@@ -26,17 +26,20 @@
         <div class="row row-cols-xxxl-5 row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 g-0 mx-n2 mb-5"  id="product-grid" v-if="products.total">
             <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in products.data">
                 <div class="card product-card card-static pb-3">
+
+                    <button class="btn-wishlist me-1 btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="image/vegan.svg" alt="Vegan" width="15px"/></button>
+
+                    <button class="btn-wishlist me-1 btn-sm" style="right:50px" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="image/vegeterian.svg" alt="Vegeterian"  width="15px"/></button>
+
+                    <button class="btn-wishlist btn-sm me-1" style="right:88px" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="image/gluten-free.svg" alt="Gluten Free"  width="15px"/></button>
+
                     <span class="badge bg-warning mt-1 ms-1 badge-end"  v-if="product.quantity <= 0">Rasprodano</span>
                     <span class="badge rounded-pill bg-primary mt-1 ms-1 badge-shadow" v-if="product.special">-{{ ($store.state.service.getDiscountAmount(product.price, product.special)) }}%</span>
-                       <a class="card-img-top d-block overflow-hidden" :href="origin + product.url"><img load="lazy" :src="product.image.replace('.webp', '-thumb.webp')" width="400" height="400" :alt="product.name">
-                     </a>
-                    <div class="card-body py-2">
-                        <div class="d-flex flex-wrap justify-content-between align-items-start pb-1">
-                            <div class="text-muted fs-xs me-1">
-                                <a class="product-meta fw-medium" :href="product.author ? (origin + product.author.url) : '#'">{{ product.author ? product.author.title : '' }}</a>
-                            </div>
 
-                        </div>
+                       <a class="card-img-top d-block overflow-hidden " :href="origin + product.url"><img load="lazy" :src="product.image.replace('.webp', '-thumb.webp')" width="400" height="400" :alt="product.name">
+                     </a>
+                    <div class="card-body py-2 pt-0">
+
                         <h3 class="product-title fs-sm text-truncate"><a :href="origin + product.url">{{ product.name }}</a></h3>
                         <div class="d-flex flex-wrap justify-content-between align-items-center" v-if="product.category_string">
                             <div class="fs-sm me-2"><span v-html="product.category_string"></span></div>

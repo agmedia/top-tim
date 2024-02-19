@@ -407,6 +407,10 @@ class AgCart extends Model
 
         }
 
+        if(empty($response)){
+            return ['error' => 'došlo je do greške'];
+        }
+
         return $response;
     }
 
