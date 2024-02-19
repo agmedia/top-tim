@@ -381,8 +381,7 @@ class AgCart extends Model
     private function structureCartItem($request)
     {
         $product = Product::where('id', $request['item']['id'])->first();
-        $response = [];
-        if($product){
+
                 $product->dataLayer = TagManager::getGoogleProductDataLayer($product);
 
                 if ($request['item']['quantity'] > $product->quantity) {
@@ -405,7 +404,7 @@ class AgCart extends Model
                 $response['conditions'] = $conditions;
             }
 
-        }
+
 
         if(empty($response)){
             return ['error' => 'došlo je do greške'];

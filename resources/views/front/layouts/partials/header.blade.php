@@ -1,20 +1,23 @@
 <!-- Navbar-->
-<header class="bg-light shadow-sm fixed-top" data-fixed-element>
-    <div class="navbar navbar-expand-lg navbar-light py-0">
+<header class="bg-primary shadow-sm fixed-top" data-fixed-element>
+    <div class="navbar navbar-expand-lg navbar-dark py-0">
         <div class="container-fluid">
             <a class="navbar-brand d-none d-md-block me-1 flex-shrink-0 py-0" href="{{ route('index') }}">
-                <div class="logo-bg" style="background-color:#f7f3f5;margin-left:-30px; padding: 0 0px 0 30px; ">
+                <div class="logo-bg" style="background-color:#fff;margin-left:-30px; padding: 0 0px 0 30px; ">
                     <img src="{{ asset('img/logo-ricekakis.svg') }}" width="200"  alt="Rice Kakis | Asian Store " >
                     <span class="arrow"></span>
                 </div>
             </a>
-            <a class="navbar-brand pt-1 pb-1 d-md-none me-0" href="{{ route('index') }}">
+            <a class="navbar-brand p-0 d-md-none me-0" href="{{ route('index') }}">
+                <div class="logo-bg" style="background-color:#fff;margin-left:-30px; padding: 0 10px 0 15px; ">
                 <img src="{{ asset('img/logo-ricekakis.svg') }}"  width="140" alt="Rice Kakis | Asian Store">
+
+                </div>
             </a>
             <!-- Search-->
             <form action="{{ route('pretrazi') }}" id="search-form-first" class="w-100 d-none d-lg-flex flex-nowrap mx-4" method="get">
                 <div class="input-group "><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
-                    <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="Pretražite po nazivu ili autoru">
+                    <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="Pretražite artikle">
                 </div>
             </form>
             <!-- Toolbar-->
@@ -29,8 +32,8 @@
                     </a>
                 @else
                     <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" data-tab-id="pills-signin-tab" aria-label="Prijavi se" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal">
-                        <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
-                        <div class="navbar-tool-text ms-n3">Prijavi se</div>
+                        <div class="navbar-tool-icon-box bg-dark"><i class="navbar-tool-icon ci-user"></i></div>
+                        <div class="navbar-tool-text ">Prijavi se</div>
                     </a>
                 @endif
 

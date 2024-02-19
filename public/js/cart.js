@@ -3478,7 +3478,7 @@ var render = function render() {
   return _vm.$store.state.cart ? _c("div", {
     staticClass: "navbar-tool dropdown ms-3"
   }, [_c("a", {
-    staticClass: "navbar-tool-icon-box bg-secondary dropdown-toggle",
+    staticClass: "navbar-tool-icon-box bg-dark dropdown-toggle",
     attrs: {
       href: _vm.carturl
     }

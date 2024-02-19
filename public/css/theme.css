@@ -144,10 +144,10 @@ h1, .h1 {
     position: relative;
     vertical-align: middle;
     width: 0;
-    background-color:#fff;   /* change background color acc to bg color */
+    background-color:#d90700;   /* change background color acc to bg color */
     border-left-width: 0.2em;
     border-left-style: solid;
-    border-left-color: #f7f3f5;
+    border-left-color: #fff;
     left:0.05em;
 }
 
@@ -16026,8 +16026,8 @@ a.nav-link:hover .media-tab-media {
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 50%;
-    background-color: var(--cz-primary);
-    color: #fff;
+    background-color: #FFF;
+    color: #373f50;
     font-size: 0.75rem;
     font-weight: 500;
     text-align: center;
@@ -17553,10 +17553,10 @@ a.nav-link:hover .media-tab-media {
     opacity: 0 !important;
 }
 .tns-carousel [data-controls=prev] {
-    left: 1.75rem;
+    left: 1rem;
 }
 .tns-carousel [data-controls=next] {
-    right: 1.75rem;
+    right: 1rem;
 }
 .tns-carousel.tns-controls-lg [data-controls] {
     width: 3.25rem;

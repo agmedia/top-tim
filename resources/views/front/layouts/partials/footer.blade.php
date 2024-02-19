@@ -16,7 +16,7 @@
 @else
 
     <section class="container-fluid">
-        <div class="card py-5 border-0 shadow">
+        <div class="card py-5 border-0 shadow" style="background: url({{ asset('image/china.jpg') }}) repeat center center fixed; background-size: contain;  ">
             <div class="card-body py-md-4 py-3 px-4 text-center">
                 <h3 class="mb-3">Ne propusti akciju!</h3>
                 <p class="mb-4 pb-2">Prijavi se na naš Newsletter i budi u toku sa najnovijim akcijama i novostima!</p>
