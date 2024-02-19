@@ -381,27 +381,30 @@ class AgCart extends Model
     private function structureCartItem($request)
     {
         $product = Product::where('id', $request['item']['id'])->first();
+        $response = [];
+        if($product){
+                $product->dataLayer = TagManager::getGoogleProductDataLayer($product);
 
-        $product->dataLayer = TagManager::getGoogleProductDataLayer($product);
+                if ($request['item']['quantity'] > $product->quantity) {
+                    return ['error' => 'Nažalost nema dovoljnih količina artikla..!'];
+                }
 
-        if ($request['item']['quantity'] > $product->quantity) {
-            return ['error' => 'Nažalost nema dovoljnih količina artikla..!'];
-        }
+                $response = [
+                    'id'              => $product->id,
+                    'name'            => $product->name,
+                    'price'           => $product->price,
+                    'sec_price'       => $product->secondary_price,
+                    'quantity'        => $request['item']['quantity'],
+                    'associatedModel' => $product,
+                    'attributes'      => $this->structureCartItemAttributes($product)
+                ];
 
-        $response = [
-            'id'              => $product->id,
-            'name'            => $product->name,
-            'price'           => $product->price,
-            'sec_price'       => $product->secondary_price,
-            'quantity'        => $request['item']['quantity'],
-            'associatedModel' => $product,
-            'attributes'      => $this->structureCartItemAttributes($product)
-        ];
+                $conditions = $this->structureCartItemConditions($product);
 
-        $conditions = $this->structureCartItemConditions($product);
+            if ($conditions) {
+                $response['conditions'] = $conditions;
+            }
 
-        if ($conditions) {
-            $response['conditions'] = $conditions;
         }
 
         return $response;

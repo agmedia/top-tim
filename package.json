@@ -33,7 +33,7 @@
         "simplebar": "^5.3.0",
         "sweetalert2": "^11.0.18",
         "tailwindcss": "^2.0.1",
-        "vue": "^2.6.14",
+        "vue": "^2.7.16",
         "vue-loader": "^15.9.7",
         "vue-sweetalert2": "^3.0.8",
         "vue-template-compiler": "^2.6.12",

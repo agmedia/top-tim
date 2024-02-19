@@ -9,7 +9,7 @@
     <meta property="og:title" content="{{ $seo['title'] }}" />
     <meta property="og:description" content="{{ $seo['description']  }}" />
     <meta property="og:url" content="{{ url($prod->url) }}"  />
-    <meta property="og:site_name" content="Plava Krava" />
+    <meta property="og:site_name" content="Rice Kakis | Asian Store" />
     <meta property="og:updated_time" content="{{ $prod->updated_at  }}" />
     <meta property="og:image" content="{{ asset($prod->image) }}" />
     <meta property="og:image:secure_url" content="{{ asset($prod->image) }}" />
@@ -27,35 +27,23 @@
     <meta name="twitter:image" content="{{ asset($prod->image) }}" />
 
 @endpush
-
+{{--
 @if (isset($gdl))
-    @section('google_data_layer')
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ ecommerce: null });
-            window.dataLayer.push({
-                'event': 'view_item',
-                'ecommerce': {
-                    'items': [<?php echo json_encode($gdl); ?>]
-                } });
-        </script>
-    @endsection
-@endif
+@section('google_data_layer')
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         window.dataLayer.push({ ecommerce: null });
+         window.dataLayer.push({
+             'event': 'view_item',
+             'ecommerce': {
+                 'items': [<?php echo json_encode($gdl); ?>]
+             } });
+     </script>
+ @endsection
+@endif--}}
 
 @section('content')
-    <section class="mb-3">
-        <div class="d-flex row justify-content-between">
 
-            <div class="col-md-12">
-                <div class="alert alert-info d-flex  mb-1 " role="alert">
-                    <div class="alert-icon">
-                        <i class="ci-gift"></i>
-                    </div>
-                    <small>Besplatna dostava za narudžbe iznad 50€</small>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Page title + breadcrumb-->
     <nav class="mb-4" aria-label="breadcrumb">
@@ -93,8 +81,17 @@
         @include('back.layouts.partials.session')
         <!-- Product Gallery + description-->
         <div class="col-xl-6 px-2 mb-3">
-            <div class="h-100 bg-light rounded-3 p-4">
+            <div class="h-100 bg-light rounded-3 p-4 position-relative">
+
+                <button class="btn-wishlist btn-primary btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="left" aria-label="Vegan" data-bs-original-title="Vegan"><img src="{{ asset('image/vegan.svg') }}" width="25px"/></button>
+
+                <button class="btn-wishlist btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="left" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><i class="ci-heart"></i></button>
+
+                <button class="btn-wishlist btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="left" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><i class="ci-heart"></i></button>
+
+
                 <div class="product-gallery">
+
                     <div class="product-gallery-preview order-sm-2">
                             @if ( ! empty($prod->image))
                                 <div class="product-gallery-preview-item active" id="first"><img  src="{{ asset($prod->image) }}"  alt="{{ $prod->name }}" height="800"></div>
@@ -117,6 +114,8 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
         <div class="col-xl-6 px-2 mb-3">
             <div class="h-100 bg-light rounded-3 py-5 px-4 px-sm-5">

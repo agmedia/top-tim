@@ -63,17 +63,17 @@
 
 @section('content')
 
-    <div class="row no-gutters justify-content-center bg-white bckimagelogin">
+    <div class="row no-gutters justify-content-center bg-white ">
         <div class="hero-static col-sm-10 col-md-8 col-xl-4 d-flex align-items-center p-2 px-sm-0">
             <!-- Sign Up Block -->
-            <div class="block block-rounded block-transparent block-fx-pop w-100 mb-0 overflow-hidden bg-image" style="background-image: url({{ asset('media/img/zuzi-bck-transparent.svg') }});">
+            <div class="block block-rounded block-transparent block-fx-pop w-100 mb-0 overflow-hidden bg-image">
                 <div class="row no-gutters">
                     <div class="col-md-12 order-md-1 bg-white">
                         <div class="block-content block-content-full px-lg-5 py-md-5 py-lg-6">
                             <!-- Header -->
                             <div class="mb-2 text-center">
                                 <a class="link-fx text-success font-w700 font-size-h1" href="{{ route('index') }}">
-                                    <span class="text-dark">Plava</span> <span class="text-primary">Krava</span>
+                                    <span class="text-dark">Rice</span> <span class="text-primary">Kakis</span>
                                 </a>
                                 <p class="text-uppercase font-w700 font-size-sm text-muted">Napravite korisnički račun</p>
                             </div>

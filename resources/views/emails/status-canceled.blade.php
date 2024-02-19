@@ -36,7 +36,7 @@
                 @else
                     <b>{{ __('Plaćanje prilikom preuzimanja') }}</b>
                 @endif
-                <br><br>Lijep pozdrav,<br>Plava Krava
+                <br><br>Lijep pozdrav,<br>Rice Kakis | Asian Store
             </td>
         </tr>
 

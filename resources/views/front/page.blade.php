@@ -1,33 +1,33 @@
 @extends('front.layouts.app')
 @if (request()->routeIs(['index']))
-    @section ( 'title', 'Plava Krava | Online knjižara |  Knjige na engleskom jeziku' )
-    @section ( 'description', 'Istražite svijet književnih čuda u našoj online knjižari. Otkrijte bogatu kolekciju knjiga na engleskom jeziku, od klasičnih romana do suvremenih bestselera. Pronađite svoje sljedeće zanimljivo štivo danas!' )
+    @section ( 'title', 'Rice Kakis - Bubble Tea | Mochi | Nudle | Slatkiši' )
+    @section ( 'description', 'Rice Kakis Azijski Webshop - autentični Bubble Tea u četiri okusa, japanski Mochi , Nudle, Korejske grickalice i slatkiši, te veliki izbor umaka i začina.' )
 
 
     @push('meta_tags')
 
         <link rel="canonical" href="{{ env('APP_URL')}}" />
         <meta property="og:locale" content="hr_HR" />
-        <meta property="og:type" content="product" />
-        <meta property="og:title" content="Plava Krava | Online knjižara |  Knjige na engleskom jeziku" />
-        <meta property="og:description" content="Istražite svijet književnih čuda u našoj online knjižari. Otkrijte bogatu kolekciju knjiga na engleskom jeziku, od klasičnih romana do suvremenih bestselera. Pronađite svoje sljedeće zanimljivo štivo danas!" />
+        <meta property="og:site_name" content="Rice Kakis | Asian Store" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Azijski Webshop- Internet Trgovina za Azijske Namirnice" />
+        <meta property="og:description" content="Rice Kakis | Azijski Webshop. Raj za užitke! Otkrijte raznolikost poslastica poput Mochi, Bubble tea, Noodlesa i još mnogo toga. Okusite izbor začina i umaka." />
         <meta property="og:url" content="{{ env('APP_URL')}}"  />
-        <meta property="og:site_name" content="Plava Krava | Online knjižara |  Knjige na engleskom jeziku" />
         <meta property="og:image" content="{{ asset('media/plavakrava.jpg') }}" />
         <meta property="og:image:secure_url" content="{{ asset('media/plavakrava.jpg') }}" />
         <meta property="og:image:width" content="1920" />
         <meta property="og:image:height" content="720" />
         <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:alt" content="Plava Krava | Online knjižara |  Knjige na engleskom jeziku" />
+        <meta property="og:image:alt" content="Azijski Webshop- Internet Trgovina za Azijske Namirnice" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Plava Krava | Online knjižara |  Knjige na engleskom jeziku" />
-        <meta name="twitter:description" content="Istražite svijet književnih čuda u našoj online knjižari. Otkrijte bogatu kolekciju knjiga na engleskom jeziku, od klasičnih romana do suvremenih bestselera. Pronađite svoje sljedeće zanimljivo štivo danas!" />
+        <meta name="twitter:title" content="Azijski Webshop - Internet Trgovina za Azijske Namirnice" />
+        <meta name="twitter:description" content="Rice Kakis | Azijski Webshop. Raj za užitke! Otkrijte raznolikost poslastica poput Mochi, Bubble tea, Noodlesa i još mnogo toga. Okusite izbor začina i umaka." />
         <meta name="twitter:image" content="{{ asset('media/plavakrava.jpg') }}" />
 
     @endpush
 
 @else
-    @section ( 'title', $page->title. ' - Plava Krava |  Knjige na engleskom jeziku' )
+    @section ( 'title', $page->title. ' - Rice Kakis | Asian Store' )
     @section ( 'description', $page->meta_description )
 @endif
 
@@ -36,20 +36,8 @@
     @if (request()->routeIs(['index']))
 
       {{--@include('front.layouts.partials.hometemp') --}}
-      <section >
-          <div class="d-flex row justify-content-between">
 
-              <div class="col-md-12">
-                  <div class="alert alert-info d-flex  mb-1 " role="alert">
-                      <div class="alert-icon">
-                          <i class="ci-gift"></i>
-                      </div>
-                      <small>Besplatna dostava za narudžbe iznad 50€</small>
-                  </div>
-              </div>
-          </div>
-      </section>
-      <h1 style="visibility: hidden;height:1px "> Knjige na engleskom jeziku - Online knjižara </h1>
+      <h1 style="visibility: hidden;height:1px "> Rice Kakis - Bubble Tea | Mochi | Nudle | Slatkiši</h1>
 
         {!! $page->description !!}
 

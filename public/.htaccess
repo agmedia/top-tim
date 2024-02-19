@@ -330,7 +330,7 @@ FileETag None
   RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 
-  RewriteRule ^.?proizvod/?$ /$1-$2 [R=301,L]
+  #RewriteRule ^.?proizvod/?$ /$1-$2 [R=301,L]
 
     #RewriteRule ^.?kategorija-proizvoda/?$ /$1-$2 [R=301,L]
 
@@ -338,7 +338,6 @@ FileETag None
     Redirect /uvjeti-kupnje /info/opci-uvjeti-kupnje
 
 
-     Redirect /proizvod/zivot-mikenjana /knjige/povijest/zivot-mikenjana
 
   # Redirect Trailing Slashes If Not A Folder...
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -426,10 +425,10 @@ RewriteRule ^(.*?)index\.php(?:/(.*))?$ /$1$2? [L,R=302,NC,NE]
 # Rewrite secure requests properly to prevent SSL cert warnings, e.g. prevent
 # https://www.example.com when your cert only allows https://secure.example.com
 
- <IfModule mod_rewrite.c>
-   RewriteCond %{SERVER_PORT} !^443
-   RewriteRule ^ https://plava-krava.agmedia.rocks%{REQUEST_URI} [R=301,L]
-</IfModule>
+ #<IfModule mod_rewrite.c>
+ #  RewriteCond %{SERVER_PORT} !^443
+  # RewriteRule ^ https://plava-krava.agmedia.rocks%{REQUEST_URI} [R=301,L]
+#</IfModule>
 
 # ----------------------------------------------------------------------
 # Prevent 404 errors for non-existing redirected folders

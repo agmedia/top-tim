@@ -1,9 +1,9 @@
 @extends('front.layouts.app')
 @if(isset($blogs))
-        @section ( 'title', 'Blog - Plava Krava' )
-        @section ( 'description', 'Medijske objave, članci i obavijesti -  Plava Krava' )
+        @section ( 'title', 'Blog - Rice Kakis | Asian Store' )
+        @section ( 'description', 'Gastronomske poslastice vas očekuju: Uživajte u primamljivom mochiju, bubble tea-u, kimchiju, proizvodima bez glutena i ukusnim umacima.' )
 @else
-    @section ( 'title', $blog->title. ' - Plava Krava' )
+    @section ( 'title', $blog->title. ' - Rice Kakis | Asian Store' )
 @section ( 'description', $blog->meta_description )
 
     @push('meta_tags')
@@ -17,7 +17,7 @@
         <meta property="og:title" content="{{ $blog->title }}" />
         <meta property="og:description" content="{{ $blog->meta_description  }}" />
         <meta property="og:url" content="{{ route('catalog.route.blog', ['blog' => $blog]) }}"  />
-        <meta property="og:site_name" content="Plava Krava" />
+        <meta property="og:site_name" content="Rice Kakis | Asian Store" />
         <meta property="og:updated_time" content="{{ $blog->updated_at  }}" />
         <meta property="og:image" content="{{ asset($blog->image) }}" />
         <meta property="og:image:secure_url" content="{{ asset($blog->image) }}" />

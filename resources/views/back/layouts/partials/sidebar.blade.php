@@ -20,7 +20,7 @@
                                 B<span class="opacity-75">x</span>
                             </span>
                 <span class="smini-hidden ml-2">
-                                Plava <span class="opacity-75">Krava</span>
+                                Rice <span class="opacity-75">Kakis</span>
                             </span>
             </a>
             <!-- END Logo -->
@@ -78,14 +78,14 @@
                                 <span class="nav-main-link-name">Artikli</span>
                             </a>
                         </li>
-                        <li class="nav-main-item">
+                     <!--   <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['publishers', 'publishers.*']) ? ' active' : '' }}" href="{{ route('publishers') }}">
                                 <span class="nav-main-link-name">Izdavači</span>
                             </a>
-                        </li>
+                        </li>-->
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['authors', 'authors.*']) ? ' active' : '' }}" href="{{ route('authors') }}">
-                                <span class="nav-main-link-name">Autori</span>
+                                <span class="nav-main-link-name">Brands</span>
                             </a>
                         </li>
                         <hr class="mt-1 mb-1" style="border-top: 1px solid #3f3f3f; margin-right: 40px;">

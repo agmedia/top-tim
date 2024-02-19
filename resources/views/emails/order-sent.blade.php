@@ -57,7 +57,7 @@
                 @endif
                 <br><br>
 
-                Lijep pozdrav,<br>Plava Krava
+                Lijep pozdrav,<br>Rice Kakis | Asian Store
             </td>
         </tr>
 

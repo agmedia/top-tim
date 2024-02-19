@@ -3,13 +3,13 @@
     <div class="navbar navbar-expand-lg navbar-light py-0">
         <div class="container-fluid">
             <a class="navbar-brand d-none d-md-block me-1 flex-shrink-0 py-0" href="{{ route('index') }}">
-                <div class="logo-bg" style="background-color:#f0f7ff;margin-left:-30px; padding: 0 0px 0 30px; ">
-                    <img src="{{ asset('img/logo-blue.svg') }}" width="90" height="81" alt="Plava Krava" >
+                <div class="logo-bg" style="background-color:#f7f3f5;margin-left:-30px; padding: 0 0px 0 30px; ">
+                    <img src="{{ asset('img/logo-ricekakis.svg') }}" width="200"  alt="Rice Kakis | Asian Store " >
                     <span class="arrow"></span>
                 </div>
             </a>
-            <a class="navbar-brand pt-1 pb-1 d-md-none me-2" href="{{ route('index') }}">
-                <img src="{{ asset('img/logo-blue.svg') }}" width="64" height="57" alt="Plava Krava">
+            <a class="navbar-brand pt-1 pb-1 d-md-none me-0" href="{{ route('index') }}">
+                <img src="{{ asset('img/logo-ricekakis.svg') }}"  width="140" alt="Rice Kakis | Asian Store">
             </a>
             <!-- Search-->
             <form action="{{ route('pretrazi') }}" id="search-form-first" class="w-100 d-none d-lg-flex flex-nowrap mx-4" method="get">
@@ -67,9 +67,7 @@
             <filter-view ids="{{ isset($ids) ? $ids : null }}"
                          group="kategorija-proizvoda"
                          cat="{{ isset($cat) ? $cat : null }}"
-                         subcat="{{ isset($subcat) ? $subcat : null }}"
-                         author="{{ isset($author) ? $author['slug'] : null }}"
-                         publisher="{{ isset($publisher) ? $publisher['slug'] : null }}">
+                         subcat="{{ isset($subcat) ? $subcat : null }}">
             </filter-view>
             <!-- Menu-->
             <div class="sidebar-nav tab-pane fade" id="menu" role="tabpanel">
@@ -88,14 +86,16 @@
         </div>
     </div>
     <div class="offcanvas-footer d-block px-grid-gutter pt-4 pb-3 mb-2">
-        <div class="d-flex mb-3"><i class="ci-support h4 mb-0 fw-normal text-primary mt-1 me-1"></i>
+        <div class="d-flex mb-3"><i class="ci-phone h4 mb-0 fw-normal text-primary mt-1 me-1"></i>
             <div class="ps-2">
-                <div class="text-muted fs-sm">Podrška</div><a class="nav-link-style fs-md" href="tel:+385 1 213 2487">+385 1 213 2487</a>
+            <a class="nav-link-style fs-md" href="tel:+385 99 3334448">+385 99 3334448 (HRV)</a><br>
+                <a class="nav-link-style fs-md" href="tel:+385 91 5207047">+385 91 5207047 (ENG)</a>
             </div>
+
         </div>
         <div class="d-flex mb-3"><i class="ci-mail h5 mb-0 fw-normal text-primary mt-1 me-1"></i>
             <div class="ps-2">
-                <div class="text-muted fs-sm">Email</div><a class="nav-link-style fs-md" href="mailto:webshop@plavakrava.hr">webshop@plavakrava.hr</a>
+              <a class="nav-link-style fs-md" href="mailto:info@ricekakis.com">info@ricekakis.com</a>
             </div>
         </div>
     </div>

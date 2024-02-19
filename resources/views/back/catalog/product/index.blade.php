@@ -71,17 +71,13 @@
 
                         </div>
                         <div class="form-group row items-push mb-0">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     @livewire('back.layout.search.author-search', ['author_id' => request()->input('author') ?: '', 'list' => true])
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    @livewire('back.layout.search.publisher-search', ['publisher_id' => request()->input('publisher') ?: '', 'list' => true])
-                                </div>
-                            </div>
-                            <div class="col-md-3">
+
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="Odaberi Status">
                                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -93,7 +89,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <select class="js-select2 form-control" id="sort-select" name="sort" style="width: 100%;" data-placeholder="Sortiraj artikle">
                                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -120,9 +116,7 @@
                             <th>Naziv</th>
                             <th>Šifra</th>
                             <th class="text-right">Cijena</th>
-                            <th class="text-center">God.</th>
-                            <th class="text-center">Polica</th>
-                            <th class="text-center">Dimenzija</th>
+
                             <th class="text-center">Kol.</th>
                             <th>Dodano</th>
                             <th>Zadnja izmjena</th>
@@ -153,11 +147,7 @@
                                 <td class="font-size-sm text-right">
                                     <ag-input-field item="{{ $product }}" target="price"></ag-input-field>
                                 </td>
-                                <td class="font-size-sm text-center">
-                                    <ag-input-field item="{{ $product }}" target="year"></ag-input-field>
-                                </td>
-                                <td class="font-size-sm text-center">  <ag-input-field item="{{ $product }}" target="polica"></ag-input-field></td>
-                                <td class="font-size-sm text-center">  <ag-input-field item="{{ $product }}" target="dimensions"></ag-input-field></td>
+
                                 <td class="font-size-sm text-center">{{ $product->quantity }}</td>
                                 <td class="font-size-sm">{{ \Illuminate\Support\Carbon::make($product->created_at)->format('d.m.Y') }}</td>
                                 <td class="font-size-sm">{{ \Illuminate\Support\Carbon::make($product->updated_at)->format('d.m.Y') }}</td>

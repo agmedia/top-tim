@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
 
-<script>window.location.href = "https://www.plavakrava.hr";</script>
+
 @section ( 'title', '404 Error')
 
 @section('content')

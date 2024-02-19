@@ -60,7 +60,7 @@
                             <div class="item rounded-circle bg-body mx-auto my-3">
                                 <i class="fa fa-wallet fa-lg text-primary"></i>
                             </div>
-                            <div class="font-size-h3 text-success font-w600 mb-1">{{ $data['this_month_total'] }}€</div>
+                            <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['this_month_total'] }}€</div>
                             <div class="text-muted ">Mjesečni promet</div>
 
                         </div>
@@ -78,7 +78,7 @@
                             <div class="item rounded-circle bg-body mx-auto my-3">
                                 <i class="fa fa-chart-line fa-lg text-primary"></i>
                             </div>
-                            <div class="font-size-h3 text-success font-w600 mb-1">{{ $data['this_month'] }}</div>
+                            <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['this_month'] }}</div>
                             <div class="text-muted ">Narudžbi ovaj mjesec</div>
 
                         </div>
@@ -96,7 +96,7 @@
                             <div class="item rounded-circle bg-body mx-auto my-3">
                                 <i class="fa fa-chart-line fa-lg text-primary"></i>
                             </div>
-                            <div class="font-size-h3 text-success font-w600 mb-1">{{ $data['today'] }}</div>
+                            <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['today'] }}</div>
                             <div class="text-muted ">Narudžbi danas</div>
 
                         </div>
@@ -114,7 +114,7 @@
                             <div class="item rounded-circle bg-body mx-auto my-3">
                                 <i class="fa fa-users fa-lg text-primary"></i>
                             </div>
-                            <div class="font-size-h3 text-success font-w600 mb-1">{{ $data['users'] }}</div>
+                            <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['users'] }}</div>
                             <div class="text-muted ">Registriranih korisnika</div>
 
                         </div>
@@ -244,7 +244,7 @@
                         </div>
                         <div class="block-content block-content-full d-flex justify-content-between align-items-center flex-grow-1">
                             <div class="me-3">
-                                <div class="font-size-h3 text-warning font-w600 mb-1">{{ $data['comments'] }}</div>
+                                <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['comments'] }}</div>
 
                                 <p class="text-muted mb-0">
                                     Novih komentara
@@ -271,7 +271,7 @@
                         </div>
                         <div class="block-content block-content-full d-flex justify-content-between align-items-center flex-grow-1">
                             <div class="me-3">
-                                <div class="font-size-h3 text-warning font-w600 mb-1">{{ $data['zeroproducts'] }}</div>
+                                <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['zeroproducts'] }}</div>
                                 <p class="text-muted mb-0">
                                     Rasprodanih artikala
                                 </p>
@@ -428,12 +428,12 @@
                     {
                         label: 'Ova godina',
                         fill: true,
-                        backgroundColor: 'rgba(59,101,190,0.75)',
-                        borderColor: 'rgb(24, 50, 109)',
-                        pointBackgroundColor: 'rgba(24, 50, 109, 1)',
+                        backgroundColor: 'rgba(239,77,72,0.75)',
+                        borderColor: 'rgb(239,77,72)',
+                        pointBackgroundColor: 'rgba(239,77,72, 1)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(24, 50, 109, 1)',
+                        pointHoverBorderColor: 'rgba(239,77,72, 1)',
                         data: this_year.values
                     },
                     {

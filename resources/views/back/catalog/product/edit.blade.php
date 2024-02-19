@@ -41,15 +41,6 @@
                     </a>
                     <div class="block-options">
                         <div class="dropdown">
-                            <div class="custom-control custom-switch custom-control-info block-options-item ml-4">
-                                <input type="checkbox" class="custom-control-input" id="product-gift-switch" name="gift"{{ (isset($product->gift) and $product->gift) ? 'checked' : '' }}>
-                                <label class="custom-control-label pt-1" for="product-gift-switch">Poklon Bon</label>
-                            </div>
-
-                            <div class="custom-control custom-switch custom-control-info block-options-item ml-4">
-                                <input type="checkbox" class="custom-control-input" id="product-decrease-switch" name="decrease"{{ (isset($product->decrease) and $product->decrease) ? '' : 'checked' }}>
-                                <label class="custom-control-label pt-1" for="product-decrease-switch">Neograničena Količina</label>
-                            </div>
 
                             <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
                                 <input type="checkbox" class="custom-control-input" id="product-switch" name="status"{{ (isset($product->status) and $product->status) ? 'checked' : '' }}>
@@ -90,7 +81,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="quantity-input">Količina <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="quantity-input" name="quantity" placeholder="Upišite količinu artikla" value="{{ isset($product) ? $product->quantity : ( ! isset($product) ? 1 : old('quantity')) }}">
                                     @error('quantity ')
@@ -98,7 +89,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="sku-input">Šifra <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="sku-input" name="sku" placeholder="Upišite šifru artikla" value="{{ isset($product) ? $product->sku : old('sku') }}">
                                     @error('sku')
@@ -109,23 +100,13 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="polica-input">Šifra police </label>
                                     <input type="text" class="form-control" id="polica-input" name="polica" placeholder="Upišite šifru police" value="{{ isset($product) ? $product->polica : old('polica') }}" >
                                 </div>
 
 
-                                <div class="col-md-3">
-                                    <label for="dm-post-edit-slug">Vrijeme isporuke @include('back.layouts.partials.required-star')</label>
-                                    <select class="js-select2 form-control" id="shipping_time-select" name="shipping_time" style="width: 100%;" data-placeholder="Odaberite ili upišite vrijem isporuke">
-                                        <option></option>
-                                        @if ($data['shipping_times'])
-                                            @foreach ($data['shipping_times'] as $shipping_time)
-                                                <option value="{{ $shipping_time }}" {{ ((isset($product)) and ($shipping_time == $product->shipping_time)) ? 'selected' : '' }}>{{ $shipping_time }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
+
                             </div>
 
                             <div class="form-group row items-push mb-3">
@@ -188,136 +169,20 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="dm-post-edit-slug">Autor</label>
+                                    <label for="dm-post-edit-slug">Brand</label>
                                     @livewire('back.layout.search.author-search', ['author_id' => isset($product) ? $product->author_id : 0])
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="dm-post-edit-slug">Izdavač</label>
-                                    @livewire('back.layout.search.publisher-search', ['publisher_id' => isset($product) ? $product->publisher_id : 0])
-                                </div>
+
                             </div>
 
-                            <div class="form-group row items-push mb-4">
-                                <div class="col-md-4 d-none">
-                                    <label for="letter-select">Pismo</label>
-                                    <select class="js-select2 form-control" id="letter-select" name="letter" style="width: 100%;" data-placeholder="Odaberite ili upišite pismo">
-                                        <option></option>
-                                        @if ($data['letters'])
-                                            @foreach ($data['letters'] as $letter)
-                                                <option value="{{ $letter }}" {{ ((isset($product)) and ($letter == $product->letter)) ? 'selected' : '' }}>{{ $letter }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="dm-post-edit-slug">Stanje</label>
-                                    <select class="js-select2 form-control" id="condition-select" name="condition" style="width: 100%;" data-placeholder="Odaberite ili upišite stanje">
-                                        <option></option>
-                                        @if ($data['conditions'])
-                                            @foreach ($data['conditions'] as $condition)
-                                                <option value="{{ $condition }}" {{ ((isset($product)) and ($condition == $product->condition)) ? 'selected' : '' }}>{{ $condition }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="dm-post-edit-slug">Uvez</label>
-                                    <select class="js-select2 form-control" id="binding-select" name="binding" style="width: 100%;" data-placeholder="Odaberite ili upišite uvez">
-                                        <option></option>
-                                        @if ($data['bindings'])
-                                            @foreach ($data['bindings'] as $binding)
-                                                <option value="{{ $binding }}" {{ ((isset($product)) and ($binding == $product->binding)) ? 'selected' : '' }}>{{ $binding }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
 
-                                <div class="col-md-4">
-                                    <label for="origin-input">Jezik</label>
-                                    <input type="text" class="form-control" id="origin-input" name="origin" placeholder="Upišite jezik" value="{{ isset($product) ? $product->origin : old('origin') }}">
-                                </div>
-                            </div>
-
-                            <div class="form-group row items-push mb-3">
-
-                                <div class="col-md-4 ">
-                                    <label for="origin-input">Godina izdavanja</label>
-                                    <input type="text" class="form-control" id="year-input" name="year" placeholder="Upišite godinu izdavanja" value="{{ isset($product) ? $product->year : old('year') }}">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="pages-input">Broj stranica</label>
-                                    <input type="text" class="form-control" id="pages-input" name="pages" placeholder="Upišite broj stranica" value="{{ isset($product) ? $product->pages : old('pages') }}">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="dimensions-input">Dimenzije</label>
-                                    <input type="text" class="form-control" id="dimensions-input" name="dimensions" placeholder="Upišite dimenzije" value="{{ isset($product) ? $product->dimensions : old('dimensions') }}">
-                                </div>
-                            </div>
 
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="block">
-                <div class="block-header block-header-default">
-                    <h3 class="block-title">Dodatna polja</h3>
-                </div>
-                <div class="block-content">
 
-                    <div class="row justify-content-center push">
-                        <div class="col-md-10">
-
-                                <div class="form-group row items-push mb-3">
-                                        <div class="col-md-6">
-                                            <label for="pages-input">YouTube (product url)</label>
-                                            <input type="text" class="form-control" id="youtube_product_url-input" name="youtube_product_url" placeholder="https://www.youtube.com/watch..." value="{{ isset($product) ? $product->youtube_product_url : old('youtube_product_url') }}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="pages-input">YouTube (channel)</label>
-                                            <input type="text" class="form-control" id="youtube_channel-input" name="youtube_channel" placeholder="https://www.youtube.com/@..." value="{{ isset($product) ? $product->youtube_channel : old('youtube_channel') }}">
-                                        </div>
-                               </div>
-
-                            <div class="form-group row items-push mb-3">
-                                <div class="col-md-6">
-                                    <label for="pages-input">Goodreads (author url) </label>
-                                    <input type="text" class="form-control" id="goodreads_author_url-input" name="goodreads_author_url" placeholder="https://www.goodreads.com/author..." value="{{ isset($product) ? $product->goodreads_author_url : old('goodreads_author_url') }}">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="pages-input">Goodreads (book url) </label>
-                                    <input type="text" class="form-control" id="goodreads_book_url-input" name="goodreads_book_url" placeholder="https://www.goodreads.com/book..." value="{{ isset($product) ? $product->goodreads_book_url : old('goodreads_book_url') }}">
-                                </div>
-                            </div>
-
-
-
-                            <div class="form-group row items-push mb-3">
-                                <div class="col-md-4">
-                                    <label for="pages-input">Wiki (url) </label>
-                                    <input type="text" class="form-control" id="wiki_url-input" name="wiki_url" placeholder="https://bs.wikipedia.org/wiki..." value="{{ isset($product) ? $product->wiki_url : old('wiki_url') }}">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="pages-input">Author Web Page (url) </label>
-                                    <input type="text" class="form-control" id="author_web_url-input" name="author_web_url" placeholder="https://www..." value="{{ isset($product) ? $product->author_web_url : old('author_web_url') }}">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="pages-input">Serial Web Page (url) </label>
-                                    <input type="text" class="form-control" id="serial_web_url-input" name="serial_web_url" placeholder="https://www..." value="{{ isset($product) ? $product->serial_web_url : old('serial_web_url') }}">
-                                </div>
-
-
-                            </div>
-
-
-
-
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
 
             <div class="block">
                 <div class="block-header block-header-default">

@@ -5,14 +5,14 @@
     <title> @yield('title') </title>
     <!-- SEO Meta Tags-->
     <meta name="description" content="@yield('description')">
-    <meta name="author" content="Plava Krava">
+    <meta name="author" content="Rice Kakis">
     @stack('meta_tags')
     <!-- Viewport-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <base href="http://ricekakis.test/">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" media="screen" href="{{ asset('vendor/simplebar/dist/simplebar.min.css') }}"/>
-    <link rel="stylesheet" media="screen" href="{{ asset('css/tema.min.css?v=2.2') }}">
+    <link rel="stylesheet" media="screen" href="{{ asset('css/theme.css?v=2.2') }}">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -36,11 +36,7 @@
             animation: sk-scaleout 1.0s infinite ease-in-out;
         }
 
-        @media screen and (-webkit-min-device-pixel-ratio:0) {
-            .form-control {
-                font-size: 16px;
-            }
-        }
+
 
 
         @-webkit-keyframes sk-scaleout {

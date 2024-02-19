@@ -2,7 +2,7 @@
 <section class="pt-2">
 
     <div class="d-flex flex-wrap justify-content-between align-items-center pt-1  pb-2 mb-2">
-        <h2 class="h3 mb-0 pt-3 font-title me-3"><img src="{{ asset('img/logo-plava-krava-glava.svg') }}" width="35" height="35" style="max-height:35px" alt="{{ $data['title'] }}"/>{{ $data['title'] }}</h2>
+        <h2 class="h3 mb-0 pt-3 font-title me-3">{{ $data['title'] }}</h2>
             @if($data['subtitle'])  <p class="text-muted text-center mb-5">{{ $data['subtitle'] }}</p> @endif
         @if($data['url'] !='/')
          <a class="btn btn-outline-primary btn-sm btn-shadow mt-3" href="{{ url($data['url']) }}"><span class="d-none d-sm-inline-block">Pogledajte ponudu</span> <i class="ci-arrow-right "></i></a>

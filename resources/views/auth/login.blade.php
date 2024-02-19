@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="row no-gutters justify-content-center bg-white bckimagelogin" >
+    <div class="row no-gutters justify-content-center bg-white " >
 
         @if (session('status'))
             <div class="mb-4 font-medium text-sm text-green-600">
@@ -19,7 +19,7 @@
                             <!-- Header -->
                             <div class="mb-2 text-center">
                                 <a class="link-fx font-w700 font-size-h2" href="{{ route('index') }}">
-                                    <span class="text-dark">Plava</span> <span class="text-primary">Krava</span>
+                                    <span class="text-dark">Rice</span> <span class="text-primary">Kakis</span>
                                 </a>
                                 <p class="text-uppercase font-w700 font-size-sm text-muted">PRIJAVA</p>
                             </div>

@@ -8,7 +8,7 @@
 
                     <h3 class="accordion-header px-grid-gutter bg-default" v-if="category && (category.id == cat.id)" >
                         <button class="accordion-button collapsed py-3" v-if="cat.subs" type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
-                            <span class="d-flex align-items-center"><i class="ci-book fs-lg opacity-60 mt-n1 me-2"></i>{{ cat.title }} </span>
+                            <span class="d-flex align-items-center"><i class="ci-basket-alt fs-lg opacity-60 mt-n1 me-2"></i>{{ cat.title }} </span>
                         </button>
                         <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-normal py-3" :class="{'active': (category.id == cat.id)}" role="link">
                             <span class="d-flex align-items-center"><span v-html="cat.icon"></span> {{ cat.title }} </span>
@@ -17,7 +17,7 @@
 
                     <h3 class="accordion-header px-grid-gutter" v-else>
                         <button class="accordion-button collapsed py-3" v-if="cat.subs " type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
-                            <span class="d-flex align-items-center"><i class="ci-book fs-lg opacity-60 mt-n1 me-2"></i>{{ cat.title }} </span>
+                            <span class="d-flex align-items-center"><i class="ci-store fs-lg opacity-60 mt-n1 me-2"></i>{{ cat.title }} </span>
                         </button>
                         <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-normal py-3" role="link">
                             <span class="d-flex align-items-center"><span v-html="cat.icon"></span> {{ cat.title }}</span>
@@ -29,7 +29,7 @@
                         <div class="px-grid-gutter pt-1 pb-4">
                             <div class="widget widget-links">
                                 <ul class="widget-list" v-for="sub in cat.subs" >
-                                    <li class="widget-list-item pb-1" :class="{'active': (subcategory && subcategory.id == sub.id)}">
+                                    <li class="widget-list-item pb-1 pt-1" :class="{'active': (subcategory && subcategory.id == sub.id)}">
                                         <a class="widget-list-link" :href="sub.url">{{ sub.title }} </a>
                                     </li>
                                 </ul>
@@ -46,7 +46,7 @@
                             <div class="widget widget-links">
 
                                 <ul class="widget-list" v-for="subcategory in cat.subs" >
-                                    <li class="widget-list-item pb-1"><a class="widget-list-link" :href="subcategory.url">{{ subcategory.title }} </a></li>
+                                    <li class="widget-list-item pb-1 pt-1"><a class="widget-list-link" :href="subcategory.url">{{ subcategory.title }} </a></li>
                                 </ul>
                                 <ul class="widget-list mt-2" >
                                     <li class="widget-list-item"><a class="widget-list-link" :href="cat.url">Pogledajte sve</a></li>
@@ -58,21 +58,8 @@
             </div>
 
 
-            <div class="accordion-item border-bottom">
-                <h3 class="accordion-header px-grid-gutter">
-                    <a class="nav-link-style d-block fs-md fw-normal py-3" :href="origin + 'autor'">
-                        <span class="d-flex align-items-center"><i class="ci-add-user fs-lg mt-n1 me-2"></i>Autori</span>
-                    </a>
-                </h3>
-            </div>
 
-            <div class="accordion-item border-bottom">
-                <h3 class="accordion-header px-grid-gutter">
-                    <a class="nav-link-style d-block fs-md fw-normal py-3" :href="origin + 'nakladnik'">
-                        <span class="d-flex align-items-center"><i class="ci-edit  fs-lg mt-n1 me-2"></i>Izdavači</span>
-                    </a>
-                </h3>
-            </div>
+
             <div class="accordion-item border-bottom">
                 <h3 class="accordion-header px-grid-gutter">
                     <a class="nav-link-style d-block fs-md fw-normal py-3" :href="origin + 'blog'">

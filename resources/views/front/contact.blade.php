@@ -29,9 +29,9 @@
             <div class="col-12 col-sm-6 mb-5">
 
                         <h3 class=" mb-4">Impressum</h3>
-                <p><strong>Plava krava izdavaštvo d.o.o., Nova cesta 130, 10000 Zagreb</strong></p>
-                <p><strong>Registarski sud: Trgovački sud u Zagrebu</strong></p> <p><strong>Temeljni kapital: 20.000,00 kn uplaćen u cjelosti.</strong></p> <p><strong>MBS: 081437207<br>
-                        OIB: 79503141656</strong></p> <p><strong>Osnivači/članovi društva: Ines Draganić</strong></p> <p><strong>Žiro račun otvoren u: Erste&amp;Steiermärkische Bank d.d.</strong><br> <strong>IBAN: HR98 2402 0061 1011 2296 1</strong><br> <strong>SWIFT: ESBCHR22</strong></p>
+                <p>Vukoje Logistika j.d.o.o., Kaštelanska 4a. Veliko Polje, 10010 Zagreb</p>
+                <p>Registarski sud: Trgovački sud u Zagrebu</p>  <p>MBS: 081362286 <br>
+                        OIB: 04676029695</p> <p>Osnivači/članovi društva: Luka Vukoje</p> <p>Žiro račun otvoren u: Privredna banka Zagreb d.d.<br> IBAN: HR9223400091111126783<br> SWIFT: PBZGHR2X</p>
 
             </div>
 

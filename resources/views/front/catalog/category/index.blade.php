@@ -4,15 +4,15 @@
 
 @if (isset($group) && $group)
     @if ($group && ! $cat && ! $subcat)
-        @section ( 'title',  \Illuminate\Support\Str::ucfirst($group). ' - Plava Krava' )
+        @section ( 'title',  \Illuminate\Support\Str::ucfirst($group). ' - Rice Kakis | Asian Store' )
     @endif
     @if ($cat && ! $subcat)
-        @section ( 'title',  $cat->title . ' - Plava Krava' )
+        @section ( 'title',  $cat->title . ' - Rice Kakis | Asian Store' )
         @section ( 'description', $cat->meta_description )
 
 
     @elseif ($cat && $subcat)
-        @section ( 'title', $subcat->meta_title . ' - Plava Krava' )
+        @section ( 'title', $subcat->meta_title . ' - Rice Kakis | Asian Store' )
         @section ( 'description',  $subcat->meta_description )
 
         @push('meta_tags')
@@ -53,19 +53,7 @@
 
 @section('content')
 
-    <section class="mb-3">
-        <div class="d-flex row justify-content-between">
 
-            <div class="col-md-12">
-                <div class="alert alert-info d-flex  mb-1 " role="alert">
-                    <div class="alert-icon">
-                        <i class="ci-gift"></i>
-                    </div>
-                    <small>Besplatna dostava za narudžbe iznad 50€</small>
-                </div>
-            </div>
-        </div>
-    </section>
 
     @if (Route::currentRouteName() == 'pretrazi')
         <section class="d-md-flex justify-content-between align-items-center mb-2 pb-2">

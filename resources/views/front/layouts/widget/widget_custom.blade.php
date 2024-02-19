@@ -25,37 +25,6 @@
 
 
 
-<section class="py-3">
-
-    <div class="d-flex flex-wrap justify-content-between align-items-center pt-1  pb-3 mb-3">
-        <h2 class="h3 mb-0 pt-3 font-title me-3"><img src="{{ asset('img/logo-plava-krava-glava.svg') }}" width="35" height="35" style="max-height:35px" alt="Najpopularnije pretrage"/> Najpopularnije pretrage</h2>
-    </div>
-
-
-
-
-    <div class="row  ">
-        <div class="col-lg-12   py-2 ">
-            <div class="scrolling-wrapper">
-                @foreach($data as  $search)
-                    @if ($loop->first)
-
-
-
-                    @foreach($search['searches'] as  $item)
-                            @if(!$loop->last)
-                    <a href="/pretrazi?pojam={{ $item }}"
-                       class="btn btn-outline-primary btn-sm mb-2">
-                        <p class=" py-0 mb-0 px-1">{{ $item }}</p></a>
-                            @endif
-                    @endforeach
-                    @endif
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-</section>
 
 
 

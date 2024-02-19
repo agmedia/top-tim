@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class=" rounded-3  p-4" v-if="route == 'kosarica'" style="border: 2px solid #d8e4ff;background-color: #fff !important;">
+        <div class=" rounded-3  p-4" v-if="route == 'kosarica'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2" >
                 <div class="text-center mb-2 pb-2">
                     <h2 class="h6 mb-3 pb-1">Ukupno</h2>
@@ -13,7 +13,7 @@
         </div>
 
 
-        <div class=" rounded-3  p-4 ms-lg-auto" v-if="route == 'naplata'" style="border: 2px solid #d8e4ff;background-color: #fff !important;">
+        <div class=" rounded-3  p-4 ms-lg-auto" v-if="route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2">
                 <div class="widget mb-3">
                     <h2 class="widget-title text-center mb-2">Sažetak narudžbe</h2>
@@ -59,7 +59,7 @@
         </div>
 
 
-        <div class=" rounded-3 p-4 ms-lg-auto" v-if="route == 'pregled'" style="border: 2px solid #d8e4ff;background-color: #fff !important;">
+        <div class=" rounded-3 p-4 ms-lg-auto" v-if="route == 'pregled'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2">
                 <div class="widget mb-3">
                     <h2 class="widget-title text-center">Sažetak narudžbe</h2>
@@ -89,15 +89,15 @@
         </div>
 
 
-      <div class="rounded-3 p-4 mt-3" v-if="route == 'kosarica' || route == 'naplata'" style="border: 2px solid #d8e4ff;background-color: #fff !important;">
+      <div class="rounded-3 p-4 mt-3" v-if="route == 'kosarica' || route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
         <div class="py-2 px-xl-2" v-cloak>
           <div class="form-group">
 
                 <label class="form-label">Imate li kod za popust?</label>
               <div class="input-group">
-              <input type="text" class="form-control" v-model="coupon" placeholder="Upišite kod ovdje...">
+              <input type="text" class="form-control" v-model="coupon" placeholder="Upišite kod">
               <div class="input-group-append">
-                <button type="button" v-on:click="setCoupon" class="btn btn-outline-primary btn-shadow">Dodaj</button>
+                <button type="button" v-on:click="setCoupon" class="btn btn-outline-primary btn-shadow">Primjeni</button>
               </div>
             </div>
           </div>
