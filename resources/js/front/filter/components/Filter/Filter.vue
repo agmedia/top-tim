@@ -8,7 +8,7 @@
 
                     <h3 class="accordion-header px-grid-gutter bg-default" v-if="category && (category.id == cat.id)" >
                         <button class="accordion-button collapsed py-3" v-if="cat.subs" type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
-                            <span class="d-flex align-items-center"><i class="ci-basket-alt fs-lg opacity-60 mt-n1 me-2"></i>{{ cat.title }} </span>
+                            <span class="d-flex align-items-center"> {{ cat.title }} </span>
                         </button>
                         <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-normal py-3" :class="{'active': (category.id == cat.id)}" role="link">
                             <span class="d-flex align-items-center"><span v-html="cat.icon"></span> {{ cat.title }} </span>
@@ -17,13 +17,12 @@
 
                     <h3 class="accordion-header px-grid-gutter" v-else>
                         <button class="accordion-button collapsed py-3" v-if="cat.subs " type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
-                            <span class="d-flex align-items-center"><i class="ci-store fs-lg opacity-60 mt-n1 me-2"></i>{{ cat.title }} </span>
+                            <span class="d-flex align-items-center"> {{ cat.title }} </span>
                         </button>
                         <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-normal py-3" role="link">
                             <span class="d-flex align-items-center"><span v-html="cat.icon"></span> {{ cat.title }}</span>
                         </a>
                     </h3>
-
 
                     <div class="collapse show" :id="'id'+ cat.id" v-if="cat.subs && category && (category.id == cat.id)" data-bs-parent="#shop-categories">
                         <div class="px-grid-gutter pt-1 pb-4">
@@ -63,7 +62,7 @@
             <div class="accordion-item border-bottom">
                 <h3 class="accordion-header px-grid-gutter">
                     <a class="nav-link-style d-block fs-md fw-normal py-3" :href="origin + 'blog'">
-                        <span class="d-flex align-items-center"><i class="ci-list  fs-lg mt-n1 me-2"></i>Blog</span>
+                        <span class="d-flex align-items-center"> Blog</span>
                     </a>
                 </h3>
             </div>

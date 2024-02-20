@@ -82,13 +82,18 @@
         <!-- Product Gallery + description-->
         <div class="col-xl-6 px-2 mb-3">
             <div class="h-100 bg-light rounded-3 p-4 position-relative">
+                <div class="btn-wishlist-block">
 
-                <button class="btn-wishlist  btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="{{ asset('image/vegan.svg') }}" alt="Vegan" width="25px"/></button>
-
-                <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="{{ asset('image/vegeterian.svg') }}" alt="Vegeterian" width="25px"/></button>
-
-                <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="{{ asset('image/gluten-free.svg') }}" alt="Gluten Free" width="25px"/></button>
-
+                    @if($prod->vegan)
+                        <button class="btn-wishlist  btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="{{ asset('image/vegan.svg') }}" alt="Vegan" style="height:23px"/></button>
+                    @endif
+                    @if($prod->vegetarian)
+                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="{{ asset('image/vegeterian.svg') }}" alt="Vegeterian"  style="height:25px" /></button>
+                    @endif
+                    @if($prod->glutenfree)
+                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="{{ asset('image/gluten-free.svg') }}" alt="Gluten Free"  style="height:27px" /></button>
+                    @endif
+                </div>
 
                 <div class="product-gallery">
 
@@ -129,7 +134,7 @@
    @endif
 
    <div class="d-flex justify-content-between align-items-center mb-2">
-       <a href="#reviews" id="openReview" data-scroll>
+       <a id="openReview" href="#reviews" data-scroll>
            <div class="star-rating">
 
                @for ($i = 0; $i < 5; $i++)
@@ -200,11 +205,9 @@
                        <li><strong>EAN:</strong> {{ $prod->isbn }} </li>
                        @endif
                            @if ($prod->quantity)
-                               @if ($prod->decrease)
-                                   <li><strong>Dostupnost:</strong> Dostupno </li>
-                               @else
-                                   <li><strong>Dostupnost:</strong> Dostupno</li>
-                               @endif
+
+                                   <li><strong>Dostupnost:</strong> {{$prod->quantity}} </li>
+
                            @else
                                <li><strong>Dostupnost:</strong> Rasprodano</li>
                            @endif
@@ -296,24 +299,46 @@
 
                </div>
                <div class="col-lg-5 col-sm-5 ">
-                   <h3 class="h6">Dodatne informacije</h3>
-                   <ul class="list-unstyled fs-sm pb-2">
 
+                   @if ($prod->sastojci or $prod->podaci)
 
-                       @if ($prod->author)
-                               <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Brand:</span><span><a href="{{ route('catalog.route.author', ['author' => $prod->author]) }}">{{ Illuminate\Support\Str::limit($prod->author->title, 30) }}</a></span></li>
-                       @endif
-                       
-                       @if ($prod->isbn)
-                            <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">EAN:</span><span>{{ $prod->isbn }}</span></li>
-                       @endif
-                   </ul>
+                      <h3 class="h6">Dodatne informacije</h3>
+
+                   <!-- Light table with striped rows -->
+
+                   <!-- Dark table with striped rows -->
+                       <div class="table-responsive">
+                           <table class="table table-light table-striped fs-sm">
+
+                               <tbody>
+
+                               @if ($prod->sastojci)
+                                   <tr>
+                                       <th>Sastojci</th>
+                                   </tr>
+                                   <tr>
+                                         <td>{!! $prod->sastojci !!}</td>
+                                   </tr>
+                               @endif
+                               @if ($prod->podaci)
+                                   <tr>
+                                       <th>Podaci o prehrani</th>
+                                   </tr>
+                                   <tr>
+                                        <td>{!! $prod->podaci !!}</td>
+                                   </tr>
+                               @endif
+
+                               </tbody>
+                           </table>
+                       </div>
+                   @endif
 
                </div>
            </div>
        </div>
        <!-- Reviews tab-->
-       <div class="tab-pane fade" id="reviews" role="tabpanel">
+       <div class="tab-pane fade" name="reviews" id="reviews" role="tabpanel">
            <!-- Reviews-->
            <div class="row pt-2 pb-3">
                <div class="col-lg-4 col-md-5 mb-3">
@@ -450,6 +475,12 @@
 </div>
 </section>
 <!-- Product description-->
+
+
+
+
+
+    @if (count($related) > 1)
 <section class="pb-5 mb-2 mb-xl-4">
 <div class=" flex-wrap justify-content-between align-items-center  text-center">
 <h2 class="h3 mb-3 pt-1 font-title me-3 text-center"> POVEZANI PROIZVODI</h2>
@@ -467,7 +498,7 @@
 </div>
 </div>
 </section>
-
+    @endif
 @endsection
 
 @push('js_after')
@@ -479,9 +510,10 @@
 </script>
 <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=6134a372eae16400120a5035&product=sop' async='async'></script>
 <script>
-$('#openReview').on('click', function() {
-$('.nav-tabs a[href="#reviews"]').tab('show');
-//  document.getElementById("tabs_widget").scrollIntoView();
+$('#openReview').on('click', function(e) {
+    e.preventDefault();
+    $('.nav-tabs a[href="#reviews"]').tab('show');
+  document.getElementById("tabs_widget").scrollIntoView();
 });
 </script>
 @endpush

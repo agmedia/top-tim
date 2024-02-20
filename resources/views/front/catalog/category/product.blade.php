@@ -1,6 +1,20 @@
 <div class="article pb-1" >
 
     <div class="card product-card d-flex align-items-stretch  pb-1">
+
+        <div class="btn-wishlist-block">
+            @if ($product->vegan)
+                <button class="btn-wishlist me-1 btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="image/vegan.svg" alt="Vegan" width="15px"/></button>
+            @endif
+            @if ($product->vegetarian)
+                <button class="btn-wishlist me-1 btn-sm"  type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="image/vegeterian.svg" alt="Vegeterian"  width="15px"/></button>
+            @endif
+            @if ($product->glutenfree)
+                <button class="btn-wishlist btn-sm me-1"  type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="image/gluten-free.svg" alt="Gluten Free"  width="15px"/></button>
+            @endif
+        </div>
+
+
         @if ($product->main_price > $product->main_special)
             <span class="badge bg-primary badge-shadow">-{{ number_format(floatval(\App\Helpers\Helper::calculateDiscount($product->price, $product->special())), 0) }}%</span>
         @endif
@@ -8,14 +22,7 @@
             <img load="lazy" src="{{ str_replace('.webp','-thumb.webp', $product->image) }}" width="400" height="400" alt="{{ $product->name }}">
         </a>
         <div class="card-body pt-2" style="min-height: 120px;">
-
-            <div class="d-flex flex-wrap justify-content-between align-items-start pb-1">
-                <div class="text-muted fs-xs me-1">
-                    <a class="product-meta fw-medium" href="{{ $product->author->url }}">{{ $product->author->title }}</a>
-                </div>
-
-            </div>
-
+           
             <h3 class="product-title fs-sm text-truncate"><a href="{{ url($product->url) }}">{{ $product->name }}</a></h3>
             {!! $product->category_string !!}
             @if ($product->main_price > $product->main_special)

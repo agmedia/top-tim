@@ -114,6 +114,10 @@ class Helper
                                ->orWhere('meta_description', 'like', '%' . $target . '%')
                                ->orWhere('sku', 'like', '%' . $target . '%')
                                ->orWhere('isbn', 'like', '%' . $target . '%')
+                                ->orWhere('category_string', 'like', '%' . $target . '%')
+                                 ->orWhere('sastojci', 'like', '%' . $target . '%')
+                                  ->orWhere('podaci', 'like', '%' . $target . '%')
+                              ->orWhere('description', 'like', '%' . $target . '%')
                                ->pluck('id');
 
             if ( ! $products->count()) {
@@ -196,14 +200,11 @@ class Helper
     {
         $related = [];
 
-        if ($subcat) {
-            $related = $subcat->products()->inRandomOrder()->take(10)->get();
-
-        } else {
-            if ($cat) {
-                $related = $cat->products()->inRandomOrder()->take(10)->get();
-            }
+        if ($cat) {
+            $related = $cat->products()->inRandomOrder()->take(10)->groupBy('id')->get();
         }
+
+
 
         if ($related->count() < 9) {
             $related->merge(Product::query()->inRandomOrder()->take(10 - $related->count())->get());

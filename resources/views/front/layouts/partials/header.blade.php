@@ -89,17 +89,8 @@
         </div>
     </div>
     <div class="offcanvas-footer d-block px-grid-gutter pt-4 pb-3 mb-2">
-        <div class="d-flex mb-3"><i class="ci-phone h4 mb-0 fw-normal text-primary mt-1 me-1"></i>
-            <div class="ps-2">
-            <a class="nav-link-style fs-md" href="tel:+385 99 3334448">+385 99 3334448 (HRV)</a><br>
-                <a class="nav-link-style fs-md" href="tel:+385 91 5207047">+385 91 5207047 (ENG)</a>
-            </div>
 
-        </div>
-        <div class="d-flex mb-3"><i class="ci-mail h5 mb-0 fw-normal text-primary mt-1 me-1"></i>
-            <div class="ps-2">
-              <a class="nav-link-style fs-md" href="mailto:info@ricekakis.com">info@ricekakis.com</a>
-            </div>
-        </div>
+
+        <h6 class="pt-2 pb-1">Pratite nas</h6><a class="btn-social bs-outline bs-facebook me-2 mb-2" href="https://www.facebook.com/ricekakis"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" href="https://www.instagram.com/ricekakis/"><i class="ci-instagram"></i></a><a class="btn-social bs-outline bs-youtube me-2 mb-2" href="https://www.youtube.com/channel/UCdNEYWHea1pKfUJbKF6fU4g"><i class="ci-youtube"></i></a>
     </div>
 </aside>

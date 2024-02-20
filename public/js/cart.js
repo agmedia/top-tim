@@ -2165,11 +2165,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var cart = this.$store.state.storage.getCart();
-    for (var key in cart.items) {
-      if (this.id == cart.items[key].id) {
-        this.has_in_cart = true;
-        this.quantity = cart.items[key].quantity;
+    if (cart) {
+      for (var key in cart.items) {
+        if (this.id == cart.items[key].id) {
+          this.has_in_cart = true;
+          this.quantity = cart.items[key].quantity;
+        }
       }
+    }
+    if (this.available == undefined) {
+      this.available = 0;
     }
     this.checkAvailability();
   },
@@ -3404,7 +3409,7 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("button", {
-    staticClass: "btn btn-primary btn-shadow btn-sm d-sm-block d-none",
+    staticClass: "btn btn-primary btn-shadow btn-sm",
     attrs: {
       disabled: _vm.disabled,
       type: "button"
@@ -4003,9 +4008,7 @@ var render = function render() {
       }
     }, [_c("span", {
       staticClass: "d-flex align-items-center"
-    }, [_c("i", {
-      staticClass: "ci-basket-alt fs-lg opacity-60 mt-n1 me-2"
-    }), _vm._v(_vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
+    }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
       staticClass: "nav-link-style d-block fs-md fw-normal py-3",
       "class": {
         active: _vm.category.id == cat.id
@@ -4033,9 +4036,7 @@ var render = function render() {
       }
     }, [_c("span", {
       staticClass: "d-flex align-items-center"
-    }, [_c("i", {
-      staticClass: "ci-store fs-lg opacity-60 mt-n1 me-2"
-    }), _vm._v(_vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
+    }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
       staticClass: "nav-link-style d-block fs-md fw-normal py-3",
       attrs: {
         href: cat.url,
@@ -4120,17 +4121,11 @@ var render = function render() {
     attrs: {
       href: _vm.origin + "blog"
     }
-  }, [_vm._m(0)])])])]) : _vm._e()]);
-};
-var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("span", {
+  }, [_c("span", {
     staticClass: "d-flex align-items-center"
-  }, [_c("i", {
-    staticClass: "ci-list fs-lg mt-n1 me-2"
-  }), _vm._v("Blog")]);
-}];
+  }, [_vm._v(" Blog")])])])])]) : _vm._e()]);
+};
+var staticRenderFns = [];
 render._withStripped = true;
 
 
@@ -4351,7 +4346,54 @@ var render = function render() {
       staticClass: "px-2 mb-4 d-flex align-items-stretch"
     }, [_c("div", {
       staticClass: "card product-card card-static pb-3"
-    }, [_vm._m(0, true), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _vm._m(2, true), _vm._v(" "), product.quantity <= 0 ? _c("span", {
+    }, [_c("div", {
+      staticClass: "btn-wishlist-block"
+    }, [product.vegan ? _c("button", {
+      staticClass: "btn-wishlist me-1 btn-sm",
+      attrs: {
+        type: "button",
+        "data-bs-toggle": "tooltip",
+        "data-bs-placement": "top",
+        "aria-label": "Vegan",
+        "data-bs-original-title": "Vegan"
+      }
+    }, [_c("img", {
+      attrs: {
+        src: "image/vegan.svg",
+        alt: "Vegan",
+        width: "15px"
+      }
+    })]) : _vm._e(), _vm._v(" "), product.vegetarian ? _c("button", {
+      staticClass: "btn-wishlist me-1 btn-sm",
+      attrs: {
+        type: "button",
+        "data-bs-toggle": "tooltip",
+        "data-bs-placement": "top",
+        "aria-label": "Vegeterian",
+        "data-bs-original-title": "Vegeterian"
+      }
+    }, [_c("img", {
+      attrs: {
+        src: "image/vegeterian.svg",
+        alt: "Vegeterian",
+        width: "15px"
+      }
+    })]) : _vm._e(), _vm._v(" "), product.glutenfee ? _c("button", {
+      staticClass: "btn-wishlist btn-sm me-1",
+      attrs: {
+        type: "button",
+        "data-bs-toggle": "tooltip",
+        "data-bs-placement": "top",
+        "aria-label": "Gluten Free",
+        "data-bs-original-title": "Gluten Free"
+      }
+    }, [_c("img", {
+      attrs: {
+        src: "image/gluten-free.svg",
+        alt: "Gluten Free",
+        width: "15px"
+      }
+    })]) : _vm._e()]), _vm._v(" "), product.quantity <= 0 ? _c("span", {
       staticClass: "badge bg-warning mt-1 ms-1 badge-end"
     }, [_vm._v("Rasprodano")]) : _vm._e(), _vm._v(" "), product.special ? _c("span", {
       staticClass: "badge rounded-pill bg-primary mt-1 ms-1 badge-shadow"
@@ -4424,7 +4466,7 @@ var render = function render() {
     }
   }), _vm._v(" "), !_vm.products_loaded ? _c("div", {
     staticClass: "row"
-  }, [_vm._m(3)]) : _vm._e(), _vm._v(" "), _vm.products.total ? _c("div", {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _vm.products.total ? _c("div", {
     staticClass: "col-md-12 d-flex justify-content-center mt-4"
   }, [_c("p", {
     staticClass: "fs-sm"
@@ -4438,78 +4480,15 @@ var render = function render() {
     staticClass: "col-md-12 px-2 mb-4"
   }, [_c("h2", [_vm._v("Nema rezultata pretrage")]), _vm._v(" "), _c("p", [_vm._v(" Vaša pretraga za  "), _c("mark", [_vm._v(_vm._s(_vm.search_query))]), _vm._v(" pronašla je 0 rezultata.")]), _vm._v(" "), _c("h4", {
     staticClass: "h5"
-  }, [_vm._v("Savjeti i smjernica")]), _vm._v(" "), _vm._m(4), _vm._v(" "), _c("hr", {
+  }, [_vm._v("Savjeti i smjernica")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("hr", {
     staticClass: "d-sm-none"
   })]) : _vm._e(), _vm._v(" "), _vm.products_loaded && _vm.navigation_zero_result ? _c("div", {
-    staticClass: "col-md-12 px-2 mb-4"
+    staticClass: "col-md-12 mb-4"
   }, [_c("h2", [_vm._v("Trenutno nema proizvoda")]), _vm._v(" "), _c("p", [_vm._v(" Pogledajte u nekoj drugoj kategoriji ili probajte sa tražilicom :-)")]), _vm._v(" "), _c("hr", {
     staticClass: "d-sm-none"
   })]) : _vm._e()], 1);
 };
 var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("button", {
-    staticClass: "btn-wishlist me-1 btn-sm",
-    attrs: {
-      type: "button",
-      "data-bs-toggle": "tooltip",
-      "data-bs-placement": "top",
-      "aria-label": "Vegan",
-      "data-bs-original-title": "Vegan"
-    }
-  }, [_c("img", {
-    attrs: {
-      src: "image/vegan.svg",
-      alt: "Vegan",
-      width: "15px"
-    }
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("button", {
-    staticClass: "btn-wishlist me-1 btn-sm",
-    staticStyle: {
-      right: "50px"
-    },
-    attrs: {
-      type: "button",
-      "data-bs-toggle": "tooltip",
-      "data-bs-placement": "top",
-      "aria-label": "Vegeterian",
-      "data-bs-original-title": "Vegeterian"
-    }
-  }, [_c("img", {
-    attrs: {
-      src: "image/vegeterian.svg",
-      alt: "Vegeterian",
-      width: "15px"
-    }
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("button", {
-    staticClass: "btn-wishlist btn-sm me-1",
-    staticStyle: {
-      right: "88px"
-    },
-    attrs: {
-      type: "button",
-      "data-bs-toggle": "tooltip",
-      "data-bs-placement": "top",
-      "aria-label": "Gluten Free",
-      "data-bs-original-title": "Gluten Free"
-    }
-  }, [_c("img", {
-    attrs: {
-      src: "image/gluten-free.svg",
-      alt: "Gluten Free",
-      width: "15px"
-    }
-  })]);
-}, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {

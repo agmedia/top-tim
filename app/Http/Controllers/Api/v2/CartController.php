@@ -62,9 +62,9 @@ class CartController extends Controller
     public function get()
     {
         $response = $this->cart->get();
-        
+
         $this->resolveDB($response);
-        
+
         return response()->json($response);
     }
 
@@ -108,9 +108,9 @@ class CartController extends Controller
     public function update(Request $request, $id)
     {
         $response = $this->cart->add($request, $id);
-    
+
         $this->resolveDB($response);
-    
+
         return response()->json($response);
     }
 
@@ -123,9 +123,9 @@ class CartController extends Controller
     public function remove($id)
     {
         $response = $this->cart->remove($id);
-    
+
         $this->resolveDB($response);
-    
+
         return response()->json($response);
     }
 
@@ -141,8 +141,8 @@ class CartController extends Controller
 
         return response()->json($this->cart->coupon($coupon));
     }
-    
-    
+
+
     /**
      * Resolve new cart session.
      * If user is logged, check the DB for cart session entries.
@@ -168,7 +168,7 @@ class CartController extends Controller
             // Queue the storage of cart data.
             dispatch(function () use ($response) {
                 $has_cart = Cart::where('user_id', Auth::user()->id)->first();
-    
+
                 if ($has_cart) {
                     Cart::edit($response);
                 } else {

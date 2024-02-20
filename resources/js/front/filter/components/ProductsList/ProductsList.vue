@@ -27,11 +27,14 @@
             <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in products.data">
                 <div class="card product-card card-static pb-3">
 
-                    <button class="btn-wishlist me-1 btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="image/vegan.svg" alt="Vegan" width="15px"/></button>
+                    <div class="btn-wishlist-block">
 
-                    <button class="btn-wishlist me-1 btn-sm" style="right:50px" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="image/vegeterian.svg" alt="Vegeterian"  width="15px"/></button>
+                        <button class="btn-wishlist me-1 btn-sm" v-if="product.vegan" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="image/vegan.svg" alt="Vegan" width="15px"/></button>
 
-                    <button class="btn-wishlist btn-sm me-1" style="right:88px" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="image/gluten-free.svg" alt="Gluten Free"  width="15px"/></button>
+                        <button class="btn-wishlist me-1 btn-sm"  v-if="product.vegetarian" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="image/vegeterian.svg" alt="Vegeterian"  width="15px"/></button>
+
+                        <button class="btn-wishlist btn-sm me-1"  v-if="product.glutenfee" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="image/gluten-free.svg" alt="Gluten Free"  width="15px"/></button>
+                    </div>
 
                     <span class="badge bg-warning mt-1 ms-1 badge-end"  v-if="product.quantity <= 0">Rasprodano</span>
                     <span class="badge rounded-pill bg-primary mt-1 ms-1 badge-shadow" v-if="product.special">-{{ ($store.state.service.getDiscountAmount(product.price, product.special)) }}%</span>
@@ -87,7 +90,7 @@
             </ul>
             <hr class="d-sm-none">
         </div>
-        <div class="col-md-12 px-2 mb-4" v-if="products_loaded && navigation_zero_result">
+        <div class="col-md-12  mb-4" v-if="products_loaded && navigation_zero_result">
             <h2>Trenutno nema proizvoda</h2>
             <p> Pogledajte u nekoj drugoj kategoriji ili probajte sa tražilicom :-)</p>
             <hr class="d-sm-none">

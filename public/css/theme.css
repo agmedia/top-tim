@@ -107,9 +107,9 @@ hr {
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
     margin-top: 0;
     margin-bottom: 0.75rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.2;
-    color: #373f50;
+    color: #000;
 
 }
 
@@ -389,7 +389,7 @@ h3, .h3 {
 }
 
 h4, .h4 {
-    font-size: calc(1.275rem + 0.3vw);
+    font-size: 0.9rem;
 }
 @media (min-width: 1200px) {
     h4, .h4 {
@@ -13460,7 +13460,8 @@ button:focus {
 }
 
 .hr-light {
-    color: rgba(255, 255, 255, 0.12);
+    color: rgba(218, 225, 231,.5);
+    /*! border-top: 2px solid; */
 }
 
 .hr-vertical {
@@ -15252,7 +15253,7 @@ input[type=search]::-webkit-search-results-decoration {
     transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out, border-color 0.25s ease-in-out, box-shadow 0.2s ease-in-out;
     border: 0;
     border-radius: 50%;
-    background-color: #80C342;
+    background-color: #F7F3F5;
     color: #373f50;
     text-align: center;
 }
@@ -18232,6 +18233,18 @@ html:not([dir=rtl]) .range-slider-ui.noUi-horizontal .noUi-handle {
     top: 0.75rem;
     right: 0.75rem;
     z-index: 5;
+}
+
+.btn-wishlist-block > .btn-wishlist {
+    display:block;
+    margin-bottom:5px
+}
+
+.btn-wishlist-block  {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 105;
 }
 .product-card .product-card-actions .btn-action {
     padding: 0.5rem;

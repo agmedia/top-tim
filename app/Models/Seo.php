@@ -24,7 +24,7 @@ class Seo
     {
         return [
             'title'       => rtrim($product->name) . ' - ' . (isset($product->author->title) ? $product->author->title : ''),
-            'description' => 'Knjiga ' . rtrim($product->name) . ' pisca ' . (isset($product->author->title) ? $product->author->title : '') . ' u Plava Krava web shopu. Kliknite na naš web i saznajte više!'
+            'description' => rtrim($product->name) . ' - ' . (isset($product->meta_description) ? $product->meta_description : '')
         ];
     }
 
@@ -34,18 +34,18 @@ class Seo
      */
     public static function getAuthorData(Author $author, Category $cat = null, Category $subcat = null): array
     {
-        $title = $author->title . ' knjige - Plava Krava';
-        $description = 'Knjige autora ' . $author->title . ' danas su jako popularne u svijetu. Bogati izbor knjiga autora ' . $author->title . ' uz brzu dostavu i sigurnu kupovinu.';
+        $title = $author->title . ' Rice Kakis | Asian Store';
+        $description =  $author->meta_description ;
 
         // Check if there is meta title or description and set vars.
         if ($cat) {
             if ($cat->meta_title) { $title = $cat->meta_title; }
-            //if ($cat->meta_description) { $description = $cat->meta_description; }
+            if ($cat->meta_description) { $description = $cat->meta_description; }
         }
 
         if ($subcat) {
             if ($subcat->meta_title) { $title = $subcat->meta_title; }
-            //if ($subcat->meta_description) { $description = $subcat->meta_description; }
+            if ($subcat->meta_description) { $description = $subcat->meta_description; }
         }
 
         return [

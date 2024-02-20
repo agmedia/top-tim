@@ -330,9 +330,9 @@ FileETag None
   RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 
-  #RewriteRule ^.?proizvod/?$ /$1-$2 [R=301,L]
+  RewriteRule ^.?proizvodi/?$ /$1-$2 [R=301,L]
 
-    #RewriteRule ^.?kategorija-proizvoda/?$ /$1-$2 [R=301,L]
+    RewriteRule ^.?kategorija-proizvoda/?$ /$1-$2 [R=301,L]
 
     Redirect /o-nama /info/o-nama
     Redirect /uvjeti-kupnje /info/opci-uvjeti-kupnje
