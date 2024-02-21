@@ -22,6 +22,9 @@ class Blog extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
     
+    /**
+     * @var string[] 
+     */
     protected $appends = ['thumb'];
 
 

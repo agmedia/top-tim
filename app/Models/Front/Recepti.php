@@ -21,7 +21,11 @@ class Recepti extends Model
      * @var array
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
-
+    
+    /**
+     * @var string[]
+     */
+    protected $appends = ['thumb'];
 
     /**
      * Get the route key for the model.
@@ -42,6 +46,17 @@ class Recepti extends Model
     public function getImageAttribute($value)
     {
         return config('settings.images_domain') . str_replace('.jpg', '.webp', $value);
+    }
+    
+    
+    /**
+     * @param $value
+     *
+     * @return array|string|string[]
+     */
+    public function getThumbAttribute($value)
+    {
+        return config('settings.images_domain') . str_replace('.jpg', '-thumb.webp', $value);
     }
 
 

@@ -129,6 +129,19 @@ class Recepti extends Model
 
             $path_webp = $str . 'webp';
             Storage::disk('recepti')->put($path_webp, $img->encode('webp'));
+            
+            // Thumb creation
+            $path_thumb = $recepti->id . '/' . Str::slug($recepti->title) . '-' . time() . '-thumb.';
+            $canvas = Image::canvas(400, 250, '#ffffff');
+            
+            $img = $img->resize(null, 250, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            
+            $canvas->insert($img, 'center');
+            
+            $path_webp_thumb = $path_thumb . 'webp';
+            Storage::disk('recepti')->put($path_webp_thumb, $canvas->encode('webp'));
 
             return $recepti->update([
                 'image' => config('filesystems.disks.recepti.url') . $path
