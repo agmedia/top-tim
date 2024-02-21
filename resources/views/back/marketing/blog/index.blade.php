@@ -26,7 +26,7 @@
                     <!-- Search Form -->
                     <form action="{{ route('blogs') }}" method="GET">
                         <div class="block-options-item">
-                            <input type="text" class="form-control" id="search-input" name="search" placeholder="Pretraži autore" value="{{ request()->query('search') }}">
+                            <input type="text" class="form-control" id="search-input" name="search" placeholder="Pretraži blogove" value="{{ request()->query('search') }}">
                         </div>
                         <div class="block-options-item">
                             <a href="{{ route('blogs') }}" class="btn btn-hero-sm btn-secondary"><i class="fa fa-search-minus"></i> Očisti</a>
