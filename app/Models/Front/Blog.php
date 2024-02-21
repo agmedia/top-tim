@@ -21,6 +21,8 @@ class Blog extends Model
      * @var array
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    
+    protected $appends = ['thumb'];
 
 
     /**
@@ -32,8 +34,8 @@ class Blog extends Model
     {
         return 'slug';
     }
-
-
+    
+    
     /**
      * @param $value
      *
@@ -42,6 +44,17 @@ class Blog extends Model
     public function getImageAttribute($value)
     {
         return config('settings.images_domain') . str_replace('.jpg', '.webp', $value);
+    }
+    
+    
+    /**
+     * @param $value
+     *
+     * @return array|string|string[]
+     */
+    public function getThumbAttribute($value)
+    {
+        return config('settings.images_domain') . str_replace('.jpg', '-thumb.webp', $value);
     }
 
 
