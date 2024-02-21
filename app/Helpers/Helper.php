@@ -220,13 +220,13 @@ class Helper
      *
      * @return false|string
      */
-    public static function setDescription(string $description)
+    public static function setDescription(string $description, int $page_id)
     {
         if ($description == '') {
             return '';
         }
 
-        $ids = Cache::remember('wg_ids', config('cache.life'), function () use ($description) {
+        $ids = Cache::remember('wg_ids' . $page_id, config('cache.life'), function () use ($description) {
             $iterator = substr_count($description, '++');
             $offset   = 0;
             $ids      = [];
@@ -242,7 +242,7 @@ class Helper
             return $ids;
         });
 
-        $wgs = Cache::remember('wgs', config('cache.life'), function () use ($ids) {
+        $wgs = Cache::remember('wgs' . $page_id, config('cache.life'), function () use ($ids) {
             return WidgetGroup::whereIn('id', $ids)->orWhereIn('slug', $ids)->where('status', 1)->with('widgets')->get();
         });
 

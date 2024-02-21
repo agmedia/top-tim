@@ -31,7 +31,10 @@ class HomeController extends Controller
             return Page::where('slug', 'homepage')->first();
         });
 
-        $page->description = Helper::setDescription(isset($page->description) ? $page->description : '');
+        $page->description = Helper::setDescription(
+            isset($page->description) ? $page->description : '',
+            isset($page->id) ? $page->id : ''
+        );
 
         return view('front.page', compact('page'));
     }
