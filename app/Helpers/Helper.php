@@ -291,6 +291,8 @@ class Helper
             if (static::isDescriptionTarget($data, 'recepti')) {
                 $items     = static::receptis($data)->get();
                 $tablename = 'recepti';
+
+
             }
 
             if (static::isDescriptionTarget($data, 'category')) {

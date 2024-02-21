@@ -68,6 +68,8 @@
 
     @elseif ($data['tablename'] == 'recepti')
 
+
+
         <div class="tns-carousel pb-5">
             <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 2, &quot;gutter&quot;: 15, &quot;controls&quot;: false, &quot;nav&quot;: true, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;500&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:2}, &quot;992&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 30},&quot;1500&quot;:{&quot;items&quot;:4, &quot;gutter&quot;: 30}}}">
                 @foreach ($data['items'] as $item)
@@ -75,7 +77,7 @@
                     <div>
                         <div class="card">
 
-                            <a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}"><span class="blog-entry-meta-label fs-sm"><i class="ci-pot"></i></span><img class="card-img-top" load="lazy" src="{{ $item['image'] }}" width="400" height="230" alt="{{ $item['title'] }}"></a>
+                            <a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}"><span class="blog-entry-meta-label fs-sm"><i class="ci-pot"></i></span><img class="card-img-top" load="lazy" src="{!! str_replace('.webp', '-thumb.webp', $item['image']) !!}" width="400" height="230" alt="{{ $item['title'] }}"></a>
 
                             <div class="card-body">
                                 <h2 class="h6 blog-entry-title"><a href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}">{{ $item['title'] }}</a></h2>
