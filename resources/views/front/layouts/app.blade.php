@@ -37,9 +37,6 @@
             animation: sk-scaleout 1.0s infinite ease-in-out;
         }
 
-
-
-
         @-webkit-keyframes sk-scaleout {
             0% { -webkit-transform: scale(0) }
             100% {
@@ -82,23 +79,7 @@
     </style>
     @if (config('app.env') == 'production')
         @yield('google_data_layer')
-        <!-- Google Tag Manager -->
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-KWFCSLSV');</script>
-        <!-- End Google Tag Manager -->
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-B0BP9R6HH4"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
 
-            gtag('config', 'G-B0BP9R6HH4');
-            gtag('config', 'AW-11343209567');
-        </script>
 
 
     @endif
@@ -109,8 +90,7 @@
 <!-- Body-->
 <body class="bg-secondary">
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWFCSLSV"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
 <!-- End Google Tag Manager (noscript) -->
 <div id="agapp">
     <div v-cloak>
@@ -154,7 +134,7 @@
 <script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
 <!-- Main theme script-->
-<script src="{{ asset('js/cart.js?v=2.0.15') }}"></script>
+<script src="{{ asset('js/cart.js?v=2.0.16') }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
 
 
