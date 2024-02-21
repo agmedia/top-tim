@@ -80,7 +80,7 @@ class Bank
                         ),
                     'receiver'    =>
                         array(
-                            'name'      => 'Vukoje Logistika j.d.o.o. ',
+                            'name'      => 'Vukoje Logistika',
                             'street'    => 'Kaštelanska Ulica 4/a',
                             'place'     => '10010 Veliko Polje',
                             'iban'      => 'HR9223400091111126783',
