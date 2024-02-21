@@ -104,6 +104,12 @@ return [
             'url' => 'media/img/blog/'
         ],
         //
+        'recepti' => [
+            'driver' => 'local',
+            'root' => public_path('media/img/recepti/'),
+            'url' => 'media/img/recepti/'
+        ],
+        //
         'page' => [
             'driver' => 'local',
             'root' => public_path('media/img/page/'),

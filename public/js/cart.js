@@ -4130,7 +4130,18 @@ var render = function render() {
     }
   }, [_c("span", {
     staticClass: "d-flex align-items-center"
-  }, [_vm._v(" Blog")])])])])]) : _vm._e()]);
+  }, [_vm._v(" Blog")])])])]), _vm._v(" "), _c("div", {
+    staticClass: "accordion-item border-bottom"
+  }, [_c("h3", {
+    staticClass: "accordion-header px-grid-gutter"
+  }, [_c("a", {
+    staticClass: "nav-link-style d-block fs-md fw-normal py-3",
+    attrs: {
+      href: _vm.origin + "recepti"
+    }
+  }, [_c("span", {
+    staticClass: "d-flex align-items-center"
+  }, [_vm._v(" Recepti")])])])])]) : _vm._e()]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

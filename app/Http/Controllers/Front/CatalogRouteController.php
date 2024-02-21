@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\ProductImport;
 use App\Models\Back\Settings\Settings;
 use App\Models\Front\Blog;
+use App\Models\Front\Recepti;
 use App\Models\Front\Page;
 use App\Models\Front\Faq;
 use App\Models\Front\Catalog\Author;
@@ -320,6 +321,25 @@ class CatalogRouteController extends Controller
         $blog->description = Helper::setDescription($blog->description);
 
         return view('front.blog', compact('blog'));
+    }
+
+
+    /**
+     * @param Recepti $recepti
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function recepti(Recepti $recepti)
+    {
+        if (! $recepti->exists) {
+            $receptis = Recepti::active()->get();
+
+            return view('front.recepti', compact('receptis'));
+        }
+
+        $recepti->description = Helper::setDescription($recepti->description);
+
+        return view('front.recepti', compact('recepti'));
     }
 
 

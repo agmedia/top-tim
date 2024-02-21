@@ -1,0 +1,106 @@
+@extends('front.layouts.app')
+@if(isset($receptis))
+        @section ( 'title', 'Recepti - Rice Kakis | Asian Store' )
+        @section ( 'description', 'Gastronomske poslastice vas očekuju: Uživajte u primamljivom mochiju, bubble tea-u, kimchiju, proizvodima bez glutena i ukusnim umacima.' )
+@else
+    @section ( 'title', $recepti->title. ' - Rice Kakis | Asian Store' )
+@section ( 'description', $recepti->meta_description )
+
+    @push('meta_tags')
+
+
+
+
+        <link rel="canonical" href="{{ route('catalog.route.recepti', ['recepti' => $recepti]) }}" />
+        <meta property="og:locale" content="hr_HR" />
+        <meta property="og:type" content="product" />
+        <meta property="og:title" content="{{ $recepti->title }}" />
+        <meta property="og:description" content="{{ $recepti->meta_description  }}" />
+        <meta property="og:url" content="{{ route('catalog.route.recepti', ['recepti' => $recepti]) }}"  />
+        <meta property="og:site_name" content="Rice Kakis | Asian Store" />
+        <meta property="og:updated_time" content="{{ $recepti->updated_at  }}" />
+        <meta property="og:image" content="{{ asset($recepti->image) }}" />
+        <meta property="og:image:secure_url" content="{{ asset($recepti->image) }}" />
+        <meta property="og:image:width" content="640" />
+        <meta property="og:image:height" content="480" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:alt" content="{{ asset($recepti->image) }}" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="{{ $recepti->title }}" />
+        <meta name="twitter:description" content="{{ $recepti->meta_description }}" />
+        <meta name="twitter:image" content="{{ asset($recepti->image) }}" />
+
+    @endpush
+
+@endif
+
+@section('content')
+
+    <nav class="mb-4" aria-label="breadcrumb">
+        <ol class="breadcrumb flex-lg-nowrap">
+            <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>Naslovnica</a></li>
+            <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('catalog.route.recepti') }}"><i class="ci-home"></i>Recepti</a></li>
+        </ol>
+    </nav>
+
+
+    <section class="d-md-flex justify-content-between align-items-center mb-4 pb-2">
+
+
+        @if(isset($receptis))
+            <h1 class="h2 mb-3 mb-md-0 me-3">Recepti</h1>
+        @else
+            <h1 class="h2 mb-3 mb-md-0 me-3">{{ $recepti->title }}</h1>
+        @endif
+
+    </section>
+
+
+
+    @if(isset($receptis))
+
+    <div class=" pb-5 mb-2 mb-md-4">
+
+
+            <!-- Entries grid-->
+            <div class="masonry-grid" data-columns="4">
+                @foreach ($receptis as $recepti)
+
+                <article class="masonry-grid-item">
+                    <div class="card">
+                        <a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $recepti]) }}"><img class="card-img-top" src="{{ $recepti->image }}" alt="Post"></a>
+                        <div class="card-body">
+                            <h2 class="h6 blog-entry-title"><a href="{{ route('catalog.route.blog', ['blog' => $recepti]) }}">{{ $recepti->title }}</a></h2>
+                            <p class="fs-sm">{{ $recepti->short_description }}</p>
+                        </div>
+                        <div class="card-footer d-flex align-items-left fs-xs">
+                            <div class="me-auto text-nowrap"><a class="blog-entry-meta-link text-nowrap" href="{{ route('catalog.route.recepti', ['recepti' => $recepti]) }}">{{ \Carbon\Carbon::make($recepti->created_at)->locale('hr')->format('d.m.Y.') }}</a></div>
+                        </div>
+                    </div>
+                </article>
+
+                @endforeach
+
+            </div>
+
+
+
+    </div>
+    @else
+        <div class="mt-2 mb-5 fs-md" style="max-width:1240px">
+                    <!-- Post meta-->
+                    <!-- Gallery-->
+                    <div class="gallery row pb-2">
+                        <div class="col-sm-12 mb-2"><img src="{{ asset($recepti->image) }}" alt="Gallery image"></div>
+
+                    </div>
+                    <!-- Post content-->
+
+                    {!! $recepti->description !!}
+
+        </div>
+
+
+    @endif
+
+@endsection

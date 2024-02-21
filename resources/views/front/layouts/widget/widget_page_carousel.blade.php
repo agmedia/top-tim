@@ -66,6 +66,26 @@
             </div>
         </div>
 
+    @elseif ($data['tablename'] == 'recepti')
+
+        <div class="tns-carousel pb-5">
+            <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 2, &quot;gutter&quot;: 15, &quot;controls&quot;: false, &quot;nav&quot;: true, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;500&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:2}, &quot;992&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 30},&quot;1200&quot;:{&quot;items&quot;:4, &quot;gutter&quot;: 30}}}">
+                @foreach ($data['items'] as $item)
+                    <!-- Product-->
+                    <div>
+                        <div class="card"><a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}"><img class="card-img-top" load="lazy" src="{{ $item['image'] }}" width="400" height="230" alt="{{ $item['title'] }}"></a>
+                            <div class="card-body">
+                                <h2 class="h6 blog-entry-title"><a href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}">{{ $item['title'] }}</a></h2>
+                                <p class="fs-sm">{{ $item['short_description'] }}</p>
+                                <div class="fs-xs text-nowrap"><a class="blog-entry-meta-link text-nowrap" href="#">{{ \Carbon\Carbon::make($item['created_at'])->locale('hr')->format('d.m.Y.') }}</a></div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+
     @else
         <div class="tns-carousel pb-5">
             <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 2, &quot;gutter&quot;: 15, &quot;controls&quot;: false, &quot;nav&quot;: true, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;500&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:2}, &quot;992&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 30}}}">

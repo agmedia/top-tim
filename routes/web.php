@@ -12,6 +12,7 @@ use App\Http\Controllers\Back\Marketing\ReviewController;
 use App\Http\Controllers\Back\OrderController;
 use App\Http\Controllers\Back\Marketing\ActionController;
 use App\Http\Controllers\Back\Marketing\BlogController;
+use App\Http\Controllers\Back\Marketing\ReceptiController;
 use App\Http\Controllers\Back\Settings\ApiController;
 use App\Http\Controllers\Back\Settings\App\CurrencyController;
 use App\Http\Controllers\Back\Settings\App\GeoZoneController;
@@ -108,6 +109,14 @@ Route::middleware(['auth:sanctum', 'verified', 'no.customers'])->prefix('admin')
         Route::get('blog/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
         Route::patch('blog/{blog}', [BlogController::class, 'update'])->name('blogs.update');
         Route::delete('blog/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+
+        // RECEPTI
+        Route::get('receptis', [ReceptiController::class, 'index'])->name('receptis');
+        Route::get('recepti/create', [ReceptiController::class, 'create'])->name('receptis.create');
+        Route::post('recepti', [ReceptiController::class, 'store'])->name('receptis.store');
+        Route::get('recepti/{recepti}/edit', [ReceptiController::class, 'edit'])->name('receptis.edit');
+        Route::patch('recepti/{recepti}', [ReceptiController::class, 'update'])->name('receptis.update');
+        Route::delete('recepti/{recepti}', [ReceptiController::class, 'destroy'])->name('receptis.destroy');
     });
 
     // NARUDŽBE
@@ -256,6 +265,9 @@ Route::prefix('api/v2')->group(function () {
     Route::post('/blogs/destroy/api', [BlogController::class, 'destroyApi'])->name('blogs.destroy.api');
     Route::post('/blogs/upload/image', [BlogController::class, 'uploadBlogImage'])->name('blogs.upload.image');
 
+    Route::post('/receptis/destroy/api', [ReceptiController::class, 'destroyApi'])->name('receptis.destroy.api');
+    Route::post('/receptis/upload/image', [ReceptiController::class, 'uploadReceptiImage'])->name('receptis.upload.image');
+
     // FILTER
     Route::prefix('filter')->group(function () {
         Route::post('/getCategories', [FilterController::class, 'categories']);
@@ -357,6 +369,7 @@ Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('pretraz
 //
 Route::get('info/{page}', [CatalogRouteController::class, 'page'])->name('catalog.route.page');
 Route::get('blog/{blog?}', [CatalogRouteController::class, 'blog'])->name('catalog.route.blog');
+Route::get('recepti/{recepti?}', [CatalogRouteController::class, 'recepti'])->name('catalog.route.recepti');
 //
 Route::get('cache/image', [HomeController::class, 'imageCache']);
 Route::get('cache/thumb', [HomeController::class, 'thumbCache']);

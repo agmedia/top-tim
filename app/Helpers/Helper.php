@@ -7,6 +7,7 @@ use App\Models\Back\Marketing\Action;
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\Widget\WidgetGroup;
 use App\Models\Front\Blog;
+use App\Models\Front\Recepti;
 use App\Models\Front\Catalog\Author;
 use App\Models\Back\Marketing\Review;
 use App\Models\Front\Catalog\Product;
@@ -287,6 +288,11 @@ class Helper
                 $tablename = 'blog';
             }
 
+            if (static::isDescriptionTarget($data, 'recepti')) {
+                $items     = static::receptis($data)->get();
+                $tablename = 'recepti';
+            }
+
             if (static::isDescriptionTarget($data, 'category')) {
                 $items     = static::category($data)->get();
                 $tablename = 'category';
@@ -435,6 +441,33 @@ class Helper
         }
 
         return $blogs;
+    }
+
+
+    /**
+     * @param array $data
+     *
+     * @return Builder
+     */
+    private static function receptis(array $data): Builder
+    {
+        $receptis = (new Recepti())->newQuery();
+
+        $receptis->active();
+
+        if (isset($data['new']) && $data['new'] == 'on') {
+            $receptis->last();
+        }
+
+        if (isset($data['popular']) && $data['popular'] == 'on') {
+            $receptis->popular();
+        }
+
+        if (isset($data['list']) && $data['list']) {
+            $receptis->whereIn('id', $data['list']);
+        }
+
+        return $receptis;
     }
 
 
