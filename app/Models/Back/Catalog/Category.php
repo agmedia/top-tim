@@ -230,15 +230,33 @@ class Category extends Model
     public function resolveImage(Category $category)
     {
         if ($this->request->hasFile('image')) {
-            $name = Str::slug($category->title) . '.' . $this->request->image->extension();
-
-            $this->request->image->storeAs('/', $name, 'category');
-
+            $img = Image::make($this->request->image);
+            $str = $category->id . '/' . Str::slug($category->title) . '-' . time() . '.';
+            
+            $path = $str . 'jpg';
+            Storage::disk('category')->put($path, $img->encode('jpg'));
+            
+            $path_webp = $str . 'webp';
+            Storage::disk('category')->put($path_webp, $img->encode('webp'));
+            
+            // Thumb creation
+            $path_thumb = $category->id . '/' . Str::slug($category->title) . '-' . time() . '-thumb.';
+            $canvas = Image::canvas(400, 400, '#ffffff');
+            
+            $img = $img->resize(null, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            
+            $canvas->insert($img, 'center');
+            
+            $path_webp_thumb = $path_thumb . 'webp';
+            Storage::disk('category')->put($path_webp_thumb, $canvas->encode('webp'));
+            
             return $category->update([
-                'image' => config('filesystems.disks.category.url') . $name
+                'image' => config('filesystems.disks.category.url') . $path
             ]);
         }
-
+        
         return false;
     }
 

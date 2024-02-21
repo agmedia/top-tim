@@ -2,19 +2,13 @@
 
 namespace App\Models\Front\Catalog;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 
 class Category extends Model
 {
-    use HasFactory;
 
     /**
      * @var string
@@ -25,7 +19,12 @@ class Category extends Model
      * @var array
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
-
+    
+    /**
+     * @var string[]
+     */
+    protected $appends = ['thumb'];
+    
 
     /**
      * Get the route key for the model.
@@ -35,6 +34,28 @@ class Category extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+    
+    
+    /**
+     * @param $value
+     *
+     * @return array|string|string[]
+     */
+    public function getImageAttribute($value)
+    {
+        return config('settings.images_domain') . str_replace('.jpg', '.webp', $value);
+    }
+    
+    
+    /**
+     * @param $value
+     *
+     * @return array|string|string[]
+     */
+    public function getThumbAttribute($value)
+    {
+        return config('settings.images_domain') . str_replace('.jpg', '-thumb.webp', $value);
     }
 
 
