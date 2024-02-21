@@ -10,10 +10,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class Wspay
+ * Class Payway
  * @package App\Models\Front\Checkout\Payment
  */
-class Wspay
+class WSpay
 {
 
     /**
@@ -31,7 +31,7 @@ class Wspay
 
 
     /**
-     * Wspay constructor.
+     * Payway constructor.
      *
      * @param Order $order
      */
@@ -63,17 +63,25 @@ class Wspay
         $total = number_format($this->order->total,2, ',', '');
         $_total = str_replace( ',', '', $total);
 
+        $shoppingcartid = $this->order->id;
+
+        // $stringhash = $payment_method->data->shop_id.$payment_method->data->secret_key.$shoppingcartid.$payment_method->data->secret_key.$_total.$payment_method->data->secret_key;
+
+
+
+        // $hash = hash('sha512', $stringhash);
+
         $hash = md5($payment_method->data->shop_id .
-                    $payment_method->data->secret_key .
-                    $this->order->id .
-                    $payment_method->data->secret_key .
-                    $_total.
-                    $payment_method->data->secret_key
+            $payment_method->data->secret_key .
+            $this->order->id.'-'.date("Y") .
+            $payment_method->data->secret_key .
+            $_total.
+            $payment_method->data->secret_key
         );
 
         $data['action'] = $action;
         $data['shop_id'] = $payment_method->data->shop_id;
-        $data['order_id'] = $this->order->id;
+        $data['order_id'] = $this->order->id.'-'.date("Y");
         $data['total'] = $total;
         $data['md5'] = $hash;
         $data['firstname'] = $this->order->payment_fname;
@@ -85,9 +93,9 @@ class Wspay
         $data['phone'] = $this->order->payment_phone;
         $data['email'] = $this->order->payment_email;
         $data['lang'] = 'HR';
-        $data['plan'] = '01';
-        $data['cc_name'] = 'VISA';//...??
-        $data['currency'] = 'HRK';
+        $data['plan'] = '';
+        $data['cc_name'] = '';//...??
+        $data['currency'] = 'EUR';
         $data['rate'] = 1;
         $data['return'] = $payment_method->data->callback;
         $data['cancel'] = route('kosarica');
@@ -111,21 +119,23 @@ class Wspay
             'order_status_id' => $status
         ]);
 
+
+
         if ($request->input('Success')) {
             Transaction::insert([
                 'order_id' => $order->id,
                 'success' => 1,
-                'amount' => $request->input('Amount'),
-                'signature' => $request->input('Signature'),
-                'payment_type' => $request->input('PaymentType'),
-                'payment_plan' => $request->input('PaymentPlan'),
-                'payment_partner' => $request->input('Partner'),
-                'datetime' => $request->input('DateTime'),
-                'approval_code' => $request->input('ApprovalCode'),
-                'pg_order_id' => $request->input('WsPayOrderId'),
-                'lang' => $request->input('Lang'),
-                'stan' => $request->input('STAN'),
-                'error' => $request->input('ErrorMessage'),
+                /* 'amount' => $request->input('Amount'),
+                 'signature' => $request->input('Signature'),
+                 'payment_type' => $request->input('PaymentType'),
+                 'payment_plan' => $request->input('PaymentPlan'),
+                 'payment_partner' => $request->input('Partner'),
+                 'datetime' => $request->input('DateTime'),
+                 'approval_code' => $request->input('ApprovalCode'),
+                 'pg_order_id' => $request->input('WsPayOrderId'),
+                 'lang' => $request->input('Lang'),
+                 'stan' => $request->input('STAN'),
+                 'error' => $request->input('ErrorMessage'),*/
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
@@ -136,17 +146,17 @@ class Wspay
         Transaction::insert([
             'order_id' => $order->id,
             'success' => 0,
-            'amount' => $request->input('Amount'),
-            'signature' => $request->input('Signature'),
-            'payment_type' => $request->input('PaymentType'),
-            'payment_plan' => $request->input('PaymentPlan'),
-            'payment_partner' => null,
-            'datetime' => $request->input('DateTime'),
-            'approval_code' => $request->input('ApprovalCode'),
-            'pg_order_id' => null,
-            'lang' => $request->input('Lang'),
-            'stan' => null,
-            'error' => $request->input('ErrorMessage'),
+            /* 'amount' => $request->input('Amount'),
+             'signature' => $request->input('Signature'),
+             'payment_type' => $request->input('PaymentType'),
+             'payment_plan' => $request->input('PaymentPlan'),
+             'payment_partner' => null,
+             'datetime' => $request->input('DateTime'),
+             'approval_code' => $request->input('ApprovalCode'),
+             'pg_order_id' => null,
+             'lang' => $request->input('Lang'),
+             'stan' => null,
+             'error' => $request->input('ErrorMessage'),*/
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
