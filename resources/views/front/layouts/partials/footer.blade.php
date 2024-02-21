@@ -49,7 +49,7 @@
                         <div class="d-flex"><i class="ci-gift link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">Besplatna dostava HR</p>
-                                <p class="mb-0 fs-ms text-dark opacity-50">Besplatna dostava za narudžbe > 45€</p>
+                                <p class="mb-0 fs-ms text-dark opacity-80">Besplatna dostava za narudžbe > 45€</p>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         <div class="d-flex"><i class="ci-gift link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">Besplatna dostava Zagreb</p>
-                                <p class="mb-0 fs-ms text-dark opacity-50">Besplatna dostava za narudžbe > 25€</p>
+                                <p class="mb-0 fs-ms text-dark opacity-80">Besplatna dostava za narudžbe > 25€</p>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                         <div class="d-flex"><i class="ci-rocket link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">Brza i pozdana dostava</p>
-                                <p class="mb-0 fs-ms text-dark opacity-50">Dostavljamo za 1-3 radna dana u Hrvatskoj</p>
+                                <p class="mb-0 fs-ms text-dark opacity-80">Dostavljamo za 1-3 radna dana u Hrvatskoj</p>
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                         <div class="d-flex"><i class="ci-card link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">Sigurna online kupnja</p>
-                                <p class="mb-0 fs-ms text-dark opacity-50">Stranica zaštićena SSL certifikatom</p>
+                                <p class="mb-0 fs-ms text-dark opacity-80">Stranica zaštićena SSL certifikatom</p>
                             </div>
                         </div>
                     </div>
