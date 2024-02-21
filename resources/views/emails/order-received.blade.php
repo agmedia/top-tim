@@ -27,6 +27,8 @@
                     <b>{{ __('Gotovinom prilikom pouzeća') }}</b>
                 @elseif ($order->payment_code == 'corvus')
                     <b>{{ __('CorvusPay') }}</b>
+                @elseif ($order->payment_code == 'wspay')
+                    <b>{{ __('WSPay') }}</b>
                 @elseif ($order->payment_code == 'keks')
                     <b>{{ __('KeksPay') }}</b>
                 @else

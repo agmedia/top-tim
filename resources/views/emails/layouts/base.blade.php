@@ -155,8 +155,8 @@
         }
         .button-td-primary:hover,
         .button-a-primary:hover {
-            background: #373f50 !important;
-            border-color: #373f50 !important;
+            background: #000 !important;
+            border-color: #000 !important;
         }
 
         /* Media Queries */
@@ -203,7 +203,7 @@
             font-family: "Quicksand", sans-serif!important;
             font-size: 14px;
             line-height: 20px;
-            color: #373f50;
+            color: #000;
         }
 
         .ag-right {
@@ -215,7 +215,7 @@
             width: 200px;
             min-height: 20px;
             padding: 10px;
-            background-color: #18326d;
+            background-color: #EF4D48;
             border-radius: 3px;
             color: #ffffff;
             font-size: 14px;
@@ -261,7 +261,7 @@
         <!-- Email Header : BEGIN -->
         <tr>
             <td style="padding: 20px 0 15px 0; text-align: center">
-                <label class="large bold" style="color: white;">   <img src="{{ asset('media/img/logo-blue.png') }}" alt="ricekakis.com" border="0" style="max-width:200px;height: auto;"></label>
+                <label class="large bold" style="color: white;">   <img src="{{ asset('img/ogo-ricekakis.svg') }}" alt="ricekakis.com" border="0" style="max-width:200px;height: auto;"></label>
             </td>
         </tr>
         <!-- Email Header : END -->
