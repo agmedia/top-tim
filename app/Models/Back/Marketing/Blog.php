@@ -129,6 +129,19 @@ class Blog extends Model
 
             $path_webp = $str . 'webp';
             Storage::disk('blog')->put($path_webp, $img->encode('webp'));
+            
+            // Thumb creation
+            $path_thumb = $blog->id . '/' . Str::slug($blog->title) . '-' . time() . '-thumb.';
+            $canvas = Image::canvas(400, 250, '#ffffff');
+            
+            $img = $img->resize(null, 250, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            
+            $canvas->insert($img, 'center');
+            
+            $path_webp_thumb = $path_thumb . 'webp';
+            Storage::disk('blog')->put($path_webp_thumb, $canvas->encode('webp'));
 
             return $blog->update([
                 'image' => config('filesystems.disks.blog.url') . $path
