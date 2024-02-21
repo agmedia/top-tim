@@ -48,7 +48,7 @@
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex"><i class="ci-gift link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
-                                <h6 class="fs-base text-dark mb-1">Besplatna dostava HR</h6>
+                                <p class="fs-base fw-medium text-dark mb-1">Besplatna dostava HR</p>
                                 <p class="mb-0 fs-ms text-dark opacity-50">Besplatna dostava za narudžbe > 45€</p>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex"><i class="ci-gift link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
-                                <h6 class="fs-base text-dark mb-1">Besplatna dostava Zagreb</h6>
+                                <p class="fs-base fw-medium text-dark mb-1">Besplatna dostava Zagreb</p>
                                 <p class="mb-0 fs-ms text-dark opacity-50">Besplatna dostava za narudžbe > 25€</p>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex"><i class="ci-rocket link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
-                                <h6 class="fs-base text-dark mb-1">Brza i pozdana dostava</h6>
+                                <p class="fs-base fw-medium text-dark mb-1">Brza i pozdana dostava</p>
                                 <p class="mb-0 fs-ms text-dark opacity-50">Dostavljamo za 1-3 radna dana u Hrvatskoj</p>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex"><i class="ci-card link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
-                                <h6 class="fs-base text-dark mb-1">Sigurna online kupnja</h6>
+                                <p class="fs-base fw-medium text-dark mb-1">Sigurna online kupnja</p>
                                 <p class="mb-0 fs-ms text-dark opacity-50">Stranica zaštićena SSL certifikatom</p>
                             </div>
                         </div>
@@ -118,7 +118,7 @@
 
 
                     </div>
-                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" href="https://www.facebook.com/ricekakis"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" href="https://www.instagram.com/ricekakis/"><i class="ci-instagram"></i></a><a class="btn-social bs-outline bs-youtube me-2 mb-2" href="https://www.youtube.com/channel/UCdNEYWHea1pKfUJbKF6fU4g"><i class="ci-youtube"></i></a></div>
+                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" aria-label="Facebook" href="https://www.facebook.com/ricekakis"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/ricekakis/"><i class="ci-instagram"></i></a><a aria-label="Youtube" class="btn-social bs-outline bs-youtube me-2 mb-2" href="https://www.youtube.com/channel/UCdNEYWHea1pKfUJbKF6fU4g"><i class="ci-youtube"></i></a></div>
 
                         </div>
 
