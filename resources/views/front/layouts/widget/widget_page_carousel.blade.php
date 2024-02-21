@@ -73,11 +73,14 @@
                 @foreach ($data['items'] as $item)
                     <!-- Product-->
                     <div>
-                        <div class="card"><a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}"><img class="card-img-top" load="lazy" src="{{ $item['image'] }}" width="400" height="230" alt="{{ $item['title'] }}"></a>
+                        <div class="card">
+
+                            <a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}"><span class="blog-entry-meta-label fs-sm"><i class="ci-pot"></i></span><img class="card-img-top" load="lazy" src="{{ $item['image'] }}" width="400" height="230" alt="{{ $item['title'] }}"></a>
+
                             <div class="card-body">
                                 <h2 class="h6 blog-entry-title"><a href="{{ route('catalog.route.recepti', ['recepti' => $item]) }}">{{ $item['title'] }}</a></h2>
                                 <p class="fs-sm">{{ $item['short_description'] }}</p>
-                                <div class="fs-xs text-nowrap"><a class="blog-entry-meta-link text-nowrap" href="#">{{ \Carbon\Carbon::make($item['created_at'])->locale('hr')->format('d.m.Y.') }}</a></div>
+
                             </div>
                         </div>
                     </div>

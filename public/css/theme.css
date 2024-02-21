@@ -18709,7 +18709,7 @@ html:not([dir=rtl]) .range-slider-ui.noUi-horizontal .noUi-handle {
 }
 .blog-entry-meta-label > i {
     margin-top: -0.0625rem;
-    margin-right: 0.375rem;
+    /*! margin-right: 0.375rem; */
     color: #363e4f;
     vertical-align: middle;
 }

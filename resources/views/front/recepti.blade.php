@@ -68,14 +68,12 @@
 
                 <article class="masonry-grid-item">
                     <div class="card">
-                        <a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $recepti]) }}"><img class="card-img-top" src="{{ $recepti->image }}" alt="Post"></a>
+                        <a class="blog-entry-thumb" href="{{ route('catalog.route.recepti', ['recepti' => $recepti]) }}"><span class="blog-entry-meta-label fs-sm"><i class="ci-pot"></i></span><img class="card-img-top" src="{{ $recepti->image }}" alt="Post"></a>
                         <div class="card-body">
                             <h2 class="h6 blog-entry-title"><a href="{{ route('catalog.route.blog', ['blog' => $recepti]) }}">{{ $recepti->title }}</a></h2>
                             <p class="fs-sm">{{ $recepti->short_description }}</p>
                         </div>
-                        <div class="card-footer d-flex align-items-left fs-xs">
-                            <div class="me-auto text-nowrap"><a class="blog-entry-meta-link text-nowrap" href="{{ route('catalog.route.recepti', ['recepti' => $recepti]) }}">{{ \Carbon\Carbon::make($recepti->created_at)->locale('hr')->format('d.m.Y.') }}</a></div>
-                        </div>
+
                     </div>
                 </article>
 
