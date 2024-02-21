@@ -10,7 +10,7 @@
                 <button class="btn-wishlist me-1 "  type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="image/vegeterian.svg" alt="Vegeterian"  width="25px"/></button>
             @endif
             @if ($product->glutenfree)
-                <button class="btn-wishlist  me-1"  type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="image/gluten-free.svg" alt="Gluten Free"  width="25px"/></button>
+                <button class="btn-wishlist  me-1"  type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="image/gluten-free.svg" alt="Gluten Free"  width="35px"/></button>
             @endif
         </div>
 
