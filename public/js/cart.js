@@ -4418,7 +4418,7 @@ var render = function render() {
       attrs: {
         src: "image/gluten-free.svg",
         alt: "Gluten Free",
-        width: "25px"
+        width: "35px"
       }
     })]) : _vm._e()]), _vm._v(" "), product.quantity <= 0 ? _c("span", {
       staticClass: "badge bg-warning mt-1 ms-1 badge-end"
