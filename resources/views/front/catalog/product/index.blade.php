@@ -85,13 +85,13 @@
                 <div class="btn-wishlist-block">
 
                     @if($prod->vegan)
-                        <button class="btn-wishlist  btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="{{ asset('image/vegan.svg') }}" alt="Vegan" style="height:23px"/></button>
+                        <button class="btn-wishlist  btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="{{ asset('image/vegan.svg') }}" alt="Vegan" width="35" height="35" style="width:31px"/></button>
                     @endif
                     @if($prod->vegetarian)
-                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="{{ asset('image/vegeterian.svg') }}" alt="Vegeterian"  style="height:25px" /></button>
+                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="{{ asset('image/vegeterian.svg') }}" alt="Vegeterian"  width="35" height="35" style="width:31px" /></button>
                     @endif
                     @if($prod->glutenfree)
-                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="{{ asset('image/gluten-free.svg') }}" alt="Gluten Free"  style="height:27px" /></button>
+                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="{{ asset('image/gluten-free.svg') }}" alt="Gluten Free"  width="35" height="35" style="width:35px" /></button>
                     @endif
                 </div>
 
@@ -290,7 +290,7 @@
            <!-- Specs table-->
            <div class="row pt-2">
                <div class="col-lg-7 col-sm-7">
-                   <h3 class="h6">Sažetak</h3>
+                   <h2 class="h6">{{ $prod->name  }}</h2>
                    <div class=" fs-md pb-2 mb-4">
                        {!! $prod->description !!}
                    </div>
@@ -342,7 +342,7 @@
            <!-- Reviews-->
            <div class="row pt-2 pb-3">
                <div class="col-lg-4 col-md-5 mb-3">
-                   <h2 class="h3 mb-1"> {{ $reviews->count() }} @if($reviews->count() > 1) Recenzije @else Recenzije @endif</h2>
+                   <h4 class="h3 mb-1"> {{ $reviews->count() }} @if($reviews->count() > 1) Recenzije @else Recenzije @endif</h4>
                    <div class="star-rating me-2">
 
                        @for ($i = 0; $i < 5; $i++)
@@ -420,7 +420,7 @@
                <!-- Leave review form-->
                <div class="col-md-5 mt-2 pt-4 mt-md-0 pt-md-0">
                    <div class="bg-secondary py-grid-gutter px-grid-gutter rounded-3">
-                       <h3 class="h4 pb-2">Napišite recenziju</h3>
+                       <h4 class="h4 pb-2">Napišite recenziju</h4>
                        <form class="needs-validation" method="post" action="{{ route('komentar.proizvoda') }}" novalidate>
                            @csrf
                            <div class="mb-3">
@@ -483,7 +483,7 @@
     @if (count($related) > 1)
 <section class="pb-5 mb-2 mb-xl-4">
 <div class=" flex-wrap justify-content-between align-items-center  text-center">
-<h2 class="h3 mb-3 pt-1 font-title me-3 text-center"> POVEZANI PROIZVODI</h2>
+<h4 class="h3 mb-3 pt-1 font-title me-3 text-center"> POVEZANI PROIZVODI</h4>
 
 </div>
 <div class="tns-carousel tns-controls-static tns-controls-outside tns-nav-enabled pt-2">

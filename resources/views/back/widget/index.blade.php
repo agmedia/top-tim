@@ -27,7 +27,7 @@
                 @include('back.layouts.partials.session')
 
                 <div id="accordion" role="tablist" aria-multiselectable="true">
-                    @forelse($groups as $group)
+                    @forelse($groups->sortByDesc('created_at') as $group)
                         <div class="block block-rounded mb-1">
                             <div class="block-header block-header-default" role="tab" id="accordion_h{{ $group->id }}">
                                 <a class="h3 block-title" data-toggle="collapse" data-parent="#accordion" href="#accordion_q{{ $group->id }}" aria-expanded="@if($loop->first) true @else false @endif" aria-controls="accordion_q{{ $group->id }}">

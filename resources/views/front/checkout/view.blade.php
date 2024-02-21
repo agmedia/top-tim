@@ -90,11 +90,13 @@
                             </ul>
                         </div>
                         <div class="col-sm-6">
+
+
                             <h4 class="h6">Način plaćanja:</h4>
                             <ul class="list-unstyled fs-sm">
                                 <li>
                                     <span class="text-muted">{{ $data['payment']->title }} </span><br>
-                                    {{ (isset($data['payment']->data->description) && $data['payment']->data->description) ?: $data['payment']->data->short_description }}
+                                    {{ $data['payment']->data->description ?: $data['payment']->data->short_description }}
                                 </li>
                             </ul>
                         </div>

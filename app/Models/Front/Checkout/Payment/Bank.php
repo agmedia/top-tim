@@ -80,15 +80,15 @@ class Bank
                         ),
                     'receiver'    =>
                         array(
-                            'name'      => 'Plava krava izdavaštvo',
-                            'street'    => 'Nova cesta 130',
-                            'place'     => '10000 Zagreb',
-                            'iban'      => 'HR9824020061101122961',
+                            'name'      => 'Vukoje Logistika j.d.o.o. ',
+                            'street'    => 'Kaštelanska Ulica 4/a',
+                            'place'     => '10010 Veliko Polje',
+                            'iban'      => 'HR9223400091111126783',
                             'model'     => '00',
                             'reference' => $pozivnabroj,
                         ),
                     'purpose'     => 'CMDT',
-                    'description' => 'Web narudžba Plava Krava',
+                    'description' => 'Order Rice Kakis Asian Store',
                 ),
         );
 

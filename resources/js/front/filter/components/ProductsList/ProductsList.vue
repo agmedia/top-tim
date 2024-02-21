@@ -29,11 +29,11 @@
 
                     <div class="btn-wishlist-block">
 
-                        <button class="btn-wishlist me-1 btn-sm" v-if="product.vegan" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="image/vegan.svg" alt="Vegan" width="15px"/></button>
+                        <button class="btn-wishlist me-1 " v-if="product.vegan" type="button" v-tooltip:top="'Vegan'"><img src="image/vegan.svg" alt="Vegan" width="25px"/></button>
 
-                        <button class="btn-wishlist me-1 btn-sm"  v-if="product.vegetarian" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="image/vegeterian.svg" alt="Vegeterian"  width="15px"/></button>
+                        <button class="btn-wishlist me-1 "  v-if="product.vegetarian" type="button" v-tooltip:top="'Vegetarian'"><img src="image/vegeterian.svg" alt="Vegeterian"  width="25px"/></button>
 
-                        <button class="btn-wishlist btn-sm me-1"  v-if="product.glutenfee" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="image/gluten-free.svg" alt="Gluten Free"  width="15px"/></button>
+                        <button class="btn-wishlist  me-1"  v-if="product.glutenfree" type="button" v-tooltip:top="'Gluten Free'"><img src="image/gluten-free.svg" alt="Gluten Free"  width="25px"/></button>
                     </div>
 
                     <span class="badge bg-warning mt-1 ms-1 badge-end"  v-if="product.quantity <= 0">Rasprodano</span>
@@ -100,6 +100,15 @@
 </template>
 
 <script>
+
+Vue.directive('tooltip', function(el, binding){
+    $(el).tooltip({
+        title: binding.value,
+        placement: binding.arg,
+        trigger: 'hover'
+    })
+})
+
     export default {
         name: 'ProductsList',
         props: {

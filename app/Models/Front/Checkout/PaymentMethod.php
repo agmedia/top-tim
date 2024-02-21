@@ -144,9 +144,9 @@ class PaymentMethod
             $this->response_methods = collect();
 
             foreach ($methods as $method) {
-                if ($method->code != 'cod') {
+               // if ($method->code != 'cod') {
                     $this->response_methods->push($method);
-                }
+               // }
             }
         }
 

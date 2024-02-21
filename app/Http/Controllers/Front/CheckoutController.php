@@ -166,8 +166,8 @@ class CheckoutController extends Controller
             }
 
             // Sent labels to gls
-            $gls   = new Gls($order);
-            $label = $gls->resolve();
+          //  $gls   = new Gls($order);
+           // $label = $gls->resolve();
 
             CheckoutSession::forgetOrder();
             CheckoutSession::forgetStep();

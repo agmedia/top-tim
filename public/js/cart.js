@@ -3075,6 +3075,13 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+Vue.directive('tooltip', function (el, binding) {
+  $(el).tooltip({
+    title: binding.value,
+    placement: binding.arg,
+    trigger: 'hover'
+  });
+});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ProductsList',
   props: {
@@ -4349,49 +4356,58 @@ var render = function render() {
     }, [_c("div", {
       staticClass: "btn-wishlist-block"
     }, [product.vegan ? _c("button", {
-      staticClass: "btn-wishlist me-1 btn-sm",
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: "Vegan",
+        expression: "'Vegan'",
+        arg: "top"
+      }],
+      staticClass: "btn-wishlist me-1",
       attrs: {
-        type: "button",
-        "data-bs-toggle": "tooltip",
-        "data-bs-placement": "top",
-        "aria-label": "Vegan",
-        "data-bs-original-title": "Vegan"
+        type: "button"
       }
     }, [_c("img", {
       attrs: {
         src: "image/vegan.svg",
         alt: "Vegan",
-        width: "15px"
+        width: "25px"
       }
     })]) : _vm._e(), _vm._v(" "), product.vegetarian ? _c("button", {
-      staticClass: "btn-wishlist me-1 btn-sm",
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: "Vegetarian",
+        expression: "'Vegetarian'",
+        arg: "top"
+      }],
+      staticClass: "btn-wishlist me-1",
       attrs: {
-        type: "button",
-        "data-bs-toggle": "tooltip",
-        "data-bs-placement": "top",
-        "aria-label": "Vegeterian",
-        "data-bs-original-title": "Vegeterian"
+        type: "button"
       }
     }, [_c("img", {
       attrs: {
         src: "image/vegeterian.svg",
         alt: "Vegeterian",
-        width: "15px"
+        width: "25px"
       }
-    })]) : _vm._e(), _vm._v(" "), product.glutenfee ? _c("button", {
-      staticClass: "btn-wishlist btn-sm me-1",
+    })]) : _vm._e(), _vm._v(" "), product.glutenfree ? _c("button", {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: "Gluten Free",
+        expression: "'Gluten Free'",
+        arg: "top"
+      }],
+      staticClass: "btn-wishlist me-1",
       attrs: {
-        type: "button",
-        "data-bs-toggle": "tooltip",
-        "data-bs-placement": "top",
-        "aria-label": "Gluten Free",
-        "data-bs-original-title": "Gluten Free"
+        type: "button"
       }
     }, [_c("img", {
       attrs: {
         src: "image/gluten-free.svg",
         alt: "Gluten Free",
-        width: "15px"
+        width: "25px"
       }
     })]) : _vm._e()]), _vm._v(" "), product.quantity <= 0 ? _c("span", {
       staticClass: "badge bg-warning mt-1 ms-1 badge-end"

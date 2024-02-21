@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'free_shipping' => 50,
+    'free_shipping' => 45,
 
     'pagination' => [
         'front' => 60,
@@ -22,7 +22,7 @@ return [
     ],
 
     'search_keyword'       => 'pojam',
-    'author_path'          => 'autor',
+    'author_path'          => 'brand',
     'publisher_path'       => 'nakladnik',
     'group_path'           => 'Kategorija proizvoda',
     'eng_default_category' => 358,
@@ -78,7 +78,7 @@ return [
 
     'payment' => [
         'providers' => [
-            //'wspay'  => \App\Models\Front\Checkout\Payment\Wspay::class,
+            'wspay'  => \App\Models\Front\Checkout\Payment\Wspay::class,
             //'payway' => \App\Models\Front\Checkout\Payment\Payway::class,
             'corvus' => \App\Models\Front\Checkout\Payment\Corvus::class,
             'keks'   => \App\Models\Front\Checkout\Payment\Keks::class,

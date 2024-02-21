@@ -15247,8 +15247,8 @@ input[type=search]::-webkit-search-results-decoration {
     }
 }
 .btn-wishlist {
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 3.25rem;
+    height: 3.25rem;
     padding: 0 !important;
     transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out, border-color 0.25s ease-in-out, box-shadow 0.2s ease-in-out;
     border: 0;
@@ -16955,7 +16955,7 @@ a.nav-link:hover .media-tab-media {
     color: #fff;
 }
 .navbar-dark .navbar-tool-text > small, .navbar-dark .navbar-tool-text > .small {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.8);
 }
 .navbar-dark .navbar-tool:hover .navbar-tool-text {
     color: #fff;

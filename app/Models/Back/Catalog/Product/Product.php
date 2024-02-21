@@ -177,8 +177,8 @@ class Product extends Model
         $slug = $this->resolveSlug();
 
         $id = $this->insertGetId([
-            'author_id'        => $this->request->author_id ?: 6,
-            'publisher_id'     => $this->request->publisher_id ?: 2,
+            'author_id'        => $this->request->author_id ?: 0,
+            'publisher_id'     => $this->request->publisher_id ?: 0,
             'action_id'        => $this->request->action ?: 0,
             'name'             => $this->request->name,
             'sku'              => $this->request->sku,
@@ -252,8 +252,8 @@ class Product extends Model
         $slug = $this->request->slug;//$this->resolveSlug('update');
 
         $updated = $this->update([
-            'author_id'        => $this->request->author_id ?: 6,
-            'publisher_id'     => $this->request->publisher_id ?: 2,
+            'author_id'        => $this->request->author_id ?: 0,
+            'publisher_id'     => $this->request->publisher_id ?: 0,
             'action_id'        => $this->request->action ?: 0,
             'name'             => $this->request->name,
             'sku'              => $this->request->sku,

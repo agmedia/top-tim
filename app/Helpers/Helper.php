@@ -297,6 +297,11 @@ class Helper
                 $tablename = 'publisher';
             }
 
+            if (static::isDescriptionTarget($data, 'author')) {
+                $items     = static::author($data)->get();
+                $tablename = 'author';
+            }
+
             if (static::isDescriptionTarget($data, 'reviews')) {
                 $items     = static::reviews($data)->get();
                 $tablename = 'reviews';
@@ -484,6 +489,32 @@ class Helper
         }
 
         return $publisher;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Builder
+     */
+    private static function author(array $data): Builder
+    {
+        $author = (new Author())->newQuery();
+
+        $author->active();
+
+        if (isset($data['new']) && $data['new'] == 'on') {
+            $author->latest();
+        }
+
+        if (isset($data['popular']) && $data['popular'] == 'on') {
+            $author->latest();
+        }
+
+        if (isset($data['list']) && $data['list']) {
+            $author->whereIn('id', $data['list']);
+        }
+
+        return $author;
     }
 
 
