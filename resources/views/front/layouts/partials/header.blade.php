@@ -9,8 +9,8 @@
                 </div>
             </a>
             <a class="navbar-brand p-0 d-md-none me-0" href="{{ route('index') }}">
-                <div class="logo-bg" style="background-color:#fff;margin-left:-30px; padding: 0 10px 0 15px; ">
-                <img src="{{ asset('img/logo-ricekakis.svg') }}"  width="140" alt="Rice Kakis | Asian Store">
+                <div class="logo-bg py-2" style="background-color:#fff;margin-left:-25px; padding: 0 10px 0 10px; ">
+                <img src="{{ asset('img/logo-ricekakis.svg') }}"  width="130" alt="Rice Kakis | Asian Store">
 
                 </div>
             </a>
