@@ -21,12 +21,12 @@
             <div class="block">
                 <div class="block-header block-header-default">
                     <a class="btn btn-light" href="{{ back()->getTargetUrl() }}">
-                        <i class="fa fa-arrow-left mr-1"></i> Povratak
+                        <i class="fa fa-arrow-left mr-1"></i> {{ __('back/faq.povratak') }}
                     </a>
                     <div class="block-options">
                         <div class="custom-control custom-switch custom-control-success">
                             <input type="checkbox" class="custom-control-input" id="faq-switch" name="status"{{ (isset($faq->status) and $faq->status) ? 'checked' : '' }}>
-                            <label class="custom-control-label" for="faq-switch">Aktiviraj</label>
+                            <label class="custom-control-label" for="faq-switch">{{ __('back/faq.aktiviraj') }}</label>
                         </div>
                     </div>
                 </div>
@@ -35,13 +35,13 @@
                         <div class="col-md-10">
 
                             <div class="form-group">
-                                <label for="title-input">Pitanje</label>
-                                <input type="text" class="form-control" id="title-input" name="title" placeholder="Upišite naslov..." value="{{ isset($faq) ? $faq->title : old('title') }}" onkeyup="SetSEOPreview()">
+                                <label for="title-input">{{ __('back/faq.pitanje') }}</label>
+                                <input type="text" class="form-control" id="title-input" name="title"  value="{{ isset($faq) ? $faq->title : old('title') }}" onkeyup="SetSEOPreview()">
                             </div>
 
                             <div class="form-group row  mb-4">
                                 <div class="col-md-12">
-                                    <label for="description-editor">Odgovor</label>
+                                    <label for="description-editor">{{ __('back/faq.odgovor') }}</label>
                                     <textarea id="js-ckeditor" name="description">{!! isset($faq) ? $faq->description : old('description') !!}</textarea>
                                 </div>
                             </div>
@@ -53,16 +53,18 @@
                     <div class="row justify-content-center push">
                         <div class="col-md-5">
                             <button type="submit" class="btn btn-hero-success my-2">
-                                <i class="fas fa-save mr-1"></i> Snimi
+                                <i class="fas fa-save mr-1"></i> {{ __('back/faq.snimi') }}
                             </button>
                         </div>
+                        <div class="col-md-5 text-right">
                         @if (isset($faq))
-                            <div class="col-md-5 text-right">
-                                <a href="{{ route('faqs.destroy', ['faq' => $faq]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-faq-form{{ $faq->id }}').submit();">
-                                    <i class="fa fa-trash-alt"></i> Obriši
+
+                                <a href="{{ route('faqs.destroy', ['faq' => $faq]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/faq.obrisi') }}" onclick="event.preventDefault(); document.getElementById('delete-faq-form{{ $faq->id }}').submit();">
+                                    <i class="fa fa-trash-alt"></i> {{ __('back/faq.obrisi') }}
                                 </a>
-                            </div>
+
                         @endif
+                        </div>
                     </div>
                 </div>
             </div>

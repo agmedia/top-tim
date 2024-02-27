@@ -20,7 +20,9 @@ return [
     'uredi' => 'FAQ uredi',
     'naslov' => 'Često postavljana pitanja - FAQ',
     'dodaj_novi' => 'Dodaj novo',
-    'nema' => 'Nema čestih pitanja...'
+    'nema' => 'Nema čestih pitanja...',
+    'snimi' => 'Snimi',
+    'obrisi' => 'Obriši'
 
 
 ];

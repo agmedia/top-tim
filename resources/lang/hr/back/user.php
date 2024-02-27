@@ -43,6 +43,13 @@ return [
     'user_role' => 'Korisnička uloga',
     'user_role_select' => 'Odaberite ulogu za korisnika...',
     'save' => 'Snimi',
+    'promjena_lozinke' => 'Promjena lozinke',
+    'reset_lozinke' => 'Resetirajte lozinku kupca',
+    'trenutna_lozinka' => 'Trenutna lozinka',
+    'nova_lozinka' => 'Nova lozinka',
+    'potvrdi_lozinku' => 'Potvrdite novu lozinke',
+    'korisnicki_podaci' => 'Korisnički podaci',
+
 
 
 ];

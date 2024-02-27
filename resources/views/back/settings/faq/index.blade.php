@@ -5,9 +5,9 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Često postavljana pitanja - FAQ</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/faq.naslov') }} </h1>
                 <a class="btn btn-hero-success my-2" href="{{ route('faqs.create') }}">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Dodaj novo</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/faq.dodaj_novi') }}</span>
                 </a>
             </div>
         </div>
@@ -25,9 +25,9 @@
                     <thead class="thead-light">
                     <tr>
 
-                        <th style="width: 80%;">Pitanje</th>
+                        <th style="width: 80%;">{{ __('back/faq.pitanje') }}</th>
 
-                        <th class="text-right"  class="text-center">Uredi</th>
+                        <th class="text-right"  class="text-center">{{ __('back/faq.uredi') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="2">Nema čestih pitanja...</td>
+                            <td colspan="2">{{ __('back/faq.nema') }}</td>
                         </tr>
                     @endforelse
                     </tbody>

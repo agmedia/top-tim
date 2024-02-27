@@ -20,6 +20,8 @@ return [
     'uredi' => 'FAQ edit',
     'naslov' => 'Frequently Asked Questions - FAQ',
     'dodaj_novi' => 'Add New',
-    'nema' => 'No entries found...'
+    'nema' => 'No entries found...',
+    'snimi' => 'Save',
+    'obrisi' => 'Delete'
 
 ];
