@@ -13,20 +13,33 @@ class CreateAuthorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('authors', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('letter', 2);
-            $table->string('title');
-            $table->longText('description')->nullable();
-            $table->text('meta_title')->nullable();
-            $table->text('meta_description')->nullable();
             $table->string('image')->default('media/avatars/avatar0.jpg');
-            $table->string('lang')->default('hr');
+            $table->integer('viewed')->unsigned()->default(0);
+            $table->integer('featured')->unsigned()->default(0);
             $table->integer('sort_order')->unsigned()->default(0);
             $table->boolean('status')->default(false);
-            $table->string('slug');
-            $table->string('url', 255);
             $table->timestamps();
+        });
+        
+        Schema::create('brand_translations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('brand_id')->index();
+            $table->string('lang', 2)->default(config('app.locale'));
+            $table->string('title');
+            $table->longText('description')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->longText('meta_description')->nullable();
+            $table->string('slug')->index();
+            $table->string('url', 255);
+            $table->string('keywords')->nullable();
+            $table->timestamps();
+            
+            $table->foreign('brand_id')
+                ->references('id')->on('brands')
+                ->onDelete('cascade');
         });
     }
 
@@ -37,7 +50,8 @@ class CreateAuthorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('authors');
+        Schema::dropIfExists('brands');
+        Schema::dropIfExists('brand_translations');
     }
 
 }

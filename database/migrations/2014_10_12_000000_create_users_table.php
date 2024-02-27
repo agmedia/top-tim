@@ -24,6 +24,37 @@ class CreateUsersTable extends Migration
             $table->text('profile_photo_path')->nullable();
             $table->timestamps();
         });
+        
+        Schema::create('user_details', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->string('fname');
+            $table->string('lname')->nullable();
+            $table->string('address')->nullable();
+            $table->string('zip')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('avatar')->default('images/avatars/default_avatar.jpg');
+            $table->longText('bio')->nullable();
+            $table->string('social')->nullable();
+            $table->string('default_lang', 2)->nullable();
+            $table->string('role');
+            $table->boolean('status')->default(1);
+            $table->timestamps();
+        });
+        
+        Schema::create('user_emails', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->string('target');
+            $table->string('key')->nullable();
+            $table->longText('mail_data')->nullable();
+            $table->timestamp('sent_at')->nullable();
+            $table->tinyInteger('clicked')->unsigned()->default(0);
+            $table->text('comment')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -34,5 +65,7 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('user_details');
+        Schema::dropIfExists('user_emails');
     }
 }

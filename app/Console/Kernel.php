@@ -24,13 +24,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('clean:authors')->dailyAt('00:03');
-        //$schedule->command('clean:publishers')->dailyAt('00:04');
+//        $schedule->command('clean:authors')->dailyAt('00:03');
+//        $schedule->command('clean:publishers')->dailyAt('00:04');
         // API
-        $schedule->command('check:api_products_akmk')->dailyAt('00:10');
-        $schedule->command('import:api_products_akmk')->dailyAt('00:12');
-        $schedule->command('update:api_products_akmk')->everyFifteenMinutes();
-        $schedule->command('report:api_products_akmk')->dailyAt('00:30');
+//        $schedule->command('check:api_products_akmk')->dailyAt('00:10');
+//        $schedule->command('import:api_products_akmk')->dailyAt('00:12');
+//        $schedule->command('update:api_products_akmk')->everyFifteenMinutes();
+//        $schedule->command('report:api_products_akmk')->dailyAt('00:30');
     }
 
     /**

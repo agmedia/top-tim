@@ -14,17 +14,28 @@ class CreateFaqTable extends Migration
     public function up()
     {
         Schema::create('faq', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-            $table->string('category')->nullable();
-            $table->longText('description')->nullable();
-            $table->string('lang')->default('hr');
+            $table->id();
+            $table->string('group')->nullable();
             $table->string('sort_order')->nullable();
             $table->boolean('status')->nullable();
             $table->timestamps();
         });
+        
+        
+        Schema::create('faq_translations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('faq_id')->index();
+            $table->string('lang', 2)->default(config('app.locale'));
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->timestamps();
+            
+            $table->foreign('faq_id')
+                ->references('id')->on('faq')
+                ->onDelete('cascade');
+        });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -33,5 +44,6 @@ class CreateFaqTable extends Migration
     public function down()
     {
         Schema::dropIfExists('faq');
+        Schema::dropIfExists('faq_translations');
     }
 }

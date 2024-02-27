@@ -57,7 +57,7 @@
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->routeIs('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                         <i class="nav-main-link-icon si si-grid"></i>
-                        <span class="nav-main-link-name">Dashboard</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.dashboard') }}</span>
                         {{--<span class="nav-main-link-badge badge badge-pill badge-success">5</span>--}}
                     </a>
                 </li>
@@ -65,17 +65,17 @@
                 <li class="nav-main-item{{ request()->is(['admin/catalog/*']) ? ' open' : '' }}">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                         <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name">Katalog</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.catalog') }}</span>
                     </a>
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['categories', 'category.*']) ? ' active' : '' }}" href="{{ route('categories') }}">
-                                <span class="nav-main-link-name">Kategorije</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.categories') }}</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['products', 'products.*']) ? ' active' : '' }}" href="{{ route('products') }}">
-                                <span class="nav-main-link-name">Artikli</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.products') }}</span>
                             </a>
                         </li>
                      <!--   <li class="nav-main-item">
@@ -85,25 +85,25 @@
                         </li>-->
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['authors', 'authors.*']) ? ' active' : '' }}" href="{{ route('authors') }}">
-                                <span class="nav-main-link-name">Brands</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.brands') }}</span>
                             </a>
                         </li>
                         <hr class="mt-1 mb-1" style="border-top: 1px solid #3f3f3f; margin-right: 40px;">
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['blogs', 'blogs.*']) ? ' active' : '' }}" href="{{ route('blogs') }}">
-                                <span class="nav-main-link-name">Blog</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.blog') }}</span>
                             </a>
                         </li>
 
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['receptis', 'receptis.*']) ? ' active' : '' }}" href="{{ route('receptis') }}">
-                                <span class="nav-main-link-name">Recepti</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.recipe') }}</span>
                             </a>
                         </li>
 
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['pages', 'pages.*']) ? ' active' : '' }}" href="{{ route('pages') }}">
-                                <span class="nav-main-link-name">Info Stranice</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.pages') }}</span>
                             </a>
                         </li>
                     </ul>
@@ -112,29 +112,29 @@
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->routeIs(['orders', 'orders.*']) ? ' active' : '' }}" href="{{ route('orders') }}">
                         <i class="nav-main-link-icon si si-basket-loaded"></i>
-                        <span class="nav-main-link-name">Narudžbe</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.orders') }}</span>
                     </a>
                 </li>
 
                 <li class="nav-main-item{{ request()->is(['admin/marketing/*']) ? ' open' : '' }}">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                         <i class="nav-main-link-icon si si-bar-chart"></i>
-                        <span class="nav-main-link-name">Marketing</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.marketing') }}</span>
                     </a>
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['actions', 'actions.*']) ? ' active' : '' }}" href="{{ route('actions') }}">
-                                <span class="nav-main-link-name">Akcije</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.actions') }}</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['reviews', 'reviews.*']) ? ' active' : '' }}" href="{{ route('reviews') }}">
-                                <span class="nav-main-link-name">{{ __('Komentari') }}</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.reviews') }}</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['faqs', 'faqs.*']) ? ' active' : '' }}" href="{{ route('faqs') }}">
-                                <span class="nav-main-link-name">FAQ</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.faq') }}</span>
                             </a>
                         </li>
                     </ul>
@@ -143,30 +143,30 @@
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->routeIs(['users', 'users.*']) ? ' active' : '' }}" href="{{ route('users') }}">
                         <i class="nav-main-link-icon si si-users"></i>
-                        <span class="nav-main-link-name">Korisnici</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.users') }}</span>
                     </a>
                 </li>
 
-                <li class="nav-main-heading">Aplikacija</li>
+                <li class="nav-main-heading">{{ __('back/layout.sidebar.application') }}</li>
 
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->routeIs(['profile', 'profile.*']) ? ' active' : '' }}" href="{{ route('profile.show') }}">
                         <i class="nav-main-link-icon si si-user"></i>
-                        <span class="nav-main-link-name">Moj Profil</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.my_profile') }}</span>
                     </a>
                 </li>
 
                 <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->routeIs(['widgets', 'widgets.*']) ? ' active' : '' }}" href="{{ route('widgets') }}">
+                    <a class="nav-main-link{{ request()->routeIs(['widgets', 'widget.*']) ? ' active' : '' }}" href="{{ route('widgets') }}">
                         <i class="nav-main-link-icon si si-chemistry"></i>
-                        <span class="nav-main-link-name">Widgets</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.widgets') }}</span>
                     </a>
                 </li>
 
-                <li class="nav-main-item{{ request()->is(['admin/settings/*']) ? ' open' : '' }}">
+                <li class="nav-main-item{{ request()->is([current_locale() . 'admin/settings/*']) ? ' open' : '' }}">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                         <i class="nav-main-link-icon si si-settings"></i>
-                        <span class="nav-main-link-name">Postavke</span>
+                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.settings') }}</span>
                     </a>
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">
@@ -175,59 +175,64 @@
                             </a>
                         </li>
 
-                        <li class="nav-main-item{{ request()->is(['admin/settings/system/*']) ? ' open' : '' }}">
+                        <li class="nav-main-item{{ request()->is([current_locale() . 'admin/settings/system/*']) ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                                <span class="nav-main-link-name">Sistem</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.system') }}</span>
                             </a>
 
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['application', 'application.*']) ? ' active' : '' }}" href="{{ route('application.settings') }}">
-                                        <span class="nav-main-link-name">Aplikacija</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.application') }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['history', 'history.*']) ? ' active' : '' }}" href="{{ route('history') }}">
-                                        <span class="nav-main-link-name">History log</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.history') }}</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
 
-                        <li class="nav-main-item{{ request()->is(['admin/settings/application/*']) ? ' open' : '' }}">
+                        <li class="nav-main-item{{ request()->is([current_locale() . '/admin/settings/application/*']) ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                                <span class="nav-main-link-name">Postavke Aplikacije</span>
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.local_settings') }}</span>
                             </a>
 
                             <ul class="nav-main-submenu">
                                 <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->routeIs(['languages']) ? ' active' : '' }}" href="{{ route('languages') }}">
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.languages') }}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['geozones', 'geozones.*']) ? ' active' : '' }}" href="{{ route('geozones') }}">
-                                        <span class="nav-main-link-name">Geo Zone</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.geozones') }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['order.statuses']) ? ' active' : '' }}" href="{{ route('order.statuses') }}">
-                                        <span class="nav-main-link-name">Statusi Narudžbi</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.order_statuses') }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['taxes']) ? ' active' : '' }}" href="{{ route('taxes') }}">
-                                        <span class="nav-main-link-name">Porezi</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.taxes') }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['currencies']) ? ' active' : '' }}" href="{{ route('currencies') }}">
-                                        <span class="nav-main-link-name">Valute</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.currencies') }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['shippings']) ? ' active' : '' }}" href="{{ route('shippings') }}">
-                                        <span class="nav-main-link-name">Načini dostave</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.shipping') }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->routeIs(['payments']) ? ' active' : '' }}" href="{{ route('payments') }}">
-                                        <span class="nav-main-link-name">Načini plaćanja</span>
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.payments') }}</span>
                                     </a>
                                 </li>
                             </ul>

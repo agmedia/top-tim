@@ -15,5 +15,9 @@ return [
 
     'previous' => '&laquo; Previous',
     'next' => 'Next &raquo;',
+    'showingd' =>'Showing',
+    'from' =>'from',
+    'to' =>'to',
+    'results' =>'results',
 
 ];

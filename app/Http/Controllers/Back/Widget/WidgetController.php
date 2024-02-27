@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Back\Widget;
 
+use App\Helpers\Helper;
 use App\Models\Back\Catalog\Publisher;
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\Widget\Widget;
 use App\Models\Back\Widget\WidgetGroup;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class WidgetController extends Controller
 {
@@ -22,15 +23,16 @@ class WidgetController extends Controller
      */
     public function index(Request $request)
     {
-        $query = (new WidgetGroup())->newQuery();
+        $query = Widget::query();
 
-        if ($request->has('group')) {
-            $query->where('group_id', $request->input('group'));
+        if ($request->has('search')) {
+            $query->where('title', 'LIKE', '%' . $request->input('search') . '%');
         }
 
-        $groups = $query->with('widgets')->paginate(config('settings.pagination.items'));
+        $widgets = $query->orderByDesc('updated_at')
+                         ->paginate(config('settings.pagination.items'));
 
-        return view('back.widget.index', compact('groups'));
+        return view('back.widget.index', compact('widgets'));
     }
 
 
@@ -41,16 +43,10 @@ class WidgetController extends Controller
      */
     public function create(Request $request)
     {
-        if ($request->has('group')) {
-            $sizes  = (new Widget())->sizes();
-            $selected = WidgetGroup::where('id', $request->input('group'))->first();
+        $resources = (new Widget())->getTargetResources();
+        $resource_data = [];
 
-            if ($selected) {
-                return view('back.widget.templates.' . $selected->template, compact('selected', 'sizes'));
-            }
-        }
-
-        abort(401);
+        return view('back.widget.edit', compact('resources', 'resource_data'));
     }
 
 
@@ -64,15 +60,9 @@ class WidgetController extends Controller
     public function store(Request $request)
     {
         $widget = new Widget();
-        $stored = $widget->validateRequest($request)->setUrl()->store();
+        $stored = $widget->validateRequest($request)->store();
 
         if ($stored) {
-            if (Widget::hasImage($request)) {
-                $stored->resolveImage($request);
-            }
-
-            $this->flush();
-
             return redirect()->route('widgets')->with(['success' => 'Widget je uspješno snimljen!']);
         }
 
@@ -87,34 +77,20 @@ class WidgetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Widget $widget)
     {
-        $query = (new Widget())->newQuery();
+        $resources     = $widget->getTargetResources();
+        $resource_data = json_decode($widget->resource_data, true);
 
-        $widget = $query->where('id', $id)->with('group')->first();
-        $sizes  = $widget->sizes();
+        $data     = $widget->data;
+        $filepath = Helper::resolveViewFilepath($widget->slug, 'widgets');
+        $storage  = Storage::disk('view');
 
-        if ( ! $widget) {
-            abort(401);
+        if ($storage->exists($filepath)) {
+            $data = $storage->get($filepath);
         }
 
-        if ($widget->group) {
-            $selected = $widget->group;
-
-            $widget->data = unserialize($widget->data);
-            $widget->target = isset($widget->data['group']) ? $widget->data['group'] : null;
-            $widget->links = collect()->flatten()->toJson();
-
-            if (isset($widget->data['list'])) {
-                $widget->links = collect($widget->data['list'])->flatten()->toJson();
-            }
-
-            return view('back.widget.templates.' . $widget->group->template, compact('selected', 'sizes', 'widget'));
-        }
-
-        $groups = WidgetGroup::where('status', 1)->get();
-
-        return view('back.widget.edit', compact('widget', 'groups', 'sizes'));
+        return view('back.widget.edit', compact('widget', 'resources', 'resource_data', 'data'));
     }
 
 
@@ -126,17 +102,13 @@ class WidgetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Widget $widget)
     {
-        $widget = new Widget();
-        $updated = $widget->validateRequest($request)->setUrl()->edit($id);
+        //dd($request->toArray());
+        $updated = $widget->validateRequest($request)->edit();
 
         if ($updated) {
-            if (Widget::hasImage($request)) {
-                $updated->resolveImage($request);
-            }
-
-            $this->flush();
+            $this->flush($widget);
 
             return redirect()->back()->with(['success' => 'Widget je uspješno snimljen!']);
         }
@@ -154,20 +126,26 @@ class WidgetController extends Controller
      */
     public function destroy(Request $request)
     {
-        if (isset($request['data']['id'])) {
-            return response()->json(
-                Widget::where('id', $request['data']['id'])->delete()
-            );
+        if ($request->has('id') && $request->input('id')) {
+            try {
+                Widget::query()->where('id', $request->input('id'))->delete();
+            } catch (\Exception $e) {
+                Log::info($e->getMessage());
+            }
+
+            return response()->json(['success' => 200]);
         }
+
+        return response()->json(['error' => 300]);
     }
 
 
     /**
-     * @return void
+     * @param Page $page
      */
-    private function flush(): void
+    private function flush(Widget $widget): void
     {
-        Artisan::call('optimize:clear');
+        Cache::forget('wg.' . $widget->id);
     }
 
 

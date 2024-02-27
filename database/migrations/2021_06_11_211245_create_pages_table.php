@@ -14,16 +14,9 @@ class CreatePagesTable extends Migration
     public function up()
     {
         Schema::create('pages', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('category_id')->unsigned()->nullable();
-            $table->string('group')->default('blog');
-            $table->string('title')->index();
-            $table->text('short_description')->nullable();
-            $table->longText('description')->nullable();
-            $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
-            $table->string('slug');
-            $table->string('keywords')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('category_id');
+            $table->string('group')->default('default');
             $table->string('image')->nullable();
             $table->timestamp('publish_date')->nullable();
             $table->integer('viewed')->unsigned()->default(0);
@@ -31,8 +24,27 @@ class CreatePagesTable extends Migration
             $table->boolean('status')->default(false);
             $table->timestamps();
         });
+        
+        
+        Schema::create('page_translations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('page_id')->index();
+            $table->string('lang', 2)->default(config('app.locale'));
+            $table->string('title');
+            $table->text('short_description')->nullable();
+            $table->longText('description')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->longText('meta_description')->nullable();
+            $table->string('slug')->index();
+            $table->string('keywords')->nullable();
+            $table->timestamps();
+            
+            $table->foreign('page_id')
+                ->references('id')->on('pages')
+                ->onDelete('cascade');
+        });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -41,6 +53,7 @@ class CreatePagesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('pages');
+        Schema::dropIfExists('page_translations');
     }
 }
 

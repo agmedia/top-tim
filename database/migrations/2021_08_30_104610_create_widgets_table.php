@@ -13,33 +13,25 @@ class CreateWidgetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('widget_groups', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('template')->index();
-            $table->string('type')->nullable();
-            $table->string('title');
-            $table->string('slug');
-            $table->string('width')->nullable();
-            $table->boolean('status')->unsigned()->default(0);
-            $table->timestamps();
-        });
-
         Schema::create('widgets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('group_id')->unsigned()->index();
-            $table->string('title')->index();
-            $table->text('subtitle')->nullable();
-            $table->longText('description')->nullable();
-            $table->text('data')->nullable();
-            $table->string('image')->nullable();
-            $table->string('link')->nullable();
-            $table->integer('link_id')->nullable();
-            $table->string('url')->nullable();
-            $table->string('badge')->nullable();
-            $table->string('width')->nullable();
-            $table->integer('sort_order')->unsigned()->default(0);
+            $table->string('resource')->nullable();
+            $table->longText('resource_data')->nullable();
+            $table->string('title')->default('Undefined Widget');
             $table->boolean('status')->default(0);
             $table->timestamps();
+        });
+        
+        Schema::create('widget_translations', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('widget_id')->index();
+            $table->string('lang', 2)->default(config('app.locale'));
+            $table->longText('data')->nullable();
+            $table->timestamps();
+            
+            $table->foreign('widget_id')
+                ->references('id')->on('widgets')
+                ->onDelete('cascade');
         });
     }
 
@@ -50,7 +42,7 @@ class CreateWidgetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('widget_groups');
         Schema::dropIfExists('widgets');
+        Schema::dropIfExists('widget_translations');
     }
 }

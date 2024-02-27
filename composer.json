@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
         "darryldecode/cart": "^4.2",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.6",
         "livewire/livewire": "^2.0",
         "phpoffice/phpspreadsheet": "^1.18",
+        "mcamara/laravel-localization": "^1.6.2",
         "silber/bouncer": "v1.0.0-rc.10",
         "ext-simplexml": "*",
       "ext-soap": "*"

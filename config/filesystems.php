@@ -98,6 +98,11 @@ return [
             'url' => 'media/img/products/'
         ],
         //
+        'view' => [
+            'driver' => 'local',
+            'root' => resource_path('views')
+        ],
+        //
         'blog' => [
             'driver' => 'local',
             'root' => public_path('media/img/blog/'),

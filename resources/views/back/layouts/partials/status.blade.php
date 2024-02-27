@@ -6,8 +6,8 @@
     @endif
 @else
     @if($status)
-        <span class="badge badge-success">Aktivan</span>
+        <span class="badge badge-success">{{ __('back/layout.active') }}</span>
     @else
-        <span class="badge badge-secondary">Neaktivan</span>
+        <span class="badge badge-secondary">{{ __('back/layout.inactive') }}</span>
     @endif
 @endif

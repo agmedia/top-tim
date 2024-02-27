@@ -4,6 +4,7 @@
  *
  */
 
+use App\Helpers\LanguageHelper;
 use Illuminate\Support\Facades\Log;
 
 if ( ! function_exists('group')) {
@@ -67,5 +68,42 @@ if ( ! function_exists('logiraj_vrijeme')) {
         $log_end1 = microtime(true);
         $sec1 = number_format(($log_end1 - $log_start1), 2, ',', '.');
         Log::info($log_text . ' --- Time: ' . $sec1 . ' sec.');
+    }
+}
+
+if ( ! function_exists('ag_lang')) {
+    /**
+     * @param bool $main
+     *
+     * @return mixed
+     */
+    function ag_lang(bool $main = false)
+    {
+        if ($main) {
+            return LanguageHelper::getMain();
+        }
+        
+        return LanguageHelper::list();
+    }
+}
+
+/**
+ *
+ */
+if ( ! function_exists('current_locale')) {
+    /**
+     * @param bool $native
+     *
+     * @return string
+     */
+    function current_locale(bool $native = false): string
+    {
+        $current = LanguageHelper::getCurrentLocale();
+        
+        if ($native) {
+            return config('laravellocalization.supportedLocales.' . $current . '.regional');
+        }
+        
+        return $current;
     }
 }
