@@ -25,6 +25,18 @@ return [
     'uredi' => 'Edit',
     'nema_objava' => 'No Pages',
 
+    'info_stranica_edit' => 'Info page edit',
+    'povratak' => 'Return',
+    'aktiviraj' => 'Activate',
+    'naslov' => 'Title',
+    'upisite_naslov' => 'Enter title...',
+    'grupa' => 'Group',
+    'glavna_slika' => 'Main image',
+
+    'opis' => 'Description',
+
+    'odaberite_ili_upisite_novu_grupu' => 'Select or enter a new group...',
+
     'seo_url' => 'SEO Link (URL)',
     'opis_kategorije' => 'Category Description',
     'meta_data_seo' => 'Meta Data - SEO',

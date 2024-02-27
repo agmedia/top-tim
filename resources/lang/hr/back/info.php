@@ -26,6 +26,17 @@ return [
     'nema_objava' => 'Nema stranica',
 
 
+    'info_stranica_edit' => 'Info stranica edit',
+    'povratak' => 'Povratak',
+    'aktiviraj' => 'Aktiviraj',
+    'naslov' => 'Naslov',
+    'upisite_naslov' => 'Upišite naslov...',
+    'grupa' => 'Grupa',
+    'glavna_slika' => 'Glavna slika',
+
+    'opis' => 'Opis',
+
+    'odaberite_ili_upisite_novu_grupu' => 'Odaberite ili upišite novu grupu...',
 
     'seo_url' => 'SEO link (url)',
     'opis_kategorije' => 'Opis kategorije',
