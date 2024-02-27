@@ -34,7 +34,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        $groups = Page::subgroups()->pluck('subgroup');
+        $groups = Page::pluck('group');
 
         return view('back.settings.pages.edit', compact('groups'));
     }
