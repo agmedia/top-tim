@@ -8,7 +8,7 @@
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Brand edit</h1>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('authors') }}">Brands</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('brands') }}">Brands</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Novi Brand</li>
                     </ol>
                 </nav>
@@ -22,9 +22,9 @@
         <!-- END Page Content -->
     @include('back.layouts.partials.session')
     <!-- New Post -->
-        <form action="{{ isset($author) ? route('authors.update', ['author' => $author]) : route('authors.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ isset($brand) ? route('brands.update', ['brand' => $brand]) : route('brands.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @if (isset($author))
+            @if (isset($brand))
                 {{ method_field('PATCH') }}
             @endif
             <div class="block">
@@ -34,12 +34,12 @@
                     </a>
                     <div class="block-options d-inline-block">
                         <div class="custom-control custom-switch custom-control-success d-inline-block mr-5">
-                            <input type="checkbox" class="custom-control-input" id="featured-switch" name="featured"{{ (isset($author->featured) and $author->featured) ? 'checked' : '' }}>
+                            <input type="checkbox" class="custom-control-input" id="featured-switch" name="featured"{{ (isset($brand->featured) and $brand->featured) ? 'checked' : '' }}>
                             <label class="custom-control-label" for="featured-switch">Izdvojeni brand</label>
                         </div>
                         <div class="custom-control custom-switch custom-control-success d-inline-block">
-                            <input type="checkbox" class="custom-control-input" id="author-switch" name="status"{{ (isset($author->status) and $author->status) ? 'checked' : '' }}>
-                            <label class="custom-control-label" for="author-switch">Aktiviraj</label>
+                            <input type="checkbox" class="custom-control-input" id="brand-switch" name="status"{{ (isset($brand->status) and $brand->status) ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="brand-switch">Aktiviraj</label>
                         </div>
                     </div>
                 </div>
@@ -49,17 +49,17 @@
 
                             <div class="form-group">
                                 <label for="title-input">Naziv brenda</label>
-                                <input type="text" class="form-control" id="title-input" name="title" placeholder="Upišite naziv autora" value="{{ isset($author) ? $author->title : old('title') }}" onkeyup="SetSEOPreview()">
+                                <input type="text" class="form-control" id="title-input" name="title" placeholder="Upišite naziv autora" value="{{ isset($brand) ? $brand->title : old('title') }}" onkeyup="SetSEOPreview()">
                             </div>
 
                             <div class="form-group">
                                 <label for="slug-input">SEO link (url)</label>
-                                <input type="text" class="form-control" id="slug-input" name="slug" value="{{ isset($author) ? $author->slug : old('slug') }}" disabled>
+                                <input type="text" class="form-control" id="slug-input" name="slug" value="{{ isset($brand) ? $brand->slug : old('slug') }}" disabled>
                             </div>
 
                             <div class="form-group">
                                 <label for="description-editor">Opis brenda</label>
-                                <textarea id="description-editor" name="description">{!! isset($author) ? $author->description : old('description') !!}</textarea>
+                                <textarea id="description-editor" name="description">{!! isset($brand) ? $brand->description : old('description') !!}</textarea>
                             </div>
 
                         </div>
@@ -76,7 +76,7 @@
                         <div class="col-md-10 ">
                             <div class="form-group">
                                 <label for="meta-title-input">Meta naslov</label>
-                                <input type="text" class="js-maxlength form-control" id="meta-title-input" name="meta_title" value="{{ isset($author) ? $author->meta_title : old('meta_title') }}" maxlength="70" data-always-show="true" data-placement="top">
+                                <input type="text" class="js-maxlength form-control" id="meta-title-input" name="meta_title" value="{{ isset($brand) ? $brand->meta_title : old('meta_title') }}" maxlength="70" data-always-show="true" data-placement="top">
                                 <small class="form-text text-muted">
                                     70 znakova max
                                 </small>
@@ -84,7 +84,7 @@
 
                             <div class="form-group">
                                 <label for="meta-description-input">Meta opis</label>
-                                <textarea class="js-maxlength form-control" id="meta-description-input" name="meta_description" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($author) ? $author->meta_description : old('meta_description') }}</textarea>
+                                <textarea class="js-maxlength form-control" id="meta-description-input" name="meta_description" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($brand) ? $brand->meta_description : old('meta_description') }}</textarea>
                                 <small class="form-text text-muted">
                                     160 znakova max
                                 </small>
@@ -98,7 +98,7 @@
                                         <label class="custom-file-label" for="image-input">Odaberite sliku</label>
                                     </div>
                                     <div class="mt-2">
-                                        <img class="img-fluid" id="image-view" src="{{ isset($author) ? asset($author->image) : asset('media/img/lightslider.webp') }}" alt="">
+                                        <img class="img-fluid" id="image-view" src="{{ isset($brand) ? asset($brand->image) : asset('media/img/lightslider.webp') }}" alt="">
                                     </div>
                                     <div class="form-text text-muted font-size-sm font-italic">Slika koja se pokazuje kada se link dijeli (facebook, twitter, itd.)</div>
                                 </div>
@@ -114,9 +114,9 @@
                             </button>
                         </div>
                         <div class="col-md-5 text-right">
-                        @if (isset($author))
+                        @if (isset($brand))
 
-                                <a href="{{ route('authors.destroy', ['author' => $author]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-author-form{{ $author->id }}').submit();">
+                                <a href="{{ route('brands.destroy', ['brand' => $brand]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-brand-form{{ $brand->id }}').submit();">
                                     <i class="fa fa-trash-alt"></i> Obriši
                                 </a>
 
@@ -127,8 +127,8 @@
             </div>
         </form>
         <!-- END New Post -->
-        @if (isset($author))
-            <form id="delete-author-form{{ $author->id }}" action="{{ route('authors.destroy', ['author' => $author]) }}" method="POST" style="display: none;">
+        @if (isset($brand))
+            <form id="delete-brand-form{{ $brand->id }}" action="{{ route('brands.destroy', ['brand' => $brand]) }}" method="POST" style="display: none;">
                 @csrf
                 {{ method_field('DELETE') }}
             </form>

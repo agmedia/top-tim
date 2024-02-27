@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Back\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use Illuminate\Http\Request;
 
-class AuthorController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +16,12 @@ class AuthorController extends Controller
     public function index(Request $request)
     {
         if ($request->has('search') && ! empty($request->search)) {
-            $authors = Author::where('title', 'like', '%' . $request->search . '%')->paginate(12)->appends(request()->query());
+            $brands = Brand::query()/*where('title', 'like', '%' . $request->search . '%')*/->paginate(12)->appends(request()->query());
         } else {
-            $authors = Author::paginate(12)->appends(request()->query());
+            $brands = Brand::paginate(12)->appends(request()->query());
         }
 
-        return view('back.catalog.author.index', compact('authors'));
+        return view('back.catalog.brand.index', compact('brands'));
     }
 
 
@@ -32,7 +32,7 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        return view('back.catalog.author.edit');
+        return view('back.catalog.brand.edit');
     }
 
 
@@ -45,14 +45,14 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        $author = new Author();
+        $brand = new Brand();
 
-        $stored = $author->validateRequest($request)->create();
+        $stored = $brand->validateRequest($request)->create();
 
         if ($stored) {
-            $author->resolveImage($stored);
+            $brand->resolveImage($stored);
 
-            return redirect()->route('authors.edit', ['author' => $stored])->with(['success' => 'Autor je uspješno snimljen!']);
+            return redirect()->route('brands.edit', ['brand' => $stored])->with(['success' => 'Brand je uspješno snimljen!']);
         }
 
         return redirect()->back()->with(['error' => 'Oops..! Greška prilikom snimanja.']);
@@ -66,9 +66,9 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Author $author)
+    public function edit(Brand $brand)
     {
-        return view('back.catalog.author.edit', compact('author'));
+        return view('back.catalog.brand.edit', compact('brand'));
     }
 
 
@@ -80,14 +80,14 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Author $author)
+    public function update(Request $request, Brand $brand)
     {
-        $updated = $author->validateRequest($request)->edit();
+        $updated = $brand->validateRequest($request)->edit();
 
         if ($updated) {
-            $author->resolveImage($updated);
+            $brand->resolveImage($updated);
 
-            return redirect()->route('authors.edit', ['author' => $updated])->with(['success' => 'Autor je uspješno snimljen!']);
+            return redirect()->route('brands.edit', ['brand' => $updated])->with(['success' => 'Autor je uspješno snimljen!']);
         }
 
         return redirect()->back()->with(['error' => 'Oops..! Greška prilikom snimanja.']);
@@ -101,12 +101,12 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Author $author)
+    public function destroy(Request $request, Brand $brand)
     {
-        $destroyed = Author::destroy($author->id);
+        $destroyed = Brand::destroy($brand->id);
 
         if ($destroyed) {
-            return redirect()->route('authors')->with(['success' => 'Autor je uspješno izbrisan!']);
+            return redirect()->route('brands')->with(['success' => 'Autor je uspješno izbrisan!']);
         }
 
         return redirect()->back()->with(['error' => 'Oops..! Greška prilikom brisanja.']);
@@ -123,7 +123,7 @@ class AuthorController extends Controller
     public function destroyApi(Request $request)
     {
         if ($request->has('id')) {
-            $destroyed = Author::destroy($request->input('id'));
+            $destroyed = Brand::destroy($request->input('id'));
 
             if ($destroyed) {
                 return response()->json(['success' => 200]);

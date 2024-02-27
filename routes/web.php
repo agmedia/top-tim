@@ -3,7 +3,7 @@
 use App\Actions\Fortify\ForgotPasswordController;
 use App\Http\Controllers\Api\v2\CartController;
 use App\Http\Controllers\Api\v2\FilterController;
-use App\Http\Controllers\Back\Catalog\AuthorController;
+use App\Http\Controllers\Back\Catalog\BrandController;
 use App\Http\Controllers\Back\Catalog\CategoryController;
 use App\Http\Controllers\Back\Catalog\ProductController;
 use App\Http\Controllers\Back\Catalog\PublisherController;
@@ -94,12 +94,12 @@ Route::group(
             Route::delete('publisher/{publisher}', [PublisherController::class, 'destroy'])->name('publishers.destroy');
             
             // AUTORI
-            Route::get('authors', [AuthorController::class, 'index'])->name('authors');
-            Route::get('author/create', [AuthorController::class, 'create'])->name('authors.create');
-            Route::post('author', [AuthorController::class, 'store'])->name('authors.store');
-            Route::get('author/{author}/edit', [AuthorController::class, 'edit'])->name('authors.edit');
-            Route::patch('author/{author}', [AuthorController::class, 'update'])->name('authors.update');
-            Route::delete('author/{author}', [AuthorController::class, 'destroy'])->name('authors.destroy');
+            Route::get('brands', [BrandController::class, 'index'])->name('brands');
+            Route::get('brand/create', [BrandController::class, 'create'])->name('brands.create');
+            Route::post('brand', [BrandController::class, 'store'])->name('brands.store');
+            Route::get('brand/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+            Route::patch('brand/{brand}', [BrandController::class, 'update'])->name('brands.update');
+            Route::delete('brand/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
             
             // ARTIKLI
             Route::get('products', [ProductController::class, 'index'])->name('products');
@@ -252,7 +252,7 @@ Route::prefix('api/v2')->group(function () {
 
     Route::post('/actions/destroy/api', [ActionController::class, 'destroyApi'])->name('actions.destroy.api');
     Route::post('/reviews/destroy/api', [ReviewController::class, 'destroyApi'])->name('reviews.destroy.api');
-    Route::post('/authors/destroy/api', [AuthorController::class, 'destroyApi'])->name('authors.destroy.api');
+    Route::post('/brands/destroy/api', [BrandController::class, 'destroyApi'])->name('brands.destroy.api');
     Route::post('/publishers/destroy/api', [PublisherController::class, 'destroyApi'])->name('publishers.destroy.api');
     Route::post('/products/destroy/api', [ProductController::class, 'destroyApi'])->name('products.destroy.api');
     Route::post('/blogs/destroy/api', [BlogController::class, 'destroyApi'])->name('blogs.destroy.api');

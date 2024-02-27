@@ -214,7 +214,7 @@ class Category extends Model
      */
     public function edit()
     {
-        $id = $this->insertGetId($this->createModelArray('update'));
+        $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
             CategoryTranslation::edit($id, $this->request);

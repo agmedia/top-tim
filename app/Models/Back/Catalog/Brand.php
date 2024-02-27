@@ -11,14 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class Author extends Model
+class Brand extends Model
 {
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'authors';
+    protected $table = 'brands';
 
     /**
      * @var array
@@ -36,7 +36,7 @@ class Author extends Model
      */
     public function products()
     {
-        return $this->hasMany(Product::class, 'author_id', 'id');
+        return $this->hasMany(Product::class, 'brand_id', 'id');
     }
 
 
@@ -77,25 +77,11 @@ class Author extends Model
      */
     public function create()
     {
-        $slug = isset($this->request->slug) ? Str::slug($this->request->slug) : Str::slug($this->request->title);
-
-        $id = $this->insertGetId([
-            'letter'           => Helper::resolveFirstLetter($this->request->title),
-            'title'            => $this->request->title,
-            'description'      => $this->request->description,
-            'meta_title'       => $this->request->meta_title,
-            'meta_description' => $this->request->meta_description,
-            'lang'             => 'hr',
-            'sort_order'       => 0,
-            'status'           => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'featured'         => (isset($this->request->featured) and $this->request->featured == 'on') ? 1 : 0,
-            'slug'             => $slug,
-            'url'              => config('settings.author_path') . '/' . $slug,
-            'created_at'       => Carbon::now(),
-            'updated_at'       => Carbon::now()
-        ]);
+        $id = $this->insertGetId($this->createModelArray());
 
         if ($id) {
+            BrandTranslation::create($id, $this->request);
+
             return $this->find($id);
         }
 
@@ -110,24 +96,11 @@ class Author extends Model
      */
     public function edit()
     {
-        $slug = isset($this->request->slug) ? Str::slug($this->request->slug) : Str::slug($this->request->title);
-
-        $id = $this->update([
-            'letter'           => Helper::resolveFirstLetter($this->request->title),
-            'title'            => $this->request->title,
-            'description'      => $this->request->description,
-            'meta_title'       => $this->request->meta_title,
-            'meta_description' => $this->request->meta_description,
-            'lang'             => 'hr',
-            'sort_order'       => 0,
-            'status'           => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'featured'         => (isset($this->request->featured) and $this->request->featured == 'on') ? 1 : 0,
-            'slug'             => $slug,
-            'url'              => config('settings.author_path') . '/' . $slug,
-            'updated_at'       => Carbon::now()
-        ]);
+        $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
+            BrandTranslation::edit($id, $this->request);
+
             return $this;
         }
 
@@ -136,11 +109,34 @@ class Author extends Model
 
 
     /**
+     * @param string $method
+     *
+     * @return array
+     */
+    private function createModelArray(string $method = 'insert'): array
+    {
+        $response = [
+            'letter'           => Helper::resolveFirstLetter($this->request->title),
+            'featured'         => (isset($this->request->featured) and $this->request->featured == 'on') ? 1 : 0,
+            'sort_order'       => 0,
+            'status'           => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'updated_at' => Carbon::now()
+        ];
+
+        if ($method == 'insert') {
+            $response['created_at'] = Carbon::now();
+        }
+
+        return $response;
+    }
+
+
+    /**
      * @param Category $category
      *
      * @return bool
      */
-    public function resolveImage(Author $author)
+    public function resolveImage(Brand $author)
     {
         if ($this->request->hasFile('image')) {
             $name = Str::slug($author->title) . '.' . $this->request->image->extension();
@@ -168,16 +164,16 @@ class Author extends Model
     {
         $log_start = microtime(true);
 
-        $total = Author::query()->pluck('id');
+        $total = Brand::query()->pluck('id');
 
-        $authors_with = Author::query()->whereHas('products', function ($query) {
+        $authors_with = Brand::query()->whereHas('products', function ($query) {
             $query->where('status', 1);
         })->pluck('id');
 
         $authors_without = $total->diff($authors_with);
 
-        Author::query()->whereIn('id', $authors_with)->update(['status' => 1]);
-        Author::query()->whereIn('id', $authors_without)->update(['status' => 0]);
+        Brand::query()->whereIn('id', $authors_with)->update(['status' => 1]);
+        Brand::query()->whereIn('id', $authors_without)->update(['status' => 0]);
 
         $log_end = microtime(true);
         Log::info('__Check Author Statuses - Total Execution Time: ' . number_format(($log_end - $log_start), 2, ',', '.') . ' sec.');

@@ -84,7 +84,7 @@
                             </a>
                         </li>-->
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->routeIs(['authors', 'authors.*']) ? ' active' : '' }}" href="{{ route('authors') }}">
+                            <a class="nav-main-link{{ request()->routeIs(['brands', 'brands.*']) ? ' active' : '' }}" href="{{ route('brands') }}">
                                 <span class="nav-main-link-name">{{ __('back/layout.sidebar.brands') }}</span>
                             </a>
                         </li>
