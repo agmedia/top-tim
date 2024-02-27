@@ -14,11 +14,11 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Artikl edit</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/products.artikl_edit') }}</h1>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('products') }}">Artikli</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Novi artikl</li>
+                        <li class="breadcrumb-item"><a href="{{ route('products') }}">{{ __('back/products.artikli') }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('back/products.novi_artikl') }}</li>
                     </ol>
                 </nav>
             </div>
@@ -45,19 +45,19 @@
             <div class="block block-rounded">
                 <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#osnovno"><i class="si si-settings"></i> Info</a>
+                        <a class="nav-link active" href="#osnovno"><i class="si si-settings"></i> {{ __('back/products.info') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#atributi"><i class="si si-settings"></i> Atributi</a>
+                        <a class="nav-link" href="#atributi"><i class="si si-settings"></i> {{ __('back/products.atributi') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#slike"><i class="si si-picture"></i> Slike</a>
+                        <a class="nav-link" href="#slike"><i class="si si-picture"></i> {{ __('back/products.slike') }}</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="#seo">
-                            <i class="si si-link"></i> SEO
+                            <i class="si si-link"></i> {{ __('back/products.seo') }}
                         </a>
                     </li>
                 </ul>
@@ -66,7 +66,7 @@
                         <div class="block">
                             <div class="block-header block-header-default">
                                 <a class="btn btn-light" href="{{ route('products') }}">
-                                    <i class="fa fa-arrow-left mr-1"></i> Povratak
+                                    <i class="fa fa-arrow-left mr-1"></i> {{ __('back/products.povratak') }}
                                 </a>
                                 <div class="block-options">
                                     <div class="dropdown">
@@ -82,7 +82,7 @@
 
                                         <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
                                             <input type="checkbox" class="custom-control-input" id="product-switch" name="status"{{ (isset($product->status) and $product->status) ? 'checked' : '' }}>
-                                            <label class="custom-control-label pt-1" for="product-switch">Aktiviraj</label>
+                                            <label class="custom-control-label pt-1" for="product-switch">{{ __('back/products.aktiviraj') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -92,22 +92,22 @@
                                     <div class="col-md-12">
                                         <div class="form-group row items-push mb-3">
                                             <div class="col-md-9">
-                                                <label for="dm-post-edit-title">Naziv <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="name-input" name="name" placeholder="Upišite naziv artikla" value="{{ isset($product) ? $product->name : old('name') }}" onkeyup="SetSEOPreview()">
+                                                <label for="dm-post-edit-title">{{ __('back/products.naziv') }} <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="name-input" name="name" placeholder="{{ __('back/products.upisite_naziv_artikla') }}" value="{{ isset($product) ? $product->name : old('name') }}" onkeyup="SetSEOPreview()">
                                                 @error('name')
-                                                <span class="text-danger font-italic">Naziv je potreban...</span>
+                                                <span class="text-danger font-italic">{{ __('back/products.naziv_je_potreban') }}</span>
                                                 @enderror
                                             </div>
 
                                             <div class="col-md-3">
                                                 <label for="polica-input">EAN </label>
-                                                <input type="text" class="form-control" id="polica-input" name="isbn" placeholder="Upišite EAN" value="{{ isset($product) ? $product->isbn : old('isbn') }}" >
+                                                <input type="text" class="form-control" id="polica-input" name="isbn" placeholder="{{ __('back/products.upisite_ean') }}" value="{{ isset($product) ? $product->isbn : old('isbn') }}" >
                                             </div>
                                         </div>
                                         <div class="form-group row items-push mb-3">
 
                                             <div class="col-md-3">
-                                                <label for="price-input">Cijena <span class="text-danger">*</span> <span class="small text-gray">(S PDV-om)</span></label>
+                                                <label for="price-input">{{ __('back/products.cijena') }} <span class="text-danger">*</span> <span class="small text-gray">({{ __('back/products.s_pdvom') }})</span></label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="price-input" name="price" placeholder="00.00" value="{{ isset($product) ? $product->price : old('price') }}">
                                                     <div class="input-group-append">
@@ -115,23 +115,23 @@
                                                     </div>
                                                 </div>
                                                 @error('price')
-                                                <span class="text-danger font-italic">Cijena je potrebna...</span>
+                                                <span class="text-danger font-italic">{{ __('back/products.cijena_je_potrebna') }}</span>
                                                 @enderror
                                             </div>
 
                                             <div class="col-md-3">
-                                                <label for="quantity-input">Količina <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="quantity-input" name="quantity" placeholder="Upišite količinu artikla" value="{{ isset($product) ? $product->quantity : ( ! isset($product) ? 1 : old('quantity')) }}">
+                                                <label for="quantity-input">{{ __('back/products.kolicina') }} <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="quantity-input" name="quantity" placeholder="{{ __('back/products.upisite_kolicinu') }}" value="{{ isset($product) ? $product->quantity : ( ! isset($product) ? 1 : old('quantity')) }}">
                                                 @error('quantity ')
-                                                <span class="text-danger font-italic">Količina je potrebna...</span>
+                                                <span class="text-danger font-italic">{{ __('back/products.kolicina_je_potrebna') }}</span>
                                                 @enderror
                                             </div>
 
                                             <div class="col-md-3">
-                                                <label for="sku-input">Šifra <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="sku-input" name="sku" placeholder="Upišite šifru artikla" value="{{ isset($product) ? $product->sku : old('sku') }}">
+                                                <label for="sku-input">{{ __('back/products.sifra') }} <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="sku-input" name="sku" placeholder="{{ __('back/products.upisite_sifru') }}" value="{{ isset($product) ? $product->sku : old('sku') }}">
                                                 @error('sku')
-                                                <span class="text-danger font-italic">Šifra je potrebna...</span>
+                                                <span class="text-danger font-italic">{{ __('back/products.sifra_je_potrebna') }}</span>
                                                 @enderror
                                                 @error('sku_dupl')
                                                 <span class="text-danger small font-italic">{{ $message }}</span>
@@ -139,8 +139,8 @@
                                             </div>
 
                                             <div class="col-md-3">
-                                                <label for="polica-input">Šifra police </label>
-                                                <input type="text" class="form-control" id="polica-input" name="polica" placeholder="Upišite šifru police" value="{{ isset($product) ? $product->polica : old('polica') }}" >
+                                                <label for="polica-input">{{ __('back/products.sifra_police') }}</label>
+                                                <input type="text" class="form-control" id="polica-input" name="polica" placeholder="{{ __('back/products.upisite_sifru_police') }}" value="{{ isset($product) ? $product->polica : old('polica') }}" >
                                             </div>
 
 
@@ -149,7 +149,7 @@
 
                                         <div class="form-group row items-push mb-3">
                                             <div class="col-md-3">
-                                                <label for="special-input">Akcija</label>
+                                                <label for="special-input">{{ __('back/products.akcija') }}</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="special-input" name="special" placeholder="00.00" value="{{ isset($product) ? $product->special : old('special') }}">
                                                     <div class="input-group-append">
@@ -158,18 +158,18 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="special-from-input">Akcija vrijedi</label>
+                                                <label for="special-from-input">{{ __('back/products.akcija_vrijedi') }}</label>
                                                 <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
-                                                    <input type="text" class="form-control" id="special-from-input" name="special_from" placeholder="od" value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_from)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                    <input type="text" class="form-control" id="special-from-input" name="special_from" placeholder="{{ __('back/products.od') }}" value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_from)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true" data-today-highlight="true">
                                                     <div class="input-group-prepend input-group-append">
                                                         <span class="input-group-text font-w600"><i class="fa fa-fw fa-arrow-right"></i></span>
                                                     </div>
-                                                    <input type="text" class="form-control" id="special-to-input" name="special_to" placeholder="do" value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_to)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                    <input type="text" class="form-control" id="special-to-input" name="special_to" placeholder="{{ __('back/products.do') }}" value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_to)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true" data-today-highlight="true">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="price-input">Porez</label>
-                                                <select class="js-select2 form-control" id="tax-select" name="tax_id" style="width: 100%;" data-placeholder="Odaberite porez...">
+                                                <label for="price-input">{{ __('back/products.porez') }}</label>
+                                                <select class="js-select2 form-control" id="tax-select" name="tax_id" style="width: 100%;" data-placeholder="{{ __('back/products.odaberite_porez') }}">
                                                     <option></option>
                                                     @foreach ($data['taxes'] as $tax)
                                                         <option value="{{ $tax->id }}" {{ ((isset($product)) and ($tax->id == $product->tax_id)) ? 'selected' : (( ! isset($product) and ($tax->id == 1)) ? 'selected' : '') }}>{{ $tax->title }}</option>
@@ -181,7 +181,7 @@
                                         <!-- For more info and examples you can check out http://ckeditor.com -->
                                         <div class="form-group row mb-4">
                                             <div class="col-md-12">
-                                                <label for="description-editor">Opis</label>
+                                                <label for="description-editor">{{ __('back/products.opis') }}</label>
                                                 <textarea id="description-editor" name="description">{!! isset($product) ? $product->description : old('description') !!}</textarea>
                                             </div>
                                         </div>
@@ -206,7 +206,7 @@
 
 
                                             <div class="col-md-6">
-                                                <label for="categories">Odaberi kategorije @include('back.layouts.partials.required-star')</label>
+                                                <label for="categories">{{ __('back/products.odaberi_kategorije') }} @include('back.layouts.partials.required-star')</label>
                                                 <select class="form-control" id="category-select" name="category[]" style="width: 100%;" multiple>
                                                     <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
                                                     @foreach ($data['categories'] as $group => $cats)
@@ -221,7 +221,7 @@
                                                     @endforeach
                                                 </select>
                                                 @error('category')
-                                                <span class="text-danger font-italic">Kategorija je potrebna...</span>
+                                                <span class="text-danger font-italic">{{ __('back/products.kategorija_je_obavezna') }}</span>
                                                 @enderror
                                             </div>
                                             <div class="col-md-6">
@@ -233,7 +233,7 @@
 
                                         <div class="form-group row items-push mb-4">
                                             <div class="col-md-12">
-                                                <label for="sastojci-editor">Sastojci</label>
+                                                <label for="sastojci-editor">{{ __('back/products.sastojci') }}</label>
                                                 <textarea id="sastojci-editor" name="sastojci">{!! isset($product) ? $product->sastojci : old('sastojci') !!}</textarea>
                                             </div>
 
@@ -241,7 +241,7 @@
 
                                         <div class="form-group row items-push mb-4">
                                             <div class="col-md-12">
-                                                <label for="podaci-editor">Podaci o prehrani</label>
+                                                <label for="podaci-editor">{{ __('back/products.podaci_o_prehrani') }}</label>
                                                 <textarea id="podaci-editor" name="podaci">{!! isset($product) ? $product->podaci : old('podaci') !!}</textarea>
                                             </div>
 
@@ -279,7 +279,7 @@
                     <div class="tab-pane" id="slike" role="tabpanel">
                         <div class="block">
                             <div class="block-header block-header-default">
-                                <h3 class="block-title">Slike</h3>
+                                <h3 class="block-title">{{ __('back/products.slike') }}</h3>
                             </div>
                             <div class="block-content block-content-full">
                                 <div class="row justify-content-center">
@@ -298,27 +298,27 @@
                     <div class="tab-pane" id="seo" role="tabpanel">
                         <div class="block">
                             <div class="block-header block-header-default">
-                                <h3 class="block-title">Meta Data - SEO</h3>
+                                <h3 class="block-title">{{ __('back/products.meta_data_seo') }}</h3>
                             </div>
                             <div class="block-content">
                                 <div class="row justify-content-center">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="meta-title-input">Meta naslov</label>
+                                            <label for="meta-title-input">{{ __('back/products.meta_naslov') }}</label>
                                             <input type="text" class="js-maxlength form-control" id="meta-title-input" name="meta_title" value="{{ isset($product) ? $product->meta_title : old('meta_title') }}" maxlength="70" data-always-show="true" data-placement="top">
                                             <small class="form-text text-muted">
-                                                70 znakova max
+                                                {{ __('back/products.70_znakova_max') }}
                                             </small>
                                         </div>
                                         <div class="form-group">
-                                            <label for="meta-description-input">Meta opis</label>
+                                            <label for="meta-description-input">{{ __('back/products.meta_opis') }}</label>
                                             <textarea class="js-maxlength form-control" id="meta-description-input" name="meta_description" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($product) ? $product->meta_description : old('meta_description') }}</textarea>
                                             <small class="form-text text-muted">
-                                                160 znakova max
+                                                {{ __('back/products.160_znakova_max') }}
                                             </small>
                                         </div>
                                         <div class="form-group">
-                                            <label for="slug-input">SEO link (url)</label>
+                                            <label for="slug-input"> {{ __('back/products.seo_url') }}</label>
                                             <input type="text" class="form-control" id="slug-input" value="{{ isset($product) ? $product->slug : old('slug') }}" disabled>
                                             <input type="hidden" name="slug" value="{{ isset($product) ? $product->slug : old('slug') }}">
                                         </div>
@@ -338,13 +338,13 @@
                     <div class="row justify-content-center push">
                         <div class="col-md-6">
                             <button type="submit" class="btn btn-hero-success my-2">
-                                <i class="fas fa-save mr-1"></i> Snimi
+                                <i class="fas fa-save mr-1"></i> {{ __('back/products.snimi') }}
                             </button>
                         </div>
                         <div class="col-md-6 text-right">
                             @if (isset($product))
                                 <a href="{{ route('products.destroy', ['product' => $product]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-product-form{{ $product->id }}').submit();">
-                                    <i class="fa fa-trash-alt"></i> Obriši
+                                    <i class="fa fa-trash-alt"></i> {{ __('back/products.obrisi') }}
                                 </a>
                             @endif
                         </div>
@@ -410,12 +410,12 @@
 
             $('#category-select').select2({});
             $('#grupa-select').select2({
-                placeholder: 'Odaberite...',
+                placeholder: '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
             $('#tax-select').select2({});
             $('#action-select').select2({
-                placeholder: 'Odaberite...',
+                placeholder: '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
             $('#author-select').select2({

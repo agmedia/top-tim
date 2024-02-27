@@ -13,6 +13,40 @@ return [
     |
     */
 
+    'dashboard_title' => 'Nadzorna ploča',
+
+    'pregled_narudzbi' => 'Pregled narudžbi',
+    'pregled_korisnika' => 'Pregled korisnika',
+    'mjesecni_promet' => 'Mjesečni promet',
+    'narudzbi_mjesec' => 'Narudžbi ovaj mjesec',
+    'narudzbi_danas' => 'Narudžbi danas',
+    'registriranih_korisnika' => 'Registriranih korisnika',
+    'prodaja' => 'Prodaja',
+    'ova_godina' => 'Ova godina',
+    'zadnja_godina' => 'Zadnja godina',
+    'zadnje_narudzbe' => 'Zadnje narudžbe',
+    'br' => 'Br',
+    'datum' => 'Datum',
+    'status' => 'Status',
+    'placanje' => 'Plaćanje',
+    'kupac' => 'Kupac',
+    'artikli' => 'Artikli',
+    'vrijednost' => 'Vrijednost',
+    'detalji' => 'Detalji',
+    'nema_narudzbi' => 'Nema narudžbi',
+    'sve_narudzbe' => 'Sve narudžbe',
+    'komentari_kupaca' => 'Komentari kupaca',
+    'novih_komentara' => 'Novih komentara',
+    'pogledaj_komentare' => 'Pogledaj komentare',
+    'rasprodano' => 'Rasprodano',
+    'rasorodanih_artikala' => 'Rasprodanih artikala',
+    'pogledaj_artikle' => 'Pogledaj artikle',
+    'najprodavaniji_artikli' => 'Najprodavaniji artikli',
+    'zadnje_prodani_artikli' => 'Zadnje prodani artikli',
+
+
+
+
     'narudzba_obrada' => 'Rezervacija u obradi',
     'narudzba_gotovo' => 'Rezervacija dovršenih',
     'narudzba_danas' => 'Rezervacija danas ',

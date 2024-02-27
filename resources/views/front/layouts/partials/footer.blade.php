@@ -98,9 +98,9 @@
                         <div class="widget pb-3 mb-lg-4">
                                 <h3 class="widget-title text-dark">Uvjeti kupnje</h3>
                                 <ul class="widget-list">
-                                    @foreach ($uvjeti_kupnje->sortBy('title') as $page)
+                                 {{--   @foreach ($uvjeti_kupnje->sortBy('title') as $page)
                                         <li class="widget-list-item"><a class="widget-list-link" href="{{ route('catalog.route.page', ['page' => $page]) }}">{{ $page->title }}</a></li>
-                                    @endforeach
+                                    @endforeach --}}
                                 </ul>
                             </div>
 

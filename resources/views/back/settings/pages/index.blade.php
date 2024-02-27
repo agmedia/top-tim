@@ -5,9 +5,9 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Info Stranice</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/info.info_stranice') }}</h1>
                 <a class="btn btn-hero-success my-2" href="{{ route('pages.create') }}">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Nova stranica</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/info.nova_post') }}</span>
                 </a>
             </div>
         </div>
@@ -21,15 +21,15 @@
         <!-- Posts -->
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Objave</h3>
+                <h3 class="block-title">{{ __('back/info.objave') }}</h3>
                 <div class="block-options">
                     <!-- Search Form -->
                     <form action="{{ route('pages') }}" method="GET">
                         <div class="block-options-item">
-                            <input type="text" class="form-control" id="search-input" name="search" placeholder="Pretraži stranice..." value="{{ request()->query('search') }}">
+                            <input type="text" class="form-control" id="search-input" name="search" placeholder="{{ __('back/info.pretrazi_stranice') }}" value="{{ request()->query('search') }}">
                         </div>
                         <div class="block-options-item">
-                            <a href="{{ route('pages') }}" class="btn btn-hero-sm btn-secondary"><i class="fa fa-search-minus"></i> Očisti</a>
+                            <a href="{{ route('pages') }}" class="btn btn-hero-sm btn-secondary"><i class="fa fa-search-minus"></i> {{ __('back/info.ocisti') }}</a>
                         </div>
                     </form>
                 </div>
@@ -40,11 +40,11 @@
                     <tr>
                         <th style="width: 5%;" class="text-center">#</th>
                       <!--  <th style="width: 27px;" class="text-center">Slika</th>-->
-                        <th>Naziv</th>
-                        <th>Podgrupa</th>
-                        <th class="text-center">Status</th>
+                        <th>{{ __('back/info.naziv') }}</th>
+                        <th>{{ __('back/info.podgrupa') }}</th>
+                        <th class="text-center">{{ __('back/info.status') }}</th>
                        <!-- <th class="text-center">Featured</th> -->
-                        <th style="width: 100px;" class="text-center">Uredi</th>
+                        <th style="width: 100px;" class="text-center">{{ __('back/info.uredi') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -83,7 +83,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="3">Nema info stranica...</td>
+                            <td colspan="3">{{ __('back/info.nema_objava') }}</td>
                         </tr>
                     @endforelse
                     </tbody>

@@ -1,5 +1,5 @@
 <div class="mb-0 input-group">
-    <input type="search" wire:model.debounce.300ms="search" class="form-control  @error('author_id') is-invalid @enderror" id="author-input" placeholder="{{ !$list ? 'Dodaj brand...' : 'Odaberi brand...' }}" autocomplete="off">
+    <input type="search" wire:model.debounce.300ms="search" class="form-control  @error('author_id') is-invalid @enderror" id="author-input" placeholder="{{ !$list ? 'Brand...' : 'Brand...' }}" autocomplete="off">
     @if ( ! $list)
         <input type="hidden" wire:model="author_id" name="author_id">
         <span class="input-group-append" data-toggle="modal" data-target="#new-author-modal">

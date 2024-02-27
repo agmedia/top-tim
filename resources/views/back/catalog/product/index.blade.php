@@ -12,9 +12,9 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Artikli</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/products.artikli') }}</h1>
                 <a class="btn btn-hero-success my-2" href="{{ route('products.create') }}">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Novi artikl</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/products.novi_artikl') }}</span>
                 </a>
             </div>
         </div>
@@ -26,13 +26,13 @@
     <!-- All Products -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Svi artikli {{ $products->total() }}</h3>
+                <h3 class="block-title">{{ __('back/products.svi_artikli') }} {{ $products->total() }}</h3>
                 <div class="block-options">
                     <div class="dropdown">
                         <button class="btn btn-outline-primary mr-3" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-filter"></i> Filter
                         </button>
-                        <a class="btn btn-primary btn-inline-block" href="{{route('products')}}"><i class=" ci-trash"></i> Očisti filtere</a>
+                        <a class="btn btn-primary btn-inline-block" href="{{route('products')}}"><i class=" ci-trash"></i> {{ __('back/products.ocisti_filtere') }}</a>
                     </div>
                 </div>
             </div>
@@ -44,16 +44,16 @@
                             <div class="col-md-9 mb-0">
                                 <div class="form-group">
                                     <div class="input-group flex-nowrap">
-                                        <input type="text" class="form-control py-3 text-center" name="search" id="search-input" value="{{ request()->input('search') }}" placeholder="Upiši pojam pretraživanja">
+                                        <input type="text" class="form-control py-3 text-center" name="search" id="search-input" value="{{ request()->input('search') }}" placeholder="{{ __('back/products.upisi_pojam_pretrazivanja') }}">
                                         <button type="submit" class="btn btn-primary fs-base" onclick="setURL('search', $('#search-input').val());"><i class="fa fa-search"></i> </button>
                                     </div>
-                                    <div class="form-text small">Pretraži po imenu, šifri, godini izdanja ili šifri police.</div>
+                                    <div class="form-text small">{{ __('back/products.pretrazi_po_imenu') }}</div>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select class="js-select2 form-control" id="category-select" name="category" style="width: 100%;" data-placeholder="Odaberi kategoriju">
+                                    <select class="js-select2 form-control" id="category-select" name="category" style="width: 100%;" data-placeholder="{{ __('back/products.odaberi_kategoriju') }}">
                                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
                                         @foreach ($categories as $group => $cats)
                                             @foreach ($cats as $id => $category)
@@ -79,26 +79,26 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="Odaberi Status">
+                                    <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/products.odaberi_status') }}">
                                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                                        <option value="all" {{ 'all' == request()->input('status') ? 'selected' : '' }}>Svi artikli</option>
-                                        <option value="active" {{ 'active' == request()->input('status') ? 'selected' : '' }}>Aktivni</option>
-                                        <option value="inactive" {{ 'inactive' == request()->input('status') ? 'selected' : '' }}>Neaktivni</option>
-                                        <option value="with_action" {{ 'with_action' == request()->input('status') ? 'selected' : '' }}>Sa akcijama</option>
-                                        <option value="without_action" {{ 'without_action' == request()->input('status') ? 'selected' : '' }}>Bez akcija</option>
+                                        <option value="all" {{ 'all' == request()->input('status') ? 'selected' : '' }}>{{ __('back/products.svi_artikli') }}</option>
+                                        <option value="active" {{ 'active' == request()->input('status') ? 'selected' : '' }}>{{ __('back/products.aktivni') }}</option>
+                                        <option value="inactive" {{ 'inactive' == request()->input('status') ? 'selected' : '' }}>{{ __('back/products.neaktivni') }}</option>
+                                        <option value="with_action" {{ 'with_action' == request()->input('status') ? 'selected' : '' }}>{{ __('back/products.sa_akcijama') }}</option>
+                                        <option value="without_action" {{ 'without_action' == request()->input('status') ? 'selected' : '' }}>{{ __('back/products.bez_akcija') }}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <select class="js-select2 form-control" id="sort-select" name="sort" style="width: 100%;" data-placeholder="Sortiraj artikle">
+                                    <select class="js-select2 form-control" id="sort-select" name="sort" style="width: 100%;" data-placeholder="{{ __('back/products.sortiraj_artikle') }}">
                                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                                        <option value="new" {{ 'new' == request()->input('sort') ? 'selected' : '' }}>Najnovije</option>
-                                        <option value="old" {{ 'old' == request()->input('sort') ? 'selected' : '' }}>Najstarije</option>
-                                        <option value="price_up" {{ 'price_up' == request()->input('sort') ? 'selected' : '' }}>Cijena od manje</option>
-                                        <option value="price_down" {{ 'price_down' == request()->input('sort') ? 'selected' : '' }}>Cijena od više</option>
-                                        <option value="az" {{ 'az' == request()->input('sort') ? 'selected' : '' }}>Od A do Ž</option>
-                                        <option value="za" {{ 'za' == request()->input('sort') ? 'selected' : '' }}>Od Ž do A</option>
+                                        <option value="new" {{ 'new' == request()->input('sort') ? 'selected' : '' }}>{{ __('back/products.najnovije') }}</option>
+                                        <option value="old" {{ 'old' == request()->input('sort') ? 'selected' : '' }}>{{ __('back/products.najstarije') }}</option>
+                                        <option value="price_up" {{ 'price_up' == request()->input('sort') ? 'selected' : '' }}>{{ __('back/products.cijena_od_manje') }}</option>
+                                        <option value="price_down" {{ 'price_down' == request()->input('sort') ? 'selected' : '' }}>{{ __('back/products.cijena_od_vise') }}</option>
+                                        <option value="az" {{ 'az' == request()->input('sort') ? 'selected' : '' }}>{{ __('back/products.a_z') }}</option>
+                                        <option value="za" {{ 'za' == request()->input('sort') ? 'selected' : '' }}>{{ __('back/products.z_a') }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -112,16 +112,16 @@
                     <table class="table table-borderless table-striped table-vcenter">
                         <thead>
                         <tr>
-                            <th class="text-center" style="width: 100px;">Slika</th>
-                            <th>Naziv</th>
-                            <th>Šifra</th>
-                            <th class="text-right">Cijena</th>
+                            <th class="text-center" style="width: 100px;">{{ __('back/products.slika') }}</th>
+                            <th>{{ __('back/products.naziv') }}</th>
+                            <th>{{ __('back/products.sifra') }}</th>
+                            <th class="text-right">{{ __('back/products.cijena') }}</th>
 
-                            <th class="text-center">Kol.</th>
-                            <th>Dodano</th>
-                            <th>Zadnja izmjena</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right" style="width: 12%;">Uredi</th>
+                            <th class="text-center">{{ __('back/products.kol') }}</th>
+                            <th>{{ __('back/products.dodano') }}</th>
+                            <th>{{ __('back/products.zadnja_izmjena') }}</th>
+                            <th class="text-center">{{ __('back/products.status') }}</th>
+                            <th class="text-right" style="width: 12%;">{{ __('back/products.uredi') }}</th>
                         </tr>
                         </thead>
                         <tbody id="ag-table-with-input-fields" class="js-gallery" >
@@ -171,7 +171,7 @@
                         @empty
                             <tr>
                                 <td class="text-center font-size-sm" colspan="12">
-                                    <label>Nema proizvoda...</label>
+                                    <label>{{ __('back/products.nema_proizvoda') }}</label>
                                 </td>
                             </tr>
                         @endforelse
@@ -198,15 +198,15 @@
     <script>
         $(() => {
             $('#category-select').select2({
-                placeholder: 'Odaberite kategoriju',
+                placeholder: '{{ __('back/products.odaberi_kategoriju') }}',
                 allowClear: true
             });
             $('#status-select').select2({
-                placeholder: 'Odaberite status',
+                placeholder: '{{ __('back/products.odaberi_status') }}',
                 allowClear: true
             });
             $('#sort-select').select2({
-                placeholder: 'Sortiraj artikle',
+                placeholder: '{{ __('back/products.sortiraj_artikle') }}',
                 allowClear: true
             });
 

@@ -5,10 +5,10 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h3 font-w400 mt-2 mb-0 mb-sm-2">Nadzorna ploča</h1>
+                <h1 class="flex-sm-fill font-size-h3 font-w400 mt-2 mb-0 mb-sm-2">  {{ __('back/dashboard.dashboard_title') }} </h1>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">Nadzorna ploča</li>
+                        <li class="breadcrumb-item active" aria-current="page"> {{ __('back/dashboard.dashboard_title') }}</li>
                     </ol>
                 </nav>
             </div>
@@ -61,12 +61,12 @@
                                 <i class="fa fa-wallet fa-lg text-primary"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['this_month_total'] }}€</div>
-                            <div class="text-muted ">Mjesečni promet</div>
+                            <div class="text-muted ">{{ __('back/dashboard.mjesecni_promet') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
                             <a class="fw-medium" href="{{ route('orders') }}">
-                                Pregled narudžbi
+                                {{ __('back/dashboard.pregled_narudzbi') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
                         </div>
@@ -79,12 +79,12 @@
                                 <i class="fa fa-chart-line fa-lg text-primary"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['this_month'] }}</div>
-                            <div class="text-muted ">Narudžbi ovaj mjesec</div>
+                            <div class="text-muted ">{{ __('back/dashboard.narudzbi_mjesec') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
                             <a class="fw-medium" href="{{ route('orders') }}">
-                                Pregled narudžbi
+                                {{ __('back/dashboard.pregled_narudzbi') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
                         </div>
@@ -97,12 +97,12 @@
                                 <i class="fa fa-chart-line fa-lg text-primary"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['today'] }}</div>
-                            <div class="text-muted ">Narudžbi danas</div>
+                            <div class="text-muted ">{{ __('back/dashboard.narudzbi_danas') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
                             <a class="fw-medium" href="{{ route('orders') }}">
-                                Pregled narudžbi
+                                {{ __('back/dashboard.pregled_narudzbi') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
                         </div>
@@ -115,12 +115,12 @@
                                 <i class="fa fa-users fa-lg text-primary"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['users'] }}</div>
-                            <div class="text-muted ">Registriranih korisnika</div>
+                            <div class="text-muted ">{{ __('back/dashboard.registriranih_korisnika') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
                             <a class="fw-medium" href="{{ route('users') }}">
-                                Pregled korisnika
+                                {{ __('back/dashboard.pregled_korisnika') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
                         </div>
@@ -133,7 +133,7 @@
         <!-- Orders Overview -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Prodaja</h3>
+                <h3 class="block-title">{{ __('back/dashboard.prodaja') }}</h3>
                 <div class="block-options">
                     <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                         <i class="si si-refresh"></i>
@@ -155,7 +155,7 @@
                 <!-- Latest Orders -->
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Zadnje narudžbe</h3>
+                        <h3 class="block-title">{{ __('back/dashboard.zadnje_narudzbe') }}</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                 <i class="si si-refresh"></i>
@@ -169,14 +169,14 @@
                                 <thead>
                                 <tr>
 
-                                    <th class="text-center" style="width: 36px;">Br.</th>
-                                    <th class="text-center">Datum</th>
-                                    <th>Status</th>
-                                    <th>Plaćanje</th>
-                                    <th>Kupac</th>
-                                    <th class="text-center">Artikli</th>
-                                    <th class="text-right">Vrijednost</th>
-                                    <th class="text-right">Detalji</th>
+                                    <th class="text-center" style="width: 36px;">{{ __('back/dashboard.br') }}.</th>
+                                    <th class="text-center">{{ __('back/dashboard.datum') }}</th>
+                                    <th>{{ __('back/dashboard.status') }}</th>
+                                    <th>{{ __('back/dashboard.placanje') }}</th>
+                                    <th>{{ __('back/dashboard.kupac') }}</th>
+                                    <th class="text-center">{{ __('back/dashboard.artikli') }}</th>
+                                    <th class="text-right">{{ __('back/dashboard.vrijednost') }}</th>
+                                    <th class="text-right">{{ __('back/dashboard.detalji') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -211,7 +211,7 @@
                                 @empty
                                     <tr>
                                         <td class="text-center font-size-sm" colspan="8">
-                                            <label>Nema narudžbi...</label>
+                                            <label>{{ __('back/dashboard.nema_narudzbi') }}</label>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -223,7 +223,7 @@
                     </div>
                     <div class="block-content block-content-full text-center block-content-sm bg-body-light fs-sm">
                         <a class="fw-medium" href="{{ route('orders') }}">
-                            Sve narudžbe
+                            {{ __('back/dashboard.sve_narudzbe') }}
                             <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                         </a>
                     </div>
@@ -239,7 +239,7 @@
                 <div class="col-md-6 d-flex flex-column">
                     <div class="block block-rounded">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">Komentari kupaca</h3>
+                            <h3 class="block-title">{{ __('back/dashboard.komentari_kupaca') }}</h3>
 
                         </div>
                         <div class="block-content block-content-full d-flex justify-content-between align-items-center flex-grow-1">
@@ -247,7 +247,7 @@
                                 <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['comments'] }}</div>
 
                                 <p class="text-muted mb-0">
-                                    Novih komentara
+                                    {{ __('back/dashboard.novih_komentara') }}
                                 </p>
                             </div>
                             <div class="item rounded-circle bg-body">
@@ -257,7 +257,7 @@
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm text-center">
                             <a class="fw-medium" href="{{ route('reviews') }}">
-                                Pogledaj komentare
+                                {{ __('back/dashboard.pogledaj_komentare') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
                         </div>
@@ -266,14 +266,14 @@
                 <div class="col-md-6 d-flex flex-column">
                     <div class="block block-rounded">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">Rasprodano</h3>
+                            <h3 class="block-title">{{ __('back/dashboard.rasprodano') }}</h3>
 
                         </div>
                         <div class="block-content block-content-full d-flex justify-content-between align-items-center flex-grow-1">
                             <div class="me-3">
                                 <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['zeroproducts'] }}</div>
                                 <p class="text-muted mb-0">
-                                    Rasprodanih artikala
+                                    {{ __('back/dashboard.rasorodanih_artikala') }}
                                 </p>
                             </div>
                             <div class="item rounded-circle bg-body">
@@ -282,7 +282,7 @@
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm text-center">
                             <a class="fw-medium" href="{{ route('products') }}">
-                                Pogledaj artikle
+                                {{ __('back/dashboard.pogledaj_artikle') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
                         </div>
@@ -295,7 +295,7 @@
                     <!-- Top Products -->
                     <div class="block block-rounded">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">Najprodavaniji artikli</h3>
+                            <h3 class="block-title"> {{ __('back/dashboard.najprodavaniji_artikli') }}</h3>
                             <div class="block-options">
                                 <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                     <i class="si si-refresh"></i>
@@ -326,7 +326,7 @@
                     <!-- Top Products -->
                     <div class="block block-rounded">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">Zadnje prodani artikli</h3>
+                            <h3 class="block-title">{{ __('back/dashboard.zadnje_prodani_artikli') }}</h3>
                             <div class="block-options">
                                 <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                     <i class="si si-refresh"></i>
@@ -426,7 +426,7 @@
                 labels: this_year.names,
                 datasets: [
                     {
-                        label: 'Ova godina',
+                        label: '{{ __('back/dashboard.ova_godina') }}',
                         fill: true,
                         backgroundColor: 'rgba(239,77,72,0.75)',
                         borderColor: 'rgb(239,77,72)',
@@ -437,7 +437,7 @@
                         data: this_year.values
                     },
                     {
-                        label: 'Zadnja godina',
+                        label: '{{ __('back/dashboard.zadnja_godina') }}',
                         fill: true,
                         backgroundColor: 'rgba(108, 117, 125, .25)',
                         borderColor: 'rgba(108, 117, 125, .75)',

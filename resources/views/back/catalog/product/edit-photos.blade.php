@@ -43,7 +43,7 @@
     <div class="row">
         <div class="col-12">
             <div class="file-drop-area">
-                <label for="files" style="display: block;padding: 1rem 2rem;border: 1px solid #CCCCCC;background-color: #eee;text-align: center;cursor: pointer;">Odaberite fotografiju proizvoda... Ili više njih...</label>
+                <label for="files" style="display: block;padding: 1rem 2rem;border: 1px solid #CCCCCC;background-color: #eee;text-align: center;cursor: pointer;">{{ __('back/products.odaberite_fotografiju_vise') }}</label>
                 <input name="files[][image]" id="files" type="file" multiple>
             </div>
         </div>
@@ -57,7 +57,7 @@
                         <div class="col-sm-3">
                             <div class="options-container fx-item-zoom-in fx-overlay-zoom-out">
                                 <div class="ribbon-box" style="background-color: #c3c3c3">
-                                    <i class="fa fa-check"></i> Glavna Slika
+                                    <i class="fa fa-check"></i> {{ __('back/products.glavna_slika') }}
                                 </div>
                                 <div class="slim"
                                      {{--data-service="{{ route('images.upload') }}"--}}
@@ -75,23 +75,23 @@
                         </div>
                         <div class="col-sm-9">
                             <div class="row mb-2">
-                                <label class="col-sm-3 text-right font-size-sm pt-2">Naziv fotografije</label>
+                                <label class="col-sm-3 text-right font-size-sm pt-2">{{ __('back/products.naziv_fotografije') }}</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="max" class="form-control js-tooltip-enabled" name="slim[0][title]" value="{{ $product->imageName() }}" data-toggle="tooltip" data-placement="top" title="Image Title" placeholder="Naziv fotografije">
+                                    <input type="text" id="max" class="form-control js-tooltip-enabled" name="slim[0][title]" value="{{ $product->imageName() }}" data-toggle="tooltip" data-placement="top" title="Image Title" placeholder="{{ __('back/products.naziv_fotografije') }}">
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label class="col-sm-3 text-right font-size-sm pt-2">Alt. tekst</label>
+                                <label class="col-sm-3 text-right font-size-sm pt-2">{{ __('back/products.alt_text') }}</label>
                                 <div class="col-sm-9 font-size-sm">
 <!--                                    Alternativni tekst glavne fotografije je jednak nazivu knjige + autor.-->
-                                    <input type="text" id="max" class="form-control js-tooltip-enabled" name="slim[0][alt]" value="{{ $product->image_alt }}" data-toggle="tooltip" data-placement="top" title="Image Alt Text" placeholder="Alternativni Naziv fotografije">
+                                    <input type="text" id="max" class="form-control js-tooltip-enabled" name="slim[0][alt]" value="{{ $product->image_alt }}" data-toggle="tooltip" data-placement="top" title="Image Alt Text" placeholder="{{ __('back/products.alternativni_naziv_fotografije') }}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 text-right">
                                     <label class="css-control css-control-primary css-radio">
                                         <input type="radio" class="css-control-input" name="slim[default]" checked>
-                                        Glavna fotografija<span class="css-control-indicator"></span>
+                                        {{ __('back/products.glavna_slika') }}<span class="css-control-indicator"></span>
                                     </label>
                                 </div>
                             </div>
@@ -125,35 +125,35 @@
                                     </div>
                                     <div class="col-md-10 col-sm-9">
                                         <div class="row mb-2">
-                                            <label class="col-sm-3 text-right font-size-sm pt-2">Naziv fotografije</label>
+                                            <label class="col-sm-3 text-right font-size-sm pt-2">{{ __('back/products.naziv_fotografije') }}</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control js-tooltip-enabled" name="slim[{{ $image['id'] }}][title]" value="{{ $image['title'] }}" data-toggle="tooltip" data-placement="top" title="Image Title" placeholder="Naziv fotografije">
+                                                <input type="text" class="form-control js-tooltip-enabled" name="slim[{{ $image['id'] }}][title]" value="{{ $image['title'] }}" data-toggle="tooltip" data-placement="top" title="Image Title" placeholder="{{ __('back/products.naziv_fotografije') }}">
                                             </div>
                                         </div>
                                         <div class="row mb-4">
-                                            <label class="col-sm-3 text-right font-size-sm pt-2">Alt. tekst</label>
+                                            <label class="col-sm-3 text-right font-size-sm pt-2">{{ __('back/products.alt_text') }}</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control js-tooltip-enabled" name="slim[{{ $image['id'] }}][alt]" value="{{ $image['alt'] }}" data-toggle="tooltip" data-placement="top" title="Image Alt Text" placeholder="Alternativni tekst fotografije">
+                                                <input type="text" class="form-control js-tooltip-enabled" name="slim[{{ $image['id'] }}][alt]" value="{{ $image['alt'] }}" data-toggle="tooltip" data-placement="top" title="Image Alt Text" placeholder="{{ __('back/products.alternativni_naziv_fotografije') }}">
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label class="col-sm-9 text-right font-size-sm pt-2" >Redosljed</label>
+                                            <label class="col-sm-9 text-right font-size-sm pt-2" >{{ __('back/products.redosljed') }}</label>
                                             <div class="col-sm-3">
-                                                <input type="text" class="form-control js-tooltip-enabled" name="slim[{{ $image['id'] }}][sort_order]" value="{{ $image['sort_order'] }}" data-toggle="tooltip" data-placement="top" title="Sort Order">
+                                                <input type="text" class="form-control js-tooltip-enabled" name="slim[{{ $image['id'] }}][sort_order]" value="{{ $image['sort_order'] }}" data-toggle="tooltip" data-placement="top" title="{{ __('back/products.redosljed') }}">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12 text-right mb-2">
                                                 <div class="custom-control custom-radio mb-1">
                                                     <input type="radio" class="custom-control-input" id="radio-default" name="slim[default]" value="{{ $image['id'] }}">
-                                                    <label class="custom-control-label" for="radio-default">Glavna fotografija</label>
+                                                    <label class="custom-control-label" for="radio-default">{{ __('back/products.glavna_slika') }}</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 text-right">
                                                 <div class="custom-control custom-checkbox custom-checkbox-square custom-control-success mb-1">
                                                     <input type="checkbox" class="custom-control-input" id="check-published[{{ $image['id'] }}]" name="slim[{{ $image['id'] }}][published]" @if($image['published']) checked @endif>
-                                                    <label class="custom-control-label" for="check-published[{{ $image['id'] }}]">Vidljivost foto.</label>
+                                                    <label class="custom-control-label" for="check-published[{{ $image['id'] }}]">{{ __('back/products.vidljivost') }}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -303,7 +303,7 @@
                 axios.post("{{ route('products.destroy.image') }}", { data: data.meta.image_id })
                     .then((response) => {
                         successToast.fire({
-                            text: 'Fotografija je uspješno izbrisana',
+                            text: '{{ __('back/products.slika_je_obrisana') }}',
                         })
 
                         let elem = document.getElementById('image_id_' + data.meta.image_id);
@@ -312,12 +312,12 @@
                     })
                     .catch((error) => {
                         errorToast.fire({
-                            text: 'Greška u brisanju fotografije..! Molimo pokušajte ponovo.',
+                            text: '{{ __('back/products.greska_u_brisanju') }}',
                         })
                     })
             } else {
                 errorToast.fire({
-                    text: 'Glavna slika se ne može izbrisati..!',
+                    text: '{{ __('back/products.glavna_slika_se_nemoze_izbrisati') }}',
                 })
             }
 
