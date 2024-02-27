@@ -22,7 +22,7 @@ return [
     'title' => 'Title',
     'from' => 'From',
     'to' => 'To',
-    'action' => 'Discount or Extra value <small class="text-muted">- If %, required +/- in front of value</small>',
+    'action' => 'Discount',
     'status' => 'Status',
     'edit' => 'Edit',
     'no_action' => 'No discounts or extra set so far...',
@@ -40,5 +40,17 @@ return [
     'items' => 'Items',
     'search' => 'Search...',
     'repeat_action' => 'Repeat action every year?',
+    'kupon_kod' => 'Coupon code',
+
+    'naziv_akcije' => 'Action name',
+    'akcija_vrijedi' => 'Action valid',
+
+    'do' => 'to',
+    'od' => 'from',
+    'zahtjeva_kupon_kod' => 'Requires Coupon Code',
+    'ako_upisete' => 'If you enter code',
+    'smatrat_ce_se' => 'It will be considered that you request it when purchasing to benefit from the action and the corresponding discount...',
+    'upisite_kupon_kod' => 'Enter coupon code...',
+    'koristi_samo_jednom' => 'Use coupon only once',
 
 ];

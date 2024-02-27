@@ -42,4 +42,19 @@ return [
     'repeat_action' => 'Ponovi akciju svake godine?',
 
 
+    'kupon_kod' => 'Kupon kod',
+    'naziv_akcije' => 'Naziv akcije',
+    'akcija_vrijedi' => 'Akcija vrijedi',
+
+    'do' => 'do',
+    'od' => 'od',
+    'zahtjeva_kupon_kod' => 'Zahtjeva Kupon kod',
+    'ako_upisete' => 'Ako upišete Kupon Kod',
+    'smatrat_ce_se' => 'Smatrat će se da ga zahtjevate prilikom kupnje za ostvarivanje akcije i pripadajučeg popusta...',
+    'upisite_kupon_kod' => 'Upišite kupon kod...',
+    'koristi_samo_jednom' => 'Koristi kupon samo jednom',
+
+
+
+
 ];

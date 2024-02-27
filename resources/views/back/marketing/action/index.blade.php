@@ -12,9 +12,9 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Akcije</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/action.action_title') }}</h1>
                 <a class="btn btn-hero-success my-2" href="{{ route('actions.create') }}">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Nova akcija</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/action.action_new') }}</span>
                 </a>
             </div>
         </div>
@@ -28,7 +28,7 @@
         <!-- All Products -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Sve akcije ({{ $actions->total() }})</h3>
+                <h3 class="block-title">{{ __('back/action.action_all') }} ({{ $actions->total() }})</h3>
 
             </div>
 
@@ -39,13 +39,13 @@
                     <table class="table table-borderless table-striped table-vcenter">
                         <thead>
                         <tr>
-                            <th class="text-left">Naziv</th>
-                            <th>Vrijedi od</th>
-                            <th>Vrijedi do</th>
-                            <th>Popust</th>
-                            <th class="text-center font-size-sm">Kupon kod</th>
-                            <th class="text-center font-size-sm">Status</th>
-                            <th class="text-right" style="width: 10%;">Uredi</th>
+                            <th class="text-left">{{ __('back/action.title') }}</th>
+                            <th>{{ __('back/action.from') }}</th>
+                            <th>{{ __('back/action.to') }}</th>
+                            <th>{{ __('back/action.action') }}</th>
+                            <th class="text-center font-size-sm">{{ __('back/action.kupon_kod') }}</th>
+                            <th class="text-center font-size-sm">{{ __('back/action.status') }}</th>
+                            <th class="text-right" style="width: 10%;">{{ __('back/action.edit') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -74,7 +74,7 @@
                         @empty
                             <tr>
                                 <td class="font-size-sm text-center" colspan="6">
-                                    <label for="">Nema Akcija...</label>
+                                    <label for="">{{ __('back/action.no_action') }}</label>
                                 </td>
                             </tr>
                         @endforelse
