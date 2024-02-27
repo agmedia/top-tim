@@ -10,10 +10,10 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Narudžba pregled <small class="font-weight-light">#_</small><strong>{{ $order->id }}</strong></h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/orders.narudzba_pregled') }}  <small class="font-weight-light">#_</small><strong>{{ $order->id }}</strong></h1>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('orders') }}">Sve narudžbe</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('orders') }}">{{ __('back/orders.sve_narudzbe') }}</a></li>
 
                     </ol>
                 </nav>
@@ -27,19 +27,19 @@
         <!-- Products -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Artikli</h3>
+                <h3 class="block-title">{{ __('back/orders.artikli') }}</h3>
             </div>
             <div class="block-content">
                 <div class="table-responsive">
                     <table class="table table-borderless table-striped table-vcenter font-size-sm">
                         <thead>
                         <tr>
-                            <th class="text-center" style="width: 100px;">Slika</th>
-                            <th>Naziv</th>
-                            <th>Polica</th>
-                            <th class="text-center">Kol</th>
-                            <th class="text-right" style="width: 10%;">Cijena</th>
-                            <th class="text-right" style="width: 10%;">Ukupno</th>
+                            <th class="text-center" style="width: 100px;">{{ __('back/orders.slika') }}</th>
+                            <th>{{ __('back/orders.naziv') }}</th>
+                            <th>{{ __('back/orders.polica') }}</th>
+                            <th class="text-center">{{ __('back/orders.kol') }}</th>
+                            <th class="text-right" style="width: 10%;">{{ __('back/orders.cijena') }}</th>
+                            <th class="text-right" style="width: 10%;">{{ __('back/orders.ukupno') }}</th>
                         </tr>
                         </thead>
                         <tbody class="js-gallery">
@@ -83,7 +83,7 @@
                 <!-- Billing Address -->
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Adresa dostave</h3>
+                        <h3 class="block-title">{{ __('back/orders.adresa_dostave') }}</h3>
                     </div>
                     <div class="block-content">
                         <div class="font-size-h4 mb-1">{{ $order->shipping_fname }} {{ $order->shipping_lname }}</div>
@@ -102,7 +102,7 @@
                 <!-- Shipping Address -->
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Napomene</h3>
+                        <h3 class="block-title">{{ __('back/orders.napomene') }}</h3>
                     </div>
                     <div class="block-content">
                         <p>{{ $order->comment }}</p>
@@ -116,14 +116,14 @@
         <!-- Log Messages -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Povijest narudžbe</h3>
+                <h3 class="block-title">{{ __('back/orders.povijest_narudzbe') }}</h3>
                 <div class="block-options">
                     <div class="dropdown">
                         <button type="button" class="btn btn-alt-secondary d-none d-xl-block" id="btn-add-comment">
-                            Dodaj komentar
+                            {{ __('back/orders.dodaj_komentar') }}
                         </button>
                         <button type="button" class="btn btn-light" id="dropdown-ecom-filters" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Promjeni status
+                            {{ __('back/orders.promjeni_status') }}
                             <i class="fa fa-angle-down ml-1"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-ecom-filters">
@@ -146,7 +146,7 @@
                                 @if ($record->status)
                                     <span class="badge badge-pill badge-{{ $record->status->color }}">{{ $record->status->title }}</span>
                                 @else
-                                    <small>Komentar</small>
+                                    <small>{{ __('back/orders.komentar') }}</small>
                                 @endif
                             </td>
                             <td>
@@ -175,7 +175,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Dodaj komentar</h3>
+                        <h3 class="block-title">{{ __('back/orders.dodaj_komentar') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -186,9 +186,9 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
                                 <div class="form-group mb-4">
-                                    <label for="status-select">Promjeni status</label>
-                                    <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="Promjeni status narudžbe">
-                                        <option value="0">Bez Promjene statusa...</option>
+                                    <label for="status-select">{{ __('back/orders.promjeni_status') }}</label>
+                                    <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/orders.promjeni_status_narudzbe') }}">
+                                        <option value="0">{{ __('back/orders.bez_promjene_statusa') }}</option>
                                         @foreach ($statuses as $status)
                                             <option value="{{ $status->id }}">{{ $status->title }}</option>
                                         @endforeach
@@ -196,7 +196,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="comment-input">Komentar</label>
+                                    <label for="comment-input">{{ __('back/orders.komentar') }}</label>
                                     <textarea class="form-control" name="comment" id="comment-input" rows="7"></textarea>
                                 </div>
 
@@ -206,10 +206,10 @@
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/orders.odustani') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); changeStatus();">
-                            Snimi <i class="fa fa-arrow-right ml-2"></i>
+                            {{ __('back/orders.snimi') }} <i class="fa fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>

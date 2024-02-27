@@ -5,11 +5,11 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Brand edit</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/brands.brand_edit') }}</h1>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('brands') }}">Brands</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Novi Brand</li>
+                        <li class="breadcrumb-item"><a href="{{ route('brands') }}">{{ __('back/brands.brands') }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('back/brands.novi_brand') }}</li>
                     </ol>
                 </nav>
             </div>
@@ -30,16 +30,16 @@
             <div class="block">
                 <div class="block-header block-header-default">
                     <a class="btn btn-light" href="{{ back()->getTargetUrl() }}">
-                        <i class="fa fa-arrow-left mr-1"></i> Povratak
+                        <i class="fa fa-arrow-left mr-1"></i> {{ __('back/brands.povratak') }}
                     </a>
                     <div class="block-options d-inline-block">
                         <div class="custom-control custom-switch custom-control-success d-inline-block mr-5">
                             <input type="checkbox" class="custom-control-input" id="featured-switch" name="featured"{{ (isset($brand->featured) and $brand->featured) ? 'checked' : '' }}>
-                            <label class="custom-control-label" for="featured-switch">Izdvojeni brand</label>
+                            <label class="custom-control-label" for="featured-switch">{{ __('back/brands.izdvojeni_brand') }}</label>
                         </div>
                         <div class="custom-control custom-switch custom-control-success d-inline-block">
                             <input type="checkbox" class="custom-control-input" id="brand-switch" name="status"{{ (isset($brand->status) and $brand->status) ? 'checked' : '' }}>
-                            <label class="custom-control-label" for="brand-switch">Aktiviraj</label>
+                            <label class="custom-control-label" for="brand-switch">{{ __('back/brands.aktiviraj') }}</label>
                         </div>
                     </div>
                 </div>
@@ -48,17 +48,17 @@
                         <div class="col-md-10">
 
                             <div class="form-group">
-                                <label for="title-input">Naziv brenda</label>
-                                <input type="text" class="form-control" id="title-input" name="title" placeholder="Upišite naziv autora" value="{{ isset($brand) ? $brand->title : old('title') }}" onkeyup="SetSEOPreview()">
+                                <label for="title-input">{{ __('back/brands.naslov') }}</label>
+                                <input type="text" class="form-control" id="title-input" name="title" placeholder="{{ __('back/brands.upisite_naslov') }}" value="{{ isset($brand) ? $brand->title : old('title') }}" onkeyup="SetSEOPreview()">
                             </div>
 
                             <div class="form-group">
-                                <label for="slug-input">SEO link (url)</label>
+                                <label for="slug-input">{{ __('back/brands.seo_url') }}</label>
                                 <input type="text" class="form-control" id="slug-input" name="slug" value="{{ isset($brand) ? $brand->slug : old('slug') }}" disabled>
                             </div>
 
                             <div class="form-group">
-                                <label for="description-editor">Opis brenda</label>
+                                <label for="description-editor">{{ __('back/brands.opisl') }}</label>
                                 <textarea id="description-editor" name="description">{!! isset($brand) ? $brand->description : old('description') !!}</textarea>
                             </div>
 
@@ -69,38 +69,38 @@
 
             <div class="block">
                 <div class="block-header block-header-default">
-                    <h3 class="block-title">Meta Data - SEO</h3>
+                    <h3 class="block-title">{{ __('back/categories.meta_data_seo') }}</h3>
                 </div>
                 <div class="block-content">
                     <div class="row justify-content-center">
                         <div class="col-md-10 ">
                             <div class="form-group">
-                                <label for="meta-title-input">Meta naslov</label>
+                                <label for="meta-title-input">{{ __('back/categories.meta_naslov') }}</label>
                                 <input type="text" class="js-maxlength form-control" id="meta-title-input" name="meta_title" value="{{ isset($brand) ? $brand->meta_title : old('meta_title') }}" maxlength="70" data-always-show="true" data-placement="top">
                                 <small class="form-text text-muted">
-                                    70 znakova max
+                                    {{ __('back/categories.70_znakova_max') }}
                                 </small>
                             </div>
 
                             <div class="form-group">
-                                <label for="meta-description-input">Meta opis</label>
+                                <label for="meta-description-input">{{ __('back/categories.meta_opis') }}</label>
                                 <textarea class="js-maxlength form-control" id="meta-description-input" name="meta_description" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($brand) ? $brand->meta_description : old('meta_description') }}</textarea>
                                 <small class="form-text text-muted">
-                                    160 znakova max
+                                    {{ __('back/categories.160_znakova_max') }}
                                 </small>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-xl-6">
-                                    <label>Open Graph slika</label>
+                                    <label>{{ __('back/categories.open_graph_slika') }}</label>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="image-input" name="image" data-toggle="custom-file-input" onchange="readURL(this);">
-                                        <label class="custom-file-label" for="image-input">Odaberite sliku</label>
+                                        <label class="custom-file-label" for="image-input">{{ __('back/categories.odaberite_sliku') }}</label>
                                     </div>
                                     <div class="mt-2">
                                         <img class="img-fluid" id="image-view" src="{{ isset($brand) ? asset($brand->image) : asset('media/img/lightslider.webp') }}" alt="">
                                     </div>
-                                    <div class="form-text text-muted font-size-sm font-italic">Slika koja se pokazuje kada se link dijeli (facebook, twitter, itd.)</div>
+                                    <div class="form-text text-muted font-size-sm font-italic">{{ __('back/categories.slika_koja_se_pokazuje') }}</div>
                                 </div>
                             </div>
                         </div>
@@ -110,14 +110,14 @@
                     <div class="row justify-content-center push">
                         <div class="col-md-5">
                             <button type="submit" class="btn btn-hero-success my-2">
-                                <i class="fas fa-save mr-1"></i> Snimi
+                                <i class="fas fa-save mr-1"></i> {{ __('back/categories.snimi') }}
                             </button>
                         </div>
                         <div class="col-md-5 text-right">
                         @if (isset($brand))
 
                                 <a href="{{ route('brands.destroy', ['brand' => $brand]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-brand-form{{ $brand->id }}').submit();">
-                                    <i class="fa fa-trash-alt"></i> Obriši
+                                    <i class="fa fa-trash-alt"></i>  {{ __('back/categories.obrisi') }}
                                 </a>
 
                         @endif

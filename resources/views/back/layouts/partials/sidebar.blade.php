@@ -169,7 +169,7 @@
                         <span class="nav-main-link-name">{{ __('back/layout.sidebar.settings') }}</span>
                     </a>
                     <ul class="nav-main-submenu">
-                        <li class="nav-main-item">
+                      {{--  <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['api', 'api.*']) ? ' active' : '' }}" href="{{ route('api.index') }}">
                                 <span class="nav-main-link-name">API</span>
                             </a>
@@ -192,7 +192,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-main-item{{ request()->is([current_locale() . '/admin/settings/application/*']) ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">

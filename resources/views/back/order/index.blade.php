@@ -11,7 +11,7 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Narudžbe</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/orders.orders') }}</h1>
             </div>
         </div>
     </div>
@@ -23,10 +23,10 @@
     <!-- All Orders -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Lista narudžbi <small class="font-weight-light">{{ $orders->total() }}</small></h3>
+                <h3 class="block-title">{{ __('back/orders.lista_narudzbi') }}  <small class="font-weight-light">{{ $orders->total() }}</small></h3>
                 <div class="block-options d-none d-xl-block">
                     <div class="form-group mb-0 mr-2">
-                        <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="Promjeni status narudžbe">
+                        <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/orders.promjeni_status_narudžbe') }}">
                             <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
                             @foreach ($statuses as $status)
                                 <option value="{{ $status->id }}">{{ $status->title }}</option>
@@ -37,12 +37,12 @@
                 <div class="block-options">
                     <div class="dropdown">
                         <button type="button" class="btn btn-light" id="dropdown-ecom-filters" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Filtriraj
+                            {{ __('back/orders.filtriraj') }}
                             <i class="fa fa-angle-down ml-1"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-ecom-filters">
                             <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:setURL('status', 0)">
-                                Sve narudžbe
+                                {{ __('back/orders.sve_narudzbe') }}
                             </a>
                             @foreach ($statuses as $status)
                                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:setURL('status', {{ $status->id }})">
@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <div class="form-group">
                             <div class="input-group flex-nowrap">
-                                <input type="text" class="form-control py-3 text-center" name="search" id="search-input" value="{{ request()->input('search') }}" placeholder="Pretraži po broju narudžbe, imenu, prezimenu ili emailu kupca...">
+                                <input type="text" class="form-control py-3 text-center" name="search" id="search-input" value="{{ request()->input('search') }}" placeholder="{{ __('back/orders.pretrazi_po_broju') }}">
                                 <button type="submit" class="btn btn-primary fs-base" onclick="setURL('search', $('#search-input').val());"><i class="fa fa-search"></i> </button>
                             </div>
                         </div>
@@ -80,15 +80,14 @@
                                     </div>
                                 </div>
                             </th>
-                            <th class="text-center" style="width: 36px;">Br.</th>
-                            <th class="text-center">Datum</th>
-                            <th>Status</th>
-                            <th>Plaćanje</th>
-                            <th>Kupac</th>
-                            <th class="text-center">Artikli</th>
-                            <th class="text-right">Vrijednost</th>
-                         <!--   <th class="text-right">GLS Labels</th> -->
-                            <th class="text-right">Detalji</th>
+                            <th class="text-center" style="width: 36px;">{{ __('back/dashboard.br') }}.</th>
+                            <th class="text-center">{{ __('back/dashboard.datum') }}</th>
+                            <th>{{ __('back/dashboard.status') }}</th>
+                            <th>{{ __('back/dashboard.placanje') }}</th>
+                            <th>{{ __('back/dashboard.kupac') }}</th>
+                            <th class="text-center">{{ __('back/dashboard.artikli') }}</th>
+                            <th class="text-right">{{ __('back/dashboard.vrijednost') }}</th>
+                            <th class="text-right">{{ __('back/dashboard.detalji') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -139,7 +138,7 @@
                         @empty
                             <tr>
                                 <td class="text-center font-size-sm" colspan="8">
-                                    <label>Nema narudžbi...</label>
+                                    <label>{{ __('back/orders.nema_narudzbi') }}</label>
                                 </td>
                             </tr>
                         @endforelse
