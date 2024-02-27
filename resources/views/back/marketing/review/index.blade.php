@@ -45,7 +45,7 @@
                             <th>{{ __('back/review.title_user') }}</th>
                             <th class="text-center font-size-sm">{{ __('back/review.title_featured') }}</th>
                             <th class="text-center font-size-sm">{{ __('Status') }}</th>
-                            <th class="text-right" style="width: 10%;">{{ __('Uredi') }}</th>
+                            <th class="text-right" style="width: 10%;">{{ __('back/review.edit') }}</th>
                         </tr>
                         </thead>
                         <tbody>

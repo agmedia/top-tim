@@ -69,7 +69,7 @@
                                     <label class="mb-2">{{ __('back/review.rating') }} @include('back.layouts.partials.required-star')</label>
 {{--                                    <ag-star-rating value="{{ isset($review) ? $review->stars : old('stars') }}" increment="0.1" decimals="1"></ag-star-rating>--}}
                                     <select class="form-control form-select" required id="review-stars" name="stars">
-                                        <option value="">Odaberite ocjenu</option>
+                                        <option value="">{{ __('back/review.odaberi_ocjenu') }}</option>
                                         @for ($i = 5; $i > 0; $i--)
                                             @if (isset($review) && $review->stars == $i)
                                                 <option value="{{ $i }}" selected>{{ $i }} stars</option>
@@ -81,7 +81,7 @@
                                 </div>
 
                                 <div class="col-md-8">
-                                    <label for="email-input">Proizvod @include('back.layouts.partials.required-star')</label>
+                                    <label for="email-input">{{ __('back/review.proizvod') }} @include('back.layouts.partials.required-star')</label>
                                     @livewire('back.layout.search.product-search', ['product_id' => isset($review) ? $review->product_id : old('product_id'), 'list' => true])
                                 </div>
                             </div>

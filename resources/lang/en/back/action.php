@@ -31,7 +31,7 @@ return [
     'back' => 'Back',
     'publish' => 'Publish',
     'title_insert' => 'Insert discount title',
-    'action_group' => 'Discount or Extra group',
+    'action_group' => 'Discount group',
     'all_units' => 'All Units',
     'action_type' => 'Discount Type',
     'enter_action' => 'Enter discount or extra',

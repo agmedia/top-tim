@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Apartment Reviews',
+    'title' => 'Reviews',
     'write_new' => 'Write New Review',
     'all_reviews' => 'All Reviews',
     'title_review' => 'Review',
@@ -28,4 +28,9 @@ return [
     'lastname' => 'Lastname',
     'rating' => 'Rating',
     'message' => 'Message',
+    'edit' => 'Edit',
+    'odaberi_ocjenu' => 'Select Review',
+    'proizvod' => 'Product',
+    'odaberi_proizvod' => 'Type product name...',
+    'naziv' => 'Title'
 ];

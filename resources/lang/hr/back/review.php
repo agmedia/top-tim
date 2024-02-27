@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Komentari Apartmana',
+    'title' => 'Komentari',
     'write_new' => 'Dodaj novi komentar',
     'all_reviews' => 'Svi komentari',
     'title_review' => 'Ocjena',
@@ -28,5 +28,10 @@ return [
     'lastname' => 'Prezime',
     'rating' => 'Ocjena',
     'message' => 'Komentar',
+    'edit' => 'Uredi',
+    'odaberi_ocjenu' => 'Odaberite ocjenu',
+    'proizvod' => 'Proizvod',
+    'odaberi_proizvod' => 'Odaberite proizvod...',
+    'naziv' => 'Naziv'
 
 ];
