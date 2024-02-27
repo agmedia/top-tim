@@ -2,6 +2,7 @@
 
 namespace App\Models\Back\Catalog;
 
+use App\Http\Controllers\Back\Catalog\CategoryController;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use Carbon\Carbon;
@@ -29,9 +30,47 @@ class Category extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /**
+     * @var string
+     */
+    protected $locale = '';
+
+    /**
      * @var Request
      */
     protected $request;
+
+
+    /**
+     * Gallery constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = current_locale();
+    }
+
+
+    /**
+     * @param null  $lang
+     * @param false $all
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null, bool $all = false)
+    {
+        if ($lang) {
+            return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $lang)->first();
+        }
+
+        if ($all) {
+            return $this->hasMany(CategoryTranslation::class, 'category_id');
+        }
+
+        return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $this->locale)->first();
+    }
 
 
     /**
@@ -103,10 +142,10 @@ class Category extends Model
 
         foreach ($groups as $group) {
             if ($full) {
-                $cats = $this->where('group', $group)->where('parent_id', 0)->orderBy('title')->with('subcategories')->withCount('products')->get();
+                $cats = $this->where('group', $group)->where('parent_id', 0)->with('subcategories', 'translation')->withCount('products')->get();
             } else {
                 $cats = [];
-                $fill = $this->where('group', $group)->where('parent_id', 0)->orderBy('title')->with('subcategories')->withCount('products')->get();
+                $fill = $this->where('group', $group)->where('parent_id', 0)->with('subcategories', 'translation')->withCount('products')->get();
 
                 foreach ($fill as $cat) {
                     $cats[$cat->id] = ['title' => $cat->title];
@@ -156,29 +195,11 @@ class Category extends Model
      */
     public function create()
     {
-        $parent = $this->request->parent ?: 0;
-        $group  = isset($this->request->group) ? $this->request->group : 0;
-
-        if ($parent) {
-            $topcat = $this->where('id', $parent)->first();
-            $group  = $topcat->group;
-        }
-
-        $id = $this->insertGetId([
-            'parent_id'        => $parent,
-            'title'            => $this->request->title,
-            'description'      => $this->request->description,
-            'meta_title'       => $this->request->meta_title,
-            'meta_description' => $this->request->meta_description,
-            'group'            => $group,
-            'lang'             => 'hr',
-            'status'           => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'slug'             => isset($this->request->slug) ? Str::slug($this->request->slug) : Str::slug($this->request->title),
-            'created_at'       => Carbon::now(),
-            'updated_at'       => Carbon::now()
-        ]);
+        $id = $this->insertGetId($this->createModelArray());
 
         if ($id) {
+            CategoryTranslation::create($id, $this->request);
+            
             return $this->find($id);
         }
 
@@ -193,6 +214,25 @@ class Category extends Model
      */
     public function edit()
     {
+        $id = $this->insertGetId($this->createModelArray('update'));
+
+        if ($id) {
+            CategoryTranslation::edit($id, $this->request);
+
+            return $this;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param string $method
+     *
+     * @return array
+     */
+    private function createModelArray(string $method = 'insert'): array
+    {
         $parent = $this->request->parent ?: 0;
         $group  = isset($this->request->group) ? $this->request->group : 0;
 
@@ -201,24 +241,20 @@ class Category extends Model
             $group  = $topcat->group;
         }
 
-        $id = $this->update([
-            'parent_id'        => $parent,
-            'title'            => $this->request->title,
-            'description'      => $this->request->description,
-            'meta_title'       => $this->request->meta_title,
-            'meta_description' => $this->request->meta_description,
-            'group'            => $group,
-            'lang'             => 'hr',
-            'status'           => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'slug'             => isset($this->request->slug) ? Str::slug($this->request->slug) : Str::slug($this->request->title),
-            'updated_at'       => Carbon::now()
-        ]);
+        $response = [
+            'parent_id'  => $parent,
+            'image'      => '',
+            'group'      => $group,
+            'sort_order' => 0,
+            'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'updated_at' => Carbon::now()
+        ];
 
-        if ($id) {
-            return $this;
+        if ($method == 'insert') {
+            $response['created_at'] = Carbon::now();
         }
 
-        return false;
+        return $response;
     }
 
 
@@ -258,6 +294,20 @@ class Category extends Model
         }
         
         return false;
+    }
+
+
+    public static function getParents(): array
+    {
+        $response = [];
+
+        $tops = self::query()->where('parent_id', 0)->with('translation')->get();
+
+        foreach ($tops as $top) {
+            $response[$top->id] = $top->translation()->title;
+        }
+
+        return $response;
     }
 
 }

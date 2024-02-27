@@ -31,7 +31,7 @@ class CategoryController extends Controller
     public function create()
     {
         $groups = Category::groups()->pluck('group');
-        $parents = Category::topList()->pluck('title', 'id');
+        $parents = Category::getParents();
 
         return view('back.catalog.category.edit', compact('parents', 'groups'));
     }
@@ -70,7 +70,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $groups = Category::groups()->pluck('group');
-        $parents = Category::topList()->pluck('title', 'id');
+        $parents = Category::getParents();
 
         return view('back.catalog.category.edit', compact('category', 'parents', 'groups'));
     }
