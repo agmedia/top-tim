@@ -48,7 +48,28 @@
 
                             <div class="form-group">
                                 <label for="title-input">{{ __('back/info.naslov') }}</label>
-                                <input type="text" class="form-control" id="title-input" name="title" placeholder="{{ __('back/info.upisite_naslov') }}" value="{{ isset($page) ? $page->title : old('title') }}" onkeyup="SetSEOPreview()">
+
+                                <ul class="nav nav-pills float-right">
+                                    @foreach(ag_lang() as $lang)
+                                        <li @if ($lang->code == current_locale()) class="active" @endif>
+                                            <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
+                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
+
+                                <div class="tab-content">
+                                    @foreach(ag_lang() as $lang)
+                                        <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($page) ? $page->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
+                                        </div>
+                                    @endforeach
+                                </div>
+
+
+
                             </div>
 
                             <div class="form-group">
@@ -75,7 +96,24 @@
                             <div class="form-group row  mb-4">
                                 <div class="col-md-12">
                                     <label for="description-editor">{{ __('back/info.opis') }}</label>
-                                    <textarea id="js-ckeditor" name="description">{!! isset($page) ? $page->description : old('description') !!}</textarea>
+                                    <ul class="nav nav-pills float-right">
+                                        @foreach(ag_lang() as $lang)
+                                            <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#description-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($page) ? $page->translation($lang->code)->description : old('description.*') !!}</textarea>
+                                            </div>
+                                        @endforeach
+                                    </div>
 
                                 </div>
                             </div>
@@ -95,23 +133,92 @@
                             <form action="be_pages_ecom_product_edit.html" method="POST" onsubmit="return false;">
                                 <div class="form-group">
                                     <label for="meta-title-input">{{ __('back/categories.meta_naslov') }}</label>
-                                    <input type="text" class="js-maxlength form-control" id="meta-title-input" name="meta_title" value="{{ isset($page) ? $page->meta_title : old('meta_title') }}" maxlength="70" data-always-show="true" data-placement="top">
-                                    <small class="form-text text-muted">
-                                        {{ __('back/categories.70_znakova_max') }}
-                                    </small>
+
+                                    <ul class="nav nav-pills float-right">
+                                        @foreach(ag_lang() as $lang)
+                                            <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta_title-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="meta_title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+
+
+                                                <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($page) ? $page->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true" data-placement="top">
+
+
+                                                <small class="form-text text-muted">
+                                                    {{ __('back/categories.70_znakova_max') }}
+                                                </small>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
+
                                 </div>
 
                                 <div class="form-group">
                                     <label for="meta-description-input">{{ __('back/categories.meta_opis') }}</label>
-                                    <textarea class="js-maxlength form-control" id="meta-description-input" name="meta_description" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($page) ? $page->meta_description : old('meta_description') }}</textarea>
-                                    <small class="form-text text-muted">
-                                        {{ __('back/categories.160_znakova_max') }}
-                                    </small>
+
+                                    <ul class="nav nav-pills float-right">
+                                        @foreach(ag_lang() as $lang)
+                                            <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta-description-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="meta-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+
+                                                <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($page) ? $page->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
+                                                <small class="form-text text-muted">
+                                                    {{ __('back/categories.160_znakova_max') }}
+                                                </small>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
                                 </div>
 
                                 <div class="form-group">
                                     <label for="slug-input"> {{ __('back/categories.seo_url') }}</label>
-                                    <input type="text" class="form-control" id="slug-input" name="slug" value="{{ isset($page) ? $page->slug : old('slug') }}" disabled>
+
+                                    <ul class="nav nav-pills float-right">
+                                        @foreach(ag_lang() as $lang)
+                                            <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#slug-input-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="slug-input-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+
+
+                                                <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}" value="{{ isset($page) ? $page->translation($lang->code)->slug : old('slug.*') }}" disabled>
+
+                                                <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ isset($page) ? $page->translation($lang->code)->slug : old('slug.*') }}">
+
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
+
                                 </div>
 
                             </form>
@@ -147,7 +254,9 @@
 @endsection
 
 @push('js_after')
-    <script src="{{ asset('js/plugins/ckeditor/ckeditor.js') }}"></script>
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
+
     <script src="{{ asset('js/plugins/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
 
@@ -162,22 +271,24 @@
                 tags: true
             });
 
-            editor = CKEDITOR.replace('js-ckeditor'); // bind editor
+            {!! ag_lang() !!}.forEach(function(item) {
+                ClassicEditor
+                    .create(document.querySelector('#description-editor-' + item.code ))
 
-            editor.addCommand("mySimpleCommand", { // create named command
-                exec: function(edt) {
-                    alert(edt.getData());
-                }
+                    .then(editor => {
+                        console.log(editor);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
             });
 
-            editor.ui.addButton('SuperButton', { // add new button and bind our command
-                label: "Click me",
-                command: 'mySimpleCommand',
-                //toolbar: 'insert',
-                icon: 'https://avatars1.githubusercontent.com/u/5500999?v=2&s=16'
-            });
+
         })
     </script>
+
+
 
     <script>
         function SetSEOPreview() {

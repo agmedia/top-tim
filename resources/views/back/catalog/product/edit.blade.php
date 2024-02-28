@@ -215,7 +215,7 @@
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($apartment) ? $apartment->translation($lang->code)->description : old('description.*') !!}</textarea>
+                                                            <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($product) ? $product->translation($lang->code)->description : old('description.*') !!}</textarea>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -273,18 +273,55 @@
                                         <div class="form-group row items-push mb-4">
                                             <div class="col-md-12">
                                                 <label for="sastojci-editor">{{ __('back/products.sastojci') }}</label>
-                                                <textarea id="sastojci-editor" name="sastojci">{!! isset($product) ? $product->sastojci : old('sastojci') !!}</textarea>
+                                                <ul class="nav nav-pills float-right">
+                                                    @foreach(ag_lang() as $lang)
+                                                        <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                            <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#sastojci-{{ $lang->code }}">
+                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+
+                                                <div class="tab-content">
+                                                    @foreach(ag_lang() as $lang)
+                                                        <div id="sastojci-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                            <textarea id="sastojci-editor-{{ $lang->code }}" name="sastojci[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($product) ? $product->translation($lang->code)->sastojci : old('sastojci.*') !!}</textarea>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+
+
+
                                             </div>
 
                                         </div>
 
-                                        <div class="form-group row items-push mb-4">
+                                  <div class="form-group row items-push mb-4">
                                             <div class="col-md-12">
                                                 <label for="podaci-editor">{{ __('back/products.podaci_o_prehrani') }}</label>
-                                                <textarea id="podaci-editor" name="podaci">{!! isset($product) ? $product->podaci : old('podaci') !!}</textarea>
+                                                <ul class="nav nav-pills float-right">
+                                                    @foreach(ag_lang() as $lang)
+                                                        <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                            <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#podaci-{{ $lang->code }}">
+                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                                <div class="tab-content">
+                                                    @foreach(ag_lang() as $lang)
+                                                        <div id="podaci-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                            <textarea id="podaci-editor-{{ $lang->code }}" name="podaci[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($product) ? $product->translation($lang->code)->podaci : old('podaci.*') !!}</textarea>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+
                                             </div>
 
                                         </div>
+
+
                                         <div class="form-group row items-push mb-4">
                                             <div class="col-md-3">
                                                 <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
@@ -344,22 +381,94 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="meta-title-input">{{ __('back/products.meta_naslov') }}</label>
-                                            <input type="text" class="js-maxlength form-control" id="meta-title-input" name="meta_title" value="{{ isset($product) ? $product->meta_title : old('meta_title') }}" maxlength="70" data-always-show="true" data-placement="top">
-                                            <small class="form-text text-muted">
-                                                {{ __('back/products.70_znakova_max') }}
-                                            </small>
+
+                                            <ul class="nav nav-pills float-right">
+                                                @foreach(ag_lang() as $lang)
+                                                    <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                        <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta_title-{{ $lang->code }}">
+                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                @foreach(ag_lang() as $lang)
+                                                    <div id="meta_title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+
+
+                                                        <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true" data-placement="top">
+
+
+                                                        <small class="form-text text-muted">
+                                                            {{ __('back/products.70_znakova_max') }}
+                                                        </small>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+
+
+
+
                                         </div>
                                         <div class="form-group">
                                             <label for="meta-description-input">{{ __('back/products.meta_opis') }}</label>
-                                            <textarea class="js-maxlength form-control" id="meta-description-input" name="meta_description" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($product) ? $product->meta_description : old('meta_description') }}</textarea>
-                                            <small class="form-text text-muted">
-                                                {{ __('back/products.160_znakova_max') }}
-                                            </small>
+
+                                            <ul class="nav nav-pills float-right">
+                                                @foreach(ag_lang() as $lang)
+                                                    <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                        <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta-description-{{ $lang->code }}">
+                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <div class="tab-content">
+                                                @foreach(ag_lang() as $lang)
+                                                    <div id="meta-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+
+                                                        <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($product) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
+                                                        <small class="form-text text-muted">
+                                                            {{ __('back/products.160_znakova_max') }}
+                                                        </small>
+                                                     </div>
+                                             @endforeach
+                                           </div>
+
+
+
+
                                         </div>
                                         <div class="form-group">
                                             <label for="slug-input"> {{ __('back/products.seo_url') }}</label>
-                                            <input type="text" class="form-control" id="slug-input" value="{{ isset($product) ? $product->slug : old('slug') }}" disabled>
-                                            <input type="hidden" name="slug" value="{{ isset($product) ? $product->slug : old('slug') }}">
+
+                                            <ul class="nav nav-pills float-right">
+                                                @foreach(ag_lang() as $lang)
+                                                    <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                        <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#slug-input-{{ $lang->code }}">
+                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+
+                                            <div class="tab-content">
+                                                @foreach(ag_lang() as $lang)
+                                                    <div id="slug-input-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+
+
+                                                        <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
+
+                                                        <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ isset($product) ? $product->translation($lang->code)->slug : old('slug.*') }}">
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -423,7 +532,8 @@
 
             {!! ag_lang() !!}.forEach(function(item) {
             ClassicEditor
-                .create(document.querySelector('#description-editor' + item.code ))
+                .create(document.querySelector('#description-editor-' + item.code ))
+
                 .then(editor => {
                     console.log(editor);
                 })
@@ -433,25 +543,26 @@
 
             });
 
-
+            {!! ag_lang() !!}.forEach(function(item) {
             ClassicEditor
-                .create(document.querySelector('#podaci-editor'))
+                .create(document.querySelector('#podaci-editor-' + item.code))
                 .then(editor => {
                     console.log(editor);
                 })
                 .catch(error => {
                     console.error(error);
                 });
-
+            });
+            {!! ag_lang() !!}.forEach(function(item) {
             ClassicEditor
-                .create(document.querySelector('#sastojci-editor'))
+                .create(document.querySelector('#sastojci-editor-' + item.code))
                 .then(editor => {
                     console.log(editor);
                 })
                 .catch(error => {
                     console.error(error);
                 });
-
+        });
             $('#category-select').select2({});
             $('#grupa-select').select2({
                 placeholder: '{{ __('back/products.odaberite') }}',
