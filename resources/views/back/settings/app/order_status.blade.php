@@ -83,7 +83,30 @@
                             <div class="col-md-10">
                                 <div class="form-group">
                                     <label for="status-title">{{ __('back/app.statuses.input_title') }}</label>
-                                    <input type="text" class="form-control" id="status-title" name="title">
+                                    <ul class="nav nav-pills float-right">
+                                        @foreach(ag_lang() as $lang)
+                                            <li @if (current_locale() == $lang->code) class="active" @endif>
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if (current_locale() == $lang->code) active @endif " data-toggle="pill" href="#{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="{{ $lang->code }}" class="tab-pane @if (current_locale() == $lang->code) active @endif">
+                                                <input type="text" class="form-control" id="status-title-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="">
+                                                @error('title.*')
+                                                <span class="text-danger font-italic">{{ __('back/app.geozone.enter_title') }}</span>
+                                                @enderror
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
+
                                 </div>
 
                                 <div class="form-group">

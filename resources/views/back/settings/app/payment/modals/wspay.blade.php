@@ -18,7 +18,29 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="wspay-title">{{ __('back/app.payments.input_title') }}</label>
-                                        <input type="text" class="form-control" id="wspay-title" name="title">
+                                        <ul class="nav nav-pills float-right">
+                                            @foreach(ag_lang() as $lang)
+                                                <li @if (current_locale() == $lang->code) class="active" @endif>
+                                                    <a class="btn btn-sm btn-outline-secondary ml-2 @if (current_locale() == $lang->code) active @endif " data-toggle="pill" href="#wspay-{{ $lang->code }}">
+                                                        <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+
+
+                                        <div class="tab-content">
+                                            @foreach(ag_lang() as $lang)
+                                                <div id="wspay-{{ $lang->code }}" class="tab-pane @if (current_locale() == $lang->code) active @endif">
+                                                    <input type="text" class="form-control" id="wspay-title-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="">
+                                                    @error('title.*')
+                                                    <span class="text-danger font-italic">{{ __('back/app.geozone.enter_title') }}</span>
+                                                    @enderror
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -46,7 +68,7 @@
                                 </small>
                             </div>
 
-                            <div class="form-group mb-4">
+                            <div class="form-group d-none mb-4">
                                 <label for="wspay-description">{{ __('back/app.payments.long_desc') }} <span class="small text-gray">{{ __('back/app.payments.long_desc_label') }}</span></label>
                                 <textarea class="form-control" id="wspay-description" name="data['description']" rows="4"></textarea>
                             </div>

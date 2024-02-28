@@ -104,7 +104,7 @@
                                             <div id="{{ $lang->code }}" class="tab-pane @if (current_locale() == $lang->code) active @endif">
                                                 <input type="text" class="form-control" id="language-title-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="">
                                                 @error('title.*')
-                                                <span class="text-danger font-italic">Greška. Niste unijeli naslov.</span>
+                                                <span class="text-danger font-italic">Error. Empt</span>
                                                 @enderror
                                             </div>
                                         @endforeach
