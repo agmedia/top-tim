@@ -36,13 +36,53 @@
 
                             <div class="form-group">
                                 <label for="title-input">{{ __('back/faq.pitanje') }}</label>
-                                <input type="text" class="form-control" id="title-input" name="title"  value="{{ isset($faq) ? $faq->title : old('title') }}" onkeyup="SetSEOPreview()">
+                                <ul class="nav nav-pills float-right">
+                                    @foreach(ag_lang() as $lang)
+                                        <li @if ($lang->code == current_locale()) class="active" @endif>
+                                            <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
+                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
+
+                                <div class="tab-content">
+                                    @foreach(ag_lang() as $lang)
+                                        <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($faq) ? $faq->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
+                                        </div>
+                                    @endforeach
+                                </div>
+
+
+
                             </div>
 
                             <div class="form-group row  mb-4">
                                 <div class="col-md-12">
                                     <label for="description-editor">{{ __('back/faq.odgovor') }}</label>
-                                    <textarea id="js-ckeditor" name="description">{!! isset($faq) ? $faq->description : old('description') !!}</textarea>
+
+                                    <ul class="nav nav-pills float-right">
+                                        @foreach(ag_lang() as $lang)
+                                            <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#description-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($faq) ? $faq->translation($lang->code)->description : old('description.*') !!}</textarea>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
                                 </div>
                             </div>
 
@@ -80,10 +120,29 @@
 @endsection
 
 @push('js_after')
-    <script src="{{ asset('js/plugins/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
 
 
-    <!-- Page JS Helpers (CKEditor 5 plugins) -->
-    <script>jQuery(function(){Dashmix.helpers(['ckeditor']);});</script>
+    <script>
+        $(() => {
+
+            {!! ag_lang() !!}.forEach(function(item) {
+                ClassicEditor
+                    .create(document.querySelector('#description-editor-' + item.code ))
+
+                    .then(editor => {
+                        console.log(editor);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
+            });
+
+
+
+        })
+    </script>
+
 
 @endpush

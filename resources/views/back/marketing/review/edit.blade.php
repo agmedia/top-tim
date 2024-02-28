@@ -89,7 +89,28 @@
                             <div class="form-group row items-push">
                                 <div class="col-md-12">
                                     <label for="email-input">{{ __('back/review.message') }} @include('back.layouts.partials.required-star')</label>
-                                    <textarea id="message-editor" name="message">{!! isset($review) ? $review->message : old('message') !!}</textarea>
+
+                                    <ul class="nav nav-pills float-right">
+                                        @foreach(ag_lang() as $lang)
+                                            <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#message-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="message-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                <textarea id="message-editor-{{ $lang->code }}" name="message[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($review) ? $review->translation($lang->code)->messag : old('messag.*') !!}</textarea>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
+
                                 </div>
                             </div>
 
@@ -134,14 +155,20 @@
 
     <script>
         $(() => {
-            ClassicEditor
-            .create(document.querySelector('#message-editor'))
-            .then(editor => {
-                //console.log(editor);
-            })
-            .catch(error => {
-                //console.error(error);
+
+            {!! ag_lang() !!}.forEach(function(item) {
+                ClassicEditor
+                    .create(document.querySelector('#message-editor-' + item.code ))
+
+                    .then(editor => {
+                        console.log(editor);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
             });
+
             /**
              *
              */

@@ -49,7 +49,26 @@
                                     <div class="form-group row items-push mb-2">
                                         <div class="col-md-8">
                                             <label for="title-input"> {{ __('back/action.naziv_akcije') }} <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="title-input" name="title" placeholder="{{ __('back/action.title_insert') }}" value="{{ isset($action) ? $action->title : old('title') }}">
+                                            <ul class="nav nav-pills float-right">
+                                                @foreach(ag_lang() as $lang)
+                                                    <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                        <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
+                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+
+                                            <div class="tab-content">
+                                                @foreach(ag_lang() as $lang)
+                                                    <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                        <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($action) ? $action->translation($lang->code)->title : old('title.*') }}" >
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+
                                         </div>
                                         <div class="col-md-4">
                                             <label for="group-select">{{ __('back/action.action_group') }}  <span class="text-danger">*</span></label>
