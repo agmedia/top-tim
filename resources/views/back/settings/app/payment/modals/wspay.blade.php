@@ -3,7 +3,7 @@
         <div class="modal-content rounded">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary">
-                    <h3 class="block-title">WSPay Payment Gateway</h3>
+                    <h3 class="block-title">{{ __('back/app.payments.wspay') }}</h3>
                     <div class="block-options">
                         <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                             <i class="fa fa-times"></i>
@@ -15,37 +15,39 @@
                         <div class="col-md-10">
 
                             <div class="row mb-3">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="wspay-title">Naslov</label>
+                                        <label for="wspay-title">{{ __('back/app.payments.input_title') }}</label>
                                         <input type="text" class="form-control" id="wspay-title" name="title">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="wspay-min">Min. iznos narudžbe</label>
+                                        <label for="wspay-min">{{ __('back/app.payments.min_order_amount') }}</label>
                                         <input type="text" class="form-control" id="wspay-min" name="min">
                                     </div>
                                 </div>
-                                <div class="col-md-8"></div>
-                                <div class="col-md-4">
+
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="wspay-price">Iznos naknade</label>
+                                        <label for="wspay-price">{{ __('back/app.payments.fee_amount') }}</label>
                                         <input type="text" class="form-control" id="wspay-price" name="data['price']">
                                     </div>
                                 </div>
+
+
                             </div>
 
                             <div class="form-group mb-4">
-                                <label for="wspay-short-description">Kratki opis <span class="small text-gray">(Prikazuje se prilikom odabira plaćanja.)</span></label>
+                                <label for="wspay-short-description">{{ __('back/app.payments.short_desc') }} <span class="small text-gray">{{ __('back/app.payments.short_desc_label') }}</span></label>
                                 <textarea class="js-maxlength form-control" id="wspay-short-description" name="data['short_description']" rows="2" maxlength="160" data-always-show="true" data-placement="top"></textarea>
                                 <small class="form-text text-muted">
-                                    160 znakova max
+                                    {{ __('back/app.payments.160_max') }}
                                 </small>
                             </div>
 
                             <div class="form-group mb-4">
-                                <label for="wspay-description">Detaljni opis <span class="small text-gray">(Ako je potreban. Prikazuje se ako je plaćanje odabrano prilikom kupnje.)</span></label>
+                                <label for="wspay-description">{{ __('back/app.payments.long_desc') }} <span class="small text-gray">{{ __('back/app.payments.long_desc_label') }}</span></label>
                                 <textarea class="form-control" id="wspay-description" name="data['description']" rows="4"></textarea>
                             </div>
 
@@ -54,22 +56,22 @@
                                     <div class="row justify-content-center">
                                         <div class="col-md-11">
                                             <div class="form-group">
-                                                <label for="wspay-shop-id">ID prodajnog mjesta (ShopID):</label>
+                                                <label for="wspay-shop-id">ShopID:</label>
                                                 <input type="text" class="form-control" id="wspay-shop-id" name="data['shop_id']">
                                             </div>
                                             <div class="form-group">
-                                                <label for="wspay-secret-key">Tajni ključ (SecretKey):</label>
+                                                <label for="wspay-secret-key">SecretKey:</label>
                                                 <input type="text" class="form-control" id="wspay-secret-key" name="data['secret_key']">
                                             </div>
                                             <div class="form-group">
-                                                <label for="wspay-type">Tip autorizacije</label>
-                                                <select class="js-select2 form-control" id="wspay-type" name="data['type']" style="width: 100%;" data-placeholder="Odaberite tip autorizacije">
-                                                    <option value="1">Autorizacija u jednom koraku (automatska autorizacija)</option>
-                                                    <option value="0">Authtorizacija u dva koraka (predautorizacija)</option>
+                                                <label for="wspay-type">Authorisation type</label>
+                                                <select class="js-select2 form-control" id="wspay-type" name="data['type']" style="width: 100%;" data-placeholder="-- Select --">
+                                                    <option value="1">One Step (automatic authorisation )</option>
+                                                    <option value="0">Two Step (manual authorisation)</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="wspay-callback">URL za slanje odgovora: <span class="small text-gray">Ovo također mora biti upisano u WSPay control panelu.</span></label>
+                                                <label for="wspay-callback">Return URL: <span class="small text-gray"></span></label>
                                                 <input type="text" class="form-control" id="wspay-callback" name="data['callback']" value="{{ url('/') }}">
                                             </div>
 
@@ -81,19 +83,19 @@
                                                     <div class="col-md-9">
                                                         <div class="custom-control custom-radio custom-control-inline custom-control-success custom-control-lg">
                                                             <input type="radio" class="custom-control-input" id="wspay-test-on" name="test" checked="" value="1">
-                                                            <label class="custom-control-label" for="wspay-test-on">Da</label>
+                                                            <label class="custom-control-label" for="wspay-test-on">Yes</label>
                                                         </div>
                                                         <div class="custom-control custom-radio custom-control-inline custom-control-danger custom-control-lg">
                                                             <input type="radio" class="custom-control-input" id="wspay-test-off" name="test" value="0">
-                                                            <label class="custom-control-label" for="wspay-test-off">Ne</label>
+                                                            <label class="custom-control-label" for="wspay-test-off">No</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="wspay-geo-zone">Geo zona <span class="small text-gray">(Ostaviti prazno ako se odnosi na sve..)</span></label>
-                                                <select class="js-select2 form-control" id="wspay-geo-zone" name="geo_zone" style="width: 100%;" data-placeholder="Odaberite geo zonu">
+                                                <label for="wspay-geo-zone">{{ __('back/app.payments.geo_zone') }} <span class="small text-gray">{{ __('back/app.payments.geo_zone_label') }}</span></label>
+                                                <select class="js-select2 form-control" id="wspay-geo-zone" name="geo_zone" style="width: 100%;" data-placeholder="{{ __('back/app.payments.select_geo') }}">
                                                     <option></option>
                                                     @foreach ($geo_zones as $geo_zone)
                                                         <option value="{{ $geo_zone->id }}" {{ ((isset($shipping)) and ($shipping->geo_zone == $geo_zone->id)) ? 'selected' : '' }}>{{ $geo_zone->title }}</option>
@@ -109,7 +111,7 @@
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="wspay-price">Poredak</label>
+                                        <label for="wspay-price">{{ __('back/app.payments.sort_order') }}</label>
                                         <input type="text" class="form-control" id="wspay-sort-order" name="sort_order">
                                     </div>
                                 </div>
@@ -117,7 +119,7 @@
                                     <div class="form-group">
                                         <label class="css-control css-control-sm css-control-success css-switch res">
                                             <input type="checkbox" class="css-control-input" id="wspay-status" name="status">
-                                            <span class="css-control-indicator"></span> Status načina plaćanja
+                                            <span class="css-control-indicator"></span> {{ __('back/app.payments.status_title') }}
                                         </label>
                                     </div>
                                 </div>
@@ -129,10 +131,10 @@
                 </div>
                 <div class="block-content block-content-full text-right bg-light">
                     <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                        Odustani <i class="fa fa-times ml-2"></i>
+                        {{ __('back/app.payments.cancel') }} <i class="fa fa-times ml-2"></i>
                     </a>
                     <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); create_wspay();">
-                        Snimi <i class="fa fa-arrow-right ml-2"></i>
+                        {{ __('back/app.payments.save') }} <i class="fa fa-arrow-right ml-2"></i>
                     </button>
                 </div>
             </div>

@@ -9,7 +9,7 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Načini plaćanja</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/app.payments.title') }}</h1>
             </div>
         </div>
     </div>
@@ -19,17 +19,17 @@
 
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Lista</h3>
+                <h3 class="block-title">{{ __('back/app.payments.list') }}</h3>
             </div>
             <div class="block-content">
                 <table class="table table-striped table-borderless table-vcenter">
                     <thead class="thead-light">
                     <tr>
-                        <th>Naziv</th>
-                        <th style="width: 10%;">Code</th>
-                        <th class="text-center" style="width: 15%;">Poredak</th>
-                        <th class="text-center" style="width: 15%;">Status</th>
-                        <th style="width: 10%;" class="text-right">Uredi</th>
+                        <th>{{ __('back/app.payments.input_title') }}</th>
+                        <th style="width: 10%;">{{ __('back/app.payments.code') }}</th>
+                        <th class="text-center" style="width: 15%;">{{ __('back/app.payments.sort_order') }}</th>
+                        <th class="text-center" style="width: 15%;">{{ __('back/app.payments.status_title') }}</th>
+                        <th style="width: 10%;" class="text-right">{{ __('back/app.payments.edit_title') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -49,7 +49,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4">Nema načina plaćanja...</td>
+                            <td colspan="4">{{ __('back/app.payments.empty_list') }}</td>
                         </tr>
                     @endforelse
                     </tbody>

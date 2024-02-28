@@ -174,6 +174,7 @@ return [
         'long_desc_label' => '(Ako je potreban. Prikazuje se ako je plaćanje odabrano prilikom kupnje.)',
         'chars' => 'znakova',
         'select_geo' => 'Odaberite geo zonu',
+        '160_max' => '160 znakova max',
 
     ],
 

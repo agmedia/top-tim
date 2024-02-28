@@ -181,6 +181,7 @@ return [
         'long_desc_label' => '(If required. Displayed if payment is selected during purchase.)',
         'chars' => 'chars',
         'select_geo' => 'Select geo zone',
+        '160_max' => 'Maximum 160 characters',
     ],
 
     'calendar' => [
