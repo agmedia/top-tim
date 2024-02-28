@@ -201,7 +201,27 @@
                                         <div class="form-group row mb-4">
                                             <div class="col-md-12">
                                                 <label for="description-editor">{{ __('back/products.opis') }}</label>
-                                                <textarea id="description-editor" name="description">{!! isset($product) ? $product->description : old('description') !!}</textarea>
+                                                <ul class="nav nav-pills float-right">
+                                                    @foreach(ag_lang() as $lang)
+                                                        <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                            <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#description-{{ $lang->code }}">
+                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+
+
+                                                <div class="tab-content">
+                                                    @foreach(ag_lang() as $lang)
+                                                        <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                            <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($apartment) ? $apartment->translation($lang->code)->description : old('description.*') !!}</textarea>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+
+
+
                                             </div>
                                         </div>
 
@@ -400,14 +420,19 @@
 
     <script>
         $(() => {
+
+            {!! ag_lang() !!}.forEach(function(item) {
             ClassicEditor
-                .create(document.querySelector('#description-editor'))
+                .create(document.querySelector('#description-editor' + item.code ))
                 .then(editor => {
                     console.log(editor);
                 })
                 .catch(error => {
                     console.error(error);
                 });
+
+            });
+
 
             ClassicEditor
                 .create(document.querySelector('#podaci-editor'))
