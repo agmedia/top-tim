@@ -66,6 +66,7 @@ return [
         'delete_status' => 'Delete status',
         'delete_shure' => 'Are you sure you want to delete the status?',
         'select_status' => 'Select status color...',
+        'empty_list' => 'You have no statuses entered...',
 
     ],
 
@@ -85,6 +86,9 @@ return [
         'cancel' => 'Cancel',
         'delete_tax' => 'Delete tax',
         'delete_shure' => 'Are you sure you want to delete tax?',
+        'stopa' => 'Rate',
+        'empty_list' => 'You have no taxes entered...',
+        'edit_title' => 'Edit',
 
 
     ],
@@ -112,9 +116,43 @@ return [
         'cancel' => 'Cancel',
         'delete_tax' => 'Delete currency',
         'delete_shure' => 'Are you sure you want to delete currency?',
+        'empty_list' => 'You have no currencies entered...',
 
 
     ],
+
+    'shipping'=> [
+
+        'title' => 'Shipping methods',
+        'edit_title' => 'Edit',
+        'input_title' => 'Title',
+        'status_title' => 'Status',
+        'code' => 'Code',
+        'sort_order' => 'Sort order',
+        'list' => 'List',
+        'save' => 'Save',
+        'cancel' => 'Cancel',
+        'empty_list' => 'No shipping methods...',
+        'price' => 'Price',
+        'min_order_amount' => 'Minimum order amount',
+        'fee_amount' => 'Fee amount',
+        'geo_zone' => 'Geo zone',
+        'geo_zone_label' => '(Geo zone to which shipping applies.)',
+        'short_desc' => 'Short description',
+        'short_desc_label' => '(Displayed when selecting shipping method.)',
+        'long_desc' => 'Long description',
+        'long_desc_label' => '(If required. Displayed if shipping is selected during purchase.)',
+        'chars' => 'chars',
+        'select_geo' => 'Select geo zone',
+        'cod' => 'Shipping method',
+        'trosak' => 'Delivery cost',
+        'trajanje' => 'Delivery duration',
+        'trajanje_label' => '(Textual. Eg. 2-3 days or 2 to 7 working days...)',
+        '160_max' => 'Maximum 160 characters',
+        'store_pickup' => 'Personal pickup of items in store'
+    ],
+
+
 
     'payments'=> [
 

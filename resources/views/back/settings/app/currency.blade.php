@@ -9,12 +9,12 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Valute</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/app.currency.title') }}</h1>
                 <button class="btn btn-hero-secondary my-2 mr-2" onclick="event.preventDefault(); openMainModal();">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Odaberi glavnu valutu</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/app.currency.select_main') }}</span>
                 </button>
                 <button class="btn btn-hero-success my-2" onclick="event.preventDefault(); openModal();">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Dodaj novu</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/app.currency.new') }}</span>
                 </button>
             </div>
         </div>
@@ -25,17 +25,17 @@
 
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Lista</h3>
+                <h3 class="block-title">{{ __('back/app.currency.list') }}</h3>
             </div>
             <div class="block-content">
                 <table class="table table-striped table-borderless table-vcenter">
                     <thead class="thead-light">
                     <tr>
-                        <th style="width: 5%;">Br.</th>
-                        <th style="width: 60%;">Naziv Valute</th>
-                        <th class="text-center">Kod</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-right">Uredi</th>
+                        <th style="width: 5%;">{{ __('back/app.currency.br') }}</th>
+                        <th style="width: 60%;">{{ __('back/app.currency.input_title') }}</th>
+                        <th class="text-center">{{ __('back/app.currency.code') }}</th>
+                        <th class="text-center">{{ __('back/app.currency.status_title') }}</th>
+                        <th class="text-right">{{ __('back/app.currency.edit_title') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,7 @@
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->title }}
                                 @if (isset($item->main) && $item->main)
-                                    <strong><small>&nbsp;(Glavna)</small></strong>
+                                    <strong><small>&nbsp;({{ __('back/app.currency.default_currency') }})</small></strong>
                                 @endif
                             </td>
                             <td class="text-center">{{ $item->code }}</td>
@@ -60,7 +60,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="5">Nema upisanih valuta...</td>
+                            <td colspan="5">{{ __('back/app.currency.empty_list') }}</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -76,7 +76,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Valuta Edit</h3>
+                        <h3 class="block-title">{{ __('back/app.currency.edit_title') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -87,25 +87,25 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
                                 <div class="form-group mb-4">
-                                    <label for="currency-title">Naslov</label>
+                                    <label for="currency-title">{{ __('back/app.currency.input_title') }}</label>
                                     <input type="text" class="form-control" id="currency-title" name="title">
                                 </div>
 
                                 <div class="form-group mb-4">
-                                    <label for="currency-code">Kod</label>
+                                    <label for="currency-code">{{ __('back/app.currency.code') }}</label>
                                     <input type="text" class="form-control" id="currency-code" name="code">
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="currency-symbol-left">Simbol lijevo</label>
+                                            <label for="currency-symbol-left">{{ __('back/app.currency.symbol_left') }}</label>
                                             <input type="text" class="form-control" id="currency-symbol-left" name="symbol_left">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="currency-symbol-right">Simbol desno</label>
+                                            <label for="currency-symbol-right">{{ __('back/app.currency.symbol_right') }}</label>
                                             <input type="text" class="form-control" id="currency-symbol-right" name="symbol_right">
                                         </div>
                                     </div>
@@ -114,13 +114,13 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="currency-value">Vrijednost</label>
+                                            <label for="currency-value">{{ __('back/app.currency.value') }}</label>
                                             <input type="text" class="form-control" id="currency-value" name="value">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="currency-decimal-places">Decimalna mjesta</label>
+                                            <label for="currency-decimal-places">{{ __('back/app.currency.decimal') }}</label>
                                             <input type="text" class="form-control" id="currency-decimal-places" name="decimal_places">
                                         </div>
                                     </div>
@@ -129,14 +129,14 @@
                                 <div class="form-group">
                                     <label class="css-control css-control-sm css-control-success css-switch res">
                                         <input type="checkbox" class="css-control-input" id="currency-status" name="status">
-                                        <span class="css-control-indicator"></span> Status valute
+                                        <span class="css-control-indicator"></span> {{ __('back/app.currency.status_title') }}
                                     </label>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="css-control css-control-sm css-control-success css-switch res">
                                         <input type="checkbox" class="css-control-input" id="currency-main" name="main">
-                                        <span class="css-control-indicator"></span> Glavna valuta
+                                        <span class="css-control-indicator"></span> {{ __('back/app.currency.default_currency') }}
                                     </label>
                                 </div>
 
@@ -146,10 +146,10 @@
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.currency.cancel') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); createCurrency();">
-                            Snimi <i class="fa fa-arrow-right ml-2"></i>
+                            {{ __('back/app.currency.save') }} <i class="fa fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Odaberite glavnu valutu</h3>
+                        <h3 class="block-title"> {{ __('back/app.currency.select_main') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -173,7 +173,7 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10 mt-3">
                                 <div class="form-group">
-                                    <select class="js-select2 form-control" id="currency-main-select" name="currency_main_select" style="width: 100%;" data-placeholder="Odaberite glavnu valutu">
+                                    <select class="js-select2 form-control" id="currency-main-select" name="currency_main_select" style="width: 100%;" data-placeholder="{{ __('back/app.currency.select_main') }}">
                                         <option></option>
                                         @foreach ($items as $item)
                                             <option value="{{ $item->id }}" {{ ((isset($main)) and ($main->id == $item->id)) ? 'selected' : '' }}>{{ $item->title }}</option>
@@ -191,10 +191,10 @@
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.currency.cancel') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); storeMainCurrency();">
-                            Snimi <i class="fa fa-arrow-right ml-2"></i>
+                            {{ __('back/app.currency.save') }} <i class="fa fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Obriši valutu</h3>
+                        <h3 class="block-title">{{ __('back/app.currency.delete_tax') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -217,17 +217,17 @@
                     <div class="block-content">
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
-                                <h4>Jeste li sigurni da želite obrisati valutu?</h4>
+                                <h4>{{ __('back/app.currency.delete_shure') }}</h4>
                                 <input type="hidden" id="delete-currency-id" value="0">
                             </div>
                         </div>
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.currency.cancel') }}  <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault(); confirmDelete();">
-                            Obriši <i class="fa fa-trash-alt ml-2"></i>
+                            {{ __('back/app.currency.delete') }}  <i class="fa fa-trash-alt ml-2"></i>
                         </button>
                     </div>
                 </div>

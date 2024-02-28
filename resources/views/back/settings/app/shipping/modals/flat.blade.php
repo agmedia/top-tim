@@ -3,7 +3,7 @@
         <div class="modal-content rounded">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary">
-                    <h3 class="block-title">Isporuka pouzećem</h3>
+                    <h3 class="block-title">{{ __('back/app.shipping.cod') }}</h3>
                     <div class="block-options">
                         <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                             <i class="fa fa-times"></i>
@@ -17,19 +17,19 @@
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="flat-title">Naslov</label>
+                                        <label for="flat-title">{{ __('back/app.shipping.input_title') }}</label>
                                         <input type="text" class="form-control" id="flat-title" name="title">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="flat-price">Trošak isporuke</label>
+                                        <label for="flat-price">{{ __('back/app.shipping.trosak') }}</label>
                                         <input type="text" class="form-control" id="flat-price" name="data['price']">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="dm-post-edit-slug">Geo zona <span class="small text-gray">(Geo zona na koju se odnosi dostava..)</span></label>
-                                    <select class="js-select2 form-control" id="flat-geo-zone" name="geo_zone" style="width: 100%;" data-placeholder="Odaberite geo zonu">
+                                    <label for="dm-post-edit-slug">{{ __('back/app.shipping.geo_zone') }} <span class="small text-gray">{{ __('back/app.shipping.geo_zone_label') }}</span></label>
+                                    <select class="js-select2 form-control" id="flat-geo-zone" name="geo_zone" style="width: 100%;" data-placeholder="{{ __('back/app.shipping.select_geo') }}">
                                         <option></option>
                                         @foreach ($geo_zones as $geo_zone)
                                             <option value="{{ $geo_zone->id }}" {{ ((isset($shipping)) and ($shipping->geo_zone == $geo_zone->id)) ? 'selected' : '' }}>{{ $geo_zone->title }}</option>
@@ -39,27 +39,27 @@
                             </div>
 
                             <div class="form-group mb-4">
-                                <label for="flat-time">Trajanje isporuke <span class="small text-gray">(Tekstualno. Npr. 2-3 dana ili 2 do 7 radnih dana...)</span></label>
+                                <label for="flat-time">{{ __('back/app.shipping.trajanje') }} <span class="small text-gray">{{ __('back/app.shipping.trajanje_label') }}</span></label>
                                 <input type="text" class="form-control" id="flat-time" name="data['time']">
                             </div>
 
                             <div class="form-group mb-4">
-                                <label for="flat-short-description">Kratki opis <span class="small text-gray">(Prikazuje se prilikom odabira dostave.)</span></label>
+                                <label for="flat-short-description">{{ __('back/app.shipping.short_desc') }} <span class="small text-gray"> {{ __('back/app.shipping.short_desc_label') }}</span></label>
                                 <textarea class="js-maxlength form-control" id="flat-short-description" name="data['short_description']" rows="2" maxlength="160" data-always-show="true" data-placement="top"></textarea>
                                 <small class="form-text text-muted">
-                                    160 znakova max
+                                    {{ __('back/app.shipping.160_max') }}
                                 </small>
                             </div>
 
                             <div class="form-group mb-4">
-                                <label for="flat-description">Detaljni opis <span class="small text-gray">(Ako je potreban. Prikazuje se ako je dostava odabrana prilikom kupnje.)</span></label>
+                                <label for="flat-description">{{ __('back/app.shipping.long_desc') }}<span class="small text-gray"> {{ __('back/app.shipping.long_desc_label') }}</span></label>
                                 <textarea class="form-control" id="flat-description" name="data['description']" rows="4"></textarea>
                             </div>
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="flat-price">Poredak</label>
+                                        <label for="flat-price">{{ __('back/app.shipping.sort_order') }}</label>
                                         <input type="text" class="form-control" id="flat-sort-order" name="sort_order">
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                                     <div class="form-group">
                                         <label class="css-control css-control-sm css-control-success css-switch res">
                                             <input type="checkbox" class="css-control-input" id="flat-status" name="status">
-                                            <span class="css-control-indicator"></span> Status načina dostave
+                                            <span class="css-control-indicator"></span> {{ __('back/app.shipping.status_title') }}
                                         </label>
                                     </div>
                                 </div>
@@ -80,10 +80,10 @@
                 </div>
                 <div class="block-content block-content-full text-right bg-light">
                     <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                        Odustani <i class="fa fa-times ml-2"></i>
+                        {{ __('back/app.shipping.cancel') }} <i class="fa fa-times ml-2"></i>
                     </a>
                     <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); create_flat();">
-                        Snimi <i class="fa fa-arrow-right ml-2"></i>
+                        {{ __('back/app.shipping.save') }} <i class="fa fa-arrow-right ml-2"></i>
                     </button>
                 </div>
             </div>

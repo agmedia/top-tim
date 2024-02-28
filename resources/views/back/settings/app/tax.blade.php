@@ -5,9 +5,9 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Porezi</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/app.tax.title') }}</h1>
                 <button class="btn btn-hero-success my-2" onclick="event.preventDefault(); openModal();">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Dodaj novi</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/app.tax.new') }}</span>
                 </button>
             </div>
         </div>
@@ -18,17 +18,17 @@
 
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Lista</h3>
+                <h3 class="block-title">{{ __('back/app.tax.list') }}</h3>
             </div>
             <div class="block-content">
                 <table class="table table-striped table-borderless table-vcenter">
                     <thead class="thead-light">
                     <tr>
-                        <th style="width: 5%;">Br.</th>
-                        <th style="width: 60%;">Naziv</th>
-                        <th class="text-center">Stopa</th>
-                        <th class="text-center">Poredak</th>
-                        <th class="text-right">Uredi</th>
+                        <th style="width: 5%;">{{ __('back/app.tax.br') }}</th>
+                        <th style="width: 60%;">{{ __('back/app.tax.input_title') }}</th>
+                        <th class="text-center">{{ __('back/app.tax.title') }}</th>
+                        <th class="text-center">{{ __('back/app.tax.stopa') }}</th>
+                        <th class="text-right">{{ __('back/app.tax.edit_title') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -49,7 +49,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4">Nema poreza...</td>
+                            <td colspan="4">{{ __('back/app.tax.empty_list') }}</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -65,7 +65,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Tax narudžbe</h3>
+                        <h3 class="block-title">{{ __('back/app.tax.main_title') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -76,20 +76,20 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
                                 <div class="form-group mb-4">
-                                    <label for="tax-title">Naslov</label>
+                                    <label for="tax-title">{{ __('back/app.tax.input_title') }}</label>
                                     <input type="text" class="form-control" id="tax-title" name="title">
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="tax-rate">Stopa</label>
+                                            <label for="tax-rate">{{ __('back/app.tax.stopa') }}</label>
                                             <input type="text" class="form-control" id="tax-rate" name="rate">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="tax-sort-order">Poredak</label>
+                                            <label for="tax-sort-order">{{ __('back/app.tax.sort_order') }}</label>
                                             <input type="text" class="form-control" id="tax-sort-order" name="sort_order">
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                                 <div class="form-group">
                                     <label class="css-control css-control-sm css-control-success css-switch res">
                                         <input type="checkbox" class="css-control-input" id="tax-status" name="status">
-                                        <span class="css-control-indicator"></span> Status poreza
+                                        <span class="css-control-indicator"></span> {{ __('back/app.tax.status_title') }}
                                     </label>
                                 </div>
 
@@ -109,10 +109,10 @@
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.tax.cancel') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); createTax();">
-                            Snimi <i class="fa fa-arrow-right ml-2"></i>
+                            {{ __('back/app.tax.save') }} <i class="fa fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Obriši porez</h3>
+                        <h3 class="block-title">{{ __('back/app.tax.delete_tax') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -135,17 +135,17 @@
                     <div class="block-content">
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
-                                <h4>Jeste li sigurni da želite obrisati porez?</h4>
+                                <h4>{{ __('back/app.tax.delete_shure') }}</h4>
                                 <input type="hidden" id="delete-tax-id" value="0">
                             </div>
                         </div>
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.tax.cancel') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault(); confirmDelete();">
-                            Obriši <i class="fa fa-trash-alt ml-2"></i>
+                            {{ __('back/app.tax.delete') }} <i class="fa fa-trash-alt ml-2"></i>
                         </button>
                     </div>
                 </div>

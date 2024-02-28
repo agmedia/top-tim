@@ -66,6 +66,7 @@ return [
         'delete_status' => 'Obriši status',
         'delete_shure' => 'Jeste li sigurni da želite obrisati status?',
         'select_status' => 'Odaberite boju statusa...',
+        'empty_list' => 'Nema statusa...',
     ],
     'tax' => [
         'title' => 'Porezi',
@@ -83,6 +84,9 @@ return [
         'cancel' => 'Odustani',
         'delete_tax' => 'Obriši porez',
         'delete_shure' => 'Jeste li sigurni da želite obrisati porez?',
+        'stopa' => 'Stopa',
+        'empty_list' => 'Nema poreza...',
+
 
     ],
     'currency' => [
@@ -108,8 +112,41 @@ return [
         'cancel' => 'Odustani',
         'delete_tax' => 'Obriši valutu',
         'delete_shure' => 'Jeste li sigurni da želite obrisati valutu?',
+        'empty_list' => 'Nema upisanih valuta...',
 
     ],
+    'shipping'=> [
+
+        'title' => 'Načini dostave',
+        'edit_title' => 'Uredi',
+        'input_title' => 'Naziv',
+        'status_title' => 'Status',
+        'code' => 'Kod',
+        'sort_order' => 'Redosljed',
+        'list' => 'Lista',
+        'save' => 'Snimi',
+        'cancel' => 'Odustani',
+        'empty_list' => 'Nema načina dostave...',
+        'price' => 'Cijena',
+        'min_order_amount' => 'Minimalan iznos narudžbe',
+        'fee_amount' => 'Iznos naknade',
+        'geo_zone' => 'Geo zona',
+        'geo_zone_label' => '(Geo zona na koju se odnosi isporuka.)',
+        'short_desc' => 'Kratki opis',
+        'short_desc_label' => '(Prikazuje se prilikom odabira dostave.)',
+        'long_desc' => 'Detaljni opis',
+        'long_desc_label' => '(Ako je potreban. Prikazuje se ako je dostava odabrano prilikom kupnje.)',
+        'chars' => 'znakova',
+        'select_geo' => 'Odaberite geo zonu',
+        'cod' => 'Način dostave',
+        'trosak' => 'Trošak isporuke',
+        'trajanje' => 'Trajanje isporuke',
+        'trajanje_label' => '(Tekstualno. Npr. 2-3 dana ili 2 do 7 radnih dana...)',
+        '160_max' => '160 znakova max',
+        'store_pickup'  => 'Osobno preuzimanje artikala u trgovini',
+    ],
+
+
     'payments'=> [
 
         'title' => 'Načini plaćanja',

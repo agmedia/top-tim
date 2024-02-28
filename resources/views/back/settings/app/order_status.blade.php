@@ -9,9 +9,9 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Statusi narudžbi</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/app.statuses.title') }}</h1>
                 <button class="btn btn-hero-success my-2" onclick="event.preventDefault(); openModal();">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Dodaj novi</span>
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/app.statuses.new') }}</span>
                 </button>
             </div>
         </div>
@@ -22,18 +22,18 @@
 
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Lista</h3>
+                <h3 class="block-title">{{ __('back/app.statuses.list') }}</h3>
             </div>
             <div class="block-content">
                 <table class="table table-striped table-borderless table-vcenter">
                     <thead class="thead-light">
                     <tr>
-                        <th class="text-center" style="width: 5%;">Br.</th>
+                        <th class="text-center" style="width: 5%;">{{ __('back/app.statuses.br') }}</th>
                         <th class="text-center" style="width: 7%;">ID</th>
-                        <th style="width: 50%;">Naziv</th>
-                        <th class="text-center">Boja</th>
-                        <th class="text-center">Poredak</th>
-                        <th class="text-right">Uredi</th>
+                        <th style="width: 50%;">{{ __('back/app.statuses.input_title') }}</th>
+                        <th class="text-center">{{ __('back/app.statuses.color') }}</th>
+                        <th class="text-center">{{ __('back/app.statuses.sort_order') }}</th>
+                        <th class="text-right">{{ __('back/app.statuses.edit_title') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -55,7 +55,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4">Nema statusa...</td>
+                            <td colspan="4">{{ __('back/app.statuses.empty_list') }}</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -71,7 +71,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Status narudžbe</h3>
+                        <h3 class="block-title">{{ __('back/app.statuses.main_title') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -82,18 +82,18 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <label for="status-title">Naslov</label>
+                                    <label for="status-title">{{ __('back/app.statuses.input_title') }}</label>
                                     <input type="text" class="form-control" id="status-title" name="title">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="status-price">Poredak</label>
+                                    <label for="status-price">{{ __('back/app.statuses.sort_order') }}</label>
                                     <input type="text" class="form-control" id="status-sort-order" name="sort_order">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="status-color-select">Boja</label>
-                                    <select class="js-select2 form-control" id="status-color-select" name="status" style="width: 100%;" data-placeholder="Odaberite boju statusa...">
+                                    <label for="status-color-select">{{ __('back/app.statuses.color') }}</label>
+                                    <select class="js-select2 form-control" id="status-color-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/app.statuses.select_status') }}">
                                         <option value="primary">Primary</option>
                                         <option value="secondary">Secondary</option>
                                         <option value="success">Success</option>
@@ -111,10 +111,10 @@
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.statuses.cancel') }}<i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); createStatus();">
-                            Snimi <i class="fa fa-arrow-right ml-2"></i>
+                            {{ __('back/app.statuses.save') }} <i class="fa fa-arrow-right ml-2"></i>
                         </button>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">Obriši status</h3>
+                        <h3 class="block-title">{{ __('back/app.statuses.delete_status') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -137,17 +137,17 @@
                     <div class="block-content">
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
-                                <h4>Jeste li sigurni da želite obrisati status?</h4>
+                                <h4>{{ __('back/app.statuses.delete_shure') }}</h4>
                                 <input type="hidden" id="delete-status-id" value="0">
                             </div>
                         </div>
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            Odustani <i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.statuses.cancel') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault(); confirmDelete();">
-                            Obriši <i class="fa fa-trash-alt ml-2"></i>
+                            {{ __('back/app.statuses.save') }} <i class="fa fa-trash-alt ml-2"></i>
                         </button>
                     </div>
                 </div>
