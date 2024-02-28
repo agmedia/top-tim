@@ -43,6 +43,8 @@ return [
         'list_countries' => 'List of countries within the geo zone',
         'delete' => 'Delete',
         'select_country' => 'Select Country...',
+        'empty_list' => 'You have no zones entered...',
+        'save' => 'Save',
     ],
 
     'statuses' => [

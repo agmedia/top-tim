@@ -9,7 +9,7 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Geo Zona edit</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/app.geozone.main_title') }}</h1>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
             <div class="block">
                 <div class="block-header block-header-default">
                     <a class="btn btn-light" href="{{ back()->getTargetUrl() }}">
-                        <i class="fa fa-arrow-left mr-1"></i> Povratak
+                        <i class="fa fa-arrow-left mr-1"></i> {{ __('back/app.geozone.back') }}
                     </a>
                     <div class="block-options">
                         <div class="custom-control custom-switch custom-control-success">
@@ -39,12 +39,12 @@
                         <div class="col-md-10">
 
                             <div class="form-group mb-4">
-                                <label for="title-input">Naslov</label>
-                                <input type="text" class="form-control" id="title-input" name="title" placeholder="Upišite naslov..." value="{{ isset($geo_zone) ? $geo_zone->title : old('title') }}">
+                                <label for="title-input">{{ __('back/app.geozone.input_title') }}</label>
+                                <input type="text" class="form-control" id="title-input" name="title" placeholder="{{ __('back/app.geozone.enter_title') }}" value="{{ isset($geo_zone) ? $geo_zone->title : old('title') }}">
                             </div>
 
                             <div class="form-group mb-4">
-                                <label for="description-input">Opis <span class="small text-gray">(Ako je potreban)</span></label>
+                                <label for="description-input">{{ __('back/app.geozone.description') }} <span class="small text-gray">({{ __('back/app.geozone.description_if_needed') }})</span></label>
                                 <textarea class="form-control" id="description-input" name="description" rows="4">{{ isset($geo_zone) ? $geo_zone->description : old('description') }}</textarea>
                             </div>
 
@@ -59,11 +59,11 @@
                     <div class="row justify-content-center push">
                         <div class="col-md-10">
                             <button type="submit" class="btn btn-hero-success">
-                                <i class="fas fa-save mr-1"></i> Snimi
+                                <i class="fas fa-save mr-1"></i> {{ __('back/app.geozone.save') }}
                             </button>
                             @if (isset($geo_zone))
-                                <a href="{{ route('geozones.destroy', ['geozone' => $geo_zone->id]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled float-right" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-geozone-form{{ $geo_zone->id }}').submit();">
-                                    <i class="fa fa-trash-alt"></i> Obriši
+                                <a href="{{ route('geozones.destroy', ['geozone' => $geo_zone->id]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled float-right" data-toggle="tooltip" title="" data-original-title="{{ __('back/app.geozone.delete') }}" onclick="event.preventDefault(); document.getElementById('delete-geozone-form{{ $geo_zone->id }}').submit();">
+                                    <i class="fa fa-trash-alt"></i> {{ __('back/app.geozone.delete') }}
                                 </a>
                             @endif
                         </div>
@@ -88,7 +88,7 @@
     <script>
         $(() => {
             $('#countries-select').select2({
-                placeholder: "Odaberi državu..."
+                placeholder: "{{ __('back/app.geozone.select_country') }}"
             });
         });
 

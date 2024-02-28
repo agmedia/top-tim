@@ -43,6 +43,8 @@ return [
         'list_countries' => 'Lista država unutar geo zone',
         'delete' => 'Obriši',
         'select_country' => 'Odaberi državu...',
+        'empty_list' => 'Nema geo zona...',
+        'save' => 'Snimi',
     ],
 
     'statuses' => [

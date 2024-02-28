@@ -1,6 +1,6 @@
 <div>
     <div class="form-group mb-4" wire:ignore>
-        <label for="countries-select">Države</label>
+        <label for="countries-select">{{ __('back/app.geozone.countries') }}</label>
         <select class="js-select2 form-control" id="countries-select" style="width: 100%;">
             <option></option>
             @foreach ($countries as $country)
@@ -13,8 +13,8 @@
         <table class="table table-striped table-borderless table-vcenter mt-5">
             <thead class="thead-light">
             <tr>
-                <th style="width: 80%;">Lista država unutar geo zone</th>
-                <th class="text-right">Obriši</th>
+                <th style="width: 80%;">{{ __('back/app.geozone.list_countries') }}</th>
+                <th class="text-right">{{ __('back/app.geozone.delete') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -41,7 +41,7 @@
     <script>
         document.addEventListener('livewire:load', function () {
             $('#countries-select').select2({
-                placeholder: "Odaberi državu..."
+                placeholder: "{{ __('back/app.geozone.select_country') }}"
             });
 
             $('#countries-select').on('change', function (e) {

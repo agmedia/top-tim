@@ -5,9 +5,9 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Geo Zone</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/app.geozone.title') }}</h1>
                 <a class="btn btn-hero-success my-2" href="{{ route('geozones.create') }}">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Dodaj novu
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/app.geozone.new') }}
                 </a>
             </div>
         </div>
@@ -18,15 +18,15 @@
 
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Lista</h3>
+                <h3 class="block-title">{{ __('back/app.geozone.list') }}</h3>
             </div>
             <div class="block-content">
                 <table class="table table-striped table-borderless table-vcenter">
                     <thead class="thead-light">
                     <tr>
-                        <th style="width: 80%;">Naziv</th>
+                        <th style="width: 80%;">{{ __('back/app.geozone.input_title') }}</th>
                         <th class="text-center" style="width: 15%;">Status</th>
-                        <th class="text-right">Uredi</th>
+                        <th class="text-right">{{ __('back/app.geozone.edit_title') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,7 +46,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="2">Nema geo zona...</td>
+                            <td colspan="2">{{ __('back/app.geozone.empty_list') }}</td>
                         </tr>
                     @endforelse
                     </tbody>
