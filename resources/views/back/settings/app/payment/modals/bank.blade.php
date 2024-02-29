@@ -52,7 +52,7 @@
                                 </small>
                             </div>
 
-                            <div class="form-group mb-4">
+                            <div class="form-group mb-4 d-none">
                                 <label for="bank-description">{{ __('back/app.payments.long_desc') }} <span class="small text-gray">{{ __('back/app.payments.long_desc_label') }}</span></label>
                                 <textarea class="form-control" id="bank-description" name="data['description']" rows="4"></textarea>
                             </div>
