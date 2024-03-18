@@ -28,6 +28,9 @@ class CreateProductsTable extends Migration
             $table->timestamp('special_from')->nullable();
             $table->timestamp('special_to')->nullable();
             $table->string('related_products')->nullable();
+            $table->boolean('vegan')->default(false);
+            $table->boolean('vegetarian')->default(false);
+            $table->boolean('glutenfree')->default(false);
             $table->tinyInteger('viewed')->unsigned()->default(0);
             $table->integer('sort_order')->unsigned()->default(0);
             $table->boolean('push')->default(false);
@@ -41,6 +44,8 @@ class CreateProductsTable extends Migration
             $table->string('lang', 2)->default(config('app.locale'));
             $table->string('name')->index();
             $table->text('description')->nullable();
+            $table->text('podaci')->nullable();
+            $table->text('sastojci')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('slug');
