@@ -34,6 +34,8 @@ class Product extends Model
      * @var string[]
      */
     protected $appends = [
+        'title',
+        'description',
         'eur_price',
         'eur_special',
         'main_price',
@@ -53,13 +55,82 @@ class Product extends Model
 
 
     /**
-     * Get the route key for the model.
+     * @var string
+     */
+    protected $locale = 'en';
+
+
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = session('locale');
+    }
+
+
+    /**
+     * @param $locale
      *
+     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
+     */
+    public function getLocalizedRouteKey($locale)
+    {
+        return $this->translation($locale)->slug;
+    }
+
+
+    /**
+     * @param $value
+     * @param $field
+     *
+     * @return Model|never|null
+     */
+    public function resolveRouteBinding($value, $field = NULL)
+    {
+        return static::whereHas('translation', function ($query) use ($value) {
+            $query->where('slug', $value);
+        })->first() ?? abort(404);
+    }
+
+
+    /**
+     * @param null  $lang
+     * @param false $all
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null, bool $all = false)
+    {
+        if ($lang) {
+            return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $lang)->first();
+        }
+
+        if ($all) {
+            return $this->hasMany(CategoryTranslation::class, 'category_id');
+        }
+
+        return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $this->locale);
+    }
+
+
+    /**
      * @return string
      */
-    public function getRouteKeyName()
+    public function getTitleAttribute()
     {
-        return 'slug';
+        return $this->translation->title;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getDescriptionAttribute()
+    {
+        return $this->translation->description;
     }
 
 
@@ -519,23 +590,22 @@ class Product extends Model
             $query->whereIn('id', collect($_ids)->unique());
         }
 
+        Log::info('Product::filter()');
+        Log::info($request->toArray());
+
         if ($request->has('group')) {
             // Akcije
             if ($request->input('group') == 'snizenja') {
-                $query->where('special', '!=', '')
+                /*$query->where('special', '!=', '')
                     ->where(function ($query) {
                         $query->whereDate('special_from', '<=', now())->orWhereNull('special_from');
                     })
                     ->where(function ($query) {
                         $query->whereDate('special_to', '>=', now())->orWhereNull('special_to');
-                    });
+                    });*/
             } else {
                 // Kategorija...
                 $group = $request->input('group');
-
-                if ($group == 'zemljovidi-i-vedute') {
-                    $group = 'Zemljovidi i vedute';
-                }
 
                 $query->whereHas('categories', function ($query) use ($request, $group) {
                     $query->where('group', 'like', '%' . $group . '%');

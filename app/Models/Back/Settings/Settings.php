@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class Settings extends Model
 {
@@ -72,8 +73,16 @@ class Settings extends Model
                 if ($style->json) {
                     $temp_style = collect(json_decode($style->value))->all();
 
+                    Log::info($temp_style);
+
                     foreach ($temp_style as $item) {
-                        $return_styles->put($item->title, $item);
+                        if ( ! is_string($item->title)) {
+                            $title = $item->title->{current_locale()};
+                        } else {
+                            $title = $item->title;
+                        }
+
+                        $return_styles->put($title, $item);
                     }
                 }
             }

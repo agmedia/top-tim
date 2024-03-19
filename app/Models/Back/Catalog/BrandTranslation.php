@@ -2,17 +2,10 @@
 
 namespace App\Models\Back\Catalog;
 
-use App\Models\Back\Catalog\Product\Product;
-use App\Models\Back\Catalog\Product\ProductCategory;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 
 class BrandTranslation extends Model
 {

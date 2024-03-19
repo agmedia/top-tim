@@ -59,13 +59,30 @@ class CreateProductsTable extends Migration
         });
 
         Schema::create('product_images', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('product_id')->unsigned()->index();
+            $table->id();
+            $table->unsignedBigInteger('product_id')->index();
             $table->string('image');
-            $table->string('alt')->nullable();
+            $table->boolean('default')->default(false);
             $table->boolean('published')->default(false);
             $table->integer('sort_order')->unsigned();
             $table->timestamps();
+
+            $table->foreign('product_id')
+                  ->references('id')->on('products');
+        });
+
+
+        Schema::create('product_images_translations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_image_id')->index();
+            $table->string('lang', 2)->default(config('app.locale'));
+            $table->string('title')->nullable();
+            $table->string('alt')->nullable();
+            $table->timestamps();
+
+            $table->foreign('product_image_id')
+                  ->references('id')->on('product_images')
+                  ->onDelete('cascade');
         });
 
         Schema::create('product_actions', function (Blueprint $table) {

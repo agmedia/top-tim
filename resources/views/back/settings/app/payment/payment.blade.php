@@ -33,23 +33,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse ($payments as $payment)
+                    @forelse ($payments as $item)
                         <tr>
-                            <td>{{ $payment->title }}</td>
-                            <td class="small">{{ $payment->code }}</td>
-                            <td class="text-center">{{ $payment->sort_order }}</td>
+                            <td>{{ isset($item->title->{current_locale()}) ? $item->title->{current_locale()} : $item->title }}</td>
+                            <td class="small">{{ $item->code }}</td>
+                            <td class="text-center">{{ $item->sort_order }}</td>
                             <td class="text-center">
-                                @include('back.layouts.partials.status', ['status' => $payment->status])
+                                @include('back.layouts.partials.status', ['status' => $item->status])
                             </td>
                             <td class="text-right font-size-sm">
-                                <button type="button" class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); edit({{ json_encode($payment) }}, '{{ $payment->code }}');">
+                                <button type="button" class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); edit({{ json_encode($item) }}, '{{ $item->code }}');">
                                     <i class="fa fa-fw fa-pencil-alt"></i>
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4">{{ __('back/app.payments.empty_list') }}</td>
+                            <td colspan="5">{{ __('back/app.payments.empty_list') }}</td>
                         </tr>
                     @endforelse
                     </tbody>

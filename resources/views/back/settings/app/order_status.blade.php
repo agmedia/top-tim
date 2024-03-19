@@ -37,25 +37,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse ($statuses as $status)
+                    @forelse ($statuses as $item)
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}.</td>
-                            <td class="text-center"><span class="text-gray-dark">{{ $status->id }}</span></td>
-                            <td>{{ $status->title }}</td>
-                            <td class="text-center"><span class="badge badge-pill badge-{{ isset($status->color) && $status->color ? $status->color : 'light' }}">{{ $status->title }}</span></td>
-                            <td class="text-center">{{ $status->sort_order }}</td>
+                            <td class="text-center"><span class="text-gray-dark">{{ $item->id }}</span></td>
+                            <td>{{ isset($item->title->{current_locale()}) ? $item->title->{current_locale()} : $item->title }}</td>
+                            <td class="text-center"><span class="badge badge-pill badge-{{ isset($item->color) && $item->color ? $item->color : 'light' }}">{{ isset($item->title->{current_locale()}) ? $item->title->{current_locale()} : $item->title }}</span></td>
+                            <td class="text-center">{{ $item->sort_order }}</td>
                             <td class="text-right font-size-sm">
-                                <button class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); openModal({{ json_encode($status) }});">
+                                <button class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); openModal({{ json_encode($item) }});">
                                     <i class="fa fa-fw fa-pencil-alt"></i>
                                 </button>
-                                <button class="btn btn-sm btn-alt-danger" onclick="event.preventDefault(); deleteStatus({{ $status->id }});">
+                                <button class="btn btn-sm btn-alt-danger" onclick="event.preventDefault(); deleteStatus({{ $item->id }});">
                                     <i class="fa fa-fw fa-trash-alt"></i>
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4">{{ __('back/app.statuses.empty_list') }}</td>
+                            <td colspan="4">Nema statusa...</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -81,32 +81,26 @@
                     <div class="block-content">
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
+
                                 <div class="form-group">
-                                    <label for="status-title">{{ __('back/app.statuses.input_title') }}</label>
-                                    <ul class="nav nav-pills float-right">
-                                        @foreach(ag_lang() as $lang)
-                                            <li @if (current_locale() == $lang->code) class="active" @endif>
-                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if (current_locale() == $lang->code) active @endif " data-toggle="pill" href="#{{ $lang->code }}">
+                                    <label for="status-title" class="w-100">{{ __('back/app.statuses.input_title') }}
+                                        <ul class="nav nav-pills float-right">
+                                            @foreach(ag_lang() as $lang)
+                                                <li @if ($lang->code == current_locale()) class="active" @endif ">
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
                                                     <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
                                                 </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-
-
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </label>
                                     <div class="tab-content">
                                         @foreach(ag_lang() as $lang)
-                                            <div id="{{ $lang->code }}" class="tab-pane @if (current_locale() == $lang->code) active @endif">
-                                                <input type="text" class="form-control" id="status-title-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="">
-                                                @error('title.*')
-                                                <span class="text-danger font-italic">{{ __('back/app.geozone.enter_title') }}</span>
-                                                @enderror
+                                            <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                <input type="text" class="form-control" id="status-title-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"  >
                                             </div>
                                         @endforeach
                                     </div>
-
-
-
                                 </div>
 
                                 <div class="form-group">
@@ -134,7 +128,7 @@
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
                         <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            {{ __('back/app.statuses.cancel') }}<i class="fa fa-times ml-2"></i>
+                            {{ __('back/app.statuses.cancel') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); createStatus();">
                             {{ __('back/app.statuses.save') }} <i class="fa fa-arrow-right ml-2"></i>
@@ -150,7 +144,7 @@
             <div class="modal-content rounded">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary">
-                        <h3 class="block-title">{{ __('back/app.statuses.delete_status') }}</h3>
+                        <h3 class="block-title"> {{ __('back/app.statuses.delete_status') }}</h3>
                         <div class="block-options">
                             <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-times"></i>
@@ -170,7 +164,7 @@
                             {{ __('back/app.statuses.cancel') }} <i class="fa fa-times ml-2"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault(); confirmDelete();">
-                            {{ __('back/app.statuses.save') }} <i class="fa fa-trash-alt ml-2"></i>
+                            {{ __('back/app.statuses.delete') }} <i class="fa fa-trash-alt ml-2"></i>
                         </button>
                     </div>
                 </div>
@@ -210,8 +204,6 @@
          * @param type
          */
         function openModal(item = {}) {
-            //console.log(item);
-
             $('#status-modal').modal('show');
             editStatus(item);
         }
@@ -220,12 +212,20 @@
          *
          */
         function createStatus() {
+            let values = {};
+
+            {!! ag_lang() !!}.forEach(function(item) {
+                values[item.code] = document.getElementById('status-title-' + item.code).value;
+            });
+
             let item = {
                 id: $('#status-id').val(),
-                title: $('#status-title').val(),
+                title: values,
                 sort_order: $('#status-sort-order').val(),
                 color: $('#status-color-select').val()
             };
+
+            console.log(item)
 
             axios.post("{{ route('api.order.status.store') }}", {data: item})
             .then(response => {
@@ -271,8 +271,15 @@
          */
         function editStatus(item) {
             $('#status-id').val(item.id);
-            $('#status-title').val(item.title);
             $('#status-sort-order').val(item.sort_order);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (typeof item.title[lang.code] !== undefined) {
+                    $('#status-title-' + lang.code).val(item.title[lang.code]);
+                } else {
+                    $('#status-title-' + lang.code).val(item.title);
+                }
+            });
 
             $('#status-color-select').val(item.color);
             $('#status-color-select').trigger('change');

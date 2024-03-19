@@ -2,7 +2,7 @@
 
 namespace App\Models\Back\Catalog\Product;
 
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Publisher;
 use App\Models\Back\Settings\Settings;
@@ -133,8 +133,8 @@ class ProductHistory extends Model
     {
         // Author changed
         if ($this->old['author_id'] != $this->new['author_id']) {
-            $old = Author::find($this->old['author_id']);
-            $new = Author::find($this->new['author_id']);
+            $old = Brand::find($this->old['author_id']);
+            $new = Brand::find($this->new['author_id']);
 
             $this->changed .= '<li>Promjenjen autor: <b>' . (isset($old->title) ? $old->title : '(Nepoznat)') . '</b> u <b>' . (isset($new->title) ? $new->title : '(Nepoznat)') . '</b></li>' ;
         }

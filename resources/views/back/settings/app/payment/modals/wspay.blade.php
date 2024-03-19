@@ -36,7 +36,6 @@
                                                 </div>
                                             @endforeach
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -239,13 +238,13 @@
             };
 
             axios.post("{{ route('api.payment.store') }}", {data: item})
-                .then(response => {
-                    if (response.data.success) {
-                        location.reload();
-                    } else {
-                        return errorToast.fire(response.data.message);
-                    }
-                });
+            .then(response => {
+                if (response.data.success) {
+                    location.reload();
+                } else {
+                    return errorToast.fire(response.data.message);
+                }
+            });
         }
         /**
          *
@@ -270,13 +269,13 @@
             $('#wspay-code').val(item.code);
 
             {!! ag_lang() !!}.forEach((lang) => {
-                if (typeof item.title[lang.code] !== undefined) {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
                     $('#wspay-title-' + lang.code).val(item.title[lang.code]);
                 }
-                if (typeof item.data.short_description[lang.code] !== undefined) {
+                if (item.data.short_description && typeof item.data.short_description[lang.code] !== undefined) {
                     $('#wspay-short-description-' + lang.code).val(item.data.short_description[lang.code]);
                 }
-                if (typeof item.data.description[lang.code] !== undefined) {
+                if (item.data.description && typeof item.data.description[lang.code] !== undefined) {
                     $('#wspay-description-' + lang.code).val(item.data.description[lang.code]);
                 }
             });

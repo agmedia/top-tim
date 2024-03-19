@@ -40,6 +40,7 @@ class CatalogRouteController extends Controller
      */
     public function resolve(Request $request, $group, Category $cat = null, $subcat = null, Product $prod = null)
     {
+        //dd($request->toArray(), $group);
         //
         if ($subcat) {
             $sub_category = Category::where('slug', $subcat)->where('parent_id', $cat->id)->first();

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Settings\Api\AkademskaKnjigaMk;
 use Illuminate\Console\Command;
 

@@ -3,7 +3,7 @@
 namespace App\Models\Back\Marketing;
 
 use App\Helpers\Helper;
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Cart;

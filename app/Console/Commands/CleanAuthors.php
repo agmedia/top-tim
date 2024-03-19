@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use Illuminate\Console\Command;
 
 class CleanAuthors extends Command
@@ -38,6 +38,6 @@ class CleanAuthors extends Command
      */
     public function handle()
     {
-        return Author::checkStatuses_CRON();
+        return Brand::checkStatuses_CRON();
     }
 }

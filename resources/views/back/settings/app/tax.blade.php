@@ -32,24 +32,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse ($taxes as $tax)
+                    @forelse ($taxes as $item)
                         <tr>
-                            <td>{{ $tax->id }}</td>
-                            <td>{{ $tax->title }}</td>
-                            <td class="text-center">{{ $tax->rate }}</td>
-                            <td class="text-center">{{ $tax->sort_order }}</td>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ isset($item->title->{current_locale()}) ? $item->title->{current_locale()} : $item->title }}</td>
+                            <td class="text-center">{{ $item->rate }}</td>
+                            <td class="text-center">{{ $item->sort_order }}</td>
                             <td class="text-right font-size-sm">
-                                <button class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); openModal({{ json_encode($tax) }});">
+                                <button class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); openModal({{ json_encode($item) }});">
                                     <i class="fa fa-fw fa-pencil-alt"></i>
                                 </button>
-                                <button class="btn btn-sm btn-alt-danger" onclick="event.preventDefault(); deleteTax({{ $tax->id }});">
+                                <button class="btn btn-sm btn-alt-danger" onclick="event.preventDefault(); deleteTax({{ $item->id }});">
                                     <i class="fa fa-fw fa-trash-alt"></i>
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4">{{ __('back/app.tax.empty_list') }}</td>
+                            <td colspan="5">{{ __('back/app.tax.empty_list') }}</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -76,8 +76,25 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
                                 <div class="form-group mb-4">
-                                    <label for="tax-title">{{ __('back/app.tax.input_title') }}</label>
-                                    <input type="text" class="form-control" id="tax-title" name="title">
+                                    <label for="tax-title" class="w-100">{{ __('back/app.currency.input_title') }}
+                                        <ul class="nav nav-pills float-right">
+                                            @foreach(ag_lang() as $lang)
+                                                <li @if ($lang->code == current_locale()) class="active" @endif ">
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+
+                                    </label>
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                <input type="text" class="form-control" id="tax-title-{{ $lang->code }}" name="tax-title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"  >
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
 
                                 <div class="row mb-3">
@@ -172,10 +189,16 @@
          *
          */
         function createTax() {
+            let titles = {};
+
+            {!! ag_lang() !!}.forEach(function(lang) {
+                titles[lang.code] = document.getElementById('tax-title-' + lang.code).value;
+            });
+
             let item = {
                 id: $('#tax-id').val(),
                 geo_zone: $('#tax-geo-zone').val(),
-                title: $('#tax-title').val(),
+                title: titles,
                 rate: $('#tax-rate').val(),
                 sort_order: $('#tax-sort-order').val(),
                 status: $('#tax-status')[0].checked,
@@ -226,9 +249,14 @@
         function editTax(item) {
             $('#tax-id').val(item.id);
             $('#tax-geo-zone').val(item.geo_zone);
-            $('#tax-title').val(item.title);
             $('#tax-rate').val(item.rate);
             $('#tax-sort-order').val(item.sort_order);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
+                    $('#tax-title-' + lang.code).val(item.title[lang.code]);
+                }
+            });
 
             if (item.status) {
                 $('#tax-status')[0].checked = item.status ? true : false;

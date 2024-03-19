@@ -69,7 +69,7 @@ class Category extends Model
             return $this->hasMany(CategoryTranslation::class, 'category_id');
         }
 
-        return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $this->locale)->first();
+        return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $this->locale);
     }
 
 
@@ -148,13 +148,13 @@ class Category extends Model
                 $fill = $this->where('group', $group)->where('parent_id', 0)->with('subcategories', 'translation')->withCount('products')->get();
 
                 foreach ($fill as $cat) {
-                    $cats[$cat->id] = ['title' => $cat->title];
+                    $cats[$cat->id] = ['title' => $cat->translation->title];
 
                     if ($cat->subcategories) {
                         $subcats = [];
 
                         foreach ($cat->subcategories as $subcategory) {
-                            $subcats[$subcategory->id] = ['title' => $subcategory->title];
+                            $subcats[$subcategory->id] = ['title' => $subcategory->translation->title];
                         }
                     }
 
@@ -304,7 +304,7 @@ class Category extends Model
         $tops = self::query()->where('parent_id', 0)->with('translation')->get();
 
         foreach ($tops as $top) {
-            $response[$top->id] = $top->translation()->title;
+            $response[$top->id] = $top->translation->title;
         }
 
         return $response;

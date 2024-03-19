@@ -25,7 +25,7 @@
                     <thead class="thead-light">
                     <tr>
                         <th style="width: 80%;">{{ __('back/app.geozone.input_title') }}</th>
-                        <th class="text-center" style="width: 15%;">Status</th>
+                        <th class="text-center" style="width: 15%;">{{ __('back/app.geozone.status_title') }}</th>
                         <th class="text-right">{{ __('back/app.geozone.edit_title') }}</th>
                     </tr>
                     </thead>
@@ -33,7 +33,7 @@
                     @forelse ($geo_zones as $geo_zone)
                         <tr>
                             <td>
-                                <a href="{{ route('geozones.edit', ['geozone' => $geo_zone->id]) }}">{{ $geo_zone->title }}</a>
+                                <a href="{{ route('geozones.edit', ['geozone' => $geo_zone->id]) }}">{{ isset($geo_zone->title->{current_locale()}) ? $geo_zone->title->{current_locale()} : $geo_zone->title }}</a>
                             </td>
                             <td class="text-center">
                                 @include('back.layouts.partials.status', ['status' => $geo_zone->status])
@@ -46,7 +46,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="2">{{ __('back/app.geozone.empty_list') }}</td>
+                            <td colspan="2">Nema geo zona...</td>
                         </tr>
                     @endforelse
                     </tbody>

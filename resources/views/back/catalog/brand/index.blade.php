@@ -47,7 +47,7 @@
                         <tbody>
                         @forelse($brands as $brand)
                             <tr>
-                                <td class="font-size-sm">{{ $brand->title }}</td>
+                                <td class="font-size-sm">{{ $brand->translation->title }}</td>
                                 <td class="text-right">
                                     @if ($brand->status)
                                         <span class="badge badge-success">{{ __('back/brands.aktivan') }}</span>

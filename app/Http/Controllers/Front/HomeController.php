@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Facades\Image;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -27,14 +28,18 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $page = Cache::remember('page.homepage', config('cache.life'), function () {
-            return Page::where('slug', 'homepage')->first();
-        });
+        $page = Page::whereHas('translation', function ($query) {
+            $query->where('slug', 'homepage');
+        })->first();
 
         $page->description = Helper::setDescription(
             isset($page->description) ? $page->description : '',
             isset($page->id) ? $page->id : ''
         );
+
+        Log::info('HomeController::index()');
+        Log::info(LaravelLocalization::getCurrentLocale());
+        Log::info(current_locale());
 
         return view('front.page', compact('page'));
     }

@@ -42,7 +42,7 @@
                     @forelse ($items as $item)
                         <tr>
                             <td>{{ $item->id }}</td>
-                            <td>{{ $item->title }}
+                            <td>{{ isset($item->title->{current_locale()}) ? $item->title->{current_locale()} : $item->title }}
                                 @if (isset($item->main) && $item->main)
                                     <strong><small>&nbsp;({{ __('back/app.currency.default_currency') }})</small></strong>
                                 @endif
@@ -87,8 +87,25 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-md-10">
                                 <div class="form-group mb-4">
-                                    <label for="currency-title">{{ __('back/app.currency.input_title') }}</label>
-                                    <input type="text" class="form-control" id="currency-title" name="title">
+                                    <label for="currency-title" class="w-100">{{ __('back/app.currency.input_title') }}
+                                        <ul class="nav nav-pills float-right">
+                                            @foreach(ag_lang() as $lang)
+                                                <li @if ($lang->code == current_locale()) class="active" @endif ">
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+
+                                    </label>
+                                    <div class="tab-content">
+                                        @foreach(ag_lang() as $lang)
+                                            <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                <input type="text" class="form-control" id="currency-title-{{ $lang->code }}" name="currency-title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"  >
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
 
                                 <div class="form-group mb-4">
@@ -176,7 +193,9 @@
                                     <select class="js-select2 form-control" id="currency-main-select" name="currency_main_select" style="width: 100%;" data-placeholder="{{ __('back/app.currency.select_main') }}">
                                         <option></option>
                                         @foreach ($items as $item)
-                                            <option value="{{ $item->id }}" {{ ((isset($main)) and ($main->id == $item->id)) ? 'selected' : '' }}>{{ $item->title }}</option>
+                                            <option value="{{ $item->id }}" {{ ((isset($main)) and ($main->id == $item->id)) ? 'selected' : '' }}>
+                                                {{ isset($item->title->{current_locale()}) ? $item->title->{current_locale()} : $item->title }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -267,9 +286,15 @@
          *
          */
         function createCurrency() {
+            let titles = {};
+
+            {!! ag_lang() !!}.forEach(function(lang) {
+                titles[lang.code] = document.getElementById('currency-title-' + lang.code).value;
+            });
+
             let item = {
                 id: $('#currency-id').val(),
-                title: $('#currency-title').val(),
+                title: titles,
                 code: $('#currency-code').val(),
                 symbol_left: $('#currency-symbol-left').val(),
                 symbol_right: $('#currency-symbol-right').val(),
@@ -322,7 +347,7 @@
         function confirmDelete() {
             let item = { id: $('#delete-currency-id').val() };
 
-            axios.post("{{ route('api.taxes.destroy') }}", { data: item })
+            axios.post("{{ route('api.currencies.destroy') }}", { data: item })
             .then(response => {
                 if (response.data.success) {
                     location.reload();
@@ -338,12 +363,17 @@
          */
         function editCurrency(item) {
             $('#currency-id').val(item.id);
-            $('#currency-title').val(item.title);
             $('#currency-code').val(item.code);
             $('#currency-symbol-left').val(item.symbol_left);
             $('#currency-symbol-right').val(item.symbol_right);
             $('#currency-value').val(item.value);
             $('#currency-decimal-places').val(item.decimal_places);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
+                    $('#currency-title-' + lang.code).val(item.title[lang.code]);
+                }
+            });
 
             if (item.status) {
                 $('#currency-status')[0].checked = item.status ? true : false;

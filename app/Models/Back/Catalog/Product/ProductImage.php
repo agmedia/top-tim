@@ -2,14 +2,12 @@
 
 namespace App\Models\Back\Catalog\Product;
 
-use App\Helpers\ProductHelper;
+use App\Models\Back\Catalog\Product\Product;
+use App\Models\Back\Catalog\Product\ProductImageTranslation;
 use Carbon\Carbon;
+use App\Helpers\Image;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 
 class ProductImage extends Model
 {
@@ -25,9 +23,84 @@ class ProductImage extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /**
+     * @var string[]
+     */
+    protected $appends = ['title', 'alt'];
+
+    /**
+     * @var string
+     */
+    protected $locale = 'en';
+
+    /**
      * @var Model
      */
     protected $resource;
+
+
+    /**
+     * apartment constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = current_locale();
+    }
+
+
+    /**
+     * @param null $lang
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null)
+    {
+        if ($lang) {
+            return $this->hasOne(ProductImageTranslation::class, 'product_image_id')->where('lang', $lang)->first();
+        }
+
+        return $this->hasOne(ProductImageTranslation::class, 'product_image_id')->where('lang', $this->locale)->first();
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function translations()
+    {
+        return $this->hasMany(ProductImageTranslation::class, 'product_image_id');
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getTitleAttribute()
+    {
+        //dd($this->translation()->toArray());
+        return (isset($this->translation()->title) && $this->translation()->title) ? $this->translation()->title : '';
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getAltAttribute()
+    {
+        return (isset($this->translation()->alt) && $this->translation()->alt) ? $this->translation()->alt : '';
+    }
+
+
+    /**
+     * @param Model $resource
+     */
+    public function setResource(Model $resource): void
+    {
+        $this->resource = $resource;
+    }
 
 
     /**
@@ -42,67 +115,90 @@ class ProductImage extends Model
         $existing       = isset($request['slim']) ? $request['slim'] : null;
         $new            = isset($request['files']) ? $request['files'] : null;
 
-        //dd($request, $resource, $existing, $new);
-
         // Ako ima novih slika
         if ($new) {
             foreach ($new as $new_image) {
                 if (isset($new_image['image']) && $new_image['image']) {
-                    $data = json_decode($new_image['image']);
-                    $sort_order = (isset($new_image['sort_order']) && $new_image['sort_order']) ? $new_image['sort_order'] : 0;
-
-                    $saved = $this->saveNew($data->output, $sort_order);
-                    // Ako je novi default ujedno i novo uploadana fotka.
-                    // Također ako je ime novo uploadane slike isto kao $existing['default']
-                    if (
-                        isset($new['default']) &&
-                        strpos($new['default'], 'image/') !== false &&
-                        $data->output->name == str_replace('image/', '', $new['default'])
-                    ) {
-                        $this->switchDefault($saved);
-                    }
+                    $this->saveNew($new_image, $request['name']);
                 }
             }
         }
 
+        // Ako ima postoječih slika
         if ($existing) {
-            // Ako se mijenja default i nismo ga već promjenili...
-            if (isset($existing['default']) && $existing['default'] != 'on') {
-                $this->switchDefault(
-                    $this->where('id', $existing['default'])->first()
-                );
-            }
-
             foreach ($existing as $key => $image) {
-                if (isset($image['image']) && $image['image']) {
-                    $data = json_decode($image['image']);
+                // Ako slika nije editirana
+                $this->updateImageData($key, $image);
 
-                    if ($data) {
-                        $this->replace($key, $data->output, $image['title']);
-                    }
-                }
-
-                if ( ! $key) {
-                    $this->saveMainTitle($image['title']);
-                    //$this->saveMainTitle($image['title'], $image['alt']);
-                    // zamjeni title na glavnoj
-                }
-
-                if ($key && $key != 'default') {
-                    $published = (isset($image['published']) && $image['published'] == 'on') ? 1 : 0;
-
-                    $this->where('id', $key)->update([
-                        'alt'        => $image['alt'],
-                        'sort_order' => $image['sort_order'],
-                        'published'  => $published
-                    ]);
-
-                    $this->saveTitle($key, $image['title']);
+                if ($image['image']) {
+                    $this->replace($key, $image);
                 }
             }
         }
 
-        return $this->where('product_id', $this->resource->id)->get();
+        return true;
+    }
+
+
+    /**
+     * @param array $new_image
+     *
+     * @return bool
+     */
+    public function saveNew(array $new_image, array $title): bool
+    {
+        $path = Image::save('products', $new_image, $this->resource);
+
+        $id = $this->insertGetId([
+            'product_id'   => $this->resource->id,
+            'image'        => config('filesystems.disks.products.url') . $path,
+            'default'      => (isset($new_image['default']) && $new_image['default']) ? 1 : 0,
+            'published'    => 1,
+            'sort_order'   => (isset($new_image['sort_order']) && $new_image['sort_order']) ? $new_image['sort_order'] : 0,
+            'created_at'   => Carbon::now(),
+            'updated_at'   => Carbon::now()
+        ]);
+
+        $this->isDefaultImage($new_image, $path);
+
+        if ($id) {
+            ProductImageTranslation::create($id, $title);
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param int   $id
+     * @param array $image_data
+     *
+     * @return bool
+     */
+    public function updateImageData(int $id, array $image_data): bool
+    {
+        $updated = $this->where('id', $id)->update([
+            'default'    => (isset($image_data['default']) && $image_data['default']) ? 1 : 0,
+            'published'  => (isset($image_data['published']) and $image_data['published'] == 'on') ? 1 : 0,
+            'sort_order' => (isset($image_data['sort_order']) && $image_data['sort_order']) ? $image_data['sort_order'] : 0,
+            'updated_at' => Carbon::now()
+        ]);
+
+        if ($this->where('id', $id)->first()) {
+            $path = str_replace(config('filesystems.disks.products.url'), '', $this->where('id', $id)->first()->image);
+
+            $this->isDefaultImage($image_data, $path);
+        }
+
+        if ($updated) {
+            ProductImageTranslation::edit($id, $image_data);
+
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -112,79 +208,44 @@ class ProductImage extends Model
      *
      * @return mixed
      */
-    public function replace($id, $new, $title)
+    public function replace(int $id, array $image)
     {
-        // Nađi staru sliku i izdvoji path
-        $old  = $id ? $this->where('id', $id)->first() : $this->resource;
-        $path = str_replace('media/images/gallery/products/', '', $old['image']);
-        // Obriši staru sliku
-        Storage::disk('products')->delete($path);
+        // Nađi staru sliku, izdvoji naziv
+        $old  = $this->where('id', $id)->first();
+        $path = Image::cleanPath('products', $this->resource->id, $old->image);
 
-        $path = $this->saveImage($new->image, $title);
+        // Obriši staru i snimi novu fotku
+        Image::delete('product', $this->resource->id, $path);
+        $new_path = Image::save('products', $image, $this->resource);
 
-        // Ako nije glavna slika updejtaj path na product_images DB
-        if ($id) {
-            return $this->where('id', $id)->update([
+        $updated = $this->where('id', $id)->update([
+            'image' => config('filesystems.disks.products.url') . $new_path
+        ]);
+
+        $this->isDefaultImage($image, $new_path);
+
+        if ( ! $updated) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * @param array  $image
+     * @param string $path
+     *
+     * @return void
+     */
+    public function isDefaultImage(array $image, string $path)
+    {
+        if (isset($image['default']) && $image['default']) {
+            return Product::where('id', $this->resource->id)->update([
                 'image' => config('filesystems.disks.products.url') . $path
             ]);
         }
-
-        return Product::where('id', $this->resource->id)->update([
-            'image' => config('filesystems.disks.products.url') . $path
-        ]);
     }
-
-
-    /**
-     * @param $new
-     *
-     * @return mixed
-     */
-    public function switchDefault($new)
-    {
-        //dd($new, $this->resource);
-        if (isset($new->id)) {
-
-            if ($this->resource->image) {
-                $this->where('id', $new->id)->update([
-                    'image' => $this->resource->image
-                ]);
-            } else {
-                $this->where('id', $new->id)->delete();
-            }
-
-            Product::where('id', $this->resource->id)->update([
-                'image' => $new->image
-            ]);
-        }
-
-        return $new;
-    }
-
-
-    /**
-     * @param $new
-     *
-     * @return mixed
-     */
-    public function saveNew($new, $sort_order = 0)
-    {
-        $path = $this->saveImage($new->image);
-
-        // Store image in product_images DB
-        $id = $this->insertGetId([
-            'product_id' => $this->resource->id,
-            'image'      => config('filesystems.disks.products.url') . $path,
-            'alt'        => $this->resource->name,
-            'published'  => 1,
-            'sort_order' => $sort_order,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
-
-        return $this->find($id);
-    }
-
 
     /*******************************************************************************
      *                                Copyright : AGmedia                           *
@@ -192,222 +253,40 @@ class ProductImage extends Model
      *******************************************************************************/
 
     /**
-     * @param string $title
+     * @param Apartment|null $apartment
+     *
+     * @return array
      */
-    private function saveMainTitle(string $title/*, string $alt*/)
+    public static function getExistingImages(Product $product = null): array
     {
-        $existing_clean = ProductHelper::getCleanImageTitle($this->resource->image);
-
-        if ($existing_clean != $title) {
-            $path          = $this->resource->id . '/';
-            $existing_full = ProductHelper::getFullImageTitle($this->resource->image);
-            $new_full      = ProductHelper::setFullImageTitle($title);
-
-            Storage::disk('products')->move($path . $existing_full . '.jpg', $path . $new_full . '.jpg');
-            Storage::disk('products')->move($path . $existing_full . '.webp', $path . $new_full . '.webp');
-            Storage::disk('products')->move($path . $existing_full . '-thumb.webp', $path . $new_full . '-thumb.webp');
-
-            Product::where('id', $this->resource->id)->update([
-                'image' => config('filesystems.disks.products.url') . $path . $new_full . '.jpg'
-            ]);
+        if ( ! $product || empty($product)) {
+            return [];
         }
 
-        /*Product::where('id', $this->resource->id)->update([
-            'image_alt' => $alt
-        ]);*/
-    }
-
-
-    /**
-     * @param int    $id
-     * @param string $title
-     */
-    private function saveTitle(int $id, string $title)
-    {
-        $resource = $this->where('id', $id)->first();
-
-        if ($resource && isset($resource->image)) {
-            $existing_clean = ProductHelper::getCleanImageTitle($resource->image);
-
-            if ($existing_clean != $title) {
-                $path          = $this->resource->id . '/';
-                $existing_full = ProductHelper::getFullImageTitle($resource->image);
-                $new_full      = ProductHelper::setFullImageTitle($title);
-
-                Storage::disk('products')->move($path . $existing_full . '.jpg', $path . $new_full . '.jpg');
-                Storage::disk('products')->move($path . $existing_full . '.webp', $path . $new_full . '.webp');
-                Storage::disk('products')->move($path . $existing_full . '-thumb.webp', $path . $new_full . '-thumb.webp');
-
-                $this->where('id', $id)->update([
-                    'image' => config('filesystems.disks.products.url') . $path . $new_full . '.jpg'
-                ]);
-            }
-        }
-    }
-
-
-    /**
-     * @param $image
-     *
-     * @return string
-     */
-    private function saveImage($image, $title = null)
-    {
-        if ( ! $title) {
-            $title = $this->resource->name;
-        }
-
-        $time = Str::random(4);
-        $img  = Image::make($this->makeImageFromBase($image));
-        $path = $this->resource->id . '/' . Str::slug($title) . '-' . $time . '.';
-
-        $path_jpg = $path . 'jpg';
-        Storage::disk('products')->put($path_jpg, $img->encode('jpg'));
-
-        $path_webp = $path . 'webp';
-        Storage::disk('products')->put($path_webp, $img->encode('webp'));
-
-        // Thumb creation
-        $path_thumb = $this->resource->id . '/' . Str::slug($title) . '-' . $time . '-thumb.';
-        $canvas = Image::canvas(400, 400, '#ffffff');
-
-        $img = $img->resize(null, 350, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-
-        $canvas->insert($img, 'center');
-
-        $path_webp_thumb = $path_thumb . 'webp';
-        Storage::disk('products')->put($path_webp_thumb, $canvas->encode('webp'));
-
-        return $path_jpg;
-    }
-
-
-    /**
-     * @param string $base_64_string
-     *
-     * @return false|string
-     */
-    private function makeImageFromBase(string $base_64_string)
-    {
-        $image_parts = explode(";base64,", $base_64_string);
-
-        return base64_decode($image_parts[1]);
-    }
-
-
-    /*******************************************************************************
-     *                                Copyright : AGmedia                           *
-     *                              email: filip@agmedia.hr                         *
-     *******************************************************************************/
-
-    /**
-     * @param int $product_id
-     *
-     * @return Collection
-     */
-    public static function getAdminList(int $product_id = null): Collection
-    {
         $response = [];
+        $images   = $product->images()->get();
 
-        if ($product_id) {
-            $images   = self::where('product_id', $product_id)->orderBy('sort_order')->get();
+        foreach ($images as $image) {
+            $response[$image->id] = [
+                'id'         => $image->id,
+                'image'      => $image->image,
+                'default'    => $image->default,
+                'published'  => $image->published,
+                'sort_order' => $image->sort_order,
+            ];
 
-            foreach ($images as $image) {
-                $response[] = [
-                    'id'         => $image->id,
-                    'product_id' => $image->product_id,
-                    'image'      => $image->image,
-                    'title'      => ProductHelper::getCleanImageTitle($image->image),
-                    'alt'        => $image->alt,
-                    'published'  => $image->published,
-                    'sort_order' => $image->sort_order,
-                ];
+            foreach (ag_lang() as $lang) {
+                $title = isset($image->translation($lang->code)->title) ? $image->translation($lang->code)->title : '';
+                $alt   = isset($image->translation($lang->code)->alt) ? $image->translation($lang->code)->alt : '';
+
+                $response[$image->id]['title'][$lang->code] = $title;
+                $response[$image->id]['alt'][$lang->code]   = $alt;
             }
         }
 
-        return collect($response);
-    }
+        //dd($response);
 
-
-    /**
-     * Save stack of images to the
-     * product_images database.
-     *
-     * @param array $paths
-     * @param       $product_id
-     *
-     * @return array|bool
-     */
-    public static function saveStack(array $paths, $product_id)
-    {
-        $images = [];
-
-        foreach ($paths as $key => $path) {
-            $images[] = self::create([
-                'product_id' => $product_id,
-                'image'      => $path,
-                'sort_order' => $key,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
-        }
-
-        if ( ! empty($images)) {
-            return $images;
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Save temporary stored images
-     * to newly saved product folder.
-     * The folder is based on product ID.
-     *
-     * @param array $paths
-     * @param       $product_id
-     *
-     * @return array|bool
-     */
-    public static function transferTemporaryImages(array $paths, $product_id)
-    {
-        $targets = [];
-
-        foreach ($paths as $key => $path) {
-            $target    = str_replace('temp', $product_id, $path);
-            $targets[] = $target;
-
-            if ($key == 0) {
-                self::setDefault($target, $product_id);
-            }
-
-            $_path   = str_replace(config('filesystems.disks.products.url'), '', $path);
-            $_target = str_replace(config('filesystems.disks.products.url'), '', $target);
-
-            Storage::disk('products')->move($_path, $_target);
-            Storage::disk('products')->delete($_path);
-        }
-
-        return self::saveStack($targets, $product_id);
-    }
-
-
-    /**
-     * Set default product image.
-     *
-     * @param string $path
-     * @param        $id
-     *
-     * @return mixed
-     */
-    public static function setDefault(string $path, $id)
-    {
-        return Product::where('id', $id)->update([
-            'image' => $path
-        ]);
+        return $response;
     }
 
 }

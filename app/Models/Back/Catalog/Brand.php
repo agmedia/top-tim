@@ -5,7 +5,6 @@ namespace App\Models\Back\Catalog;
 use App\Helpers\Helper;
 use App\Models\Back\Catalog\Product\Product;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +12,6 @@ use Illuminate\Support\Str;
 
 class Brand extends Model
 {
-    use HasFactory;
 
     /**
      * @var string
@@ -29,6 +27,42 @@ class Brand extends Model
      * @var Request
      */
     protected $request;
+
+    /**
+     * @var string
+     */
+    protected $locale = 'en';
+
+
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = current_locale();
+    }
+
+
+    /**
+     * @param null  $lang
+     * @param false $all
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null, bool $all = false)
+    {
+        if ($lang) {
+            return $this->hasOne(BrandTranslation::class, 'brand_id')->where('lang', $lang)->first();
+        }
+
+        if ($all) {
+            return $this->hasMany(BrandTranslation::class, 'brand_id');
+        }
+
+        return $this->hasOne(BrandTranslation::class, 'brand_id')->where('lang', $this->locale);
+    }
 
 
     /**
@@ -116,7 +150,7 @@ class Brand extends Model
     private function createModelArray(string $method = 'insert'): array
     {
         $response = [
-            'letter'           => Helper::resolveFirstLetter($this->request->title),
+            'letter'           => Helper::resolveFirstLetter($this->request->title[current_locale()]),
             'featured'         => (isset($this->request->featured) and $this->request->featured == 'on') ? 1 : 0,
             'sort_order'       => 0,
             'status'           => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,

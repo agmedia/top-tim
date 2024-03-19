@@ -29,6 +29,8 @@ return [
     'default_category'     => 2,
     'unknown_author'       => 6,
     'unknown_publisher'    => 6,
+    'image_size_ratio' => '1440x960',
+    'thumb_size_ratio' => '800x534',
     'images_domain'        => env('APP_IMAGE_DOMAIN'),
     'image_default'        => 'media/avatars/avatar0.jpg',
     //
@@ -37,6 +39,17 @@ return [
     'eur_divide_amount' => 0.13272280,
 
     'hrk_divide_amount' => 7.53450,
+
+    'category_group_paths' => [
+        1 => [
+            'en' => 'Products category',
+            'hr' => 'Kategorija proizvoda'
+        ],
+        2 >= [
+            'en' => 'Info',
+            'hr' => 'Info'
+        ]
+    ],
 
     'sorting_list' => [
         0 => [

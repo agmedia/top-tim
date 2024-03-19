@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Back\Marketing;
 
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Publisher;
@@ -84,7 +84,7 @@ class ActionGroupList extends Component
                     $this->search_results = Publisher::where('title', 'like', '%' . $this->search . '%')->limit(5)->get();
                     break;
                 case 'author':
-                    $this->search_results = Author::where('title', 'like', '%' . $this->search . '%')->limit(5)->get();
+                    $this->search_results = Brand::where('title', 'like', '%' . $this->search . '%')->limit(5)->get();
                     break;
                 case 'blog':
                     $this->search_results = Blog::where('title', 'like', '%' . $this->search . '%')->limit(5)->get();
@@ -113,7 +113,7 @@ class ActionGroupList extends Component
                 $this->list[$id] = Publisher::where('id', $id)->first();
                 break;
             case 'author':
-                $this->list[$id] = Author::where('id', $id)->first();
+                $this->list[$id] = Brand::where('id', $id)->first();
                 break;
             case 'blog':
                 $this->list[$id] = Blog::where('id', $id)->first();

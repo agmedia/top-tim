@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Back\Layout\Search;
 
 use App\Helpers\Helper;
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -50,7 +50,7 @@ class AuthorSearch extends Component
     public function mount()
     {
         if ($this->author_id) {
-            $author = Author::find($this->author_id);
+            $author = Brand::find($this->author_id);
 
             if ($author) {
                 $this->search = $author->title;
@@ -77,9 +77,9 @@ class AuthorSearch extends Component
         $this->search_results = [];
 
         if ($this->search != '') {
-            $this->search_results = (new Author())->where('title', 'LIKE', '%' . $this->search . '%')
-                                                  ->limit(5)
-                                                  ->get();
+            $this->search_results = (new Brand())->where('title', 'LIKE', '%' . $this->search . '%')
+                                                 ->limit(5)
+                                                 ->get();
         }
     }
 
@@ -89,7 +89,7 @@ class AuthorSearch extends Component
      */
     public function addAuthor($id)
     {
-        $author = (new Author())->where('id', $id)->first();
+        $author = (new Brand())->where('id', $id)->first();
 
         $this->search_results = [];
         $this->search         = $author->title;
@@ -112,7 +112,7 @@ class AuthorSearch extends Component
 
         $slug = Str::slug($this->new['title']);
 
-        $id = Author::insertGetId([
+        $id = Brand::insertGetId([
             'letter'           => Helper::resolveFirstLetter($this->new['title']),
             'title'            => $this->new['title'],
             'description'      => '',
@@ -128,7 +128,7 @@ class AuthorSearch extends Component
         ]);
 
         if ($id) {
-            $author = Author::find($id);
+            $author = Brand::find($id);
 
             $this->show_add_window = false;
 

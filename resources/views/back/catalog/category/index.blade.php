@@ -25,26 +25,23 @@
                         @forelse($categories as $category)
                             <div class="block block-rounded mb-1">
                                 <div class="block-header block-header-default" role="tab" id="accordion_h{{ $category->id }}">
-                                    <a class="h3 block-title" data-toggle="collapse" data-parent="#accordion" href="#accordion_q{{ $category->id }}" aria-expanded="@if($loop->first) true @else false @endif" aria-controls="accordion_q{{ $category->id }}">{{ $category->title }}</a>
+                                    <a class="h3 block-title" data-toggle="collapse" data-parent="#accordion" href="#accordion_q{{ $category->id }}" aria-expanded="@if($loop->first) true @else false @endif" aria-controls="accordion_q{{ $category->id }}">{{ $category->translation->title }}</a>
                                     <div class="block-options">
                                         <div class="btn-group">
                                             <a  class="btn btn-sm btn-secondary js-tooltip-enabled me-2" data-toggle="tooltip" title="" data-original-title="{{ __('back/categories.uredi') }}"> {{ $category->products_count }}
                                             </a>
-
                                             <a href="{{ route('category.edit', ['category' => $category]) }}" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/categories.uredi') }}">
                                                 <i class="fa fa-pencil-alt"></i>
                                             </a>
-
-
                                         </div>
                                     </div>
                                 </div>
                                 @if ($category->subcategories)
                                     <div id="accordion_q{{ $category->id }}" class="collapse @if($loop->first) show @endif" role="tabpanel" aria-labelledby="accordion_h{{ $category->id }}" data-parent="#accordion">
                                         <div class="block-content pb-4">
-                                            @foreach($category->subcategories()->orderBy('title')->get() as $subcategory)
+                                            @foreach($category->subcategories()->get() as $subcategory)
                                                 <a href="{{ route('category.edit', ['category' => $subcategory]) }}" class="btn btn-sm mb-3  @if ($subcategory->products()->count() == 0) btn-warning @else btn-success @endif js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/categories.uredi') }}">
-                                                    {{ $subcategory->title }} - {{ $subcategory->products()->count() }}
+                                                    {{ $subcategory->translation->title }} - {{ $subcategory->products()->count() }}
                                                 </a>
                                             @endforeach
                                         </div>

@@ -171,6 +171,8 @@ export default {
                 this.checkSpecials();
                 this.checkAvailables();
 
+                console.log(response.data)
+
                 if (params.pojam != '' && !this.products.total) {
                     this.search_zero_result = true;
                 }

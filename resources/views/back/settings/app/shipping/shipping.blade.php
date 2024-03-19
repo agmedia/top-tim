@@ -33,16 +33,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse ($shippings as $shipping)
+                    @forelse ($shippings as $item)
                         <tr>
-                            <td>{{ $shipping->title }}</td>
-                            <td class="text-center">{{ $shipping->sort_order }}</td>
-                            <td class="text-center">{{ number_format($shipping->data->price, 2, ',', '.') }}</td>
+                            <td>{{ isset($item->title->{current_locale()}) ? $item->title->{current_locale()} : $item->title }}</td>
+                            <td class="text-center">{{ $item->sort_order }}</td>
+                            <td class="text-center">{{ number_format($item->data->price, 2, ',', '.') }}</td>
                             <td class="text-center">
-                                @include('back.layouts.partials.status', ['status' => $shipping->status])
+                                @include('back.layouts.partials.status', ['status' => $item->status])
                             </td>
                             <td class="text-right font-size-sm">
-                                <button type="button" class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); edit({{ json_encode($shipping) }}, '{{ $shipping->code }}');">
+                                <button type="button" class="btn btn-sm btn-alt-secondary" onclick="event.preventDefault(); edit({{ json_encode($item) }}, '{{ $item->code }}');">
                                     <i class="fa fa-fw fa-pencil-alt"></i>
                                 </button>
                             </td>

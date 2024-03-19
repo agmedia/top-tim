@@ -2,6 +2,7 @@
 
 namespace App\Models\Back\Marketing;
 
+use App\Models\Back\Settings\PageTranslation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,6 +31,42 @@ class Blog extends Model
      */
     protected $request;
 
+    /**
+     * @var string
+     */
+    protected $locale = 'en';
+
+
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = current_locale();
+    }
+
+
+    /**
+     * @param null  $lang
+     * @param false $all
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null, bool $all = false)
+    {
+        if ($lang) {
+            return $this->hasOne(PageTranslation::class, 'page_id')->where('lang', $lang)->first();
+        }
+
+        if ($all) {
+            return $this->hasMany(PageTranslation::class, 'page_id');
+        }
+
+        return $this->hasOne(PageTranslation::class, 'page_id')->where('lang', $this->locale);
+    }
+
 
     /**
      * Validate new category Request.
@@ -57,24 +94,11 @@ class Blog extends Model
      */
     public function create()
     {
-        $id = $this->insertGetId([
-            'category_id'       => null,
-            'group'             => 'blog',
-            'title'             => $this->request->title,
-            'short_description' => $this->request->short_description,
-            'description'       => $this->request->description,
-            'meta_title'        => $this->request->meta_title,
-            'meta_description'  => $this->request->meta_description,
-            'slug'              => isset($this->request->slug) ? Str::slug($this->request->slug) : Str::slug($this->request->title),
-            'keywords'          => null,
-            'publish_date'      => $this->request->publish_date ? Carbon::make($this->request->publish_date) : null,
-            'keywords'          => false,
-            'status'            => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'created_at'        => Carbon::now(),
-            'updated_at'        => Carbon::now()
-        ]);
+        $id = $this->insertGetId($this->createModelArray());
 
         if ($id) {
+            PageTranslation::create($id, $this->request);
+
             return $this->find($id);
         }
 
@@ -89,24 +113,12 @@ class Blog extends Model
      */
     public function edit()
     {
-        $id = $this->update([
-            'category_id'       => null,
-            'group'             => 'blog',
-            'title'             => $this->request->title,
-            'short_description' => $this->request->short_description,
-            'description'       => $this->request->description,
-            'meta_title'        => $this->request->meta_title,
-            'meta_description'  => $this->request->meta_description,
-            'slug'              => isset($this->request->slug) ? Str::slug($this->request->slug) : Str::slug($this->request->title),
-            'keywords'          => null,
-            'publish_date'      => $this->request->publish_date ? Carbon::make($this->request->publish_date) : null,
-            'keywords'          => false,
-            'status'            => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'updated_at'        => Carbon::now()
-        ]);
+        $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
-            return $this->find($this->id);
+            PageTranslation::edit($id, $this->request);
+
+            return $this;
         }
 
         return false;
@@ -149,5 +161,30 @@ class Blog extends Model
         }
 
         return false;
+    }
+
+
+    /**
+     * @param string $method
+     *
+     * @return array
+     */
+    private function createModelArray(string $method = 'insert'): array
+    {
+        $response = [
+            'category_id'       => null,
+            'group'             => 'blog',
+            'subgroup'          => $this->request->group ?: null,
+            'publish_date'      => null,
+            'keywords'          => false,
+            'status'            => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'updated_at'        => Carbon::now()
+        ];
+
+        if ($method == 'insert') {
+            $response['created_at'] = Carbon::now();
+        }
+
+        return $response;
     }
 }

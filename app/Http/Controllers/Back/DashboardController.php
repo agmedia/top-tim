@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\ProductImport;
 use App\Mail\OrderReceived;
 use App\Mail\OrderSent;
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Mjerilo;
 use App\Models\Back\Catalog\Product\Product;
@@ -254,7 +254,7 @@ class DashboardController extends Controller
      */
     public function letters()
     {
-        $authors = Author::all();
+        $authors = Brand::all();
 
         foreach ($authors as $author) {
             $letter = Helper::resolveFirstLetter($author->title);
@@ -317,14 +317,14 @@ class DashboardController extends Controller
                            ->pluck('author_id')
                            ->unique();
 
-        $authors = Author::query()->pluck('id')->diff($products)->flatten();
+        $authors = Brand::query()->pluck('id')->diff($products)->flatten();
 
-        Author::whereIn('id', $authors)->update([
+        Brand::whereIn('id', $authors)->update([
             'status' => 0,
             'updated_at' => now()
         ]);
 
-        Author::whereNotIn('id', $authors)->update([
+        Brand::whereNotIn('id', $authors)->update([
             'status' => 1,
             'updated_at' => now()
         ]);

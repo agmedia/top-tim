@@ -137,7 +137,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="text-center font-size-sm" colspan="8">
+                                <td class="text-center font-size-sm" colspan="9">
                                     <label>{{ __('back/orders.nema_narudzbi') }}</label>
                                 </td>
                             </tr>

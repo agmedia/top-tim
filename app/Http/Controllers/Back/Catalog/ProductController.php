@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Back\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductAction;
@@ -90,13 +90,13 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->toArray());
         $product = new Product();
 
         $stored = $product->validateRequest($request)->create();
 
         if ($stored) {
-            $product->checkSettings()
-                    ->storeImages($stored);
+            $product->storeImages($stored);
 
             return redirect()->route('products.edit', ['product' => $stored])->with(['success' => 'Artikl je uspješno snimljen!']);
         }
@@ -130,13 +130,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        //dd($request->toArray());
         $updated = $product->validateRequest($request)->edit();
 
         if ($updated) {
-            $product->checkSettings()
-                    ->storeImages($updated);
+            $product->storeImages($updated);
 
-            $product->addHistoryData('change');
+            //$product->addHistoryData('change');
 
             return redirect()->route('products.edit', ['product' => $updated])->with(['success' => 'Artikl je uspješno snimljen!']);
         }

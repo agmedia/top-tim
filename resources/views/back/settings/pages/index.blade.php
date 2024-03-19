@@ -58,7 +58,7 @@
                             </td>-->
                             <td>
                                 <i class="fa fa-eye text-success mr-1"></i>
-                                <a href="{{ route('pages.edit', ['page' => $page]) }}">{{ $page->title }}</a>
+                                <a href="{{ route('pages.edit', ['page' => $page]) }}">{{ $page->translation->title }}</a>
                             </td>
                             <td>{{ $page->subgroup }}</td>
                             <td class="text-center">
@@ -83,7 +83,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="3">{{ __('back/info.nema_objava') }}</td>
+                            <td colspan="5">{{ __('back/info.nema_objava') }}</td>
                         </tr>
                     @endforelse
                     </tbody>

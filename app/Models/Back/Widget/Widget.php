@@ -2,7 +2,6 @@
 
 namespace App\Models\Back\Widget;
 
-use App\Helpers\Helper;
 use App\Models\Back\Catalog\Product\Product;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class Widget extends Model
 {
@@ -30,21 +30,39 @@ class Widget extends Model
     private $request;
 
     /**
-     * @var string[]
+     * @var
      */
-    private $targets = [
-        'blog' => 'Novosti',
-        'info' => 'Info Stranice',
-        'gallery' => 'Galerije'
-    ];
+    private $url;
 
 
     /**
-     * @return string[]
+     * @param $value
+     *
+     * @return array|string|string[]
      */
-    public function getTargetResources(): array
+    public function getImageAttribute($value)
     {
-        return $this->targets;
+        return config('settings.images_domain') . str_replace('.jpg', '.webp', $value);
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function group()
+    {
+        return $this->hasOne(WidgetGroup::class, 'id', 'group_id');
+    }
+
+
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeGroups($query)
+    {
+        return $query->groupBy('group_id');
     }
 
 
@@ -55,11 +73,29 @@ class Widget extends Model
      */
     public function validateRequest(Request $request)
     {
+        // Validate the request.
         $request->validate([
+            'group_template' => 'required',
             'title' => 'required'
         ]);
 
+        // Set Product Model request variable
         $this->setRequest($request);
+
+        return $this;
+    }
+
+
+    /**
+     * @return $this
+     */
+    public function setUrl()
+    {
+        $this->url = $this->request->url;
+
+        if ( ! $this->url && $this->request->link && $this->request->link_id) {
+            $this->url = Url::set($this->request->link, $this->request->link_id);
+        }
 
         return $this;
     }
@@ -70,74 +106,157 @@ class Widget extends Model
      */
     public function store()
     {
-        $id = $this->insertGetId($this->getModelArray());
+        $data = null;
+
+        if ($this->request->has('group_template')) {
+            $group = WidgetGroup::where('id', $this->request->group_id)->first();
+            $group_id = $group->id;
+
+            $arr = $this->request->toArray();
+            unset($arr['_token']);
+            unset($arr['_method']);
+            unset($arr['image']);
+            unset($arr['image_long']);
+
+            if ($this->request->has('action_list')) {
+                $arr['list'] = $this->request->input('action_list');
+                unset($arr['action_list']);
+            }
+
+            $data = serialize($arr);
+        }
+
+        $id = $this->insertGetId([
+            'group_id'   => $group_id,
+            'title'      => $this->request->title,
+            'subtitle'   => $this->request->subtitle,
+            'description' => $this->request->description ?: null,
+            'data'       => $data,
+            'link'       => $this->request->link ?: null,
+            'link_id'    => $this->request->link_id ?: null,
+            'url'        => $this->url ?: '/',
+            'badge'      => $this->request->badge ?: null,
+            'width'      => $this->request->width ?: null,
+            'sort_order' => $this->request->sort_order ?: 0,
+            'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
 
         return $this->find($id);
     }
 
 
     /**
+     * @param $id
+     *
      * @return false
      */
-    public function edit()
+    public function edit($id)
     {
-        $updated = $this->update($this->getModelArray(false));
+        if ($this->request->has('group_template')) {
+            $group = WidgetGroup::where('id', $this->request->group_id)->first();
+            $group_id = $group->id;
 
-        if ($updated) {
-            return $this;
+            $arr = $this->request->toArray();
+            unset($arr['_token']);
+            unset($arr['_method']);
+            unset($arr['image']);
+            unset($arr['image_long']);
+
+            if ($this->request->has('action_list')) {
+                $arr['list'] = $this->request->input('action_list');
+                unset($arr['action_list']);
+            }
+
+            $data = serialize($arr);
+        }
+
+        $ok = $this->where('id', $id)->update([
+            'group_id'   => $group_id,
+            'title'      => $this->request->title,
+            'subtitle'   => $this->request->subtitle,
+            'description' => $this->request->description ?: null,
+            'data'       => $data,
+            'link'       => $this->request->link ?: null,
+            'link_id'    => $this->request->link_id ?: null,
+            'url'        => $this->url ?: '/',
+            'badge'      => $this->request->badge ?: null,
+            'width'      => $this->request->width ?: null,
+            'sort_order' => $this->request->sort_order ?: 0,
+            'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'updated_at' => Carbon::now()
+        ]);
+
+        if ($ok) {
+            return $this->find($id);
         }
 
         return false;
     }
 
-    /*******************************************************************************
-    *                                Copyright : AGmedia                           *
-    *                              email: filip@agmedia.hr                         *
-    *******************************************************************************/
 
     /**
-     * @param bool $insert
+     * @param $request
      *
-     * @return array
+     * @return bool
      */
-    private function getModelArray(bool $insert = true): array
+    public function resolveImage($request)
     {
-        $response = [
-            'resource'      => $this->request->group,
-            'resource_data' => $this->setResourceData(),
-            'title'         => $this->request->title,
-            'subtitle'      => '',
-            'slug'          => $this->setSlug(),
-            'status'        => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'updated_at'    => Carbon::now()
-        ];
-
-        if ($this->request->data) {
-            $filepath = Helper::resolveViewFilepath($this->setSlug(), 'widgets');
-
-            Storage::disk('view')->put($filepath, $this->request->data);
-
-            $response['data'] = $this->request->data;
+        if ($request->image) {
+            $data = json_decode($request->image);
+        }
+        if ($request->image_long) {
+            $data = json_decode($request->image_long);
         }
 
-        if ($insert) {
-            $response['created_at'] = Carbon::now();
+        $img  = Image::make($data->output->image);
+
+        $str = $this->id . '/' . Str::slug($this->title) . '-' . time() . '.';
+
+        $path = $str . 'jpg';
+        Storage::disk('widget')->put($path, $img->encode('jpg'));
+
+        $path_webp = $str . 'webp';
+        Storage::disk('widget')->put($path_webp, $img->encode('webp'));
+
+        $default_path = config('filesystems.disks.widget.url') . 'default.jpg';
+
+        if ($this->image && $this->image != $default_path) {
+            $delete_path = str_replace(config('filesystems.disks.widget.url'), '', $this->image);
+
+            Storage::disk('widget')->delete($delete_path);
         }
 
-        return $response;
+        return $this->update([
+            'image' => config('filesystems.disks.widget.url') . $path
+        ]);
     }
 
 
     /**
-     * @return string
+     * @return array[]
      */
-    private function setSlug(): string
+    public function sizes()
     {
-        if ( ! $this->request->slug || $this->request->slug == '') {
-            return Str::slug($this->request->title);
-        }
-
-        return $this->request->slug;
+        return [
+            [
+                'value' => 12,
+                'title' => '1:1 - Puna širina'
+            ],
+            [
+                'value' => 6,
+                'title' => '1:2 - Pola širine'
+            ],
+            [
+                'value' => 4,
+                'title' => '1:3 - Trećina širine'
+            ],
+            [
+                'value' => 8,
+                'title' => '2:3 - 2 trećine širine'
+            ],
+        ];
     }
 
 
@@ -153,24 +272,19 @@ class Widget extends Model
 
 
     /**
-     * @return false|string
+     * @param $request
+     *
+     * @return bool
      */
-    private function setResourceData()
+    public static function hasImage($request)
     {
-        $query = '';
-
-        if ($this->request->query_string) {
-            $query = str_replace('"', '', $this->request->query_string);
+        if ($request->has('image') && $request->input('image')) {
+            return true;
+        }
+        if ($request->has('image_long') && $request->input('image_long')) {
+            return true;
         }
 
-        $data = [
-            'new'        => (isset($this->request->new) and $this->request->new == 'on') ? 1 : 0,
-            'popular'    => (isset($this->request->popular) and $this->request->popular == 'on') ? 1 : 0,
-            'query'      => $query,
-            'query_data' => (isset($this->request->query_data) and $this->request->query_data) ? $this->request->query_data : '',
-            'items_list' => $this->request->has('action_list') ? $this->request->input('action_list') : []
-        ];
-
-        return json_encode($data);
+        return false;
     }
 }

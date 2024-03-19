@@ -55,7 +55,7 @@
                             </td>
                             <td>
                                 <i class="fa fa-eye text-success mr-1"></i>
-                                <a href="{{ route('receptis.edit', ['recepti' => $recepti]) }}">{{ $recepti->title }}</a>
+                                <a href="{{ route('receptis.edit', ['recepti' => $recepti]) }}">{{ $recepti->translation->title }}</a>
                             </td>
                             <td>
                                 {{ \Illuminate\Support\Carbon::make($recepti->created_at)->format('d.m.Y') }}
@@ -72,7 +72,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="6">{{ __('back/blog.nema_objava') }}</td>
+                            <td colspan="5">{{ __('back/blog.nema_objava') }}</td>
                         </tr>
                     @endforelse
                     </tbody>

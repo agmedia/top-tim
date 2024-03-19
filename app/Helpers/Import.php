@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Back\Catalog\Author;
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Publisher;
 use Carbon\Carbon;
@@ -161,10 +161,10 @@ class Import
         if ($author) {
             $author = trim($author);
 
-            $exist = Author::where('title', $author)->first();
+            $exist = Brand::where('title', $author)->first();
 
             if ( ! $exist) {
-                return Author::insertGetId([
+                return Brand::insertGetId([
                     'letter'           => Helper::resolveFirstLetter($author),
                     'title'            => $author,
                     'description'      => '',

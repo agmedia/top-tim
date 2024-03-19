@@ -30,6 +30,7 @@
                         <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
                         <div class="navbar-tool-text ms-n3"><small>{{ auth()->user()->details->fname }} {{ auth()->user()->details->lname }}</small>Moj Račun</div>
                     </a>
+                    @include('front.layouts.partials.language-selector')
                 @else
                     <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" data-tab-id="pills-signin-tab" aria-label="Prijavi se" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal">
                         <div class="navbar-tool-icon-box bg-dark"><i class="navbar-tool-icon ci-user"></i></div>
@@ -70,7 +71,8 @@
             <filter-view ids="{{ isset($ids) ? $ids : null }}"
                          group="kategorija-proizvoda"
                          cat="{{ isset($cat) ? $cat : null }}"
-                         subcat="{{ isset($subcat) ? $subcat : null }}">
+                         subcat="{{ isset($subcat) ? $subcat : null }}"
+                         locale="{{ current_locale() }}">
             </filter-view>
             <!-- Menu-->
             <div class="sidebar-nav tab-pane fade" id="menu" role="tabpanel">

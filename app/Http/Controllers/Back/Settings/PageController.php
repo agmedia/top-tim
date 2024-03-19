@@ -74,7 +74,7 @@ class PageController extends Controller
      */
     public function edit(Page $page)
     {
-        $groups = $page->subgroups()->pluck('subgroup');
+        $groups = $page->pluck('group');
 
         return view('back.settings.pages.edit', compact('page', 'groups'));
     }

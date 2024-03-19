@@ -106,7 +106,7 @@
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="name-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <input type="text" class="form-control" id="name-input-{{ $lang->code }}" name="name[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->title : old('name.*') }}" onkeyup="SetSEOPreview()">
+                                                            <input type="text" class="form-control" id="name-input-{{ $lang->code }}" name="name[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->name : old('name.*') }}" onkeyup="SetSEOPreview()">
                                                             @error('name')
                                                             <span class="text-danger font-italic">{{ __('back/products.naziv_je_potreban') }}</span>
                                                             @enderror
@@ -365,7 +365,7 @@
                                         <!--                            <div class="dropzone">
                                                                         <div class="dz-message" data-dz-message><span>Klikni ovdje ili dovuci slike za uplad</span></div>
                                                                     </div>-->
-                                        @include('back.catalog.product.edit-photos')
+                                        @include('back.catalog.product.edit-photos', ['resource' => isset($product) ? $product : null, 'existing' => $data['images'], 'delete_url' => route('products.destroy.image')])
                                     </div>
                                 </div>
                             </div>

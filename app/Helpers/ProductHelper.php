@@ -177,4 +177,17 @@ class ProductHelper
 
         return true;
     }
+
+
+    /**
+     * @param $description
+     *
+     * @return string
+     */
+    public static function cleanHTML($description = null): string
+    {
+        $clean = preg_replace('/ style=("|\')(.*?)("|\')/', '', $description ?: '');
+
+        return preg_replace('/ face=("|\')(.*?)("|\')/', '', $clean);
+    }
 }

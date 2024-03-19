@@ -28,6 +28,42 @@ class Action extends Model
      */
     protected $request;
 
+    /**
+     * @var string
+     */
+    protected $locale = 'en';
+
+
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = current_locale();
+    }
+
+
+    /**
+     * @param null  $lang
+     * @param false $all
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null, bool $all = false)
+    {
+        if ($lang) {
+            return $this->hasOne(ActionTranslation::class, 'action_id')->where('lang', $lang)->first();
+        }
+
+        if ($all) {
+            return $this->hasMany(ActionTranslation::class, 'action_id');
+        }
+
+        return $this->hasOne(ActionTranslation::class, 'action_id')->where('lang', $this->locale);
+    }
+
 
     /**
      * Validate new action Request.
@@ -68,6 +104,8 @@ class Action extends Model
         $id   = $this->insertGetId($this->getModelArray());
 
         if ($id) {
+            ActionTranslation::create($id, $this->request);
+
             if ($this->shouldUpdateProducts($data)) {
                 $this->updateProducts($this->resolveTarget($data['links']), $id, $data['start'], $data['end']);
             }
@@ -90,6 +128,8 @@ class Action extends Model
         $updated = $this->update($this->getModelArray(false));
 
         if ($updated) {
+            ActionTranslation::edit($updated, $this->request);
+
             if ($this->shouldUpdateProducts($data)) {
                 $this->updateProducts($this->resolveTarget($data['links']), $this->id, $data['start'], $data['end']);
             }
@@ -173,7 +213,6 @@ class Action extends Model
         $data = $this->getRequestData();
 
         $response = [
-            'title'      => $this->request->title,
             'type'       => $this->request->type,
             'discount'   => $this->request->discount,
             'group'      => $this->request->group,

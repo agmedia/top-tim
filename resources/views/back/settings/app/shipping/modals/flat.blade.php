@@ -15,13 +15,30 @@
                         <div class="col-md-10">
 
                             <div class="row mb-4">
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="form-group">
-                                        <label for="flat-title">{{ __('back/app.shipping.input_title') }}</label>
-                                        <input type="text" class="form-control" id="flat-title" name="title">
+                                        <label for="flat-title" class="w-100">{{ __('back/app.payments.input_title') }}
+                                            <ul class="nav nav-pills float-right">
+                                                @foreach(ag_lang() as $lang)
+                                                    <li @if ($lang->code == current_locale()) class="active" @endif ">
+                                                    <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
+                                                        <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                    </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+                                        </label>
+                                        <div class="tab-content">
+                                            @foreach(ag_lang() as $lang)
+                                                <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                    <input type="text" class="form-control" id="flat-title-{{ $lang->code }}" name="flat-title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"  >
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="flat-price">{{ __('back/app.shipping.trosak') }}</label>
                                         <input type="text" class="form-control" id="flat-price" name="data['price']">
@@ -44,10 +61,28 @@
                             </div>
 
                             <div class="form-group mb-4">
-                                <label for="flat-short-description">{{ __('back/app.shipping.short_desc') }} <span class="small text-gray"> {{ __('back/app.shipping.short_desc_label') }}</span></label>
-                                <textarea class="js-maxlength form-control" id="flat-short-description" name="data['short_description']" rows="2" maxlength="160" data-always-show="true" data-placement="top"></textarea>
+                                <label for="bank-short-description" class="w-100">{{ __('back/app.payments.short_desc') }} <span class="small text-gray">{{ __('back/app.payments.short_desc_label') }}</span>
+                                    <div class="float-right">
+                                        <ul class="nav nav-pills float-right">
+                                            @foreach(ag_lang() as $lang)
+                                                <li @if ($lang->code == current_locale()) class="active" @endif ">
+                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#flat-description-{{ $lang->code }}">
+                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </label>
+                                <div class="tab-content">
+                                    @foreach(ag_lang() as $lang)
+                                        <div id="flat-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                            <textarea id="flat-short-description-{{ $lang->code }}" class=" form-control"  name="data['short_description'][{{ $lang->code }}]" placeholder="{{ $lang->code }}" ></textarea>
+                                        </div>
+                                    @endforeach
+                                </div>
                                 <small class="form-text text-muted">
-                                    {{ __('back/app.shipping.160_max') }}
+                                    160 {{ __('back/app.payments.chars') }} max
                                 </small>
                             </div>
 
@@ -103,14 +138,24 @@
          *
          */
         function create_flat() {
+            let titles = {};
+            let short = {};
+            let desc = {};
+
+            {!! ag_lang() !!}.forEach(function(lang) {
+                titles[lang.code] = document.getElementById('flat-title-' + lang.code).value;
+                short[lang.code] = document.getElementById('flat-short-description-' + lang.code).value;
+                desc[lang.code] = document.getElementById('flat-description-' + lang.code).value;
+            });
+
             let item = {
-                title: $('#flat-title').val(),
+                title: titles,
                 code: $('#flat-code').val(),
                 data: {
                     price: $('#flat-price').val(),
                     time: $('#flat-time').val(),
-                    short_description: $('#flat-short-description').val(),
-                    description: $('#flat-description').val(),
+                    short_description: short,
+                    description: desc,
                 },
                 geo_zone: $('#flat-geo-zone').val(),
                 status: $('#flat-status')[0].checked,
@@ -133,13 +178,22 @@
          * @param item
          */
         function edit_flat(item) {
-            $('#flat-title').val(item.title);
             $('#flat-price').val(item.data.price);
             $('#flat-time').val(item.data.time);
-            $('#flat-short-description').val(item.data.short_description);
-            $('#flat-description').val(item.data.description);
             $('#flat-sort-order').val(item.sort_order);
             $('#flat-code').val(item.code);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
+                    $('#flat-title-' + lang.code).val(item.title[lang.code]);
+                }
+                if (item.data.short_description && typeof item.data.short_description[lang.code] !== undefined) {
+                    $('#flat-short-description-' + lang.code).val(item.data.short_description[lang.code]);
+                }
+                if (item.data.description && typeof item.data.description[lang.code] !== undefined) {
+                    $('#flat-description-' + lang.code).val(item.data.description[lang.code]);
+                }
+            });
 
             if (item.status) {
                 $('#flat-status')[0].checked = item.status ? true : false;

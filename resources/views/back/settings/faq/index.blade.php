@@ -24,9 +24,7 @@
                 <table class="table table-striped table-borderless table-vcenter">
                     <thead class="thead-light">
                     <tr>
-
                         <th style="width: 80%;">{{ __('back/faq.pitanje') }}</th>
-
                         <th class="text-right"  class="text-center">{{ __('back/faq.uredi') }}</th>
                     </tr>
                     </thead>
@@ -34,7 +32,7 @@
                     @forelse ($faqs as $faq)
                         <tr>
                             <td>
-                                <a href="{{ route('faqs.edit', ['faq' => $faq]) }}">{{ $faq->title }}</a>
+                                <a href="{{ route('faqs.edit', ['faq' => $faq]) }}">{{ $faq->translation->title }}</a>
                             </td>
                             <td class="text-right font-size-sm">
                                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('faqs.edit', ['faq' => $faq]) }}">
