@@ -3,6 +3,7 @@
 namespace App\Models\Front\Catalog;
 
 use App\Helpers\Currency;
+use App\Helpers\ProductHelper;
 use App\Models\Back\Catalog\Product\ProductAction;
 use App\Models\Back\Marketing\Review;
 use App\Models\Back\Settings\Settings;
@@ -34,8 +35,9 @@ class Product extends Model
      * @var string[]
      */
     protected $appends = [
-        'title',
+        'name',
         'description',
+        'url',
         'eur_price',
         'eur_special',
         'main_price',
@@ -76,9 +78,9 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
      */
-    public function getLocalizedRouteKey($locale)
+    public function getLocalizedRouteKey()
     {
-        return $this->translation($locale)->slug;
+        return $this->translation(current_locale())->slug;
     }
 
 
@@ -105,23 +107,29 @@ class Product extends Model
     public function translation($lang = null, bool $all = false)
     {
         if ($lang) {
-            return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $lang)->first();
+            return $this->hasOne(ProductTranslation::class, 'product_id')->where('lang', $lang)->first();
         }
 
         if ($all) {
-            return $this->hasMany(CategoryTranslation::class, 'category_id');
+            return $this->hasMany(ProductTranslation::class, 'product_id');
         }
 
-        return $this->hasOne(CategoryTranslation::class, 'category_id')->where('lang', $this->locale);
+        return $this->hasOne(ProductTranslation::class, 'product_id')->where('lang', $this->locale);
     }
+
+
+    /*public function translations()
+    {
+        return $this->hasMany(ProductTranslation::class, 'product_id');
+    }*/
 
 
     /**
      * @return string
      */
-    public function getTitleAttribute()
+    public function getNameAttribute()
     {
-        return $this->translation->title;
+        return $this->translation->name;
     }
 
 
@@ -131,6 +139,15 @@ class Product extends Model
     public function getDescriptionAttribute()
     {
         return $this->translation->description;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getUrlAttribute()
+    {
+        return ProductHelper::url(\App\Models\Back\Catalog\Product\Product::query()->find($this->id), $this->category());
     }
 
 
@@ -589,9 +606,6 @@ class Product extends Model
             $_ids = explode(',', substr($request->input('ids'), 1, -1));
             $query->whereIn('id', collect($_ids)->unique());
         }
-
-        Log::info('Product::filter()');
-        Log::info($request->toArray());
 
         if ($request->has('group')) {
             // Akcije

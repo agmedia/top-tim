@@ -3613,8 +3613,11 @@ Vue.directive('tooltip', function (el, binding) {
         _this.products = response.data;
         _this.checkHrTotal();
         _this.checkSpecials();
-        _this.checkAvailables();
-        console.log(response.data);
+        if (_this.$store.state.storage.getCart()) {
+          _this.checkAvailables();
+        }
+        console.log('Response::data.data');
+        console.log(response.data.data);
         if (params.pojam != '' && !_this.products.total) {
           _this.search_zero_result = true;
         }

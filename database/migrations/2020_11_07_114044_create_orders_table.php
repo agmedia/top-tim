@@ -25,6 +25,7 @@ class CreateOrdersTable extends Migration
             $table->string('payment_address');
             $table->string('payment_zip');
             $table->string('payment_city');
+            $table->string('payment_state');
             $table->string('payment_phone')->nullable();
             $table->string('payment_email');
             $table->string('payment_method');
@@ -36,14 +37,15 @@ class CreateOrdersTable extends Migration
             $table->string('shipping_address');
             $table->string('shipping_zip');
             $table->string('shipping_city');
+            $table->string('shipping_state');
             $table->string('shipping_phone')->nullable();
             $table->string('shipping_email');
             $table->string('shipping_method');
             $table->string('shipping_code')->nullable();
-            $table->string('company');
-            $table->string('oib');
+            $table->string('company')->nullable();
+            $table->string('oib')->nullable();
             $table->text('comment')->nullable();
-            $table->string('tracking_code');
+            $table->string('tracking_code')->nullable();
             $table->boolean('shipped')->default(false);
             $table->boolean('printed')->default(false);
             $table->timestamps();

@@ -199,7 +199,9 @@ class FilterController extends Controller
             $products = (new Product())->filter($request)
                                        ->paginate(config('settings.pagination.front'));
 
-            Log::info($products);
+            /*foreach ($products as $product) {
+                Log::info($product->toArray());
+            }*/
         }
 
         return response()->json($products);

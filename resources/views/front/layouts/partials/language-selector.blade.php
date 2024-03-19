@@ -26,7 +26,7 @@
                             </a>
                         @elseif(isset($cat) && ! isset($subcat))
                             <a class=" @if (current_locale() == $lang->code) active @endif"
-                               href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path')), 'cat' => $cat->translation($lang->code)->slug]), [], true) }}">
+                               href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, null, [], true) }}">
 
                                 <img class="lang" style="width:16px" src="{{ asset('images/'.Str::upper($lang->code).'.png') }}" alt="">
                                 {{ $lang->title->{current_locale()} }}

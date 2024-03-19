@@ -93,10 +93,7 @@ class CheckoutController extends Controller
             $data['id'] = CheckoutSession::getOrder()['id'];
         }
 
-        $uvjeti = DB::table('pages')
-                    ->select('description')
-                    ->whereIn('id', [6])
-                    ->get();
+        $uvjeti = null;//DB::table('pages')->select('description')->whereIn('id', [6])->get();
 
         $data['payment_form'] = $order->resolvePaymentForm();
 

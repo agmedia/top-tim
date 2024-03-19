@@ -6,6 +6,7 @@ use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Orders\OrderProduct;
 use App\Models\Front\Catalog\Category;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ProductHelper
@@ -54,14 +55,14 @@ class ProductHelper
         $subcategory = $data['subcategory'];
 
         if ($subcategory) {
-            return Str::slug($category->group) . '/' . $category->slug . '/' . $subcategory->slug . '/' . $product->slug;
+            return current_locale() . '/' . Str::slug($category->group) . '/' . $category->translation->slug . '/' . $subcategory->translation->slug . '/' . $product->translation->slug;
         }
 
         if ($category) {
-            return Str::slug($category->group) . '/' . $category->slug . '/' . $product->slug;
+            return current_locale() . '/' . Str::slug($category->group) . '/' . $category->translation->slug . '/' . $product->translation->slug;
         }
 
-        return '/';
+        return current_locale() . '/';
     }
 
 

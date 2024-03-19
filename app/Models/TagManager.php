@@ -73,7 +73,7 @@ class TagManager
         $item = [
             'item_id'        => $product->sku,
             'item_name'      => $product->name,
-            'price'          =>  (float) number_format(str_replace(',', '.', $product->main_price), 2),
+            'price'          =>  (float) number_format((float) str_replace(',', '.', $product->main_price), 2),
             'currency'       => 'EUR',
             'discount'       =>  (float) number_format($discount, 2),
             'item_category'  => $product->category() ? $product->category()->title : '',

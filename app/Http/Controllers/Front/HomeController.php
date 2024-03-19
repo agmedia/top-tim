@@ -34,12 +34,12 @@ class HomeController extends Controller
 
         $page->description = Helper::setDescription(
             isset($page->description) ? $page->description : '',
-            isset($page->id) ? $page->id : ''
+            isset($page->id) ? $page->id : 0
         );
 
-        Log::info('HomeController::index()');
+        /*Log::info('HomeController::index()');
         Log::info(LaravelLocalization::getCurrentLocale());
-        Log::info(current_locale());
+        Log::info(current_locale());*/
 
         return view('front.page', compact('page'));
     }

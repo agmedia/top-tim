@@ -169,9 +169,13 @@ export default {
                 this.products = response.data;
                 this.checkHrTotal();
                 this.checkSpecials();
-                this.checkAvailables();
 
-                console.log(response.data)
+                if (this.$store.state.storage.getCart()) {
+                    this.checkAvailables();
+                }
+
+                console.log('Response::data.data')
+                console.log(response.data.data)
 
                 if (params.pojam != '' && !this.products.total) {
                     this.search_zero_result = true;

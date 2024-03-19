@@ -5,9 +5,10 @@ namespace App\Models\Front\Catalog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class Category extends Model
+class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\LocalizedUrlRoutable
 {
 
     /**
@@ -61,9 +62,16 @@ class Category extends Model
      */
     public function resolveRouteBinding($value, $field = NULL)
     {
-        return static::whereHas('translation', function ($query) use ($value) {
+        //$fallback = $this->locale == 'en' ? 'hr' : 'en';
+
+        /*Log::info('$fallback = ' . $fallback);
+        Log::info('$value = ' . $value);*/
+
+        return static::query()->whereHas('translation', function ($query) use ($value) {
             $query->where('slug', $value);
-        })->first() ?? abort(404);
+        })/*->orWhereHas('translation', function ($query) use ($value, $fallback) {
+            $query->where('lang', $fallback)->where('slug', $value);
+        })*/->first() ?? abort(404);
     }
 
 
