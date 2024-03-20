@@ -41,7 +41,7 @@ return [
     'form' => [
         'title' => 'Naslov',
     ],
-    
+
     'table' => [
         'id' => 'ID',
         'title' => 'Naziv',
@@ -85,6 +85,7 @@ return [
         'settings' => 'Postavke',
         'system' => 'Sistem',
         'category' => 'Kategorije',
+        'categories' => 'Kategorije',
         'general_settings' => 'Generalne postavke',
         'pages' => 'Info stranice',
         'faq' => 'FAQ',

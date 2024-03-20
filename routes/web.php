@@ -60,10 +60,10 @@ Route::group(
         'prefix' => LaravelLocalization::setLocale(),
         'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
     ], function() {
-    
+
     Route::middleware(['auth:sanctum', 'verified', 'no.customers'])->prefix('admin')->group(function () {
         Route::match(['get', 'post'], '/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        
+
         Route::get('setRoles', [DashboardController::class, 'setRoles'])->name('roles.set');
         Route::get('import', [DashboardController::class, 'import'])->name('import.initial');
         Route::get('mailing-test', [DashboardController::class, 'mailing'])->name('mailing.test');
@@ -74,7 +74,7 @@ Route::group(
         Route::get('set/category-group', [DashboardController::class, 'setCategoryGroup'])->name('set.group');
         Route::get('set/pdv/products', [DashboardController::class, 'setPdvProducts'])->name('set.pdv.products');
         Route::get('set/unlimited-qty', [DashboardController::class, 'setProductsUnlimitedQty'])->name('set.unlimited');
-        
+
         // CATALOG
         Route::prefix('catalog')->group(function () {
             // KATEGORIJE
@@ -92,7 +92,7 @@ Route::group(
             Route::get('product/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
             Route::patch('product/{product}', [ProductController::class, 'update'])->name('products.update');
             Route::delete('product/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-            
+
             // IZDAVAČI
             Route::get('publishers', [PublisherController::class, 'index'])->name('publishers');
             Route::get('publisher/create', [PublisherController::class, 'create'])->name('publishers.create');
@@ -100,7 +100,7 @@ Route::group(
             Route::get('publisher/{publisher}/edit', [PublisherController::class, 'edit'])->name('publishers.edit');
             Route::patch('publisher/{publisher}', [PublisherController::class, 'update'])->name('publishers.update');
             Route::delete('publisher/{publisher}', [PublisherController::class, 'destroy'])->name('publishers.destroy');
-            
+
             // AUTORI
             Route::get('brands', [BrandController::class, 'index'])->name('brands');
             Route::get('brand/create', [BrandController::class, 'create'])->name('brands.create');
@@ -108,7 +108,7 @@ Route::group(
             Route::get('brand/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
             Route::patch('brand/{brand}', [BrandController::class, 'update'])->name('brands.update');
             Route::delete('brand/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
-            
+
             // BLOG
             Route::get('blogs', [BlogController::class, 'index'])->name('blogs');
             Route::get('blog/create', [BlogController::class, 'create'])->name('blogs.create');
@@ -116,7 +116,7 @@ Route::group(
             Route::get('blog/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
             Route::patch('blog/{blog}', [BlogController::class, 'update'])->name('blogs.update');
             Route::delete('blog/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
-            
+
             // RECEPTI
             Route::get('receptis', [ReceptiController::class, 'index'])->name('receptis');
             Route::get('recepti/create', [ReceptiController::class, 'create'])->name('receptis.create');
@@ -133,7 +133,7 @@ Route::group(
             Route::patch('page/{page}', [PageController::class, 'update'])->name('pages.update');
             Route::delete('page/{page}', [PageController::class, 'destroy'])->name('pages.destroy');
         });
-        
+
         // NARUDŽBE
         Route::get('orders', [OrderController::class, 'index'])->name('orders');
         Route::get('order/create', [OrderController::class, 'create'])->name('orders.create');
@@ -141,7 +141,7 @@ Route::group(
         Route::get('order/{order}', [OrderController::class, 'show'])->name('orders.show');
         Route::get('order/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
         Route::patch('order/{order}', [OrderController::class, 'update'])->name('orders.update');
-        
+
         // MARKETING
         Route::prefix('marketing')->group(function () {
             // AKCIJE
@@ -151,7 +151,7 @@ Route::group(
             Route::get('action/{action}/edit', [ActionController::class, 'edit'])->name('actions.edit');
             Route::patch('action/{action}', [ActionController::class, 'update'])->name('actions.update');
             Route::delete('action/{action}', [ActionController::class, 'destroy'])->name('actions.destroy');
-            
+
             // REWIEVS
             Route::get('reviews', [ReviewController::class, 'index'])->name('reviews');
             Route::get('review/create', [ReviewController::class, 'create'])->name('reviews.create');
@@ -159,7 +159,7 @@ Route::group(
             Route::get('review/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
             Route::patch('review/{review}', [ReviewController::class, 'update'])->name('reviews.update');
             Route::delete('review/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
-            
+
             // FAQ
             Route::get('faqs', [FaqController::class, 'index'])->name('faqs');
             Route::get('faq/create', [FaqController::class, 'create'])->name('faqs.create');
@@ -168,7 +168,7 @@ Route::group(
             Route::patch('faq/{faq}', [FaqController::class, 'update'])->name('faqs.update');
             Route::delete('faq/{faq}', [FaqController::class, 'destroy'])->name('faqs.destroy');
         });
-        
+
         // KORISNICI
         Route::get('users', [UserController::class, 'index'])->name('users');
         Route::get('user/create', [UserController::class, 'create'])->name('users.create');
@@ -191,21 +191,21 @@ Route::group(
                 Route::patch('{widget}', [WidgetGroupController::class, 'update'])->name('widget.group.update');
             });
         });
-        
+
         // POSTAVKE
         Route::prefix('settings')->group(function () {
             // API
             Route::get('api', [ApiController::class, 'index'])->name('api.index');
             Route::get('api/cron-reports', [ApiController::class, 'cronReports'])->name('api.cron.reports');
-            
+
             //Route::get('application', [SettingsController::class, 'index'])->name('settings');
-            
+
             // SISTEM
             Route::prefix('system')->group(function () {
                 // APPLICATION SETTINGS
                 Route::get('application', [ApplicationController::class, 'index'])->name('application.settings');
             });
-            
+
             Route::prefix('application')->group(function () {
                 Route::get('languages', [LanguagesController::class, 'index'])->name('languages');
                 // GEO ZONES
@@ -223,12 +223,12 @@ Route::group(
                 Route::get('taxes', [TaxController::class, 'index'])->name('taxes');
                 Route::get('currencies', [CurrencyController::class, 'index'])->name('currencies');
             });
-            
+
             // HISTORY
             Route::get('history', [HistoryController::class, 'index'])->name('history');
             Route::get('history/log/{history}', [HistoryController::class, 'show'])->name('history.show');
         });
-        
+
         // SETTINGS
         Route::get('/clean/cache', [QuickMenuController::class, 'cache'])->name('cache');
         Route::get('maintenance/on', [QuickMenuController::class, 'maintenanceModeON'])->name('maintenance.on');
