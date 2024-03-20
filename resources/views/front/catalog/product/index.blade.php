@@ -226,7 +226,8 @@
                    @foreach($shipping_methods as $shipping_method)
                        <div class="d-flex justify-content-between ">
                            <div>
-                               <div class="fw-semibold text-dark">{{ $shipping_method->title }}</div>
+
+                               <div class="fw-semibold text-dark">{{$shipping_method->title->{ current_locale() } }}</div>
                                <div class="fs-sm text-muted"> Besplatna dostava za narudžbe iznad {{ config('settings.free_shipping') }}€</div>
                                @if ($prod->shipping_time)
 

@@ -29,8 +29,8 @@ return [
     'default_category'     => 2,
     'unknown_author'       => 6,
     'unknown_publisher'    => 6,
-    'image_size_ratio' => '1440x960',
-    'thumb_size_ratio' => '800x534',
+    'image_size_ratio' => '500x500',
+    'thumb_size_ratio' => '400x400',
     'images_domain'        => env('APP_IMAGE_DOMAIN'),
     'image_default'        => 'media/avatars/avatar0.jpg',
     //

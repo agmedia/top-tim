@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <div class="wave-container-blue"></div>
+
         <div class="bg-darker px-lg-5 py-3">
             <div class="d-sm-flex justify-content-between align-items-center mx-auto px-3" >
                 <div class="fs-sm text-white  text-center text-sm-start py-3">Rice Kakis Asian Store © Sva prava pridržana. Web by <a class="text-white" href="https://www.agmedia.hr" target="_blank" rel="noopener">AG media</a></div>

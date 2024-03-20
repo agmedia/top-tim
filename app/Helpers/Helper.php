@@ -551,8 +551,8 @@ class Helper
 
         return $author;
     }
-    
-    
+
+
     /**
      * @param string $title
      * @param string $target
@@ -562,14 +562,14 @@ class Helper
     public static function resolveViewFilepath(string $title, string $target): string
     {
         $path = '';
-        
+
         if (in_array($target, ['pages', 'page'])) {
             $path = config('settings.pages_views');
         }
         if (in_array($target, ['widgets', 'widget'])) {
             $path = config('settings.widgets_views');
         }
-        
+
         return $path . $title . '.blade.php';
     }
 

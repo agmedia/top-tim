@@ -75,13 +75,13 @@ class HomeController extends Controller
     public function sendProductComment(Request $request)
     {
         $review = new Review();
-        
+
         $created_review = $review->validateRequest($request)->create();
-        
+
         if ($created_review) {
             return back()->with(['success' => 'Komentar je uspješno poslan']);
         }
-        
+
         return back()->with(['error' => 'Whoops..! Greška kod snimanja komentara']);
     }
 

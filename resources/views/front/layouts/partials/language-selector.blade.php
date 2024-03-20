@@ -1,7 +1,7 @@
 
 <div class="language">
     <div class="dropdown hover-dropdown">
-        <button class="dropdown-toggle text-primary" type="button" data-bs-toggle="dropdown"><img class="lang" style="width:16px" src="{{ asset('media/flags/' . session('locale') . '.png') }}" alt=""> {{ \Illuminate\Support\Str::upper(current_locale()) }} </button>
+        <button class="dropdown-toggle btn btn-sm btn-default px-1 text-white" type="button" data-bs-toggle="dropdown"><img class="lang" style="width:16px" src="{{ asset('media/flags/' . session('locale') . '.png') }}" alt=""> {{ \Illuminate\Support\Str::upper(current_locale()) }} </button>
         <ul class="dropdown-menu">
             @if (isset($langs))
                 @foreach ($langs as $lang)
@@ -25,6 +25,7 @@
                                 {{ $lang->title->{current_locale()} }}
                             </a>
                         @elseif(isset($cat) && ! isset($subcat))
+
                             <a class=" @if (current_locale() == $lang->code) active @endif"
                                href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, null, [], true) }}">
 
