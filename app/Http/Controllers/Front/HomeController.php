@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Helpers\Helper;
 use App\Helpers\Recaptcha;
 use App\Http\Controllers\Controller;
-use App\Imports\ProductImport;
+use App\Http\Controllers\FrontBaseController;
 use App\Mail\ContactFormMessage;
 use App\Models\Back\Marketing\Review;
 use App\Models\Front\Page;
@@ -19,7 +19,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-class HomeController extends Controller
+class HomeController extends FrontBaseController
 {
     /**
      * Display a listing of the resource.
@@ -40,6 +40,8 @@ class HomeController extends Controller
         /*Log::info('HomeController::index()');
         Log::info(LaravelLocalization::getCurrentLocale());
         Log::info(current_locale());*/
+
+
 
         return view('front.page', compact('page'));
     }

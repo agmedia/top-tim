@@ -48,7 +48,7 @@
     <!-- Page title + breadcrumb-->
     <nav class="mb-4" aria-label="breadcrumb">
         <ol class="breadcrumb flex-lg-nowrap">
-            <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>Naslovnica</a></li>
+            <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
             @if ($group)
                 @if ($group && ! $cat && ! $subcat)
                   <!--  <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ \Illuminate\Support\Str::ucfirst($group) }}</li> -->
@@ -126,7 +126,7 @@
             <div class="h-100 bg-light rounded-3 py-5 px-4 px-sm-5">
 
         @if ( $prod->quantity < 1)
-                    <span class="badge bg-warning ">Rasprodano</span>
+                    <span class="badge bg-warning ">{{ __('front/ricekakis.rasprodano') }}</span>
        @endif
 
    @if ($prod->main_price > $prod->main_special)
@@ -152,7 +152,7 @@
 
 
            </div>
-           <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1">{{ $reviews->count() }} @if($reviews->count() > 1) Recenzije @else Recenzija @endif</span>
+           <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1">{{ $reviews->count() }} @if($reviews->count() > 1) {{ __('front/ricekakis.reviews') }} @else  {{ __('front/ricekakis.review') }} @endif</span>
        </a>
    </div>
 
@@ -182,7 +182,7 @@
    @if ($prod->main_price > $prod->main_special)
 
        <div class="mb-3 mt-1 text-start">
-           <span class=" fs-sm text-muted me-1"> *Najniža cijena u zadnjih 30 dana.</span>
+           <span class=" fs-sm text-muted me-1">  {{ __('front/ricekakis.lowest_price') }}</span>
        </div>
 
    @endif
@@ -192,7 +192,7 @@
    <!-- Product panels-->
    <div class="accordion mb-4" id="productPanels">
        <div class="accordion-item">
-           <h3 class="accordion-header"><a class="accordion-button" href="#productInfo" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="productInfo"><i class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i>Osnovne informacije</a></h3>
+           <h3 class="accordion-header"><a class="accordion-button" href="#productInfo" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="productInfo"><i class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i> {{ __('front/ricekakis.osnovne_informacije') }}</a></h3>
            <div class="accordion-collapse collapse show" id="productInfo" data-bs-parent="#productPanels">
                <div class="accordion-body">
 
@@ -206,10 +206,10 @@
                        @endif
                            @if ($prod->quantity)
 
-                                   <li><strong>Dostupnost:</strong> {{$prod->quantity}} </li>
+                                   <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong> {{$prod->quantity}} </li>
 
                            @else
-                               <li><strong>Dostupnost:</strong> Rasprodano</li>
+                               <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong>{{ __('front/ricekakis.rasprodano') }}</li>
                            @endif
 
 
@@ -219,7 +219,7 @@
            </div>
        </div>
        <div class="accordion-item">
-           <h3 class="accordion-header"><a class="accordion-button collapsed" href="#shippingOptions" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="shippingOptions"><i class="ci-delivery text-muted lead align-middle mt-n1 me-2"></i>Opcije dostave</a></h3>
+           <h3 class="accordion-header"><a class="accordion-button collapsed" href="#shippingOptions" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="shippingOptions"><i class="ci-delivery text-muted lead align-middle mt-n1 me-2"></i>{{ __('front/ricekakis.opcije_dostave') }}</a></h3>
            <div class="accordion-collapse collapse" id="shippingOptions" data-bs-parent="#productPanels">
                <div class="accordion-body fs-sm">
 
@@ -228,14 +228,14 @@
                            <div>
 
                                <div class="fw-semibold text-dark">{{$shipping_method->title->{ current_locale() } }}</div>
-                               <div class="fs-sm text-muted"> Besplatna dostava za narudžbe iznad {{ config('settings.free_shipping') }}€</div>
+                               <div class="fs-sm text-muted"> {{ __('front/ricekakis.besplatna_dostava') }} {{ config('settings.free_shipping') }}€</div>
                                @if ($prod->shipping_time)
 
-                                       <span class=" fs-sm text-muted me-1"> Rok dostave: {{ $prod->shipping_time }}</span>
+                                       <span class=" fs-sm text-muted me-1"> {{ __('front/ricekakis.rok_dostave') }}: {{ $prod->shipping_time }}</span>
 
                                @endif
                            </div>
-                           <div>{{ $shipping_method->data->price }}€ <small> {{ number_format(config('settings.hrk_divide_amount') * $shipping_method->data->price), 2 }}kn</small></div>
+                           <div>{{ $shipping_method->data->price }}€</div>
                        </div>
                    @endforeach
 
@@ -244,15 +244,12 @@
            </div>
        </div>
        <div class="accordion-item">
-           <h3 class="accordion-header"><a class="accordion-button collapsed" href="#localStore" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="localStore"><i class="ci-card text-muted fs-lg align-middle mt-n1 me-2"></i>Načini plaćanja</a></h3>
+           <h3 class="accordion-header"><a class="accordion-button collapsed" href="#localStore" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="localStore"><i class="ci-card text-muted fs-lg align-middle mt-n1 me-2"></i>{{ __('front/ricekakis.nacin_placanja') }}</a></h3>
            <div class="accordion-collapse collapse" id="localStore" data-bs-parent="#productPanels">
                <div class="accordion-body fs-sm">
 
 
                    @foreach($payment_methods as $payment_method)
-                       @if($prod->origin == 'Engleski' and $payment_method->code == 'cod' )
-
-                       @else
                        <div class="d-flex justify-content-between border-bottom py-2">
                            <div>
                                <div class="fw-semibold text-dark">{{ $payment_method->title }}</div>
@@ -261,7 +258,7 @@
                                @endif
                            </div>
                        </div>
-                       @endif
+
                    @endforeach
 
                </div>
@@ -281,8 +278,8 @@
 <div class="bg-light px-2 mb-3 shadow-lg rounded-3">
 <!-- Tabs-->
 <ul class="nav nav-tabs" role="tablist">
-   <li class="nav-item"><a class="nav-link py-4 px-sm-4 active" href="#specs" data-bs-toggle="tab" role="tab"><span>Opis</span> </a></li>
-   <li class="nav-item"><a class="nav-link py-4 px-sm-4" href="#reviews" data-bs-toggle="tab" role="tab">Recenzije <span class="fs-sm opacity-60">({{ $reviews->count() }})</span></a></li>
+   <li class="nav-item"><a class="nav-link py-4 px-sm-4 active" href="#specs" data-bs-toggle="tab" role="tab"><span>{{ __('front/ricekakis.description') }}</span> </a></li>
+   <li class="nav-item"><a class="nav-link py-4 px-sm-4" href="#reviews" data-bs-toggle="tab" role="tab">{{ __('front/ricekakis.reviews') }} <span class="fs-sm opacity-60">({{ $reviews->count() }})</span></a></li>
 </ul>
 <div class="px-4 pt-lg-3 pb-3 mb-5">
    <div class="tab-content px-lg-3">
@@ -303,7 +300,7 @@
 
                    @if ($prod->sastojci or $prod->podaci)
 
-                      <h3 class="h6">Dodatne informacije</h3>
+                      <h3 class="h6">{{ __('front/ricekakis.dodatne_informacije') }}</h3>
 
                    <!-- Light table with striped rows -->
 
@@ -315,7 +312,7 @@
 
                                @if ($prod->sastojci)
                                    <tr>
-                                       <th>Sastojci</th>
+                                       <th>{{ __('front/ricekakis.sastojci') }}</th>
                                    </tr>
                                    <tr>
                                          <td>{!! $prod->sastojci !!}</td>
@@ -323,7 +320,7 @@
                                @endif
                                @if ($prod->podaci)
                                    <tr>
-                                       <th>Podaci o prehrani</th>
+                                       <th>{{ __('front/ricekakis.podaci_o_prehrani') }}</th>
                                    </tr>
                                    <tr>
                                         <td>{!! $prod->podaci !!}</td>
@@ -343,7 +340,7 @@
            <!-- Reviews-->
            <div class="row pt-2 pb-3">
                <div class="col-lg-4 col-md-5 mb-3">
-                   <h4 class="h3 mb-1"> {{ $reviews->count() }} @if($reviews->count() > 1) Recenzije @else Recenzije @endif</h4>
+                   <h4 class="h3 mb-1"> {{ $reviews->count() }} @if($reviews->count() > 1) {{ __('front/ricekakis.reviews') }}  @else {{ __('front/ricekakis.review') }}  @endif</h4>
                    <div class="star-rating me-2">
 
                        @for ($i = 0; $i < 5; $i++)
@@ -359,7 +356,7 @@
                            @endif
                        @endfor
 
-                   </div><span class="d-inline-block align-middle">{{ number_format($reviews->avg('stars'), 2) }} Prosječna ocjena</span>
+                   </div><span class="d-inline-block align-middle">{{ number_format($reviews->avg('stars'), 2) }} {{ __('front/ricekakis.prosjecna_ocjena') }}  </span>
 
                </div>
                <div class="col-lg-8 col-md-7">
@@ -414,36 +411,36 @@
 
                        @endforeach
                    @else
-                       <p>Trenutno nema ocjena i komentara za ovaj artikl!</p>
+                       <p>{{ __('front/ricekakis.trenutno_nema') }}</p>
                    @endif
 
                </div>
                <!-- Leave review form-->
                <div class="col-md-5 mt-2 pt-4 mt-md-0 pt-md-0">
                    <div class="bg-secondary py-grid-gutter px-grid-gutter rounded-3">
-                       <h4 class="h4 pb-2">Napišite recenziju</h4>
+                       <h4 class="h4 pb-2">{{ __('front/ricekakis.napisite_recenziju') }} </h4>
                        <form class="needs-validation" method="post" action="{{ route('komentar.proizvoda') }}" novalidate>
                            @csrf
                            <div class="mb-3">
-                               <label class="form-label" for="review-name">Vaše Ime<span class="text-danger">*</span></label>
+                               <label class="form-label" for="review-name">{{ __('front/ricekakis.vase_ime') }} <span class="text-danger">*</span></label>
                                <input class="form-control" type="text" required id="review-name" name="name">
                                @error('name')
-                               <div class="fs-md fw-light text-danger">Molimo unesite vaše ime!</div>
+                               <div class="fs-md fw-light text-danger">{{ __('front/ricekakis.vase_ime_error') }}</div>
                                @enderror
-                               <div class="invalid-feedback">Molimo unesite vaše ime!</div>
+                               <div class="invalid-feedback">{{ __('front/ricekakis.vase_ime_error') }} </div>
                            </div>
                            <div class="mb-3">
-                               <label class="form-label" for="review-email">Vaš email<span class="text-danger">*</span></label>
+                               <label class="form-label" for="review-email">{{ __('front/ricekakis.vase_email') }} <span class="text-danger">*</span></label>
                                <input class="form-control" type="email" required id="review-email" name="email">
                                @error('email')
-                               <div class="fs-md fw-light text-danger">Molimo upišite ispravnu email adresu!</div>
+                               <div class="fs-md fw-light text-danger">{{ __('front/ricekakis.vase_email_error') }} </div>
                                @enderror
-                               <div class="invalid-feedback">Molimo upišite ispravnu email adresu!</div>
+                               <div class="invalid-feedback">{{ __('front/ricekakis.vase_email_error') }} </div>
                            </div>
                            <div class="mb-3">
-                               <label class="form-label" for="review-rating">Ocjena<span class="text-danger">*</span></label>
+                               <label class="form-label" for="review-rating">{{ __('front/ricekakis.review') }} <span class="text-danger">*</span></label>
                                <select class="form-select" required id="review-stars" name="stars">
-                                   <option value="">Odaberite ocjenu</option>
+                                   <option value="">{{ __('front/ricekakis.odaberite_ocjenu') }} </option>
                                    <option value="5">5 stars</option>
                                    <option value="4">4 stars</option>
                                    <option value="3">3 stars</option>
@@ -451,21 +448,21 @@
                                    <option value="1">1 star</option>
                                </select>
                                @error('stars')
-                               <div class="fs-md fw-light text-danger">Molimo odaberite ocjenu!</div>
+                               <div class="fs-md fw-light text-danger">{{ __('front/ricekakis.odaberite_ocjenu_error') }} </div>
                                @enderror
-                               <div class="invalid-feedback">Molimo odaberite ocjenu!</div>
+                               <div class="invalid-feedback">{{ __('front/ricekakis.odaberite_ocjenu_error') }}</div>
                            </div>
                            <div class="mb-3">
-                               <label class="form-label" for="review-text">Rocenzija<span class="text-danger">*</span></label>
+                               <label class="form-label" for="review-text">{{ __('front/ricekakis.review') }} <span class="text-danger">*</span></label>
                                <textarea class="form-control" rows="6" required id="review-message" name="message"></textarea>
                                @error('message')
-                               <div class="fs-md fw-light text-danger">Molimo napišite recenziju!</div>
+                               <div class="fs-md fw-light text-danger">{{ __('front/ricekakis.review_error') }}</div>
                                @enderror
-                               <div class="invalid-feedback">Molimo napišite recenziju!</div>
+                               <div class="invalid-feedback">{{ __('front/ricekakis.review_error') }} </div>
                            </div>
 
                            <input type="hidden" name="product_id" value="{{ $prod->id }}">
-                           <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Pošalji</button>
+                           <button class="btn btn-primary btn-shadow d-block w-100" type="submit">{{ __('front/ricekakis.posalji') }} </button>
                        </form>
                    </div>
                </div>
@@ -484,7 +481,7 @@
     @if (count($related) > 1)
 <section class="pb-5 mb-2 mb-xl-4">
 <div class=" flex-wrap justify-content-between align-items-center  text-center">
-<h4 class="h3 mb-3 pt-1 font-title me-3 text-center"> POVEZANI PROIZVODI</h4>
+<h4 class="h3 mb-3 pt-1 font-title me-3 text-center"> {{ __('front/ricekakis.povezani_proizvodi') }}</h4>
 
 </div>
 <div class="tns-carousel tns-controls-static tns-controls-outside tns-nav-enabled pt-2">

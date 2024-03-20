@@ -61,7 +61,7 @@
 
     @if (Route::currentRouteName() == 'pretrazi')
         <section class="d-md-flex justify-content-between align-items-center mb-2 pb-2">
-            <h1 class="h2 mb-2 mb-md-0 me-3"><span class="small fw-light me-2">Rezultati za:</span> {{ request()->input('pojam') }}</h1>
+            <h1 class="h2 mb-2 mb-md-0 me-3"><span class="small fw-light me-2">{{ __('front/ricekakis.rezultati') }}:</span> {{ request()->input('pojam') }}</h1>
         </section>
     @endif
 
@@ -69,7 +69,7 @@
 
         <nav class="mb-4" aria-label="breadcrumb">
             <ol class="breadcrumb flex-lg-nowrap">
-                    <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>Naslovnica</a></li>
+                    <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
                     <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author') }}">Autori</a></li>
                     @if ( ! $cat && ! $subcat)
                         <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $author->title }}</li>
@@ -96,7 +96,7 @@
 
                 <nav class="mb-2" aria-label="breadcrumb">
                         <ol class="breadcrumb flex-lg-nowrap">
-                            <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>Naslovnica</a></li>
+                            <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
                             @if ($group && ! $cat && ! $subcat)
                                <!-- <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ \Illuminate\Support\Str::ucfirst($group) }}</li> -->
                             @elseif ($group && $cat)
@@ -117,7 +117,7 @@
                     @if ($group && ! $cat && ! $subcat)
 
 
-                            <h1 class="h2 mb-4  me-3">Web Shop azijskih namirnica</h1>
+                            <h1 class="h2 mb-4  me-3">{{ __('front/ricekakis.web_shop') }}</h1>
                         <div class="row">
 
                                 @foreach ($list as $item)

@@ -43,4 +43,23 @@ return [
     'newsletter_btn' => 'Prijavi se*',
     'newsletter_foot' => '* Prijavom na Newsletter pristajem na uvjete korištenja i dajem privolu za primanje promotivnih obavijesti.',
 
+
+    'web_shop' => 'Web Shop azijskih namirnica',
+
+    'rezultati' => 'Rezultati za',
+
+    'rasprodano' => 'Rasprodano',
+    'review' => 'Recenzija',
+    'reviews' => 'Recenzije',
+    'lowest_price' => '*Najniža cijena u zadnjih 30 dana.',
+
+    'osnovne_informacije' => 'Osnovne informacije',
+    'dostupnost' => 'Dostupnost',
+
+
+    'opcije_dostave' => 'Opcije dostave',
+
+
+
+
 ];

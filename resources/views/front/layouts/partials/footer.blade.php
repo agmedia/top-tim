@@ -98,9 +98,16 @@
                         <div class="widget pb-3 mb-lg-4">
                                 <h3 class="widget-title text-dark">{{ __('front/ricekakis.terms') }}</h3>
                                 <ul class="widget-list">
-                                 {{--   @foreach ($uvjeti_kupnje->sortBy('title') as $page)
-                                        <li class="widget-list-item"><a class="widget-list-link" href="{{ route('catalog.route.page', ['page' => $page]) }}">{{ $page->title }}</a></li>
-                                    @endforeach --}}
+
+
+                                    @if (isset($pages) && $pages)
+                                        @foreach($pages as $page)
+                                            @if($page->translation->title !='Homepage')
+                                            <li class="widget-list-item"><a class="widget-list-link" href="{{ $page->translation->slug }}">{{ $page->translation->title }}</a>
+                                            </li>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </div>
 
