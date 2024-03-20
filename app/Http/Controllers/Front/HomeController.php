@@ -32,8 +32,8 @@ class HomeController extends Controller
             $query->where('slug', 'homepage');
         })->first();
 
-        $page->description = Helper::setDescription(
-            isset($page->description) ? $page->description : '',
+        $page->translation->description = Helper::setDescription(
+            isset($page->translation->description) ? $page->translation->description : '',
             isset($page->id) ? $page->id : 0
         );
 
