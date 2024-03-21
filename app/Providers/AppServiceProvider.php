@@ -55,5 +55,8 @@ class AppServiceProvider extends ServiceProvider
           View::share('zemljovidi_vedute', $zemljovidi_vedute);
 
           Paginator::useBootstrap();*/
+
+        $js_lang = json_encode(Lang::get('front/cart'));
+        View::share('js_lang', $js_lang);
     }
 }
