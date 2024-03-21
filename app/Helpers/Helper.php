@@ -205,8 +205,6 @@ class Helper
             $related = $cat->products()->inRandomOrder()->take(10)->groupBy('id')->get();
         }
 
-
-
         if ($related->count() < 9) {
             $related->merge(Product::query()->inRandomOrder()->take(10 - $related->count())->get());
         }
@@ -226,7 +224,7 @@ class Helper
             return '';
         }
 
-        $ids = Cache::remember('wg_ids' . $page_id, config('cache.life'), function () use ($description) {
+        $ids = Cache::remember('wg_ids' . $page_id . current_locale(), config('cache.life'), function () use ($description) {
             $iterator = substr_count($description, '++');
             $offset   = 0;
             $ids      = [];
@@ -242,12 +240,12 @@ class Helper
             return $ids;
         });
 
-        $wgs = Cache::remember('wgs' . $page_id, config('cache.life'), function () use ($ids) {
+        $wgs = Cache::remember('wgs' . $page_id . current_locale(), config('cache.life'), function () use ($ids) {
             return WidgetGroup::whereIn('id', $ids)->orWhereIn('slug', $ids)->where('status', 1)->with('widgets')->get();
         });
 
         foreach ($ids as $id) {
-            $description = Cache::remember('wg.' . $id, config('cache.life'), function () use ($wgs, $description, $id) {
+            $description = Cache::remember('wg.' . $id . current_locale(), config('cache.life'), function () use ($wgs, $description, $id) {
                 return static::resolveDescription($wgs, $description, $id);
             });
             //$description = static::resolveDescription($wgs, $description, $id);
@@ -333,7 +331,6 @@ class Helper
                 $searches = Storage::disk('assets')->get('searches.csv');
 
                 $searches = explode(PHP_EOL, $searches);
-
 
                 $widgets[] = [
                     'title'    => $widget->title,
