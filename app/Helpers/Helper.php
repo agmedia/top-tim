@@ -225,7 +225,7 @@ class Helper
             return '';
         }
 
-        $ids = Cache::remember('wg_ids' . $page_id . current_locale(), config('cache.life'), function () use ($description) {
+        /*$ids = Cache::remember('wg_ids' . $page_id . current_locale(), config('cache.life'), function () use ($description) {
             $iterator = substr_count($description, '++');
             $offset   = 0;
             $ids      = [];
@@ -239,17 +239,31 @@ class Helper
             }
 
             return $ids;
-        });
+        });*/
 
-        $wgs = Cache::remember('wgs' . $page_id . current_locale(), config('cache.life'), function () use ($ids) {
+        $iterator = substr_count($description, '++');
+        $offset   = 0;
+        $ids      = [];
+
+        for ($i = 0; $i < $iterator / 2; $i++) {
+            $from  = strpos($description, '++', $offset) + 2;
+            $to    = strpos($description, '++', $from + 2);
+            $ids[] = substr($description, $from, $to - $from);
+
+            $offset = $to + 2;
+        }
+
+        /*$wgs = Cache::remember('wgs' . $page_id . current_locale(), config('cache.life'), function () use ($ids) {
             return WidgetGroup::whereIn('id', $ids)->orWhereIn('slug', $ids)->where('status', 1)->with('widgets')->get();
-        });
+        });*/
+
+        $wgs = WidgetGroup::whereIn('id', $ids)->orWhereIn('slug', $ids)->where('status', 1)->with('widgets')->get();
 
         foreach ($ids as $id) {
-            $description = Cache::remember('wg.' . $id . current_locale(), config('cache.life'), function () use ($wgs, $description, $id) {
+            /*$description = Cache::remember('wg.' . $id . current_locale(), config('cache.life'), function () use ($wgs, $description, $id) {
                 return static::resolveDescription($wgs, $description, $id);
-            });
-            //$description = static::resolveDescription($wgs, $description, $id);
+            });*/
+            $description = static::resolveDescription($wgs, $description, $id);
         }
 
         return $description;
