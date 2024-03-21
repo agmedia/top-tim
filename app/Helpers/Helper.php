@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Marketing\Action;
 use App\Models\Back\Settings\Settings;
@@ -294,9 +295,13 @@ class Helper
             if (static::isDescriptionTarget($data, 'recepti')) {
                 $items     = static::receptis($data)->get();
                 $tablename = 'recepti';
-
-
             }
+
+            if (static::isDescriptionTarget($data, 'brand')) {
+                $items     = static::brand($data)->get();
+                $tablename = 'brand';
+            }
+
 
             if (static::isDescriptionTarget($data, 'category')) {
                 $items     = static::category($data)->get();
@@ -306,11 +311,6 @@ class Helper
             if (static::isDescriptionTarget($data, 'publisher')) {
                 $items     = static::publisher($data)->get();
                 $tablename = 'publisher';
-            }
-
-            if (static::isDescriptionTarget($data, 'author')) {
-                $items     = static::author($data)->get();
-                $tablename = 'author';
             }
 
             if (static::isDescriptionTarget($data, 'reviews')) {
@@ -533,25 +533,25 @@ class Helper
      *
      * @return Builder
      */
-    private static function author(array $data): Builder
+    private static function brand(array $data): Builder
     {
-        $author = (new Author())->newQuery();
+        $brand = (new Brand())->newQuery();
 
-        $author->active();
+        $brand->active();
 
         if (isset($data['new']) && $data['new'] == 'on') {
-            $author->latest();
+            $brand->latest();
         }
 
         if (isset($data['popular']) && $data['popular'] == 'on') {
-            $author->latest();
+            $brand->latest();
         }
 
         if (isset($data['list']) && $data['list']) {
-            $author->whereIn('id', $data['list']);
+            $brand->whereIn('id', $data['list']);
         }
 
-        return $author;
+        return $brand;
     }
 
 
