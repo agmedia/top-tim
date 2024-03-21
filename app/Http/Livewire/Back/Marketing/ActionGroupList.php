@@ -90,7 +90,7 @@ class ActionGroupList extends Component
                 case 'publisher':
                     $this->search_results = Publisher::whereHas()('title', 'like', '%' . $this->search . '%')->limit(5)->get();
                     break;
-                case 'author':
+                case 'brand':
                     $this->search_results = Brand::whereHas('translation', function ($query) use ($value) {
                         $query->where('title', 'like', '%' . $value . '%');
                     })->limit(5)->get();
@@ -123,7 +123,7 @@ class ActionGroupList extends Component
             case 'publisher':
                 $this->list[$id] = Publisher::where('id', $id)->first();
                 break;
-            case 'author':
+            case 'brand':
                 $this->list[$id] = Brand::where('id', $id)->first();
                 break;
             case 'blog':
