@@ -22,7 +22,7 @@
 
     <div class="content content-full content-boxed">
         <!-- END Page Content -->
-    @include('back.layouts.partials.session')
+        @include('back.layouts.partials.session')
         <!-- New Post -->
         <form action="{{ isset($category) ? route('category.update', ['category' => $category]) : route('category.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -57,8 +57,6 @@
                                         </li>
                                     @endforeach
                                 </ul>
-
-
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
@@ -66,12 +64,6 @@
                                         </div>
                                     @endforeach
                                 </div>
-
-
-
-
-
-
 
                             </div>
                             <div class="form-group">
@@ -243,13 +235,13 @@
                             </button>
                         </div>
                         <div class="col-md-5 text-right">
-                        @if (isset($category))
+                            @if (isset($category))
 
                                 <a href="{{ route('category.destroy', ['category' => $category]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-category-form{{ $category->id }}').submit();">
                                     <i class="fa fa-trash-alt"></i> {{ __('back/categories.obrisi') }}
                                 </a>
 
-                        @endif
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -284,14 +276,14 @@
 
             {!! ag_lang() !!}.forEach(function(item) {
                 ClassicEditor
-                    .create(document.querySelector('#description-editor-' + item.code ))
+                .create(document.querySelector('#description-editor-' + item.code ))
 
-                    .then(editor => {
-                        console.log(editor);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
+                .then(editor => {
+                    console.log(editor);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
             });
         })
