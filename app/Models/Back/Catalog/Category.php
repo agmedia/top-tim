@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -179,7 +180,7 @@ class Category extends Model
     public function validateRequest(Request $request)
     {
         $request->validate([
-            'title' => 'required'
+            'title.*' => 'required'
         ]);
 
         $this->request = $request;
@@ -267,7 +268,7 @@ class Category extends Model
     {
         if ($this->request->hasFile('image')) {
             $img = Image::make($this->request->image);
-            $str = $category->id . '/' . Str::slug($category->title) . '-' . time() . '.';
+            $str = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time() . '.';
             
             $path = $str . 'jpg';
             Storage::disk('category')->put($path, $img->encode('jpg'));
@@ -276,7 +277,7 @@ class Category extends Model
             Storage::disk('category')->put($path_webp, $img->encode('webp'));
             
             // Thumb creation
-            $path_thumb = $category->id . '/' . Str::slug($category->title) . '-' . time() . '-thumb.';
+            $path_thumb = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time() . '-thumb.';
             $canvas = Image::canvas(400, 400, '#ffffff');
             
             $img = $img->resize(null, 400, function ($constraint) {
@@ -304,7 +305,9 @@ class Category extends Model
         $tops = self::query()->where('parent_id', 0)->with('translation')->get();
 
         foreach ($tops as $top) {
-            $response[$top->id] = $top->translation->title;
+            if ($top->translation) {
+                $response[$top->id] = $top->translation->title;
+            }
         }
 
         return $response;
