@@ -14,7 +14,7 @@
                         <a class="card border-0 shadow" href="{{ $item['group'] }}/{{ $item->translation->slug }}">
                             <img class="card-img-top p-3" loading="lazy" width="400" height="400" src="{{ $item['image'] }}" alt="Kategorija {{ $item->translation->title }}">
                             <div class="card-body py-2 text-center px-0">
-                                <h3 class="h4 mt-1 font-title text-primary">{{ $item->title }}</h3>
+                                <h3 class="h4 mt-1 font-title text-primary">{{ $item->translation->title }}</h3>
                             </div>
                         </a>
                     </div>
@@ -22,10 +22,12 @@
             </div>
         </div>
 
-    @elseif ($data['tablename'] == 'author')
+    @elseif ($data['tablename'] == 'brand')
         <div class="tns-carousel">
             <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "controls": true, "autoHeight": false, "responsive": {"0":{"items":2, "gutter": 10},"480":{"items":2, "gutter": 10},"800":{"items":3, "gutter": 20}, "1300":{"items":4, "gutter": 30}, "1800":{"items":5, "gutter": 30}}}'>
                 @foreach ($data['items'] as $item)
+
+
                     <div class="col-md-3 col-sm-4 col-6"><a class="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter" href="{{ $item['url'] }}"><img loading="lazy" class="d-block mx-auto" src="{{ $item['image'] }}" style="width: 200px;" alt="{{ $item['title'] }}"></a></div>
                 @endforeach
             </div>

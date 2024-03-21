@@ -173,7 +173,7 @@ class Brand extends Model
     public function resolveImage(Brand $author)
     {
         if ($this->request->hasFile('image')) {
-            $name = Str::slug($author->title) . '.' . $this->request->image->extension();
+            $name = Str::slug($author->translation->title) . '.' . $this->request->image->extension();
 
             $this->request->image->storeAs('/', $name, 'author');
 

@@ -316,7 +316,6 @@ class Helper
                 $tablename = 'brand';
             }
 
-
             if (static::isDescriptionTarget($data, 'category')) {
                 $items     = static::category($data)->get();
                 $tablename = 'category';
