@@ -57,7 +57,6 @@ class AppServiceProvider extends ServiceProvider
 
           Paginator::useBootstrap();*/
 
-        $js_lang = json_encode(Lang::get('front/cart'));
-        View::share('js_lang', $js_lang);
+
     }
 }

@@ -5,7 +5,7 @@
             <div class="d-flex flex-wrap">
                 <div class="d-flex align-items-center flex-nowrap me-0 me-sm-4 pb-3">
                     <select class="form-select pe-2" style="min-width: 130px;" v-model="sorting">
-                        <option value="">Sortiraj</option>
+                        <option value="">{{ trans.sortiraj }}</option>
                         <option value="novi">Najnovije</option>
                         <option value="price_up">Najmanja cijena</option>
                         <option value="price_down">Najveća cijena</option>
@@ -133,6 +133,7 @@ export default {
             products_loaded: false,
             search_zero_result: false,
             navigation_zero_result: false,
+            trans: window.trans,
         }
     },
     //
@@ -147,7 +148,6 @@ export default {
     //
     mounted() {
         this.checkQuery(this.$route);
-
         /*console.log('twindow.AGSettings')
         console.log(window.AGSettings)*/
     },

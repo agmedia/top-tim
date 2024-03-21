@@ -13,5 +13,6 @@ return [
     |
     */
 
-    'main_title' => 'Shopping Card'
+    'main_title' => 'Shopping Card',
+    'sortiraj' =>'Sort',
 ];

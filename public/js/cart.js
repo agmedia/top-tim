@@ -3107,7 +3107,8 @@ Vue.directive('tooltip', function (el, binding) {
       hr_total: 'rezultata',
       products_loaded: false,
       search_zero_result: false,
-      navigation_zero_result: false
+      navigation_zero_result: false,
+      trans: window.trans
     };
   },
   //
@@ -3122,7 +3123,6 @@ Vue.directive('tooltip', function (el, binding) {
   //
   mounted: function mounted() {
     this.checkQuery(this.$route);
-
     /*console.log('twindow.AGSettings')
     console.log(window.AGSettings)*/
   },
@@ -4314,7 +4314,7 @@ var render = function render() {
     attrs: {
       value: ""
     }
-  }, [_vm._v("Sortiraj")]), _vm._v(" "), _c("option", {
+  }, [_vm._v(_vm._s(_vm.trans.sortiraj))]), _vm._v(" "), _c("option", {
     attrs: {
       value: "novi"
     }

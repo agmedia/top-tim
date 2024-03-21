@@ -13,5 +13,6 @@ return [
     |
     */
 
-    'main_title' => 'Košarica'
+    'main_title' => 'Košarica',
+    'sortiraj' =>'Sortiraj',
 ];
