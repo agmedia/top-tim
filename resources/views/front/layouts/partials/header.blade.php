@@ -30,13 +30,14 @@
                         <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
                         <div class="navbar-tool-text ms-n3"><small>{{ auth()->user()->details->fname }} {{ auth()->user()->details->lname }}</small>{{ __('front/ricekakis.my_account') }}</div>
                     </a>
-                    @include('front.layouts.partials.language-selector')
+
                 @else
                     <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" data-tab-id="pills-signin-tab" aria-label="{{ __('front/ricekakis.login') }}" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal">
                         <div class="navbar-tool-icon-box bg-dark"><i class="navbar-tool-icon ci-user"></i></div>
                         <div class="navbar-tool-text ">{{ __('front/ricekakis.login') }}</div>
                     </a>
                 @endif
+                @include('front.layouts.partials.language-selector')
 
                 <cart-nav-icon carturl="{{ route('kosarica') }}" checkouturl="{{ route('naplata') }}"></cart-nav-icon>
 
@@ -84,6 +85,20 @@
                                 <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ route('catalog.route.page', ['page' => $page]) }}"><span class="d-flex align-items-center">{{ $page->title }}</span></a></h3>
                             </div>
                         @endforeach--}}
+
+
+                        @if (isset($pages) && $pages)
+                            @foreach($pages as $page)
+                                @if($page->translation->title !='Homepage')
+
+                                    <div class="accordion-item border-bottom">
+
+                                        <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/info/{{ $page->translation->slug }}"><span class="d-flex align-items-center">{{ $page->translation->title }}</span></a></h3>
+                                    </div>
+
+                                @endif
+                            @endforeach
+                        @endif
 
                     </div>
                 </div>
