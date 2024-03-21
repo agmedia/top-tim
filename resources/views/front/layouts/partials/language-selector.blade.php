@@ -12,46 +12,10 @@
             @else
                 @foreach (ag_lang() as $lang)
                     <li>
-                        @if (isset($page))
-                            <a class=" @if (current_locale() == $lang->code) active @endif"
-                               href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route.page', ['page' => $page->translation($lang->code)->slug]), [], true) }}">
-                                <img class="lang" style="width:16px" src="{{ asset('media/flags/'.Str::upper($lang->code).'.png') }}" alt="">
-                                {{ $lang->title->{current_locale()} }}
-                            </a>
-                        @elseif(isset($group) && ! isset($cat))
-                            <a class=" @if (current_locale() == $lang->code) active @endif"
-                               href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path'))]), [], true) }}">
-                                <img class="lang" style="width:16px" src="{{ asset('media/flags/'.Str::upper($lang->code).'.png') }}" alt="">
-                                {{ $lang->title->{current_locale()} }}
-                            </a>
-                        @elseif(isset($cat) && ! isset($subcat))
-
-                            <a class=" @if (current_locale() == $lang->code) active @endif"
-                               href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, null, [], true) }}">
-
-                                <img class="lang" style="width:16px" src="{{ asset('media/flags/'.Str::upper($lang->code).'.png') }}" alt="">
-                                {{ $lang->title->{current_locale()} }}  br
-                            </a>
-                        @elseif(isset($subcat) && ! isset($product))
-                            <a class=" @if (current_locale() == $lang->code) active @endif"
-                               href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['product' => $product->translation($lang->code)->slug]), [], true) }}">
-
-                                <img class="lang" style="width:16px" src="{{ asset('media/flags/'.Str::upper($lang->code).'.png') }}" alt="">
-                                {{ $lang->title->{current_locale()} }}
-                            </a>
-                        @elseif(isset($product))
-                            <a class=" @if (current_locale() == $lang->code) active @endif"
-                               href="{{ LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['product' => $product->translation($lang->code)->slug]), [], true) }}">
-
-                                <img class="lang" style="width:16px" src="{{ asset('images/'.Str::upper($lang->code).'.png') }}" alt="">
-                                {{ $lang->title->{current_locale()} }}
-                            </a>
-                        @else
-                            <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, null, [], true) }}">
-                                <img class="lang" style="width:16px" src="{{ asset('images/'.Str::upper($lang->code).'.png') }}" alt="">
-                                {{ $lang->title->{current_locale()} }}
-                            </a>
-                        @endif
+                        <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('index'), [], true) }}">
+                            <img class="lang" style="width:16px" src="{{ asset('images/'.Str::upper($lang->code).'.png') }}" alt="">
+                            {{ $lang->title->{current_locale()} }}
+                        </a>
                     </li>
                 @endforeach
             @endif
