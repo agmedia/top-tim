@@ -79,11 +79,14 @@
     </style>
     @if (config('app.env') == 'production')
         @yield('google_data_layer')
-
-
-
     @endif
 
+    @if (isset($js_lang))
+        <script>
+            window.trans = {!! $js_lang !!};
+            window.locale = "{{ current_locale() }}";
+        </script>
+    @endif
 
 </head>
 
