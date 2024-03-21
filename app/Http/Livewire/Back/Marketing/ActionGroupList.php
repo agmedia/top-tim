@@ -49,6 +49,9 @@ class ActionGroupList extends Component
     public $list = [];
 
 
+    /**
+     * @return void
+     */
     public function mount()
     {
         if ( ! empty($this->list)) {
@@ -66,8 +69,10 @@ class ActionGroupList extends Component
 
     /**
      * @param string $value
+     *
+     * @return void
      */
-    public function updatingSearch(string $value)
+    public function updatingSearch(string $value): void
     {
         $this->search = $value;
         $this->search_results = [];
@@ -75,30 +80,33 @@ class ActionGroupList extends Component
         if ($this->search != '') {
             switch ($this->group) {
                 case 'product':
-
-
-                    $this->search_results = Product::whereHas('translation', function ($query) use ($value) {
-                        $query->where('name', 'like', '%' . $value . '%')->orwhere('sku', 'like', '%' . $value . '%');
-                    })->limit(5)->get();
+                    $this->search_results = Product::query()->whereNotIn('id', array_keys($this->list))
+                                                   ->whereHas('translation', function ($query) use ($value) {
+                                                       $query->where('name', 'like', '%' . $value . '%')->orwhere('sku', 'like', '%' . $value . '%');
+                                                   })->limit(5)->get();
 
                     break;
+
                 case 'category':
-                    $this->search_results = Category::whereHas('translation', function ($query) use ($value) {
-                        $query->where('title', 'like', '%' . $value . '%');
-                    })->limit(5)->get();
+                    $this->search_results = Category::query()->whereNotIn('id', array_keys($this->list))
+                                                    ->whereHas('translation', function ($query) use ($value) {
+                                                        $query->where('title', 'like', '%' . $value . '%');
+                                                    })->limit(5)->get();
                     break;
-                case 'publisher':
-                    $this->search_results = Publisher::whereHas()('title', 'like', '%' . $this->search . '%')->limit(5)->get();
-                    break;
+
                 case 'brand':
-                    $this->search_results = Brand::whereHas('translation', function ($query) use ($value) {
-                        $query->where('title', 'like', '%' . $value . '%');
-                    })->limit(5)->get();
+                    $this->search_results = Brand::query()->whereNotIn('id', array_keys($this->list))
+                                                 ->whereHas('translation', function ($query) use ($value) {
+                                                     $query->where('lang', current_locale())->where('title', 'like', '%' . $value . '%');
+                                                 })->limit(5)->get();
+
                     break;
+
                 case 'blog':
-                    $this->search_results = Blog::whereHas('translation', function ($query) use ($value) {
-                        $query->where('title', 'like', '%' . $value . '%');
-                    })->limit(5)->get();
+                    $this->search_results = Blog::query()->whereNotIn('id', array_keys($this->list))
+                                                ->whereHas('translation', function ($query) use ($value) {
+                                                    $query->where('title', 'like', '%' . $value . '%');
+                                                })->limit(5)->get();
                     break;
             }
         }
@@ -107,27 +115,29 @@ class ActionGroupList extends Component
 
     /**
      * @param int $id
+     *
+     * @return void
      */
-    public function addItem(int $id)
+    public function addItem(int $id): void
     {
         $this->search = '';
         $this->search_results = [];
 
         switch ($this->group) {
             case 'product':
-                $this->list[$id] = Product::where('id', $id)->first();
+                $this->list[$id] = Product::where('id', $id)->with('translation')->first()->toArray();
                 break;
+
             case 'category':
-                $this->list[$id] = Category::where('id', $id)->first();
+                $this->list[$id] = Category::query()->where('id', $id)->with('translation')->first()->toArray();
                 break;
-            case 'publisher':
-                $this->list[$id] = Publisher::where('id', $id)->first();
-                break;
+
             case 'brand':
-                $this->list[$id] = Brand::where('id', $id)->first();
+                $this->list[$id] = Brand::where('id', $id)->with('translation')->first()->toArray();
                 break;
+
             case 'blog':
-                $this->list[$id] = Blog::where('id', $id)->first();
+                $this->list[$id] = Blog::where('id', $id)->with('translation')->first()->toArray();
                 break;
         }
     }
@@ -135,8 +145,10 @@ class ActionGroupList extends Component
 
     /**
      * @param int $id
+     *
+     * @return void
      */
-    public function removeItem(int $id)
+    public function removeItem(int $id): void
     {
         if ($this->list[$id]) {
             unset($this->list[$id]);
@@ -146,8 +158,10 @@ class ActionGroupList extends Component
 
     /**
      * @param string $group
+     *
+     * @return void
      */
-    public function groupSelected(string $group)
+    public function groupSelected(string $group): void
     {
         $this->group = $group;
         $this->checkGroup();
@@ -183,7 +197,10 @@ class ActionGroupList extends Component
     }
 
 
-    private function checkGroup()
+    /**
+     * @return void
+     */
+    private function checkGroup(): void
     {
         if (in_array($this->group, ['all', 'total'])) {
             $this->is_search_active = false;
