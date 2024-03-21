@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Helpers\Session\CheckoutSession;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FrontBaseController;
 use App\Mail\OrderReceived;
 use App\Mail\OrderSent;
 use App\Models\Back\Settings\Settings;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Mail;
 use SoapClient;
 use \stdClass;
 
-class CheckoutController extends Controller
+class CheckoutController extends FrontBaseController
 {
 
     /**

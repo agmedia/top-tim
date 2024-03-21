@@ -2582,7 +2582,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       authors_loaded: false,
       show_publishers: false,
       publishers_loaded: false,
-      origin: location.origin + '/'
+      origin: location.origin + '/',
+      trans: window.trans
     };
   },
   //
@@ -4145,7 +4146,7 @@ var render = function render() {
     }
   }, [_c("span", {
     staticClass: "d-flex align-items-center"
-  }, [_vm._v(" Recepti")])])])])]) : _vm._e()]);
+  }, [_vm._v(" " + _vm._s(_vm.trans.recepti))])])])])]) : _vm._e()]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -4318,27 +4319,27 @@ var render = function render() {
     attrs: {
       value: "novi"
     }
-  }, [_vm._v("Najnovije")]), _vm._v(" "), _c("option", {
+  }, [_vm._v(_vm._s(_vm.trans.najnovije))]), _vm._v(" "), _c("option", {
     attrs: {
       value: "price_up"
     }
-  }, [_vm._v("Najmanja cijena")]), _vm._v(" "), _c("option", {
+  }, [_vm._v(_vm._s(_vm.trans.najmanja_cijena))]), _vm._v(" "), _c("option", {
     attrs: {
       value: "price_down"
     }
-  }, [_vm._v("Najveća cijena")]), _vm._v(" "), _c("option", {
+  }, [_vm._v(_vm._s(_vm.trans.najveca_cijena))]), _vm._v(" "), _c("option", {
     attrs: {
       value: "naziv_up"
     }
-  }, [_vm._v("A - Ž")]), _vm._v(" "), _c("option", {
+  }, [_vm._v(_vm._s(_vm.trans.a_z))]), _vm._v(" "), _c("option", {
     attrs: {
       value: "naziv_down"
     }
-  }, [_vm._v("Ž - A")])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.z_a))])])])]), _vm._v(" "), _c("div", {
     staticClass: "d-flex pb-3"
   }, [_c("span", {
     staticClass: "fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block"
-  }, [_vm._v(_vm._s(_vm.products.total ? Number(_vm.products.total).toLocaleString("hr-HR") : 0) + " artikala")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.products.total ? Number(_vm.products.total).toLocaleString("hr-HR") : 0) + " " + _vm._s(_vm.trans.artikala))])]), _vm._v(" "), _c("div", {
     staticClass: "d-flex d-sm-none pb-3"
   }, [_c("button", {
     staticClass: "btn btn-icon btn-sm nav-link-style me-1",
@@ -4426,7 +4427,7 @@ var render = function render() {
       }
     })]) : _vm._e()]), _vm._v(" "), product.quantity <= 0 ? _c("span", {
       staticClass: "badge bg-warning mt-1 ms-1 badge-end"
-    }, [_vm._v("Rasprodano")]) : _vm._e(), _vm._v(" "), product.special ? _c("span", {
+    }, [_vm._v(_vm._s(_vm.trans.rasprodano))]) : _vm._e(), _vm._v(" "), product.special ? _c("span", {
       staticClass: "badge rounded-pill bg-primary mt-1 ms-1 badge-shadow"
     }, [_vm._v("-" + _vm._s(_vm.$store.state.service.getDiscountAmount(product.price, product.special)) + "%")]) : _vm._e(), _vm._v(" "), _c("a", {
       staticClass: "card-img-top d-block overflow-hidden",
@@ -4501,21 +4502,23 @@ var render = function render() {
     staticClass: "col-md-12 d-flex justify-content-center mt-4"
   }, [_c("p", {
     staticClass: "fs-sm"
-  }, [_vm._v("Prikazano\n            "), _c("span", {
+  }, [_vm._v(_vm._s(_vm.trans.prikazano) + "\n            "), _c("span", {
     staticClass: "font-weight-bolder mx-1"
-  }, [_vm._v(_vm._s(_vm.products.from ? Number(_vm.products.from).toLocaleString("hr-HR") : 0))]), _vm._v(" do\n            "), _c("span", {
+  }, [_vm._v(_vm._s(_vm.products.from ? Number(_vm.products.from).toLocaleString("hr-HR") : 0))]), _vm._v(" " + _vm._s(_vm.trans["do"]) + "\n            "), _c("span", {
     staticClass: "font-weight-bolder mx-1"
-  }, [_vm._v(_vm._s(_vm.products.to ? Number(_vm.products.to).toLocaleString("hr-HR") : 0))]), _vm._v(" od\n            "), _c("span", {
+  }, [_vm._v(_vm._s(_vm.products.to ? Number(_vm.products.to).toLocaleString("hr-HR") : 0))]), _vm._v(" " + _vm._s(_vm.trans.od) + "\n            "), _c("span", {
     staticClass: "font-weight-bold mx-1"
-  }, [_vm._v(_vm._s(_vm.products.total ? Number(_vm.products.total).toLocaleString("hr-HR") : 0))]), _vm._v(" " + _vm._s(_vm.hr_total) + "\n        ")])]) : _vm._e(), _vm._v(" "), _vm.products_loaded && _vm.search_zero_result ? _c("div", {
+  }, [_vm._v(_vm._s(_vm.products.total ? Number(_vm.products.total).toLocaleString("hr-HR") : 0))]), _vm._v(" " + _vm._s(_vm.trans.rezultata) + "\n        ")])]) : _vm._e(), _vm._v(" "), _vm.products_loaded && _vm.search_zero_result ? _c("div", {
     staticClass: "col-md-12 px-2 mb-4"
-  }, [_c("h2", [_vm._v("Nema rezultata pretrage")]), _vm._v(" "), _c("p", [_vm._v(" Vaša pretraga za  "), _c("mark", [_vm._v(_vm._s(_vm.search_query))]), _vm._v(" pronašla je 0 rezultata.")]), _vm._v(" "), _c("h4", {
+  }, [_c("h2", [_vm._v(_vm._s(_vm.trans.nema_rezultata))]), _vm._v(" "), _c("p", [_vm._v(" " + _vm._s(_vm.trans.vasa_pretraga) + " "), _c("mark", [_vm._v(_vm._s(_vm.search_query))]), _vm._v(" " + _vm._s(_vm.trans.pronasla_nula) + ".")]), _vm._v(" "), _c("h4", {
     staticClass: "h5"
-  }, [_vm._v("Savjeti i smjernica")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("hr", {
+  }, [_vm._v(_vm._s(_vm.trans.s1))]), _vm._v(" "), _c("ul", {
+    staticClass: "list-style"
+  }, [_c("li", [_vm._v(_vm._s(_vm.trans.s2))]), _vm._v(" "), _c("li", [_vm._v(_vm._s(_vm.trans.s3))]), _vm._v(" "), _c("li", [_vm._v(_vm._s(_vm.trans.s4))])]), _vm._v(" "), _c("hr", {
     staticClass: "d-sm-none"
   })]) : _vm._e(), _vm._v(" "), _vm.products_loaded && _vm.navigation_zero_result ? _c("div", {
     staticClass: "col-md-12 mb-4"
-  }, [_c("h2", [_vm._v("Trenutno nema proizvoda")]), _vm._v(" "), _c("p", [_vm._v(" Pogledajte u nekoj drugoj kategoriji ili probajte sa tražilicom :-)")]), _vm._v(" "), _c("hr", {
+  }, [_c("h2", [_vm._v(_vm._s(_vm.trans.t1))]), _vm._v(" "), _c("p", [_vm._v(" " + _vm._s(_vm.trans.t2))]), _vm._v(" "), _c("hr", {
     staticClass: "d-sm-none"
   })]) : _vm._e()], 1);
 };
@@ -4534,12 +4537,6 @@ var staticRenderFns = [function () {
       role: "status"
     }
   })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("ul", {
-    staticClass: "list-style"
-  }, [_c("li", [_vm._v("Dvaput provjerite pravopis.")]), _vm._v(" "), _c("li", [_vm._v("Ograničite pretragu na samo jedan ili dva pojma.")]), _vm._v(" "), _c("li", [_vm._v("Budite manje precizni u terminologiji. Koristeći više općenitih termina prije ćete doći do sličnih i povezanih proizvoda.")])]);
 }];
 render._withStripped = true;
 

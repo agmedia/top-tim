@@ -7,41 +7,43 @@
         @section ( 'title',  \Illuminate\Support\Str::ucfirst($group). ' - Rice Kakis | Asian Store' )
     @endif
     @if ($cat && ! $subcat)
-        @section ( 'title',  $cat->title . ' - Rice Kakis | Asian Store' )
-        @section ( 'description', $cat->meta_description )
+        @section ( 'title',  $cat->translation->title . ' - Rice Kakis | Asian Store' )
+        @section ( 'description', $cat->translation->meta_description )
 
         @push('meta_tags')
-            <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $cat['slug'] }}" />
+       <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $cat->translation['slug'] }}" />
         @endpush
 
 
     @elseif ($cat && $subcat)
-        @section ( 'title', $subcat->meta_title . ' - Rice Kakis | Asian Store' )
-        @section ( 'description',  $subcat->meta_description )
+
+
+        @section ( 'title', $subcat->translation->meta_title . ' - Rice Kakis | Asian Store' )
+        @section ( 'description',  $subcat->translation->meta_description )
 
         @push('meta_tags')
-         <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $subcat['slug'] }}" />
+         <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $subcat->translation['slug'] }}" />
         @endpush
 
     @endif
 @endif
 
 @if (isset($author) && $author)
-    @section ('title',  $seo['title'])
-    @section ('description', $seo['description'])
+    @section ('title',  $seo->translation['title'])
+    @section ('description', $seo->translation['description'])
 
 
     @push('meta_tags')
-        <link rel="canonical" href="{{ env('APP_URL')}}{{ $author['url'] }}" />
+        <link rel="canonical" href="{{ env('APP_URL')}}{{ $author->translation['url'] }}" />
     @endpush
 
 @endif
 
 @if (isset($publisher) && $publisher)
-    @section ('title',  $seo['title'])
-    @section ('description', $seo['description'])
+    @section ('title',  $seo->translation['title'])
+    @section ('description', $seo->translation['description'])
     @push('meta_tags')
-        <link rel="canonical" href="{{ env('APP_URL')}}{{ $publisher['url'] }}" />
+        <link rel="canonical" href="{{ env('APP_URL')}}{{ $publisher->translation['url'] }}" />
     @endpush
 @endif
 
@@ -49,7 +51,7 @@
     @push('meta_tags')
 
         @foreach ($meta_tags as $tag)
-            <meta name={{ $tag['name'] }} content={{ $tag['content'] }}>
+            <meta name={{ $tag->translation['name'] }} content={{ $tag->translation['content'] }}>
         @endforeach
     @endpush
 @endif

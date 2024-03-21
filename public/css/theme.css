@@ -3718,7 +3718,7 @@ textarea.form-control-lg {
 
 .dropdown-menu {
     --cz-dropdown-zindex: 1000;
-    --cz-dropdown-min-width: 10rem;
+    --cz-dropdown-min-width: 8rem;
     --cz-dropdown-padding-x: 0;
     --cz-dropdown-padding-y: 0.5rem;
     --cz-dropdown-spacer: 0.125rem;
@@ -3749,7 +3749,7 @@ textarea.form-control-lg {
     min-width: var(--cz-dropdown-min-width);
     padding: var(--cz-dropdown-padding-y) var(--cz-dropdown-padding-x);
     margin: 0;
-    font-size: var(--cz-dropdown-font-size);
+    font-size: .9rem;
     color: var(--cz-dropdown-color);
     text-align: left;
     list-style: none;

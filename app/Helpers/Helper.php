@@ -415,7 +415,7 @@ class Helper
             $prods->whereIn('id', $data['list']);
         }
 
-        return $prods->with(['author', 'action']);
+        return $prods;
     }
 
 

@@ -6,16 +6,16 @@
                 <div class="d-flex align-items-center flex-nowrap me-0 me-sm-4 pb-3">
                     <select class="form-select pe-2" style="min-width: 130px;" v-model="sorting">
                         <option value="">{{ trans.sortiraj }}</option>
-                        <option value="novi">Najnovije</option>
-                        <option value="price_up">Najmanja cijena</option>
-                        <option value="price_down">Najveća cijena</option>
-                        <option value="naziv_up">A - Ž</option>
-                        <option value="naziv_down">Ž - A</option>
+                        <option value="novi">{{ trans.najnovije }}</option>
+                        <option value="price_up">{{ trans.najmanja_cijena }}</option>
+                        <option value="price_down">{{ trans.najveca_cijena }}</option>
+                        <option value="naziv_up">{{ trans.a_z }}</option>
+                        <option value="naziv_down">{{ trans.z_a }}</option>
                     </select>
                 </div>
             </div>
 
-            <div class="d-flex pb-3"><span class="fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }} artikala</span></div>
+            <div class="d-flex pb-3"><span class="fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }} {{ trans.artikala }}</span></div>
             <div class="d-flex d-sm-none pb-3">
                 <button class="btn btn-icon btn-sm nav-link-style  me-1" v-on:click="tworow()" ><i class="ci-view-grid"></i></button>
 
@@ -36,7 +36,7 @@
                         <button class="btn-wishlist  me-1"  v-if="product.glutenfree" type="button" v-tooltip:top="'Gluten Free'"><img src="image/gluten-free.svg" alt="Gluten Free"  width="35px"/></button>
                     </div>
 
-                    <span class="badge bg-warning mt-1 ms-1 badge-end"  v-if="product.quantity <= 0">Rasprodano</span>
+                    <span class="badge bg-warning mt-1 ms-1 badge-end"  v-if="product.quantity <= 0">{{ trans.rasprodano }}</span>
                     <span class="badge rounded-pill bg-primary mt-1 ms-1 badge-shadow" v-if="product.special">-{{ ($store.state.service.getDiscountAmount(product.price, product.special)) }}%</span>
 
                     <a class="card-img-top d-block overflow-hidden " :href="origin + product.url"><img load="lazy" :src="product.image.replace('.webp', '-thumb.webp')" width="400" height="400" :alt="product.name">
@@ -71,26 +71,26 @@
             </div>
         </div>
         <div class="col-md-12 d-flex justify-content-center mt-4" v-if="products.total">
-            <p class="fs-sm">Prikazano
-                <span class="font-weight-bolder mx-1">{{ products.from ? Number(products.from).toLocaleString('hr-HR') : 0 }}</span> do
-                <span class="font-weight-bolder mx-1">{{ products.to ? Number(products.to).toLocaleString('hr-HR') : 0 }}</span> od
-                <span class="font-weight-bold mx-1">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }}</span> {{ hr_total }}
+            <p class="fs-sm">{{ trans.prikazano }}
+                <span class="font-weight-bolder mx-1">{{ products.from ? Number(products.from).toLocaleString('hr-HR') : 0 }}</span> {{ trans.do }}
+                <span class="font-weight-bolder mx-1">{{ products.to ? Number(products.to).toLocaleString('hr-HR') : 0 }}</span> {{ trans.od }}
+                <span class="font-weight-bold mx-1">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }}</span> {{ trans.rezultata }}
             </p>
         </div>
         <div class="col-md-12 px-2 mb-4" v-if="products_loaded && search_zero_result">
-            <h2>Nema rezultata pretrage</h2>
-            <p> Vaša pretraga za  <mark>{{ search_query }}</mark> pronašla je 0 rezultata.</p>
-            <h4 class="h5">Savjeti i smjernica</h4>
+            <h2>{{ trans.nema_rezultata }}</h2>
+            <p> {{ trans.vasa_pretraga }} <mark>{{ search_query }}</mark> {{ trans.pronasla_nula }}.</p>
+            <h4 class="h5">{{ trans.s1 }}</h4>
             <ul class="list-style">
-                <li>Dvaput provjerite pravopis.</li>
-                <li>Ograničite pretragu na samo jedan ili dva pojma.</li>
-                <li>Budite manje precizni u terminologiji. Koristeći više općenitih termina prije ćete doći do sličnih i povezanih proizvoda.</li>
+                <li>{{ trans.s2 }}</li>
+                <li>{{ trans.s3 }}</li>
+                <li>{{ trans.s4 }}</li>
             </ul>
             <hr class="d-sm-none">
         </div>
         <div class="col-md-12  mb-4" v-if="products_loaded && navigation_zero_result">
-            <h2>Trenutno nema proizvoda</h2>
-            <p> Pogledajte u nekoj drugoj kategoriji ili probajte sa tražilicom :-)</p>
+            <h2>{{ trans.t1 }}</h2>
+            <p> {{ trans.t2 }}</p>
             <hr class="d-sm-none">
         </div>
 

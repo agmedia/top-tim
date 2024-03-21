@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Helpers\Breadcrumb;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FrontBaseController;
 use App\Imports\ProductImport;
 use App\Models\Back\Settings\Settings;
 use App\Models\Front\Blog;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class CatalogRouteController extends Controller
+class CatalogRouteController extends FrontBaseController
 {
 
     /**

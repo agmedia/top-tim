@@ -75,10 +75,15 @@ class ActionGroupList extends Component
         if ($this->search != '') {
             switch ($this->group) {
                 case 'product':
-                    $this->search_results = Product::whereHas()('name', 'like', '%' . $this->search . '%')->orWhereHas()('sku', 'like', '%' . $this->search . '%')->limit(5)->get();
+
+
+                    $this->search_results = Product::whereHas('translation', function ($query) use ($value) {
+                        $query->where('name', 'like', '%' . $value . '%')->orwhere('sku', 'like', '%' . $value . '%');
+                    })->limit(5)->get();
+
                     break;
                 case 'category':
-                    $this->search_results =Category::whereHas('translation', function ($query) use ($value) {
+                    $this->search_results = Category::whereHas('translation', function ($query) use ($value) {
                         $query->where('title', 'like', '%' . $value . '%');
                     })->limit(5)->get();
                     break;
@@ -86,10 +91,14 @@ class ActionGroupList extends Component
                     $this->search_results = Publisher::whereHas()('title', 'like', '%' . $this->search . '%')->limit(5)->get();
                     break;
                 case 'author':
-                    $this->search_results = Brand::whereHas()('title', 'like', '%' . $this->search . '%')->limit(5)->get();
+                    $this->search_results = Brand::whereHas('translation', function ($query) use ($value) {
+                        $query->where('title', 'like', '%' . $value . '%');
+                    })->limit(5)->get();
                     break;
                 case 'blog':
-                    $this->search_results = Blog::whereHas()('title', 'like', '%' . $this->search . '%')->limit(5)->get();
+                    $this->search_results = Blog::whereHas('translation', function ($query) use ($value) {
+                        $query->where('title', 'like', '%' . $value . '%');
+                    })->limit(5)->get();
                     break;
             }
         }

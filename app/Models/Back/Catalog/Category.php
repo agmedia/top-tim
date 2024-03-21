@@ -200,7 +200,7 @@ class Category extends Model
 
         if ($id) {
             CategoryTranslation::create($id, $this->request);
-            
+
             return $this->find($id);
         }
 
@@ -246,7 +246,7 @@ class Category extends Model
             'parent_id'  => $parent,
             'image'      => '',
             'group'      => $group,
-            'sort_order' => 0,
+            'sort_order' => $this->request->sort_order,
             'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
             'updated_at' => Carbon::now()
         ];
@@ -269,31 +269,31 @@ class Category extends Model
         if ($this->request->hasFile('image')) {
             $img = Image::make($this->request->image);
             $str = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time() . '.';
-            
+
             $path = $str . 'jpg';
             Storage::disk('category')->put($path, $img->encode('jpg'));
-            
+
             $path_webp = $str . 'webp';
             Storage::disk('category')->put($path_webp, $img->encode('webp'));
-            
+
             // Thumb creation
             $path_thumb = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time() . '-thumb.';
             $canvas = Image::canvas(400, 400, '#ffffff');
-            
+
             $img = $img->resize(null, 400, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            
+
             $canvas->insert($img, 'center');
-            
+
             $path_webp_thumb = $path_thumb . 'webp';
             Storage::disk('category')->put($path_webp_thumb, $canvas->encode('webp'));
-            
+
             return $category->update([
                 'image' => config('filesystems.disks.category.url') . $path
             ]);
         }
-        
+
         return false;
     }
 

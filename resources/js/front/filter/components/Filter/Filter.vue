@@ -70,7 +70,7 @@
             <div class="accordion-item border-bottom">
                 <h3 class="accordion-header px-grid-gutter">
                     <a class="nav-link-style d-block fs-md fw-normal py-3" :href="origin + 'recepti'">
-                        <span class="d-flex align-items-center"> Recepti</span>
+                        <span class="d-flex align-items-center"> {{ trans.recepti }}</span>
                     </a>
                 </h3>
             </div>
@@ -124,7 +124,8 @@ export default {
             authors_loaded: false,
             show_publishers: false,
             publishers_loaded: false,
-            origin: location.origin + '/'
+            origin: location.origin + '/',
+            trans: window.trans,
         }
     },
     //
