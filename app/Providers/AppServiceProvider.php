@@ -8,6 +8,7 @@ use App\Models\Front\Page;
 use App\Models\User;
 use App\Models\Front\Catalog\Product;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
