@@ -274,7 +274,12 @@ class Helper
 
         if ($wg->template == 'product_carousel' || $wg->template == 'page_carousel') {
             $widget = $wg->widgets()->first();
-            $data   = unserialize($widget->data);
+
+            if ( ! $widget || empty($widget->data)) {
+                return '';
+            }
+
+            $data = unserialize($widget->data);
 
             if (static::isDescriptionTarget($data, 'product')) {
                 $items     = static::products($data)->get();
