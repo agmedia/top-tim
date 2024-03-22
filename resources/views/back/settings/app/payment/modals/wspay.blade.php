@@ -16,27 +16,14 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="wspay-title" class="w-100">{{ __('back/app.payments.input_title') }}
-                                            <ul class="nav nav-pills float-right">
-                                                @foreach(ag_lang() as $lang)
-                                                    <li @if ($lang->code == current_locale()) class="active" @endif ">
-                                                    <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
-                                                        <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                    </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
+                                    @include('back.layouts.partials.language-inputs', [
+                                                    'type' => 'input',
+                                                    'title' => __('back/app.payments.input_title'),
+                                                    'tab' => 'wspay-tab-title',
+                                                    'input' => 'title',
+                                                    'id' => 'wspay-title'
+                                                    ])
 
-                                        </label>
-                                        <div class="tab-content">
-                                            @foreach(ag_lang() as $lang)
-                                                <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                    <input type="text" class="form-control" id="wspay-title-{{ $lang->code }}" name="wspay-title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"  >
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -61,59 +48,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label for="bank-short-description" class="w-100">{{ __('back/app.payments.short_desc') }} <span class="small text-gray">{{ __('back/app.payments.short_desc_label') }}</span>
-                                    <div class="float-right">
-                                        <ul class="nav nav-pills float-right">
-                                            @foreach(ag_lang() as $lang)
-                                                <li @if ($lang->code == current_locale()) class="active" @endif ">
-                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#wspay-description-{{ $lang->code }}">
-                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-
-                                </label>
-                                <div class="tab-content">
-                                    @foreach(ag_lang() as $lang)
-                                        <div id="wspay-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <textarea id="wspay-short-description-{{ $lang->code }}" class=" form-control"  name="data['short_description'][{{ $lang->code }}]" placeholder="{{ $lang->code }}" ></textarea>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <small class="form-text text-muted">
-                                    160 {{ __('back/app.payments.chars') }} max
-                                </small>
-                            </div>
-
-                            <div class="form-group mb-4 d-none">
-                                <label for="wspay-description" class="w-100">{{ __('back/app.payments.long_desc') }}<span class="small text-gray"> {{ __('back/app.payments.long_desc_label') }}</span>
-                                    <div class="float-right">
-                                        <ul class="nav nav-pills float-right">
-                                            @foreach(ag_lang() as $lang)
-                                                <li @if ($lang->code == current_locale()) class="active" @endif ">
-                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#wspay-long-description-{{ $lang->code }}">
-                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-
-                                </label>
-
-                                <div class="tab-content">
-                                    @foreach(ag_lang() as $lang)
-                                        <div id="wspay-long-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <textarea id="wspay-description-{{ $lang->code }}" class="form-control" rows="4" maxlength="160" data-always-show="true" name="data['description'][{{ $lang->code }}]" placeholder="{{ $lang->code }}" data-placement="top"></textarea>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                            </div>
-
+                            @include('back.layouts.partials.language-inputs', [
+                                            'type' => 'textarea',
+                                            'title' => __('back/app.payments.short_desc') . '<span class="small text-gray">' . __('back/app.payments.short_desc_label') . '</span>',
+                                            'tab' => 'wspay-tab-short-description',
+                                            'input' => 'short_description',
+                                            'id' => 'wspay-short-description'
+                                            ])
 
 
                             <div class="block block-themed block-transparent mb-4">
@@ -215,7 +156,7 @@
             {!! ag_lang() !!}.forEach(function(lang) {
                 titles[lang.code] = document.getElementById('wspay-title-' + lang.code).value;
                 short[lang.code] = document.getElementById('wspay-short-description-' + lang.code).value;
-                desc[lang.code] = document.getElementById('wspay-description-' + lang.code).value;
+                desc[lang.code] = null; //document.getElementById('wspay-description-' + lang.code).value;
             });
 
             let item = {

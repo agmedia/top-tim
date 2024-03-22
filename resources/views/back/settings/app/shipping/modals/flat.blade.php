@@ -16,27 +16,13 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="flat-title" class="w-100">{{ __('back/app.payments.input_title') }}
-                                            <ul class="nav nav-pills float-right">
-                                                @foreach(ag_lang() as $lang)
-                                                    <li @if ($lang->code == current_locale()) class="active" @endif ">
-                                                    <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#title-{{ $lang->code }}">
-                                                        <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                    </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-
-                                        </label>
-                                        <div class="tab-content">
-                                            @foreach(ag_lang() as $lang)
-                                                <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                    <input type="text" class="form-control" id="flat-title-{{ $lang->code }}" name="flat-title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"  >
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
+                                    @include('back.layouts.partials.language-inputs', [
+                                                    'type' => 'input',
+                                                    'title' => __('back/app.shipping.input_title'),
+                                                    'tab' => 'flat-tab-title',
+                                                    'input' => 'title',
+                                                    'id' => 'flat-title'
+                                                    ])
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -60,31 +46,13 @@
                                 <input type="text" class="form-control" id="flat-time" name="data['time']">
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label for="bank-short-description" class="w-100">{{ __('back/app.payments.short_desc') }} <span class="small text-gray">{{ __('back/app.payments.short_desc_label') }}</span>
-                                    <div class="float-right">
-                                        <ul class="nav nav-pills float-right">
-                                            @foreach(ag_lang() as $lang)
-                                                <li @if ($lang->code == current_locale()) class="active" @endif ">
-                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#flat-description-{{ $lang->code }}">
-                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </label>
-                                <div class="tab-content">
-                                    @foreach(ag_lang() as $lang)
-                                        <div id="flat-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <textarea id="flat-short-description-{{ $lang->code }}" class=" form-control"  name="data['short_description'][{{ $lang->code }}]" placeholder="{{ $lang->code }}" ></textarea>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <small class="form-text text-muted">
-                                    160 {{ __('back/app.payments.chars') }} max
-                                </small>
-                            </div>
+                            @include('back.layouts.partials.language-inputs', [
+                                            'type' => 'textarea',
+                                            'title' => __('back/app.shipping.short_desc') . '<span class="small text-gray">' . __('back/app.shipping.short_desc_label') . '</span>',
+                                            'tab' => 'flat-tab-short-description',
+                                            'input' => 'short_description',
+                                            'id' => 'flat-short-description'
+                                            ])
 
                             <div class="form-group mb-4 d-none">
                                 <label for="flat-description">{{ __('back/app.shipping.long_desc') }}<span class="small text-gray"> {{ __('back/app.shipping.long_desc_label') }}</span></label>
@@ -145,7 +113,7 @@
             {!! ag_lang() !!}.forEach(function(lang) {
                 titles[lang.code] = document.getElementById('flat-title-' + lang.code).value;
                 short[lang.code] = document.getElementById('flat-short-description-' + lang.code).value;
-                desc[lang.code] = document.getElementById('flat-description-' + lang.code).value;
+                desc[lang.code] = null; //document.getElementById('flat-description-' + lang.code).value;
             });
 
             let item = {
@@ -164,7 +132,6 @@
 
             axios.post("{{ route('api.shipping.store') }}", {data: item})
             .then(response => {
-                console.log(response.data)
                 if (response.data.success) {
                     location.reload();
                 } else {

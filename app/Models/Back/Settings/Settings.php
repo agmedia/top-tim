@@ -67,6 +67,8 @@ class Settings extends Model
     {
         $styles = Settings::where('code', $code)->where('key', 'like', $key)->get();
 
+        //dd($styles->toArray());
+
         if ($styles->count()) {
             $return_styles = collect();
 
@@ -74,16 +76,12 @@ class Settings extends Model
                 if ($style->json) {
                     $temp_style = collect(json_decode($style->value))->all();
 
-                    //Log::info($temp_style);
-
                     foreach ($temp_style as $item) {
                         if ( ! is_string($item->title)) {
                             $title = $item->title->{current_locale()};
                         } else {
                             $title = $item->title;
                         }
-
-                        //Log::info($title);
 
                         $return_styles->put($title, $item);
                     }

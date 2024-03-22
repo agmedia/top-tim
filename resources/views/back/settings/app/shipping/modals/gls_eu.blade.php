@@ -16,10 +16,13 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="gls_eu-title">{{ __('back/app.shipping.input_title') }}</label>
-                                        <input type="text" class="form-control" id="gls_eu-title" name="title">
-                                    </div>
+                                    @include('back.layouts.partials.language-inputs', [
+                                                    'type' => 'input',
+                                                    'title' => __('back/app.shipping.input_title'),
+                                                    'tab' => 'gls_eu-tab-title',
+                                                    'input' => 'title',
+                                                    'id' => 'gls_eu-title'
+                                                    ])
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -43,13 +46,13 @@
                                 <input type="text" class="form-control" id="gls_eu-time" name="data['time']">
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label for="gls_eu-short-description">{{ __('back/app.shipping.short_desc') }} <span class="small text-gray">{{ __('back/app.shipping.short_desc_label') }}</span></label>
-                                <textarea class="js-maxlength form-control" id="gls_eu-short-description" name="data['short_description']" rows="2" maxlength="160" data-always-show="true" data-placement="top"></textarea>
-                                <small class="form-text text-muted">
-                                    {{ __('back/app.shipping.160_max') }}
-                                </small>
-                            </div>
+                            @include('back.layouts.partials.language-inputs', [
+                                            'type' => 'textarea',
+                                            'title' => __('back/app.shipping.short_desc') . '<span class="small text-gray">' . __('back/app.shipping.short_desc_label') . '</span>',
+                                            'tab' => 'gls_eu-tab-short-description',
+                                            'input' => 'short_description',
+                                            'id' => 'gls_eu-short-description'
+                                            ])
 
                             <div class="form-group mb-4 d-none">
                                 <label for="gls_eu-description">{{ __('back/app.shipping.long_desc') }} <span class="small text-gray">{{ __('back/app.shipping.long_desc_label') }}</span></label>
@@ -102,14 +105,24 @@
          *
          */
         function create_gls_eu() {
+            let titles = {};
+            let short = {};
+            let desc = {};
+
+            {!! ag_lang() !!}.forEach(function(lang) {
+                titles[lang.code] = document.getElementById('gls_eu-title-' + lang.code).value;
+                short[lang.code] = document.getElementById('gls_eu-short-description-' + lang.code).value;
+                desc[lang.code] = null; //document.getElementById('flat-description-' + lang.code).value;
+            });
+
             let item = {
-                title: $('#gls_eu-title').val(),
+                title: titles,
                 code: $('#gls_eu-code').val(),
                 data: {
                     price: $('#gls_eu-price').val(),
                     time: $('#gls_eu-time').val(),
-                    short_description: $('#gls_eu-short-description').val(),
-                    description: $('#gls_eu-description').val(),
+                    short_description: short,
+                    description: desc,
                 },
                 geo_zone: $('#gls_eu-geo-zone').val(),
                 status: $('#gls_eu-status')[0].checked,
@@ -118,7 +131,6 @@
 
             axios.post("{{ route('api.shipping.store') }}", {data: item})
             .then(response => {
-                console.log(response.data)
                 if (response.data.success) {
                     location.reload();
                 } else {
@@ -132,13 +144,22 @@
          * @param item
          */
         function edit_gls_eu(item) {
-            $('#gls_eu-title').val(item.title);
             $('#gls_eu-price').val(item.data.price);
             $('#gls_eu-time').val(item.data.time);
-            $('#gls_eu-short-description').val(item.data.short_description);
-            $('#gls_eu-description').val(item.data.description);
             $('#gls_eu-sort-order').val(item.sort_order);
             $('#gls_eu-code').val(item.code);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
+                    $('#gls_eu-title-' + lang.code).val(item.title[lang.code]);
+                }
+                if (item.data.short_description && typeof item.data.short_description[lang.code] !== undefined) {
+                    $('#gls_eu-short-description-' + lang.code).val(item.data.short_description[lang.code]);
+                }
+                if (item.data.description && typeof item.data.description[lang.code] !== undefined) {
+                    $('#gls_eu-description-' + lang.code).val(item.data.description[lang.code]);
+                }
+            });
 
             if (item.status) {
                 $('#gls_eu-status')[0].checked = item.status ? true : false;

@@ -16,10 +16,13 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="pickup-title">{{ __('back/app.shipping.input_title') }}</label>
-                                        <input type="text" class="form-control" id="pickup-title" name="title">
-                                    </div>
+                                    @include('back.layouts.partials.language-inputs', [
+                                                    'type' => 'input',
+                                                    'title' => __('back/app.shipping.input_title'),
+                                                    'tab' => 'pickup-tab-title',
+                                                    'input' => 'title',
+                                                    'id' => 'pickup-title'
+                                                    ])
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -43,13 +46,13 @@
                                 <input type="text" class="form-control" id="pickup-time" name="data['time']">
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label for="pickup-short-description">{{ __('back/app.shipping.short_desc') }} <span class="small text-gray">{{ __('back/app.shipping.short_desc_label') }}</span></label>
-                                <textarea class="js-maxlength form-control" id="pickup-short-description" name="data['short_description']" rows="2" maxlength="160" data-always-show="true" data-placement="top"></textarea>
-                                <small class="form-text text-muted">
-                                    {{ __('back/app.shipping.160_max') }}
-                                </small>
-                            </div>
+                            @include('back.layouts.partials.language-inputs', [
+                                            'type' => 'textarea',
+                                            'title' => __('back/app.shipping.short_desc') . '<span class="small text-gray">' . __('back/app.shipping.short_desc_label') . '</span>',
+                                            'tab' => 'pickup-tab-short-description',
+                                            'input' => 'short_description',
+                                            'id' => 'pickup-short-description'
+                                            ])
 
                             <div class="form-group mb-4 d-none">
                                 <label for="pickup-description">{{ __('back/app.shipping.long_desc') }} <span class="small text-gray">{{ __('back/app.shipping.long_desc_label') }}</span></label>
@@ -103,14 +106,24 @@
          *
          */
         function create_pickup() {
+            let titles = {};
+            let short = {};
+            let desc = {};
+
+            {!! ag_lang() !!}.forEach(function(lang) {
+                titles[lang.code] = document.getElementById('pickup-title-' + lang.code).value;
+                short[lang.code] = document.getElementById('pickup-short-description-' + lang.code).value;
+                desc[lang.code] = null; //document.getElementById('pickup-description-' + lang.code).value;
+            });
+
             let item = {
-                title: $('#pickup-title').val(),
+                title: titles,
                 code: $('#pickup-code').val(),
                 data: {
                     price: $('#pickup-price').val(),
                     time: $('#pickup-time').val(),
-                    short_description: $('#pickup-short-description').val(),
-                    description: $('#pickup-description').val(),
+                    short_description: short,
+                    description: desc,
                 },
                 geo_zone: $('#pickup-geo-zone').val(),
                 status: $('#pickup-status')[0].checked,
@@ -119,7 +132,6 @@
 
             axios.post("{{ route('api.shipping.store') }}", {data: item})
             .then(response => {
-                console.log(response.data)
                 if (response.data.success) {
                     location.reload();
                 } else {
@@ -133,13 +145,22 @@
          * @param item
          */
         function edit_pickup(item) {
-            $('#pickup-title').val(item.title);
             $('#pickup-price').val(item.data.price);
             $('#pickup-time').val(item.data.time);
-            $('#pickup-short-description').val(item.data.short_description);
-            $('#pickup-description').val(item.data.description);
             $('#pickup-sort-order').val(item.sort_order);
             $('#pickup-code').val(item.code);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
+                    $('#pickup-title-' + lang.code).val(item.title[lang.code]);
+                }
+                if (item.data.short_description && typeof item.data.short_description[lang.code] !== undefined) {
+                    $('#pickup-short-description-' + lang.code).val(item.data.short_description[lang.code]);
+                }
+                if (item.data.description && typeof item.data.description[lang.code] !== undefined) {
+                    $('#pickup-description-' + lang.code).val(item.data.description[lang.code]);
+                }
+            });
 
             if (item.status) {
                 $('#pickup-status')[0].checked = item.status ? true : false;

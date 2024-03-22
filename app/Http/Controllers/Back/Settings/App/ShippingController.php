@@ -22,8 +22,6 @@ class ShippingController extends Controller
         $shippings = Settings::getList('shipping', 'list.%', false);
         $geo_zones = Settings::getList('geo_zone', 'list', false);
 
-        //dd($geo_zones);
-
         return view('back.settings.app.shipping.shipping', compact('shippings', 'geo_zones'));
     }
 

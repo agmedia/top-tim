@@ -16,10 +16,13 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="bank-title">{{ __('back/app.payments.input_title') }}</label>
-                                        <input type="text" class="form-control" id="bank-title" name="title">
-                                    </div>
+                                    @include('back.layouts.partials.language-inputs', [
+                                                    'type' => 'input',
+                                                    'title' => __('back/app.payments.input_title'),
+                                                    'tab' => 'bank-tab-title',
+                                                    'input' => 'title',
+                                                    'id' => 'bank-title'
+                                                    ])
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -44,18 +47,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label for="bank-short-description">{{ __('back/app.payments.short_desc') }} <span class="small text-gray">{{ __('back/app.payments.short_desc_label') }}</span></label>
-                                <textarea class="js-maxlength form-control" id="bank-short-description" name="data['short_description']" rows="2" maxlength="160" data-always-show="true" data-placement="top"></textarea>
-                                <small class="form-text text-muted">
-                                    {{ __('back/app.payments.160_max') }}
-                                </small>
-                            </div>
-
-                            <div class="form-group mb-4 d-none">
-                                <label for="bank-description">{{ __('back/app.payments.long_desc') }} <span class="small text-gray">{{ __('back/app.payments.long_desc_label') }}</span></label>
-                                <textarea class="form-control" id="bank-description" name="data['description']" rows="4"></textarea>
-                            </div>
+                            @include('back.layouts.partials.language-inputs', [
+                                            'type' => 'textarea',
+                                            'title' => __('back/app.payments.short_desc') . '<span class="small text-gray">' . __('back/app.payments.short_desc_label') . '</span>',
+                                            'tab' => 'bank-tab-short-description',
+                                            'input' => 'short_description',
+                                            'id' => 'bank-short-description'
+                                            ])
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
@@ -104,14 +102,24 @@
          *
          */
         function create_bank() {
+            let titles = {};
+            let short = {};
+            let desc = {};
+
+            {!! ag_lang() !!}.forEach(function(lang) {
+                titles[lang.code] = document.getElementById('bank-title-' + lang.code).value;
+                short[lang.code] = document.getElementById('bank-short-description-' + lang.code).value;
+                desc[lang.code] = null; //document.getElementById('wspay-description-' + lang.code).value;
+            });
+
             let item = {
-                title: $('#bank-title').val(),
+                title: titles,
                 code: $('#bank-code').val(),
                 min: $('#bank-min').val(),
                 data: {
                     price: $('#bank-price').val(),
-                    short_description: $('#bank-short-description').val(),
-                    description: $('#bank-description').val(),
+                    short_description: short,
+                    description: desc,
                 },
                 geo_zone: $('#bank-geo-zone').val(),
                 status: $('#bank-status')[0].checked,
@@ -120,7 +128,6 @@
 
             axios.post("{{ route('api.payment.store') }}", {data: item})
             .then(response => {
-                console.log(response.data)
                 if (response.data.success) {
                     location.reload();
                 } else {
@@ -134,13 +141,22 @@
          * @param item
          */
         function edit_bank(item) {
-            $('#bank-title').val(item.title);
             $('#bank-min').val(item.min);
             $('#bank-price').val(item.data.price);
-            $('#bank-short-description').val(item.data.short_description);
-            $('#bank-description').val(item.data.description);
             $('#bank-sort-order').val(item.sort_order);
             $('#bank-code').val(item.code);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
+                    $('#bank-title-' + lang.code).val(item.title[lang.code]);
+                }
+                if (item.data.short_description && typeof item.data.short_description[lang.code] !== undefined) {
+                    $('#bank-short-description-' + lang.code).val(item.data.short_description[lang.code]);
+                }
+                if (item.data.description && typeof item.data.description[lang.code] !== undefined) {
+                    $('#bank-description-' + lang.code).val(item.data.description[lang.code]);
+                }
+            });
 
             if (item.status) {
                 $('#bank-status')[0].checked = item.status ? true : false;

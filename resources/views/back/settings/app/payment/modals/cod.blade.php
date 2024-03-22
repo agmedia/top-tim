@@ -16,10 +16,13 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="cod-title">{{ __('back/app.payments.input_title') }}</label>
-                                        <input type="text" class="form-control" id="cod-title" name="title">
-                                    </div>
+                                    @include('back.layouts.partials.language-inputs', [
+                                                    'type' => 'input',
+                                                    'title' => __('back/app.payments.input_title'),
+                                                    'tab' => 'cod-tab-title',
+                                                    'input' => 'title',
+                                                    'id' => 'cod-title'
+                                                    ])
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -44,18 +47,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label for="cod-short-description">{{ __('back/app.payments.short_desc') }} <span class="small text-gray">{{ __('back/app.payments.short_desc_label') }}</span></label>
-                                <textarea class="js-maxlength form-control" id="cod-short-description" name="data['short_description']" rows="2" maxlength="160" data-always-show="true" data-placement="top"></textarea>
-                                <small class="form-text text-muted">
-                                    {{ __('back/app.payments.160_max') }}
-                                </small>
-                            </div>
-
-                            <div class="form-group mb-4 d-none">
-                                <label for="cod-description">{{ __('back/app.payments.long_desc') }} <span class="small text-gray">{{ __('back/app.payments.long_desc_label') }}</span></label>
-                                <textarea class="form-control" id="cod-description" name="data['description']" rows="4"></textarea>
-                            </div>
+                            @include('back.layouts.partials.language-inputs', [
+                                            'type' => 'textarea',
+                                            'title' => __('back/app.payments.short_desc') . '<span class="small text-gray">' . __('back/app.payments.short_desc_label') . '</span>',
+                                            'tab' => 'cod-tab-short-description',
+                                            'input' => 'short_description',
+                                            'id' => 'cod-short-description'
+                                            ])
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
@@ -103,14 +101,24 @@
          *
          */
         function create_cod() {
+            let titles = {};
+            let short = {};
+            let desc = {};
+
+            {!! ag_lang() !!}.forEach(function(lang) {
+                titles[lang.code] = document.getElementById('cod-title-' + lang.code).value;
+                short[lang.code] = document.getElementById('cod-short-description-' + lang.code).value;
+                desc[lang.code] = null; //document.getElementById('wspay-description-' + lang.code).value;
+            });
+
             let item = {
-                title: $('#cod-title').val(),
+                title: titles,
                 code: $('#cod-code').val(),
                 min: $('#cod-min').val(),
                 data: {
                     price: $('#cod-price').val(),
-                    short_description: $('#cod-short-description').val(),
-                    description: $('#cod-description').val(),
+                    short_description: short,
+                    description: desc,
                 },
                 geo_zone: $('#cod-geo-zone').val(),
                 status: $('#cod-status')[0].checked,
@@ -119,7 +127,6 @@
 
             axios.post("{{ route('api.payment.store') }}", {data: item})
             .then(response => {
-                console.log(response.data)
                 if (response.data.success) {
                     location.reload();
                 } else {
@@ -133,13 +140,22 @@
          * @param item
          */
         function edit_cod(item) {
-            $('#cod-title').val(item.title);
             $('#cod-min').val(item.min);
             $('#cod-price').val(item.data.price);
-            $('#cod-short-description').val(item.data.short_description);
-            $('#cod-description').val(item.data.description);
             $('#cod-sort-order').val(item.sort_order);
             $('#cod-code').val(item.code);
+
+            {!! ag_lang() !!}.forEach((lang) => {
+                if (item.title && typeof item.title[lang.code] !== undefined) {
+                    $('#cod-title-' + lang.code).val(item.title[lang.code]);
+                }
+                if (item.data.short_description && typeof item.data.short_description[lang.code] !== undefined) {
+                    $('#cod-short-description-' + lang.code).val(item.data.short_description[lang.code]);
+                }
+                if (item.data.description && typeof item.data.description[lang.code] !== undefined) {
+                    $('#cod-description-' + lang.code).val(item.data.description[lang.code]);
+                }
+            });
 
             if (item.status) {
                 $('#cod-status')[0].checked = item.status ? true : false;
