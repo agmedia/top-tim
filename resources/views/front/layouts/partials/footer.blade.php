@@ -99,7 +99,7 @@
                                     @if (isset($pages) && $pages)
                                         @foreach($pages as $page)
                                             @if($page->translation->title !='Homepage' and $page->group =='page' )
-                                            <li class="widget-list-item"><a class="widget-list-link" href="{{ $page->translation->slug }}">{{ $page->translation->title }}</a>
+                                            <li class="widget-list-item"><a class="widget-list-link" href="{{ current_locale() }}/info/{{ $page->translation->slug }}">{{ $page->translation->title }}</a>
                                             </li>
                                             @endif
                                         @endforeach
