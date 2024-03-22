@@ -3,8 +3,6 @@
 
     <footer class="footer pt-5">
 
-
-        <div class="wave-container-blue" style="background-color: #f6f9fc;"></div>
         <div class="bg-darker px-lg-5 py-3">
             <div class="d-sm-flex justify-content-between align-items-center mx-auto px-3" >
                 <div class="fs-sm text-white  text-center text-sm-start py-3">Rice Kakis Asian Store © {{ __('front/ricekakis.sva_prava') }}. Web by <a class="text-white" href="https://www.agmedia.hr" target="_blank" rel="noopener">AG media</a></div>
@@ -100,7 +98,7 @@
                                 <ul class="widget-list">
                                     @if (isset($pages) && $pages)
                                         @foreach($pages as $page)
-                                            @if($page->translation->title !='Homepage')
+                                            @if($page->translation->title !='Homepage' and $page->group =='page' )
                                             <li class="widget-list-item"><a class="widget-list-link" href="{{ $page->translation->slug }}">{{ $page->translation->title }}</a>
                                             </li>
                                             @endif

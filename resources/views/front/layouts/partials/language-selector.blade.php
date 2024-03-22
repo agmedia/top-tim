@@ -13,7 +13,7 @@
                 @foreach (ag_lang() as $lang)
                     <li>
                         <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('index'), [], true) }}">
-                            <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::upper($lang->code).'.png') }}" alt="">
+                            <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
                             {{ $lang->title->{current_locale()} }}
                         </a>
                     </li>

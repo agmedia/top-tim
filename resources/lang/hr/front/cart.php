@@ -118,6 +118,19 @@ return [
     'narudzba' => 'Narudžba',
     'status' => 'Status',
     'datum' => 'Datume',
+    'zapamti' => 'Zapamti me',
+    'prijavi_se' => 'Prijavi se',
+    'korisnicko_ime' =>'Korisničko ime',
+    'korisnicko_ime_warning' =>'Molimo unesite korisničko ime.',
+    'min_8' => 'Minimalno 8 znakova',
+    'potvrdite_lozinku' => 'Potvrdite lozinku',
+    'morate_se_sloziti' =>'Morate se složiti sa Uvjetima kupnje.',
+    'slazem_se_sa'=> 'Slažem se sa',
+    'uvijetima_kupovine' => 'Uvjetima kupovine',
+    'ova_stranica' => 'Ova je stranica zaštićena reCAPTCHA-om i primjenjuju se Googleova',
+    'pravila' => 'Pravila o privatnosti',
+    'i' => 'i',
+    'uvjeti_pruzanja' => 'Uvjeti pružanja usluge'
 
 
 

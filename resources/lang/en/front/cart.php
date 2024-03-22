@@ -116,6 +116,19 @@ return [
     'narudzba' => 'Order',
     'status' => 'Status',
     'datum' => 'Date',
+    'zapamti' => 'Remember me',
+    'prijavi_se' => 'Log in',
+    'korisnicko_ime' =>'Username',
+    'korisnicko_ime_warning' =>'Please enter a username.',
+    'min_8' => 'Minimum 8 characters',
+    'potvrdite_lozinku' => 'Confirm password',
+    'morate_se_sloziti' =>'You must agree to the Purchase Terms.',
+    'slazem_se_sa'=> 'I agree to the',
+    'uvijetima_kupovine' => 'Purchase Terms',
+    'ova_stranica' => 'This page is protected by reCAPTCHA and is subject to Google\'s',
+    'pravila' => 'Privacy Policy',
+    'i' => 'and',
+    'uvjeti_pruzanja' => 'Terms of Service'
 
 
 

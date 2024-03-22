@@ -89,7 +89,8 @@
 
                         @if (isset($pages) && $pages)
                             @foreach($pages as $page)
-                                @if($page->translation->title !='Homepage')
+
+                                @if($page->translation->title !='Homepage' and $page->group =='page' )
 
                                     <div class="accordion-item border-bottom">
 
