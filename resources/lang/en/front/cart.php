@@ -106,7 +106,19 @@ return [
     'moj_korisnicki_racun' => 'My User Account',
     'moji_podaci' => 'My Data',
     'narudzbe' => 'Orders',
-    'odjava' => 'Log out'
+    'odjava' => 'Log out',
+    'edit_data' => 'Edit your data below',
+    'osnovni_podaci' => 'Basic data',
+    'save' => 'Save',
+    'broj_narudzbe' => 'Order number',
+    'pogledajte_povijest' => 'View the history of your orders',
+    'trenutno_nemate' => 'You have no orders...',
+    'narudzba' => 'Order',
+    'status' => 'Status',
+    'datum' => 'Date',
+
+
+
 
 
 ];

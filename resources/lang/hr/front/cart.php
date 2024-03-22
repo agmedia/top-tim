@@ -106,9 +106,19 @@ return [
     'moj_racun' => 'Moj Račun',
     'navigacija' => 'Navigacija',
     'moj_korisnicki_racun' => 'Moj korisnički račun',
-    'moji_podaci' => 'MOji podaci',
+    'moji_podaci' => 'Moji podaci',
     'narudzbe' => 'Narudžbe',
-    'odjava' => 'Odjava'
+    'odjava' => 'Odjava',
+    'edit_data' => 'Uredite svoje podatke ispod',
+    'osnovni_podaci' => 'Osnovni podaci',
+    'save' => 'Snimi',
+    'broj_narudzbe' => 'Broj narudžbe',
+    'pogledajte_povijest' => 'Pogledajte povijest svoji narudžbi',
+    'trenutno_nemate' => 'Trenutno nemate narudžbi...',
+    'narudzba' => 'Narudžba',
+    'status' => 'Status',
+    'datum' => 'Datume',
+
 
 
 

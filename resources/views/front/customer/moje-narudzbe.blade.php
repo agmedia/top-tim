@@ -8,7 +8,7 @@
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Broj narudžbe - {{ $order->id }}</h5>
+                        <h5 class="modal-title">{{ __('front/cart.broj_narudzbe') }} - {{ $order->id }}</h5>
                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body pb-0">
@@ -24,10 +24,10 @@
                                     </div>
                                 </div>
                                 <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-                                    <div class="text-muted mb-2 fs-sm">Količina:</div>{{ $product->quantity }}
+                                    <div class="text-muted mb-2 fs-sm">{{ __('front/cart.kolicina') }}:</div>{{ $product->quantity }}
                                 </div>
                                 <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-                                    <div class="text-muted mb-2 fs-sm">Ukupno</div>{{ number_format($product->total, 2, ',', '.') }} €
+                                    <div class="text-muted mb-2 fs-sm">{{ __('front/cart.ukupnoe') }}</div>{{ number_format($product->total, 2, ',', '.') }} €
                                 </div>
                             </div>
                         @endforeach
@@ -53,18 +53,18 @@
             <section class="col-lg-8">
                 <!-- Toolbar-->
                 <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
-                    <h6 class="fs-base text-primary mb-0">Pogledajte povijest svoji narudžbi:</h6><a class="btn btn-primary btn-sm" href="{{ route('logout') }}"><i class="ci-sign-out me-2"></i>Odjava</a>
+                    <h6 class="fs-base text-primary mb-0">{{ __('front/cart.pogledajte_povijest') }} :</h6><a class="btn btn-primary btn-sm" href="{{ route('logout') }}"><i class="ci-sign-out me-2"></i>{{ __('front/cart.odjava') }}</a>
                 </div>
                 <!-- Orders list-->
                 <div class="table-responsive fs-md mb-4">
                     <table class="table table-hover mb-0">
                         <thead>
                         <tr>
-                            <th>Broj narudžbe #</th>
-                            <th>Datum</th>
-                            <th>Status</th>
-                            <th>Ukupno</th>
-                            <th>Narudžba</th>
+                            <th>{{ __('front/cart.broj_narudzbe') }} #</th>
+                            <th>{{ __('front/cart.datum') }}</th>
+                            <th>{{ __('front/cart.status') }}</th>
+                            <th>{{ __('front/cart.ukupno') }}</th>
+                            <th>{{ __('front/cart.narudzba') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -74,12 +74,12 @@
                                 <td class="py-3">{{ \Illuminate\Support\Carbon::make($order->created_at)->format('d.m.Y') }}</td>
                                 <td class="py-3"><span class="badge bg-info m-0">{{ $order->status->title }}</span></td>
                                 <td class="py-3">{{ number_format($order->total, 2, ',', '.') }} €</td>
-                                <td class="py-3"><a class="badge bg-primary text-white m-0 " href="#order-details{{ $order->id }}" data-bs-toggle="modal">Pregled</a></td>
+                                <td class="py-3"><a class="badge bg-primary text-white m-0 " href="#order-details{{ $order->id }}" data-bs-toggle="modal"{{ __('front/cart.pregled') }}</a></td>
                             </tr>
                         @empty
                             <tr>
                                 <td class="text-center font-size-sm" colspan="4">
-                                    <label>Trenutno nemate narudžbi...</label>
+                                    <label>{{ __('front/cart.trenutno_nemate') }}</label>
                                 </td>
                             </tr>
                         @endforelse
