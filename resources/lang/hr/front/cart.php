@@ -91,7 +91,18 @@ return [
     'povratak_cart' => 'Povratak na košaricu',
     'nastavi' => 'Nastavi',
     'na_odabir_dostave' => 'Na odabir dostave',
-    'trebate_r1' => 'Trebate R1 račun?'
+    'trebate_r1' => 'Trebate R1 račun?',
+    'odaberite_nacin_dostave' => 'Odaberite način dostave',
+    'vrijeme_dostave' => 'Vrijeme dostave',
+    'cijena' => 'Cijena',
+    'ne_vrsimo_dostavu' => 'Ne vršimo dostavu za odabranu Državu isporuke.',
+    'dostava_obavezna' => ' Način dostave je obvezan',
+    'povratak_na_unos_podataka' => 'Povratak na unos podataka',
+    'na_odabir_placanja' => 'Na odabir plaćanja',
+    'odaberite_nacin_placanja' => 'Odaberite način plaćanja',
+    'nacin_placanja_obavezan' => 'Način plaćanja je obvezan',
+    'povratak_na_odabir_dostave' => 'Povratak na odabir dostave',
+    'pregledajte_bnarudzbu' => 'Pregledajte narudžbu'
 
 
 

@@ -90,4 +90,16 @@ return [
     'nastavi' => 'Continue',
     'na_odabir_dostave' => 'To Delivery Selection',
     'trebate_r1' => 'Do you need a VAT invoice?',
+    'odaberite_nacin_dostave' => 'Choose delivery method',
+    'vrijeme_dostave' => 'Delivery time',
+    'cijena' => 'Price',
+    'ne_vrsimo_dostavu' => 'We do not deliver to the selected delivery country.',
+    'dostava_obavezna' => 'Delivery method is mandatory',
+    'povratak_na_unos_podataka' => 'Return to entering data',
+    'na_odabir_placanja' => 'On payment selection',
+    'odaberite_nacin_placanja' => 'Choose payment method',
+    'nacin_placanja_obavezan' => 'Payment method is mandatory',
+    'povratak_na_odabir_dostave' => 'Return to delivery selection',
+    'pregledajte_bnarudzbu' => 'Review the order'
+
 ];

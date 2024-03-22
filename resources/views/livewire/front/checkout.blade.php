@@ -237,19 +237,21 @@
 
 
     @if ($step == 'dostava')
-        <h2 class="h5 pt-1 pb-3 mb-3 ">Odaberite način dostave</h2>
+        <h2 class="h5 pt-1 pb-3 mb-3 ">{{ __('front/cart.odaberite_nacin_dostave') }}</h2>
         <div class="table-responsive">
             <table class="table table-hover fs-sm border-top">
                 <thead>
                 <tr>
                     <th class="align-middle"></th>
-                    <th class="align-middle">Dostava</th>
-                    <th class="align-middle">Vrijeme dostave</th>
-                    <th class="align-middle">Cijena</th>
+                    <th class="align-middle">{{ __('front/cart.dostava') }}</th>
+                    <th class="align-middle">{{ __('front/cart.vrijeme_dostave') }}</th>
+                    <th class="align-middle">{{ __('front/cart.cijena') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($shippingMethods as $s_method)
+
+
                     <tr wire:click="selectShipping('{{ $s_method->code }}')" style="cursor: pointer;">
                         <td>
                             <div class="form-check mb-4">
@@ -257,7 +259,7 @@
                                 <label class="form-check-label" for="courier"></label>
                             </div>
                         </td>
-                        <td class="align-middle"><span class="text-dark fw-medium">{{ $s_method->title->{current_locale} }}</span><br><span class="text-muted">{!! $s_method->data->short_description !!}</span></td>
+                        <td class="align-middle"><span class="text-dark fw-medium">{{ $s_method->title->{current_locale()} }}</span><br><span class="text-muted">{!! $s_method->data->short_description->{current_locale()} !!}</span></td>
                         <td class="align-middle">{{ $s_method->data->time }}</td>
                         <td class="align-middle">
                             @if ($is_free_shipping)
@@ -277,21 +279,21 @@
             </table>
         </div>
         @if($shippingMethods->isEmpty())
-          <p class="text-danger">Ne vršimo dostavu za odabranu Državu isporuke.</p>
-            @error('shipping') <small class="text-danger">Ne vršimo dostavu za odabranu Državu isporuke. </small> @enderror
+          <p class="text-danger">{{ __('front/cart.ne_vrsimo_dostavu') }} </p>
+            @error('shipping') <small class="text-danger">{{ __('front/cart.ne_vrsimo_dostavu') }} </small> @enderror
         @else
-            @error('shipping') <small class="text-danger">Način dostave je obvezan</small> @enderror
+            @error('shipping') <small class="text-danger">{{ __('front/cart.dostava_obavezna') }}</small> @enderror
         @endif
 
         <div class=" d-flex pt-4 mt-3">
-            <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" wire:click="changeStep('podaci')" href="javascript:void(0);"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Povratak na unos podataka</span><span class="d-inline d-sm-none">Povratak</span></a></div>
-            <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" wire:click="changeStep('placanje')" href="javascript:void(0);"><span class="d-none d-sm-inline">Na odabir plaćanja</span><span class="d-inline d-sm-none">Nastavi</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
+            <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" wire:click="changeStep('podaci')" href="javascript:void(0);"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">{{ __('front/cart.povratak_na_unos_podataka') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.povratak') }}</span></a></div>
+            <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" wire:click="changeStep('placanje')" href="javascript:void(0);"><span class="d-none d-sm-inline">{{ __('front/cart.na_odabir_placanja') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.nastavi') }}</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
         </div>
     @endif
 
 
     @if ($step == 'placanje')
-        <h2 class="h5 pt-1 pb-3 mb-3 ">Odaberite način plaćanja</h2>
+        <h2 class="h5 pt-1 pb-3 mb-3 ">{{ __('front/cart.odaberite_nacin_placanja') }}</h2>
         <div class="table-responsive">
             <table class="table table-hover fs-sm border-top">
                 <tbody>
@@ -303,16 +305,16 @@
                                 <label class="form-check-label" for="courier"></label>
                             </div>
                         </td>
-                        <td class="align-middle"><span class="text-dark fw-medium">{{ $p_method->title }}</span><br><span class="text-muted">{{ $p_method->data->short_description }}</span></td>
+                        <td class="align-middle"><span class="text-dark fw-medium">{{ $p_method->title->{current_locale()} }}</span><br><span class="text-muted">{{ $p_method->data->short_description->{current_locale()} }}</span></td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
         </div>
-        @error('payment') <small class="text-danger">Način plaćanja je obvezan</small> @enderror
+        @error('payment') <small class="text-danger">{{ __('front/cart.nacin_placanja_obavezan') }}</small> @enderror
         <div class=" d-flex pt-4 mt-3">
-            <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" wire:click="changeStep('dostava')" href="javascript:void(0);"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Povratak na odabir dostave</span><span class="d-inline d-sm-none">Povratak</span></a></div>
-            <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="{{ ($payment != '') ? route('pregled') : '#' }}"><span class="d-none d-sm-inline">Pregledajte narudžbu</span><span class="d-inline d-sm-none">Nastavi</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
+            <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" wire:click="changeStep('dostava')" href="javascript:void(0);"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">{{ __('front/cart.povratak_na_odabir_dostave') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.povratak') }}</span></a></div>
+            <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="{{ ($payment != '') ? route('pregled') : '#' }}"><span class="d-none d-sm-inline">{{ __('front/cart.pregledajte_narudzbu') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.nastavi') }}</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
         </div>
     @endif
 
