@@ -97,6 +97,8 @@
 
                 <div class="product-gallery">
 
+
+
                     <div class="product-gallery-preview order-sm-2">
                             @if ( ! empty($prod->image))
                                 <div class="product-gallery-preview-item active" id="first"><img  src="{{ asset($prod->image) }}"  alt="{{ $prod->name }}" height="800"></div>
@@ -108,7 +110,7 @@
                             @endif
                     </div>
                     <div class="product-gallery-thumblist order-sm-1">
-                        @if ($prod->images->count())
+                        @if ($prod->images->count() > 1)
                             @if ( ! empty($prod->thumb))
                                 <a class="product-gallery-thumblist-item active" href="#first"><img src="{{ asset($prod->thumb) }}" alt="{{ $prod->name }}"></a>
                             @endif
