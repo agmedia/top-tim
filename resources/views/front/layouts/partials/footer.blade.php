@@ -89,12 +89,17 @@
                                 <li  class="widget-list-item"> <span class="widget-list-link">IBAN: HR9223400091111126783</span></li>
                             </ul>
                         </div>
+                        <div class="review-widget_net" data-uuid="9ba05add-2ec4-47e0-9d98-72aec4875742" data-template="10" data-lang="en" data-theme="light"></div>
+
+
+
 
                     </div>
                     <div class="col-lg-4 mb-lg-0 mb-4">
 
                         <div class="widget pb-3 mb-lg-4">
                                 <h3 class="widget-title text-dark">{{ __('front/ricekakis.terms') }}</h3>
+
                                 <ul class="widget-list">
                                     @if (isset($pages) && $pages)
                                         @foreach($pages as $page)

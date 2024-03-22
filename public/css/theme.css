@@ -93,6 +93,14 @@ body {
     display:none;
 }
 
+.grw-net-widget {
+
+    margin-left: 0px!important;
+}
+.branding {
+
+    display:none!important;
+}
 
 
 hr {
