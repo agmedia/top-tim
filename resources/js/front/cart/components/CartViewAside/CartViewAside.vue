@@ -122,6 +122,7 @@ export default {
             show_delete_btn: true,
             coupon: '',
             tax: 0,
+          trans: window.trans,
         }
     },
     mounted() {

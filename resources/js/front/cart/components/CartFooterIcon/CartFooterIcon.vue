@@ -13,7 +13,8 @@ export default {
         return {
             base_path: window.location.origin + '/',
             success_path: window.location.origin + '/kosarica/success',
-            mobile: false
+            mobile: false,
+          trans: window.trans,
         }
     },
     //

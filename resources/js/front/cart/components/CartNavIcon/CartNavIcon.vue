@@ -18,15 +18,15 @@
                 </div>
                 <div class="d-flex flex-wrap justify-content-between align-items-center py-3">
                     <div class="fs-sm me-2 py-2">
-                        <span class="text-muted">Ukupno:</span><span class="text-primary fs-base ms-1">{{ $store.state.service.formatMainPrice($store.state.cart.total) }}</span>
+                        <span class="text-muted">{{ trans.ukupno }}:</span><span class="text-primary fs-base ms-1">{{ $store.state.service.formatMainPrice($store.state.cart.total) }}</span>
                         <span v-if="$store.state.cart.secondary_price" class="text-muted">{{ $store.state.service.formatSecondaryPrice($store.state.cart.total) }}</span>
                     </div>
 
-                </div><a class="btn btn-primary btn-sm d-block w-100" :href="carturl"><i class="ci-card me-2 fs-base align-middle"></i>Dovrši kupnju</a>
+                </div><a class="btn btn-primary btn-sm d-block w-100" :href="carturl"><i class="ci-card me-2 fs-base align-middle"></i>{{ trans.dovrsi_kupnju }}</a>
             </div>
             <div class="widget widget-cart px-3 pt-2 pb-3" style="width: 20rem;" v-else>
                 <i class="fa fa-cart-arrow-down fa-2x" style="color: #aaaaaa"></i>
-                <p>Vaša košarica je prazna!</p>
+                <p>{{ trans.empty_cart_text }}</p>
             </div>
         </div>
     </div>
@@ -43,7 +43,8 @@
             return {
                 base_path: window.location.origin + '/',
                 success_path: window.location.origin + '/kosarica/success',
-                mobile: false
+                mobile: false,
+              trans: window.trans,
             }
         },
         //

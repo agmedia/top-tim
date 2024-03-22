@@ -2161,7 +2161,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       quantity: 1,
       has_in_cart: false,
-      disabled: false
+      disabled: false,
+      trans: window.trans
     };
   },
   mounted: function mounted() {
@@ -2241,7 +2242,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       base_path: window.location.origin + '/',
       success_path: window.location.origin + '/kosarica/success',
-      mobile: false
+      mobile: false,
+      trans: window.trans
     };
   },
   //
@@ -2290,7 +2292,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       base_path: window.location.origin + '/',
       success_path: window.location.origin + '/kosarica/success',
-      mobile: false
+      mobile: false,
+      trans: window.trans
     };
   },
   //
@@ -2364,7 +2367,8 @@ __webpack_require__.r(__webpack_exports__);
       mobile: false,
       show_delete_btn: true,
       coupon: '',
-      show_buttons: true
+      show_buttons: true,
+      trans: window.trans
     };
   },
   mounted: function mounted() {
@@ -2460,7 +2464,8 @@ __webpack_require__.r(__webpack_exports__);
       mobile: false,
       show_delete_btn: true,
       coupon: '',
-      tax: 0
+      tax: 0,
+      trans: window.trans
     };
   },
   mounted: function mounted() {
@@ -3577,7 +3582,7 @@ var render = function render() {
     staticClass: "fs-sm me-2 py-2"
   }, [_c("span", {
     staticClass: "text-muted"
-  }, [_vm._v("Ukupno:")]), _c("span", {
+  }, [_vm._v(_vm._s(_vm.trans.ukupno) + ":")]), _c("span", {
     staticClass: "text-primary fs-base ms-1"
   }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.$store.state.cart.total)))]), _vm._v(" "), _vm.$store.state.cart.secondary_price ? _c("span", {
     staticClass: "text-muted"
@@ -3588,7 +3593,7 @@ var render = function render() {
     }
   }, [_c("i", {
     staticClass: "ci-card me-2 fs-base align-middle"
-  }), _vm._v("Dovrši kupnju")])], 2) : _c("div", {
+  }), _vm._v(_vm._s(_vm.trans.dovrsi_kupnju))])], 2) : _c("div", {
     staticClass: "widget widget-cart px-3 pt-2 pb-3",
     staticStyle: {
       width: "20rem"
@@ -3598,7 +3603,7 @@ var render = function render() {
     staticStyle: {
       color: "#aaaaaa"
     }
-  }), _vm._v(" "), _c("p", [_vm._v("Vaša košarica je prazna!")])])])]) : _vm._e();
+  }), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.trans.empty_cart_text))])])])]) : _vm._e();
 };
 var staticRenderFns = [];
 render._withStripped = true;

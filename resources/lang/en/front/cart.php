@@ -40,4 +40,7 @@ return [
     'add_to_cart' => 'Add to Cart',
     'imate' => 'You have',
     'artikala_u_kosarici' => 'item(s) in shopping cart',
+    'dovrsi_kupnju' => 'Complete purchase',
+    'ukupno' => 'Total',
+    'empty_cart_text' => 'Your cart is empty!',
 ];

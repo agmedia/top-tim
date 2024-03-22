@@ -42,5 +42,8 @@ return [
 
     'imate' => 'Imate',
     'artikala_u_kosarici' => 'artikala u košarici',
+    'dovrsi_kupnju' => 'Dovrši kupnju',
+    'ukupno' => 'Ukupno',
+    'empty_cart_text' => 'Vaša košarica je prazna!',
 
 ];

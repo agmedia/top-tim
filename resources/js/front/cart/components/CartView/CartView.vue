@@ -72,6 +72,7 @@ export default {
             show_delete_btn: true,
             coupon: '',
             show_buttons: true,
+           trans: window.trans,
         }
     },
     mounted() {

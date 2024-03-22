@@ -13,7 +13,8 @@ export default {
         return {
             quantity: 1,
             has_in_cart: false,
-            disabled: false
+            disabled: false,
+          trans: window.trans,
         }
     },
 
