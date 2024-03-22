@@ -112,12 +112,12 @@
                                             <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
                                                 <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($page) ? $page->translation($lang->code)->description : old('description.*') !!}</textarea>
                                             </div>
+                                            <input type="hidden" name="short_description[{{ $lang->code }}]" value="">
                                         @endforeach
                                     </div>
 
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
