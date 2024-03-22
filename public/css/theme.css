@@ -3707,10 +3707,10 @@ textarea.form-control-lg {
     margin-left: 0.23375rem;
     vertical-align: 0.23375rem;
     content: "";
-    border-top: 0.275rem solid;
-    border-right: 0.275rem solid transparent;
+    border-top: 0.25rem solid;
+    border-right: 0.25rem solid transparent;
     border-bottom: 0;
-    border-left: 0.275rem solid transparent;
+    border-left: 0.25rem solid transparent;
 }
 .dropdown-toggle:empty::after {
     margin-left: 0;
@@ -16060,11 +16060,11 @@ a.nav-link:hover .media-tab-media {
 
 .navbar-tool-icon-box {
     position: relative;
-    width: 2.875rem;
-    height: 2.875rem;
+    width: 2.575rem;
+    height: 2.575rem;
     transition: color 0.25s ease-in-out;
     border-radius: 50%;
-    line-height: 2.625rem;
+    line-height: 2rem;
     text-align: center;
 }
 .navbar-tool-icon-box.dropdown-toggle::after {
@@ -16073,7 +16073,7 @@ a.nav-link:hover .media-tab-media {
 
 .navbar-tool-icon {
     font-size: 1.25rem;
-    line-height: 2.875rem;
+    line-height: 2.575rem;
 }
 
 .navbar-tool-text {
