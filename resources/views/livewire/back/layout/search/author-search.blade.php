@@ -1,7 +1,7 @@
 <div class="mb-0 input-group">
-    <input type="search" wire:model.debounce.300ms="search" class="form-control  @error('author_id') is-invalid @enderror" id="author-input" placeholder="{{ !$list ? 'Brand...' : 'Brand...' }}" autocomplete="off">
+    <input type="search" wire:model.debounce.300ms="search" class="form-control  @error('brand_id') is-invalid @enderror" id="author-input" placeholder="{{ !$list ? 'Brand...' : 'Brand...' }}" autocomplete="off">
     @if ( ! $list)
-        <input type="hidden" wire:model="author_id" name="author_id">
+        <input type="hidden" wire:model="brand_id" name="brand_id">
         <span class="input-group-append" data-toggle="modal" data-target="#new-author-modal">
             <a href="javascript:void(0)" wire:click="viewAddWindow" class="btn btn-secondary btn-search py-0"><i class="fa fa-plus pt-2"></i></a>
         </span>
@@ -25,9 +25,9 @@
     @if( ! empty($search_results))
         <div class="autocomplete pt-1" style="position:absolute; z-index:10; top:38px; background-color: #f6f6f6; border: 1px solid #d7d7d7;width:100%">
             <div id="myInputautocomplete-list" class="autocomplete-items">
-                @foreach($search_results as $author)
-                    <div style="cursor: pointer;border-bottom: 1px solid #d7d7d7;padding-bottom: 10px;padding-left: 10px;font-size: 16px" wire:click="addAuthor('{{ $author->id }}')">
-                        <small class="font-weight-lighter">Ime: <strong>{{ $author->title }}</strong></small>
+                @foreach($search_results as $brand)
+                    <div style="cursor: pointer;border-bottom: 1px solid #d7d7d7;padding-bottom: 10px;padding-left: 10px;font-size: 16px" wire:click="addAuthor('{{ $brand->id }}')">
+                        <small class="font-weight-lighter">Ime: <strong>{{ $brand->translation->title }}</strong></small>
                     </div>
                 @endforeach
             </div>

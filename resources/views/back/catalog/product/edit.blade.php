@@ -1,16 +1,12 @@
 @extends('back.layouts.backend')
-
 @push('css_before')
     <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/dropzone/min/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/slim/slim.css') }}">
-
     @stack('product_css')
 @endpush
-
 @section('content')
-
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -27,31 +23,22 @@
     <!-- Page Content -->
     <div class="content content-full">
         @include('back.layouts.partials.session')
-
         <!--tabs start-->
-
-
-
         <!-- tabs end-->
-
         <form action="{{ isset($product) ? route('products.update', ['product' => $product]) : route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if (isset($product))
                 {{ method_field('PATCH') }}
             @endif
-
-
             <!-- Block Tabs Default Style -->
             <div class="block block-rounded">
                 <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" href="#osnovno"><i class="si si-settings"></i> {{ __('back/products.info') }}</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#atributi"><i class="si si-settings"></i> {{ __('back/products.atributi') }}</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#slike"><i class="si si-picture"></i> {{ __('back/products.slike') }}</a>
                     </li>
@@ -74,12 +61,10 @@
                                             <input type="checkbox" class="custom-control-input" id="product-gift-switch" name="gift"{{ (isset($product->gift) and $product->gift) ? 'checked' : '' }}>
                                             <label class="custom-control-label pt-1" for="product-gift-switch">Poklon Bon</label>
                                         </div>
-
                                         <div class=" d-none custom-control custom-switch custom-control-info block-options-item ml-4">
                                             <input type="checkbox" class="custom-control-input" id="product-decrease-switch" name="decrease"{{ (isset($product->decrease) and $product->decrease) ? '' : 'checked' }}>
                                             <label class="custom-control-label pt-1" for="product-decrease-switch">Neograničena Količina</label>
                                         </div>
-
                                         <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
                                             <input type="checkbox" class="custom-control-input" id="product-switch" name="status"{{ (isset($product->status) and $product->status) ? 'checked' : '' }}>
                                             <label class="custom-control-label pt-1" for="product-switch">{{ __('back/products.aktiviraj') }}</label>
@@ -102,7 +87,6 @@
                                                         </li>
                                                     @endforeach
                                                 </ul>
-
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="name-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
@@ -113,18 +97,13 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
-
-
-
                                             </div>
-
                                             <div class="col-md-3">
                                                 <label for="polica-input">EAN </label>
                                                 <input type="text" class="form-control" id="polica-input" name="isbn" placeholder="{{ __('back/products.upisite_ean') }}" value="{{ isset($product) ? $product->isbn : old('isbn') }}" >
                                             </div>
                                         </div>
                                         <div class="form-group row items-push mb-3">
-
                                             <div class="col-md-3">
                                                 <label for="price-input">{{ __('back/products.cijena') }} <span class="text-danger">*</span> <span class="small text-gray">({{ __('back/products.s_pdvom') }})</span></label>
                                                 <div class="input-group">
@@ -137,7 +116,6 @@
                                                 <span class="text-danger font-italic">{{ __('back/products.cijena_je_potrebna') }}</span>
                                                 @enderror
                                             </div>
-
                                             <div class="col-md-3">
                                                 <label for="quantity-input">{{ __('back/products.kolicina') }} <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="quantity-input" name="quantity" placeholder="{{ __('back/products.upisite_kolicinu') }}" value="{{ isset($product) ? $product->quantity : ( ! isset($product) ? 1 : old('quantity')) }}">
@@ -145,7 +123,6 @@
                                                 <span class="text-danger font-italic">{{ __('back/products.kolicina_je_potrebna') }}</span>
                                                 @enderror
                                             </div>
-
                                             <div class="col-md-3">
                                                 <label for="sku-input">{{ __('back/products.sifra') }} <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="sku-input" name="sku" placeholder="{{ __('back/products.upisite_sifru') }}" value="{{ isset($product) ? $product->sku : old('sku') }}">
@@ -156,16 +133,11 @@
                                                 <span class="text-danger small font-italic">{{ $message }}</span>
                                                 @enderror
                                             </div>
-
                                             <div class="col-md-3">
                                                 <label for="polica-input">{{ __('back/products.sifra_police') }}</label>
                                                 <input type="text" class="form-control" id="polica-input" name="polica" placeholder="{{ __('back/products.upisite_sifru_police') }}" value="{{ isset($product) ? $product->polica : old('polica') }}" >
                                             </div>
-
-
-
                                         </div>
-
                                         <div class="form-group row items-push mb-3">
                                             <div class="col-md-3">
                                                 <label for="special-input">{{ __('back/products.akcija') }}</label>
@@ -186,16 +158,12 @@
                                                     <input type="text" class="form-control" id="special-to-input" name="special_to" placeholder="{{ __('back/products.do') }}" value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_to)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true" data-today-highlight="true">
                                                 </div>
                                             </div>
-
-
                                             <div class="col-md-3">
                                                 <label for="price-input">{{ __('back/products.porez') }}</label>
                                                 <select class="js-select2 form-control" id="tax-select" name="tax_id" style="width: 100%;" data-placeholder="{{ __('back/products.odaberite_porez') }}">
                                                     <option></option>
-
-
                                                     @foreach ($data['taxes'] as $tax)
-                                                        <option value="{{ $tax->id }}" {{ ((isset($product)) and ($tax->id == $product->tax_id)) ? 'selected' : (( ! isset($product) and ($tax->id == 1)) ? 'selected' : '') }}>{{ $tax->title->hr }}</option>
+                                                        <option value="{{ $tax->id }}" {{ ((isset($product)) and ($tax->id == $product->tax_id)) ? 'selected' : (( ! isset($product) and ($tax->id == 1)) ? 'selected' : '') }}>{{ isset($tax->title->{current_locale()}) ? $tax->title->{current_locale()} : $tax->title }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -215,7 +183,6 @@
                                                     @endforeach
                                                 </ul>
 
-
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
@@ -223,14 +190,8 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
-
-
-
                                             </div>
                                         </div>
-
-
-
                                     </div>
                                 </div>
                             </div>
@@ -238,16 +199,10 @@
                     </div>
                     <div class="tab-pane" id="atributi" role="tabpanel">
                         <div class="block">
-
                             <div class="block-content">
                                 <div class="row justify-content-center push">
                                     <div class="col-md-12">
-
-
                                         <div class="form-group row items-push mb-4">
-
-
-
                                             <div class="col-md-6">
                                                 <label for="categories">{{ __('back/products.odaberi_kategorije') }} @include('back.layouts.partials.required-star')</label>
                                                 <select class="form-control" id="category-select" name="category[]" style="width: 100%;" multiple>
@@ -269,11 +224,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="dm-post-edit-slug">Brand</label>
-                                                @livewire('back.layout.search.author-search', ['author_id' => isset($product) ? $product->author_id : 0])
+                                                @livewire('back.layout.search.author-search', ['brand_id' => isset($product) ? $product->brand_id : 0])
                                             </div>
-
                                         </div>
-
                                         <div class="form-group row items-push mb-4">
                                             <div class="col-md-12">
                                                 <label for="sastojci-editor">{{ __('back/products.sastojci') }}</label>
@@ -286,7 +239,6 @@
                                                         </li>
                                                     @endforeach
                                                 </ul>
-
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="sastojci-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
@@ -294,14 +246,9 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
-
-
-
                                             </div>
-
                                         </div>
-
-                                  <div class="form-group row items-push mb-4">
+                                        <div class="form-group row items-push mb-4">
                                             <div class="col-md-12">
                                                 <label for="podaci-editor">{{ __('back/products.podaci_o_prehrani') }}</label>
                                                 <ul class="nav nav-pills float-right">
@@ -320,12 +267,8 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
-
                                             </div>
-
                                         </div>
-
-
                                         <div class="form-group row items-push mb-4">
                                             <div class="col-md-3">
                                                 <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
@@ -333,14 +276,12 @@
                                                     <label class="custom-control-label pt-1" for="product-switch">Vegan</label>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-3">
                                                 <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
                                                     <input type="checkbox" class="custom-control-input" id="product-switch" name="vegetarian"{{ (isset($product->vegetarian) and $product->vegetarian) ? 'checked' : '' }}>
                                                     <label class="custom-control-label pt-1" for="product-switch">Vegeterian</label>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-3">
                                                 <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
                                                     <input type="checkbox" class="custom-control-input" id="product-switch" name="glutenfree"{{ (isset($product->glutenfree) and $product->glutenfree) ? 'checked' : '' }}>
@@ -348,9 +289,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </div>
                                 </div>
                             </div>
@@ -385,7 +323,6 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="meta-title-input">{{ __('back/products.meta_naslov') }}</label>
-
                                             <ul class="nav nav-pills float-right">
                                                 @foreach(ag_lang() as $lang)
                                                     <li @if ($lang->code == current_locale()) class="active" @endif>
@@ -395,30 +332,19 @@
                                                     </li>
                                                 @endforeach
                                             </ul>
-
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="meta_title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-
-
                                                         <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true" data-placement="top">
-
-
                                                         <small class="form-text text-muted">
                                                             {{ __('back/products.70_znakova_max') }}
                                                         </small>
                                                     </div>
                                                 @endforeach
                                             </div>
-
-
-
-
-
                                         </div>
                                         <div class="form-group">
                                             <label for="meta-description-input">{{ __('back/products.meta_opis') }}</label>
-
                                             <ul class="nav nav-pills float-right">
                                                 @foreach(ag_lang() as $lang)
                                                     <li @if ($lang->code == current_locale()) class="active" @endif>
@@ -431,22 +357,16 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="meta-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-
                                                         <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($product) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
                                                         <small class="form-text text-muted">
                                                             {{ __('back/products.160_znakova_max') }}
                                                         </small>
-                                                     </div>
-                                             @endforeach
-                                           </div>
-
-
-
-
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="slug-input"> {{ __('back/products.seo_url') }}</label>
-
                                             <ul class="nav nav-pills float-right">
                                                 @foreach(ag_lang() as $lang)
                                                     <li @if ($lang->code == current_locale()) class="active" @endif>
@@ -456,35 +376,23 @@
                                                     </li>
                                                 @endforeach
                                             </ul>
-
-
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="slug-input-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-
-
                                                         <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
-
                                                         <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ isset($product) ? $product->translation($lang->code)->slug : old('slug.*') }}">
-
                                                     </div>
                                                 @endforeach
                                             </div>
-
-
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
             <!-- END Block Tabs Default Style -->
-
-
             <div class="block">
                 <div class="block-content bg-body-light">
                     <div class="row justify-content-center push">
@@ -502,14 +410,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
-
-
         </form>
-
         @if (isset($product))
             <form id="delete-product-form{{ $product->id }}" action="{{ route('products.destroy', ['product' => $product]) }}" method="POST" style="display: none;">
                 @csrf
@@ -518,7 +420,6 @@
         @endif
     </div>
 @endsection
-
 @push('js_after')
     <!-- Page JS Plugins -->
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
@@ -527,28 +428,22 @@
     <script src="{{ asset('js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery.maskedinput/jquery.maskedinput.min.js') }}"></script>
     <script src="{{ asset('js/plugins/slim/slim.kickstart.js') }}"></script>
-
     <!-- Page JS Helpers (CKEditor 5 plugins) -->
     <script>jQuery(function(){Dashmix.helpers(['datepicker']);});</script>
-
     <script>
         $(() => {
-
             {!! ag_lang() !!}.forEach(function(item) {
-            ClassicEditor
+                ClassicEditor
                 .create(document.querySelector('#description-editor-' + item.code ))
-
                 .then(editor => {
                     console.log(editor);
                 })
                 .catch(error => {
                     console.error(error);
                 });
-
             });
-
             {!! ag_lang() !!}.forEach(function(item) {
-            ClassicEditor
+                ClassicEditor
                 .create(document.querySelector('#podaci-editor-' + item.code))
                 .then(editor => {
                     console.log(editor);
@@ -558,7 +453,7 @@
                 });
             });
             {!! ag_lang() !!}.forEach(function(item) {
-            ClassicEditor
+                ClassicEditor
                 .create(document.querySelector('#sastojci-editor-' + item.code))
                 .then(editor => {
                     console.log(editor);
@@ -566,7 +461,7 @@
                 .catch(error => {
                     console.error(error);
                 });
-        });
+            });
             $('#category-select').select2({});
             $('#grupa-select').select2({
                 placeholder: '{{ __('back/products.odaberite') }}',
@@ -595,24 +490,17 @@
             $('#condition-select').select2({
                 tags: true
             });
-
             Livewire.on('success_alert', () => {
-
             });
-
             Livewire.on('error_alert', (e) => {
-
             });
         })
     </script>
-
     <script>
         function SetSEOPreview() {
             let title = $('#name-input').val();
             $('#slug-input').val(slugify(title));
         }
     </script>
-
     @stack('product_scripts')
-
 @endpush

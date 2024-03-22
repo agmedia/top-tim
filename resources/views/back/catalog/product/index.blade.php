@@ -223,8 +223,8 @@
             });
 
             //
-            Livewire.on('authorSelect', (e) => {
-                setURL('author', e.author.id, true);
+            Livewire.on('brandSelect', (e) => {
+                setURL('brand', e.brand.id, true);
             });
             Livewire.on('publisherSelect', (e) => {
                 setURL('publisher', e.publisher.id, true);

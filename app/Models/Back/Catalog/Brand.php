@@ -95,7 +95,7 @@ class Brand extends Model
     public function validateRequest(Request $request)
     {
         $request->validate([
-            'title' => 'required'
+            'title.*' => 'required'
         ]);
 
         $this->request = $request;

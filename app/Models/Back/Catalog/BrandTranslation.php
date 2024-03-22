@@ -44,6 +44,7 @@ class BrandTranslation extends Model
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ]);
+
             if ( ! $saved) {
                 return false;
             }
@@ -73,11 +74,42 @@ class BrandTranslation extends Model
                 'url'              => config('settings.brand_path') . '/' . $slug,
                 'updated_at'       => Carbon::now()
             ]);
+
             if ( ! $saved) {
                 return false;
             }
         }
         
+        return true;
+    }
+
+
+    /**
+     * @param int    $id
+     * @param string $title
+     *
+     * @return bool
+     */
+    public static function createFast(int $id, string $title): bool
+    {
+        $slug = Str::slug($title);
+
+        foreach (ag_lang() as $lang) {
+            $saved = self::insertGetId([
+                'brand_id'         => $id,
+                'lang'             => $lang->code,
+                'title'            => $title,
+                'slug'             => $slug,
+                'url'              => config('settings.brand_path') . '/' . $slug,
+                'created_at'       => Carbon::now(),
+                'updated_at'       => Carbon::now()
+            ]);
+
+            if ( ! $saved) {
+                return false;
+            }
+        }
+
         return true;
     }
     

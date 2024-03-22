@@ -4,8 +4,8 @@ namespace App\Http\Livewire\Back\Layout\Search;
 
 use App\Helpers\Helper;
 use App\Models\Back\Catalog\Brand;
+use App\Models\Back\Catalog\BrandTranslation;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Livewire\Component;
 
 class AuthorSearch extends Component
@@ -24,7 +24,7 @@ class AuthorSearch extends Component
     /**
      * @var int
      */
-    public $author_id = 0;
+    public $brand_id = 0;
 
     /**
      * @var bool
@@ -49,11 +49,11 @@ class AuthorSearch extends Component
      */
     public function mount()
     {
-        if ($this->author_id) {
-            $author = Brand::find($this->author_id);
+        if ($this->brand_id) {
+            $brand = Brand::find($this->brand_id);
 
-            if ($author) {
-                $this->search = $author->title;
+            if ($brand) {
+                $this->search = $brand->translation->title;
             }
         }
     }
@@ -77,7 +77,12 @@ class AuthorSearch extends Component
         $this->search_results = [];
 
         if ($this->search != '') {
-            $this->search_results = (new Brand())->where('title', 'LIKE', '%' . $this->search . '%')
+            $search = $this->search;
+
+            $this->search_results = (new Brand())->newQuery()
+                                                 ->whereHas('translation', function ($query) use ($search) {
+                                                     $query->where('title', 'LIKE', '%' . $search . '%');
+                                                 })
                                                  ->limit(5)
                                                  ->get();
         }
@@ -89,14 +94,14 @@ class AuthorSearch extends Component
      */
     public function addAuthor($id)
     {
-        $author = (new Brand())->where('id', $id)->first();
+        $brand = (new Brand())->where('id', $id)->first();
 
         $this->search_results = [];
-        $this->search         = $author->title;
-        $this->author_id     = $author->id;
+        $this->search         = $brand->translation->title;
+        $this->brand_id       = $brand->id;
 
         if ($this->list) {
-            return $this->emit('authorSelect', ['author' => $author->toArray()]);
+            return $this->emit('brandSelect', ['brand' => $brand->toArray()]);
         }
     }
 
@@ -110,32 +115,25 @@ class AuthorSearch extends Component
             return $this->emit('error_alert', ['message' => 'Molimo vas da popunite sve podatke!']);
         }
 
-        $slug = Str::slug($this->new['title']);
-
         $id = Brand::insertGetId([
-            'letter'           => Helper::resolveFirstLetter($this->new['title']),
-            'title'            => $this->new['title'],
-            'description'      => '',
-            'meta_title'       => $this->new['title'],
-            'meta_description' => '',
-            'lang'             => 'hr',
-            'sort_order'       => 0,
-            'status'           => 1,
-            'slug'             => $slug,
-            'url'              => config('settings.author_path') . '/' . $slug,
-            'created_at'       => Carbon::now(),
-            'updated_at'       => Carbon::now()
+            'letter'     => Helper::resolveFirstLetter($this->new['title']),
+            'featured'   => 0,
+            'sort_order' => 0,
+            'status'     => 1,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
 
         if ($id) {
-            $author = Brand::find($id);
+            BrandTranslation::createFast($id, $this->new['title']);
 
             $this->show_add_window = false;
 
-            $this->author_id = $author->id;
-            $this->search     = $author->title;
+            $brand          = Brand::find($id);
+            $this->brand_id = $brand->id;
+            $this->search   = $brand->translation->title;
 
-            return $this->emit('success_alert', ['message' => 'Autor je uspješno dodan..!']);
+            return $this->emit('success_alert', ['message' => 'Brand je uspješno dodan..!']);
         }
 
         return $this->emit('error_alert');
@@ -148,10 +146,10 @@ class AuthorSearch extends Component
     public function render()
     {
         if ($this->search == '') {
-            $this->author_id = 0;
+            $this->brand_id = 0;
 
             if ($this->list) {
-                $this->emit('authorSelect', ['author' => ['id' => '']]);
+                $this->emit('brandSelect', ['brand' => ['id' => '']]);
             }
         }
 

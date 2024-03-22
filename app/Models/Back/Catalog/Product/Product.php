@@ -243,6 +243,7 @@ class Product extends Model
     {
         return [
             'categories'     => (new Category())->getList(false),
+            'brands' => '',
             'images'         => ProductImage::getExistingImages($this),
             'taxes'          => Settings::get('tax', 'list')
         ];
