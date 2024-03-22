@@ -102,7 +102,13 @@ return [
     'odaberite_nacin_placanja' => 'Odaberite način plaćanja',
     'nacin_placanja_obavezan' => 'Način plaćanja je obvezan',
     'povratak_na_odabir_dostave' => 'Povratak na odabir dostave',
-    'pregledajte_bnarudzbu' => 'Pregledajte narudžbu'
+    'pregledajte_narudzbu' => 'Pregledajte narudžbu',
+    'moj_racun' => 'Moj Račun',
+    'navigacija' => 'Navigacija',
+    'moj_korisnicki_racun' => 'Moj korisnički račun',
+    'moji_podaci' => 'MOji podaci',
+    'narudzbe' => 'Narudžbe',
+    'odjava' => 'Odjava'
 
 
 

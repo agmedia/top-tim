@@ -100,6 +100,13 @@ return [
     'odaberite_nacin_placanja' => 'Choose payment method',
     'nacin_placanja_obavezan' => 'Payment method is mandatory',
     'povratak_na_odabir_dostave' => 'Return to delivery selection',
-    'pregledajte_bnarudzbu' => 'Review the order'
+    'pregledajte_narudzbu' => 'Review the order',
+    'moj_racun' => 'My Account',
+    'navigacija' => 'Navigation',
+    'moj_korisnicki_racun' => 'My User Account',
+    'moji_podaci' => 'My Data',
+    'narudzbe' => 'Orders',
+    'odjava' => 'Log out'
+
 
 ];
