@@ -15596,7 +15596,7 @@ input[type=search]::-webkit-search-results-decoration {
 }
 
 .btn.dropdown-toggle::after {
-    margin-left: 0.35rem;
+    margin-left: 0.05rem;
 }
 
 h1 .dropdown-toggle::after, h2 .dropdown-toggle::after, h3 .dropdown-toggle::after, h4 .dropdown-toggle::after, h5 .dropdown-toggle::after,

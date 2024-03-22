@@ -1,7 +1,7 @@
 
 <div class="language">
     <div class="dropdown hover-dropdown">
-        <button class="dropdown-toggle btn btn-sm btn-default px-1 text-white" type="button" data-bs-toggle="dropdown"><img class="lang" style="width:16px" src="{{ asset('media/flags/' . session('locale') . '.png') }}" alt=""> {{ \Illuminate\Support\Str::upper(current_locale()) }} </button>
+        <button class="dropdown-toggle btn btn-sm btn-default px-1 ps-2 text-white" type="button" data-bs-toggle="dropdown"><img class="lang" style="width:16px" src="{{ asset('media/flags/' . session('locale') . '.png') }}" alt=""> {{ \Illuminate\Support\Str::upper(current_locale()) }} </button>
         <ul class="dropdown-menu">
             @if (isset($langs))
                 @foreach ($langs as $lang)
