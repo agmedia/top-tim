@@ -13,8 +13,8 @@
         <meta property="og:title" content="Azijski Webshop- Internet Trgovina za Azijske Namirnice" />
         <meta property="og:description" content="Rice Kakis | Azijski Webshop. Raj za užitke! Otkrijte raznolikost poslastica poput Mochi, Bubble tea, Noodlesa i još mnogo toga. Okusite izbor začina i umaka." />
         <meta property="og:url" content="{{ env('APP_URL')}}"  />
-        <meta property="og:image" content="{{ asset('media/ricekakis.jpg') }}" />
-        <meta property="og:image:secure_url" content="{{ asset('media/ricekakis.jpg') }}" />
+        <meta property="og:image" content="{{ asset('media/rice-kakis.jpg') }}" />
+        <meta property="og:image:secure_url" content="{{ asset('media/rice-kakis.jpg') }}" />
         <meta property="og:image:width" content="1920" />
         <meta property="og:image:height" content="720" />
         <meta property="og:image:type" content="image/jpeg" />
@@ -22,7 +22,7 @@
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Azijski Webshop - Internet Trgovina za Azijske Namirnice" />
         <meta name="twitter:description" content="Rice Kakis | Azijski Webshop. Raj za užitke! Otkrijte raznolikost poslastica poput Mochi, Bubble tea, Noodlesa i još mnogo toga. Okusite izbor začina i umaka." />
-        <meta name="twitter:image" content="{{ asset('media/plavakrava.jpg') }}" />
+        <meta name="twitter:image" content="{{ asset('media/rice-kakis.jpg') }}" />
 
     @endpush
 
