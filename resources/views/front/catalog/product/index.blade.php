@@ -287,7 +287,7 @@
        <div class="tab-pane fade show active" id="specs" role="tabpanel">
            <!-- Specs table-->
            <div class="row pt-2">
-               <div class="col-lg-7 col-sm-7">
+               <div class="col-lg-9 col-sm-12">
                    <h2 class="h6">{{ $prod->name  }}</h2>
                    <div class=" fs-md pb-2 mb-4">
                        {!! $prod->description !!}

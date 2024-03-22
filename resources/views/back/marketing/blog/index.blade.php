@@ -47,6 +47,7 @@
                     </thead>
                     <tbody>
                     @forelse ($blogs as $blog)
+
                         <tr>
                             <td>
                                 <a href="{{ route('blogs.edit', ['blog' => $blog]) }}">

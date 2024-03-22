@@ -58,6 +58,14 @@ return [
 
 
     'opcije_dostave' => 'Opcije dostave',
+    'top_ponuda' => 'TOP PONUDA',
+    'pogledajte_ponudu' => 'Pogledajte ponudu',
+    'pogledajte_sve' => 'Pogledajte sve',
+    'nc_30' => 'NC 30 dana',
+    'add_to_cart' => 'U košaricu',
+
+    'imate' => 'Imate',
+    'artikala_u_kosarici' => 'artikala u košarici',
 
 
 

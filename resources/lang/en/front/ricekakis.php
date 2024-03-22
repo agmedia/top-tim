@@ -74,4 +74,11 @@ return [
     'review_error' => 'Please write a review!',
     'posalji' => 'Send',
     'povezani_proizvodi' => 'RELATED PRODUCTS',
+    'top_ponuda' => 'HOT',
+    'pogledajte_ponudu' => 'Shop Now',
+    'pogledajte_sve' => 'View all',
+    'nc_30' => 'LP 30 days',
+    'add_to_cart' => 'Add to Cart',
+    'imate' => 'You have',
+    'artikala_u_kosarici' => 'items in shopping cart',
 ];

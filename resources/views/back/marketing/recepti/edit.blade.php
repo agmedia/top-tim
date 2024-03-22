@@ -81,11 +81,14 @@
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="short-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <textarea class="form-control" id="short-description-input" name="short_description" rows="3" placeholder="{{ $lang->code }}">{{ isset($recepti) ? $recepti->translation($lang->code)->short_description : old('title') }}</textarea>
+                                            <textarea class="form-control" id="short-description-input-{{ $lang->code }}" name="short_description[{{ $lang->code }}]" rows="3" placeholder="{{ $lang->code }}">{{ isset($recepti) ? $recepti->translation($lang->code)->short_description : old('short_description.*') }}</textarea>
                                             <div class="form-text text-muted font-size-sm font-italic">{{ __('back/blog.vidljivo_na_pocetnoj_stranici') }}</div>
                                         </div>
                                     @endforeach
                                 </div>
+
+
+
 
 
 

@@ -141,17 +141,17 @@ class Blog extends Model
 
             $path_webp = $str . 'webp';
             Storage::disk('blog')->put($path_webp, $img->encode('webp'));
-            
+
             // Thumb creation
             $path_thumb = $blog->id . '/' . Str::slug($blog->title) . '-' . time() . '-thumb.';
             $canvas = Image::canvas(400, 250, '#ffffff');
-            
+
             $img = $img->resize(null, 250, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            
+
             $canvas->insert($img, 'center');
-            
+
             $path_webp_thumb = $path_thumb . 'webp';
             Storage::disk('blog')->put($path_webp_thumb, $canvas->encode('webp'));
 
@@ -172,11 +172,9 @@ class Blog extends Model
     private function createModelArray(string $method = 'insert'): array
     {
         $response = [
-            'category_id'       => null,
+            'category_id'       => 3,
             'group'             => 'blog',
-            'subgroup'          => $this->request->group ?: null,
             'publish_date'      => null,
-            'keywords'          => false,
             'status'            => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
             'updated_at'        => Carbon::now()
         ];

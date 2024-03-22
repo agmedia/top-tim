@@ -39,7 +39,7 @@ class PageTranslation extends Model
                 'page_id'           => $id,
                 'lang'              => $lang->code,
                 'title'             => $request->title[$lang->code],
-                'short_description' => '',
+                'short_description' => $request->short_description[$lang->code],
                 'description'       => $request->description[$lang->code],
                 'meta_title'        => $request->meta_title[$lang->code],
                 'meta_description'  => $request->meta_description[$lang->code],
@@ -65,12 +65,13 @@ class PageTranslation extends Model
      */
     public static function edit(int $id, Request $request): bool
     {
+
         foreach (ag_lang() as $lang) {
             $slug = isset($request->slug[$lang->code]) ? Str::slug($request->slug[$lang->code]) : Str::slug($request->title[$lang->code]);
 
             $saved = self::where('page_id', $id)->where('lang', $lang->code)->update([
                 'title'             => $request->title[$lang->code],
-                'short_description' => '',
+                'short_description' => $request->short_description[$lang->code],
                 'description'       => $request->description[$lang->code],
                 'meta_title'        => $request->meta_title[$lang->code],
                 'meta_description'  => $request->meta_description[$lang->code],

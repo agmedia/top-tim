@@ -2074,7 +2074,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       quantity: 1,
       has_in_cart: 0,
-      disabled: false
+      disabled: false,
+      trans: window.trans
     };
   },
   mounted: function mounted() {
@@ -3392,12 +3393,12 @@ var render = function render() {
     }
   }, [_c("i", {
     staticClass: "ci-cart"
-  }), _vm._v(" Dodaj u Košaricu")]), _vm._v(" "), _vm.has_in_cart ? _c("p", {
+  }), _vm._v(" " + _vm._s(_vm.trans.add_to_cart))]), _vm._v(" "), _vm.has_in_cart ? _c("p", {
     staticClass: "fs-md fw-light text-danger",
     staticStyle: {
       width: "100%"
     }
-  }, [_vm._v("Imate " + _vm._s(_vm.has_in_cart) + " artikala u košarici.")]) : _vm._e()]);
+  }, [_vm._v(_vm._s(_vm.trans.imate) + " " + _vm._s(_vm.has_in_cart) + " " + _vm._s(_vm.trans.artikala_u_kosarici) + ".")]) : _vm._e()]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -4430,7 +4431,7 @@ var render = function render() {
     }, [_vm._v(_vm._s(_vm.trans.rasprodano))]) : _vm._e(), _vm._v(" "), product.special ? _c("span", {
       staticClass: "badge rounded-pill bg-primary mt-1 ms-1 badge-shadow"
     }, [_vm._v("-" + _vm._s(_vm.$store.state.service.getDiscountAmount(product.price, product.special)) + "%")]) : _vm._e(), _vm._v(" "), _c("a", {
-      staticClass: "card-img-top d-block overflow-hidden",
+      staticClass: "card-img-top d-block pb-2 overflow-hidden",
       attrs: {
         href: _vm.origin + product.url
       }
@@ -4465,7 +4466,7 @@ var render = function render() {
     }, [_c("small", [_vm._v("NC 30 dana: " + _vm._s(product.main_price_text) + " ")]), _vm._v(" "), product.secondary_price_text ? _c("small", [_vm._v(_vm._s(product.secondary_price_text) + " ")]) : _vm._e()]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
     }, [product.special ? _c("span", {
-      staticClass: "text-dark fs-md"
+      staticClass: "text-red fs-md"
     }, [_vm._v(_vm._s(product.main_special_text) + " "), product.secondary_special_text ? _c("small", [_vm._v(_vm._s(product.secondary_special_text) + " ")]) : _vm._e()]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
     }, [!product.special ? _c("span", {

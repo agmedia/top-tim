@@ -172,11 +172,9 @@ class Recepti extends Model
     private function createModelArray(string $method = 'insert'): array
     {
         $response = [
-            'category_id'       => null,
+            'category_id'       => 2,
             'group'             => 'recepti',
-            'subgroup'          => $this->request->group ?: null,
             'publish_date'      => null,
-            'keywords'          => false,
             'status'            => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
             'updated_at'        => Carbon::now()
         ];

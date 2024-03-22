@@ -36,4 +36,8 @@ return [
     't1' => 'Currently no products available',
     't2' => 'Browse in another category or try using the search tool :-)',
     'recepti' =>'Recepies',
+    'nc_30' => 'LP 30 days',
+    'add_to_cart' => 'Add to Cart',
+    'imate' => 'You have',
+    'artikala_u_kosarici' => 'item(s) in shopping cart',
 ];

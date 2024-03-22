@@ -37,5 +37,10 @@ return [
      't2' =>       'Pogledajte u nekoj drugoj kategoriji ili probajte sa tražilicom :-)',
 
     'recepti' =>'Recepti',
+    'nc_30' => 'NC 30 dana',
+    'add_to_cart' => 'U košaricu',
+
+    'imate' => 'Imate',
+    'artikala_u_kosarici' => 'artikala u košarici',
 
 ];
