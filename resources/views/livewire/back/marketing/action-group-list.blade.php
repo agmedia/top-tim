@@ -35,7 +35,7 @@
                 @foreach ($list as $item)
                     <tr>
                         <td class="font-size-sm">
-                            {{ isset($item['translation']['title']) ? $item['translation']['title'] : '' }} {{ isset($item['sku']) ? ' - ' . $item['sku'] : '' }}
+                            {{ isset($item['translation']['title']) ? $item['translation']['title'] : (isset($item['translation']['name']) ? $item['translation']['name'] : '') }} {{ isset($item['sku']) ? ' - ' . $item['sku'] : '' }}
                             <input type="hidden" name="action_list[{{ isset($item['id']) ? $item['id'] : '' }}]" value="{{ isset($item['id']) ? $item['id'] : '' }}">
                         </td>
                         <td class="text-right font-size-sm">

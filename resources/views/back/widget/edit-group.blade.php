@@ -99,8 +99,13 @@
                 </div>
 
                 <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm text-right">
+                    @if (isset($widget))
+                        <button class="btn btn-danger float-left" onclick="event.preventDefault(); deleteItem({{ $widget->id }}, '{{ route('widget.group.destroy.api') }}');">
+                            <i class="fa fa-fw fa-trash"></i> Delete
+                        </button>
+                    @endif
                     <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-save mr-5"></i> Snimi
+                        <i class="fa fa-save"></i> Save
                     </button>
                 </div>
             </div>

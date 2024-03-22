@@ -282,6 +282,7 @@ Route::prefix('api/v2')->group(function () {
         Route::get('/get', [SettingsController::class, 'get']);
         // WIDGET
         Route::prefix('widget')->group(function () {
+            Route::post('group/destroy', [WidgetGroupController::class, 'destroy'])->name('widget.group.destroy.api');
             Route::post('destroy', [WidgetController::class, 'destroy'])->name('widget.destroy');
             Route::get('get-links', [WidgetController::class, 'getLinks'])->name('widget.api.get-links');
         });

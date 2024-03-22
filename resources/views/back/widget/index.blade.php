@@ -83,6 +83,8 @@
                         <h3>Widgeti su prazni. Napravite <a href="#" data-toggle="modal" data-target="#modal-block-popout">novi.</a></h3>
                     @endforelse
                 </div>
+
+                {{ $groups->links() }}
             </div>
         </div>
     </div>

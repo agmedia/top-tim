@@ -42,7 +42,11 @@ class WidgetGroupController extends Controller
         if ($stored) {
             $this->flush($stored);
 
-            return redirect()->back()->with(['success' => 'Widget grupa je uspješno snimljena!']);
+            $widget = $stored;
+            $sizes = $wg->sizes();
+            $sections = $wg->getSectionsList();
+
+            return view('back.widget.edit-group', compact('widget', 'sections', 'sizes'));
         }
 
         return redirect()->back()->with(['error' => 'Whoops..! Desila se greška sa snimanjem widget grupe.']);
@@ -104,10 +108,17 @@ class WidgetGroupController extends Controller
      */
     public function destroy(Request $request)
     {
-        if (isset($request['data']['id'])) {
-            return response()->json(
-                Widget::where('id', $request['data']['id'])->delete()
-            );
+        Log::info($request->toArray());
+        if ($request->has('id')) {
+            $deleted = WidgetGroup::destroy($request->input('id'));
+
+            if ($deleted) {
+                return response()->json(
+                    Widget::where('group_id', $request->input('id'))->delete()
+                );
+            }
+
+            return response()->json(['error' => 'Error...']);
         }
     }
 
