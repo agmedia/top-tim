@@ -252,9 +252,9 @@
                    @foreach($payment_methods as $payment_method)
                        <div class="d-flex justify-content-between border-bottom py-2">
                            <div>
-                               <div class="fw-semibold text-dark">{{ $payment_method->title }}</div>
-                               @if (isset($payment_method->data->description))
-                                   <div class="fs-sm text-muted">{{ $payment_method->data->description }}</div>
+                               <div class="fw-semibold text-dark">{{ $payment_method->title->{ current_locale() } }}</div>
+                               @if (isset($payment_method->data->short_description))
+                                   <div class="fs-sm text-muted">{{ $payment_method->data->short_description->{ current_locale() } }}</div>
                                @endif
                            </div>
                        </div>
