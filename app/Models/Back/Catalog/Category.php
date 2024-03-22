@@ -218,7 +218,7 @@ class Category extends Model
         $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
-            CategoryTranslation::edit($id, $this->request);
+            CategoryTranslation::edit($this->id, $this->request);
 
             return $this;
         }
@@ -244,7 +244,6 @@ class Category extends Model
 
         $response = [
             'parent_id'  => $parent,
-            'image'      => '',
             'group'      => $group,
             'sort_order' => $this->request->sort_order,
             'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
