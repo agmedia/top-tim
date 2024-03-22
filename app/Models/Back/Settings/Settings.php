@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use function Livewire\str;
 
 class Settings extends Model
 {
@@ -73,7 +74,7 @@ class Settings extends Model
                 if ($style->json) {
                     $temp_style = collect(json_decode($style->value))->all();
 
-                    Log::info($temp_style);
+                    //Log::info($temp_style);
 
                     foreach ($temp_style as $item) {
                         if ( ! is_string($item->title)) {
@@ -81,6 +82,8 @@ class Settings extends Model
                         } else {
                             $title = $item->title;
                         }
+
+                        //Log::info($title);
 
                         $return_styles->put($title, $item);
                     }

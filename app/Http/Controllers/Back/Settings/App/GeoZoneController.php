@@ -49,8 +49,6 @@ class GeoZoneController extends Controller
     {
         $data = $this->cleanRequest($request);
 
-        //dd($data);
-
         $setting = Settings::where('code', 'geo_zone')->where('key', 'list')->first();
 
         $values = collect();
@@ -74,6 +72,8 @@ class GeoZoneController extends Controller
                 return $item;
             });
         }
+
+        //dd($data, $setting, $values);
 
         if ( ! $setting) {
             $stored = Settings::insert('geo_zone', 'list', $values->toJson(), true);
@@ -111,6 +111,8 @@ class GeoZoneController extends Controller
         } else {
             $geo_zone->state = [];
         }
+
+        //dd($geo_zone);
 
         $countries = Country::list();
 
