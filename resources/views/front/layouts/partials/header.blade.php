@@ -9,8 +9,8 @@
                 </div>
             </a>
             <a class="navbar-brand p-0 d-md-none me-0" href="{{ route('index') }}">
-                <div class="logo-bg py-2" style="background-color:#fff;margin-left:-25px; padding: 0 10px 0 10px; ">
-                <img src="{{ asset('img/logo-kakis.png') }}"  width="90" alt="Rice Kakis | Asian Store">
+                <div class="logo-bg py-1" style="background-color:#fff;margin-left:-15px; padding: 0 10px 0 10px; ">
+                <img src="{{ asset('img/logo-kakis.png') }}"  width="100" alt="Rice Kakis | Asian Store">
 
                 </div>
             </a>
@@ -26,13 +26,13 @@
                     <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-search"></i></div></a>
 
                 @if(auth()->user())
-                    <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" aria-label="My account" href="{{ route('login') }}" >
+                    <a class="navbar-tool d-none d-sm-flex ms-1 ms-lg-0 me-n1 me-lg-2" aria-label="My account" href="{{ route('login') }}" >
                         <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
                         <div class="navbar-tool-text ms-n3"><small>{{ auth()->user()->details->fname }} {{ auth()->user()->details->lname }}</small>{{ __('front/ricekakis.my_account') }}</div>
                     </a>
 
                 @else
-                    <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" data-tab-id="pills-signin-tab" aria-label="{{ __('front/ricekakis.login') }}" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal">
+                    <a class="navbar-tool d-none d-sm-flex ms-1 ms-lg-0 me-n1 me-lg-2" data-tab-id="pills-signin-tab" aria-label="{{ __('front/ricekakis.login') }}" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal">
                         <div class="navbar-tool-icon-box bg-dark"><i class="navbar-tool-icon ci-user"></i></div>
                         <div class="navbar-tool-text ">{{ __('front/ricekakis.login') }}</div>
                     </a>
