@@ -112,7 +112,23 @@ class Helper
         if ($target != '') {
             $response = collect();
 
-            $products = Product::query()->where('name', 'like', '%' . $target . '%')
+
+            $products = Product::query()->whereHas('translation', function ($query) use ($target) {
+                $query->where('name', 'like', '%' . $target . '%');
+            })->orwhereHas('translation', function ($query) use ($target) {
+                $query->where('meta_description', 'like', '%' . $target . '%');
+            })->orWhere('sku', 'like', '%' . $target . '%')
+                ->orwhereHas('translation', function ($query) use ($target) {
+                $query->where( 'sastojci', 'like', '%' . $target . '%');
+            })->orwhereHas('translation', function ($query) use ($target) {
+                    $query->where('podaci', 'like', '%' . $target . '%');
+            })->orwhereHas('translation', function ($query) use ($target) {
+                    $query->where('description', 'like', '%' . $target . '%');
+                })->pluck('id');
+
+
+
+           /* $products = Product::query()->where('name', 'like', '%' . $target . '%')
                                ->orWhere('meta_description', 'like', '%' . $target . '%')
                                ->orWhere('sku', 'like', '%' . $target . '%')
                                ->orWhere('isbn', 'like', '%' . $target . '%')
@@ -121,20 +137,21 @@ class Helper
                                   ->orWhere('podaci', 'like', '%' . $target . '%')
                               ->orWhere('description', 'like', '%' . $target . '%')
                                ->pluck('id');
+           */
 
             if ( ! $products->count()) {
                 $products = collect();
             }
 
-            $preg = explode(' ', $target, 3);
+           // $preg = explode(' ', $target, 3);
 
-            if (isset ($preg[1]) && in_array($preg[1], $preg) && ! isset($preg[2])) {
-                $authors = Author::active()->where('title', 'like', '%' . $preg[0] . '%' . $preg[1] . '%')
+           /* if (isset ($preg[1]) && in_array($preg[1], $preg) && ! isset($preg[2])) {
+                $authors = Brand::active()->where('title', 'like', '%' . $preg[0] . '%' . $preg[1] . '%')
                                  ->orWhere('title', 'like', '%' . $preg[1] . '% ' . $preg[0] . '%')
                                  ->with('products')->get();
 
             } elseif (isset ($preg[2]) && in_array($preg[2], $preg)) {
-                $authors = Author::active()->where('title', 'like', $preg[0] . '%' . $preg[1] . '%' . $preg[2] . '%')
+                $authors = Brand::active()->where('title', 'like', $preg[0] . '%' . $preg[1] . '%' . $preg[2] . '%')
                                  ->orWhere('title', 'like', $preg[2] . '%' . $preg[1] . '% ' . $preg[0] . '%')
                                  ->orWhere('title', 'like', $preg[0] . '%' . $preg[2] . '% ' . $preg[1] . '%')
                                  ->orWhere('title', 'like', $preg[1] . '%' . $preg[0] . '% ' . $preg[2] . '%')
@@ -142,13 +159,15 @@ class Helper
                                  ->with('products')->get();
 
             } else {
-                $authors = Author::active()->where('title', 'like', '%' . $preg[0] . '%')
+                $authors = Brand::active()->where('title', 'like', '%' . $preg[0] . '%')
                                  ->with('products')->get();
             }
 
             foreach ($authors as $author) {
                 $products = $products->merge($author->products->pluck('id'));
             }
+
+           */
 
             $response->put('products', $products->unique()->flatten());
 
@@ -346,15 +365,11 @@ class Helper
             foreach ($wg->widgets()->orderBy('sort_order')->get() as $widget) {
                 $data = unserialize($widget->data);
 
-                $searches = Storage::disk('assets')->get('searches.csv');
-
-                $searches = explode(PHP_EOL, $searches);
 
                 $widgets[] = [
                     'title'    => $widget->title,
                     'subtitle' => $widget->subtitle,
                     'color'    => $widget->badge,
-                    'searches' => $searches,
                     'url'      => $widget->url,
                     'image'    => str_replace('.jpg', '.webp', $widget->image),
                     'width'    => $widget->width,

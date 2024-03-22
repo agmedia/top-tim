@@ -66,6 +66,7 @@ return [
 
     'imate' => 'Imate',
     'artikala_u_kosarici' => 'artikala u košarici',
+    'kontaktirajte_nas' => 'Kontaktirajte nas',
 
 
 

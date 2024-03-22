@@ -91,9 +91,6 @@
                         </div>
                         <div class="review-widget_net" data-uuid="9ba05add-2ec4-47e0-9d98-72aec4875742" data-template="10" data-lang="en" data-theme="light"></div>
 
-
-
-
                     </div>
                     <div class="col-lg-4 mb-lg-0 mb-4">
 
@@ -109,6 +106,8 @@
                                             @endif
                                         @endforeach
                                     @endif
+                                        <li class="widget-list-item"><a class="widget-list-link" href="{{ current_locale() }}/kontakt">{{ __('front/ricekakis.kontaktirajte_nas') }}</a>
+                                        </li>
                                 </ul>
                             </div>
 
