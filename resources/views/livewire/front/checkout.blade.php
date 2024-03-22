@@ -2,23 +2,23 @@
     <div class="steps steps-dark pt-2 pb-3 mb-4">
         <a class="step-item active" href="{{ route('kosarica') }}">
             <div class="step-progress"><span class="step-count">1</span></div>
-            <div class="step-label"><i class="ci-cart"></i>Košarica</div>
+            <div class="step-label"><i class="ci-cart"></i>{{ __('front/cart.kosarica') }}</div>
         </a>
         <a class="step-item @if($step == 'podaci') current @endif @if(in_array($step, ['podaci', 'dostava', 'placanje'])) active @endif" wire:click="changeStep('podaci')" href="javascript:void(0);">
             <div class="step-progress"><span class="step-count">2</span></div>
-            <div class="step-label"><i class="ci-user-circle"></i>Podaci</div>
+            <div class="step-label"><i class="ci-user-circle"></i>{{ __('front/cart.podaci') }}</div>
         </a>
         <a class="step-item @if($step == 'dostava') current @endif @if(in_array($step, ['dostava', 'placanje'])) active @endif" wire:click="changeStep('dostava')" href="javascript:void(0);">
             <div class="step-progress"><span class="step-count">3</span></div>
-            <div class="step-label"><i class="ci-package"></i>Dostava</div>
+            <div class="step-label"><i class="ci-package"></i>{{ __('front/cart.dostava') }}</div>
         </a>
         <a class="step-item @if($step == 'placanje') current @endif @if(in_array($step, ['placanje'])) active @endif" wire:click="changeStep('placanje')" href="javascript:void(0);">
             <div class="step-progress"><span class="step-count">4</span></div>
-            <div class="step-label"><i class="ci-card"></i>Plaćanje</div>
+            <div class="step-label"><i class="ci-card"></i>{{ __('front/cart.placanje') }}</div>
         </a>
         <a class="step-item" href="{{ ($payment != '') ? route('pregled') : '#' }}">
             <div class="step-progress"><span class="step-count">5</span></div>
-            <div class="step-label"><i class="ci-check-circle"></i>Pregledaj</div>
+            <div class="step-label"><i class="ci-check-circle"></i>{{ __('front/cart.pregledaj') }}</div>
         </a>
     </div>
 
@@ -67,7 +67,7 @@
     @endif
 
     @if ($step == 'podaci')
-        <h2 class="h5 pt-1 pb-3 mb-3 m">Adresa dostave</h2>
+        <h2 class="h5 pt-1 pb-3 mb-3 m">{{ __('front/cart.adresa_dostave') }}</h2>
 
         @if (session()->has('login_success'))
             <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
@@ -81,7 +81,7 @@
                 <div class="alert-icon">
                     <i class="ci-user"></i>
                 </div>
-                <div><a data-bs-toggle="collapse" href="#collapseLogin" role="button" aria-expanded="false" aria-controls="collapseLogin" class="alert-link">Prijava </a> za registrirane korisnike!</div>
+                <div><a data-bs-toggle="collapse" href="#collapseLogin" role="button" aria-expanded="false" aria-controls="collapseLogin" class="alert-link">{{ __('front/cart.prijava') }} </a> {{ __('front/cart.za_registrirane_korisnike') }}</div>
             </div>
 
             @if (session()->has('error'))
@@ -97,14 +97,14 @@
                         <div class="row mb-3">
                             <div class="col-sm-6">
                                 <div class="mb-3">
-                                    <label class="form-label" for="si-email">Email adresa</label>
+                                    <label class="form-label" for="si-email">{{ __('front/cart.email') }} </label>
                                     <input class="form-control" type="email" wire:model.defer="login.email" placeholder="" required>
-                                    <div class="invalid-feedback">Molimo upišite ispravnu email adresu.</div>
+                                    <div class="invalid-feedback">{{ __('front/cart.email_warning') }} {{ __('front/cart.email_warning') }}</div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="mb-3">
-                                    <label class="form-label" for="si-password">Lozinka</label>
+                                    <label class="form-label" for="si-password">{{ __('front/cart.lozinka') }}</label>
                                     <div class="password-toggle">
                                         <input class="form-control" type="password" wire:model.defer="login.pass" required>
                                         <label class="password-toggle-btn" aria-label="Show/hide password">
@@ -117,17 +117,17 @@
                                 <div class="mb-3 d-flex flex-wrap justify-content-between">
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" wire:model.defer="login.remember" id="si-remember">
-                                        <label class="form-check-label" for="si-remember">Zapamti me</label>
+                                        <label class="form-check-label" for="si-remember">{{ __('front/cart.zapamti_me') }}</label>
                                     </div>
 
 
                                     <button id="signup-button" data-tab-id="pills-signup-tab" type="button" href="signup-tab" class="btn btn-outline-primary  btn-sm float-end" data-bs-toggle="modal" data-bs-target="#signin-modal">
-                                      Registriraj se
+                                        {{ __('front/cart.registriraj_se') }}
                                     </button>
 
 
                                 </div>
-                                <button class="btn btn-primary btn-shadow d-block w-100" wire:click="authUser()" type="button">Prijava</button>
+                                <button class="btn btn-primary btn-shadow d-block w-100" wire:click="authUser()" type="button">{{ __('front/cart.prijava') }}</button>
                             </div>
                         </div>
                     </div>
@@ -138,88 +138,88 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" for="checkout-fn">Ime <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-fn">{{ __('front/cart.name') }} <span class="text-danger">*</span></label>
                     <input name="fname" class="form-control @error('address.fname') is-invalid @enderror" type="text" wire:model.defer="address.fname">
-                    @error('address.fname') <div class="invalid-feedback animated fadeIn">Ime je obvezno</div> @enderror
+                    @error('address.fname') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.name_warning') }}</div> @enderror
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" for="checkout-ln">Prezime <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-ln">{{ __('front/cart.surname') }}<span class="text-danger">*</span></label>
                     <input name="lname" class="form-control @error('address.lname') is-invalid @enderror" type="text" wire:model.deferl="address.lname">
-                    @error('address.lname') <div class="invalid-feedback animated fadeIn">Prezime je obvezno</div> @enderror
+                    @error('address.lname') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.surname_warning') }}</div> @enderror
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" for="checkout-email">E-mail Adresa <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-email">{{ __('front/cart.email') }} <span class="text-danger">*</span></label>
                     <input class="form-control @error('address.email') is-invalid @enderror" type="email" wire:model.defer="address.email">
-                    @error('address.email') <div class="invalid-feedback animated fadeIn">Email adresa je obavezna</div> @enderror
+                    @error('address.email') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.email_warning') }}</div> @enderror
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" for="checkout-phone">Telefon <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-phone">{{ __('front/cart.telefon') }} <span class="text-danger">*</span></label>
                     <input class="form-control @error('address.phone') is-invalid  @enderror" type="text" wire:model.defer="address.phone">
-                    @error('address.phone') <div class="invalid-feedback animated fadeIn">Broj telefona je obavezan</div> @enderror
+                    @error('address.phone') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.telefon_warning') }}</div> @enderror
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" for="checkout-address">Adresa <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-address">{{ __('front/cart.adresa') }} <span class="text-danger">*</span></label>
                     <input name="street-address" class="form-control @error('address.address') is-invalid @enderror" type="text" wire:model.defer="address.address">
-                    @error('address.address') <div class="invalid-feedback animated fadeIn">Adresa je obvezno</div> @enderror
+                    @error('address.address') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.warning') }}</div> @enderror
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" for="checkout-city">Grad <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-city">{{ __('front/cart.grad') }} <span class="text-danger">*</span></label>
                     <input name="city" class="form-control @error('address.city') is-invalid @enderror" type="text" wire:model.defer="address.city">
-                    @error('address.city') <div class="invalid-feedback animated fadeIn">Grad je obvezan</div> @enderror
+                    @error('address.city') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.grad_warning') }}</div> @enderror
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" for="checkout-zip">Poštanski broj <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-zip">{{ __('front/cart.zip') }}<span class="text-danger">*</span></label>
                     <input name="postal-code" class="form-control @error('address.zip') is-invalid @enderror" type="text" wire:model.defer="address.zip">
-                    @error('address.zip') <div class="invalid-feedback animated fadeIn">Poštanski broj je obvezan</div> @enderror
+                    @error('address.zip') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.zip_warning') }}</div> @enderror
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="mb-3" wire:ignore>
-                    <label class="form-label" for="checkout-country">Država <span class="text-danger">*</span></label>
+                    <label class="form-label" for="checkout-country">{{ __('front/cart.drzava') }} <span class="text-danger">*</span></label>
                     <select name="country" class="form-select @error('address.state') is-invalid @enderror" id="state-select" wire:model="address.state" wire:change="stateSelected($event.target.value)">
                         <option value=""></option>
                         @foreach ($countries as $country)
                             <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
                         @endforeach
                     </select>
-                    @error('address.state') <div class="invalid-feedback animated fadeIn">Država je obvezna</div> @enderror
+                    @error('address.state') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.drzava_warning') }}</div> @enderror
                 </div>
             </div>
         </div>
 
-        <h2 class="h6 pt-3 pb-3 mb-2"><a data-bs-toggle="collapse" href="#collapseOib" role="button" aria-expanded="false" aria-controls="collapseLogin" class="alert-link">Trebate R1 račun?</a></h2>
+        <h2 class="h6 pt-3 pb-3 mb-2"><a data-bs-toggle="collapse" href="#collapseOib" role="button" aria-expanded="false" aria-controls="collapseLogin" class="alert-link">{{ __('front/cart.trebate_r1') }}</a></h2>
 
         <div id="collapseOib" aria-expanded="false" class="collapse">
 
                     <div class="row ">
                         <div class="col-sm-6">
                             <div class="mb-3">
-                                <label class="form-label" for="checkout-company">Tvrtka</label>
+                                <label class="form-label" for="checkout-company">{{ __('front/cart.tvrtka') }}</label>
                                 <input class="form-control" type="text" wire:model="address.company">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="mb-3">
                                 <div class="mb-3">
-                                    <label class="form-label" for="checkout-oib">OIB</label>
+                                    <label class="form-label" for="checkout-oib">{{ __('front/cart.oib') }}</label>
                                     <input class="form-control" type="text" wire:model="address.oib">
                                 </div>
                             </div>
@@ -229,8 +229,8 @@
         </div>
 
         <div class="d-flex pt-4 mt-3">
-            <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" href="{{ route('kosarica') }}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Povratak na košaricu</span><span class="d-inline d-sm-none">Povratak</span></a></div>
-            <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" wire:click="changeStep('dostava')" href="javascript:void(0);"><span class="d-none d-sm-inline">Na odabir dostave</span><span class="d-inline d-sm-none">Nastavi</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
+            <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" href="{{ route('kosarica') }}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">{{ __('front/cart.povratak_cart') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.povratak') }}</span></a></div>
+            <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" wire:click="changeStep('dostava')" href="javascript:void(0);"><span class="d-none d-sm-inline">{{ __('front/cart.na_odabir_dostave') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.nastavi') }}</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
         </div>
 
     @endif
@@ -257,7 +257,7 @@
                                 <label class="form-check-label" for="courier"></label>
                             </div>
                         </td>
-                        <td class="align-middle"><span class="text-dark fw-medium">{{ $s_method->title }}</span><br><span class="text-muted">{!! $s_method->data->short_description !!}</span></td>
+                        <td class="align-middle"><span class="text-dark fw-medium">{{ $s_method->title->{current_locale} }}</span><br><span class="text-muted">{!! $s_method->data->short_description !!}</span></td>
                         <td class="align-middle">{{ $s_method->data->time }}</td>
                         <td class="align-middle">
                             @if ($is_free_shipping)

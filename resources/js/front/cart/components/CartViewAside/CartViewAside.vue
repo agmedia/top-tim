@@ -3,11 +3,11 @@
         <div class=" rounded-3  p-4" v-if="route == 'kosarica'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2" >
                 <div class="text-center mb-2 pb-2">
-                    <h2 class="h6 mb-3 pb-1">Ukupno</h2>
+                    <h2 class="h6 mb-3 pb-1">{{ trans.ukupno }}</h2>
                     <h3 class="fw-bold text-primary">{{ $store.state.service.formatMainPrice($store.state.cart.total) }}</h3>
                     <h4 class="fs-sm" v-if="$store.state.cart.secondary_price">{{ $store.state.service.formatSecondaryPrice($store.state.cart.total) }}</h4>
                 </div>
-                <a class="btn btn-primary btn-shadow d-block w-100 mt-4" :href="checkouturl">NASTAVI NA NAPLATU <i class="ci-arrow-right fs-sm"></i></a>
+                <a class="btn btn-primary btn-shadow d-block w-100 mt-4" :href="checkouturl"> {{ trans.nastavi_na_naplatu}} <i class="ci-arrow-right fs-sm"></i></a>
                 <!-- <p class="small fw-light text-center mt-2">* Cijena dostave će biti izračunata na koraku 3: Dostava</p>-->
             </div>
         </div>
@@ -16,7 +16,7 @@
         <div class=" rounded-3  p-4 ms-lg-auto" v-if="route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2">
                 <div class="widget mb-3">
-                    <h2 class="widget-title text-center mb-2">Sažetak narudžbe</h2>
+                    <h2 class="widget-title text-center mb-2">{{ trans.sazetak}}</h2>
 
                     <div class="d-flex align-items-center py-2 border-bottom" v-for="item in $store.state.cart.items">
                         <a class="d-block flex-shrink-0" :href="base_path + item.attributes.path"><img :src="item.associatedModel.image" :alt="item.name" width="64"></a>
@@ -26,7 +26,7 @@
                                 {{ Object.keys(item.conditions).length ? item.associatedModel.main_special_text : item.associatedModel.main_price_text }}</span><span class="text-muted">x {{ item.quantity }}</span>
                                 <span class="text-primary fs-md fw-light" style="margin-left: 20px;"
                                       v-if="Object.keys(item.conditions).length && item.associatedModel.action && item.associatedModel.action.coupon == $store.state.cart.coupon">
-                                    Kupon kod: {{ item.associatedModel.action.title }} ({{ Math.round(item.associatedModel.action.discount).toFixed(0) }}
+                                    {{ trans.kupon_kod}}: {{ item.associatedModel.action.title }} ({{ Math.round(item.associatedModel.action.discount).toFixed(0) }}
                                     {{ item.associatedModel.action.type == 'F' ? 'kn' : '%' }})
                                 </span>
                             </div>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <ul class="list-unstyled fs-sm pb-2 border-bottom">
-                    <li class="d-flex justify-content-between align-items-center"><span class="me-2">Ukupno:</span><span class="text-end">{{ $store.state.service.formatMainPrice($store.state.cart.subtotal) }}</span></li>
+                    <li class="d-flex justify-content-between align-items-center"><span class="me-2">{{ trans.ukupno }}:</span><span class="text-end">{{ $store.state.service.formatMainPrice($store.state.cart.subtotal) }}</span></li>
                     <li v-if="$store.state.cart.secondary_price" class="d-flex justify-content-between align-items-center">
                         <span class="me-2"></span><span class="text-end">{{ $store.state.service.formatSecondaryPrice($store.state.cart.subtotal) }}</span>
                     </li>
@@ -54,7 +54,7 @@
                        <span class="fw-normal">{{ $store.state.service.formatSecondaryPrice($store.state.service.calculateItemsTax($store.state.cart.items)) }}</span> PDV knjige i
                        <span class="fw-normal">{{ $store.state.service.formatSecondaryPrice($store.state.service.calculateItemsTax($store.state.cart.total - $store.state.cart.subtotal)) }}</span> PDV dostava
                    </p> -->
-                <p class="small text-center mt-0 mb-0">PDV uračunat u cijeni</p>
+                <p class="small text-center mt-0 mb-0">{{ trans.pdv_u_cijeni }}</p>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
         <div class=" rounded-3 p-4 ms-lg-auto" v-if="route == 'pregled'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2">
                 <div class="widget mb-3">
-                    <h2 class="widget-title text-center">Sažetak narudžbe</h2>
+                    <h2 class="widget-title text-center">{{ trans.sazetak }}</h2>
                 </div>
                 <ul class="list-unstyled fs-sm pb-2 border-bottom">
                     <li class="d-flex justify-content-between align-items-center"><span class="me-2">Ukupno:</span><span class="text-end">{{ $store.state.service.formatMainPrice($store.state.cart.subtotal) }}</span></li>
@@ -84,7 +84,7 @@
                       <span class="fw-normal">{{ $store.state.service.formatSecondaryPrice($store.state.service.calculateItemsTax($store.state.cart.items)) }}</span> PDV knjige i
                       <span class="fw-normal">{{ $store.state.service.formatSecondaryPrice($store.state.service.calculateItemsTax($store.state.cart.total - $store.state.cart.subtotal)) }}</span> PDV dostava
                   </p> -->
-                <p class="small text-center mt-0 mb-0">PDV uračunat u cijeni</p>
+                <p class="small text-center mt-0 mb-0">{{ trans.pdv_u_cijeni }}</p>
             </div>
         </div>
 
@@ -93,11 +93,11 @@
         <div class="py-2 px-xl-2" v-cloak>
           <div class="form-group">
 
-                <label class="form-label">Imate li kod za popust?</label>
+                <label class="form-label">{{ trans.imate_kod }}</label>
               <div class="input-group">
-              <input type="text" class="form-control" v-model="coupon" placeholder="Upišite kod">
+              <input type="text" class="form-control" v-model="coupon" :placeholder="trans.upisite_kod" >
               <div class="input-group-append">
-                <button type="button" v-on:click="setCoupon" class="btn btn-outline-primary btn-shadow">Primjeni</button>
+                <button type="button" v-on:click="setCoupon" class="btn btn-outline-primary btn-shadow">{{ trans.primjeni }} </button>
               </div>
             </div>
           </div>

@@ -5,18 +5,18 @@
                 <div class="alert-icon">
                     <i class="ci-announcement"></i>
                 </div>
-                <div><small>Još {{ $store.state.service.formatMainPrice(freeship - $store.state.cart.total) }} <span v-if="$store.state.cart.secondary_price">({{ $store.state.service.formatSecondaryPrice(freeship - $store.state.cart.total) }})</span> do besplatne dostave!</small></div>
+                <div><small>{{ trans.jos }} {{ $store.state.service.formatMainPrice(freeship - $store.state.cart.total) }} <span v-if="$store.state.cart.secondary_price">({{ $store.state.service.formatSecondaryPrice(freeship - $store.state.cart.total) }})</span> {{ trans.do_besplatne }}</small></div>
             </div>
             <div class="alert alert-success d-flex" v-if="$store.state.cart.total > freeship && $store.state.cart.count" role="alert">
                 <div class="alert-icon">
                     <i class="ci-check-circle"></i>
                 </div>
-                <div><small>Ostvarili ste pravo na besplatnu dostavu!</small></div>
+                <div><small>{{ trans.ostvarili }}</small></div>
             </div>
-            <h2 class="h6 text-primary  mb-0">Artikli</h2>
+            <h2 class="h6 text-primary  mb-0">{{ trans.artikli}}</h2>
         </div>
         <div class="d-flex pt-3 pb-2 mt-1" v-if="$store.state.cart.total < 1">
-            <p class="text-dark mb-0">Vaša košarica je prazna!</p>
+            <p class="text-dark mb-0">{{ trans.empty_cart_text }}</p>
         </div>
 
 
@@ -45,9 +45,9 @@
                 </div>
             </div>
             <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto justify-content-between mx-sm-0 text-start" style="max-width: 9rem;">
-                <label class="form-label">Količina: {{item.quantity}}</label>
+                <label class="form-label">{{ trans.kolicina }}: {{item.quantity}}</label>
                 <input class="form-control d-none d-sm-block" type="number" v-model="item.quantity" min="1" :max="item.associatedModel.quantity" @click.prevent="updateCart(item)">
-                <button class="btn btn-link px-0 text-danger" type="button" @click.prevent="removeFromCart(item)"><i class="ci-close-circle me-2"></i><span class="fs-sm">Ukloni</span></button>
+                <button class="btn btn-link px-0 text-danger" type="button" @click.prevent="removeFromCart(item)"><i class="ci-close-circle me-2"></i><span class="fs-sm">{{ trans.ukloni }}</span></button>
             </div>
         </div>
 

@@ -3633,18 +3633,18 @@ var render = function render() {
     attrs: {
       role: "alert"
     }
-  }, [_vm._m(0), _vm._v(" "), _c("div", [_c("small", [_vm._v("Još " + _vm._s(_vm.$store.state.service.formatMainPrice(_vm.freeship - _vm.$store.state.cart.total)) + " "), _vm.$store.state.cart.secondary_price ? _c("span", [_vm._v("(" + _vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.freeship - _vm.$store.state.cart.total)) + ")")]) : _vm._e(), _vm._v(" do besplatne dostave!")])])]) : _vm._e(), _vm._v(" "), _vm.$store.state.cart.total > _vm.freeship && _vm.$store.state.cart.count ? _c("div", {
+  }, [_vm._m(0), _vm._v(" "), _c("div", [_c("small", [_vm._v(_vm._s(_vm.trans.jos) + " " + _vm._s(_vm.$store.state.service.formatMainPrice(_vm.freeship - _vm.$store.state.cart.total)) + " "), _vm.$store.state.cart.secondary_price ? _c("span", [_vm._v("(" + _vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.freeship - _vm.$store.state.cart.total)) + ")")]) : _vm._e(), _vm._v(" " + _vm._s(_vm.trans.do_besplatne))])])]) : _vm._e(), _vm._v(" "), _vm.$store.state.cart.total > _vm.freeship && _vm.$store.state.cart.count ? _c("div", {
     staticClass: "alert alert-success d-flex",
     attrs: {
       role: "alert"
     }
-  }, [_vm._m(1), _vm._v(" "), _vm._m(2)]) : _vm._e(), _vm._v(" "), _c("h2", {
+  }, [_vm._m(1), _vm._v(" "), _c("div", [_c("small", [_vm._v(_vm._s(_vm.trans.ostvarili))])])]) : _vm._e(), _vm._v(" "), _c("h2", {
     staticClass: "h6 text-primary mb-0"
-  }, [_vm._v("Artikli")])]) : _vm._e(), _vm._v(" "), _vm.$store.state.cart.total < 1 ? _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.artikli))])]) : _vm._e(), _vm._v(" "), _vm.$store.state.cart.total < 1 ? _c("div", {
     staticClass: "d-flex pt-3 pb-2 mt-1"
   }, [_c("p", {
     staticClass: "text-dark mb-0"
-  }, [_vm._v("Vaša košarica je prazna!")])]) : _vm._e(), _vm._v(" "), _vm._l(_vm.$store.state.cart.items, function (item) {
+  }, [_vm._v(_vm._s(_vm.trans.empty_cart_text))])]) : _vm._e(), _vm._v(" "), _vm._l(_vm.$store.state.cart.items, function (item) {
     return _c("div", {
       staticClass: "d-sm-flex justify-content-between align-items-center my-2 pb-3 border-bottom"
     }, [_c("div", {
@@ -3685,7 +3685,7 @@ var render = function render() {
       }
     }, [_c("label", {
       staticClass: "form-label"
-    }, [_vm._v("Količina: " + _vm._s(item.quantity))]), _vm._v(" "), _c("input", {
+    }, [_vm._v(_vm._s(_vm.trans.kolicina) + ": " + _vm._s(item.quantity))]), _vm._v(" "), _c("input", {
       directives: [{
         name: "model",
         rawName: "v-model",
@@ -3726,7 +3726,7 @@ var render = function render() {
       staticClass: "ci-close-circle me-2"
     }), _c("span", {
       staticClass: "fs-sm"
-    }, [_vm._v("Ukloni")])])])]);
+    }, [_vm._v(_vm._s(_vm.trans.ukloni))])])])]);
   })], 2);
 };
 var staticRenderFns = [function () {
@@ -3745,10 +3745,6 @@ var staticRenderFns = [function () {
   }, [_c("i", {
     staticClass: "ci-check-circle"
   })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", [_c("small", [_vm._v("Ostvarili ste pravo na besplatnu dostavu!")])]);
 }];
 render._withStripped = true;
 
@@ -3782,7 +3778,7 @@ var render = function render() {
     staticClass: "text-center mb-2 pb-2"
   }, [_c("h2", {
     staticClass: "h6 mb-3 pb-1"
-  }, [_vm._v("Ukupno")]), _vm._v(" "), _c("h3", {
+  }, [_vm._v(_vm._s(_vm.trans.ukupno))]), _vm._v(" "), _c("h3", {
     staticClass: "fw-bold text-primary"
   }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.$store.state.cart.total)))]), _vm._v(" "), _vm.$store.state.cart.secondary_price ? _c("h4", {
     staticClass: "fs-sm"
@@ -3791,7 +3787,7 @@ var render = function render() {
     attrs: {
       href: _vm.checkouturl
     }
-  }, [_vm._v("NASTAVI NA NAPLATU "), _c("i", {
+  }, [_vm._v(" " + _vm._s(_vm.trans.nastavi_na_naplatu) + " "), _c("i", {
     staticClass: "ci-arrow-right fs-sm"
   })])])]) : _vm._e(), _vm._v(" "), _vm.route == "naplata" ? _c("div", {
     staticClass: "rounded-3 p-4 ms-lg-auto",
@@ -3805,7 +3801,7 @@ var render = function render() {
     staticClass: "widget mb-3"
   }, [_c("h2", {
     staticClass: "widget-title text-center mb-2"
-  }, [_vm._v("Sažetak narudžbe")]), _vm._v(" "), _vm._l(_vm.$store.state.cart.items, function (item) {
+  }, [_vm._v(_vm._s(_vm.trans.sazetak))]), _vm._v(" "), _vm._l(_vm.$store.state.cart.items, function (item) {
     return _c("div", {
       staticClass: "d-flex align-items-center py-2 border-bottom"
     }, [_c("a", {
@@ -3838,7 +3834,7 @@ var render = function render() {
       staticStyle: {
         "margin-left": "20px"
       }
-    }, [_vm._v("\n                                Kupon kod: " + _vm._s(item.associatedModel.action.title) + " (" + _vm._s(Math.round(item.associatedModel.action.discount).toFixed(0)) + "\n                                " + _vm._s(item.associatedModel.action.type == "F" ? "kn" : "%") + ")\n                            ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n                                " + _vm._s(_vm.trans.kupon_kod) + ": " + _vm._s(item.associatedModel.action.title) + " (" + _vm._s(Math.round(item.associatedModel.action.discount).toFixed(0)) + "\n                                " + _vm._s(item.associatedModel.action.type == "F" ? "kn" : "%") + ")\n                            ")]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "widget-product-meta"
     }, [item.associatedModel.secondary_price_text ? _c("span", {
       staticClass: "text-muted me-2"
@@ -3851,7 +3847,7 @@ var render = function render() {
     staticClass: "d-flex justify-content-between align-items-center"
   }, [_c("span", {
     staticClass: "me-2"
-  }, [_vm._v("Ukupno:")]), _c("span", {
+  }, [_vm._v(_vm._s(_vm.trans.ukupno) + ":")]), _c("span", {
     staticClass: "text-end"
   }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.$store.state.cart.subtotal)))])]), _vm._v(" "), _vm.$store.state.cart.secondary_price ? _c("li", {
     staticClass: "d-flex justify-content-between align-items-center"
@@ -3879,7 +3875,7 @@ var render = function render() {
     staticClass: "fs-sm text-center my-2"
   }, [_vm._v(_vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.$store.state.cart.total)))]) : _vm._e(), _vm._v(" "), _c("p", {
     staticClass: "small text-center mt-0 mb-0"
-  }, [_vm._v("PDV uračunat u cijeni")])])]) : _vm._e(), _vm._v(" "), _vm.route == "pregled" ? _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.pdv_u_cijeni))])])]) : _vm._e(), _vm._v(" "), _vm.route == "pregled" ? _c("div", {
     staticClass: "rounded-3 p-4 ms-lg-auto",
     staticStyle: {
       border: "1px solid #dae1e7",
@@ -3887,7 +3883,11 @@ var render = function render() {
     }
   }, [_c("div", {
     staticClass: "py-2 px-xl-2"
-  }, [_vm._m(0), _vm._v(" "), _c("ul", {
+  }, [_c("div", {
+    staticClass: "widget mb-3"
+  }, [_c("h2", {
+    staticClass: "widget-title text-center"
+  }, [_vm._v(_vm._s(_vm.trans.sazetak))])]), _vm._v(" "), _c("ul", {
     staticClass: "list-unstyled fs-sm pb-2 border-bottom"
   }, [_c("li", {
     staticClass: "d-flex justify-content-between align-items-center"
@@ -3921,7 +3921,7 @@ var render = function render() {
     staticClass: "fs-sm text-center my-2"
   }, [_vm._v(_vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.$store.state.cart.total)))]) : _vm._e(), _vm._v(" "), _c("p", {
     staticClass: "small text-center mt-0 mb-0"
-  }, [_vm._v("PDV uračunat u cijeni")])])]) : _vm._e(), _vm._v(" "), _vm.route == "kosarica" || _vm.route == "naplata" ? _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.pdv_u_cijeni))])])]) : _vm._e(), _vm._v(" "), _vm.route == "kosarica" || _vm.route == "naplata" ? _c("div", {
     staticClass: "rounded-3 p-4 mt-3",
     staticStyle: {
       border: "1px solid #dae1e7",
@@ -3933,7 +3933,7 @@ var render = function render() {
     staticClass: "form-group"
   }, [_c("label", {
     staticClass: "form-label"
-  }, [_vm._v("Imate li kod za popust?")]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.imate_kod))]), _vm._v(" "), _c("div", {
     staticClass: "input-group"
   }, [_c("input", {
     directives: [{
@@ -3945,7 +3945,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "text",
-      placeholder: "Upišite kod"
+      placeholder: _vm.trans.upisite_kod
     },
     domProps: {
       value: _vm.coupon
@@ -3966,17 +3966,9 @@ var render = function render() {
     on: {
       click: _vm.setCoupon
     }
-  }, [_vm._v("Primjeni")])])])])])]) : _vm._e()]);
+  }, [_vm._v(_vm._s(_vm.trans.primjeni) + " ")])])])])])]) : _vm._e()]);
 };
-var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "widget mb-3"
-  }, [_c("h2", {
-    staticClass: "widget-title text-center"
-  }, [_vm._v("Sažetak narudžbe")])]);
-}];
+var staticRenderFns = [];
 render._withStripped = true;
 
 
