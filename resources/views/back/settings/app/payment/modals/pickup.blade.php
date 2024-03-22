@@ -38,7 +38,7 @@
                                     <select class="js-select2 form-control" id="pickup-geo-zone" name="geo_zone" style="width: 100%;" data-placeholder="Odaberite geo zonu">
                                         <option></option>
                                         @foreach ($geo_zones as $geo_zone)
-                                            <option value="{{ $geo_zone->id }}" {{ ((isset($payment->geo_zone)) and ($payment->geo_zone == $geo_zone->id)) ? 'selected' : '' }}>{{ $geo_zone->title }}</option>
+                                            <option value="{{ $geo_zone->id }}" {{ ((isset($payment->geo_zone)) and ($payment->geo_zone == $geo_zone->id)) ? 'selected' : '' }}>{{ isset($geo_zone->title->{current_locale()}) ? $geo_zone->title->{current_locale()} : $geo_zone->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
