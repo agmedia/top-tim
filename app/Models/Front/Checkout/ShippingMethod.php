@@ -150,12 +150,12 @@ class ShippingMethod
             }
 
             $condition = new \Darryldecode\Cart\CartCondition(array(
-                'name' => $shipping->title,
+                'name' => $shipping->title->{current_locale()},
                 'type' => 'shipping',
                 'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
                 'value' => '+' . $value,
                 'attributes' => [
-                    'description' => $shipping->data->short_description,
+                    'description' => $shipping->data->short_description->{current_locale()},
                     'geo_zone' => $shipping->geo_zone
                 ]
             ));

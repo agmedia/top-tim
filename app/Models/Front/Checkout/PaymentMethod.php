@@ -281,7 +281,7 @@ class PaymentMethod
                 'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
                 'value' => '+' . $value ?: 0,
                 'attributes' => [
-                    'description' => $payment->data->short_description ?: '',
+                    'description' => $payment->data->short_description->{current_locale()} ?: '',
                     'geo_zone' => $payment->geo_zone ?: 0
                 ]
             ));
