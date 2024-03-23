@@ -180,6 +180,7 @@ return [
     'search2' => 'Find via advanced search',
     'faq1' => 'Frequently Asked Questions',
     'faq2' => 'Visit the Frequently Asked Questions page',
+    'faq' => 'FAQ',
 
 
 ];

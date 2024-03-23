@@ -41,7 +41,8 @@
                                         <h5 class="fs-sm mb-0">{{ __('front/cart.faq1') }}</h5><span class="text-muted fs-ms">{{ __('front/cart.faq2') }} </span>
                                     </div>
                                 </div>
-                            </div></a></div>
+                            </div></a>
+                    </div>
                 </div>
             </div>
         </div>

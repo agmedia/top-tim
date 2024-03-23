@@ -181,6 +181,7 @@ return [
     'search2' => 'Pronađite preko napredne tražilice',
     'faq1' => 'Česta pitanja',
     'faq2' => 'Posjetite stranicu sa čestim pitanjima',
+    'faq' => 'Česta pitanja (FAQ)',
 
 
 ];
