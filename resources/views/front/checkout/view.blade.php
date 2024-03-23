@@ -85,7 +85,7 @@
                             <ul class="list-unstyled fs-sm">
                                 <li>
                                     <span class="text-muted">{{ $data['shipping']->title->{current_locale()} }} </span><br>
-                                    {{ $data['shipping']->data->description->{current_locale()} ?: $data['shipping']->data->short_description->{current_locale()} }}
+                                    {{ $data['shipping']->data->description ?: $data['shipping']->data->short_description->{current_locale()} }}
                                 </li>
                             </ul>
                         </div>
