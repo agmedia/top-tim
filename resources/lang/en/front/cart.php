@@ -172,13 +172,14 @@ return [
     'kol' => 'Qty.',
     'pdv_ukljucen' => 'VAT included in the price. Of which',
     'pdv_artikli' => 'VAT articles and',
-    'pdv_dostava' => 'VAT delivery'
-
-
-
-
-
-
+    'pdv_dostava' => 'VAT delivery',
+    '404_text' => 'It seems we can\'t find the page you are looking for.',
+    '404_subtext' => 'Here are some helpful links instead',
+    'home_bck'=> 'Back to Homepage',
+    'search1' => 'Search',
+    'search2' => 'Find via advanced search',
+    'faq1' => 'Frequently Asked Questions',
+    'faq2' => 'Visit the Frequently Asked Questions page',
 
 
 ];

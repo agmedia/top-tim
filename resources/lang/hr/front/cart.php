@@ -165,7 +165,6 @@ return [
     'pozdrav' => 'Pozdrav',
     'hvala' => ', hvala vam na vašoj narudžbi.',
     'lp'=> 'Lijep pozdrav, ',
-
     'bank' => 'Općom uplatnicom / Virmanom / Internet bankarstvom',
     'cod' => 'Gotovinom prilikom pouzeća',
     'ppp' => 'Plaćanje prilikom preuzimanja',
@@ -174,13 +173,14 @@ return [
     'kol' => 'Kol.',
     'pdv_ukljucen' => 'PDV uključen u cijenu. Od toga',
     'pdv_artikli' => 'PDV artikli i',
-    'pdv_dostava' => 'PDV dostava'
-
-
-
-
-
-
+    'pdv_dostava' => 'PDV dostava',
+    '404_text' => 'Čini se da ne možemo pronaći stranicu koju tražite.',
+    '404_subtext' => 'Evo nekoliko korisnih veza umjesto toga',
+    'home_bck'=> 'Povratak na naslovnicu',
+    'search1' => 'Pretraži',
+    'search2' => 'Pronađite preko napredne tražilice',
+    'faq1' => 'Česta pitanja',
+    'faq2' => 'Posjetite stranicu sa čestim pitanjima',
 
 
 ];

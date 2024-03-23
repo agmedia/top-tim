@@ -172,7 +172,7 @@
                 <div class="mb-3">
                     <label class="form-label" for="checkout-address">{{ __('front/cart.adresa') }} <span class="text-danger">*</span></label>
                     <input name="street-address" class="form-control @error('address.address') is-invalid @enderror" type="text" wire:model.defer="address.address">
-                    @error('address.address') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.warning') }}</div> @enderror
+                    @error('address.address') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.adresa_warning') }}</div> @enderror
                 </div>
             </div>
             <div class="col-sm-6">
