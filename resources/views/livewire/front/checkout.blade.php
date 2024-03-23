@@ -213,14 +213,14 @@
                         <div class="col-sm-6">
                             <div class="mb-3">
                                 <label class="form-label" for="checkout-company">{{ __('front/cart.tvrtka') }}</label>
-                                <input class="form-control" type="text" wire:model="address.company">
+                                <input class="form-control" name="company" type="text" wire:model="address.company">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="mb-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="checkout-oib">{{ __('front/cart.oib') }}</label>
-                                    <input class="form-control" type="text" wire:model="address.oib">
+                                    <input class="form-control" name="oib" type="text" wire:model="address.oib">
                                 </div>
                             </div>
                         </div>

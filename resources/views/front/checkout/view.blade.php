@@ -84,8 +84,8 @@
                             <h4 class="h6">Način dostave:</h4>
                             <ul class="list-unstyled fs-sm">
                                 <li>
-                                    <span class="text-muted">{{ $data['shipping']->title }} </span><br>
-                                    {{ $data['shipping']->data->description ?: $data['shipping']->data->short_description }}
+                                    <span class="text-muted">{{ $data['shipping']->title->{current_locale()} }} </span><br>
+                                    {{ $data['shipping']->data->description ?: $data['shipping']->data->short_description->{current_locale()} }}
                                 </li>
                             </ul>
                         </div>
@@ -94,9 +94,11 @@
 
                             <h4 class="h6">Način plaćanja:</h4>
                             <ul class="list-unstyled fs-sm">
+
+
                                 <li>
-                                    <span class="text-muted">{{ $data['payment']->title }} </span><br>
-                                    {{ $data['payment']->data->description ?: $data['payment']->data->short_description }}
+                                    <span class="text-muted">{{ $data['payment']->title->{current_locale()} }} </span><br>
+                                    {{ $data['payment']->data->description->{current_locale()} ? : $data['payment']->data->short_description->{current_locale()} }}
                                 </li>
                             </ul>
                         </div>

@@ -206,6 +206,10 @@ class Order extends Model
     public function make()
     {
         $id = $this->insertGetId([
+
+
+
+
             'user_id'          => auth()->user() ? auth()->user()->id : 0,
             'order_status_id'  => 1,
             'payment_fname'    => $this->request->fname,
@@ -227,8 +231,8 @@ class Order extends Model
             'shipping_email'   => $this->request->email,
             'shipping_method'  => $this->request->shipping,
             'shipping_code'    => '',
-            'company'          => isset($this->request->company) ? $this->request->company : null,
-            'oib'              => isset($this->request->oib) ? $this->request->oib : null,
+            'company'          => isset($this->request->company) ? $this->request->company : '',
+            'oib'              => isset($this->request->oib) ? $this->request->oib : '',
             'created_at'       => Carbon::now(),
             'updated_at'       => Carbon::now()
         ]);

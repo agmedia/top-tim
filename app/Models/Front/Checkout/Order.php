@@ -123,6 +123,8 @@ class Order extends Model
         if ( ! empty($this->order) && isset($this->order['cart'])) {
             $user_id = auth()->user() ? auth()->user()->id : 0;
 
+
+
             $order_id = \App\Models\Back\Orders\Order::insertGetId([
                 'user_id'          => $user_id,
                 'affiliate_id'     => 0,
@@ -137,7 +139,7 @@ class Order extends Model
                 'payment_state'    => $this->order['address']['state'],
                 'payment_phone'    => $this->order['address']['phone'] ?: null,
                 'payment_email'    => $this->order['address']['email'],
-                'payment_method'   => $this->order['payment']->title,
+                'payment_method'   => $this->order['payment']->title->{current_locale()},
                 'payment_code'     => $this->order['payment']->code,
                 'payment_card'     => '',
                 'payment_installment' => '',
@@ -149,7 +151,7 @@ class Order extends Model
                 'shipping_state'   => $this->order['address']['state'],
                 'shipping_phone'   => $this->order['address']['phone'] ?: null,
                 'shipping_email'   => $this->order['address']['email'],
-                'shipping_method'  => $this->order['shipping']->title,
+                'shipping_method'  => $this->order['shipping']->title->{current_locale()},
                 'shipping_code'    => $this->order['shipping']->code,
                 'company'          => $this->order['address']['company'],
                 'oib'              => $this->order['address']['oib'],
@@ -198,7 +200,7 @@ class Order extends Model
             'payment_state'    => $this->order['address']['state'],
             'payment_phone'    => $this->order['address']['phone'] ?: null,
             'payment_email'    => $this->order['address']['email'],
-            'payment_method'   => $this->order['payment']->title,
+            'payment_method'   => $this->order['payment']->title->{current_locale()},
             'payment_code'     => $this->order['payment']->code,
             'payment_card'     => '',
             'payment_installment' => '',
@@ -210,7 +212,7 @@ class Order extends Model
             'shipping_state'   => $this->order['address']['state'],
             'shipping_phone'   => $this->order['address']['phone'] ?: null,
             'shipping_email'   => $this->order['address']['email'],
-            'shipping_method'  => $this->order['shipping']->title,
+            'shipping_method'  => $this->order['shipping']->title->{current_locale()},
             'shipping_code'    => $this->order['shipping']->code,
             'company'          => $this->order['address']['company'],
             'oib'              => $this->order['address']['oib'],
