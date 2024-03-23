@@ -81,5 +81,6 @@ return [
     'add_to_cart' => 'Add to Cart',
     'imate' => 'You have',
     'artikala_u_kosarici' => 'items in shopping cart',
-    'kontaktirajte_nas' => 'Contact Us',
+    'hvala_vam_za_narudzbu' => 'Thank you for your order',
+    'dobili_ste_narudzbu' => 'You have received a new order'
 ];

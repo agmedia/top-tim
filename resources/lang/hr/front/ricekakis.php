@@ -1,8 +1,6 @@
 <?php
 
 return [
-
-
     'my_account' => 'Moj račun',
     'homepage' => 'Naslovnica',
     'navigation' => 'Navigation',
@@ -61,7 +59,6 @@ return [
     'nacin_placanja'=> 'Načini plaćanja',
     'description' => 'Opis',
     'dodatne_informacije' => 'Dodatne informacije',
-
     'sastojci' => 'Sastojci',
     'podaci_o_prehrani' => 'Nutritivne informacije',
     'prosjecna_ocjena' => 'Prosječna ocjena',
@@ -69,21 +66,13 @@ return [
     'napisite_recenziju' => 'Napišite recenziju',
     'vase_ime' => 'Vaše ime',
     'vase_ime_error' => 'Molimo unesite vaše ime!',
-
     'vase_email' => 'Vaša e-mail adresa',
     'vase_email_error' => 'Molimo unesite ispravnu e-mail adresu!',
-
     'odaberite_ocjenu' => 'Odaberite ocjenu',
     'odaberite_ocjenu_error' => 'Molimo odaberite ocjenu!',
-
     'review_error' => 'Molimo napišite recenziju!',
     'posalji' => 'Pošalji',
     'povezani_proizvodi' => 'POVEZANI PROIZVODI',
-
-
-
-
-
     'top_ponuda' => 'TOP PONUDA',
     'pogledajte_ponudu' => 'Pogledajte ponudu',
     'pogledajte_sve' => 'Pogledajte sve',
@@ -91,7 +80,9 @@ return [
     'add_to_cart' => 'U košaricu',
     'imate' => 'Imate',
     'artikala_u_kosarici' => 'artikala u košarici',
- 
+    'hvala_vam_za_narudzbu' => 'Hvala vam za narudžbu',
+    'dobili_ste_narudzbu' => 'Dobili ste novu narudžbu'
+
 
 
 
