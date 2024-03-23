@@ -128,7 +128,14 @@ return [
     'ova_stranica' => 'This page is protected by reCAPTCHA and is subject to Google\'s',
     'pravila' => 'Privacy Policy',
     'i' => 'and',
-    'uvjeti_pruzanja' => 'Terms of Service'
+    'uvjeti_pruzanja' => 'Terms of Service',
+    'proizvod_dodan' => 'Product added to cart.',
+
+    'errorr' => 'Whoops!... Server error!',
+    'cartupdate' =>  'Product quantity changed',
+    'cartremove' => 'Product removed from cart.',
+    'couponsuccess' => 'Coupon successfully added to cart.',
+    'couponerror' => 'Unfortunately, there are no coupons under that code.',
 
 
 

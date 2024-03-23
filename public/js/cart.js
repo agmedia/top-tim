@@ -4616,12 +4616,12 @@ var storage_cart = {
   }
 };
 var messages = {
-  error: 'Whoops!... Greška u vezi sa poslužiteljem!',
-  cartAdd: 'Proizvod dodan u košaricu.',
-  cartUpdate: 'Količina proizvoda je promjenjena',
-  cartRemove: 'Proizvod maknut iz košarice.',
-  couponSuccess: 'Kupon je uspješno dodan u košaricu.',
-  couponError: 'Nažalost nema kupona pod tim kodom.'
+  error: window.trans.errorr,
+  cartAdd: window.trans.proizvod_dodan,
+  cartUpdate: window.trans.cartppdate,
+  cartRemove: window.trans.cartremove,
+  couponSuccess: window.trans.couponsuccess,
+  couponError: window.trans.couponerror
 };
 var AgService = /*#__PURE__*/function () {
   function AgService() {

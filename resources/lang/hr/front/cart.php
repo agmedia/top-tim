@@ -130,9 +130,13 @@ return [
     'ova_stranica' => 'Ova je stranica zaštićena reCAPTCHA-om i primjenjuju se Googleova',
     'pravila' => 'Pravila o privatnosti',
     'i' => 'i',
-    'uvjeti_pruzanja' => 'Uvjeti pružanja usluge'
-
-
+    'uvjeti_pruzanja' => 'Uvjeti pružanja usluge',
+    'proizvod_dodan' => 'Proizvod dodan u košaricu.',
+    'errorr' => 'Whoops!... Greška u vezi sa poslužiteljem!',
+    'cartupdate' =>  'Količina proizvoda je promjenjena',
+    'cartremove' => 'Product removed from cart.',
+    'couponsuccess' => 'Kupon je uspješno dodan u košaricu.',
+    'couponerror' => 'Nažalost nema kupona pod tim kodom.',
 
 
 
