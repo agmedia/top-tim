@@ -18,7 +18,7 @@ class ReviewController extends Controller
      */
     public function index(Request $request)
     {
-        $reviews = Review::paginate(12);
+        $reviews = Review::paginate(config('settings.pagination.back'));
 
         return view('back.marketing.review.index', compact('reviews'));
     }
@@ -31,7 +31,6 @@ class ReviewController extends Controller
      */
     public function create()
     {
-        //dd('$$$$$');
         return view('back.marketing.review.edit');
     }
 
@@ -66,7 +65,6 @@ class ReviewController extends Controller
      */
     public function edit(Review $review)
     {
-        //dd($review->toArray());
         return view('back.marketing.review.edit', compact('review'));
     }
 

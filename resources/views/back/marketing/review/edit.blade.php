@@ -67,17 +67,17 @@
                             <div class="form-group row items-push mb-3">
                                 <div class="col-md-4" id="ag-star-rating-component">
                                     <label class="mb-2">{{ __('back/review.rating') }} @include('back.layouts.partials.required-star')</label>
-{{--                                    <ag-star-rating value="{{ isset($review) ? $review->stars : old('stars') }}" increment="0.1" decimals="1"></ag-star-rating>--}}
-                                    <select class="form-control form-select" required id="review-stars" name="stars">
-                                        <option value="">{{ __('back/review.odaberi_ocjenu') }}</option>
-                                        @for ($i = 5; $i > 0; $i--)
-                                            @if (isset($review) && $review->stars == $i)
-                                                <option value="{{ $i }}" selected>{{ $i }} stars</option>
-                                            @else
-                                                <option value="{{ $i }}">{{ $i }} star{{ $i != 1 ? 's' : '' }}</option>
-                                            @endif
-                                        @endfor
-                                    </select>
+                                    <ag-star-rating value="{{ isset($review) ? $review->stars : old('stars') }}" increment="1" decimals="0" size="40" padding="3"></ag-star-rating>
+{{--                                    <select class="form-control form-select" required id="review-stars" name="stars">--}}
+{{--                                        <option value="">{{ __('back/review.odaberi_ocjenu') }}</option>--}}
+{{--                                        @for ($i = 5; $i > 0; $i--)--}}
+{{--                                            @if (isset($review) && $review->stars == $i)--}}
+{{--                                                <option value="{{ $i }}" selected>{{ $i }} stars</option>--}}
+{{--                                            @else--}}
+{{--                                                <option value="{{ $i }}">{{ $i }} star{{ $i != 1 ? 's' : '' }}</option>--}}
+{{--                                            @endif--}}
+{{--                                        @endfor--}}
+{{--                                    </select>--}}
                                 </div>
 
                                 <div class="col-md-8">
@@ -86,31 +86,20 @@
                                 </div>
                             </div>
 
+                            <div class="form-group mt-4 mb-4">
+                                <label class="d-block"></label>
+                                @foreach (ag_lang() as $lang)
+                                    <div class="custom-control custom-radio custom-control-inline custom-control-primary">
+                                        <input type="radio" class="custom-control-input" id="lang-{{ $lang->code }}" value="{{ $lang->code }}" name="lang" {{ (isset($review) && $review->lang == $lang->code) ? 'checked' : '' }}>
+                                        <label class="custom-control-label" for="example-radio-custom-inline1">{{ $lang->title->{current_locale()} }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+
                             <div class="form-group row items-push">
                                 <div class="col-md-12">
                                     <label for="email-input">{{ __('back/review.message') }} @include('back.layouts.partials.required-star')</label>
-
-                                    <ul class="nav nav-pills float-right">
-                                        @foreach(ag_lang() as $lang)
-                                            <li @if ($lang->code == current_locale()) class="active" @endif>
-                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#message-{{ $lang->code }}">
-                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-
-
-                                    <div class="tab-content">
-                                        @foreach(ag_lang() as $lang)
-                                            <div id="message-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                <textarea id="message-editor-{{ $lang->code }}" name="message[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($review) ? $review->translation($lang->code)->messag : old('messag.*') !!}</textarea>
-                                            </div>
-                                        @endforeach
-                                    </div>
-
-
-
+                                    <textarea id="message-editor" name="message" placeholder="{{ __('back/review.message') }}">{!! isset($review) ? $review->message : old('message') !!}</textarea>
                                 </div>
                             </div>
 
@@ -156,18 +145,9 @@
     <script>
         $(() => {
 
-            {!! ag_lang() !!}.forEach(function(item) {
-                ClassicEditor
-                    .create(document.querySelector('#message-editor-' + item.code ))
-
-                    .then(editor => {
-                        console.log(editor);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-
-            });
+            ClassicEditor.create(document.querySelector('#message-editor'))
+            .then(editor => {})
+            .catch(error => { console.error(error); });
 
             /**
              *

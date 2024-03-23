@@ -56,7 +56,8 @@ class Review extends Model
             'email' => ['required', 'string', 'email', 'max:255'],
             'stars' => ['required', 'string', 'max:3'],
             'product_id' => ['required', 'string', 'max:11'],
-            'message' => ['required', 'string', 'max:1000']
+            'lang' => ['required', 'string', 'max:2'],
+            'message' => ['required', 'string', 'max:1000'],
         ]);
 
         $this->request = $request;
@@ -72,9 +73,7 @@ class Review extends Model
      */
     public function create()
     {
-        $id = $this->insertGetId(
-            $this->createModelArray()
-        );
+        $id = $this->insertGetId($this->createModelArray());
 
         if ($id) {
             return $this->find($id);
@@ -91,9 +90,7 @@ class Review extends Model
      */
     public function edit()
     {
-        $updated = $this->update(
-            $this->createModelArray('update')
-        );
+        $updated = $this->update($this->createModelArray('update'));
 
         if ($updated) {
             return $this;
@@ -114,7 +111,7 @@ class Review extends Model
             'product_id'   => $this->request->product_id,
             'order_id'     => 0,
             'user_id'      => 0,
-            'lang'         => 'hr',
+            'lang'         => $this->request->lang,
             'fname'        => $this->request->name,
             'lname'        => isset($this->request->lastname) ? $this->request->lastname : '',
             'email'        => $this->request->email,

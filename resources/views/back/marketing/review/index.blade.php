@@ -70,7 +70,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="font-size-sm text-center" colspan="6">
+                                <td class="font-size-sm text-center" colspan="7">
                                     <label for="">{{ __('back/review.no_reviews') }}</label>
                                 </td>
                             </tr>
