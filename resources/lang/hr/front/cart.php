@@ -146,6 +146,9 @@ return [
     'nacin_placanja' => 'Način plaćanja',
     'zatvori' => 'Zatvori',
     'opci_uvjeti' => 'Opći uvjeti korištenja',
+    'povratak_na_placanje' =>'Povratak na plaćanje',
+    'dovrsi_kupnju' => 'Dovrši kupnju',
+    'prihvati' => 'Prije kupnje potrebno je prihvatiti Opće uvjete korištenja i privatnosti'
 
 
 

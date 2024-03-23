@@ -145,6 +145,10 @@ return [
     'nacin_placanja' => 'Payment method',
     'zatvori' => 'Close',
     'opci_uvjeti' => 'General terms of use',
+    'povratak_na_placanje' =>'Return to Payment',
+    'dovrsi_kupnju' => 'Complete Purchase',
+    'prihvati' => 'Before purchase, it is necessary to accept the Terms of Service and Privacy Policy'
+
 
 
 

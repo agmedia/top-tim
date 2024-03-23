@@ -131,11 +131,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @if ($uvjeti)
-                        @foreach ($uvjeti as $uvjet)
-                            {!! $uvjet->description !!}
+
+                    @if (isset($pages) && $pages)
+                        @foreach($pages as $page)
+                            @if($page->translation->title !='Homepage' and $page->group =='page' )
+                                {!! $page->description !!}
+                            @endif
                         @endforeach
                     @endif
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('front/cart.zatvori') }}</button>
