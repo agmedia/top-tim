@@ -36,7 +36,7 @@ class OrderReceived extends Mailable
      */
     public function build()
     {
-        return $this->subject('front/cart.dobili_ste_narudzbu' )
+        return $this->subject('front/ricekskis.dobili_ste_narudzbu' )
                     ->replyTo($this->order->payment_email, $this->order->payment_fname)->view('emails.order-received');
     }
 }

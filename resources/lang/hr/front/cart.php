@@ -131,7 +131,7 @@ return [
     'pravila' => 'Pravila o privatnosti',
     'i' => 'i',
     'uvjeti_pruzanja' => 'Uvjeti pružanja usluge',
-    'proizvod_dodan' => 'Proizvod dodan u košaricu.',
+    'proizvoddodan' => 'Proizvod dodan u košaricu.',
     'errorr' => 'Whoops!... Greška u vezi sa poslužiteljem!',
     'cartupdate' =>  'Količina proizvoda je promjenjena',
     'cartremove' => 'Product removed from cart.',

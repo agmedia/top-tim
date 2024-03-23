@@ -128,8 +128,7 @@ return [
     'pravila' => 'Privacy Policy',
     'i' => 'and',
     'uvjeti_pruzanja' => 'Terms of Service',
-    'proizvod_dodan' => 'Product added to cart.',
-
+    'proizvoddodan' => 'Product added to cart.',
     'errorr' => 'Whoops!... Server error!',
     'cartupdate' =>  'Product quantity changed',
     'cartremove' => 'Product removed from cart.',

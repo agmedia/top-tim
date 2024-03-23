@@ -5,7 +5,7 @@ let storage_cart = {
 };
 let messages = {
     error: window.trans.errorr,
-    cartAdd: window.trans.proizvod_dodan,
+    cartAdd: window.trans.proizvoddodan,
     cartUpdate: window.trans.cartppdate,
     cartRemove:  window.trans.cartremove,
     couponSuccess: window.trans.couponsuccess,
