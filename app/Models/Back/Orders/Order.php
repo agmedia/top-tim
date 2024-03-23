@@ -231,8 +231,8 @@ class Order extends Model
             'shipping_email'   => $this->request->email,
             'shipping_method'  => $this->request->shipping,
             'shipping_code'    => '',
-            'company'          => isset($this->request->company) ? $this->request->company : '',
-            'oib'              => isset($this->request->oib) ? $this->request->oib : '',
+            'company'          => isset($this->request->company) ? $this->request->company : null,
+            'oib'              => isset($this->request->oib) ? $this->request->oib : null,
             'created_at'       => Carbon::now(),
             'updated_at'       => Carbon::now()
         ]);
