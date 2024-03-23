@@ -26,23 +26,23 @@
         <div class="pt-0">
             <div class="card py-3 mt-sm-3">
                 <div class="card-body text-center">
-                    <h2 class="h4 pb-3">Vaša narudžba je uspješno dovršena!</h2>
+                    <h2 class="h4 pb-3">{{ __('front/cart.vasa_narudzba_txt') }}</h2>
 
                     @if($data['order']['payment_code'] == 'bank')
-                        <p>Uredno smo zaprimili Vašu narudžbu broj {{ $data['order']['id'] }} i zahvaljujemo Vam.</p><p>Molimo vas da izvršite uplatu po sljedećim uputama za plaćanje.</p>
-                        <p> Rok za uplatu je maksimalno 48h tijekom koga robu koju ste naručili držimo rezerviranu za vas.</p>
-                        <p> Ukoliko u tom roku ne zaprimimo uplatu, nažalost moramo poništiti ovu narudžbu.</p>
-                        <p>MOLIMO IZVRŠITE UPLATU U IZNOSU OD  {{number_format($data['order']['total'], 2)}} €<br>
-                           IBAN RAČUN: HR98 2402 0061 1011 2296 1<br>
-                           MODEL: 00 POZIV NA BROJ: {{ $data['order']['id'] }}-{{date('ym')}}</p>
-                        <p>ILI JEDNOSTAVNO POSKENIRAJTE 2D BARKOD</p>
+                        <p>{{ __('front/cart.sb1') }} {{ $data['order']['id'] }} {{ __('front/cart.sb2') }}</p><p>{{ __('front/cart.sb3') }}</p>
+                        <p> {{ __('front/cart.sb4') }}</p>
+                        <p> {{ __('front/cart.sb5') }}</p>
+                        <p>{{ __('front/cart.sb6') }}  {{number_format($data['order']['total'], 2)}} €<br>
+                            {{ __('front/cart.sb7') }}: HR98 2402 0061 1011 2296 1<br>
+                            {{ __('front/cart.sb8') }}: {{ $data['order']['id'] }}-{{date('ym')}}</p>
+                        <p>{{ __('front/cart.sb9') }}</p>
                         <p><img src="{{ asset('media/img/qr/'.$data['order']['id']) }}.jpg"></p>
                     @else
-                        <p class="fs-sm mb-2">Vaša je narudžba poslana i bit će obrađena u najkraćem mogućem roku.</p>
-                        <p class="fs-sm">Uskoro ćete primiti e-poštu s potvrdom narudžbe.</p>
+                        <p class="fs-sm mb-2">{{ __('front/cart.se1') }}</p>
+                        <p class="fs-sm">{{ __('front/cart.se2') }}</p>
                     @endif
 
-                    <a class="btn btn-secondary mt-3 me-3" href="{{ route('index') }}">Nastavite pregled stranice</a>
+                    <a class="btn btn-secondary mt-3 me-3" href="{{ route('index') }}">{{ __('front/cart.nastavite_pregled') }}</a>
                 </div>
             </div>
         </div>

@@ -147,8 +147,22 @@ return [
     'zatvori' => 'Zatvori',
     'opci_uvjeti' => 'Opći uvjeti korištenja',
     'povratak_na_placanje' =>'Povratak na plaćanje',
-    'dovrsi_kupnju' => 'Dovrši kupnju',
-    'prihvati' => 'Prije kupnje potrebno je prihvatiti Opće uvjete korištenja i privatnosti'
+    'prihvati' => 'Prije kupnje potrebno je prihvatiti Opće uvjete korištenja i privatnosti',
+    'vasa_narudzba_txt' => 'Vaša narudžba je uspješno dovršena!',
+    'sb1' => 'Uredno smo zaprimili Vašu narudžbu broj ',
+    'sb2' => 'i zahvaljujemo Vam.',
+    'sb3' => 'Molimo vas da izvršite uplatu po sljedećim uputama za plaćanje.',
+    'sb4' => 'Rok za uplatu je maksimalno 48h tijekom koga robu koju ste naručili držimo rezerviranu za vas.',
+    'sb5' => 'Ukoliko u tom roku ne zaprimimo uplatu, nažalost moramo poništiti ovu narudžbu.',
+    'sb6' => 'MOLIMO IZVRŠITE UPLATU U IZNOSU OD',
+    'sb7' => 'IBAN RAČUN',
+    'sb8' => 'MODEL: 00 POZIV NA BROJ',
+    'sb9' => 'ILI JEDNOSTAVNO POSKENIRAJTE 2D BARKOD',
+
+    'se1' => 'Vaša je narudžba poslana i bit će obrađena u najkraćem mogućem roku. ',
+    'se2' => 'Uskoro ćete primiti e-poštu s potvrdom narudžbe.',
+    'nastavite_pregled' => 'Nastavite pregled stranice'
+
 
 
 

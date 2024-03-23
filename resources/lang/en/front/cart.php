@@ -147,7 +147,22 @@ return [
     'opci_uvjeti' => 'General terms of use',
     'povratak_na_placanje' =>'Return to Payment',
     'dovrsi_kupnju' => 'Complete Purchase',
-    'prihvati' => 'Before purchase, it is necessary to accept the Terms of Service and Privacy Policy'
+    'prihvati' => 'Before purchase, it is necessary to accept the Terms of Service and Privacy Policy',
+    'vasa_narudzba_txt' => 'Your order has been successfully completed!',
+    'sb1' => 'We have duly received your order number ',
+    'sb2' => 'and thank you.',
+    'sb3' => 'Please proceed with the payment according to the following payment instructions.',
+    'sb4' => 'The payment deadline is a maximum of 48 hours during which we hold the ordered goods reserved for you.',
+    'sb5' => 'If we do not receive the payment within this deadline, unfortunately, we must cancel this order.',
+    'sb6' => 'PLEASE MAKE THE PAYMENT IN THE AMOUNT OF',
+    'sb7' => 'IBAN ACCOUNT',
+    'sb8' => 'MODEL: 00 REFERENCE NUMBER',
+    'sb9' => 'OR SIMPLY SCAN THE 2D BARCODE',
+
+    'se1' => 'Your order has been submitted and will be processed as soon as possible. ',
+    'se2' => 'You will soon receive an email confirmation of your order.',
+    'nastavite_pregled' => 'Continue browsing the page'
+
 
 
 
