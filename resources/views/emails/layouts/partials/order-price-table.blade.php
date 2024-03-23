@@ -35,11 +35,11 @@
 
 <table id="products">
     <tr>
-        <th>Proizvod</th>
+        <th>{{ __('front/cart.proizvod') }}</th>
 
-        <th style="text-align: center;" width="15%">Kol.</th>
-        <th style="text-align: right;" width="20%">Cijena</th>
-        <th style="text-align: right;" width="25%">Ukupno</th>
+        <th style="text-align: center;" width="15%">{{ __('front/cart.kol') }}</th>
+        <th style="text-align: right;" width="20%">{{ __('front/cart.cijena') }}</th>
+        <th style="text-align: right;" width="25%">{{ __('front/cart.ukupno') }}</th>
     </tr>
     @foreach ($order->products as $product)
         <tr>
@@ -65,12 +65,12 @@
     @endforeach
 </table>
 
-<small style="text-align: right;"> PDV uključen u cijenu. Od toga
+<small style="text-align: right;"> {{ __('front/cart.pdv_ukljucen') }}
     @foreach ($order->totals as $total)
         @if($total->code == 'subtotal')
-        €<strong>{{ number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong>  PDV artikli i
+        €<strong>{{ number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong>  {{ __('front/cart.pdv_artikli') }}
     @elseif ($total->code == 'shipping')
-        €<strong>{{number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong>  PDV dostava
+        €<strong>{{number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong> {{ __('front/cart.pdv_dostava') }}
     @endif
     @endforeach
 </small>

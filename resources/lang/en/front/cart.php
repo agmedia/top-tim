@@ -40,7 +40,6 @@ return [
     'add_to_cart' => 'Add to Cart',
     'imate' => 'You have',
     'artikala_u_kosarici' => 'item(s) in shopping cart',
-    'dovrsi_kupnju' => 'Complete purchase',
     'ukupno' => 'Total',
     'empty_cart_text' => 'Your cart is empty!',
     'kosarica' => 'Shopping Cart',
@@ -158,10 +157,23 @@ return [
     'sb7' => 'IBAN ACCOUNT',
     'sb8' => 'MODEL: 00 REFERENCE NUMBER',
     'sb9' => 'OR SIMPLY SCAN THE 2D BARCODE',
-
     'se1' => 'Your order has been submitted and will be processed as soon as possible. ',
     'se2' => 'You will soon receive an email confirmation of your order.',
-    'nastavite_pregled' => 'Continue browsing the page'
+    'nastavite_pregled' => 'Continue browsing the page',
+    'narudzba_broj' => 'Order number',
+    'pozdrav' => 'Greetings',
+    'hvala' => ', thank you for your order.',
+    'lp'=> 'Kind regards, ',
+    'bank' => 'General payment slip / Bank transfer / Internet banking',
+    'cod' => 'Cash on delivery',
+    'ppp' => 'Payment upon pickup',
+    'dobili_ste' => 'You have received a new order',
+    'proizvod' => 'Item',
+    'kol' => 'Qty.',
+    'pdv_ukljucen' => 'VAT included in the price. Of which',
+    'pdv_artikli' => 'VAT articles and',
+    'pdv_dostava' => 'VAT delivery'
+
 
 
 

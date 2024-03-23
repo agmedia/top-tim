@@ -261,7 +261,7 @@
         <!-- Email Header : BEGIN -->
         <tr>
             <td style="padding: 20px 0 15px 0; text-align: center">
-                <label class="large bold" style="color: white;">   <img src="{{ asset('img/logo-ricekakis.png') }}" alt="ricekakis.com" border="0" style="max-width:200px;height: auto;"></label>
+                <label class="large bold" style="color: white;">   <img src="{{ asset('img/logo-kakis.png') }}" alt="ricekakis.com" border="0" style="max-width:200px;height: auto;"></label>
             </td>
         </tr>
         <!-- Email Header : END -->
@@ -281,7 +281,7 @@
     <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="margin: auto;" class="email-container">
         <tr>
             <td style="padding: 20px;  font-size: 12px; line-height: 15px; text-align: center; color: #373f50;">
-                Rice Kakis | Asian Store © {{ now()->year }}. Sva prava pridržana. <br><a href="info/uvjeti-prodaje" style="color:#ffffff;">Uvjeti korištenja</a>
+                Rice Kakis | Asian Store © {{ now()->year }}. {{ __('front/ricekakis.sva_prava') }}. <br><a href="info/uvjeti-prodaje" style="color:#ffffff;">{{ __('front/cart.opci_uvjeti') }}</a>
                 <br>
             </td>
         </tr>

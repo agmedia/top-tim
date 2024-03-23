@@ -158,10 +158,26 @@ return [
     'sb7' => 'IBAN RAČUN',
     'sb8' => 'MODEL: 00 POZIV NA BROJ',
     'sb9' => 'ILI JEDNOSTAVNO POSKENIRAJTE 2D BARKOD',
-
     'se1' => 'Vaša je narudžba poslana i bit će obrađena u najkraćem mogućem roku. ',
     'se2' => 'Uskoro ćete primiti e-poštu s potvrdom narudžbe.',
-    'nastavite_pregled' => 'Nastavite pregled stranice'
+    'nastavite_pregled' => 'Nastavite pregled stranice',
+    'narudzba_broj' => 'Narudžba broj',
+    'pozdrav' => 'Pozdrav',
+    'hvala' => ', hvala vam na vašoj narudžbi.',
+    'lp'=> 'Lijep pozdrav, ',
+
+    'bank' => 'Općom uplatnicom / Virmanom / Internet bankarstvom',
+    'cod' => 'Gotovinom prilikom pouzeća',
+    'ppp' => 'Plaćanje prilikom preuzimanja',
+    'dobili_ste' => 'Dobili ste novu narudžbu',
+    'proizvod' => 'Proizvod',
+    'kol' => 'Kol.',
+    'pdv_ukljucen' => 'PDV uključen u cijenu. Od toga',
+    'pdv_artikli' => 'PDV artikli i',
+    'pdv_dostava' => 'PDV dostava'
+
+
+
 
 
 
