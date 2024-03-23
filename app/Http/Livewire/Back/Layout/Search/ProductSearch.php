@@ -51,7 +51,7 @@ class ProductSearch extends Component
             $product = Product::find($this->product_id);
 
             if ($product) {
-                $this->search = $product->name;
+                $this->search = $product->translation->name;
                 $this->product_id = $product->id;
             }
         }
@@ -92,7 +92,7 @@ class ProductSearch extends Component
         $product = (new Product())->where('id', $id)->first();
 
         $this->search_results = [];
-        $this->search         = $product->name;
+        $this->search         = $product->translation->name;
         $this->product_id     = $product->id;
 
         if ($this->list) {
