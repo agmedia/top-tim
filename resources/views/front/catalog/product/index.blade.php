@@ -462,7 +462,7 @@
                                @enderror
                                <div class="invalid-feedback">{{ __('front/ricekakis.review_error') }} </div>
                            </div>
-
+                           <input type="hidden" name="lang" value="{{ current_locale() }}">
                            <input type="hidden" name="product_id" value="{{ $prod->id }}">
                            <button class="btn btn-primary btn-shadow d-block w-100" type="submit">{{ __('front/ricekakis.posalji') }} </button>
                        </form>
