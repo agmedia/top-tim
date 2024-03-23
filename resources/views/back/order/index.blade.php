@@ -24,12 +24,14 @@
         <div class="block block-rounded">
             <div class="block-header block-header-default">
                 <h3 class="block-title">{{ __('back/orders.lista_narudzbi') }}  <small class="font-weight-light">{{ $orders->total() }}</small></h3>
+
+
                 <div class="block-options d-none d-xl-block">
                     <div class="form-group mb-0 mr-2">
                         <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/orders.promjeni_status_narudžbe') }}">
                             <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
                             @foreach ($statuses as $status)
-                                <option value="{{ $status->id }}">{{ $status->title }}</option>
+                                <option value="{{ $status->id }}">{{ $status->title->{current_locale()} }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -46,7 +48,7 @@
                             </a>
                             @foreach ($statuses as $status)
                                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:setURL('status', {{ $status->id }})">
-                                    <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title }}</span>
+                                    <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title->{ current_locale() } }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -107,7 +109,7 @@
                                 </td>
                                 <td class="text-center">{{ \Illuminate\Support\Carbon::make($order->created_at)->format('d.m.Y') }}</td>
                                 <td class="font-size-base">
-                                    <span class="badge badge-pill badge-{{ $order->status->color }}">{{ $order->status->title }}</span>
+                                    <span class="badge badge-pill badge-{{ $order->status->color }}">{{ $order->status->title->{ current_locale() } }}</span>
                                 </td>
                                 <td class="text-lwft">{{ $order->payment_method }}</td>
                                 <td>

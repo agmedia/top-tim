@@ -129,7 +129,7 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-ecom-filters">
                             @foreach ($statuses as $status)
                                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:setStatus({{ $status->id }});">
-                                    <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title }}</span>
+                                    <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title->{ current_locale() } }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -190,7 +190,7 @@
                                     <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/orders.promjeni_status_narudzbe') }}">
                                         <option value="0">{{ __('back/orders.bez_promjene_statusa') }}</option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}">{{ $status->title }}</option>
+                                            <option value="{{ $status->id }}">{{ $status->title->{ current_locale() } }}</option>
                                         @endforeach
                                     </select>
                                 </div>

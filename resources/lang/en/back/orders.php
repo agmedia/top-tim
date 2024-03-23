@@ -79,6 +79,7 @@ return [
     'odustani' => 'Cancel',
 
     'narudzba_pregled' => 'Order overview',
+    'narudzba_edit' => 'Edit Order',
 
     'slika' => 'Image',
     'naziv' => 'Name',

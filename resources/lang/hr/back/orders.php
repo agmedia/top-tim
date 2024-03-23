@@ -80,6 +80,7 @@ return [
     'odustani' => 'Odustani',
 
     'narudzba_pregled' => 'Narudžba pregled',
+    'narudzba_edit' => 'Uredi narudžbu',
 
     'slika' => 'Slika',
     'naziv' => 'Naziv',

@@ -50,7 +50,7 @@
             <div class="container">
                 <form action="{{ route('pretrazi') }}" id="search-form" method="get">
                     <div class="input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
-                        <input class="form-control rounded-start" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="Pretražite proizvode">
+                        <input class="form-control rounded-start" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="{{ __('front/ricekakis.search_products') }}">
                         <button type="submit" class="btn btn-primary btn-lg fs-base"><i class="ci-search"></i></button>
                     </div>
                 </form>

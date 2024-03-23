@@ -113,7 +113,7 @@
                                     <select class="js-select2 form-control" id="shipping-select" name="shipping" style="width: 100%;" data-placeholder="{{ __('back/orders.odaberite_nacin_dostave') }}">
                                         <option></option>
                                         @foreach ($shippings as $shipping)
-                                            <option value="{{ $shipping->code }}" {{ ((isset($order)) and ($order->shipping_code == $shipping->code)) ? 'selected' : '' }}>{{ $shipping->title }}</option>
+                                            <option value="{{ $shipping->code }}" {{ ((isset($order)) and ($order->shipping_code == $shipping->code)) ? 'selected' : '' }}>{{ $shipping->title->{ current_locale() } }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -136,7 +136,7 @@
                                     <select class="js-select2 form-control" id="payment-select" name="payment" style="width: 100%;" data-placeholder="{{ __('back/orders.odaberite_nacin_placanja') }}">
                                         <option></option>
                                         @foreach ($payments as $payment)
-                                            <option value="{{ $payment->code }}" {{ ((isset($order)) and ($order->payment_code == $payment->code)) ? 'selected' : '' }}>{{ $payment->title }}</option>
+                                            <option value="{{ $payment->code }}" {{ ((isset($order)) and ($order->payment_code == $payment->code)) ? 'selected' : '' }}>{{ $payment->title->{ current_locale() } }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -167,7 +167,7 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-ecom-filters">
                                 @foreach ($statuses as $status)
                                     <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:setStatus({{ $status->id }});">
-                                        <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title }}</span>
+                                        <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title->{ current_locale() } }}</span>
                                     </a>
                                 @endforeach
                             </div>
@@ -182,7 +182,7 @@
                             <tr>
                                 <td class="font-size-base">
                                     @if ($record->status)
-                                        <span class="badge badge-pill badge-{{ $record->status->color }}">{{ $record->status->title }}</span>
+                                        <span class="badge badge-pill badge-{{ $record->status->color }}">{{ $record->status->title->{ current_locale() } }}</span>
                                     @else
                                         <small>{{ __('back/orders.komentar') }}</small>
                                     @endif
@@ -241,7 +241,7 @@
                                     <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/orders.promjeni_status_narudzbe') }}">
                                         <option value="0">{{ __('back/orders.bez_promjene_statusa') }}</option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}">{{ $status->title }}</option>
+                                            <option value="{{ $status->id }}">{{ $status->title->{ current_locale() } }}</option>
                                         @endforeach
                                     </select>
                                 </div>
