@@ -189,7 +189,7 @@
                                         </td>
                                         <td class="text-center">{{ \Illuminate\Support\Carbon::make($order->created_at)->format('d.m.Y') }}</td>
                                         <td class="font-size-base">
-                                            <span class="badge badge-pill badge-{{ $order->status->color }}">{{ $order->status->title }}</span>
+                                            <span class="badge badge-pill badge-{{ $order->status->color }}">{{ $order->status->title->{current_locale() }}</span>
                                         </td>
                                         <td class="text-lwft">{{ $order->payment_method }}</td>
                                         <td>

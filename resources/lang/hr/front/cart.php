@@ -137,6 +137,15 @@ return [
     'cartremove' => 'Product removed from cart.',
     'couponsuccess' => 'Kupon je uspješno dodan u košaricu.',
     'couponerror' => 'Nažalost nema kupona pod tim kodom.',
+    'potvrdite_narudzbu' => 'Potvrdite narudžbu',
+    'pregledaj_potvrdi' => 'Pregledaj i potvrdi narudžbu',
+    'platitelj' => 'Platitelj',
+    'korisnik' => 'Korisnik',
+    'dostaviti_na' => 'Dostaviti na',
+    'nacin_dostave' => 'Način dostave',
+    'nacin_placanja' => 'Način plaćanja',
+    'zatvori' => 'Zatvori',
+    'opci_uvjeti' => 'Opći uvjeti korištenja',
 
 
 

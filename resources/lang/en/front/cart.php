@@ -136,6 +136,15 @@ return [
     'cartremove' => 'Product removed from cart.',
     'couponsuccess' => 'Coupon successfully added to cart.',
     'couponerror' => 'Unfortunately, there are no coupons under that code.',
+    'potvrdite_narudzbu' => 'Confirm order',
+    'pregledaj_potvrdi' => 'Review and confirm order',
+    'platitelj' => 'Payer',
+    'korisnik' => 'User',
+    'dostaviti_na' => 'Deliver to',
+    'nacin_dostave' => 'Delivery method',
+    'nacin_placanja' => 'Payment method',
+    'zatvori' => 'Close',
+    'opci_uvjeti' => 'General terms of use',
 
 
 
