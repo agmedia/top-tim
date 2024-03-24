@@ -252,7 +252,7 @@ class Order extends Model
             OrderProduct::insert([
                 'order_id'   => $order_id,
                 'product_id' => $item->id,
-                'name'       => $item->name->{ current_locale() },
+                'name'       => $item->name,
                 'quantity'   => $item->quantity,
                 'org_price'  => $item->price,
                 'discount'   => $discount ? number_format($discount, 2) : 0,
