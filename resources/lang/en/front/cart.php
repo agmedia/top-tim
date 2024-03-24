@@ -145,7 +145,7 @@ return [
     'zatvori' => 'Close',
     'opci_uvjeti' => 'General terms of use',
     'povratak_na_placanje' =>'Return to Payment',
-    'dovrsi_kupnju' => 'Complete Purchase',
+    'dovrsi_kupnju' => 'Purchase',
     'prihvati' => 'Before purchase, it is necessary to accept the Terms of Service and Privacy Policy',
     'vasa_narudzba_txt' => 'Your order has been successfully completed!',
     'sb1' => 'We have duly received your order number ',
