@@ -36,7 +36,7 @@ class StatusCanceled extends Mailable
      */
     public function build()
     {
-        return $this->subject(__('front/cart.hvala'))
+        return $this->subject(__('front/cart.otkazano_narudzba'))
             ->view('emails.status-canceled');
     }
 }

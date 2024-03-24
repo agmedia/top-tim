@@ -187,7 +187,9 @@ return [
     'greska_prilikom_snimanja'=> 'Oops..! Greška prilikom snimanja.',
     'uspjeh'=> 'Uspjeh',
     'greska' => 'Greška',
-    'naknada_cod' => 'Naknada za pouzeće'
+    'naknada_cod' => 'Naknada za pouzeće',
+    'hvala_narudzba' => 'Hvala vam na vašoj narudžbi.',
+    'otkazano_narudzba' => 'Vaša narudžba je otkazana.',
 
 
 ];

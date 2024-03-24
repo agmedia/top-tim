@@ -185,7 +185,9 @@ return [
     'uspjeh' => 'Success',
     'greska' => 'Error',
     'greska_prilikom_snimanja'=> 'Oops..! Error occurred while saving.',
-    'naknada_cod' => 'Cash on Delivery Fee'
+    'naknada_cod' => 'Cash on Delivery Fee',
+    'hvala_narudzba' => 'Thank you for your order.',
+    'otkazano_narudzba' => 'Your order has been canceled.',
 
 
 ];
