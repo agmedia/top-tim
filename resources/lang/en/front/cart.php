@@ -128,8 +128,8 @@ return [
     'pravila' => 'Privacy Policy',
     'i' => 'and',
     'uvjeti_pruzanja' => 'Terms of Service',
-    'proizvoddodan' => 'Product added to cart.',
-    'errorr' => 'Whoops!... Server error!',
+    'cartadd' => 'Product added to cart.',
+    'error' => 'Whoops!... Server error!',
     'cartupdate' =>  'Product quantity changed',
     'cartremove' => 'Product removed from cart.',
     'couponsuccess' => 'Coupon successfully added to cart.',
@@ -180,6 +180,10 @@ return [
     'faq1' => 'Frequently Asked Questions',
     'faq2' => 'Visit the Frequently Asked Questions page',
     'faq' => 'FAQ',
+    'korisnik_snimljen' => 'User data successfully saved.',
+    'uspjeh' => 'Success',
+    'greska' => 'Error',
+    'greska_prilikom_snimanja'=> 'Oops..! Error occurred while saving.'
 
 
 ];

@@ -36,7 +36,7 @@ class StatusPaid extends Mailable
      */
     public function build()
     {
-        return $this->$this->subject(__('front/cart.hvala_vam_za_narudzbu'))
+        return $this->subject(__('front/cart.hvala_vam_za_narudzbu'))
             ->view('emails.status-paid');
     }
 }

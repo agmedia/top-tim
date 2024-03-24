@@ -131,10 +131,10 @@ return [
     'pravila' => 'Pravila o privatnosti',
     'i' => 'i',
     'uvjeti_pruzanja' => 'Uvjeti pružanja usluge',
-    'proizvoddodan' => 'Proizvod dodan u košaricu.',
-    'errorr' => 'Whoops!... Greška u vezi sa poslužiteljem!',
+    'cartadd' => 'Proizvod dodan u košaricu.',
+    'error' => 'Whoops!... Greška u vezi sa poslužiteljem!',
     'cartupdate' =>  'Količina proizvoda je promjenjena',
-    'cartremove' => 'Product removed from cart.',
+    'cartremove' => 'Artikl maknut iz košarice.',
     'couponsuccess' => 'Kupon je uspješno dodan u košaricu.',
     'couponerror' => 'Nažalost nema kupona pod tim kodom.',
     'potvrdite_narudzbu' => 'Potvrdite narudžbu',
@@ -182,6 +182,10 @@ return [
     'faq1' => 'Česta pitanja',
     'faq2' => 'Posjetite stranicu sa čestim pitanjima',
     'faq' => 'Česta pitanja (FAQ)',
+    'korisnik_snimljen' => 'Korisnik je uspješno snimljen.',
+    'greska_prilikom_snimanja'=> 'Oops..! Greška prilikom snimanja.',
+    'uspjeh'=> 'Uspjeh',
+    'greska' => 'Greška',
 
 
 ];

@@ -65,10 +65,10 @@ class CustomerController extends FrontBaseController
         $updated = $user->validateFrontRequest($request)->edit();
 
         if ($updated) {
-            return redirect()->route('moj-racun', ['user' => $updated])->with(['success' => 'Korisnik je uspješno snimljen!']);
+            return redirect()->route('moj-racun', ['user' => $updated])->with(['success' => (__('front/cart.korisnik_snimljen'))]);
         }
 
-        return redirect()->back()->with(['error' => 'Oops..! Greška prilikom snimanja.']);
+        return redirect()->back()->with(['error' => (__('front/cart.greska_prilikom_snimanja'))]);
     }
 
 }

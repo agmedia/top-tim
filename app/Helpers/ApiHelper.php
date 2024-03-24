@@ -26,9 +26,9 @@ class ApiHelper
     public static function resultBadge(int $status): string
     {
         if ($status) {
-            return '<span class="badge badge-success font-size-h5">Uspjeh</span>';
+            return '<span class="badge badge-success font-size-h5">' .(__('front/cart.uspjeh')).'</span>';
         }
 
-        return '<span class="badge badge-danger font-size-h5">Greška</span>';
+        return '<span class="badge badge-danger font-size-h5">' .(__('front/cart.greska')).'</span>';
     }
 }
