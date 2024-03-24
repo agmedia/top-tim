@@ -249,12 +249,12 @@ class Order extends Model
                 $discount = Helper::calculateDiscount($item->price, $price);
             }
 
-
+            Log::info(print_r($item, true));
 
             OrderProduct::insert([
                 'order_id'   => $order_id,
                 'product_id' => $item->id,
-                'name'       => $item->associatedModel->translation->title,
+                'name'       => $item->name,
                 'quantity'   => $item->quantity,
                 'org_price'  => $item->price,
                 'discount'   => $discount ? number_format($discount, 2) : 0,
