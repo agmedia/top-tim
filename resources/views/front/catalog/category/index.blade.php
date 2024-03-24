@@ -11,7 +11,7 @@
         @section ( 'description', $cat->translation->meta_description )
 
         @push('meta_tags')
-       <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $cat->translation['slug'] }}" />
+            <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $cat->translation['slug'] }}" />
         @endpush
 
 
@@ -22,7 +22,7 @@
         @section ( 'description',  $subcat->translation->meta_description )
 
         @push('meta_tags')
-         <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $subcat->translation['slug'] }}" />
+            <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $subcat->translation['slug'] }}" />
         @endpush
 
     @endif
@@ -71,21 +71,21 @@
 
         <nav class="mb-4" aria-label="breadcrumb">
             <ol class="breadcrumb flex-lg-nowrap">
-                    <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author') }}">Autori</a></li>
-                    @if ( ! $cat && ! $subcat)
-                        <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $author->title }}</li>
-                    @endif
-                    @if ($cat && ! $subcat)
-                        <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author]) }}">{{ $author->title }}</a></li>
-                        <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $cat->title }}</li>
-                    @elseif ($cat && $subcat)
-                        <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author]) }}">{{ $author->title }}</a></li>
-                        <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author, 'cat' => $cat]) }}">{{ $cat->title }}</a></li>
-                        <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $subcat->title }}</li>
-                    @endif
-                </ol>
-            </nav>
+                <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
+                <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author') }}">Autori</a></li>
+                @if ( ! $cat && ! $subcat)
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $author->title }}</li>
+                @endif
+                @if ($cat && ! $subcat)
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author]) }}">{{ $author->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $cat->title }}</li>
+                @elseif ($cat && $subcat)
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author]) }}">{{ $author->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author, 'cat' => $cat]) }}">{{ $cat->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $subcat->title }}</li>
+                @endif
+            </ol>
+        </nav>
 
         <section class="d-md-flex justify-content-between align-items-center mb-2 pb-2">
             <h1 class="h2 mb-2 mb-md-0 me-3">{{ $author->title }}</h1>
@@ -94,92 +94,92 @@
 
 
 
-            @if (isset($group) && $group)
+    @if (isset($group) && $group)
 
-                <nav class="mb-2" aria-label="breadcrumb">
-                        <ol class="breadcrumb flex-lg-nowrap">
-                            <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
-                            @if ($group && ! $cat && ! $subcat)
-                               <!-- <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ \Illuminate\Support\Str::ucfirst($group) }}</li> -->
-                            @elseif ($group && $cat)
-                            <!--    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route', ['group' => $group]) }}">{{ \Illuminate\Support\Str::ucfirst($group) }}</a></li>-->
-                            @endif
-                            @if ($cat && ! $subcat)
-                                <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $cat->title }}</li>
-                            @elseif ($cat && $subcat)
-                                <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route', ['group' => $group, 'cat' => $cat]) }}">{{ $cat->title }}</a></li>
-                                <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $subcat->title }}</li>
-                            @endif
-                        </ol>
-                </nav>
+        <nav class="mb-2" aria-label="breadcrumb">
+            <ol class="breadcrumb flex-lg-nowrap">
+                <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
+                @if ($group && ! $cat && ! $subcat)
+                    <!-- <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ \Illuminate\Support\Str::ucfirst($group) }}</li> -->
+                @elseif ($group && $cat)
+                    <!--    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route', ['group' => $group]) }}">{{ \Illuminate\Support\Str::ucfirst($group) }}</a></li>-->
+                @endif
+                @if ($cat && ! $subcat)
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $cat->translation->title }}</li>
+                @elseif ($cat && $subcat)
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route', ['group' => $group, 'cat' => $cat->translation->slug]) }}">{{ $cat->translation->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $subcat->translation->title }}</li>
+                @endif
+            </ol>
+        </nav>
 
 
+        <section class="py-2 mb-1">
+
+            @if ($group && ! $cat && ! $subcat)
+
+
+                <h1 class="h2 mb-4  me-3">{{ __('front/ricekakis.web_shop') }}</h1>
+                <div class="row">
+
+                    @foreach ($list as $item)
+                        <!-- Product-->
+                        <div class="article col-md-3 mb-grid-gutter">
+                            <a class="card border-0 shadow" href="{{ route('catalog.route', ['group' => $group]) }}/{{ $item['slug'] }}">
+                                <img class="card-img-top p-3" loading="lazy" width="200" height="200" src="{{ $item['image'] }}" alt="Kategorija {{ $item['title'] }}">
+                                <div class="card-body py-2 text-center px-0">
+                                    <h3 class="h4 mt-1 font-title text-primary">{{ $item['title'] }}</h3>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+
+
+
+
+
+            @endif
+            @if ($cat && ! $subcat)
+                <h1 class="h2 mb-2 mb-md-0 me-3">{{ $cat->translation->title }}</h1>
+            @elseif ($cat && $subcat)
+                <h1 class="h2 mb-2 mb-md-0 me-3">{{ $subcat->translation->title }}</h1>
+            @endif
+
+
+        </section>
+
+        @if ($cat && ! $subcat)
+
+            @if ($cat->subcategories()->count())
                 <section class="py-2 mb-1">
 
-                    @if ($group && ! $cat && ! $subcat)
+                    <div class="tns-carousel">
+                        <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "controls": true, "autoHeight": false, "responsive": {"0":{"items":2, "gutter": 10},"480":{"items":2, "gutter": 10},"800":{"items":4, "gutter": 20}, "1300":{"items":5, "gutter": 30}, "1800":{"items":6, "gutter": 30}}}'>
+                            @foreach ($cat->subcategories as $item)
+                                <!-- Product-->
+                                <div class="article mb-grid-gutter">
+                                    <a class="card border-0 shadow" href="{{ route('catalog.route', ['group' => $group, 'cat' => $cat->translation->slug, 'subcat' => $item->translation->slug]) }}">
+                                        <img class="card-img-top p-3" loading="lazy" width="200" height="200" src="{{ $item['image'] }}" alt="Kategorija {{ $item->translation->title }}">
+                                        <div class="card-body py-2 text-center px-0">
+                                            <h3 class="h4 mt-1 font-title text-primary">{{ $item->translation->title }}</h3>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
 
 
-                            <h1 class="h2 mb-4  me-3">{{ __('front/ricekakis.web_shop') }}</h1>
-                        <div class="row">
-
-                                @foreach ($list as $item)
-                                    <!-- Product-->
-                                    <div class="article col-md-3 mb-grid-gutter">
-                                        <a class="card border-0 shadow" href="{{ route('catalog.route', ['group' => $group]) }}/{{ $item['slug'] }}">
-                                            <img class="card-img-top p-3" loading="lazy" width="200" height="200" src="{{ $item['image'] }}" alt="Kategorija {{ $item['title'] }}">
-                                            <div class="card-body py-2 text-center px-0">
-                                                <h3 class="h4 mt-1 font-title text-primary">{{ $item['title'] }}</h3>
-                                            </div>
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-
-
-
-
-
-                    @endif
-                    @if ($cat && ! $subcat)
-                            <h1 class="h2 mb-2 mb-md-0 me-3">{{ $cat->title }}</h1>
-                    @elseif ($cat && $subcat)
-                            <h1 class="h2 mb-2 mb-md-0 me-3">{{ $subcat->title }}</h1>
-                    @endif
 
 
                 </section>
 
-                @if ($cat && ! $subcat)
-
-                    @if ($cat->subcategories()->count())
-                        <section class="py-2 mb-1">
-
-                            <div class="tns-carousel">
-                                <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "controls": true, "autoHeight": false, "responsive": {"0":{"items":2, "gutter": 10},"480":{"items":2, "gutter": 10},"800":{"items":4, "gutter": 20}, "1300":{"items":5, "gutter": 30}, "1800":{"items":6, "gutter": 30}}}'>
-                                    @foreach ($cat->subcategories as $item)
-                                        <!-- Product-->
-                                        <div class="article mb-grid-gutter">
-                                            <a class="card border-0 shadow" href="{{ route('catalog.route', ['group' => $group, 'cat' => $cat, 'subcat' => $item]) }}">
-                                                <img class="card-img-top p-3" loading="lazy" width="200" height="200" src="{{ $item['image'] }}" alt="Kategorija {{ $item['title'] }}">
-                                                <div class="card-body py-2 text-center px-0">
-                                                    <h3 class="h4 mt-1 font-title text-primary">{{ $item['title'] }}</h3>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-
-
-
-                        </section>
-
-                    @endif
-
-                @endif
-
             @endif
+
+        @endif
+
+    @endif
 
 
     <products-view ids="{{ isset($ids) ? $ids : null }}"
@@ -208,28 +208,28 @@
             </div>
         </section>
 
-              @endif
+    @endif
 
 
-                  @if ($cat && !$subcat)
-                      <section class="col">
-                          <div class="card p2-5 border-0 mt-5 shadow mb-5" >
-                              <div class="card-body py-md-4 py-3 px-4 ">
-                      <h2 class="fs-5 mb-4 mt-2">{{ $cat->meta_title }}</h2>
-                      {!! $cat->description !!}
-                    </div>
+    @if ($cat && !$subcat)
+        <section class="col">
+            <div class="card p2-5 border-0 mt-5 shadow mb-5" >
+                <div class="card-body py-md-4 py-3 px-4 ">
+                    <h2 class="fs-5 mb-4 mt-2">{{ $cat->translation->meta_title }}</h2>
+                    {!! $cat->translation->description !!}
                 </div>
-            </section>
-        @elseif ($subcat)
-                            <section class="col">
-                                <div class="card p2-5 border-0 mt-5 shadow mb-5" >
-                                    <div class="card-body py-md-4 py-3 px-4 ">
-                    <h2 class="fs-5 mb-4 mt-2">{{ $subcat->meta_title }}</h2>
-            {!! $subcat->description !!}
-                                    </div>
-                                </div>
-                            </section>
-        @endif
+            </div>
+        </section>
+    @elseif ($subcat)
+        <section class="col">
+            <div class="card p2-5 border-0 mt-5 shadow mb-5" >
+                <div class="card-body py-md-4 py-3 px-4 ">
+                    <h2 class="fs-5 mb-4 mt-2">{{ $subcat->translation->meta_title }}</h2>
+                    {!! $subcat->translation->description !!}
+                </div>
+            </div>
+        </section>
+    @endif
 
 
 
