@@ -4617,7 +4617,7 @@ var storage_cart = {
 };
 var messages = {
   error: window.trans.errorr,
-  cartAdd: window.trans.proizvoddodan,
+  cartAdd: window.trans.cartadd,
   cartUpdate: window.trans.cartppdate,
   cartRemove: window.trans.cartremove,
   couponSuccess: window.trans.couponsuccess,
