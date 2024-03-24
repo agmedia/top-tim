@@ -47,6 +47,7 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->toArray());
         $action = new Action();
 
         $stored = $action->validateRequest($request)->create();
@@ -104,7 +105,7 @@ class ActionController extends Controller
      */
     public function destroy(Request $request, Action $action)
     {
-        $destroyed = Action::destroy($action->id);
+        $destroyed = $action->resolveDestruction($action->id);
 
         if ($destroyed) {
             return redirect()->route('actions')->with(['success' => 'Akcija je uspjšeno izbrisana!']);
@@ -124,9 +125,8 @@ class ActionController extends Controller
     public function destroyApi(Request $request)
     {
         if ($request->has('id')) {
-            $action = Action::find($request->input('id'));
-            $action->truncateProducts();
-            $destroyed = $action->delete();
+            $action = new Action();
+            $destroyed = $action->resolveDestruction($request->input('id'));
 
             if ($destroyed) {
                 return response()->json(['success' => 200]);

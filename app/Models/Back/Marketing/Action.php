@@ -54,14 +54,14 @@ class Action extends Model
     public function translation($lang = null, bool $all = false)
     {
         if ($lang) {
-            return $this->hasOne(ActionTranslation::class, 'action_id')->where('lang', $lang)->first();
+            return $this->hasOne(ActionTranslation::class, 'product_action_id')->where('lang', $lang)->first();
         }
 
         if ($all) {
-            return $this->hasMany(ActionTranslation::class, 'action_id');
+            return $this->hasMany(ActionTranslation::class, 'product_action_id');
         }
 
-        return $this->hasOne(ActionTranslation::class, 'action_id')->where('lang', $this->locale);
+        return $this->hasOne(ActionTranslation::class, 'product_action_id')->where('lang', $this->locale);
     }
 
 
@@ -125,6 +125,7 @@ class Action extends Model
     public function edit()
     {
         $data    = $this->getRequestData();
+        $deactivate = $this->shouldDeactivateProducts($this->status, $data['status']);
         $updated = $this->update($this->getModelArray(false));
 
         if ($updated) {
@@ -132,6 +133,10 @@ class Action extends Model
 
             if ($this->shouldUpdateProducts($data)) {
                 $this->updateProducts($this->resolveTarget($data['links']), $this->id, $data['start'], $data['end']);
+            }
+
+            if ($deactivate) {
+                $this->resolveDestruction($this->id, 0);
             }
 
             return $this;
@@ -204,6 +209,36 @@ class Action extends Model
 
 
     /**
+     * @param int $action_id
+     * @param int $complete
+     *
+     * @return bool
+     */
+    public function resolveDestruction(int $action_id, int $complete = 1): bool
+    {
+        $action = Action::query()->find($action_id);
+
+        if ($action) {
+            $products_updated = $action->truncateProducts();
+
+            if ($products_updated) {
+                if ($complete) {
+                    $action->delete();
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*******************************************************************************
+    *                                Copyright : AGmedia                           *
+    *                              email: filip@agmedia.hr                         *
+    *******************************************************************************/
+
+    /**
      * @param bool $insert
      *
      * @return array
@@ -274,6 +309,21 @@ class Action extends Model
 
 
     /**
+     * @param int $new_status
+     *
+     * @return bool
+     */
+    private function shouldDeactivateProducts(int $old_status, int $new_status): bool
+    {
+        if ($old_status == 1 && $new_status == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
      * @return bool
      */
     private function listRequired(): bool
@@ -301,12 +351,8 @@ class Action extends Model
             return ProductCategory::whereIn('category_id', $links)->pluck('product_id')->unique();
         }
 
-        if ($this->request->group == 'author') {
-            return Product::whereIn('author_id', $links)->pluck('id')->unique();
-        }
-
-        if ($this->request->group == 'publisher') {
-            return Product::whereIn('publisher_id', $links)->pluck('id')->unique();
+        if ($this->request->group == 'brand') {
+            return Product::whereIn('brand_id', $links)->pluck('id')->unique();
         }
 
         return $this->request->group;
@@ -354,9 +400,15 @@ class Action extends Model
     /**
      * @return mixed
      */
-    private function truncateProducts()
+    private function truncateProducts(int $action_id = 0)
     {
-        return Product::where('action_id', $this->id)->update([
+        $id = $this->id ?? 0;
+
+        if ($action_id) {
+            $id = $action_id;
+        }
+
+        return Product::where('action_id', $id)->update([
             'action_id'    => 0,
             'special'      => null,
             'special_from' => null,
