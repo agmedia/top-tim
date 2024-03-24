@@ -39,7 +39,7 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
     {
         parent::__construct($attributes);
 
-        $this->locale = session('locale');
+        $this->locale = current_locale();
     }
 
 
@@ -50,6 +50,8 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
      */
     public function getLocalizedRouteKey($locale)
     {
+        Log::info('$locale = ' . $locale);
+
         return $this->translation($locale)->slug;
     }
 
@@ -64,8 +66,10 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
     {
         //$fallback = $this->locale == 'en' ? 'hr' : 'en';
 
-        /*Log::info('$fallback = ' . $fallback);
-        Log::info('$value = ' . $value);*/
+        /*Log::info('$fallback = ' . $fallback);*/
+        Log::info('$value = ' . $value);
+        Log::info('$this->locale = ' . $this->locale);
+        Log::info('current_locale() = ' . current_locale());
 
         return static::query()->whereHas('translation', function ($query) use ($value) {
             $query->where('slug', $value);

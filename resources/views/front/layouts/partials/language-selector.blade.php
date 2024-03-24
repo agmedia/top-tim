@@ -12,10 +12,35 @@
             @else
                 @foreach (ag_lang() as $lang)
                     <li>
-                        <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('index'), [], true) }}">
-                            <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
-                            {{ $lang->title->{current_locale()} }}
-                        </a>
+{{--                        <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('index'), [], true) }}">--}}
+{{--                            <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">--}}
+{{--                            {{ $lang->title->{current_locale()} }}--}}
+{{--                        </a>--}}
+                        @if (isset($group) && isset($cat) && ! $cat)
+                            <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path'))]), [], true) }}">
+                                <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
+                                {{ $lang->title->{current_locale()} }}
+                            </a>
+                        @endif
+                        @if (isset($cat) && $cat && isset($subcat) && ! $subcat)
+                            <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path')), 'cat' => $cat->translation($lang->code)->slug]), [], true) }}">
+                                <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
+                                {{ $lang->title->{current_locale()} }}
+                            </a>
+                        @endif
+                        @if (isset($prod) && $prod)
+                            @if (isset($cat) && $cat && ! $prod->subcategory())
+                                <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path')), 'cat' => $cat->translation($lang->code)->slug, 'subcat' => $prod->translation($lang->code)->slug]), [], true) }}">
+                                    <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
+                                    {{ $lang->title->{current_locale()} }}
+                                </a>
+                            @else
+                                <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path')), 'cat' => $cat->translation($lang->code)->slug, 'subcat' => $subcat->translation($lang->code)->slug, 'prod' => $prod->translation($lang->code)->slug]), [], true) }}">
+                                    <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
+                                    {{ $lang->title->{current_locale()} }}
+                                </a>
+                            @endif
+                        @endif
                     </li>
                 @endforeach
             @endif
