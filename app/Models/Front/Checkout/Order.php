@@ -252,7 +252,7 @@ class Order extends Model
             OrderProduct::insert([
                 'order_id'   => $order_id,
                 'product_id' => $item->id,
-                'name'       => $item->name,
+                'name'       => $item->name->{ current_locale() },
                 'quantity'   => $item->quantity,
                 'org_price'  => $item->price,
                 'discount'   => $discount ? number_format($discount, 2) : 0,
@@ -278,7 +278,7 @@ class Order extends Model
         OrderTotal::insert([
             'order_id'   => $order_id,
             'code'       => 'subtotal',
-            'title'      => 'Ukupno',
+            'title'      => __('front/cart.ukupno'),
             'value'      => $this->order['cart']['subtotal'],
             'sort_order' => 0,
             'created_at' => Carbon::now(),
@@ -328,7 +328,7 @@ class Order extends Model
         OrderTotal::insert([
             'order_id'   => $order_id,
             'code'       => 'total',
-            'title'      => 'Sveukupno',
+            'title'      =>  __('front/cart.sveukupno'),
             'value'      => $this->order['cart']['total'],
             'sort_order' => 5,
             'created_at' => Carbon::now(),
