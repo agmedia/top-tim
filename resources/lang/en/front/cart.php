@@ -184,7 +184,8 @@ return [
     'korisnik_snimljen' => 'User data successfully saved.',
     'uspjeh' => 'Success',
     'greska' => 'Error',
-    'greska_prilikom_snimanja'=> 'Oops..! Error occurred while saving.'
+    'greska_prilikom_snimanja'=> 'Oops..! Error occurred while saving.',
+    'naknada_cod' => 'Cash on Delivery Fee'
 
 
 ];

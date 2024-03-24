@@ -36,7 +36,7 @@ class OrderSent extends Mailable
      */
     public function build()
     {
-        return $this->subject(__('front/cart.hvala_vam_za_narudzbu'))
+        return $this->subject(__('front/cart.hvala'))
             ->view('emails.order-sent');
     }
 }
