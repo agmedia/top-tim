@@ -385,9 +385,9 @@ export default {
 
             if (this.brand != '') {
                 if ((this.brand).includes('+')) {
-                    this.selectedPublishers = (this.brand).split('+');
+                    this.selectedBrands = (this.brand).split('+');
                 } else {
-                    this.selectedPublishers = [this.brand];
+                    this.selectedBrands = [this.brand];
                 }
             }
 
