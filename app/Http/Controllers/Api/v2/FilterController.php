@@ -37,13 +37,13 @@ class FilterController extends Controller
 
         // Ako je normal kategorija
         if ($params['group']) {
-            //$response = Helper::resolveCache('categories')->remember($params['group'], config('cache.life'), function () use ($params) {
+            $cache_tag = $params['group'] . session('locale');
+
+            $response = Helper::resolveCache('categories')->remember($cache_tag, config('cache.life'), function () use ($params) {
                 $categories = Category::active()->topList($params['group'])->sortByName()->with('subcategories')/*->withCount('products')*/ ->get();
 
-            //Log::info($categories->toArray());
-
                 return $this->resolveCategoryArray($categories, 'categories');
-            //});
+            });
         }
 
         return response()->json($response);
@@ -60,6 +60,7 @@ class FilterController extends Controller
      */
     private function resolveCategoryArray($categories, string $type, $target = null, string $parent_slug = null): array
     {
+        $locale = session('locale');
         $response = [];
 
         foreach ($categories as $category) {
@@ -68,11 +69,11 @@ class FilterController extends Controller
 
             if (isset($category['subcategories']) && ! empty($category['subcategories'])) {
                 foreach ($category['subcategories'] as $subcategory) {
-                    $sub_url = $this->resolveCategoryUrl($subcategory, $type, $target, $category->translation->slug);
+                    $sub_url = $this->resolveCategoryUrl($subcategory, $type, $target, $category->translation($locale)->slug);
 
                     $subs[] = [
                         'id'    => $subcategory['id'],
-                        'title' => $subcategory->translation->title,
+                        'title' => $subcategory->translation($locale)->title,
                         'count' => 0,//Category::find($subcategory['id'])->products()->count(),
                         'url'   => $sub_url
                     ];
@@ -81,7 +82,7 @@ class FilterController extends Controller
 
             $response[] = [
                 'id'    => $category['id'],
-                'title' => $category->translation->title,
+                'title' => $category->translation($locale)->title,
                 'icon'  => $category['icon'],
                 'count' => 0,//$category['products_count'],
                 'url'   => $url,
@@ -105,35 +106,25 @@ class FilterController extends Controller
      */
     private function resolveCategoryUrl($category, string $type, $target, string $parent_slug = null): string
     {
-        if ($type == 'author') {
-            return route('catalog.route.author', [
-                'author' => $target,
-                'cat'    => $parent_slug ?: $category->translation->slug,
-                'subcat' => $parent_slug ? $category->translation->slug : null
-            ]);
+        $locale = session('locale');
 
-        } elseif ($type == 'publisher') {
-            return route('catalog.route.publisher', [
-                'publisher' => $target,
-                'cat'       => $parent_slug ?: $category->translation->slug,
-                'subcat'    => $parent_slug ? $category->translation->slug : null
-            ]);
-
-        } elseif ($type == 'brand') {
-            return route('catalog.route.brand', [
+        if ($type == 'brand') {
+            $route = route('catalog.route.brand', [
                 'brand' => $target,
-                'cat'       => $parent_slug ?: $category->translation->slug,
-                'subcat'    => $parent_slug ? $category->translation->slug : null
+                'cat'       => $parent_slug ?: $category->translation($locale)->slug,
+                'subcat'    => $parent_slug ? $category->translation($locale)->slug : null
             ]);
 
-
+            return LaravelLocalization::getLocalizedUrl($locale, $route);
 
         } else {
-            return route('catalog.route', [
+            $route = route('catalog.route', [
                 'group'  => Str::slug($category['group']),
-                'cat'    => $parent_slug ?: $category->translation->slug,
-                'subcat' => $parent_slug ? $category->translation->slug : null
+                'cat'    => $parent_slug ?: $category->translation($locale)->slug,
+                'subcat' => $parent_slug ? $category->translation($locale)->slug : null
             ]);
+
+            return LaravelLocalization::getLocalizedUrl($locale, $route);
         }
     }
 

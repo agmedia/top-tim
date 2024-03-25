@@ -50,8 +50,6 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
      */
     public function getLocalizedRouteKey($locale)
     {
-        Log::info('$locale = ' . $locale);
-
         return $this->translation($locale)->slug;
     }
 
@@ -64,18 +62,9 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
      */
     public function resolveRouteBinding($value, $field = NULL)
     {
-        //$fallback = $this->locale == 'en' ? 'hr' : 'en';
-
-        /*Log::info('$fallback = ' . $fallback);*/
-        Log::info('$value = ' . $value);
-        Log::info('$this->locale = ' . $this->locale);
-        Log::info('current_locale() = ' . current_locale());
-
         return static::query()->whereHas('translation', function ($query) use ($value) {
             $query->where('slug', $value);
-        })/*->orWhereHas('translation', function ($query) use ($value, $fallback) {
-            $query->where('lang', $fallback)->where('slug', $value);
-        })*/->first() ?? abort(404);
+        })->first() ?? abort(404);
     }
 
 
@@ -252,13 +241,13 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
                 $fill = $this->topList($group)->with('subcategories')->get();
 
                 foreach ($fill as $cat) {
-                    $cats[$cat->id] = ['title' => $cat->title];
+                    $cats[$cat->id] = ['title' => $cat->translation->title];
 
                     if ($cat->subcategories) {
                         $subcats = [];
 
                         foreach ($cat->subcategories as $subcategory) {
-                            $subcats[$subcategory->id] = ['title' => $subcategory->title];
+                            $subcats[$subcategory->id] = ['title' => $subcategory->translation->title];
                         }
                     }
 
