@@ -28,6 +28,8 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $appends = ['title', 'description', 'webp', 'thumb'];
+
     /**
      * @var string
      */
