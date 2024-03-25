@@ -16,6 +16,7 @@ use App\Models\Front\Catalog\Author;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Product;
 use App\Models\Front\Catalog\Publisher;
+use App\Models\Front\Catalog\Brand;
 use App\Models\Seo;
 use App\Models\TagManager;
 use Illuminate\Database\Eloquent\Builder;

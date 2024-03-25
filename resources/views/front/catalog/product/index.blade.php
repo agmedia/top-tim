@@ -199,8 +199,10 @@
                <div class="accordion-body">
 
                    <ul class="fs-sm ps-4 mb-0">
-                       @if ($prod->author)
-                           <li><strong>Brand:</strong> <a href="{{ route('catalog.route.author', ['author' => $prod->author]) }}">{{ $prod->author->title }} </a></li>
+
+{{dd($prod->brand->title)}}
+                       @if ($prod->brand)
+                           <li><strong>Brand:</strong> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand]) }}">{{ $prod->brand->title->{ current_locale() } }} </a></li>
                        @endif
 
                        @if ($prod->isbn)

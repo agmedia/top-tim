@@ -391,6 +391,15 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
+    public function brand()
+    {
+        return $this->hasOne(Brand::class, 'id', 'brand_id');
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function publisher()
     {
         return $this->hasOne(Publisher::class, 'id', 'publisher_id');

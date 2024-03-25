@@ -432,6 +432,8 @@ Route::group(
 //
     Route::get(config('settings.author_path') . '/{author?}/{cat?}/{subcat?}', [CatalogRouteController::class, 'author'])->name('catalog.route.author');
     Route::get(config('settings.publisher_path') . '/{publisher?}/{cat?}/{subcat?}', [CatalogRouteController::class, 'publisher'])->name('catalog.route.publisher');
+
+    Route::get(config('settings.brand_path') . '/{brand?}/{cat?}/{subcat?}', [CatalogRouteController::class, 'brand'])->name('catalog.route.brand');
 //
     Route::get('akcijska-ponuda/{cat?}/{subcat?}', [CatalogRouteController::class, 'actions'])->name('catalog.route.actions');
 //

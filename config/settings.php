@@ -23,6 +23,7 @@ return [
 
     'search_keyword'       => 'pojam',
     'author_path'          => 'brand',
+    'brand_path'          => 'brand',
     'publisher_path'       => 'nakladnik',
     'group_path'           => 'Kategorija proizvoda',
     'eng_default_category' => 358,
