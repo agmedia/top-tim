@@ -47,6 +47,17 @@
     @endpush
 @endif
 
+
+@if (isset($brand) && $brand)
+
+
+    @section ('title',  $brand->translation->title)
+    @section ('description', $brand->translation->descriptiom)
+    @push('meta_tags')
+        <link rel="canonical" href="{{ env('APP_URL')}}{{ $brand->translation->slug }}" />
+    @endpush
+@endif
+
 @if (isset($meta_tags))
     @push('meta_tags')
 
@@ -67,28 +78,28 @@
         </section>
     @endif
 
-    @if (isset($author) && $author)
+    @if (isset($brand) && $brand)
 
         <nav class="mb-4" aria-label="breadcrumb">
             <ol class="breadcrumb flex-lg-nowrap">
                 <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
                 <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author') }}">Autori</a></li>
                 @if ( ! $cat && ! $subcat)
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $author->title }}</li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $brand->title }}</li>
                 @endif
                 @if ($cat && ! $subcat)
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author]) }}">{{ $author->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.abrand', ['brand' => $brand]) }}">{{ $brand->title }}</a></li>
                     <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $cat->title }}</li>
                 @elseif ($cat && $subcat)
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author]) }}">{{ $author->title }}</a></li>
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author', ['author' => $author, 'cat' => $cat]) }}">{{ $cat->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand', ['brand' => $brand]) }}">{{ $brand->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand', ['brand' => $brand, 'cat' => $cat]) }}">{{ $cat->title }}</a></li>
                     <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $subcat->title }}</li>
                 @endif
             </ol>
         </nav>
 
         <section class="d-md-flex justify-content-between align-items-center mb-2 pb-2">
-            <h1 class="h2 mb-2 mb-md-0 me-3">{{ $author->title }}</h1>
+            <h1 class="h2 mb-2 mb-md-0 me-3">{{ $brand->title }}</h1>
         </section>
     @endif
 
@@ -187,6 +198,7 @@
                    cat="{{ isset($cat) ? $cat['id'] : null }}"
                    subcat="{{ isset($subcat) ? $subcat['id'] : null }}"
                    author="{{ isset($author) ? $author['slug'] : null }}"
+                   brand="{{ isset($brand) ? $brand['slug'] : null }}"
                    publisher="{{ isset($publisher) ? $publisher['slug'] : null }}">
     </products-view>
 
@@ -209,6 +221,21 @@
         </section>
 
     @endif
+
+
+    @if (isset($brand) && $brand && ! empty($brand->description))
+        <section class="col">
+            <div class="card p2-5 border-0 mt-5 shadow mb-5" >
+                <div class="card-body py-md-4 py-3 px-4 ">
+                    <h2 class="fs-5 mb-4 mt-2">{{ $brand->translation->meta_title }}</h2>
+
+                    {!!$brand->translation->description !!}
+                </div>
+            </div>
+        </section>
+
+    @endif
+
 
 
     @if ($cat && !$subcat)

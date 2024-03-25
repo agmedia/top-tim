@@ -28,7 +28,7 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    protected $appends = ['title', 'description', 'webp', 'thumb'];
+    protected $appends = ['title', 'description', 'url'];
 
     /**
      * @var string
@@ -121,17 +121,14 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
     }
 
 
-
-
     /**
-     * Get the route key for the model.
-     *
      * @return string
      */
-    public function getRouteKeyName()
+    public function getUrlAttribute()
     {
-        return 'slug';
+        return config('settings.brand_path'). '/' . $this->translation->slug;
     }
+
 
 
     /**

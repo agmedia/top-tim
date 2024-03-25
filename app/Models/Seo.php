@@ -61,8 +61,10 @@ class Seo
      */
     public static function getBrandData(Brand $brand, Category $cat = null, Category $subcat = null): array
     {
-        $title = brand->title . ' Rice Kakis | Asian Store';
-        $description =  $brand->meta_description ;
+        $title = $brand->title . ' Rice Kakis | Asian Store';
+        $description =  $brand->translation->meta_description ;
+
+
 
         // Check if there is meta title or description and set vars.
         if ($cat) {

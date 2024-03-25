@@ -3097,13 +3097,15 @@ Vue.directive('tooltip', function (el, binding) {
     cat: String,
     subcat: String,
     author: String,
-    publisher: String
+    publisher: String,
+    brand: String
   },
   //
   data: function data() {
     return {
       products: {},
       autor: '',
+      brand: '',
       nakladnik: '',
       start: '',
       end: '',
@@ -3213,6 +3215,7 @@ Vue.directive('tooltip', function (el, binding) {
         start: this.start,
         end: this.end,
         autor: this.autor,
+        brand: this.brand,
         nakladnik: this.nakladnik,
         sort: this.sorting,
         pojam: this.search_query,
@@ -3234,6 +3237,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.start = params.query.start ? params.query.start : '';
       this.end = params.query.end ? params.query.end : '';
       this.autor = params.query.autor ? params.query.autor : '';
+      this.brand = params.query.brand ? params.query.brand : '';
       this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
       this.page = params.query.page ? params.query.page : '';
       this.sorting = params.query.sort ? params.query.sort : '';
@@ -3255,6 +3259,7 @@ Vue.directive('tooltip', function (el, binding) {
         cat: this.cat,
         subcat: this.subcat,
         autor: this.autor,
+        brand: this.brand,
         nakladnik: this.nakladnik,
         start: this.start,
         end: this.end,
@@ -3263,6 +3268,9 @@ Vue.directive('tooltip', function (el, binding) {
       };
       if (this.author != '') {
         params.autor = this.author;
+      }
+      if (this.brand != '') {
+        params.brand = this.brand;
       }
       if (this.publisher != '') {
         params.nakladnik = this.publisher;
