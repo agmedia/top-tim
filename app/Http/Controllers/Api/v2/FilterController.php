@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Models\Front\Catalog\Product;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Front\Catalog\Author;
+use App\Models\Front\Catalog\Brand;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Publisher;
 use Illuminate\Http\Request;
@@ -118,6 +119,15 @@ class FilterController extends Controller
                 'subcat'    => $parent_slug ? $category->translation->slug : null
             ]);
 
+        } elseif ($type == 'brand') {
+            return route('catalog.route.brand', [
+                'brand' => $target,
+                'cat'       => $parent_slug ?: $category->translation->slug,
+                'subcat'    => $parent_slug ? $category->translation->slug : null
+            ]);
+
+
+
         } else {
             return route('catalog.route', [
                 'group'  => Str::slug($category['group']),
@@ -170,6 +180,10 @@ class FilterController extends Controller
             $request_data['nakladnik'] = $this->publishers;
         }
 
+        if (isset($params['brand']) && $params['brand']) {
+            $request_data['brand'] = $this->brands;
+        }
+
         if (isset($params['start']) && $params['start']) {
             $request_data['start'] = $params['start'];
         }
@@ -213,27 +227,29 @@ class FilterController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function authors(Request $request)
+    public function brands(Request $request)
     {
         if ($request->has('params')) {
             return response()->json(
                 (new Author())->filter($request->input('params'))
-                              ->get()
-                              ->toArray()
+                    ->get()
+                    ->toArray()
             );
         }
 
         return response()->json(
             Helper::resolveCache('authors')->remember('featured', config('cache.life'), function () {
-                return Author::query()->active()
-                             ->featured()
-                             ->basicData()
-                             ->withCount('products')
-                             ->get()
-                             ->toArray();
+                return Brand::query()->active()
+                    ->featured()
+                    ->basicData()
+                    ->withCount('products')
+                    ->get()
+                    ->toArray();
             })
         );
     }
+
+
 
 
     /**

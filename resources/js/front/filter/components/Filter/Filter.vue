@@ -99,6 +99,7 @@ export default {
         cat: String,
         subcat: String,
         author: String,
+        brand: String,
         publisher: String,
     },
 
@@ -110,18 +111,22 @@ export default {
             category: null,
             subcategory: null,
             authors: [],
+            brands: [],
             publishers: [],
             selectedAuthors: [],
             selectedPublishers: [],
             start: '',
             end: '',
             autor: '',
+            brand: '',
             nakladnik: '',
             search_query: '',
             searchAuthor: '',
+            searchBrand: '',
             searchPublisher: '',
             show_authors: false,
             authors_loaded: false,
+            brands_loaded: false,
             show_publishers: false,
             publishers_loaded: false,
             origin: location.origin + '/',
@@ -139,6 +144,10 @@ export default {
         selectedAuthors(value) {
             this.autor = value.join('+');
             this.setQueryParamOther('autor', this.autor);
+        },
+        selectedBrands(value) {
+            this.brand = value.join('+');
+            this.setQueryParamOther('brand', this.brand);
         },
         selectedPublishers(value) {
             this.nakladnik = value.join('+');
@@ -171,6 +180,10 @@ export default {
         if (this.author == '') {
             this.show_authors = true;
             this.getAuthors();
+        }
+        if (this.brand == '') {
+            this.show_brands = true;
+            this.getBrands();
         }
 
         if (this.publisher == '') {
@@ -222,6 +235,19 @@ export default {
         /**
          *
          **/
+        getBrands() {
+            this.brands_loaded = false;
+            let params = this.setParams();
+
+            axios.post('filter/getBrands', { params }).then(response => {
+                this.brands_loaded = true;
+                this.brands = response.data;
+            });
+        },
+
+        /**
+         *
+         **/
         getPublishers() {
             this.publishers_loaded = false;
             let params = this.setParams();
@@ -267,6 +293,7 @@ export default {
                 start: this.start,
                 end: this.end,
                 autor: this.autor,
+                brand: this.brand,
                 nakladnik: this.nakladnik,
                 page: this.page,
                 pojam: this.search_query,
@@ -284,7 +311,7 @@ export default {
          *
          */
         checkNoFollowQuery(param) {
-            if (param.nakladnik || param.autor || param.start || param.end) {
+            if (param.nakladnik || param.autor || param.brand || param.start || param.end) {
                 if (!document.querySelectorAll('meta[name="robots"]').length > 0) {
                     $('head').append('<meta name=robots content=noindex,nofollow>');
                 }
@@ -302,6 +329,7 @@ export default {
             this.start = params.query.start ? params.query.start : '';
             this.end = params.query.end ? params.query.end : '';
             this.autor = params.query.autor ? params.query.autor : '';
+            this.brand = params.query.brand ? params.query.brand : '';
             this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
             this.search_query = params.query.pojam ? params.query.pojam : '';
         },
@@ -316,6 +344,7 @@ export default {
                 cat: this.category ? this.category.id : this.cat,
                 subcat: this.subcategory ? this.subcategory.id : this.subcat,
                 author: this.author,
+                brand: this.brand,
                 publisher: this.publisher,
                 search_author: this.searchAuthor,
                 search_publisher: this.searchPublisher,
@@ -324,6 +353,9 @@ export default {
 
             if (this.author != '') {
                 params.author = this.author;
+            }
+            if (this.brand != '') {
+                params.brand = this.brand;
             }
             if (this.publisher != '') {
                 params.publisher = this.publisher;
@@ -351,6 +383,14 @@ export default {
                 }
             }
 
+            if (this.brand != '') {
+                if ((this.brand).includes('+')) {
+                    this.selectedPublishers = (this.brand).split('+');
+                } else {
+                    this.selectedPublishers = [this.brand];
+                }
+            }
+
             console.log(location)
             console.log(this.category)
             console.log(this.subcategory)
@@ -364,6 +404,7 @@ export default {
             this.$router.push({query: {}}).catch(()=>{});
             this.selectedAuthors = [];
             this.selectedPublishers = [];
+            this.selectedBrands = [];
             this.start = '';
             this.end = '';
         },

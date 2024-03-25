@@ -2565,6 +2565,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     cat: String,
     subcat: String,
     author: String,
+    brand: String,
     publisher: String
   },
   //
@@ -2574,18 +2575,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       category: null,
       subcategory: null,
       authors: [],
+      brands: [],
       publishers: [],
       selectedAuthors: [],
       selectedPublishers: [],
       start: '',
       end: '',
       autor: '',
+      brand: '',
       nakladnik: '',
       search_query: '',
       searchAuthor: '',
+      searchBrand: '',
       searchPublisher: '',
       show_authors: false,
       authors_loaded: false,
+      brands_loaded: false,
       show_publishers: false,
       publishers_loaded: false,
       origin: location.origin + '/',
@@ -2603,6 +2608,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     selectedAuthors: function selectedAuthors(value) {
       this.autor = value.join('+');
       this.setQueryParamOther('autor', this.autor);
+    },
+    selectedBrands: function selectedBrands(value) {
+      this.brand = value.join('+');
+      this.setQueryParamOther('brand', this.brand);
     },
     selectedPublishers: function selectedPublishers(value) {
       this.nakladnik = value.join('+');
@@ -2630,6 +2639,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     if (this.author == '') {
       this.show_authors = true;
       this.getAuthors();
+    }
+    if (this.brand == '') {
+      this.show_brands = true;
+      this.getBrands();
     }
     if (this.publisher == '') {
       this.show_publishers = true;
@@ -2679,15 +2692,29 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     /**
      *
      **/
-    getPublishers: function getPublishers() {
+    getBrands: function getBrands() {
       var _this3 = this;
+      this.brands_loaded = false;
+      var params = this.setParams();
+      axios.post('filter/getBrands', {
+        params: params
+      }).then(function (response) {
+        _this3.brands_loaded = true;
+        _this3.brands = response.data;
+      });
+    },
+    /**
+     *
+     **/
+    getPublishers: function getPublishers() {
+      var _this4 = this;
       this.publishers_loaded = false;
       var params = this.setParams();
       axios.post('filter/getPublishers', {
         params: params
       }).then(function (response) {
-        _this3.publishers_loaded = true;
-        _this3.publishers = response.data;
+        _this4.publishers_loaded = true;
+        _this4.publishers = response.data;
       });
     },
     /**
@@ -2729,6 +2756,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         start: this.start,
         end: this.end,
         autor: this.autor,
+        brand: this.brand,
         nakladnik: this.nakladnik,
         page: this.page,
         pojam: this.search_query
@@ -2746,7 +2774,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      *
      */
     checkNoFollowQuery: function checkNoFollowQuery(param) {
-      if (param.nakladnik || param.autor || param.start || param.end) {
+      if (param.nakladnik || param.autor || param.brand || param.start || param.end) {
         if (!document.querySelectorAll('meta[name="robots"]').length > 0) {
           $('head').append('<meta name=robots content=noindex,nofollow>');
         }
@@ -2763,6 +2791,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       this.start = params.query.start ? params.query.start : '';
       this.end = params.query.end ? params.query.end : '';
       this.autor = params.query.autor ? params.query.autor : '';
+      this.brand = params.query.brand ? params.query.brand : '';
       this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
       this.search_query = params.query.pojam ? params.query.pojam : '';
     },
@@ -2776,6 +2805,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         cat: this.category ? this.category.id : this.cat,
         subcat: this.subcategory ? this.subcategory.id : this.subcat,
         author: this.author,
+        brand: this.brand,
         publisher: this.publisher,
         search_author: this.searchAuthor,
         search_publisher: this.searchPublisher,
@@ -2783,6 +2813,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       };
       if (this.author != '') {
         params.author = this.author;
+      }
+      if (this.brand != '') {
+        params.brand = this.brand;
       }
       if (this.publisher != '') {
         params.publisher = this.publisher;
@@ -2807,6 +2840,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           this.selectedPublishers = [this.nakladnik];
         }
       }
+      if (this.brand != '') {
+        if (this.brand.includes('+')) {
+          this.selectedPublishers = this.brand.split('+');
+        } else {
+          this.selectedPublishers = [this.brand];
+        }
+      }
       console.log(location);
       console.log(this.category);
       console.log(this.subcategory);
@@ -2821,6 +2861,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       })["catch"](function () {});
       this.selectedAuthors = [];
       this.selectedPublishers = [];
+      this.selectedBrands = [];
       this.start = '';
       this.end = '';
     },
