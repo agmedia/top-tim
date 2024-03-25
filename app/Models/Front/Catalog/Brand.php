@@ -181,9 +181,10 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
      */
     public function filter(array $request, int $limit = 20): Builder
     {
+        Log::info($request);
         $query = (new Brand())->newQuery();
 
-        if ($request['search_brand']) {
+        if (isset($request['search_brand']) && $request['search_brand']) {
             $query->active();
 
             $query = Helper::searchByTitle($query, $request['search_brand']);
@@ -191,7 +192,7 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
         } else {
             $query->active()->featured();
 
-            if ($request['group'] && ! $request['search_brand']) {
+            if ($request['group'] && ( ! isset($request['search_brand']) || ! $request['search_brand'])) {
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
 
@@ -211,7 +212,7 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
             if (! $request['group'] && $request['brand']) {
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
-                    $query->where('brand_id', Publisher::where('slug', $request['brand'])->pluck('id')->first());
+                    $query->where('brand_id', Brand::where('id', $request['brand'])->pluck('id')->first());
                 });
             }
 
@@ -225,9 +226,8 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
         }
 
         $query->limit($limit)
-              ->basicData()
               ->withCount('products')
-              ->orderBy('title');
+              ->orderBy('sort_order');
 
         return $query;
     }

@@ -198,7 +198,7 @@
                    cat="{{ isset($cat) ? $cat['id'] : null }}"
                    subcat="{{ isset($subcat) ? $subcat['id'] : null }}"
                    author="{{ isset($author) ? $author['slug'] : null }}"
-                   brand="{{ isset($brand) ? $brand['slug'] : null }}"
+                   brand="{{ isset($brand) ? $brand->translation->slug : null }}"
                    publisher="{{ isset($publisher) ? $publisher['slug'] : null }}">
     </products-view>
 
