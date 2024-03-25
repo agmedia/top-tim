@@ -231,7 +231,7 @@ class FilterController extends Controller
     {
         if ($request->has('params')) {
             return response()->json(
-                (new Author())->filter($request->input('params'))
+                (new Brand())->filter($request->input('params'))
                     ->get()
                     ->toArray()
             );
@@ -252,33 +252,5 @@ class FilterController extends Controller
 
 
 
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function publishers(Request $request)
-    {
-        if ($request->has('params')) {
-            return response()->json(
-                (new Publisher())->filter($request->input('params'))
-                                 ->basicData()
-                                 ->withCount('products')
-                                 ->get()
-                                 ->toArray()
-            );
-        }
-
-        return response()->json(
-            Helper::resolveCache('publishers')->remember('featured', config('cache.life'), function () {
-                return Publisher::active()
-                                ->featured()
-                                ->basicData()
-                                ->withCount('products')
-                                ->get()
-                                ->toArray();
-            })
-        );
-    }
 
 }
