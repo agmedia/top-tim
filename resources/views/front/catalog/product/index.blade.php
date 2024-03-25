@@ -200,9 +200,9 @@
 
                    <ul class="fs-sm ps-4 mb-0">
 
-{{dd($prod->brand->title)}}
+
                        @if ($prod->brand)
-                           <li><strong>Brand:</strong> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand]) }}">{{ $prod->brand->title->{ current_locale() } }} </a></li>
+                           <li><strong>Brand:</strong> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand]) }}">{{ $prod->brand->title}} </a></li>
                        @endif
 
                        @if ($prod->isbn)

@@ -13,7 +13,7 @@
     <nav class="mb-4" aria-label="breadcrumb">
         <ol class="breadcrumb flex-lg-nowrap">
             <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>Naslovnica</a></li>
-            <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author') }}">Lista brandova</a></li>
+            <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand') }}">Lista brandova</a></li>
 
 
 
@@ -33,7 +33,7 @@
             <div class="col-lg-12   py-2 ">
                 <div class="scrolling-wrapper">
                     @foreach ($letters as $item)
-                        <a href="{{ route('catalog.route.author', ['author' => null, 'letter' => $item['value']]) }}"
+                        <a href="{{ route('catalog.route.brand', ['brand' => null, 'letter' => $item['value']]) }}"
                            class="btn btn-outline-primary btn-sm text-white  bg-primary mb-2 @if( ! $item['active'])  disabled @endif @if($item['value'] == $letter) bg-primary  @endif">
                             <strong>{{ $item['value'] }}</strong></a>
                     @endforeach
@@ -46,11 +46,11 @@
                 <h2 class="h5">{{ $letter ?: 'Svi brandovi' }}</h2>
 
             </div>
-            @foreach ($authors as $author)
+            @foreach ($brands as $brand)
                 <div class="col-sm-6 col-md-4  mb-3">
                     <div class="card border-bottom-primary">
                         <div class="card-body">
-                            <h6 class="card-title mb-0"><a href="{{ url($author['url']) }}" class="text-dark">{{ $author['title'] }} <span class="badge rounded-pill bg-secondary float-end">{{ $author['products_count'] }}</span></a></h6>
+                            <h6 class="card-title mb-0"><a href="{{ url($brand['url']) }}" class="text-dark">{{ $rand['title'] }} <span class="badge rounded-pill bg-secondary float-end">{{ $brand['products_count'] }}</span></a></h6>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
 
         <div class="row  py-md-3">
 
-            {{ $authors->onEachSide(1)->links() }}
+            {{ $rands->onEachSide(1)->links() }}
 
         </div>
     </section>

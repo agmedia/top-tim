@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\Metatags;
 use App\Models\Front\Catalog\Author;
+use App\Models\Front\Catalog\Brand;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Product;
 use App\Models\Front\Catalog\Publisher;
@@ -36,6 +37,32 @@ class Seo
     {
         $title = $author->title . ' Rice Kakis | Asian Store';
         $description =  $author->meta_description ;
+
+        // Check if there is meta title or description and set vars.
+        if ($cat) {
+            if ($cat->meta_title) { $title = $cat->meta_title; }
+            if ($cat->meta_description) { $description = $cat->meta_description; }
+        }
+
+        if ($subcat) {
+            if ($subcat->meta_title) { $title = $subcat->meta_title; }
+            if ($subcat->meta_description) { $description = $subcat->meta_description; }
+        }
+
+        return [
+            'title'       => $title,
+            'description' => $description
+        ];
+    }
+
+
+    /**
+     * @return array
+     */
+    public static function getBrandData(Brand $brand, Category $cat = null, Category $subcat = null): array
+    {
+        $title = brand->title . ' Rice Kakis | Asian Store';
+        $description =  $brand->meta_description ;
 
         // Check if there is meta title or description and set vars.
         if ($cat) {

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
  * Class Author
  * @package App\Models\Front\Catalog
  */
-class Brand extends Model
+class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\LocalizedUrlRoutable
 {
     use HasFactory;
 
@@ -27,6 +27,98 @@ class Brand extends Model
      * @var array
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    /**
+     * @var string
+     */
+    protected $locale = 'en';
+
+
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = current_locale();
+    }
+
+
+    /**
+     * @param $locale
+     *
+     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
+     */
+    public function getLocalizedRouteKey($locale)
+    {
+        Log::info('$locale = ' . $locale);
+
+        return $this->translation($locale)->slug;
+    }
+
+
+    /**
+     * @param $value
+     * @param $field
+     *
+     * @return Model|never|null
+     */
+    public function resolveRouteBinding($value, $field = NULL)
+    {
+        //$fallback = $this->locale == 'en' ? 'hr' : 'en';
+
+        /*Log::info('$fallback = ' . $fallback);*/
+        Log::info('$value = ' . $value);
+        Log::info('$this->locale = ' . $this->locale);
+        Log::info('current_locale() = ' . current_locale());
+
+        return static::query()->whereHas('translation', function ($query) use ($value) {
+            $query->where('slug', $value);
+        })/*->orWhereHas('translation', function ($query) use ($value, $fallback) {
+            $query->where('lang', $fallback)->where('slug', $value);
+        })*/->first() ?? abort(404);
+    }
+
+
+    /**
+     * @param null  $lang
+     * @param false $all
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null, bool $all = false)
+    {
+        if ($lang) {
+            return $this->hasOne(BrandTranslation::class, 'brand_id')->where('lang', $lang)->first();
+        }
+
+        if ($all) {
+            return $this->hasMany(BrandTranslation::class, 'brand_id');
+        }
+
+        return $this->hasOne(BrandTranslation::class, 'brand_id')->where('lang', $this->locale);
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getTitleAttribute()
+    {
+        return $this->translation->title;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getDescriptionAttribute()
+    {
+        return $this->translation->description;
+    }
+
+
 
 
     /**
@@ -92,10 +184,10 @@ class Brand extends Model
     {
         $query = (new Brand())->newQuery();
 
-        if ($request['search_author']) {
+        if ($request['search_brand']) {
             $query->active();
 
-            $query = Helper::searchByTitle($query, $request['search_author']);
+            $query = Helper::searchByTitle($query, $request['search_brand']);
 
         } else {
             $query->active()->featured();
@@ -148,7 +240,7 @@ class Brand extends Model
     public static function letters(): Collection
     {
         $letters = collect();
-        $authors = Brand::active()->pluck('letter')->unique();
+        $brands = Brand::active()->pluck('letter')->unique();
 
         foreach (Helper::abc() as $item) {
             if ($item == $brand->contains($item)) {

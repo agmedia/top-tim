@@ -376,6 +376,7 @@ Route::group(
             Route::post('/getProducts', [FilterController::class, 'products']);
             Route::post('/getAuthors', [FilterController::class, 'authors']);
             Route::post('/getPublishers', [FilterController::class, 'publishers']);
+            Route::post('/getBrands', [FilterController::class, 'brands']);
         });
     });
 

@@ -199,6 +199,59 @@ class CatalogRouteController extends FrontBaseController
     /**
      *
      *
+     * @param Brand $brand
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function brand(Request $request, Brand $brand = null, Category $cat = null, Category $subcat = null)
+    {
+        if ( ! $brand) {
+            $letters = Helper::resolveCache('brands')->remember('aut_' . 'letters', config('cache.life'), function () {
+                return Brand::letters();
+            });
+            $letter = 0; //$this->checkLetter($letters);
+
+            if ($request->has('letter')) {
+                $letter = $request->input('letter');
+            }
+
+            $currentPage = request()->get('page', 1);
+
+            $brands = Helper::resolveCache('brands')->remember('aut_' . $letter . '.' . $currentPage, config('cache.life'), function () use ($letter) {
+                $auts = Brand::query()->select('id', 'title', 'url')->where('status',  1);
+
+                if ($letter) {
+                    $auts->where('letter', $letter);
+                }
+
+                return $auts->orderBy('title')
+                    ->withCount('products')
+                    ->paginate(36)
+                    ->appends(request()->query());
+            });
+
+            $meta_tags = Seo::getMetaTags($request, 'ap_filter');
+
+            return view('front.catalog.brands.index', compact('brands', 'letters', 'letter', 'meta_tags'));
+        }
+
+        $letter = null;
+
+        if ($cat) { $cat->count = $cat->products()->count(); }
+        if ($subcat) { $subcat->count = $subcat->products()->count(); }
+
+        $seo = Seo::getBrandData($brand, $cat, $subcat);
+
+        $crumbs = null;
+
+        return view('front.catalog.category.index', compact('brand', 'letter', 'cat', 'subcat', 'seo', 'crumbs'));
+    }
+
+
+
+    /**
+     *
+     *
      * @param Publisher $publisher
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
