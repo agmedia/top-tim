@@ -47,10 +47,12 @@
 
             </div>
             @foreach ($brands as $brand)
+
+
                 <div class="col-sm-6 col-md-4  mb-3">
                     <div class="card border-bottom-primary">
                         <div class="card-body">
-                            <h6 class="card-title mb-0"><a href="{{ url($brand['url']) }}" class="text-dark">{{ $rand['title'] }} <span class="badge rounded-pill bg-secondary float-end">{{ $brand['products_count'] }}</span></a></h6>
+                            <h6 class="card-title mb-0"><a href="{{ url($brand['url']) }}" class="text-dark">{{ $brand->translation->title }} <span class="badge rounded-pill bg-secondary float-end">{{ $brand['products_count'] }}</span></a></h6>
                         </div>
                     </div>
                 </div>

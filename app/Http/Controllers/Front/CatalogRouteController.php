@@ -218,13 +218,13 @@ class CatalogRouteController extends FrontBaseController
             $currentPage = request()->get('page', 1);
 
             $brands = Helper::resolveCache('brands')->remember('aut_' . $letter . '.' . $currentPage, config('cache.life'), function () use ($letter) {
-                $auts = Brand::query()->select('id', 'title', 'url')->where('status',  1);
+                $auts = Brand::query()->where('status',  1);
 
                 if ($letter) {
                     $auts->where('letter', $letter);
                 }
 
-                return $auts->orderBy('title')
+                return $auts->orderBy('id')
                     ->withCount('products')
                     ->paginate(36)
                     ->appends(request()->query());
