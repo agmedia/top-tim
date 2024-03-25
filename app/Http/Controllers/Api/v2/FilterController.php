@@ -229,7 +229,7 @@ class FilterController extends Controller
         }
 
         return response()->json(
-            Helper::resolveCache('authors')->remember('featured', config('cache.life'), function () {
+            Helper::resolveCache('brands')->remember('featured', config('cache.life'), function () {
                 return Brand::query()->active()
                     ->featured()
                     ->basicData()

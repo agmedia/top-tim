@@ -10,12 +10,21 @@
                     </li>
                 @endforeach
             @else
-                @foreach (ag_lang() as $lang)
+                @foreach (ag_lang() as $lang )
                     <li>
-{{--                        <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('index'), [], true) }}">--}}
-{{--                            <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">--}}
-{{--                            {{ $lang->title->{current_locale()} }}--}}
-{{--                        </a>--}}
+                        @if (isset($page) && $page->page_id == 5)
+                        <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('index'), [], true) }}">
+                        <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
+                            {{ $lang->title->{current_locale()} }}
+                        </a>
+                        @endif
+                        @if (isset($page) && $page->page_id != 5)
+                                <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route.page', ['page' => $page->translation($lang->code)->slug])) }}">
+                                    <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
+                                    {{ $lang->title->{current_locale()} }}
+                                </a>
+                         @endif
+
                         @if (isset($group) && isset($cat) && ! $cat)
                             <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path'))]), [], true) }}">
                                 <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
@@ -28,6 +37,13 @@
                                 {{ $lang->title->{current_locale()} }}
                             </a>
                         @endif
+
+                            @if (isset($subcat) && $subcat)
+                                <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path')), 'cat' => $cat->translation($lang->code)->slug, 'subcat' => $subcat->translation($lang->code)->slug]), [], true) }}">
+                                    <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
+                                    {{ $lang->title->{current_locale()} }}
+                                </a>
+                            @endif
                         @if (isset($prod) && $prod)
                             @if (isset($cat) && $cat && ! $prod->subcategory())
                                 <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path')), 'cat' => $cat->translation($lang->code)->slug, 'subcat' => $prod->translation($lang->code)->slug]), [], true) }}">

@@ -1,4 +1,6 @@
 <!-- Navbar-->
+
+
 <header class="bg-primary shadow-sm fixed-top" data-fixed-element>
     <div class="navbar navbar-expand-lg navbar-dark py-0">
         <div class="container-fluid">
@@ -37,6 +39,8 @@
                         <div class="navbar-tool-text ">{{ __('front/ricekakis.login') }}</div>
                     </a>
                 @endif
+
+
                 @include('front.layouts.partials.language-selector')
 
                 <cart-nav-icon carturl="{{ route('kosarica') }}" checkouturl="{{ route('naplata') }}"></cart-nav-icon>
