@@ -181,7 +181,7 @@ class FilterController extends Controller
         }
 
         if (isset($params['brand']) && $params['brand']) {
-            $request_data['brand'] = $this->brands;
+            $request_data['brand'] = $params['brand'];
         }
 
         if (isset($params['start']) && $params['start']) {

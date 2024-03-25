@@ -119,7 +119,7 @@ export default {
             start: '',
             end: '',
             autor: '',
-            brand: '',
+            brend: '',
             nakladnik: '',
             search_query: '',
             searchAuthor: '',
@@ -148,8 +148,8 @@ export default {
             this.setQueryParamOther('autor', this.autor);
         },
         selectedBrands(value) {
-            this.brand = value.join('+');
-            this.setQueryParamOther('brand', this.brand);
+            this.brend = value.join('+');
+            this.setQueryParamOther('brand', this.brend);
         },
         selectedPublishers(value) {
             this.nakladnik = value.join('+');
@@ -188,7 +188,7 @@ export default {
             this.show_authors = true;
             this.getAuthors();
         }
-        if (this.brand == '') {
+        if (this.brend == '') {
             this.show_brands = true;
             this.getBrands();
         }
@@ -300,7 +300,7 @@ export default {
                 start: this.start,
                 end: this.end,
                 autor: this.autor,
-                brand: this.brand,
+                brand: this.brend,
                 nakladnik: this.nakladnik,
                 page: this.page,
                 pojam: this.search_query,
@@ -336,7 +336,7 @@ export default {
             this.start = params.query.start ? params.query.start : '';
             this.end = params.query.end ? params.query.end : '';
             this.autor = params.query.autor ? params.query.autor : '';
-            this.brand = params.query.brand ? params.query.brand : '';
+            this.brend = params.query.brand ? params.query.brand : '';
             this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
             this.search_query = params.query.pojam ? params.query.pojam : '';
         },
@@ -351,7 +351,7 @@ export default {
                 cat: this.category ? this.category.id : this.cat,
                 subcat: this.subcategory ? this.subcategory.id : this.subcat,
                 author: this.author,
-                brand: this.brand,
+                brand: this.brend,
                 publisher: this.publisher,
                 search_author: this.searchAuthor,
                 search_publisher: this.searchPublisher,
@@ -362,8 +362,8 @@ export default {
             if (this.author != '') {
                 params.author = this.author;
             }
-            if (this.brand != '') {
-                params.brand = this.brand;
+            if (this.brend != '') {
+                params.brand = this.brend;
             }
             if (this.publisher != '') {
                 params.publisher = this.publisher;
@@ -391,18 +391,13 @@ export default {
                 }
             }
 
-            if (this.brand != '') {
-                if ((this.brand).includes('+')) {
-                    this.selectedBrands = (this.brand).split('+');
+            if (this.brend != '') {
+                if ((this.brend).includes('+')) {
+                    this.selectedBrands = (this.brend).split('+');
                 } else {
-                    this.selectedBrands = [this.brand];
+                    this.selectedBrands = [this.brend];
                 }
             }
-
-            console.log(location)
-            console.log(this.category)
-            console.log(this.subcategory)
-            console.log(this)
         },
 
         /**

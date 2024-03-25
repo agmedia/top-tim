@@ -123,7 +123,7 @@ export default {
         return {
             products: {},
             autor: '',
-            brand: '',
+            brend: '',
             nakladnik: '',
             start: '',
             end: '',
@@ -150,8 +150,6 @@ export default {
     //
     mounted() {
         this.checkQuery(this.$route);
-        /*console.log('twindow.AGSettings')
-        console.log(window.AGSettings)*/
     },
 
     methods: {
@@ -163,6 +161,9 @@ export default {
             this.navigation_zero_result = false;
             this.products_loaded = false;
             let params = this.setParams();
+
+            console.log('tu sam...')
+            console.log(params)
 
             axios.post('filter/getProducts', { params }).then(response => {
                 this.products_loaded = true;
@@ -231,7 +232,7 @@ export default {
                 start: this.start,
                 end: this.end,
                 autor: this.autor,
-                brand: this.brand,
+                brand: this.brend,
                 nakladnik: this.nakladnik,
                 sort: this.sorting,
                 pojam: this.search_query,
@@ -252,7 +253,7 @@ export default {
             this.start = params.query.start ? params.query.start : '';
             this.end = params.query.end ? params.query.end : '';
             this.autor = params.query.autor ? params.query.autor : '';
-            this.brand = params.query.brand ? params.query.brand : '';
+            this.brend = params.query.brand ? params.query.brand : '';
             this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
             this.page = params.query.page ? params.query.page : '';
             this.sorting = params.query.sort ? params.query.sort : '';
@@ -276,7 +277,7 @@ export default {
                 cat: this.cat,
                 subcat: this.subcat,
                 autor: this.autor,
-                brand: this.brand,
+                brand: this.brend ? this.brend : this.brand,
                 nakladnik: this.nakladnik,
                 start: this.start,
                 end: this.end,
@@ -288,8 +289,8 @@ export default {
                 params.autor = this.author;
             }
 
-            if (this.brand != '') {
-                params.brand = this.brand;
+            if (this.brend != '') {
+                params.brand = this.brend;
             }
             if (this.publisher != '') {
                 params.nakladnik = this.publisher;

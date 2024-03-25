@@ -648,18 +648,31 @@ class Product extends Model
             });
         }
 
-        if ($request->has('autor')) {
+        if ($request->has('brand')) {
             $auts = [];
 
-            foreach ($request->input('autor') as $key => $item) {
-                if (isset($item->id)) {
-                    array_push($auts, $item->id);
-                } else {
-                    array_push($auts, $key);
+            if (is_array($request->input('brand'))) {
+                foreach ($request->input('brand') as $key => $item) {
+                    if (isset($item->id)) {
+                        array_push($auts, $item->id);
+                    } else {
+                        array_push($auts, $key);
+                    }
                 }
             }
 
-            $query->whereIn('author_id', $auts);
+            if (is_string($request->input('brand'))) {
+                $value = $request->input('brand');
+                $brand = Brand::query()->whereHas('translation', function ($query) use ($value) {
+                    $query->where('slug', $value);
+                })->first();
+
+                if ($brand) {
+                    array_push($auts, $brand->id);
+                }
+            }
+
+            $query->whereIn('brand_id', $auts);
         }
 
         if ($request->has('nakladnik')) {
