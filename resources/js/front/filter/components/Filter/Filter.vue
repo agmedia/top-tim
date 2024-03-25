@@ -114,6 +114,7 @@ export default {
             brands: [],
             publishers: [],
             selectedAuthors: [],
+            selectedBrands: [],
             selectedPublishers: [],
             start: '',
             end: '',
@@ -126,6 +127,7 @@ export default {
             searchPublisher: '',
             show_authors: false,
             authors_loaded: false,
+            show_brands: false,
             brands_loaded: false,
             show_publishers: false,
             publishers_loaded: false,
@@ -163,6 +165,11 @@ export default {
                 return this.getPublishers();
             }
         },
+      searchBrand(value) {
+        if (value.length > 2 || value == '') {
+          return this.getBrands();
+        }
+      },
         $route(params) {
             this.checkQuery(params);
         }
@@ -348,6 +355,7 @@ export default {
                 publisher: this.publisher,
                 search_author: this.searchAuthor,
                 search_publisher: this.searchPublisher,
+                search_brand: this.searchBrand,
                 pojam: this.search_query
             };
 

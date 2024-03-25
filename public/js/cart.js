@@ -2578,6 +2578,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       brands: [],
       publishers: [],
       selectedAuthors: [],
+      selectedBrands: [],
       selectedPublishers: [],
       start: '',
       end: '',
@@ -2590,6 +2591,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       searchPublisher: '',
       show_authors: false,
       authors_loaded: false,
+      show_brands: false,
       brands_loaded: false,
       show_publishers: false,
       publishers_loaded: false,
@@ -2625,6 +2627,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     searchPublisher: function searchPublisher(value) {
       if (value.length > 2 || value == '') {
         return this.getPublishers();
+      }
+    },
+    searchBrand: function searchBrand(value) {
+      if (value.length > 2 || value == '') {
+        return this.getBrands();
       }
     },
     $route: function $route(params) {
@@ -2809,6 +2816,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         publisher: this.publisher,
         search_author: this.searchAuthor,
         search_publisher: this.searchPublisher,
+        search_brand: this.searchBrand,
         pojam: this.search_query
       };
       if (this.author != '') {
