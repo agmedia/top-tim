@@ -243,7 +243,7 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
         $brands = Brand::active()->pluck('letter')->unique();
 
         foreach (Helper::abc() as $item) {
-            if ($item == $brand->contains($item)) {
+            if ($item == $brands->contains($item)) {
                 $letters->push([
                     'value' => $item,
                     'active' => true
