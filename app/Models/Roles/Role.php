@@ -93,7 +93,7 @@ class Role extends Model
 
         // if user is NOT super-admin, remove all super-admin users.
         if ( ! Auth::user()->can('*')) {
-            $query->where('name', '!=', 'admin');
+            $query->where('name', '!=', 'superadmin');
         }
 
         return $query->get();
