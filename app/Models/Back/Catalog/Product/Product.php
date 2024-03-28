@@ -289,6 +289,9 @@ class Product extends Model
             $query->whereHas('translation', function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->input('search') . '%');
             })
+                ->orwhereHas('translation', function ($query) use ($request) {
+                    $query->where('description', 'like', '%' . $request->input('search')  . '%');
+                          })
                   ->orWhere('sku', 'like', '%' . $request->input('search') . '%');
         }
 
