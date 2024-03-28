@@ -12,13 +12,13 @@
             @else
                 @foreach (ag_lang() as $lang )
                     <li>
-                        @if (isset($page) && $page->page_id == 5)
+                        @if (isset($page) && $page->id == 5 )
                         <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('index'), [], true) }}">
                         <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
                             {{ $lang->title->{current_locale()} }}
                         </a>
                         @endif
-                        @if (isset($page) && $page->page_id != 5)
+                        @if (isset($page) && $page->id != 5)
                                 <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route.page', ['page' => $page->translation($lang->code)->slug])) }}">
                                     <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
                                     {{ $lang->title->{current_locale()} }}
