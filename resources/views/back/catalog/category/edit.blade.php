@@ -77,7 +77,7 @@
 
                             <div class="form-group">
                                 <label for="sort_order-input">Sort</label>
-                                <input type="text" class="form-control" id="sort_order-input" name="sort_order" placeholder="Sort" value="{{ isset($category) ? $category->sort_order : old('sort_order') }}" >
+                                <input type="text" class="form-control" id="sort_order-input" name="sort_order" placeholder="Sort" value="{{ isset($category) ? $category->sort_order : old('sort_order') }}"  required>
                             </div>
 
 
