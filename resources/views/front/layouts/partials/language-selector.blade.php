@@ -45,7 +45,7 @@
                                 </a>
                             @endif
                         @if (isset($prod) && $prod)
-                            @if (isset($cat) && $cat && ! $prod->subcategory())
+                            @if (isset($cat) && $cat && ! $subcat)
                                 <a class=" @if (current_locale() == $lang->code) active @endif" href="{{ \Mcamara\LaravelLocalization\Facades\LaravelLocalization::getLocalizedURL($lang->code, route('catalog.route', ['group' => \Illuminate\Support\Str::slug(config('settings.group_path')), 'cat' => $cat->translation($lang->code)->slug, 'subcat' => $prod->translation($lang->code)->slug]), [], true) }}">
                                     <img class="lang" style="width:16px;margin-left:5px" src="{{ asset('media/flags/'.Str::lower($lang->code).'.png') }}" alt="">
                                     {{ $lang->title->{current_locale()} }}
