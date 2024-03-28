@@ -127,7 +127,7 @@ class DashboardController extends Controller
                             'product_id'       => $new_product_id,
                             'lang'             => $lang->code,
                             'name'             => $item->name,
-                            'description'      => ProductHelper::cleanHTML($item->description),
+                            'description'      => $item->category . '<br><br>' . ProductHelper::cleanHTML($item->description),
                             'podaci'           => ProductHelper::cleanHTML($item->podaci),
                             'sastojci'         => ProductHelper::cleanHTML($item->sastojci),
                             'meta_title'       => $item->meta_title,
