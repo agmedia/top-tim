@@ -50,7 +50,7 @@
 
 
             <!-- Entries grid-->
-            <div class="masonry-grid" data-columns="4">
+            <div class="masonry-grid" data-columns="3" >
                 @foreach ($receptis as $recepti)
 
                 <article class="masonry-grid-item">

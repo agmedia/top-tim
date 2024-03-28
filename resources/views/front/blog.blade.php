@@ -52,7 +52,7 @@
 
 
             <!-- Entries grid-->
-            <div class="masonry-grid" data-columns="4">
+            <div class="masonry-grid" data-columns="3">
                 @foreach ($blogs as $blog)
 
                 <article class="masonry-grid-item">
