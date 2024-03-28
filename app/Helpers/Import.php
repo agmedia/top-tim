@@ -51,7 +51,7 @@ class Import
                 $str_thumb = $id . '/' . Str::limit(Str::slug($name)) . '-' . $time . '-thumb.';
                 $canvas = Image::canvas(400, 400, '#ffffff');
 
-                $img = $img->resize(null, 350, function ($constraint) {
+                $img = $img->resize(null, 400, function ($constraint) {
                     $constraint->aspectRatio();
                 });
 
