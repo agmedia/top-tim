@@ -25,7 +25,7 @@
                         @forelse($categories as $category)
                             <div class="block block-rounded mb-1">
                                 <div class="block-header block-header-default" role="tab" id="accordion_h{{ $category->id }}">
-                                    <a class="h3 block-title" data-toggle="collapse" data-parent="#accordion" href="#accordion_q{{ $category->id }}" aria-expanded="@if($loop->first) true @else false @endif" aria-controls="accordion_q{{ $category->id }}">{{ $category->translation->title }}</a>
+                                    <a class="h3 block-title" data-toggle="collapse" data-parent="#accordion" href="#accordion_q{{ $category->id }}" aria-expanded=" false" aria-controls="accordion_q{{ $category->id }}">{{ $category->translation->title }}</a>
                                     <div class="block-options">
                                         <div class="btn-group">
                                             <a  class="btn btn-sm btn-secondary js-tooltip-enabled me-2" data-toggle="tooltip" title="" data-original-title="{{ __('back/categories.uredi') }}"> {{ $category->products_count }}
