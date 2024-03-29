@@ -53,16 +53,17 @@ class ProductHelper
         $data        = static::resolveCategories($product, $category, $subcategory);
         $category    = $data['category'];
         $subcategory = $data['subcategory'];
+        $locale = session('locale') ?: current_locale();
 
         if ($subcategory) {
-            return current_locale() . '/' . Str::slug($category->group) . '/' . $category->translation->slug . '/' . $subcategory->translation->slug . '/' . $product->translation->slug;
+            return $locale . '/' . Str::slug($category->group) . '/' . $category->translation($locale)->slug . '/' . $subcategory->translation($locale)->slug . '/' . $product->translation($locale)->slug;
         }
 
         if ($category) {
-            return current_locale() . '/' . Str::slug($category->group) . '/' . $category->translation->slug . '/' . $product->translation->slug;
+            return $locale . '/' . Str::slug($category->group) . '/' . $category->translation($locale)->slug . '/' . $product->translation($locale)->slug;
         }
 
-        return current_locale() . '/';
+        return $locale . '/';
     }
 
 
