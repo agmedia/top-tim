@@ -291,7 +291,7 @@
        <div class="tab-pane fade show active" id="specs" role="tabpanel">
            <!-- Specs table-->
            <div class="row pt-2">
-               <div class="col-lg-9 col-sm-12">
+               <div class="col-lg-7 col-sm-12">
                    <h2 class="h6">{{ $prod->name  }}</h2>
                    <div class=" fs-md pb-2 mb-4">
                        {!! $prod->description !!}
@@ -302,7 +302,9 @@
                </div>
                <div class="col-lg-5 col-sm-5 ">
 
-                   @if ($prod->sastojci or $prod->podaci)
+
+
+                   @if ($prod->translation->sastojci or $prod->translation->podaci)
 
                       <h3 class="h6">{{ __('front/ricekakis.dodatne_informacije') }}</h3>
 
@@ -314,20 +316,20 @@
 
                                <tbody>
 
-                               @if ($prod->sastojci)
+                               @if ($prod->translation->sastojci)
                                    <tr>
                                        <th>{{ __('front/ricekakis.sastojci') }}</th>
                                    </tr>
                                    <tr>
-                                         <td>{!! $prod->sastojci !!}</td>
+                                         <td>{!! $prod->translation->sastojci !!}</td>
                                    </tr>
                                @endif
-                               @if ($prod->podaci)
+                               @if ($prod->translation->podaci)
                                    <tr>
                                        <th>{{ __('front/ricekakis.podaci_o_prehrani') }}</th>
                                    </tr>
                                    <tr>
-                                        <td>{!! $prod->podaci !!}</td>
+                                        <td>{!! $prod->translation->podaci !!}</td>
                                    </tr>
                                @endif
 
