@@ -167,10 +167,7 @@ class CheckoutController extends FrontBaseController
           //  $gls   = new Gls($order);
            // $label = $gls->resolve();
 
-            CheckoutSession::forgetOrder();
-            CheckoutSession::forgetStep();
-            CheckoutSession::forgetPayment();
-            CheckoutSession::forgetShipping();
+            $this->forgetCheckoutCache();
 
             $cart = $this->shoppingCart();
             $cart->flush()->resolveDB();
@@ -200,6 +197,8 @@ class CheckoutController extends FrontBaseController
             $order->update([
                 'order_status_id' => config('settings.order.new_status')
             ]);
+
+            $this->forgetCheckoutCache();
 
             return response()->json(['status' => 0, 'message' => 'Accepted']);
         }
@@ -296,6 +295,15 @@ class CheckoutController extends FrontBaseController
         }
 
         return new AgCart(config('session.cart'));
+    }
+
+    private function forgetCheckoutCache()
+    {
+        CheckoutSession::forgetOrder();
+        CheckoutSession::forgetStep();
+        CheckoutSession::forgetPayment();
+        CheckoutSession::forgetShipping();
+        CheckoutSession::forgetComment();
     }
 
 }
