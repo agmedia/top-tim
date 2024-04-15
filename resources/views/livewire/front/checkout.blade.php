@@ -259,7 +259,12 @@
                                 <label class="form-check-label" for="courier"></label>
                             </div>
                         </td>
-                        <td class="align-middle"><span class="text-dark fw-medium">{{ $s_method->title->{current_locale()} }}</span><br><span class="text-muted">{!! $s_method->data->short_description->{current_locale()} !!}</span></td>
+                        <td class="align-middle"><span class="text-dark fw-medium">{{ $s_method->title->{current_locale()} }}</span><br><span class="text-muted">{!! $s_method->data->short_description->{current_locale()} !!}</span>
+                            @if ($s_method->code == 'gls_eu' && $view_comment)
+                                <input class="form-control mt-2" type="text" wire:model="comment" placeholder="">
+                            @endif
+
+                        </td>
                         <td class="align-middle">{{ $s_method->data->time }}</td>
                         <td class="align-middle">
                             @if ($is_free_shipping)
