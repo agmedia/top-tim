@@ -276,7 +276,7 @@ class PaymentMethod
             }
 
             $condition = new \Darryldecode\Cart\CartCondition(array(
-                'name' => __('front/cart.naknada'),
+                'name' => __('front/cart.naknada_cod'),
                 'type' => 'payment',
                 'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
                 'value' => '+' . $value ?: 0,
