@@ -1,17 +1,4 @@
-@if (request()->routeIs(['naplata']) or request()->routeIs(['pregled']))
 
-
-    <footer class="footer pt-5">
-
-        <div class="bg-darker px-lg-5 py-3">
-            <div class="d-sm-flex justify-content-between align-items-center mx-auto px-3" >
-                <div class="fs-sm text-white  text-center text-sm-start py-3">Rice Kakis Asian Store © {{ __('front/ricekakis.sva_prava') }}. Web by <a class="text-white" href="https://www.agmedia.hr" target="_blank" rel="noopener">AG media</a></div>
-                <div class="widget widget-links widget-light pt-1 text-center text-md-end"><img src="{{ asset('media/cards/visa.svg') }}" alt="Visa" class="d-inline-block" style="width: 55px; margin-right: 3px;" width="55" height="35"> <img src="{{ asset('media/cards/maestro.svg') }}" alt="Maestro" class="d-inline-block" style="width: 55px; margin-right: 3px;" width="55" height="35"> <img src="{{ asset('media/cards/mastercard.svg') }}" alt="MasterCard" class="d-inline-block" style="width: 55px; margin-right: 3px;" width="55" height="35"> <img src="{{ asset('media/cards/diners.svg') }}" alt="Diners" class="d-inline-block" style="width: 55px; margin-right: 3px;" width="55" height="35"></div>
-            </div>
-        </div>
-    </footer>
-
-@else
 
     <section class="col">
         <div class="card py-5 border-0 " style="background: url({{ asset('image/china.jpg') }}) repeat center center fixed; background-size: contain;  ">
@@ -151,7 +138,7 @@
 
 
 
-@endif
+
 
 
 
