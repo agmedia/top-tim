@@ -85,7 +85,7 @@
                             <ul class="list-unstyled fs-sm">
                                 <li>
                                     <span class="text-muted">{{ $data['shipping']->title->{current_locale()} }} </span><br>
-                                    {{$data['shipping']->data->short_description->{current_locale()} }}
+                                    {!! $data['shipping']->data->short_description->{current_locale()} !!}
                                 </li>
                             </ul>
                         </div>
@@ -139,7 +139,7 @@
                             @endif
                         @endforeach
                     @endif
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('front/cart.zatvori') }}</button>
