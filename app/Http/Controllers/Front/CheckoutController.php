@@ -231,7 +231,8 @@ class CheckoutController extends FrontBaseController
             return [
                 'address'  => CheckoutSession::getAddress(),
                 'shipping' => CheckoutSession::getShipping(),
-                'payment'  => CheckoutSession::getPayment()
+                'payment'  => CheckoutSession::getPayment(),
+                'comment'  => CheckoutSession::getComment()
             ];
         }
 
@@ -254,6 +255,7 @@ class CheckoutController extends FrontBaseController
         $response['address']         = $data['address'];
         $response['shipping']        = $shipping;
         $response['payment']         = $payment;
+        $response['comment']         = isset($data['comment']) ? $data['comment'] : '';
         $response['cart']            = $this->shoppingCart()->get();
         $response['order_status_id'] = $order_status_id;
 
