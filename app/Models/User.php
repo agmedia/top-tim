@@ -186,6 +186,12 @@ class User extends Authenticatable
             ]);
         }
 
+        if (isset($this->request->password)) {
+            $this->update([
+                'password' => Hash::make($this->request->password),
+            ]);
+        }
+
 
 
         if ($this->id) {
