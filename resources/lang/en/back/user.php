@@ -43,4 +43,10 @@ return [
     'user_role' => 'User Role',
     'user_role_select' => 'Select role for user...',
     'save' => 'Save',
+    'promjena_lozinke' => 'Change password',
+    'reset_lozinke' => 'Reset user password',
+    'trenutna_lozinka' => 'Current password',
+    'nova_lozinka' => 'New password',
+    'potvrdi_lozinku' => 'repeat new password',
+    'korisnicki_podaci' => 'User data',
 ];

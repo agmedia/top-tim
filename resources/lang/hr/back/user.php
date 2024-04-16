@@ -25,7 +25,7 @@ return [
     'role' => 'Uloga',
     'clear' => 'Očisti',
     'search' => 'Pretraži korisnike..',
-    'user_edit' => 'Uredi korsinika',
+    'user_edit' => 'Uredi korisnika',
     'user_profile' => 'Korisnički profil',
     'user_profile_label' => 'Osnovni podaci o korisniku',
     'user_name' => 'Korisničko ime',
