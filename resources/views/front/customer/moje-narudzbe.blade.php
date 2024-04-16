@@ -1,5 +1,6 @@
 @extends('front.layouts.app')
-
+@section ( 'title', __('front/cart.moj_korisnicki_racun') )
+@section ( 'description', 'Rice Kakis Azijski Webshop - autentični Bubble Tea u četiri okusa, japanski Mochi , Nudle, Korejske grickalice i slatkiši, te veliki izbor umaka i začina.' )
 @section('content')
 
     <!-- Order Details Modal-->
@@ -27,7 +28,7 @@
                                     <div class="text-muted mb-2 fs-sm">{{ __('front/cart.kolicina') }}:</div>{{ $product->quantity }}
                                 </div>
                                 <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-                                    <div class="text-muted mb-2 fs-sm">{{ __('front/cart.ukupnoe') }}</div>{{ number_format($product->total, 2, ',', '.') }} €
+                                    <div class="text-muted mb-2 fs-sm">{{ __('front/cart.ukupno') }}</div>{{ number_format($product->total, 2, ',', '.') }} €
                                 </div>
                             </div>
                         @endforeach
@@ -72,9 +73,9 @@
                             <tr>
                                 <td class="py-3"><a class="nav-link-style fw-medium fs-sm" href="#order-details{{ $order->id }}" data-bs-toggle="modal">{{ $order->id }}</a></td>
                                 <td class="py-3">{{ \Illuminate\Support\Carbon::make($order->created_at)->format('d.m.Y') }}</td>
-                                <td class="py-3"><span class="badge bg-info m-0">{{ $order->status->title }}</span></td>
+                                <td class="py-3"><span class="badge bg-info m-0">{{ $order->status->title->{current_locale()} }}</span></td>
                                 <td class="py-3">{{ number_format($order->total, 2, ',', '.') }} €</td>
-                                <td class="py-3"><a class="badge bg-primary text-white m-0 " href="#order-details{{ $order->id }}" data-bs-toggle="modal"{{ __('front/cart.pregled') }}</a></td>
+                                <td class="py-3"><a class="badge bg-primary text-white m-0 " href="#order-details{{ $order->id }}" data-bs-toggle="modal"> {{ __('front/cart.pregledajte_narudzbu') }}</a></td>
                             </tr>
                         @empty
                             <tr>

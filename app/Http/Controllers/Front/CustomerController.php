@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
 use App\Models\Front\AgCart;
 use App\Models\Front\Checkout\Order;
+use App\Models\Front\Loyalty;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -51,6 +52,21 @@ class CustomerController extends FrontBaseController
         $orders = Order::where('user_id', $user->id)->orWhere('payment_email', $user->email)->paginate(config('settings.pagination.front'));
 
         return view('front.customer.moje-narudzbe', compact('user', 'orders'));
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function loyalty(Request $request)
+    {
+        $user = auth()->user();
+
+        $loyalty = Loyalty::where('user_id', $user->id)->get();
+
+        return view('front.customer.loyalty', compact('user', 'loyalty'));
     }
 
 

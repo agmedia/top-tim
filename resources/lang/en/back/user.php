@@ -47,6 +47,6 @@ return [
     'reset_lozinke' => 'Reset user password',
     'trenutna_lozinka' => 'Current password',
     'nova_lozinka' => 'New password',
-    'potvrdi_lozinku' => 'repeat new password',
+    'potvrdi_lozinku' => 'Repeat new password',
     'korisnicki_podaci' => 'User data',
 ];

@@ -115,6 +115,7 @@ return [
     'save' => 'Snimi',
     'broj_narudzbe' => 'Broj narudžbe',
     'pogledajte_povijest' => 'Pogledajte povijest svoji narudžbi',
+    'pogledajte_povijest_loyalty' => 'Pogledajte povijest vaših bodova',
     'trenutno_nemate' => 'Trenutno nemate narudžbi...',
     'narudzba' => 'Narudžba',
     'status' => 'Status',
@@ -190,6 +191,18 @@ return [
     'naknada_cod' => 'Naknada za pouzeće',
     'hvala_narudzba' => 'Hvala vam na vašoj narudžbi.',
     'otkazano_narudzba' => 'Vaša narudžba je otkazana.',
+    'loyalty' => 'Program vjernosti',
+    'loyalty_reference' => 'Referenca',
+    'loyalty_earned' => 'Bodova',
+    'loyalty_date' => 'Datum',
+    'loyalty_current_points' => 'Ukupno raspoloživih bodova',
+
+    'loyalty_ref_order' => 'Narudžba',
+    'loyalty_ref_review' => 'Recenzija proizvoda',
+
+    'loyalty_trenutno_nemate' => 'Trenutno nemate bodova. ',
+
+
 
 
 ];

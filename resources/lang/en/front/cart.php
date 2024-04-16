@@ -112,6 +112,7 @@ return [
     'save' => 'Save',
     'broj_narudzbe' => 'Order number',
     'pogledajte_povijest' => 'View the history of your orders',
+    'pogledajte_povijest_loyalty' => 'View the history of your points',
     'trenutno_nemate' => 'You have no orders...',
     'narudzba' => 'Order',
     'status' => 'Status',
@@ -188,6 +189,15 @@ return [
     'naknada_cod' => 'Cash on Delivery Fee',
     'hvala_narudzba' => 'Thank you for your order.',
     'otkazano_narudzba' => 'Your order has been canceled.',
+    'loyalty' => 'Loyalty program',
+    'loyalty_reference' => 'Reference',
+    'loyalty_earned' => 'Points Earned',
+    'loyalty_date' => 'Date',
+    'loyalty_current_points' => 'Total Available Points',
+    'loyalty_ref_order' => 'Order',
+    'loyalty_ref_review' => 'Product Review',
+    'loyalty_trenutno_nemate' => 'Currently you have no points. ',
+
 
 
 ];
