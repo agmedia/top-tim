@@ -48,6 +48,27 @@ class Loyalty extends Model
 
 
     /**
+     * @return int
+     */
+    public static function hasLoyaltyTotal(): int
+    {
+        if (auth()->user()) {
+            $user_id = auth()->user()->id;
+
+            $earned = Loyalty::query()->where('user_id', $user_id)->sum('earned');
+            $spent = Loyalty::query()->where('user_id', $user_id)->sum('spend');
+            $has_any = intval($earned - $spent);
+
+            if ($has_any) {
+                return $has_any;
+            }
+        }
+
+        return 0;
+    }
+
+
+    /**
      * @param int $points
      *
      * @return int
