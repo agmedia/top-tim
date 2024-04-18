@@ -11,6 +11,7 @@ use App\Models\Back\Settings\Settings;
 use App\Models\Front\AgCart;
 use App\Models\Front\Checkout\Order;
 use App\Models\Front\Checkout\Shipping\Gls;
+use App\Models\Front\Loyalty;
 use App\Models\TagManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -144,24 +145,19 @@ class CheckoutController extends FrontBaseController
         $order = \App\Models\Back\Orders\Order::where('id', $data['order']['id'])->first();
 
         if ($order) {
+            $cart = $this->shoppingCart();
+
+            //Log::info($cart->get());
+
+            $order->decreaseItems($order->products);
+
+            Loyalty::resolveOrder($cart->get(), $order);
+
             dispatch(function () use ($order) {
                 Mail::to(config('mail.admin'))->send(new OrderReceived($order));
                 Mail::to($order->payment_email)->send(new OrderSent($order));
-            });
+            })->afterResponse();
 
-            foreach ($order->products as $product) {
-                $real = $product->real;
-
-                if ($real->decrease) {
-                    $real->decrement('quantity', $product->quantity);
-
-                    if ( ! $real->quantity) {
-                        /*$real->update([
-                            'status' => 0
-                        ]);*/
-                    }
-                }
-            }
 
             // Sent labels to gls
           //  $gls   = new Gls($order);
@@ -169,7 +165,6 @@ class CheckoutController extends FrontBaseController
 
             $this->forgetCheckoutCache();
 
-            $cart = $this->shoppingCart();
             $cart->flush()->resolveDB();
 
             $data['google_tag_manager'] = TagManager::getGoogleSuccessDataLayer($order);

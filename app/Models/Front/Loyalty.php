@@ -2,6 +2,7 @@
 
 namespace App\Models\Front;
 
+use App\Models\Back\Orders\Order;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -65,6 +66,26 @@ class Loyalty extends Model
         }
 
         return 0;
+    }
+
+
+    public static function resolveOrder(array $cart, Order $order)
+    {
+        $spent = 0;
+
+        if ($cart['loyalty']) {
+            $spent = $cart['loyalty'];
+        }
+
+        return Loyalty::query()->insert([
+            'user_id'      => auth()->user()->id,
+            'reference_id' => $order->id,
+            'target'       => 'order',
+            'earned'       => intval($order->total),
+            'spend'        => $spent,
+            'created_at'   => now(),
+            'updated_at'   => now()
+        ]);
     }
 
 }

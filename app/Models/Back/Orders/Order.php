@@ -7,6 +7,7 @@ use App\Models\Back\Users\Client;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Bouncer;
@@ -206,10 +207,6 @@ class Order extends Model
     public function make()
     {
         $id = $this->insertGetId([
-
-
-
-
             'user_id'          => auth()->user() ? auth()->user()->id : 0,
             'order_status_id'  => 1,
             'payment_fname'    => $this->request->fname,
@@ -269,6 +266,72 @@ class Order extends Model
         return false;
     }
 
+
+    /**
+     * Set Model request variable.
+     *
+     * @param $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return Builder
+     */
+    public function filter(Request $request): Builder
+    {
+        $query = $this->newQuery();
+
+        if ($request->has('status')) {
+            $query->where('order_status_id', '=', $request->input('status'));
+        }
+
+        if ($request->has('search') && ! empty($request->input('search'))) {
+            $query->where(function ($query) use ($request) {
+                $query->where('id', 'like', '%' . $request->input('search') . '%')
+                      ->orWhere('payment_fname', 'like', '%' . $request->input('search'))
+                      ->orWhere('payment_lname', 'like', '%' . $request->input('search'))
+                      ->orWhere('payment_email', 'like', '%' . $request->input('search'));
+            });
+        }
+
+        return $query->orderBy('created_at', 'desc');
+    }
+
+
+    /**
+     * @param Collection $products
+     *
+     * @return $this
+     */
+    public function decreaseItems(Collection $products)
+    {
+        foreach ($products as $product) {
+            $real = $product->real;
+
+            if ($real->decrease) {
+                $real->decrement('quantity', $product->quantity);
+
+                if ( ! $real->quantity) {
+                    /*$real->update([
+                        'status' => 0
+                    ]);*/
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /*******************************************************************************
+    *                                Copyright : AGmedia                           *
+    *                              email: filip@agmedia.hr                         *
+    *******************************************************************************/
 
     /**
      * @return bool
@@ -365,17 +428,10 @@ class Order extends Model
         return false;
     }
 
-
-    /**
-     * Set Model request variable.
-     *
-     * @param $request
-     */
-    public function setRequest($request)
-    {
-        $this->request = $request;
-    }
-
+    /*******************************************************************************
+    *                                Copyright : AGmedia                           *
+    *                              email: filip@agmedia.hr                         *
+    *******************************************************************************/
 
     /**
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
@@ -385,32 +441,6 @@ class Order extends Model
         $query = (new Order())->newQuery();
 
         return $query->with('status')->orderBy('id', 'desc')->limit($count)->get();
-    }
-
-
-    /**
-     * @param Request $request
-     *
-     * @return Builder
-     */
-    public function filter(Request $request): Builder
-    {
-        $query = $this->newQuery();
-
-        if ($request->has('status')) {
-            $query->where('order_status_id', '=', $request->input('status'));
-        }
-
-        if ($request->has('search') && ! empty($request->input('search'))) {
-            $query->where(function ($query) use ($request) {
-                $query->where('id', 'like', '%' . $request->input('search') . '%')
-                      ->orWhere('payment_fname', 'like', '%' . $request->input('search'))
-                      ->orWhere('payment_lname', 'like', '%' . $request->input('search'))
-                      ->orWhere('payment_email', 'like', '%' . $request->input('search'));
-            });
-        }
-
-        return $query->orderBy('created_at', 'desc');
     }
 
 

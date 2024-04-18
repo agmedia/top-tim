@@ -251,7 +251,7 @@ class Order extends Model
                 $discount = Helper::calculateDiscount($item->price, $price);
             }
 
-            Log::info(print_r($item, true));
+            //Log::info(print_r($item, true));
 
             OrderProduct::insert([
                 'order_id'   => $order_id,
