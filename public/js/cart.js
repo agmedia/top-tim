@@ -2557,7 +2557,7 @@ __webpack_require__.r(__webpack_exports__);
     checkLoyalty: function checkLoyalty() {
       var cart = this.$store.state.storage.getCart();
       console.log('cart LOYALTY');
-      console.log(cart.hasLoyalty);
+      console.log(cart.has_loyalty);
       if (cart.has_loyalty > 100) {
         this.has_loyalty = true;
       }
@@ -4051,7 +4051,7 @@ var render = function render() {
     on: {
       click: _vm.setCoupon
     }
-  }, [_vm._v(_vm._s(_vm.trans.primjeni) + " ")])])])])])]) : _vm._e(), _vm._v(" "), _vm.has_loyalty && _vm.route == "kosarica" || _vm.route == "naplata" ? _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.primjeni) + " ")])])])])])]) : _vm._e(), _vm._v(" "), _vm.has_loyalty && _vm.route == "kosarica" || _vm.has_loyalty && _vm.route == "naplata" ? _c("div", {
     staticClass: "rounded-3 p-4 mt-3",
     staticStyle: {
       border: "1px solid #dae1e7",
@@ -4127,7 +4127,7 @@ var render = function render() {
         _vm.selected_loyalty = null;
       }
     }
-  }, [_vm._v(_vm._s(_vm.trans.loyalty_use))]), _vm._v(" "), _c("button", {
+  }, [_vm._v(_vm._s(_vm.trans.loyalty_cancel))]), _vm._v(" "), _c("button", {
     staticClass: "btn btn-outline-primary btn-shadow",
     attrs: {
       type: "button"
@@ -4135,7 +4135,7 @@ var render = function render() {
     on: {
       click: _vm.setLoyalty
     }
-  }, [_vm._v(_vm._s(_vm.trans.loyalty_cancel) + " ")])])]) : _vm._e()]);
+  }, [_vm._v(_vm._s(_vm.trans.loyalty_use) + " ")])])]) : _vm._e()]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

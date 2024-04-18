@@ -104,26 +104,26 @@
             </div>
         </div>
 
-        <div class="rounded-3 p-4 mt-3" v-if="has_loyalty && route == 'kosarica' || route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
+        <div class="rounded-3 p-4 mt-3" v-if="has_loyalty && route == 'kosarica' || has_loyalty && route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2" v-cloak>
                 <div class="form-group mb-3">
 
                     <label class="form-label">{{ trans.use_loyalty }}</label>
 
 
-                    <div class="form-check"  v-if="$store.state.cart.has_loyalty >= 100">
-                        <input class="form-check-input" type="radio"   v-model="selected_loyalty" value="100" >
+                    <div class="form-check" v-if="$store.state.cart.has_loyalty >= 100">
+                        <input class="form-check-input" type="radio"    v-model="selected_loyalty" value="100" >
                         <label class="form-check-label" for="ex-radio-2">{{ trans.loyalty_100 }}</label>
                     </div>
-                    <div class="form-check"  v-if="$store.state.cart.has_loyalty >= 200">
+                    <div class="form-check" v-if="$store.state.cart.has_loyalty >= 200">
                         <input class="form-check-input" type="radio"   v-model="selected_loyalty" value="200">
                         <label class="form-check-label" for="ex-radio-3">{{ trans.loyalty_200 }}</label>
                     </div>
 
 
                 </div>
-                <button type="button" v-on:click="selected_loyalty = null" class="btn btn-outline-primary btn-shadow">{{ trans.loyalty_use }}</button>
-                <button type="button" v-on:click="setLoyalty" class="btn btn-outline-primary btn-shadow">{{ trans.loyalty_cancel }} </button>
+                <button type="button" v-on:click="selected_loyalty = null" class="btn btn-outline-primary btn-shadow">{{ trans.loyalty_cancel }}</button>
+                <button type="button" v-on:click="setLoyalty" class="btn btn-outline-primary btn-shadow">{{ trans.loyalty_use }} </button>
             </div>
         </div>
 
@@ -254,7 +254,7 @@ export default {
             let cart = this.$store.state.storage.getCart();
 
             console.log('cart LOYALTY')
-            console.log(cart.hasLoyalty)
+            console.log(cart.has_loyalty)
 
             if (cart.has_loyalty > 100) {
                 this.has_loyalty = true;
