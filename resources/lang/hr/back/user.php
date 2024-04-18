@@ -49,6 +49,7 @@ return [
     'nova_lozinka' => 'Nova lozinka',
     'potvrdi_lozinku' => 'Potvrdite novu lozinke',
     'korisnicki_podaci' => 'Korisnički podaci',
+    'user_loyalty' => 'Loyalty bodovi ukupno'
 
 
 

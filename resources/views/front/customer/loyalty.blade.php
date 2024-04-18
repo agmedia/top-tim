@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="d-none d-lg-flex align-items-start pt-lg-3 pb-1 pb-lg-1 mb-lg-2">
-                    <p class="fs-sm text-primary mb-0"><strong>{{ __('front/cart.loyalty_current_points') }}</strong> : 6 </p>
+                    <p class="fs-sm text-primary mb-0"><strong>{{ __('front/cart.loyalty_current_points') }}</strong> : {{$points }}</p>
                 </div>
                 <!-- Orders list-->
                 <div class="table-responsive fs-md mb-4">

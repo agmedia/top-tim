@@ -66,7 +66,9 @@ class CustomerController extends FrontBaseController
 
         $loyalty = Loyalty::where('user_id', $user->id)->get();
 
-        return view('front.customer.loyalty', compact('user', 'loyalty'));
+        $points = Loyalty::hasLoyalty();
+
+        return view('front.customer.loyalty', compact('user', 'loyalty', 'points'));
     }
 
 

@@ -49,4 +49,5 @@ return [
     'nova_lozinka' => 'New password',
     'potvrdi_lozinku' => 'Repeat new password',
     'korisnicki_podaci' => 'User data',
+    'user_loyalty' => 'Loyalty Points Total'
 ];
