@@ -197,6 +197,11 @@ return [
     'loyalty_ref_order' => 'Order',
     'loyalty_ref_review' => 'Product Review',
     'loyalty_trenutno_nemate' => 'Currently you have no points. ',
+    'use_loyalty' => 'Use Loyalty discount',
+    'loyalty_100' => '100 = 5 € discount',
+    'loyalty_200' => '200 = 12 € discount',
+    'loyalty_use' => 'Apply',
+    'loyalty_cancel' => 'Cancel',
 
 
 

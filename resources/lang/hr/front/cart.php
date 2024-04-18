@@ -201,6 +201,11 @@ return [
     'loyalty_ref_review' => 'Recenzija proizvoda',
 
     'loyalty_trenutno_nemate' => 'Trenutno nemate bodova. ',
+    'use_loyalty' => 'Iskoristite Loyalty popust',
+    'loyalty_100' => '100 = 5€ popust',
+    'loyalty_200' => '200 = 12€ popust',
+    'loyalty_use' => 'Primjeni',
+    'loyalty_cancel' => 'Odbaci',
 
 
 
