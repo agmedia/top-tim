@@ -137,7 +137,8 @@
                                 <input type="text" class="form-control" id="input-state" name="state" value="{{ isset($user) ? $user->details->state : old('state') }}">
                             </div>
 
-                            <div class="form-group">{{ __('back/user.user_loyalty') }}</label>
+                            <div class="form-group">
+                                <label for="input-loyalty">{{ __('back/user.user_loyalty') }}</label>
                                 <input type="text" class="form-control" id="input-loyalty" name="loyalty_points" value="">
                             </div>
                         </div>
