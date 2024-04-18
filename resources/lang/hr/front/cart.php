@@ -194,6 +194,7 @@ return [
     'loyalty' => 'Program vjernosti',
     'loyalty_reference' => 'Referenca',
     'loyalty_earned' => 'Bodova',
+    'loyalty_used' => 'Iskorišten popust',
     'loyalty_date' => 'Datum',
     'loyalty_current_points' => 'Ukupno raspoloživih bodova',
 

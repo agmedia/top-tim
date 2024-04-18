@@ -191,6 +191,7 @@ return [
     'otkazano_narudzba' => 'Your order has been canceled.',
     'loyalty' => 'Loyalty program',
     'loyalty_reference' => 'Reference',
+    'loyalty_used' => 'Discount used',
     'loyalty_earned' => 'Points Earned',
     'loyalty_date' => 'Date',
     'loyalty_current_points' => 'Total Available Points',

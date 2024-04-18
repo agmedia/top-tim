@@ -29,6 +29,7 @@
                             <th>{{ __('front/cart.loyalty_reference') }} #</th>
                             <th>{{ __('front/cart.loyalty_date') }}</th>
                             <th>{{ __('front/cart.loyalty_earned') }}</th>
+                            <th>{{ __('front/cart.loyalty_used') }}</th>
 
                         </tr>
                         </thead>
@@ -42,7 +43,8 @@
                                         <td class="py-3">{{ __('front/cart.loyalty_ref_review') }}  - {{$row->reference_id }} {{-- staviti naziv proizvoda preko product id --}}</td>
                                     @endif
                                     <td class="py-3">{{ \Illuminate\Support\Carbon::make($row->created_at)->format('d.m.Y') }}</td>
-                                    <td class="py-3">{{ $row->earned }}</td>
+                                    <td class="py-3"> + {{ $row->earned }} </td>
+                                        <td class="py-3">   @if($row->spend == 100)   -  {{ __('front/cart.loyalty_100') }} @endif @if($row->spend == 200)  -  {{ __('front/cart.loyalty_200') }} @endif </td>
                                 </tr>
                             @empty
                                 <tr>
