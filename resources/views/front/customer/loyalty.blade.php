@@ -39,6 +39,9 @@
                                 <tr>
                                     @if($row->target == 'order')
                                          <td class="py-3">{{ __('front/cart.loyalty_ref_order') }} - {{$row->reference_id }}</td>
+
+                                    @elseif($row->target == 'admin')
+                                            <td class="py-3">Admin - {{$row->reference_id }}</td>
                                     @else
                                         <td class="py-3">{{ __('front/cart.loyalty_ref_review') }}  - {{$row->reference_id }} {{-- staviti naziv proizvoda preko product id --}}</td>
                                     @endif
