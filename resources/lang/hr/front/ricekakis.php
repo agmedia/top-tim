@@ -18,8 +18,8 @@ return [
     'icons_t1' => 'Besplatna dostava HR',
     'icons_d1' => 'Besplatna dostava za narudžbe > 45€',
 
-    'icons_t2' => 'Besplatna dostava Zagreb',
-    'icons_d2' => 'Besplatna dostava za narudžbe > 25€',
+    'icons_t2' => 'Program vjernosti',
+    'icons_d2' => 'Osvoji bodove s svakom narudžbom i recenzijom',
 
     'icons_t3' => 'Brza i pozdana dostava',
     'icons_d3' => 'Dostavljamo za 1-3 radna dana u Hrvatskoj',

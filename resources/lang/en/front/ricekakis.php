@@ -20,8 +20,8 @@ return [
     'icons_t1' => 'Free shipping HR',
     'icons_d1' => 'Free shipping for orders > 45€',
 
-    'icons_t2' => 'Free shipping Zagreb',
-    'icons_d2' => 'Free shipping for orders > 25€',
+    'icons_t2' => 'Customer Loyalty',
+    'icons_d2' => 'Earn points with every order and review',
 
     'icons_t3' => 'Fast and reliable delivery',
     'icons_d3' => 'Delivered within 1-3 business days in Croatia',
