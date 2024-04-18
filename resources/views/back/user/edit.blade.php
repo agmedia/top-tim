@@ -139,7 +139,7 @@
 
                             <div class="form-group">
                                 <label for="input-loyalty">{{ __('back/user.user_loyalty') }}</label>
-                                <input type="text" class="form-control" id="input-loyalty" name="loyalty_points" value="">
+                                <input type="text" class="form-control" id="input-loyalty" name="loyalty_points" value="{{ isset($points) ? $points : old('state') }}">
                             </div>
                         </div>
                     </div>
@@ -175,6 +175,8 @@
                     </div>
                 </div>
             </div>
+
+            <input type="hidden" name="user_id" value="{{ isset($user) ? $user->id : old('user_id') }}">
         </form>
     </div>
 

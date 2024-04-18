@@ -50,11 +50,9 @@ class Loyalty extends Model
     /**
      * @return int
      */
-    public static function hasLoyaltyTotal(): int
+    public static function hasLoyaltyTotal($user_id): int
     {
-        if (auth()->user()) {
-            $user_id = auth()->user()->id;
-
+        if ($user_id) {
             $earned = Loyalty::query()->where('user_id', $user_id)->sum('earned');
             $spent = Loyalty::query()->where('user_id', $user_id)->sum('spend');
             $has_any = intval($earned - $spent);
@@ -132,15 +130,48 @@ class Loyalty extends Model
      *
      * @return bool
      */
-    public static function addPoints(int $points, int $reference_id, string $target): bool
+    public static function addPoints(int $points, int $reference_id, string $target, int $user_id = null): bool
     {
         if (auth()->user() && $points) {
+            if ( ! $user_id) {
+                $user_id = auth()->user()->id;
+            }
+
             return Loyalty::query()->insert([
-                'user_id'      => auth()->user()->id,
+                'user_id'      => $user_id,
                 'reference_id' => $reference_id,
                 'target'       => $target,
                 'earned'       => $points,
                 'spend'        => 0,
+                'created_at'   => now(),
+                'updated_at'   => now()
+            ]);
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param int    $points
+     * @param int    $reference_id
+     * @param string $target
+     *
+     * @return bool
+     */
+    public static function removePoints(int $points, int $reference_id, string $target, int $user_id = null): bool
+    {
+        if (auth()->user() && $points) {
+            if ( ! $user_id) {
+                $user_id = auth()->user()->id;
+            }
+
+            return Loyalty::query()->insert([
+                'user_id'      => $user_id,
+                'reference_id' => $reference_id,
+                'target'       => $target,
+                'earned'       => 0,
+                'spend'        => $points,
                 'created_at'   => now(),
                 'updated_at'   => now()
             ]);
