@@ -114,6 +114,11 @@ return [
         'title' => 'Količinski popust',
         'start' => '04/11/2023 00:00:01',
         'end' => '12/11/2023 00:00:00'
+    ],
+
+    'loyalty' => [
+        'product_review' => 1,
+        'google_review' => 5,
     ]
 
 ];

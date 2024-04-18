@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
 use App\Mail\ContactFormMessage;
 use App\Models\Back\Marketing\Review;
+use App\Models\Front\Loyalty;
 use App\Models\Front\Page;
 use App\Models\Sitemap;
 use Illuminate\Http\Request;
@@ -81,6 +82,8 @@ class HomeController extends FrontBaseController
         $created_review = $review->validateRequest($request)->create();
 
         if ($created_review) {
+            Loyalty::addPoints(config('settings.loyalty.product_review'), $created_review->id, 'product_review');
+
             return back()->with(['success' => 'Komentar je uspješno poslan']);
         }
 

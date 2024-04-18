@@ -3,6 +3,7 @@
 namespace App\Models\Front;
 
 use App\Models\Back\Orders\Order;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +26,9 @@ class Loyalty extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
 
+    /**
+     * @return int
+     */
     public static function hasLoyalty(): int
     {
         if (auth()->user()) {
@@ -43,6 +47,11 @@ class Loyalty extends Model
     }
 
 
+    /**
+     * @param int $points
+     *
+     * @return int
+     */
     public static function calculateLoyalty(int $points = 0): int
     {
         Log::info('calculateLoyalty:: $points');
@@ -69,7 +78,13 @@ class Loyalty extends Model
     }
 
 
-    public static function resolveOrder(array $cart, Order $order)
+    /**
+     * @param array $cart
+     * @param Order $order
+     *
+     * @return bool
+     */
+    public static function resolveOrder(array $cart, Order $order): bool
     {
         $spent = 0;
 
@@ -86,6 +101,31 @@ class Loyalty extends Model
             'created_at'   => now(),
             'updated_at'   => now()
         ]);
+    }
+
+
+    /**
+     * @param int    $points
+     * @param int    $reference_id
+     * @param string $target
+     *
+     * @return bool
+     */
+    public static function addPoints(int $points, int $reference_id, string $target): bool
+    {
+        if (auth()->user() && $points) {
+            return Loyalty::query()->insert([
+                'user_id'      => auth()->user()->id,
+                'reference_id' => $reference_id,
+                'target'       => $target,
+                'earned'       => $points,
+                'spend'        => 0,
+                'created_at'   => now(),
+                'updated_at'   => now()
+            ]);
+        }
+
+        return false;
     }
 
 }
