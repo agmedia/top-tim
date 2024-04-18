@@ -2,6 +2,7 @@
 
 namespace App\Models\Front;
 
+use App\Models\Front\Catalog\Product;
 use App\Models\Back\Orders\Order;
 use App\Models\User;
 use Carbon\Carbon;
@@ -24,6 +25,19 @@ class Loyalty extends Model
      * @var array
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+
+    public function reference()
+    {
+        if ($this->target == 'product_review') {
+            return $this->hasOne(Product::class, 'id', 'reference_id');
+        }
+        if ($this->target == 'order') {
+            return $this->hasOne(Order::class, 'id', 'reference_id');
+        }
+
+        return $this->hasOne(Product::class);
+    }
 
 
     /**
