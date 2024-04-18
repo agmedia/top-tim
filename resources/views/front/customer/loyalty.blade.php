@@ -41,9 +41,9 @@
                                          <td class="py-3">{{ __('front/cart.loyalty_ref_order') }} - {{$row->reference_id }}</td>
 
                                     @elseif($row->target == 'admin')
-                                            <td class="py-3">Admin - {{$row->reference_id }}</td>
+                                            <td class="py-3">Admin </td>
                                     @else
-                                        <td class="py-3">{{ __('front/cart.loyalty_ref_review') }}  - {{$row->reference_id }} {{-- staviti naziv proizvoda preko product id --}}</td>
+                                        <td class="py-3">{{ __('front/cart.loyalty_ref_review') }}  - {{$row->reference->name }} {{-- staviti naziv proizvoda preko product id --}}</td>
                                     @endif
                                     <td class="py-3">{{ \Illuminate\Support\Carbon::make($row->created_at)->format('d.m.Y') }}</td>
                                     <td class="py-3"> + {{ $row->earned }} </td>
