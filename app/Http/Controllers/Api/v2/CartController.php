@@ -144,6 +144,22 @@ class CartController extends Controller
 
 
     /**
+     * @param $loyalty
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loyalty($loyalty)
+    {
+        Log::info('loyalty($loyalty)');
+        Log::info($loyalty);
+
+        session([$this->key . '_loyalty' => $loyalty]);
+
+        return response()->json($this->cart->hasLoyalty());
+    }
+
+
+    /**
      * Resolve new cart session.
      * If user is logged, check the DB for cart session entries.
      */

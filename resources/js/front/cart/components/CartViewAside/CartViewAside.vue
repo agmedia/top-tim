@@ -89,20 +89,34 @@
         </div>
 
 
-      <div class="rounded-3 p-4 mt-3" v-if="route == 'kosarica' || route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
-        <div class="py-2 px-xl-2" v-cloak>
-          <div class="form-group">
+        <div class="rounded-3 p-4 mt-3" v-if="route == 'kosarica' || route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
+            <div class="py-2 px-xl-2" v-cloak>
+                <div class="form-group">
 
-                <label class="form-label">{{ trans.imate_kod }}</label>
-              <div class="input-group">
-              <input type="text" class="form-control" v-model="coupon" :placeholder="trans.upisite_kod" >
-              <div class="input-group-append">
-                <button type="button" v-on:click="setCoupon" class="btn btn-outline-primary btn-shadow">{{ trans.primjeni }} </button>
-              </div>
+                    <label class="form-label">{{ trans.imate_kod }}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" v-model="coupon" :placeholder="trans.upisite_kod" >
+                        <div class="input-group-append">
+                            <button type="button" v-on:click="setCoupon" class="btn btn-outline-primary btn-shadow">{{ trans.primjeni }} </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+
+        <div class="rounded-3 p-4 mt-3" v-if="has_loyalty && route == 'kosarica' || route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
+            <div class="py-2 px-xl-2" v-cloak>
+                <div class="form-group">
+
+                    <label class="form-label">{{ trans.imate_kod }}</label>
+                    <input type="radio" v-if="$store.state.cart.has_loyalty >= 100" v-model="selected_loyalty" value="100">100
+                    <input type="radio" v-if="$store.state.cart.has_loyalty >= 200" v-model="selected_loyalty" value="200">200
+                </div>
+                <button type="button" v-on:click="selected_loyalty = null" class="btn btn-outline-primary btn-shadow">Unselect </button>
+                <button type="button" v-on:click="setLoyalty" class="btn btn-outline-primary btn-shadow">Set loyalty </button>
+            </div>
+        </div>
+
     </div>
 
 </template>
@@ -121,6 +135,8 @@ export default {
             mobile: false,
             show_delete_btn: true,
             coupon: '',
+            has_loyalty: false,
+            selected_loyalty: 0,
             tax: 0,
           trans: window.trans,
         }
@@ -131,6 +147,7 @@ export default {
         }
 
         this.checkIfEmpty();
+        this.checkLoyalty();
         //this.setCoupon();
     },
 
@@ -176,6 +193,11 @@ export default {
                 this.coupon = cart.coupon;
             }
 
+            // Check loyalty
+            if (cart.loyalty != '' && cart.loyalty != 'null') {
+                this.selected_loyalty = cart.loyalty;
+            }
+
             if (cart && ! cart.count && window.location.pathname != '/kosarica') {
                 window.location.href = '/kosarica';
             }
@@ -191,11 +213,42 @@ export default {
             this.checkCoupon();
         },
 
+        setLoyalty() {
+            let cart = this.$store.state.storage.getCart();
+
+            cart.loyalty = this.selected_loyalty;
+            this.updateLoyalty();
+        },
+
         /**
          *
          */
         checkCoupon() {
             this.$store.dispatch('checkCoupon', this.coupon);
+        },
+
+
+        /**
+         *
+         */
+        updateLoyalty() {
+            console.log('updateLoyalty')
+            console.log(this.selected_loyalty)
+            this.$store.dispatch('updateLoyalty', this.selected_loyalty);
+        },
+
+        /**
+         *
+         */
+        checkLoyalty() {
+            let cart = this.$store.state.storage.getCart();
+
+            console.log('cart LOYALTY')
+            console.log(cart.hasLoyalty)
+
+            if (cart.has_loyalty > 100) {
+                this.has_loyalty = true;
+            }
         }
     }
 };

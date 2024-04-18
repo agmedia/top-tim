@@ -23,4 +23,48 @@ class Loyalty extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+
+    public static function hasLoyalty(): int
+    {
+        if (auth()->user()) {
+            $user_id = auth()->user()->id;
+
+            $earned = Loyalty::query()->where('user_id', $user_id)->sum('earned');
+            $spent = Loyalty::query()->where('user_id', $user_id)->sum('spend');
+            $has_any = intval($earned - $spent);
+
+            if ($has_any && $has_any > 100) {
+                return $has_any;
+            }
+        }
+
+        return 0;
+    }
+
+
+    public static function calculateLoyalty(int $points = 0): int
+    {
+        Log::info('calculateLoyalty:: $points');
+        Log::info($points);
+
+        if (auth()->user() && $points) {
+            $user_id = auth()->user()->id;
+
+            $earned = Loyalty::query()->where('user_id', $user_id)->sum('earned');
+            $spent = Loyalty::query()->where('user_id', $user_id)->sum('spend');
+            $has_points = intval($earned - $spent);
+
+            if ($has_points && $has_points > $points) {
+                if ($points == 100) {
+                    return 5;
+                }
+                if ($points == 200) {
+                    return 12;
+                }
+            }
+        }
+
+        return 0;
+    }
+
 }

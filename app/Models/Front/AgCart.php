@@ -40,6 +40,11 @@ class AgCart extends Model
      */
     private $coupon;
 
+    /**
+     * @var int
+     */
+    private $loyalty;
+
 
     /**
      * AgCart constructor.
@@ -52,6 +57,7 @@ class AgCart extends Model
         $this->cart        = Cart::session($id);
         $this->session_key = config('session.cart') ?: 'agm';
         $this->coupon      = session()->has($this->session_key . '_coupon') ? session($this->session_key . '_coupon') : '';
+        $this->loyalty     = session()->has($this->session_key . '_loyalty') ? session($this->session_key . '_loyalty') : '';
     }
 
 
@@ -65,6 +71,8 @@ class AgCart extends Model
         $response = [
             'id'              => $this->cart_id,
             'coupon'          => $this->coupon,
+            'loyalty'         => $this->loyalty,
+            'has_loyalty'     => $this->hasLoyalty(),
             'items'           => $this->cart->getContent(),
             'count'           => $this->cart->getTotalQuantity(),
             'subtotal'        => $this->cart->getSubTotal(),
@@ -226,6 +234,18 @@ class AgCart extends Model
     }
 
 
+    public function hasLoyalty(): int
+    {
+        $loyalty = Loyalty::hasLoyalty();
+
+        if ($loyalty) {
+            return $loyalty;
+        }
+
+        return 0;
+    }
+
+
     /**
      * @return $this
      */
@@ -297,10 +317,14 @@ class AgCart extends Model
     {
         $this->cart->clearCartConditions();
 
+        Log::info('setCartConditions()');
+        Log::info($this->loyalty);
+
         $shipping_method   = ShippingMethod::condition($this->cart);
         $payment_method    = PaymentMethod::condition($this->cart);
         $special_condition = Helper::hasSpecialCartCondition($this->cart);
         $coupon_conditions = Helper::hasCouponCartConditions($this->cart, $this->coupon);
+        $loyalty_conditions = Helper::hasLoyaltyCartConditions($this->cart, intval($this->loyalty));
 
         if ($payment_method) {
             $str = str_replace('+', '', $payment_method->getValue());
@@ -319,6 +343,10 @@ class AgCart extends Model
 
         if ($coupon_conditions) {
             $this->cart->condition($coupon_conditions);
+        }
+
+        if ($loyalty_conditions) {
+            $this->cart->condition($loyalty_conditions);
         }
 
         // Style response array

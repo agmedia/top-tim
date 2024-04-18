@@ -8,6 +8,7 @@ use App\Models\Back\Marketing\Action;
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\Widget\WidgetGroup;
 use App\Models\Front\Blog;
+use App\Models\Front\Loyalty;
 use App\Models\Front\Recepti;
 use App\Models\Front\Catalog\Author;
 
@@ -779,6 +780,39 @@ class Helper
                         'attributes' => $action->setConditionAttributes($coupon)
                     ));
                 }
+            }
+        }
+
+        return $condition;
+    }
+
+
+    /**
+     * @param        $cart
+     * @param string $coupon
+     *
+     * @return CartCondition|false
+     * @throws \Darryldecode\Cart\Exceptions\InvalidConditionException
+     */
+    public static function hasLoyaltyCartConditions($cart, int $loyalty = 0)
+    {
+        $condition = false;
+        $has_loyalty   = Loyalty::hasLoyalty();
+
+        if ($has_loyalty) {
+            $discount = Loyalty::calculateLoyalty($loyalty);
+
+            if ($cart->getTotal() > $discount) {
+                $condition = new CartCondition(array(
+                    'name'       => 'Loyalty',
+                    'type'       => 'special',
+                    'target'     => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+                    'value'      => '-' . $discount,
+                    'attributes' => [
+                        'type'        => 'loyalty',
+                        'description' => 'Loyalty Program'
+                    ]
+                ));
             }
         }
 

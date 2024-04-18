@@ -34,6 +34,7 @@ use App\Http\Controllers\Front\CatalogRouteController;
 use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\CustomerController;
 use App\Http\Controllers\Front\HomeController;
+use App\Models\Front\Checkout\Payment\Keks;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -249,7 +250,8 @@ Route::prefix('api/v2')->group(function () {
         Route::post('/add', [CartController::class, 'add']);
         Route::post('/update/{id}', [CartController::class, 'update']);
         Route::get('/remove/{id}', [CartController::class, 'remove']);
-        Route::get('/coupon/{coupon}', [CartController::class, 'coupon']);;
+        Route::get('/coupon/{coupon}', [CartController::class, 'coupon']);
+        Route::get('/loyalty/{loyalty}', [CartController::class, 'loyalty']);
     });
 
     Route::get('/products/autocomplete', [\App\Http\Controllers\Api\v2\ProductController::class, 'autocomplete'])->name('products.autocomplete');
@@ -445,7 +447,7 @@ Route::group(
     Route::get('{group}/{cat?}/{subcat?}/{prod?}', [CatalogRouteController::class, 'resolve'])->name('catalog.route');
 
 // SPECIAL ROUTES
-    Route::post('kekspay/provjera-narudzbe', [\App\Models\Front\Checkout\Payment\Keks::class, 'check'])->name('keks.provjera');
+    Route::post('kekspay/provjera-narudzbe', [Keks::class, 'check'])->name('keks.provjera');
 
 
     Route::fallback(function () {
