@@ -82,7 +82,7 @@ class HomeController extends FrontBaseController
         $created_review = $review->validateRequest($request)->create();
 
         if ($created_review) {
-            Loyalty::addPoints(config('settings.loyalty.product_review'), $created_review->id, 'product_review');
+            Loyalty::addPoints(config('settings.loyalty.product_review'), $request->input('product_id'), 'product_review');
 
             return back()->with(['success' => 'Komentar je uspješno poslan']);
         }
