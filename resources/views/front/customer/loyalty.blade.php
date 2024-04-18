@@ -43,7 +43,7 @@
                                     @elseif($row->target == 'admin')
                                             <td class="py-3">Admin </td>
                                     @elseif ($row->target == 'product_review')
-                                        <td class="py-3">{{ __('front/cart.loyalty_ref_review') }}  - {{$row->reference->translation->name }} {{-- staviti naziv proizvoda preko product id --}}</td>
+                                        <td class="py-3">{{ __('front/cart.loyalty_ref_review') }}  - {{$row->reference()->first()->translation->name }} {{-- staviti naziv proizvoda preko product id --}}</td>
                                     @else
                                         <td class="py-3"></td>
                                     @endif
