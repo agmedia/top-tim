@@ -51,7 +51,7 @@
                                                  data-ratio="16:9"
                                                  data-force-size="500,500"
                                                  data-max-file-size="2">
-                                                <img src="{{ isset($widget) && isset($widget->image) ? asset($widget->image) : '' }}" alt=""/>
+                                                <img src="{{ isset($widget) && isset($widget->image) ? asset(str_replace('.webp', '.jpg', $widget->image)) : '' }}" alt=""/>
                                                 <input type="file" name="image"/>
                                             </div>
                                         </div>
@@ -60,7 +60,7 @@
                                                  data-ratio="16:9"
                                                  data-force-size="400,400"
                                                  data-max-file-size="2">
-                                                <img src="{{ isset($widget) && isset($widget->image) ? asset($widget->image) : '' }}" alt=""/>
+                                                <img src="{{ isset($widget) && isset($widget->image) ? asset(str_replace('.webp', '.jpg', $widget->image)) : '' }}" alt=""/>
                                                 <input type="file" name="image_long"/>
                                             </div>
                                         </div>

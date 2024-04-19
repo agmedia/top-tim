@@ -49,7 +49,7 @@
                                         <div class="col-md-10 offset-md-1" id="size-half">
                                             <div class="slim"
                                                  data-max-file-size="2">
-                                                <img src="{{ isset($widget) && isset($widget->image) ? asset($widget->image) : '' }}" alt=""/>
+                                                <img src="{{ isset($widget) && isset($widget->image) ? asset(str_replace('.webp', '.jpg', $widget->image)) : '' }}" alt=""/>
                                                 <input type="file" name="image"/>
                                             </div>
                                         </div>
@@ -58,7 +58,7 @@
                                                  data-ratio="16:9"
                                                  data-force-size="1024,320"
                                                  data-max-file-size="2">
-                                                <img src="{{ isset($widget) && isset($widget->image) ? asset($widget->image) : '' }}" alt=""/>
+                                                <img src="{{ isset($widget) && isset($widget->image) ? asset(str_replace('.webp', '.jpg', $widget->image)) : '' }}" alt=""/>
                                                 <input type="file" name="image_long"/>
                                             </div>
                                         </div>
