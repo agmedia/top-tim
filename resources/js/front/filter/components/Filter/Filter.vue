@@ -4,6 +4,7 @@
         <!-- Categories-->
         <div class="widget widget-categories" v-if="categories">
             <div class="accordion" id="shop-categories">
+
                 <div class="accordion-item border-bottom" v-for="cat in categories">
 
                     <h3 class="accordion-header px-grid-gutter bg-default" v-if="category && (category.id == cat.id)" >
@@ -59,21 +60,7 @@
 
 
 
-            <div class="accordion-item border-bottom">
-                <h3 class="accordion-header px-grid-gutter">
-                    <a class="nav-link-style d-block fs-md fw-normal py-3" :href="origin + 'blog'">
-                        <span class="d-flex align-items-center"> Blog</span>
-                    </a>
-                </h3>
-            </div>
 
-            <div class="accordion-item border-bottom">
-                <h3 class="accordion-header px-grid-gutter">
-                    <a class="nav-link-style d-block fs-md fw-normal py-3" :href="origin + 'recepti'">
-                        <span class="d-flex align-items-center"> {{ trans.recepti }}</span>
-                    </a>
-                </h3>
-            </div>
 
 
 

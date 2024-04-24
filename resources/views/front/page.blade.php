@@ -1,33 +1,33 @@
 @extends('front.layouts.app')
 @if (request()->routeIs(['index']))
-    @section ( 'title', 'Rice Kakis - Bubble Tea | Mochi | Nudle | Slatkiši' )
-    @section ( 'description', 'Rice Kakis Azijski Webshop - autentični Bubble Tea u četiri okusa, japanski Mochi , Nudle, Korejske grickalice i slatkiši, te veliki izbor umaka i začina.' )
+    @section ( 'title', ' Top Tim - Better way to stay in the game' )
+    @section ( 'description', 'Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija.' )
 
 
     @push('meta_tags')
 
         <link rel="canonical" href="{{ env('APP_URL')}}" />
         <meta property="og:locale" content="hr_HR" />
-        <meta property="og:site_name" content="Rice Kakis | Asian Store" />
+        <meta property="og:site_name" content="Top Tim - Better way to stay in the game" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Azijski Webshop- Internet Trgovina za Azijske Namirnice" />
-        <meta property="og:description" content="Rice Kakis | Azijski Webshop. Raj za užitke! Otkrijte raznolikost poslastica poput Mochi, Bubble tea, Noodlesa i još mnogo toga. Okusite izbor začina i umaka." />
+        <meta property="og:title" content="Top Tim - Better way to stay in the game" />
+        <meta property="og:description" content="Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija." />
         <meta property="og:url" content="{{ env('APP_URL')}}"  />
-        <meta property="og:image" content="{{ asset('media/rice-kakis.jpg') }}" />
-        <meta property="og:image:secure_url" content="{{ asset('media/rice-kakis.jpg') }}" />
+        <meta property="og:image" content="{{ asset('image/toptim-ponuda.jpg') }}" />
+        <meta property="og:image:secure_url" content="{{ asset('image/toptim-ponuda.jpg') }}" />
         <meta property="og:image:width" content="1920" />
         <meta property="og:image:height" content="720" />
         <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:alt" content="Azijski Webshop - Internet Trgovina za Azijske Namirnice" />
+        <meta property="og:image:alt" content="Top Tim - Better way to stay in the game" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Azijski Webshop - Internet Trgovina za Azijske Namirnice" />
-        <meta name="twitter:description" content="Rice Kakis | Azijski Webshop. Raj za užitke! Otkrijte raznolikost poslastica poput Mochi, Bubble tea, Noodlesa i još mnogo toga. Okusite izbor začina i umaka." />
-        <meta name="twitter:image" content="{{ asset('media/rice-kakis.jpg') }}" />
+        <meta name="twitter:title" content="Top Tim - Better way to stay in the game" />
+        <meta name="twitter:description" content="Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija." />
+        <meta name="twitter:image" content="{{ asset('image/toptim-ponuda.jpg') }}" />
 
     @endpush
 
 @else
-    @section ( 'title', $page->title. ' - Rice Kakis | Asian Store' )
+    @section ( 'title', $page->title. ' | Top Tim - Better way to stay in the game' )
     @section ( 'description', $page->meta_description )
 @endif
 
@@ -35,9 +35,9 @@
 
     @if (request()->routeIs(['index']))
 
-      {{--@include('front.layouts.partials.hometemp') --}}
+    @include('front.layouts.partials.hometemp')
 
-      <h1 style="visibility: hidden;height:1px "> Rice Kakis - Bubble Tea | Mochi | Nudle | Slatkiši</h1>
+      <h1 style="visibility: hidden;height:1px "> Top Tim - Better way to stay in the game</h1>
 
         {!! $page->description !!}
 

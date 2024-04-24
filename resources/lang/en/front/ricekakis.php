@@ -82,5 +82,9 @@ return [
     'imate' => 'You have',
     'artikala_u_kosarici' => 'items in shopping cart',
     'hvala_vam_za_narudzbu' => 'Thank you for your order',
-    'dobili_ste_narudzbu' => 'You have received a new order'
+    'dobili_ste_narudzbu' => 'You have received a new order',
+    'pdv' => 'VAT included.',
+    'boja' => 'Select color',
+    'velicina'   => 'Select size',
+    'tech_desc' => 'Technical specification'
 ];

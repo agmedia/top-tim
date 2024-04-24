@@ -30,7 +30,7 @@ return [
     'default_category'     => 2,
     'unknown_author'       => 6,
     'unknown_publisher'    => 6,
-    'image_size_ratio' => '500x500',
+    'image_size_ratio' => '600x600',
     'thumb_size_ratio' => '400x400',
     'images_domain'        => env('APP_IMAGE_DOMAIN'),
     'image_default'        => 'media/avatars/avatar0.jpg',

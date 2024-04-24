@@ -6,13 +6,13 @@
         <div class="container-fluid">
             <a class="navbar-brand d-none d-md-block me-1 flex-shrink-0 py-0" href="{{ route('index') }}">
                 <div class="logo-bg" style="background-color:#fff;margin-left:-30px; padding: 0 0px 0 30px; ">
-                    <img src="{{ asset('img/logo-kakis.png') }}" width="140"  alt="Rice Kakis | Asian Store " >
+                    <img src="{{ asset('image/logo-top-tim.svg') }}" width="220"  alt="Rice Kakis | Asian Store " >
                     <span class="arrow"></span>
                 </div>
             </a>
             <a class="navbar-brand p-0 d-md-none me-0" href="{{ route('index') }}">
                 <div class="logo-bg py-1" style="background-color:#fff;margin-left:-15px; padding: 0 10px 0 10px; ">
-                <img src="{{ asset('img/logo-kakis.png') }}"  width="100" alt="Rice Kakis | Asian Store">
+                <img src="{{ asset('image/logo-top-tim.svg') }}"  width="100" alt="Rice Kakis | Asian Store">
 
                 </div>
             </a>

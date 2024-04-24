@@ -3443,7 +3443,7 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "cart d-flex flex-wrap align-items-center pt-2 pb-2 mb-3"
+    staticClass: "cart d-flex flex-wrap align-items-center pt-2 pb-2 mb-1"
   }, [_c("input", {
     directives: [{
       name: "model",
@@ -3472,7 +3472,7 @@ var render = function render() {
       }
     }
   }), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-primary btn-shadow me-3 mb-1",
+    staticClass: "btn btn-primary btn-shadow me-3 mb-2",
     attrs: {
       disabled: _vm.disabled
     },
@@ -3484,7 +3484,7 @@ var render = function render() {
   }, [_c("i", {
     staticClass: "ci-cart"
   }), _vm._v(" " + _vm._s(_vm.trans.add_to_cart))]), _vm._v(" "), _vm.has_in_cart ? _c("p", {
-    staticClass: "fs-md fw-light text-danger",
+    staticClass: "fs-sm fw-light text-danger mb-0",
     staticStyle: {
       width: "100%"
     }
@@ -4291,29 +4291,7 @@ var render = function render() {
         href: cat.url
       }
     }, [_vm._v("Pogledaj sve")])])])], 2)])])]);
-  }), 0), _vm._v(" "), _c("div", {
-    staticClass: "accordion-item border-bottom"
-  }, [_c("h3", {
-    staticClass: "accordion-header px-grid-gutter"
-  }, [_c("a", {
-    staticClass: "nav-link-style d-block fs-md fw-normal py-3",
-    attrs: {
-      href: _vm.origin + "blog"
-    }
-  }, [_c("span", {
-    staticClass: "d-flex align-items-center"
-  }, [_vm._v(" Blog")])])])]), _vm._v(" "), _c("div", {
-    staticClass: "accordion-item border-bottom"
-  }, [_c("h3", {
-    staticClass: "accordion-header px-grid-gutter"
-  }, [_c("a", {
-    staticClass: "nav-link-style d-block fs-md fw-normal py-3",
-    attrs: {
-      href: _vm.origin + "recepti"
-    }
-  }, [_c("span", {
-    staticClass: "d-flex align-items-center"
-  }, [_vm._v(" " + _vm._s(_vm.trans.recepti))])])])])]) : _vm._e()]);
+  }), 0)]) : _vm._e()]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

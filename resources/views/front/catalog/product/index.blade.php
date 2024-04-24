@@ -26,6 +26,20 @@
     <meta name="twitter:description" content="{{ $seo['description'] }}" />
     <meta name="twitter:image" content="{{ asset($prod->image) }}" />
 
+    <style>
+        .slider {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease;
+            -webkit-transition: opacity 1s ease;
+        }
+
+        .slider.slick-initialized {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+
 @endpush
 {{--
 @if (isset($gdl))
@@ -82,44 +96,44 @@
         <!-- Product Gallery + description-->
         <div class="col-xl-6 px-2 mb-3">
             <div class="h-100 bg-light rounded-3 p-4 position-relative">
-                <div class="btn-wishlist-block">
 
-                    @if($prod->vegan)
-                        <button class="btn-wishlist  btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegan" data-bs-original-title="Vegan"><img src="{{ asset('image/vegan.svg') }}" alt="Vegan" width="35" height="35" style="width:31px"/></button>
-                    @endif
-                    @if($prod->vegetarian)
-                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Vegeterian" data-bs-original-title="Vegeterian"><img src="{{ asset('image/vegeterian.svg') }}" alt="Vegeterian"  width="35" height="35" style="width:31px" /></button>
-                    @endif
-                    @if($prod->glutenfree)
-                        <button class="btn-wishlist btn-lg" type="button" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Gluten Free" data-bs-original-title="Gluten Free"><img src="{{ asset('image/gluten-free.svg') }}" alt="Gluten Free"  width="35" height="35" style="width:35px" /></button>
-                    @endif
-                </div>
+                <div class="" id="gallery">
+                    <div class="main-image product-thumb">
 
-                <div class="product-gallery">
+                        <div class=" slider slider-for  mb-3">
 
-
-
-                    <div class="product-gallery-preview order-sm-2">
                             @if ( ! empty($prod->image))
-                                <div class="product-gallery-preview-item active" id="first"><img  src="{{ asset($prod->image) }}"  alt="{{ $prod->name }}" height="800"></div>
+
+                                <div class="item single-product" data-target="0">
+                                    <a class="link" href="{{ asset($prod->image) }}">
+                                        <img  src="{{ asset($prod->image) }}" alt="{{ $prod->name }}"  >
+                                    </a>
+                                </div>
+
+
+
                             @endif
+
                             @if ($prod->images->count())
                                 @foreach ($prod->images as $key => $image)
-                                    <div class="product-gallery-preview-item" id="key{{ $key + 1 }}"><img  src="{{ asset($image->image) }}" alt="{{ $image->alt }}"  height="800"></div>
+                                        <div class="item single-product" data-target="{{ $key + 1 }}">
+                                            <a class="link" href="{{ asset($image->image) }}">
+                                            <img  src="{{ asset($image->image) }}" alt="{{ $image->alt }}" >
+                                            </a>
+                                        </div>
                                 @endforeach
                             @endif
-                    </div>
-                    <div class="product-gallery-thumblist order-sm-1">
-                        @if ($prod->images->count() > 1)
-                            @if ( ! empty($prod->thumb))
-                                <a class="product-gallery-thumblist-item active" href="#first"><img src="{{ asset($prod->thumb) }}" alt="{{ $prod->name }}"></a>
-                            @endif
+                        </div>
+
+                        <ul class=" slider slider-nav mt-5">
                             @foreach ($prod->images as $key => $image)
-                                <a class="product-gallery-thumblist-item" href="#key{{ $key + 1 }}"><img src="{{ url('cache/thumb?size=100x100&src=' . $image->thumb) }}" width="100" height="100" alt="{{ $image->alt }}"></a>
+                            <li  ><img src="{{ url('cache/thumb?size=100x100&src=' . $image->thumb) }}" class="thumb" width="100" height="100" alt="{{ $image->alt }}"></li>
                             @endforeach
-                        @endif
+                        </ul>
                     </div>
                 </div>
+
+
             </div>
 
 
@@ -181,21 +195,79 @@
            @endif
        </div>
    @endif
-   @if ($prod->main_price > $prod->main_special)
+   @if ($prod->main_price > $prod->main_special )
 
        <div class="mb-3 mt-1 text-start">
            <span class=" fs-sm text-muted me-1">  {{ __('front/ricekakis.lowest_price') }}</span>
        </div>
 
    @endif
+
+            <div class="mb-3 mt-1 text-start">
+                <span class=" fs-xs text-muted me-1">  {{ __('front/ricekakis.pdv') }}</span>
+            </div>
+
+
+            <div class="fs-sm mb-4"><span class="text-heading fw-medium me-1">{{ __('front/ricekakis.boja') }}:</span><span class="text-muted" id="colorOption">Bijela</span></div>
+            <div class="position-relative me-n4 mb-3" id="select">
+                <div class="form-check form-option form-check-inline mb-2" data-target="0">
+                    <input class="form-check-input" type="radio" name="color"  id="color1" data-bs-label="colorOption" value="Bijela" checked>
+                    <label class="form-option-label rounded-circle" for="color1"><span class="form-option-color rounded-circle" style="background-color: #f7f7f7;"></span></label>
+                </div>
+                <div class="form-check form-option form-check-inline mb-2" data-target="1">
+                    <input class="form-check-input" type="radio" name="color"  id="color2" data-bs-label="colorOption" value="Crvena">
+                    <label class="form-option-label rounded-circle" for="color2"><span class="form-option-color rounded-circle" style="background-color: #cd232d;"></span></label>
+                </div>
+                <div class="form-check form-option form-check-inline mb-2" data-target="2">
+                    <input class="form-check-input" type="radio" name="color" id="color3"  data-bs-label="colorOption" value="Plava">
+                    <label class="form-option-label rounded-circle" for="color3"><span class="form-option-color rounded-circle" style="background-color: #3666ac;"></span></label>
+                </div>
+                <div class="form-check form-option form-check-inline mb-2" data-target="3">
+                    <input class="form-check-input" type="radio" name="color"  id="color4" data-bs-label="colorOption" value="Žuta">
+                    <label class="form-option-label rounded-circle" for="color4"><span class="form-option-color rounded-circle" style="background-color: #e5cf50;"></span></label>
+                </div>
+
+                <div class="form-check form-option form-check-inline mb-2" data-target="4">
+                    <input class="form-check-input" type="radio" name="color"  id="color5" data-bs-label="colorOption" value="Flouroscentno zelena">
+                    <label class="form-option-label rounded-circle" for="color5"><span class="form-option-color rounded-circle" style="background-color: #b2d245;"></span></label>
+                </div>
+
+                <div class="form-check form-option form-check-inline mb-2" data-target="5">
+                    <input class="form-check-input" type="radio" name="color"  id="color6" data-bs-label="colorOption" value="Tamno crvena">
+                    <label class="form-option-label rounded-circle" for="color6"><span class="form-option-color rounded-circle" style="background-color: #c12f32;"></span></label>
+                </div>
+
+                <div class="form-check form-option form-check-inline mb-2" data-target="6">
+                    <input class="form-check-input" type="radio" name="color"  id="color7" data-bs-label="colorOption" value="Zelena">
+                    <label class="form-option-label rounded-circle" for="color7"><span class="form-option-color rounded-circle" style="background-color: #239752;"></span></label>
+                </div>
+
+
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <div class="d-flex justify-content-between align-items-center pb-1">
+                    <label class="form-label" for="product-size">{{ __('front/ricekakis.velicina') }}:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Size guide</a>
+                </div>
+                <select class="form-select" required id="product-size">
+                    <option value="">{{ __('front/ricekakis.velicina') }}</option>
+                    <option value="xs">XS</option>
+                    <option value="s">S</option>
+                    <option value="m">M</option>
+                    <option value="l">L</option>
+                    <option value="xl">XL</option>
+                </select>
+            </div>
+
+
             @if ( $prod->quantity > 0)
    <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"></add-to-cart-btn>
             @endif
-   <!-- Product panels-->
+
    <div class="accordion mb-4" id="productPanels">
        <div class="accordion-item">
-           <h3 class="accordion-header"><a class="accordion-button" href="#productInfo" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="productInfo"><i class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i> {{ __('front/ricekakis.osnovne_informacije') }}</a></h3>
-           <div class="accordion-collapse collapse show" id="productInfo" data-bs-parent="#productPanels">
+           <h3 class="accordion-header"><a class="accordion-button collapsed" href="#productInfo" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="productInfo"><i class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i> {{ __('front/ricekakis.osnovne_informacije') }}</a></h3>
+           <div class="accordion-collapse collapse " id="productInfo" data-bs-parent="#productPanels">
                <div class="accordion-body">
 
                    <ul class="fs-sm ps-4 mb-0">
@@ -271,6 +343,8 @@
            </div>
        </div>
    </div>
+
+
    <!-- Sharing-->
    <!-- ShareThis BEGIN --><div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
 </div>
@@ -282,7 +356,7 @@
 <div class="bg-light px-2 mb-3 shadow-lg rounded-3">
 <!-- Tabs-->
 <ul class="nav nav-tabs" role="tablist">
-   <li class="nav-item"><a class="nav-link py-4 px-sm-4 active" href="#specs" data-bs-toggle="tab" role="tab"><span>{{ __('front/ricekakis.description') }}</span> </a></li>
+   <li class="nav-item"><a class="nav-link py-4 px-sm-4 active" href="#specs" data-bs-toggle="tab" role="tab"><span>{{ __('front/ricekakis.tech_desc') }}</span> </a></li>
    <li class="nav-item"><a class="nav-link py-4 px-sm-4" href="#reviews" data-bs-toggle="tab" role="tab">{{ __('front/ricekakis.reviews') }} <span class="fs-sm opacity-60">({{ $reviews->count() }})</span></a></li>
 </ul>
 <div class="px-4 pt-lg-3 pb-3 mb-5">
@@ -506,6 +580,14 @@
 @endsection
 
 @push('js_after')
+    <link rel="stylesheet" media="screen" href="{{ asset('js/slick/slick.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ asset('js/slick/slick-theme.css') }}">
+
+    <script src="{{ asset('js/slick/slick.min.js') }}"></script>
+
+
+
+
 <script type="application/ld+json">
 {!! collect($crumbs)->toJson() !!}
 </script>
@@ -519,5 +601,41 @@ $('#openReview').on('click', function(e) {
     $('.nav-tabs a[href="#reviews"]').tab('show');
   document.getElementById("tabs_widget").scrollIntoView();
 });
+</script>
+<script>
+
+
+
+
+    var $carousel = $('.slider-for').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        fade: true,
+        asNavFor: '.slider-nav'
+    });
+    var $thumbs = $('.slider-nav').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        asNavFor: '.slider-for',
+        dots: false,
+        centerMode: false,
+        focusOnSelect: true,
+
+    });
+
+
+    $(".form-check").click(function(){
+        var artworkId = $(this).data('target');
+
+        console.log(artworkId);
+        var artIndex = $carousel.find('[data-target="' + artworkId + '"]').data('slick-index');
+
+        console.log(artIndex);
+
+
+        $carousel.slick('slickGoTo', artIndex);
+    });
+
 </script>
 @endpush

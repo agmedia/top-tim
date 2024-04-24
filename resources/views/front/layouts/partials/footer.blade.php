@@ -1,7 +1,7 @@
 
 
     <section class="col">
-        <div class="card py-5 border-0 " style="background: url({{ asset('image/china.jpg') }}) repeat center center fixed; background-size: contain;  ">
+        <div class="card py-5 border-0 " style="background: url({{ asset('image/pattern3.jpg') }}) #fff repeat center center fixed; background-size: auto;  ">
             <div class="card-body py-md-4 py-3 px-4 text-center">
                 <h3 class="mb-3">{{ __('front/ricekakis.newsletter_title') }}</h3>
                 <p class="mb-4 pb-2">{{ __('front/ricekakis.newsletter_description') }}</p>
@@ -67,16 +67,18 @@
                 <div class="row py-lg-3">
                     <div class="col-lg-4 mb-lg-0 mb-4">
                         <div class="widget pb-3 mb-lg-4">
-                            <h3 class="widget-title text-dark pb-1">Rice Kakis Asian Store</h3>
+                            <h3 class="widget-title text-dark pb-1">Top Tim d.o.o.</h3>
                             <ul class="widget-list">
-                            <li  class="widget-list-item"><span class="widget-list-link">Vukoje Logistika j.d.o.o.</span></li>
-                            <li  class="widget-list-item"><span class="widget-list-link">Kaštelanska 4a. Veliko Polje, 10010 Zagreb</span></li>
-                            <li  class="widget-list-item"><span class="widget-list-link">MBS: 081362286 - OIB: 04676029695</span></li>
-                            <li  class="widget-list-item"><span class="widget-list-link">{{ __('front/ricekakis.ziro_racun') }}: Privredna banka Zagreb d.d.</span></li>
-                                <li  class="widget-list-item"> <span class="widget-list-link">IBAN: HR9223400091111126783</span></li>
+
+                            <li  class="widget-list-item"><span class="widget-list-link">Put Gvozdenova 283, 22000 Šibenik </span></li>
+                            <li  class="widget-list-item"><span class="widget-list-link">OIB: 20925110769</span></li>
+                            <li  class="widget-list-item"><span class="widget-list-link">{{ __('front/ricekakis.ziro_racun') }}: OTP banka d.d.</span></li>
+                                <li  class="widget-list-item"> <span class="widget-list-link">IBAN: HR5824070001100095118 </span></li>
+
+
                             </ul>
                         </div>
-                        <div class="review-widget_net" data-uuid="9ba05add-2ec4-47e0-9d98-72aec4875742" data-template="10" data-lang="en" data-theme="light"></div>
+
 
                     </div>
                     <div class="col-lg-4 mb-lg-0 mb-4">
@@ -103,16 +105,16 @@
                         <div class="widget pb-3 mb-lg-2">
                                 <h3 class="widget-title text-dark pb-1">{{ __('front/ricekakis.kontaktirajte_nas') }}</h3>
                                 <ul class="widget-list">
-                                    <li  class="widget-list-item"><span class="widget-list-link"><a class="nav-link-style fs-md" href="tel:+385 99 3334448"><i class="ci-phone me-1"></i> +385 99 3334448 (HRV)</a></span></li>
-                                    <li  class="widget-list-item"><span class="widget-list-link"> <a class="nav-link-style fs-md" href="tel:+385 91 5207047"><i class="ci-phone hme-1"></i> +385 91 5207047 (ENG)</a></span></li>
-                                    <li  class="widget-list-item"><span class="widget-list-link"> <a class="nav-link-style fs-md" href="mailto:info@ricekakis.com"><i class="ci-mail  me-1"></i> info@ricekakis.com</a></span></li>
+                                    <li  class="widget-list-item"><span class="widget-list-link"><a class="nav-link-style fs-md" href="tel:+385 22 337000"><i class="ci-phone me-1"></i> +385 22 337000 </a></span></li>
+
+                                    <li  class="widget-list-item"><span class="widget-list-link"> <a class="nav-link-style fs-md" href="mailto:info@top-tim.com"><i class="ci-mail  me-1"></i> info@top-tim.com</a></span></li>
 
                                 </ul>
 
 
 
                     </div>
-                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" aria-label="Facebook" href="https://www.facebook.com/ricekakis"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/ricekakis/"><i class="ci-instagram"></i></a><a aria-label="Youtube" class="btn-social bs-outline bs-youtube me-2 mb-2" href="https://www.youtube.com/channel/UCdNEYWHea1pKfUJbKF6fU4g"><i class="ci-youtube"></i></a><a class="btn-social bs-outline bs-tiktok me-2 mb-2" aria-label="Youtube" href="https://www.tiktok.com/@ricekakis"><i class="ci-tiktok"></i></a></div>
+                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" aria-label="Facebook" href="https://www.facebook.com/"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/"><i class="ci-instagram"></i></a><a aria-label="Youtube" class="btn-social bs-outline bs-youtube me-2 mb-2" href="https://www.youtube.com/channel/"><i class="ci-youtube"></i></a><a class="btn-social bs-outline bs-tiktok me-2 mb-2" aria-label="Youtube" href="https://www.tiktok.com/"><i class="ci-tiktok"></i></a></div>
 
                         </div>
 
@@ -123,7 +125,7 @@
 
         <div class="bg-darker px-lg-5 py-3">
             <div class="d-sm-flex justify-content-between align-items-center mx-auto px-3" >
-                <div class="fs-sm text-white  text-center text-sm-start py-3">Rice Kakis Asian Store © {{ __('front/ricekakis.sva_prava') }}. Web by <a class="text-white" href="https://www.agmedia.hr" target="_blank" rel="noopener">AG media</a></div>
+                <div class="fs-sm text-white  text-center text-sm-start py-3">Top Tim d.o.o. © {{ __('front/ricekakis.sva_prava') }}. Web by <a class="text-white" href="https://www.agmedia.hr" target="_blank" rel="noopener">AG media</a></div>
                 <div class="widget widget-links widget-light pt-1 text-center text-md-end">
 
 
