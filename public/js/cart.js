@@ -3443,7 +3443,9 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "cart d-flex flex-wrap align-items-center pt-2 pb-2 mb-1"
+    staticClass: "cart pt-2 pb-2 mb-3"
+  }, [_c("div", {
+    staticClass: "d-flex align-items-center mw-500"
   }, [_c("input", {
     directives: [{
       name: "model",
@@ -3472,7 +3474,7 @@ var render = function render() {
       }
     }
   }), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-primary btn-shadow me-3 mb-2",
+    staticClass: "btn btn-primary btn-shadow w-100 mb-1",
     attrs: {
       disabled: _vm.disabled
     },
@@ -3483,7 +3485,7 @@ var render = function render() {
     }
   }, [_c("i", {
     staticClass: "ci-cart"
-  }), _vm._v(" " + _vm._s(_vm.trans.add_to_cart))]), _vm._v(" "), _vm.has_in_cart ? _c("p", {
+  }), _vm._v(" " + _vm._s(_vm.trans.add_to_cart))])]), _vm._v(" "), _vm.has_in_cart ? _c("p", {
     staticClass: "fs-sm fw-light text-danger mb-0",
     staticStyle: {
       width: "100%"
@@ -3712,7 +3714,7 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", [_vm.$store.state.cart.total > 0 ? _c("div", {
-    staticClass: "d-block pt-3 pb-2 mt-1 text-start"
+    staticClass: "d-block pt-0 pb-2 mt-0 text-start"
   }, [_vm.$store.state.cart.total < _vm.freeship && _vm.$store.state.cart.count ? _c("div", {
     staticClass: "alert alert-info d-flex",
     attrs: {
@@ -4430,10 +4432,10 @@ var render = function render() {
     staticClass: "col"
   }, [_c("div", {
     staticClass: "d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2"
-  }, [_c("div", {
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
     staticClass: "d-flex flex-wrap"
   }, [_c("div", {
-    staticClass: "d-flex align-items-center flex-nowrap me-0 me-sm-4 pb-3"
+    staticClass: "d-flex align-items-center flex-nowrap me-0 pb-3"
   }, [_c("select", {
     directives: [{
       name: "model",
@@ -4443,7 +4445,7 @@ var render = function render() {
     }],
     staticClass: "form-select pe-2",
     staticStyle: {
-      "min-width": "130px"
+      "max-width": "120px"
     },
     on: {
       change: function change($event) {
@@ -4481,30 +4483,26 @@ var render = function render() {
       value: "naziv_down"
     }
   }, [_vm._v(_vm._s(_vm.trans.z_a))])])])]), _vm._v(" "), _c("div", {
-    staticClass: "d-flex pb-3"
+    staticClass: "d-flex pb-3 d-none"
   }, [_c("span", {
     staticClass: "fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block"
   }, [_vm._v(_vm._s(_vm.products.total ? Number(_vm.products.total).toLocaleString("hr-HR") : 0) + " " + _vm._s(_vm.trans.artikala))])]), _vm._v(" "), _c("div", {
     staticClass: "d-flex d-sm-none pb-3"
   }, [_c("button", {
-    staticClass: "btn btn-icon btn-sm nav-link-style me-1",
+    staticClass: "btn btn-outline-secondary bg-white btn-icon nav-link-style me-1",
     on: {
       click: function click($event) {
         return _vm.tworow();
       }
     }
-  }, [_c("i", {
-    staticClass: "ci-view-grid"
-  })]), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-icon btn-sm nav-link-style",
+  }, [_vm._v("2")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-outline-secondary bg-white btn-icon btn-sm nav-link-style",
     on: {
       click: function click($event) {
         return _vm.onerow();
       }
     }
-  }, [_c("i", {
-    staticClass: "ci-view-list"
-  })])])]), _vm._v(" "), _vm.products.total ? _c("div", {
+  }, [_vm._v("1")])])]), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm.products.total ? _c("div", {
     staticClass: "row row-cols-xxxl-5 row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 g-0 mx-n2 mb-5",
     attrs: {
       id: "product-grid"
@@ -4514,66 +4512,10 @@ var render = function render() {
       staticClass: "px-2 mb-4 d-flex align-items-stretch"
     }, [_c("div", {
       staticClass: "card product-card card-static pb-3"
-    }, [_c("div", {
-      staticClass: "btn-wishlist-block"
-    }, [product.vegan ? _c("button", {
-      directives: [{
-        name: "tooltip",
-        rawName: "v-tooltip:top",
-        value: "Vegan",
-        expression: "'Vegan'",
-        arg: "top"
-      }],
-      staticClass: "btn-wishlist me-1",
-      attrs: {
-        type: "button"
-      }
-    }, [_c("img", {
-      attrs: {
-        src: "image/vegan.svg",
-        alt: "Vegan",
-        width: "25px"
-      }
-    })]) : _vm._e(), _vm._v(" "), product.vegetarian ? _c("button", {
-      directives: [{
-        name: "tooltip",
-        rawName: "v-tooltip:top",
-        value: "Vegetarian",
-        expression: "'Vegetarian'",
-        arg: "top"
-      }],
-      staticClass: "btn-wishlist me-1",
-      attrs: {
-        type: "button"
-      }
-    }, [_c("img", {
-      attrs: {
-        src: "image/vegeterian.svg",
-        alt: "Vegeterian",
-        width: "25px"
-      }
-    })]) : _vm._e(), _vm._v(" "), product.glutenfree ? _c("button", {
-      directives: [{
-        name: "tooltip",
-        rawName: "v-tooltip:top",
-        value: "Gluten Free",
-        expression: "'Gluten Free'",
-        arg: "top"
-      }],
-      staticClass: "btn-wishlist me-1",
-      attrs: {
-        type: "button"
-      }
-    }, [_c("img", {
-      attrs: {
-        src: "image/gluten-free.svg",
-        alt: "Gluten Free",
-        width: "35px"
-      }
-    })]) : _vm._e()]), _vm._v(" "), product.quantity <= 0 ? _c("span", {
+    }, [product.quantity <= 0 ? _c("span", {
       staticClass: "badge bg-warning mt-1 ms-1 badge-end"
     }, [_vm._v(_vm._s(_vm.trans.rasprodano))]) : _vm._e(), _vm._v(" "), product.special ? _c("span", {
-      staticClass: "badge rounded-pill bg-primary mt-1 ms-1 badge-shadow"
+      staticClass: "badge rounded-pill bg-red mt-1 ms-1 badge-shadow"
     }, [_vm._v("-" + _vm._s(_vm.$store.state.service.getDiscountAmount(product.price, product.special)) + "%")]) : _vm._e(), _vm._v(" "), _c("a", {
       staticClass: "card-img-top d-block pb-2 overflow-hidden",
       attrs: {
@@ -4643,7 +4585,7 @@ var render = function render() {
     }
   }), _vm._v(" "), !_vm.products_loaded ? _c("div", {
     staticClass: "row"
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _vm.products.total ? _c("div", {
+  }, [_vm._m(2)]) : _vm._e(), _vm._v(" "), _vm.products.total ? _c("div", {
     staticClass: "col-md-12 d-flex justify-content-center mt-4"
   }, [_c("p", {
     staticClass: "fs-sm"
@@ -4668,6 +4610,1108 @@ var render = function render() {
   })]) : _vm._e()], 1);
 };
 var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "d-flex flex-wrap pb-3"
+  }, [_c("button", {
+    staticClass: "btn btn-outline-secondary bg-white btn-icon",
+    attrs: {
+      type: "button",
+      "data-bs-toggle": "offcanvas",
+      "data-bs-target": "#offcanvasRight"
+    }
+  }, [_c("i", {
+    staticClass: "ci-filter me-2"
+  }), _vm._v(" Filter")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "offcanvas offcanvas-end",
+    attrs: {
+      id: "offcanvasRight",
+      tabindex: "-1"
+    }
+  }, [_c("div", {
+    staticClass: "offcanvas-header border-bottom"
+  }, [_c("h5", {
+    staticClass: "offcanvas-title"
+  }, [_vm._v("Filter")]), _vm._v(" "), _c("button", {
+    staticClass: "btn-close",
+    attrs: {
+      type: "button",
+      "data-bs-dismiss": "offcanvas"
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "offcanvas-body",
+    attrs: {
+      "data-simplebar": ""
+    }
+  }, [_c("div", {
+    staticClass: "row pt-2"
+  }, [_c("div", {
+    staticClass: "col-lg-12"
+  }, [_c("div", {
+    staticClass: "mb-grid-gutter"
+  }, [_c("div", {
+    staticClass: "px-2"
+  }, [_c("div", {
+    staticClass: "widget widget-filter"
+  }, [_c("h3", {
+    staticClass: "widget-title"
+  }, [_vm._v("Brand")]), _vm._v(" "), _c("div", {
+    staticClass: "input-group input-group-sm mb-2"
+  }, [_c("input", {
+    staticClass: "widget-filter-search form-control rounded-end pe-5",
+    attrs: {
+      type: "text",
+      placeholder: "Search"
+    }
+  }), _c("i", {
+    staticClass: "ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"
+  })]), _vm._v(" "), _c("ul", {
+    staticClass: "widget-list widget-filter-list list-unstyled pt-1",
+    staticStyle: {
+      "max-height": "11rem"
+    },
+    attrs: {
+      "data-simplebar": "",
+      "data-simplebar-auto-hide": "false"
+    }
+  }, [_c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "adidas"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "adidas"
+    }
+  }, [_vm._v("Adidas")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("425")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "ataylor"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "ataylor"
+    }
+  }, [_vm._v("Ann Taylor")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("15")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "armani"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "armani"
+    }
+  }, [_vm._v("Armani")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("18")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "banana"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "banana"
+    }
+  }, [_vm._v("Banana Republic")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("103")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "bilabong"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "bilabong"
+    }
+  }, [_vm._v("Bilabong")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("27")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "birkenstock"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "birkenstock"
+    }
+  }, [_vm._v("Birkenstock")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("10")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "klein"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "klein"
+    }
+  }, [_vm._v("Calvin Klein")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("365")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "columbia"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "columbia"
+    }
+  }, [_vm._v("Columbia")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("508")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "converse"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "converse"
+    }
+  }, [_vm._v("Converse")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("176")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "dockers"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "dockers"
+    }
+  }, [_vm._v("Dockers")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("54")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "fruit"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "fruit"
+    }
+  }, [_vm._v("Fruit of the Loom")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("739")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "hanes"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "hanes"
+    }
+  }, [_vm._v("Hanes")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("92")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "choo"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "choo"
+    }
+  }, [_vm._v("Jimmy Choo")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("17")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "levis"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "levis"
+    }
+  }, [_vm._v("Levi's")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("361")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "lee"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "lee"
+    }
+  }, [_vm._v("Lee")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("264")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "wearhouse"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "wearhouse"
+    }
+  }, [_vm._v("Men's Wearhouse")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("75")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "newbalance"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "newbalance"
+    }
+  }, [_vm._v("New Balance")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("218")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "nike"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "nike"
+    }
+  }, [_vm._v("Nike")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("810")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "navy"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "navy"
+    }
+  }, [_vm._v("Old Navy")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("147")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "polo"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "polo"
+    }
+  }, [_vm._v("Polo Ralph Lauren")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("64")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "puma"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "puma"
+    }
+  }, [_vm._v("Puma")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("370")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "reebok"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "reebok"
+    }
+  }, [_vm._v("Reebok")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("506")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "skechers"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "skechers"
+    }
+  }, [_vm._v("Skechers")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("209")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "hilfiger"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "hilfiger"
+    }
+  }, [_vm._v("Tommy Hilfiger")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("487")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "armour"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "armour"
+    }
+  }, [_vm._v("Under Armour")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("90")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "urban"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "urban"
+    }
+  }, [_vm._v("Urban Outfitters")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("152")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "vsecret"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "vsecret"
+    }
+  }, [_vm._v("Victoria's Secret")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("238")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "wolverine"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "wolverine"
+    }
+  }, [_vm._v("Wolverine")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("29")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "wrangler"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "wrangler"
+    }
+  }, [_vm._v("Wrangler")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("115")])])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-lg-12"
+  }, [_c("div", {
+    staticClass: "mb-grid-gutter"
+  }, [_c("div", {
+    staticClass: "px-2"
+  }, [_c("div", {
+    staticClass: "widget widget-filter"
+  }, [_c("h3", {
+    staticClass: "widget-title"
+  }, [_vm._v("Veličina")]), _vm._v(" "), _c("div", {
+    staticClass: "input-group input-group-sm mb-2"
+  }, [_c("input", {
+    staticClass: "widget-filter-search form-control rounded-end pe-5",
+    attrs: {
+      type: "text",
+      placeholder: "Search"
+    }
+  }), _c("i", {
+    staticClass: "ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"
+  })]), _vm._v(" "), _c("ul", {
+    staticClass: "widget-list widget-filter-list list-unstyled pt-1",
+    staticStyle: {
+      "max-height": "11.5rem"
+    },
+    attrs: {
+      "data-simplebar": "",
+      "data-simplebar-auto-hide": "false"
+    }
+  }, [_c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-xs"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-xs"
+    }
+  }, [_vm._v("XS")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("34")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-s"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-s"
+    }
+  }, [_vm._v("S")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("57")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-m"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-m"
+    }
+  }, [_vm._v("M")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("198")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-l"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-l"
+    }
+  }, [_vm._v("L")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("72")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-xl"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-xl"
+    }
+  }, [_vm._v("XL")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("46")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-39"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-39"
+    }
+  }, [_vm._v("39")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("112")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-40"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-40"
+    }
+  }, [_vm._v("40")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("85")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-41"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-40"
+    }
+  }, [_vm._v("41")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("210")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-42"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-42"
+    }
+  }, [_vm._v("42")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("57")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-43"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-43"
+    }
+  }, [_vm._v("43")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("30")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-44"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-44"
+    }
+  }, [_vm._v("44")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("61")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-45"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-45"
+    }
+  }, [_vm._v("45")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("23")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-46"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-46"
+    }
+  }, [_vm._v("46")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("19")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-47"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-47"
+    }
+  }, [_vm._v("47")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("15")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-48"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-48"
+    }
+  }, [_vm._v("48")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("12")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-49"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-49"
+    }
+  }, [_vm._v("49")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("8")])]), _vm._v(" "), _c("li", {
+    staticClass: "widget-filter-item d-flex justify-content-between align-items-center"
+  }, [_c("div", {
+    staticClass: "form-check"
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "size-50"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label widget-filter-item-text",
+    attrs: {
+      "for": "size-50"
+    }
+  }, [_vm._v("50")])]), _c("span", {
+    staticClass: "fs-xs text-muted"
+  }, [_vm._v("6")])])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-lg-12"
+  }, [_c("div", {
+    staticClass: "mb-grid-gutter"
+  }, [_c("div", {
+    staticClass: "px-2"
+  }, [_c("div", {
+    staticClass: "widget"
+  }, [_c("h3", {
+    staticClass: "widget-title"
+  }, [_vm._v("Boja")]), _vm._v(" "), _c("div", {
+    staticClass: "d-flex flex-wrap"
+  }, [_c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-blue-gray"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-blue-gray"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#b3c8db"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-blue-gray"
+    }
+  }, [_vm._v("Blue-gray")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-burgundy"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-burgundy"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#ca7295"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-burgundy"
+    }
+  }, [_vm._v("Burgundy")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-teal"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-teal"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#91c2c3"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-teal"
+    }
+  }, [_vm._v("Teal")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-brown"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-brown"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#9a8480"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-brown"
+    }
+  }, [_vm._v("Brown")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-coral-red"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-coral-red"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#ff7072"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-coral-red"
+    }
+  }, [_vm._v("Coral red")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-navy"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-navy"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#696dc8"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-navy"
+    }
+  }, [_vm._v("Navy")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-charcoal"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-charcoal"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#4e4d4d"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-charcoal"
+    }
+  }, [_vm._v("Charcoal")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-option text-center mb-2 mx-1",
+    staticStyle: {
+      width: "4rem"
+    }
+  }, [_c("input", {
+    staticClass: "form-check-input",
+    attrs: {
+      type: "checkbox",
+      id: "color-sky-blue"
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-option-label rounded-circle",
+    attrs: {
+      "for": "color-sky-blue"
+    }
+  }, [_c("span", {
+    staticClass: "form-option-color rounded-circle",
+    staticStyle: {
+      "background-color": "#8bcdf5"
+    }
+  })]), _vm._v(" "), _c("label", {
+    staticClass: "d-block fs-xs text-muted mt-n1",
+    attrs: {
+      "for": "color-sky-blue"
+    }
+  }, [_vm._v("Sky blue")])])])])])])])])])]);
+}, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {

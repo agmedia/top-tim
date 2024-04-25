@@ -185,86 +185,86 @@
 
        </div>
 
-   @if($prod->secondary_price_text)
-       <div class="mb-1 mt-1 text-start">
-           @if ($prod->main_price > $prod->main_special)
-               <span class=" fs-sm text-muted me-1"> {{ $prod->secondary_special_text }}</span>
-               <span class="text-muted fs-sm me-3">*{{ $prod->secondary_price_text }}</span>
-           @else
-               <span class="fs-sm text-muted  me-1">{{ $prod->secondary_price_text }}</span>
+           @if($prod->secondary_price_text)
+               <div class="mb-1 mt-1 text-start">
+                   @if ($prod->main_price > $prod->main_special)
+                       <span class=" fs-sm text-muted me-1"> {{ $prod->secondary_special_text }}</span>
+                       <span class="text-muted fs-sm me-3">*{{ $prod->secondary_price_text }}</span>
+                   @else
+                       <span class="fs-sm text-muted  me-1">{{ $prod->secondary_price_text }}</span>
+                   @endif
+               </div>
            @endif
-       </div>
-   @endif
-   @if ($prod->main_price > $prod->main_special )
+           @if ($prod->main_price > $prod->main_special )
 
-       <div class="mb-3 mt-1 text-start">
-           <span class=" fs-sm text-muted me-1">  {{ __('front/ricekakis.lowest_price') }}</span>
-       </div>
+               <div class="mb-3 mt-1 text-start">
+                   <span class=" fs-sm text-muted me-1">  {{ __('front/ricekakis.lowest_price') }}</span>
+               </div>
 
-   @endif
+           @endif
 
             <div class="mb-3 mt-1 text-start">
                 <span class=" fs-xs text-muted me-1">  {{ __('front/ricekakis.pdv') }}</span>
             </div>
 
+            <div class="mw-500">
+                <div class="fs-sm mb-4"><span class="text-heading fw-medium me-1"><span class="text-danger">*</span> {{ __('front/ricekakis.boja') }}:</span><span class="text-muted" id="colorOption">Bijela</span></div>
+                <div class="position-relative me-n4 mb-3" id="select">
+                    <div class="form-check form-option form-check-inline mb-2" data-target="0">
+                        <input class="form-check-input" type="radio" name="color"  id="color1" data-bs-label="colorOption" value="Bijela" checked>
+                        <label class="form-option-label rounded-circle" for="color1"><span class="form-option-color rounded-circle" style="background-color: #f7f7f7;"></span></label>
+                    </div>
+                    <div class="form-check form-option form-check-inline mb-2" data-target="1">
+                        <input class="form-check-input" type="radio" name="color"  id="color2" data-bs-label="colorOption" value="Crvena">
+                        <label class="form-option-label rounded-circle" for="color2"><span class="form-option-color rounded-circle" style="background-color: #cd232d;"></span></label>
+                    </div>
+                    <div class="form-check form-option form-check-inline mb-2" data-target="2">
+                        <input class="form-check-input" type="radio" name="color" id="color3"  data-bs-label="colorOption" value="Plava">
+                        <label class="form-option-label rounded-circle" for="color3"><span class="form-option-color rounded-circle" style="background-color: #3666ac;"></span></label>
+                    </div>
+                    <div class="form-check form-option form-check-inline mb-2" data-target="3">
+                        <input class="form-check-input" type="radio" name="color"  id="color4" data-bs-label="colorOption" value="Žuta">
+                        <label class="form-option-label rounded-circle" for="color4"><span class="form-option-color rounded-circle" style="background-color: #e5cf50;"></span></label>
+                    </div>
 
-            <div class="fs-sm mb-4"><span class="text-heading fw-medium me-1">{{ __('front/ricekakis.boja') }}:</span><span class="text-muted" id="colorOption">Bijela</span></div>
-            <div class="position-relative me-n4 mb-3" id="select">
-                <div class="form-check form-option form-check-inline mb-2" data-target="0">
-                    <input class="form-check-input" type="radio" name="color"  id="color1" data-bs-label="colorOption" value="Bijela" checked>
-                    <label class="form-option-label rounded-circle" for="color1"><span class="form-option-color rounded-circle" style="background-color: #f7f7f7;"></span></label>
-                </div>
-                <div class="form-check form-option form-check-inline mb-2" data-target="1">
-                    <input class="form-check-input" type="radio" name="color"  id="color2" data-bs-label="colorOption" value="Crvena">
-                    <label class="form-option-label rounded-circle" for="color2"><span class="form-option-color rounded-circle" style="background-color: #cd232d;"></span></label>
-                </div>
-                <div class="form-check form-option form-check-inline mb-2" data-target="2">
-                    <input class="form-check-input" type="radio" name="color" id="color3"  data-bs-label="colorOption" value="Plava">
-                    <label class="form-option-label rounded-circle" for="color3"><span class="form-option-color rounded-circle" style="background-color: #3666ac;"></span></label>
-                </div>
-                <div class="form-check form-option form-check-inline mb-2" data-target="3">
-                    <input class="form-check-input" type="radio" name="color"  id="color4" data-bs-label="colorOption" value="Žuta">
-                    <label class="form-option-label rounded-circle" for="color4"><span class="form-option-color rounded-circle" style="background-color: #e5cf50;"></span></label>
-                </div>
+                    <div class="form-check form-option form-check-inline mb-2" data-target="4">
+                        <input class="form-check-input" type="radio" name="color"  id="color5" data-bs-label="colorOption" value="Flouroscentno zelena">
+                        <label class="form-option-label rounded-circle" for="color5"><span class="form-option-color rounded-circle" style="background-color: #b2d245;"></span></label>
+                    </div>
 
-                <div class="form-check form-option form-check-inline mb-2" data-target="4">
-                    <input class="form-check-input" type="radio" name="color"  id="color5" data-bs-label="colorOption" value="Flouroscentno zelena">
-                    <label class="form-option-label rounded-circle" for="color5"><span class="form-option-color rounded-circle" style="background-color: #b2d245;"></span></label>
-                </div>
+                    <div class="form-check form-option form-check-inline mb-2" data-target="5">
+                        <input class="form-check-input" type="radio" name="color"  id="color6" data-bs-label="colorOption" value="Tamno crvena">
+                        <label class="form-option-label rounded-circle" for="color6"><span class="form-option-color rounded-circle" style="background-color: #c12f32;"></span></label>
+                    </div>
 
-                <div class="form-check form-option form-check-inline mb-2" data-target="5">
-                    <input class="form-check-input" type="radio" name="color"  id="color6" data-bs-label="colorOption" value="Tamno crvena">
-                    <label class="form-option-label rounded-circle" for="color6"><span class="form-option-color rounded-circle" style="background-color: #c12f32;"></span></label>
-                </div>
-
-                <div class="form-check form-option form-check-inline mb-2" data-target="6">
-                    <input class="form-check-input" type="radio" name="color"  id="color7" data-bs-label="colorOption" value="Zelena">
-                    <label class="form-option-label rounded-circle" for="color7"><span class="form-option-color rounded-circle" style="background-color: #239752;"></span></label>
-                </div>
+                    <div class="form-check form-option form-check-inline mb-2" data-target="6">
+                        <input class="form-check-input" type="radio" name="color"  id="color7" data-bs-label="colorOption" value="Zelena">
+                        <label class="form-option-label rounded-circle" for="color7"><span class="form-option-color rounded-circle" style="background-color: #239752;"></span></label>
+                    </div>
 
 
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center pb-1">
+                        <label class="form-label" for="product-size"><span class="text-danger">*</span> {{ __('front/ricekakis.velicina') }}:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Size guide</a>
+                    </div>
+                    <select class="form-select" required id="product-size">
+                        <option value="">{{ __('front/ricekakis.velicina') }}</option>
+                        <option value="xs">XS</option>
+                        <option value="s">S</option>
+                        <option value="m">M</option>
+                        <option value="l">L</option>
+                        <option value="xl">XL</option>
+                    </select>
+                </div>
             </div>
-
-            <div class="mb-3 col-md-6">
-                <div class="d-flex justify-content-between align-items-center pb-1">
-                    <label class="form-label" for="product-size">{{ __('front/ricekakis.velicina') }}:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Size guide</a>
-                </div>
-                <select class="form-select" required id="product-size">
-                    <option value="">{{ __('front/ricekakis.velicina') }}</option>
-                    <option value="xs">XS</option>
-                    <option value="s">S</option>
-                    <option value="m">M</option>
-                    <option value="l">L</option>
-                    <option value="xl">XL</option>
-                </select>
-            </div>
-
 
             @if ( $prod->quantity > 0)
-   <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"></add-to-cart-btn>
+                    <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"></add-to-cart-btn>
             @endif
 
-   <div class="accordion mb-4" id="productPanels">
+            <div class="accordion mb-4" id="productPanels">
        <div class="accordion-item">
            <h3 class="accordion-header"><a class="accordion-button collapsed" href="#productInfo" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="productInfo"><i class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i> {{ __('front/ricekakis.osnovne_informacije') }}</a></h3>
            <div class="accordion-collapse collapse " id="productInfo" data-bs-parent="#productPanels">
@@ -272,7 +272,7 @@
 
                    <ul class="fs-sm ps-4 mb-0">
 
-
+                       <li><strong>{{ __('front/ricekakis.sifra') }}:</strong> {{ $prod->sku }} </li>
                        @if ($prod->brand)
                            <li><strong>Brand:</strong> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand->translation->slug]) }}">{{ $prod->brand->title}} </a></li>
                        @endif
@@ -282,7 +282,7 @@
                        @endif
                            @if ($prod->quantity)
 
-                                   <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong> {{$prod->quantity}} </li>
+                                   <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong> {{ __('front/ricekakis.onstock') }} </li>
 
                            @else
                                <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong>{{ __('front/ricekakis.rasprodano') }}</li>
@@ -359,16 +359,34 @@
    <li class="nav-item"><a class="nav-link py-4 px-sm-4 active" href="#specs" data-bs-toggle="tab" role="tab"><span>{{ __('front/ricekakis.tech_desc') }}</span> </a></li>
    <li class="nav-item"><a class="nav-link py-4 px-sm-4" href="#reviews" data-bs-toggle="tab" role="tab">{{ __('front/ricekakis.reviews') }} <span class="fs-sm opacity-60">({{ $reviews->count() }})</span></a></li>
 </ul>
-<div class="px-4 pt-lg-3 pb-3 mb-5">
+<div class="px-3 pt-lg-2 pb-3 mb-2">
    <div class="tab-content px-lg-3">
        <!-- Tech specs tab-->
        <div class="tab-pane fade show active" id="specs" role="tabpanel">
            <!-- Specs table-->
            <div class="row pt-2">
-               <div class="col-lg-7 col-sm-12">
-                   <h2 class="h6">{{ $prod->name  }}</h2>
+               <div class="col-lg-6 col-sm-12">
+                   <h2 class="h6 mb-3">{{ $prod->name  }}</h2>
                    <div class=" fs-md pb-2 mb-4">
                        {!! $prod->description !!}
+
+
+
+                           <ul class="list-unstyled fs-sm pb-2">
+                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Tip rukava:</span><span>Kratki rukavi</span></li>
+                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Kroj:</span><span>Standard Fit</span></li>
+                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Materijal:</span><span>65% Polyester 35% Cotton</span></li>
+                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Spol:</span><span>Muški</span></li>
+                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Tekstil:</span><span>Softlock</span></li>
+
+                               @if ($prod->brand)
+                                   <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Proizvođač:</span> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand->translation->slug]) }}"><span>{{ $prod->brand->title}} </span></a></li>
+                               @endif
+
+
+                           </ul>
+
+
                    </div>
 
 
@@ -561,7 +579,7 @@
     @if (count($related) > 1)
 <section class="pb-5 mb-2 mb-xl-4">
 <div class=" flex-wrap justify-content-between align-items-center  text-center">
-<h4 class="h3 mb-3 pt-1 font-title me-3 text-center"> {{ __('front/ricekakis.povezani_proizvodi') }}</h4>
+<h4 class="h3 mb-4 pt-1 font-title me-3 text-center"> {{ __('front/ricekakis.povezani_proizvodi') }}</h4>
 
 </div>
 <div class="tns-carousel tns-controls-static tns-controls-outside tns-nav-enabled pt-2">

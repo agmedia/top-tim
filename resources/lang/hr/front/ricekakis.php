@@ -85,7 +85,9 @@ return [
     'pdv' => 'U cijenu je uključen PDV.',
     'boja' => 'Odabir boje',
     'velicina'   => 'Odabir veličine',
-    'tech_desc' => 'Tehnička specifikacija'
+    'tech_desc' => 'Tehnička specifikacija',
+    'sifra' => 'Šifra artikla',
+    'onstock' => 'Dostupno',
 
 
 

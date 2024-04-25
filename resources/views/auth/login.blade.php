@@ -18,10 +18,10 @@
                         <div class="block-content block-content-full px-lg-5 py-md-5 py-lg-6">
                             <!-- Header -->
                             <div class="mb-2 text-center">
-                                <a class="link-fx font-w700 font-size-h2" href="{{ route('index') }}">
-                                    <span class="text-dark">Rice</span> <span class="text-primary">Kakis</span>
+                                <a  href="{{ route('index') }}">
+                                    <img src="{{ asset('image/logo-top-tim.svg') }}"  class="mb-4" width="200" alt="Top Tim - Better way to stay in the game">
                                 </a>
-                                <p class="text-uppercase font-w700 font-size-sm text-muted">PRIJAVA</p>
+                                <h3>Prijavite se</h3>
                             </div>
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf

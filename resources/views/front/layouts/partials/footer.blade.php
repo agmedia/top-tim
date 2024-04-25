@@ -114,7 +114,7 @@
 
 
                     </div>
-                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" aria-label="Facebook" href="https://www.facebook.com/"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/"><i class="ci-instagram"></i></a><a aria-label="Youtube" class="btn-social bs-outline bs-youtube me-2 mb-2" href="https://www.youtube.com/channel/"><i class="ci-youtube"></i></a><a class="btn-social bs-outline bs-tiktok me-2 mb-2" aria-label="Youtube" href="https://www.tiktok.com/"><i class="ci-tiktok"></i></a></div>
+                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" href="https://www.facebook.com/toptim1/" aria-label="Facebook"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/toptimofficial/"><i class="ci-instagram"></i></a><a class="btn-social btn-x bs-outline bs-twitter me-2 mb-2" style="margin-top:-5px" aria-label="Twitter" href="https://twitter.com/toptimsport"><img src="{{ asset('image/x-icom.svg') }}"  class="x-icon"   alt="Top Tim - Better way to stay in the game" ></a></div>
 
                         </div>
 

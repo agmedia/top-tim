@@ -29,9 +29,25 @@
             <div class="col-12 col-sm-6 mb-5">
 
                         <h3 class=" mb-4">Impressum</h3>
-                <p>Vukoje Logistika j.d.o.o., Kaštelanska 4a. Veliko Polje, 10010 Zagreb</p>
-                <p>Registarski sud: Trgovački sud u Zagrebu</p>  <p>MBS: 081362286 <br>
-                        OIB: 04676029695</p> <p>Osnivači/članovi društva: Luka Vukoje</p> <p>Žiro račun otvoren u: Privredna banka Zagreb d.d.<br> IBAN: HR9223400091111126783<br> SWIFT: PBZGHR2X</p>
+                <p>
+                    <b>Tvrtka:</b> TOP TIM d.o.o.<br>
+                    <b>Sjedište:</b> Put Gvozdenova 283, 22000 Šibenik<br>
+                    <b>OIB:</b> 20925110769<br>
+                    <b>IBAN:</b> HR58 2407 0001 1000 9511 8, OTP Banka d.d.<br>
+                    <b>SWIFT:</b> OTPVHR2X
+                </p>
+                <p>
+                    <strong>E-mail:</strong> <a href="mailto:info@top-tim.com">info@top-tim.com</a>
+                </p>
+                <p>
+                    <strong>Tel:</strong> <a href="tel:+38522337000">022/337-000</a>
+                </p>
+                <p>
+                    <b>Trgovački sud:</b> Trgovački sud u Zadru - stalna služba u Šibeniku<br>
+                    <b>Temeljni kapital:</b> 20.000,00 kuna / 2.654,46 euro (fiksni tečaj konverzije 7.53450) plaćen u cijelosti<br>
+                    <b>Osnivači/članovi društva:</b> Tamara Strika, jedini član d.o.o. <br>
+                    <b>Osoba ovlaštena za zastupanje:</b> Tamara Strika, član uprave
+                </p>
 
             </div>
 

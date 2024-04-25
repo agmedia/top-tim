@@ -4,9 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <title>Rice Kakis | Asian Store</title>
+        <title>Top Tim - Better way to stay in the game</title>
 
-        <meta name="description" content="Rice Kakis | Asian Store">
+        <meta name="description" content="Top Tim - Better way to stay in the game">
         <meta name="author" content="www.agmedia.hr">
         <meta name="robots" content="noindex, nofollow">
 
@@ -60,7 +60,7 @@
                             Crafted with <i class="fa fa-heart text-danger"></i> by <a class="font-w600" href="https://www.agmedia.hr" target="_blank">AG media</a>
                         </div>
                         <div class="col-sm-6 order-sm-1 text-center text-sm-left">
-                            <a class="font-w600" href="https://www.ricekakis.com" target="_blank">Rice Kakis | Asian Store</a> &copy; <span data-toggle="year-copy"></span>
+                            <a class="font-w600" href="https://www.ricekakis.com" target="_blank">Top Tim d.o.o.</a> &copy; <span data-toggle="year-copy"></span>
                         </div>
                     </div>
                 </div>

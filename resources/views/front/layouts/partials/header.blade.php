@@ -6,13 +6,13 @@
         <div class="container-fluid">
             <a class="navbar-brand d-none d-md-block me-1 flex-shrink-0 py-0" href="{{ route('index') }}">
                 <div class="logo-bg" style="background-color:#fff;margin-left:-30px; padding: 0 0px 0 30px; ">
-                    <img src="{{ asset('image/logo-top-tim.svg') }}" width="220"  alt="Rice Kakis | Asian Store " >
+                    <img src="{{ asset('image/logo-top-tim.svg') }}" width="220"  alt="Top Tim - Better way to stay in the game" >
                     <span class="arrow"></span>
                 </div>
             </a>
             <a class="navbar-brand p-0 d-md-none me-0" href="{{ route('index') }}">
-                <div class="logo-bg py-1" style="background-color:#fff;margin-left:-15px; padding: 0 10px 0 10px; ">
-                <img src="{{ asset('image/logo-top-tim.svg') }}"  width="100" alt="Rice Kakis | Asian Store">
+                <div class="logo-bg py-2" style="background-color:#fff;margin-left:-15px; padding: 6px 5px 6px 5px; ">
+                <img src="{{ asset('image/logo-top-tim.svg') }}"  width="150" alt="Top Tim - Better way to stay in the game">
 
                 </div>
             </a>
@@ -64,7 +64,7 @@
 </header>
 
 <!-- Sidebar menu-->
-<aside class="offcanvas offcanvas-expand w-100 border-end zindex-lg-5 pt-lg-5" id="sideNav" style="max-width: 19.875rem;">
+<aside class="offcanvas offcanvas-expand w-100 border-end zindex-lg-5 pt-lg-5" id="sideNav" style="max-width: 18.875rem;">
     <div class="pt-2 d-none d-lg-block"></div>
     <ul class="nav nav-tabs nav-justified mt-0 mt-lg-5 mb-0" role="tablist" >
         <li class="nav-item"><a class="nav-link fw-medium active" href="#categories" data-bs-toggle="tab" role="tab">{{ __('front/ricekakis.categories') }}</a></li>
@@ -113,6 +113,6 @@
     <div class="offcanvas-footer d-block px-grid-gutter pt-4 pb-3 mb-2">
 
 
-        <p class="pt-2 fw-medium pb-1">{{ __('front/ricekakis.follow_us') }}</p><a class="btn-social bs-outline bs-facebook me-2 mb-2" href="https://www.facebook.com/ricekakis" aria-label="Facebook"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/ricekakis/"><i class="ci-instagram"></i></a><a class="btn-social bs-outline bs-youtube me-2 mb-2" aria-label="Youtube" href="https://www.youtube.com/channel/UCdNEYWHea1pKfUJbKF6fU4g"><i class="ci-youtube"></i></a><a class="btn-social bs-outline bs-tiktok me-2 mb-2" aria-label="Youtube" href="https://www.tiktok.com/@ricekakis"><i class="ci-tiktok"></i></a>
+        <p class="pt-2 fw-medium pb-1">{{ __('front/ricekakis.follow_us') }}</p><a class="btn-social bs-outline bs-facebook me-2 mb-2" href="https://www.facebook.com/toptim1/" aria-label="Facebook"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/toptimofficial/"><i class="ci-instagram"></i></a><a class="btn-social btn-x bs-outline bs-twitter me-2 mb-2" style="margin-top:-5px" aria-label="Twitter" href="https://twitter.com/toptimsport"><img src="{{ asset('image/x-icom.svg') }}"  class="x-icon"   alt="Top Tim - Better way to stay in the game" ></a>
     </div>
 </aside>

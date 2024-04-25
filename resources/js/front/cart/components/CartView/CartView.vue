@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="d-block pt-3 pb-2 mt-1 text-start" v-if="$store.state.cart.total > 0">
+        <div class="d-block pt-0 pb-2 mt-0 text-start" v-if="$store.state.cart.total > 0">
             <div class="alert alert-info  d-flex" v-if="$store.state.cart.total < freeship && $store.state.cart.count" role="alert">
                 <div class="alert-icon">
                     <i class="ci-announcement"></i>

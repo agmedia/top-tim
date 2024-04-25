@@ -12,7 +12,7 @@
 -->
 <nav id="sidebar" aria-label="Main Navigation">
     <!-- Side Header -->
-    <div class="bg-header-dark">
+    <div class="bg-header-light-blue">
         <div class="content-header bg-white-10">
             <!-- Logo -->
             <a class="font-w600 text-white text-center tracking-wide" href="/">
@@ -20,7 +20,8 @@
                                 B<span class="opacity-75">x</span>
                             </span>
                 <span class="smini-hidden ml-2">
-                                Rice <span class="opacity-75">Kakis</span>
+                                             <img src="{{ asset('image/logo-top-tim.svg') }}"  width="150" alt="Top Tim - Better way to stay in the game">
+
                             </span>
             </a>
             <!-- END Logo -->

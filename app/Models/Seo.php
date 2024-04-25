@@ -24,7 +24,7 @@ class Seo
     public static function getProductData(Product $product): array
     {
         return [
-            'title'       => rtrim($product->name) . ' - ' . (isset($product->author->title) ? $product->author->title : ''),
+            'title'       => rtrim($product->name) . ' | Top Tim - Better way to stay in the game',
             'description' => rtrim($product->name) . ' - ' . (isset($product->meta_description) ? $product->meta_description : '')
         ];
     }
@@ -61,7 +61,7 @@ class Seo
      */
     public static function getBrandData(Brand $brand, Category $cat = null, Category $subcat = null): array
     {
-        $title = $brand->title . ' Rice Kakis | Asian Store';
+        $title = $brand->title . '| Top Tim - Better way to stay in the game';
         $description =  $brand->translation->meta_description ;
 
 
@@ -89,8 +89,8 @@ class Seo
      */
     public static function getPublisherData(Publisher $publisher, Category $cat = null, Category $subcat = null): array
     {
-        $title = $publisher->title . ' knjige - Plava Krava';
-        $description = 'Ponuda knjiga nakladnika ' . $publisher->title . ' u Plava Krava Online shopu. Naručite knjige na engleskom jeziku iz naklade ' . $publisher->title . '.';
+        $title = $publisher->title . '| Top Tim - Better way to stay in the game';
+        $description = '';
 
         // Check if there is meta title or description and set vars.
         if ($cat) {

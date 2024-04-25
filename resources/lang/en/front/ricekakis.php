@@ -86,5 +86,7 @@ return [
     'pdv' => 'VAT included.',
     'boja' => 'Select color',
     'velicina'   => 'Select size',
-    'tech_desc' => 'Technical specification'
+    'tech_desc' => 'Technical specification',
+    'sifra' => 'Sku',
+    'onstock' => 'Available',
 ];

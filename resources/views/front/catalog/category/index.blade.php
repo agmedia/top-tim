@@ -83,7 +83,7 @@
         <nav class="mb-4" aria-label="breadcrumb">
             <ol class="breadcrumb flex-lg-nowrap">
                 <li class="breadcrumb-item"><a class="text-nowrap" href="{{ route('index') }}"><i class="ci-home"></i>{{ __('front/ricekakis.homepage') }}</a></li>
-                <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.author') }}">Autori</a></li>
+                <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand') }}">Brand</a></li>
                 @if ( ! $cat && ! $subcat)
                     <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $brand->title }}</li>
                 @endif
@@ -238,7 +238,7 @@
 
 
 
-    @if ($cat && !$subcat)
+    @if ($cat && !$subcat  && ! empty($cat->description))
         <section class="col">
             <div class="card p2-5 border-0 mt-5 shadow mb-5" >
                 <div class="card-body py-md-4 py-3 px-4 ">
@@ -247,7 +247,7 @@
                 </div>
             </div>
         </section>
-    @elseif ($subcat)
+    @elseif ($subcat && ! empty($subcat->description))
         <section class="col">
             <div class="card p2-5 border-0 mt-5 shadow mb-5" >
                 <div class="card-body py-md-4 py-3 px-4 ">

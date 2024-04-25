@@ -102,7 +102,7 @@ body {
     display:none!important;
 }
 
-
+.mw-500{max-width:500px}
 hr {
     margin: 0 0;
     color: #e3e9ef;
@@ -112,7 +112,7 @@ hr {
 }
 
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
-    font-family: "Nova Square", sans-serif;
+
     margin-top: 0;
     margin-bottom: 0.75rem;
     font-weight: 600;
@@ -121,9 +121,11 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
 
 }
 
+h3.accordion-header, h3.product-title { font-family: 'Poppins', sans-serif;}
+
 .font-title{
     /*! font-family: 'Amatic SC', cursive; */
-    font-weight:500;
+    font-weight:600;
 }
 
 span.text-red{color:#05519e!important}
@@ -383,7 +385,7 @@ h2, .h2 {
 }
 @media (min-width: 1200px) {
     h2, .h2 {
-        font-size: 1.8735rem;
+        font-size: 1.6735rem;
     }
 }
 
@@ -4883,7 +4885,7 @@ textarea.form-control-lg {
     align-items: center;
     width: 100%;
     padding: var(--cz-accordion-btn-padding-y) var(--cz-accordion-btn-padding-x);
-    font-size: 1rem;
+    font-size: 0.8935rem;
     color: var(--cz-accordion-btn-color);
     text-align: left;
     background-color: var(--cz-accordion-btn-bg);
@@ -5115,7 +5117,7 @@ textarea.form-control-lg {
 
 .badge {
     --cz-badge-padding-x: 0.625em;
-    --cz-badge-padding-y: 0.25em;
+    --cz-badge-padding-y: 0.45em;
     --cz-badge-font-size: 0.75em;
     --cz-badge-font-weight: normal;
     --cz-badge-color: #fff;
@@ -5216,7 +5218,7 @@ textarea.form-control-lg {
 .alert-info {
     --cz-alert-color: #05519e;
     --cz-alert-bg: #fff;
-    --cz-alert-border-color: #ffcdcb;
+    --cz-alert-border-color: #c3dbff;
 }
 .alert-info .alert-link {
     color: #4c81b7;
@@ -6625,7 +6627,7 @@ textarea.form-control-lg {
 }
 .offcanvas, .offcanvas-xxl, .offcanvas-xl, .offcanvas-lg, .offcanvas-md, .offcanvas-sm {
     --cz-offcanvas-zindex: 1080;
-    --cz-offcanvas-width: 20rem;
+    --cz-offcanvas-width: 22rem;
     --cz-offcanvas-height: 30vh;
     --cz-offcanvas-padding-x: 1.5rem;
     --cz-offcanvas-padding-y: 1.25rem;
@@ -9157,6 +9159,12 @@ textarea.form-control-lg {
 .bg-accent {
     --cz-bg-opacity: 1;
     background-color: rgba(var(--cz-accent-rgb), var(--cz-bg-opacity)) !important;
+}
+
+.bg-red{
+    --cz-bg-opacity: 1;
+    background-color:  #d41712; !important;
+
 }
 
 .bg-secondary {
@@ -13585,6 +13593,13 @@ dd {
     content: "\e903";
 }
 
+.x-icon {
+margin-top:-2px;
+padding-top:0px;
+    display: inline-block;
+width:14px;
+}
+
 .ci-announcement:before {
     content: "\e904";
 }
@@ -15326,6 +15341,12 @@ input[type=search]::-webkit-search-results-decoration {
 .btn-social > i {
     line-height: 2.125rem;
 }
+
+
+.btn-x {
+    line-height: 2.225rem;
+
+}
 .btn-social:hover {
     color: #fff;
 }
@@ -15386,8 +15407,8 @@ input[type=search]::-webkit-search-results-decoration {
 }
 
 .bs-twitter:hover {
-    background-color: #1da1f2;
-    box-shadow: 0 0.5rem 1.125rem -0.5rem rgba(29, 161, 242, 0.9);
+    background-color: #ccc;
+    box-shadow: 0 0.5rem 1.125rem -0.5rem rgba(0,0,0, 0.2);
 }
 .bs-twitter:hover.bs-light {
     color: #1da1f2;
@@ -17343,7 +17364,7 @@ a.nav-link:hover .media-tab-media {
 }
 
 .alert-info .alert-icon {
-    background-color: rgb(255, 205, 203);
+    background-color: rgb(243, 247, 253);
 }
 
 .alert-warning .alert-icon {
@@ -18032,7 +18053,6 @@ a.nav-link:hover .media-tab-media {
 .widget-categories .accordion-button {
     padding: 0.444rem 0;
     font-size: 0.9375rem;
-    font-weight: normal;
     color: var(--cz-primary);
     box-shadow: none;
 }
@@ -18087,8 +18107,7 @@ a.nav-link:hover .media-tab-media {
     transition: color 0.25s ease-in-out;
     color: #4b566b;
     font-size: 0.9375rem;
-    font-weight: normal;
-    font-family: "Nova Square", sans-serif;
+
 }
 .widget-list-link:hover {
     color: var(--cz-primary);
@@ -18267,6 +18286,7 @@ html:not([dir=rtl]) .range-slider-ui.noUi-horizontal .noUi-handle {
 .product-card .badge {
     right: auto;
     left: 0.75rem;
+    font-weight: 600;
 }
 .product-card .badge.badge-end {
     right: 0.75rem;
@@ -18878,7 +18898,7 @@ html:not([dir=rtl]) .range-slider-ui.noUi-horizontal .noUi-handle {
         border-radius: 0.4375rem !important;
     }
     .offcanvas-enabled {
-        padding-left: 19rem;
+        padding-left: 18rem;
         padding-top:5.4rem;
     }
     .offcanvas-enabled.offcanvas-end {
@@ -19052,6 +19072,14 @@ html:not([dir=rtl]) .range-slider-ui.noUi-horizontal .noUi-handle {
         width: 16.66%;
     }
 }
+
+@media (max-width: 400px) {
+    .logo-bg img {width:130px}
+}
+@media (max-width: 370px) {
+    .logo-bg img {width:120px}
+}
+
 .date-picker[readonly] {
     background-color: #fff;
 }
