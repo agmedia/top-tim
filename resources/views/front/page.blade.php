@@ -6,15 +6,15 @@
 
     @push('meta_tags')
 
-        <link rel="canonical" href="{{ env('APP_URL')}}" />
+        <link rel="canonical" href="{{ env('APP_URL')}}/{{ current_locale() }}" />
         <meta property="og:locale" content="hr_HR" />
         <meta property="og:site_name" content="Top Tim - Better way to stay in the game" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Top Tim - Better way to stay in the game" />
         <meta property="og:description" content="Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija." />
         <meta property="og:url" content="{{ env('APP_URL')}}"  />
-        <meta property="og:image" content="{{ asset('image/toptim-ponuda.jpg') }}" />
-        <meta property="og:image:secure_url" content="{{ asset('image/toptim-ponuda.jpg') }}" />
+        <meta property="og:image" content="{{ asset('image/bannerd3-1.jpg') }}" />
+        <meta property="og:image:secure_url" content="{{ asset('image/bannerd3-1.jpg') }}" />
         <meta property="og:image:width" content="1920" />
         <meta property="og:image:height" content="720" />
         <meta property="og:image:type" content="image/jpeg" />
@@ -22,7 +22,7 @@
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Top Tim - Better way to stay in the game" />
         <meta name="twitter:description" content="Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija." />
-        <meta name="twitter:image" content="{{ asset('image/toptim-ponuda.jpg') }}" />
+        <meta name="twitter:image" content="{{ asset('image/bannerd3-1.jpg') }}" />
 
     @endpush
 

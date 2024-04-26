@@ -60,7 +60,7 @@ class RouteResolver
             foreach ($groups as $item) {
                 if ($item->slug == $this->group) {
                     $this->title = $item->title;
-                    $this->description = $item->title . ' - Antikvarijat Vremeplov';
+                    $this->description = $item->title . ' - Top Tim - Better way to stay in the game';
                     $this->canonical = url($item->slug);
                     $group_exist = true;
                 }
@@ -68,8 +68,8 @@ class RouteResolver
 
             if ($this->group == $this->all_path) {
                 $this->group = null;
-                $this->title = 'Web shop';
-                $this->description = 'Dobro došli na stranice antikvarijata Vremeplov. Specijalizirani smo za stare razglednice, pisma, knjige, plakate,časopise te vršimo otkup i prodaju navedenih.';
+                $this->title = 'Top Tim - Better way to stay in the game';
+                $this->description = 'Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija.';
                 $this->canonical = url($this->all_path);
                 $group_exist = true;
             }
