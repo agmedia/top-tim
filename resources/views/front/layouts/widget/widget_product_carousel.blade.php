@@ -9,7 +9,7 @@
         @endif
 
     </div>
-    <div class="tns-carousel pt-4 pb-2">
+    <div class="tns-carousel pt-3 pb-2">
         <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "controls": true, "nav": true, "autoHeight": true, "responsive": {"0":{"items":2, "gutter": 10},"500":{"items":2, "gutter": 10},"768":{"items":3, "gutter": 10}, "1100":{"items":4, "gutter": 15}, "1500":{"items":5, "gutter": 20}}}'>
             @foreach ($data['items'] as $product)
                 <!-- Product-->

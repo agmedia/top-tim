@@ -35,7 +35,7 @@
 
                 @else
                     <a class="navbar-tool d-none d-sm-flex ms-1 ms-lg-0 me-n1 me-lg-2" data-tab-id="pills-signin-tab" aria-label="{{ __('front/ricekakis.login') }}" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal">
-                        <div class="navbar-tool-icon-box bg-dark"><i class="navbar-tool-icon ci-user"></i></div>
+                        <div class="navbar-tool-icon-box bg-red"><i class="navbar-tool-icon ci-user"></i></div>
                         <div class="navbar-tool-text ">{{ __('front/ricekakis.login') }}</div>
                     </a>
                 @endif

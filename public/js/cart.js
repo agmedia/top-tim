@@ -3588,7 +3588,7 @@ var render = function render() {
   return _vm.$store.state.cart ? _c("div", {
     staticClass: "navbar-tool dropdown ms-2"
   }, [_c("a", {
-    staticClass: "navbar-tool-icon-box bg-dark dropdown-toggle",
+    staticClass: "navbar-tool-icon-box bg-red dropdown-toggle",
     attrs: {
       href: _vm.carturl
     }
@@ -3690,7 +3690,9 @@ var render = function render() {
     staticStyle: {
       color: "#aaaaaa"
     }
-  }), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.trans.empty_cart_text))])])])]) : _vm._e();
+  }), _vm._v(" "), _c("p", {
+    staticClass: "mb-0"
+  }, [_vm._v(_vm._s(_vm.trans.empty_cart_text))])])])]) : _vm._e();
 };
 var staticRenderFns = [];
 render._withStripped = true;

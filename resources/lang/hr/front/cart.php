@@ -45,7 +45,7 @@ return [
     'dovrsi_kupnju' => 'Dovrši kupnju',
     'ukupno' => 'Ukupno',
     'sveukupno' => 'Sveukupno',
-    'empty_cart_text' => 'Vaša košarica je prazna!',
+    'empty_cart_text' => 'Vaša košarica je prazna, ali mogućnosti su beskrajne :-)',
     'kosarica' => 'Košarica',
     'podaci' => 'Podaci',
     'dostava' => 'Dostava',

@@ -42,7 +42,7 @@ return [
     'artikala_u_kosarici' => 'item(s) in shopping cart',
     'ukupno' => 'Subtotal',
     'sveukupno' => 'Total',
-    'empty_cart_text' => 'Your cart is empty!',
+    'empty_cart_text' => 'Your cart is empty, but the possibilities are endless :-)',
     'kosarica' => 'Shopping Cart',
     'podaci' => 'Shipping Data',
     'dostava' => 'Delivery',

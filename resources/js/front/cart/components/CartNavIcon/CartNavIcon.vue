@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar-tool dropdown ms-2" v-if="$store.state.cart"><a class="navbar-tool-icon-box bg-dark dropdown-toggle" :href="carturl"><span class="navbar-tool-label">{{ $store.state.cart ? $store.state.cart.count : 0 }}</span><i class="navbar-tool-icon ci-cart"></i></a>
+    <div class="navbar-tool dropdown ms-2" v-if="$store.state.cart"><a class="navbar-tool-icon-box bg-red dropdown-toggle" :href="carturl"><span class="navbar-tool-label">{{ $store.state.cart ? $store.state.cart.count : 0 }}</span><i class="navbar-tool-icon ci-cart"></i></a>
         <!-- Cart dropdown-->
         <div class="dropdown-menu dropdown-menu-end">
             <div class="widget widget-cart px-3 pt-2 pb-3" style="width: 20rem;" v-if="$store.state.cart.count">
@@ -26,7 +26,7 @@
             </div>
             <div class="widget widget-cart px-3 pt-2 pb-3" style="width: 20rem;" v-else>
                 <i class="fa fa-cart-arrow-down fa-2x" style="color: #aaaaaa"></i>
-                <p>{{ trans.empty_cart_text }}</p>
+                <p class="mb-0">{{ trans.empty_cart_text }}</p>
             </div>
         </div>
     </div>
