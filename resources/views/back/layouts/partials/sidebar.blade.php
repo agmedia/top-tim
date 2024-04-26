@@ -96,11 +96,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->routeIs(['receptis', 'receptis.*']) ? ' active' : '' }}" href="{{ route('receptis') }}">
-                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.recipe') }}</span>
-                            </a>
-                        </li>
+
 
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['pages', 'pages.*']) ? ' active' : '' }}" href="{{ route('pages') }}">

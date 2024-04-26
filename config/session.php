@@ -204,6 +204,6 @@ return [
     *                              email: filip@agmedia.hr                         *
     *******************************************************************************/
 
-    'cart' => 'ricekakis_cart',
+    'cart' => 'toptim_cart',
 
 ];

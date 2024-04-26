@@ -29,7 +29,7 @@
             @endif
             <div class="block">
                 <div class="block-header block-header-default">
-                    <a class="btn btn-light" href="{{ back()->getTargetUrl() }}">
+                    <a class="btn btn-light" href="{{ route('brands') }}">
                         <i class="fa fa-arrow-left mr-1"></i> {{ __('back/brands.povratak') }}
                     </a>
                     <div class="block-options d-inline-block">

@@ -7,7 +7,7 @@
                     <div class="widget-cart-item py-2 border-bottom">
                         <button class="btn-close text-danger" type="button" @click.prevent="removeFromCart(item)" aria-label="Remove"><span aria-hidden="true">&times;</span></button>
                         <div class="d-flex align-items-center">
-                            <a class="d-block flex-shrink-0 pt-2" href="#"><img :src="item.associatedModel.image" :alt="item.name" :title="item.name" style="width: 5rem;"></a>
+                            <a class="d-block flex-shrink-0 pt-2" :href="base_path + item.attributes.path"><img :src="item.associatedModel.image" :alt="item.name" :title="item.name" style="width: 5rem;"></a>
                             <div class="ps-2 py-2">
                                 <h6 class="widget-product-title"><a :href="base_path + item.attributes.path">{{ item.name }}</a></h6>
                                 <div class="widget-product-meta"><span class="text-primary me-2">{{ Object.keys(item.conditions).length ? item.associatedModel.main_special_text : item.associatedModel.main_price_text }}</span><span class="text-muted">x {{ item.quantity }}</span></div>

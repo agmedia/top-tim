@@ -24,6 +24,8 @@
 
         <div class="mt-5 mb-5" style="max-width:1240px">
 
+            <div class="rounded-3 p-4 mt-3" style="border: 1px solid rgb(218, 225, 231); background-color: rgb(255, 255, 255) !important;">
+
     <!-- Flush accordion. Use this when you need to render accordions edge-to-edge with their parent container -->
     <div class="accordion accordion-flush" id="accordionFlushExample">
 
@@ -32,24 +34,15 @@
 
         <!-- Item -->
             <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-heading{{ $fa->id }}">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $fa->id }}" aria-expanded="false" aria-controls="flush-collapse{{ $fa->id }}">{{ $fa->title->{ current_locale() } }}</button>
+                <h2 class=" accordion-header" id="flush-heading{{ $fa->id }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $fa->id }}" aria-expanded="false" aria-controls="flush-collapse{{ $fa->id }}"><span class="h4 mb-0">{{ $fa->title }}</span></button>
                 </h2>
                 <div class="accordion-collapse collapse" id="flush-collapse{{ $fa->id }}" aria-labelledby="flush-heading{{ $fa->id }}" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">  {!! $fa->description->{ current_locale() } !!}</div>
+                    <div class="accordion-body">  {!! $fa->description !!}</div>
                 </div>
             </div>
 
     @endforeach
-
-
-
-
-
-
-
-
-
 
 
     </div>
@@ -57,7 +50,7 @@
         </div>
 
 
-
+        </div>
 
 
 @endsection

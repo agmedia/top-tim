@@ -45,7 +45,6 @@
                                     <select class="form-control" id="target-select" name="target">
                                         <option></option>
                                         <option value="blog" {{ (isset($widget) and $widget->target == 'blog') ? 'selected="selected"' : '' }}>Blog</option>
-                                        <option value="recepti" {{ (isset($widget) and $widget->target == 'recepti') ? 'selected="selected"' : '' }}>Recepti</option>
                                         <option value="category" {{ (isset($widget) and $widget->target == 'category') ? 'selected="selected"' : '' }}>Kategorije</option>
                                         <option value="brand" {{ (isset($widget) and $widget->target == 'brand') ? 'selected="selected"' : '' }}>Brands</option>
 

@@ -3631,7 +3631,7 @@ var render = function render() {
     }, [_c("a", {
       staticClass: "d-block flex-shrink-0 pt-2",
       attrs: {
-        href: "#"
+        href: _vm.base_path + item.attributes.path
       }
     }, [_c("img", {
       staticStyle: {
@@ -4256,13 +4256,13 @@ var render = function render() {
     }), _vm._v(" "), _c("ul", {
       staticClass: "widget-list mt-2"
     }, [_c("li", {
-      staticClass: "widget-list-item"
+      staticClass: "widget-list-item red"
     }, [_c("a", {
       staticClass: "widget-list-link",
       attrs: {
         href: cat.url
       }
-    }, [_vm._v("Pogledaj sve")])])])], 2)])]) : _c("div", {
+    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])])], 2)])]) : _c("div", {
       staticClass: "collapse",
       attrs: {
         id: "id" + cat.id,
@@ -4286,13 +4286,13 @@ var render = function render() {
     }), _vm._v(" "), _c("ul", {
       staticClass: "widget-list mt-2"
     }, [_c("li", {
-      staticClass: "widget-list-item"
+      staticClass: "widget-list-item red"
     }, [_c("a", {
       staticClass: "widget-list-link",
       attrs: {
         href: cat.url
       }
-    }, [_vm._v("Pogledaj sve")])])])], 2)])])]);
+    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])])], 2)])])]);
   }), 0)]) : _vm._e()]);
 };
 var staticRenderFns = [];
@@ -4666,7 +4666,7 @@ var staticRenderFns = [function () {
     staticClass: "widget-filter-search form-control rounded-end pe-5",
     attrs: {
       type: "text",
-      placeholder: "Search"
+      placeholder: "Pretraži"
     }
   }), _c("i", {
     staticClass: "ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"
@@ -4687,14 +4687,14 @@ var staticRenderFns = [function () {
     staticClass: "form-check-input",
     attrs: {
       type: "checkbox",
-      id: "adidas"
+      id: "macron"
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "form-check-label widget-filter-item-text",
     attrs: {
-      "for": "adidas"
+      "for": "macron"
     }
-  }, [_vm._v("Adidas")])]), _c("span", {
+  }, [_vm._v("Macron")])]), _c("span", {
     staticClass: "fs-xs text-muted"
   }, [_vm._v("425")])]), _vm._v(" "), _c("li", {
     staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
@@ -4704,14 +4704,14 @@ var staticRenderFns = [function () {
     staticClass: "form-check-input",
     attrs: {
       type: "checkbox",
-      id: "ataylor"
+      id: "joma"
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "form-check-label widget-filter-item-text",
     attrs: {
-      "for": "ataylor"
+      "for": "jomar"
     }
-  }, [_vm._v("Ann Taylor")])]), _c("span", {
+  }, [_vm._v("Joma")])]), _c("span", {
     staticClass: "fs-xs text-muted"
   }, [_vm._v("15")])]), _vm._v(" "), _c("li", {
     staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
@@ -4721,14 +4721,14 @@ var staticRenderFns = [function () {
     staticClass: "form-check-input",
     attrs: {
       type: "checkbox",
-      id: "armani"
+      id: "zeus"
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "form-check-label widget-filter-item-text",
     attrs: {
-      "for": "armani"
+      "for": "zeus"
     }
-  }, [_vm._v("Armani")])]), _c("span", {
+  }, [_vm._v("Zeus")])]), _c("span", {
     staticClass: "fs-xs text-muted"
   }, [_vm._v("18")])]), _vm._v(" "), _c("li", {
     staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
@@ -4738,14 +4738,14 @@ var staticRenderFns = [function () {
     staticClass: "form-check-input",
     attrs: {
       type: "checkbox",
-      id: "banana"
+      id: "givova"
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "form-check-label widget-filter-item-text",
     attrs: {
-      "for": "banana"
+      "for": "givova"
     }
-  }, [_vm._v("Banana Republic")])]), _c("span", {
+  }, [_vm._v("Givova")])]), _c("span", {
     staticClass: "fs-xs text-muted"
   }, [_vm._v("103")])]), _vm._v(" "), _c("li", {
     staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
@@ -4755,14 +4755,14 @@ var staticRenderFns = [function () {
     staticClass: "form-check-input",
     attrs: {
       type: "checkbox",
-      id: "bilabong"
+      id: "select"
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "form-check-label widget-filter-item-text",
     attrs: {
-      "for": "bilabong"
+      "for": "select"
     }
-  }, [_vm._v("Bilabong")])]), _c("span", {
+  }, [_vm._v("Select")])]), _c("span", {
     staticClass: "fs-xs text-muted"
   }, [_vm._v("27")])]), _vm._v(" "), _c("li", {
     staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
@@ -4772,407 +4772,16 @@ var staticRenderFns = [function () {
     staticClass: "form-check-input",
     attrs: {
       type: "checkbox",
-      id: "birkenstock"
+      id: "yakimasport"
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "form-check-label widget-filter-item-text",
     attrs: {
-      "for": "birkenstock"
+      "for": "yakimasport"
     }
-  }, [_vm._v("Birkenstock")])]), _c("span", {
+  }, [_vm._v("Yakimasport")])]), _c("span", {
     staticClass: "fs-xs text-muted"
-  }, [_vm._v("10")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "klein"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "klein"
-    }
-  }, [_vm._v("Calvin Klein")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("365")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "columbia"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "columbia"
-    }
-  }, [_vm._v("Columbia")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("508")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "converse"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "converse"
-    }
-  }, [_vm._v("Converse")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("176")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "dockers"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "dockers"
-    }
-  }, [_vm._v("Dockers")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("54")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "fruit"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "fruit"
-    }
-  }, [_vm._v("Fruit of the Loom")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("739")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "hanes"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "hanes"
-    }
-  }, [_vm._v("Hanes")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("92")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "choo"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "choo"
-    }
-  }, [_vm._v("Jimmy Choo")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("17")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "levis"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "levis"
-    }
-  }, [_vm._v("Levi's")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("361")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "lee"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "lee"
-    }
-  }, [_vm._v("Lee")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("264")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "wearhouse"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "wearhouse"
-    }
-  }, [_vm._v("Men's Wearhouse")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("75")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "newbalance"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "newbalance"
-    }
-  }, [_vm._v("New Balance")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("218")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "nike"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "nike"
-    }
-  }, [_vm._v("Nike")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("810")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "navy"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "navy"
-    }
-  }, [_vm._v("Old Navy")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("147")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "polo"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "polo"
-    }
-  }, [_vm._v("Polo Ralph Lauren")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("64")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "puma"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "puma"
-    }
-  }, [_vm._v("Puma")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("370")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "reebok"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "reebok"
-    }
-  }, [_vm._v("Reebok")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("506")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "skechers"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "skechers"
-    }
-  }, [_vm._v("Skechers")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("209")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "hilfiger"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "hilfiger"
-    }
-  }, [_vm._v("Tommy Hilfiger")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("487")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "armour"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "armour"
-    }
-  }, [_vm._v("Under Armour")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("90")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "urban"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "urban"
-    }
-  }, [_vm._v("Urban Outfitters")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("152")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "vsecret"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "vsecret"
-    }
-  }, [_vm._v("Victoria's Secret")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("238")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "wolverine"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "wolverine"
-    }
-  }, [_vm._v("Wolverine")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("29")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "wrangler"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "wrangler"
-    }
-  }, [_vm._v("Wrangler")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("115")])])])])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("10")])])])])])])]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
   }, [_c("div", {
     staticClass: "mb-grid-gutter"
@@ -5188,7 +4797,7 @@ var staticRenderFns = [function () {
     staticClass: "widget-filter-search form-control rounded-end pe-5",
     attrs: {
       type: "text",
-      placeholder: "Search"
+      placeholder: "Pretraži"
     }
   }), _c("i", {
     staticClass: "ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"
@@ -5528,7 +5137,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-blue-gray"
     }
-  }, [_vm._v("Blue-gray")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Plava")])]), _vm._v(" "), _c("div", {
     staticClass: "form-check form-option text-center mb-2 mx-1",
     staticStyle: {
       width: "4rem"
@@ -5554,7 +5163,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-burgundy"
     }
-  }, [_vm._v("Burgundy")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Crvena")])]), _vm._v(" "), _c("div", {
     staticClass: "form-check form-option text-center mb-2 mx-1",
     staticStyle: {
       width: "4rem"
@@ -5580,7 +5189,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-teal"
     }
-  }, [_vm._v("Teal")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Zelena")])]), _vm._v(" "), _c("div", {
     staticClass: "form-check form-option text-center mb-2 mx-1",
     staticStyle: {
       width: "4rem"
@@ -5606,7 +5215,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-brown"
     }
-  }, [_vm._v("Brown")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Smeđa")])]), _vm._v(" "), _c("div", {
     staticClass: "form-check form-option text-center mb-2 mx-1",
     staticStyle: {
       width: "4rem"
@@ -5632,7 +5241,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-coral-red"
     }
-  }, [_vm._v("Coral red")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Crvena")])]), _vm._v(" "), _c("div", {
     staticClass: "form-check form-option text-center mb-2 mx-1",
     staticStyle: {
       width: "4rem"
@@ -5658,7 +5267,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-navy"
     }
-  }, [_vm._v("Navy")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Plava")])]), _vm._v(" "), _c("div", {
     staticClass: "form-check form-option text-center mb-2 mx-1",
     staticStyle: {
       width: "4rem"
@@ -5684,7 +5293,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-charcoal"
     }
-  }, [_vm._v("Charcoal")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Siva")])]), _vm._v(" "), _c("div", {
     staticClass: "form-check form-option text-center mb-2 mx-1",
     staticStyle: {
       width: "4rem"
@@ -5710,7 +5319,7 @@ var staticRenderFns = [function () {
     attrs: {
       "for": "color-sky-blue"
     }
-  }, [_vm._v("Sky blue")])])])])])])])])])]);
+  }, [_vm._v("Modra")])])])])])])])])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;

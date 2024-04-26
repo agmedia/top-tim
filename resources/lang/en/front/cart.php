@@ -203,6 +203,7 @@ return [
     'loyalty_200' => '200 = 12 € discount',
     'loyalty_use' => 'Apply',
     'loyalty_cancel' => 'Cancel',
+    'pogledajte_sve' => 'View all',
 
 
 

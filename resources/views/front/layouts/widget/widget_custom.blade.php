@@ -8,7 +8,7 @@
                     <div class="d-xl-flex justify-content-between align-items-center px-5  mx-auto" style="max-width: 1226px;">
                         <div class="py-2 py-sm-3 pb-0 me-xl-4 mx-auto mx-xl-0" style="max-width: 490px;">
                             <p class="text-black fs-sm pb-0 mb-1 mt-2 "><i class="ci-bookmark  fs-sm mt-n1 me-2"></i> {{ __('front/ricekakis.top_ponuda') }}</p>
-                            <h2 class="h2 text-black font-title mb-1">{{ $widget['title'] }} </h2>
+                            <h2 class=" text-black font-title mb-1">{{ $widget['title'] }} </h2>
                             <div class="star-rating mb-3"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i>
                             </div>
                             <p class="text-black pb-1">{{ $widget['subtitle'] }}</p>

@@ -94,7 +94,7 @@
                         @if (isset($pages) && $pages)
                             @foreach($pages as $page)
 
-                                @if($page->translation->title !='Homepage' and $page->group =='page' )
+                                @if($page->translation->title !='Naslovnica' and $page->group =='page' )
 
                                     <div class="accordion-item border-bottom">
 
@@ -103,6 +103,16 @@
 
                                 @endif
                             @endforeach
+
+                                <div class="accordion-item border-bottom">
+
+                                    <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/faq"><span class="d-flex align-items-center">{{ __('front/cart.faq') }}</span></a></h3>
+                                </div>
+
+                                <div class="accordion-item border-bottom">
+
+                                    <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/kontakt"><span class="d-flex align-items-center">Kontakt</span></a></h3>
+                                </div>
                         @endif
 
                     </div>

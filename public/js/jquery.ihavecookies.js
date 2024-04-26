@@ -56,8 +56,8 @@
                 }
             ],
             title: 'Kolačići i privatnost',
-            message: 'www.ricekakis.com koristi kolačiće kako bi osigurala punu funkcionalnost ovih Internet stranica i omogućila bolje korisničko iskustvo. Za više informacija o kolačićima i privatnosti osobnih podataka na www.ricekakis.com kliknite na ',
-            link: 'privatnost-i-kolacici',
+            message: 'www.top-tim.com koristi kolačiće kako bi osigurala punu funkcionalnost ovih Internet stranica i omogućila bolje korisničko iskustvo. Za više informacija o kolačićima i privatnosti osobnih podataka na www.top-tim.com kliknite na ',
+            link: 'hr/info/zastita-privatnosti',
             delay: 2000,
             expires: 30,
             moreInfoLabel: 'Više informacija',

@@ -80,10 +80,10 @@ class Bank
                         ),
                     'receiver'    =>
                         array(
-                            'name'      => 'Vukoje Logistika',
-                            'street'    => 'Kaštelanska Ulica 4/a',
-                            'place'     => '10010 Veliko Polje',
-                            'iban'      => 'HR9223400091111126783',
+                            'name'      => 'Top Tim d.o.o.',
+                            'street'    => 'Put Gvozdenova 283',
+                            'place'     => '22000 Šibenik ',
+                            'iban'      => 'HR5824070001100095118',
                             'model'     => '00',
                             'reference' => $pozivnabroj,
                         ),
