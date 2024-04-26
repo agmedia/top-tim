@@ -1,19 +1,22 @@
 @extends('errors.container')
 
 @section('content')
-    <div id="page-container" class="main-content-boxed">
-        <main id="main-container">
-            <div class="hero bg-white bg-pattern" style="background-image: url({{ asset('media/various/bg-pattern-inverse.png') }});">
-                <div class="hero-inner">
-                    <div class="content content-full">
-                        <div class="py-30 text-center">
-                            <i class="si si-chemistry text-primary display-3"></i>
-                            <h1 class="h2 font-w700 mt-30 mb-10">We’ll be back soon!</h1>
-                            <h2 class="h3 font-w400 text-muted mb-50">We’re currently down for maintenance..</h2>
-                        </div>
-                    </div>
-                </div>
+
+
+
+    <div class="container">
+        <div class="row align-items-center  text-light"
+            style="min-height: 100vh">
+            <div class="col-md-12 mx-auto text-center">
+                <img src="{{ asset('image/logo-top-tim.svg') }}" width="320"  alt="Top Tim - Better way to stay in the game" >
+
             </div>
-        </main>
+        </div>
     </div>
+
+
+
+
+
+
 @endsection

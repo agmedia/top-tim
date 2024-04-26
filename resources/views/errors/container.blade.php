@@ -1,82 +1,72 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ config('app.locale') }}">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="author" content="Skladišna Logistika" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>  @yield ('title' ) - {{ config('app.name') }}</title>
+    <meta charset="utf-8">
+    <title> @yield('title') </title>
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="@yield('description')">
+    <meta name="author" content="Top Tim - Better way to stay in the game">
+    @stack('meta_tags')
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="{{ config('settings.images_domain') }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" media="screen" href="{{ asset('vendor/simplebar/dist/simplebar.min.css') }}"/>
+    <link rel="stylesheet" media="screen" href="{{ asset('css/theme.css?v=2.4') }}">
     <!-- Favicon and Touch Icons-->
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ config('settings.images_domain') . 'media/img/favicon-32x32.png' }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ config('settings.images_domain') . 'media/img/favicon-32x32.png' }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ config('settings.images_domain') . 'media/img/favicon-16x16.png' }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ config('settings.images_domain') . 'apple-touch-icon.png' }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ config('settings.images_domain') . 'favicon-32x32.png' }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ config('settings.images_domain') . 'favicon-32x32.png' }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ config('settings.images_domain') . 'favicon-16x16.png' }}">
-    <link rel="mask-icon" href="{{ config('settings.images_domain') . 'safari-pinned-tab.svg' }}" color="#314837">
-    <meta name="msapplication-TileColor" content="#314837">
+    <link rel="manifest" href="{{ config('settings.images_domain') . 'site.webmanifest' }}">
+    <link rel="mask-icon" href="{{ config('settings.images_domain') . 'safari-pinned-tab.svg' }}" color="#05519e">
+    <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
+    @stack('css_after')
+    @if (config('app.env') == 'production')
+        @yield('google_data_layer')
+    @endif
+    @if (isset($js_lang))
+        <script>
+            window.trans = {!! $js_lang !!};
+            window.locale = "{{ current_locale() }}";
+        </script>
+    @endif
 
-    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="{{ config('settings.images_domain') . 'css/theme.min.css?v=1.6' }}">
-    <!-- Fire the plugin -->
-    <script>
-        document.addEventListener(
-            "DOMContentLoaded", () => {
-                new Mmenu( "#menu", {
-                    "extensions": [
-                        "pagedim-black",
-                        "border-full"
-                    ],
-                    "navbars": [
-                        {
-                            "position": "bottom",
-                            "content": [
-                                "<a class='fa fa-envelope' href='#/'></a>",
-                                "<a class='fa fa-twitter' href='#/'></a>",
-                                "<a class='fa fa-facebook' href='#/'></a>"
-                            ]
-                        }
-                    ]
-                });
-            }
-        );
-    </script>
-    @stack('css_before')
-    @stack('css')
+    <style>
+        body{
+            height: 100vh;
+        }
+        .container{
+            height: 100%;
+        }
+    </style>
 </head>
-<body class="stretched side-panel-left" data-loader="9" data-loader-color="#C11226" data-animation-in="fadeIn" data-speed-in="1500" data-animation-out="fadeOut" data-speed-out="800"
->
+<body>
 <!-- Document Wrapper -->
 <div id="wrapper" class="clearfix">
     <!-- Topbar -->
-@include('front.layouts.partials.header')
+
 <!-- Slider -->
 {{-- @include('front.layouts.partials.slider') --}}
 <!-- Content -->
 @yield('content')
 <!-- Footer -->
-    @include('front.layouts.partials.footer')
+
 </div><!-- #wrapper end -->
 
-<link rel="stylesheet" media="screen" href="{{ config('settings.images_domain') . 'css/tiny-slider.css?v=1.2' }}"/>
+<link rel="stylesheet" media="screen" href="{{ asset(config('settings.images_domain') . 'css/tiny-slider.css?v=1.2') }}"/>
 <!-- Vendor scrits: js libraries and plugins-->
-<script src="{{ asset('js/jquery/jquery-2.1.1.min.js?v=1.2') }}"></script>
-<script src="{{ asset('js/bootstrap.bundle.min.js?v=1.2') }}"></script>
-<script src="{{ asset('js/tiny-slider.js?v=1.2') }}"></script>
-<script src="{{ asset('js/smooth-scroll.polyfills.min.js?v=1.2') }}"></script>
+<script src="{{ asset('js/jquery/jquery-2.1.1.min.js') }}"></script>
+<script src="{{ asset('js/jquery.ihavecookies.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('vendor/simplebar/dist/simplebar.min.js') }}"></script>
+<script src="{{ asset('vendor/tiny-slider/dist/min/tiny-slider.js?v=2.0') }}"></script>
+<script src="{{ asset('vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js') }}"></script>
+<script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+<script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
 <!-- Main theme script-->
-
-<script src="{{ asset('js/cart.js?v=2.0.2') }}"></script>
-
+<script src="{{ asset('js/cart.js?v=2.0.16') }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
-@stack('js')
-<script>
-    jQuery(function() {
-        jQuery( "#side-navigation" ).tabs({ show: { effect: "fade", duration: 400 } });
-    });
-</script>
 
 </body>
 </html>
