@@ -41,7 +41,7 @@
                         <th style="width: 5%;" class="text-center">#</th>
                       <!--  <th style="width: 27px;" class="text-center">Slika</th>-->
                         <th>{{ __('back/info.naziv') }}</th>
-                        <th>{{ __('back/info.podgrupa') }}</th>
+
                         <th class="text-center">{{ __('back/info.status') }}</th>
                        <!-- <th class="text-center">Featured</th> -->
                         <th style="width: 100px;" class="text-center">{{ __('back/info.uredi') }}</th>
@@ -58,9 +58,8 @@
                             </td>-->
                             <td>
                                 <i class="fa fa-eye text-success mr-1"></i>
-                                <a href="{{ route('pages.edit', ['page' => $page]) }}">{{ $page->translation->title }}</a>
+                                <a class="font-size-sm" href="{{ route('pages.edit', ['page' => $page]) }}">{{ $page->translation->title }}</a>
                             </td>
-                            <td>{{ $page->subgroup }}</td>
                             <td class="text-center">
                                 @if ($page->status)
                                     <i class="fa fa-check-circle text-success"></i>

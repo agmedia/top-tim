@@ -30,7 +30,7 @@
                     @forelse($groups as $group)
                         <div class="block block-rounded mb-1">
                             <div class="block-header block-header-default" role="tab" id="accordion_h{{ $group->id }}">
-                                <a class="h3 block-title" data-toggle="collapse" data-parent="#accordion" href="#accordion_q{{ $group->id }}" aria-expanded="@if($loop->first) true @else false @endif" aria-controls="accordion_q{{ $group->id }}">
+                                <a class="h3 block-title" data-toggle="collapse" data-parent="#accordion" href="#accordion_q{{ $group->id }}" aria-expanded="@if($loop->first) false @else false @endif" aria-controls="accordion_q{{ $group->id }}">
                                     {{ $group->title }}
                                     @if ($group->status)
                                         <i class="si si-check text-success ml-3"></i>
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                             @if ($group->widgets && ! empty($group->widgets))
-                                <div id="accordion_q{{ $group->id }}" class="collapse @if($loop->first) show @endif" role="tabpanel" aria-labelledby="accordion_h{{ $group->id }}" data-parent="#accordion">
+                                <div id="accordion_q{{ $group->id }}" class="collapse @if($loop->first)  @endif" role="tabpanel" aria-labelledby="accordion_h{{ $group->id }}" data-parent="#accordion">
                                     <div class="block-content pb-4">
                                         <div class="row">
                                             <div class="col-md-4">

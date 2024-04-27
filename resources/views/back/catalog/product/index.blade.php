@@ -29,10 +29,10 @@
                 <h3 class="block-title">{{ __('back/products.svi_artikli') }} {{ $products->total() }}</h3>
                 <div class="block-options">
                     <div class="dropdown">
-                        <button class="btn btn-outline-primary mr-3" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-sm btn-outline-secondary mr-3" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-filter"></i> Filter
                         </button>
-                        <a class="btn btn-primary btn-inline-block" href="{{route('products')}}"><i class=" ci-trash"></i> {{ __('back/products.ocisti_filtere') }}</a>
+                        <a class="btn btn-sm btn-outline-secondary btn-inline-block" href="{{route('products')}}"><i class=" ci-trash"></i> {{ __('back/products.ocisti_filtere') }}</a>
                     </div>
                 </div>
             </div>

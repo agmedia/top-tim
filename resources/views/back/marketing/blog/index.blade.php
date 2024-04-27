@@ -41,7 +41,7 @@
                         <th style="width: 60px;">{{ __('back/blog.slika') }}</th>
                         <th style="width: 33%;">{{ __('back/blog.naziv') }}</th>
                         <th >{{ __('back/blog.kreirano') }}</th>
-                        <th >{{ __('back/blog.objavljeno') }}</th>
+
                         <th style="width: 100px;" class="text-center">{{ __('back/blog.uredi') }}</th>
                     </tr>
                     </thead>
@@ -56,14 +56,12 @@
                             </td>
                             <td>
                                 <i class="fa fa-eye text-success mr-1"></i>
-                                <a href="{{ route('blogs.edit', ['blog' => $blog]) }}">{{ $blog->translation->title }}</a>
+                                <a class="font-size-sm" href="{{ route('blogs.edit', ['blog' => $blog]) }}">{{ $blog->translation->title }}</a>
                             </td>
-                            <td>
+                            <td class="font-size-sm">
                                 {{ \Illuminate\Support\Carbon::make($blog->created_at)->format('d.m.Y') }}
                             </td>
-                            <td>
-                                {{ isset($blog->publish_date) ? \Illuminate\Support\Carbon::make($blog->publish_date)->format('d.m.Y u h:i') : '' }}
-                            </td>
+
                             <td class="text-right font-size-sm">
                                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('blogs.edit', ['blog' => $blog]) }}">
                                     <i class="fa fa-fw fa-pencil-alt"></i>
