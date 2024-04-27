@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <div class="collapse show" id="collapseExample">
+            <div class="collapse " id="collapseExample">
                 <div class="block-content bg-body-dark">
                     <form action="{{ route('products') }}" method="get">
 
@@ -121,7 +121,7 @@
                             <th>{{ __('back/products.dodano') }}</th>
                             <th>{{ __('back/products.zadnja_izmjena') }}</th>
                             <th class="text-center">{{ __('back/products.status') }}</th>
-                            <th class="text-right" style="width: 12%;">{{ __('back/products.uredi') }}</th>
+                            <th class="text-right" style="width: 15%;">{{ __('back/products.uredi') }}</th>
                         </tr>
                         </thead>
                         <tbody id="ag-table-with-input-fields" class="js-gallery" >

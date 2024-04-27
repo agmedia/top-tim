@@ -32,7 +32,7 @@
                     @forelse ($faqs as $faq)
                         <tr>
                             <td>
-                                <a href="{{ route('faqs.edit', ['faq' => $faq]) }}">{{ $faq->translation->title }}</a>
+                        <span class="font-size-sm">  {{ $faq->translation->title }} </span>
                             </td>
                             <td class="text-right font-size-sm">
                                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('faqs.edit', ['faq' => $faq]) }}">
