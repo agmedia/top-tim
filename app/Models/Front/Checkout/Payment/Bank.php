@@ -105,6 +105,9 @@ class Bank
         $response = curl_exec($ch);
         curl_close($ch);
 
+        Log::info($response);
+
+
         $response = base64_encode($response);
 
         $data['uplatnica'] = $response;

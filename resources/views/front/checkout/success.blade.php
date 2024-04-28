@@ -4,7 +4,7 @@
 @section('content')
 
     @if (isset($data['google_tag_manager']))
-
+{{--
         <!-- Event snippet for Purchase conversion page -->
         <script>
             gtag('event', 'conversion', {
@@ -20,6 +20,8 @@
                 dataLayer.push(<?php echo json_encode($data['google_tag_manager']); ?>);
             </script>
         @endsection
+
+        --}}
     @endif
 
     <div class="pb-5 mb-sm-4">
