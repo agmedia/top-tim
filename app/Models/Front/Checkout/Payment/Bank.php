@@ -80,8 +80,8 @@ class Bank
                         ),
                     'receiver'    =>
                         array(
-                            'name'      => 'Top Tim d.o.o.',
-                            'street'    => 'Put Gvozdenova 283',
+                            'name'      => 'Top Tim',
+                            'street'    => 'Gvozdenova 283',
                             'place'     => '22000 Šibenik ',
                             'iban'      => 'HR5824070001100095118',
                             'model'     => '00',
