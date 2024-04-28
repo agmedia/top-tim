@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
 @if(isset($receptis))
-        @section ( 'title', 'Recepti - Rice Kakis | Asian Store' )
+        @section ( 'title', 'Top Tim - Better way to stay in the gam' )
         @section ( 'description', 'Gastronomske poslastice vas očekuju: Uživajte u primamljivom mochiju, bubble tea-u, kimchiju, proizvodima bez glutena i ukusnim umacima.' )
 @else
     @section ( 'title', $recepti->title. ' - Rice Kakis | Asian Store' )

@@ -58,14 +58,14 @@
                     <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
                         <div class="block-content block-content-full">
                             <div class="item rounded-circle bg-body mx-auto my-3">
-                                <i class="fa fa-wallet fa-lg text-primary"></i>
+                                <i class="fa fa-wallet fa-lg text-blue"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['this_month_total'] }}€</div>
                             <div class="text-muted ">{{ __('back/dashboard.mjesecni_promet') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-                            <a class="fw-medium" href="{{ route('orders') }}">
+                            <a class="font-size-sm" href="{{ route('orders') }}">
                                 {{ __('back/dashboard.pregled_narudzbi') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
@@ -76,14 +76,14 @@
                     <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
                         <div class="block-content block-content-full flex-grow-1">
                             <div class="item rounded-circle bg-body mx-auto my-3">
-                                <i class="fa fa-chart-line fa-lg text-primary"></i>
+                                <i class="fa fa-chart-line fa-lg text-blue"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['this_month'] }}</div>
                             <div class="text-muted ">{{ __('back/dashboard.narudzbi_mjesec') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-                            <a class="fw-medium" href="{{ route('orders') }}">
+                            <a class="font-size-sm" href="{{ route('orders') }}">
                                 {{ __('back/dashboard.pregled_narudzbi') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
@@ -94,14 +94,14 @@
                     <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
                         <div class="block-content block-content-full flex-grow-1">
                             <div class="item rounded-circle bg-body mx-auto my-3">
-                                <i class="fa fa-chart-line fa-lg text-primary"></i>
+                                <i class="fa fa-chart-line fa-lg text-blue"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['today'] }}</div>
                             <div class="text-muted ">{{ __('back/dashboard.narudzbi_danas') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-                            <a class="fw-medium" href="{{ route('orders') }}">
+                            <a class="font-size-sm" href="{{ route('orders') }}">
                                 {{ __('back/dashboard.pregled_narudzbi') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
@@ -112,14 +112,14 @@
                     <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
                         <div class="block-content block-content-full flex-grow-1">
                             <div class="item rounded-circle bg-body mx-auto my-3">
-                                <i class="fa fa-users fa-lg text-primary"></i>
+                                <i class="fa fa-users fa-lg text-blue"></i>
                             </div>
                             <div class="font-size-h3 text-black font-w600 mb-1">{{ $data['users'] }}</div>
                             <div class="text-muted ">{{ __('back/dashboard.registriranih_korisnika') }}</div>
 
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-                            <a class="fw-medium" href="{{ route('users') }}">
+                            <a class="font-size-sm" href="{{ route('users') }}">
                                 {{ __('back/dashboard.pregled_korisnika') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
@@ -222,7 +222,7 @@
 
                     </div>
                     <div class="block-content block-content-full text-center block-content-sm bg-body-light fs-sm">
-                        <a class="fw-medium" href="{{ route('orders') }}">
+                        <a class="font-size-sm" href="{{ route('orders') }}">
                             {{ __('back/dashboard.sve_narudzbe') }}
                             <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                         </a>
@@ -251,12 +251,12 @@
                                 </p>
                             </div>
                             <div class="item rounded-circle bg-body">
-                                <i class="fas fa-comments fa-lg text-primary"></i>
+                                <i class="fas fa-comments fa-lg text-blue"></i>
 
                             </div>
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm text-center">
-                            <a class="fw-medium" href="{{ route('reviews') }}">
+                            <a class="font-size-sm" href="{{ route('reviews') }}">
                                 {{ __('back/dashboard.pogledaj_komentare') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
@@ -277,11 +277,11 @@
                                 </p>
                             </div>
                             <div class="item rounded-circle bg-body">
-                                <i class="fas fa-exclamation-triangle fa-lg text-primary"></i>
+                                <i class="fas fa-exclamation-triangle fa-lg text-blue"></i>
                             </div>
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm text-center">
-                            <a class="fw-medium" href="{{ route('products') }}">
+                            <a class="font-size-sm" href="{{ route('products') }}">
                                 {{ __('back/dashboard.pogledaj_artikle') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
@@ -439,12 +439,12 @@
                     {
                         label: '{{ __('back/dashboard.zadnja_godina') }}',
                         fill: true,
-                        backgroundColor: 'rgba(108, 117, 125, .25)',
-                        borderColor: 'rgba(108, 117, 125, .75)',
-                        pointBackgroundColor: 'rgba(108, 117, 125, 1)',
+                        backgroundColor: 'rgba(5, 81, 158, .25)',
+                        borderColor: 'rgba(5, 81, 158, .75)',
+                        pointBackgroundColor: 'rgba(5, 81, 158, 1)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(108, 117, 125, 1)',
+                        pointHoverBorderColor: 'rgba(5, 81, 158, 1)',
                         data: last_year.values
                     }
                 ]

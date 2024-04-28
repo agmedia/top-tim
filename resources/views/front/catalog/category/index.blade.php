@@ -4,10 +4,10 @@
 
 @if (isset($group) && $group)
     @if ($group && ! $cat && ! $subcat)
-        @section ( 'title',  \Illuminate\Support\Str::ucfirst($group). ' - Rice Kakis | Asian Store' )
+        @section ( 'title',  \Illuminate\Support\Str::ucfirst($group). ' - Top Tim - Better way to stay in the gam' )
     @endif
     @if ($cat && ! $subcat)
-        @section ( 'title',  $cat->translation->title . ' - Rice Kakis | Asian Store' )
+        @section ( 'title',  $cat->translation->title . ' - Top Tim - Better way to stay in the gam' )
         @section ( 'description', $cat->translation->meta_description )
 
         @push('meta_tags')
@@ -18,7 +18,7 @@
     @elseif ($cat && $subcat)
 
 
-        @section ( 'title', $subcat->translation->meta_title . ' - Rice Kakis | Asian Store' )
+        @section ( 'title', $subcat->translation->meta_title . ' - Top Tim - Better way to stay in the gam' )
         @section ( 'description',  $subcat->translation->meta_description )
 
         @push('meta_tags')

@@ -11041,6 +11041,18 @@ a.text-primary:hover, a.text-primary:focus {
   color: #080b09 !important;
 }
 
+
+.text-blue {
+    color: #05519e !important;
+}
+
+a.text-blue.link-fx::before {
+    background-color: #05519e;
+}
+a.text-blue:hover, a.text-primary:focus {
+    color: #080b09 !important;
+}
+
 .text-secondary {
   color: #6c757d !important;
 }

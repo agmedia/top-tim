@@ -36,7 +36,7 @@
                 @endif
                 <br><br>
 
-                {{ __('front/cart.lp') }}<br>Rice Kakis | Asian Store
+                {{ __('front/cart.lp') }}<br>Top Tim - Better way to stay in the game
             </td>
         </tr>
 

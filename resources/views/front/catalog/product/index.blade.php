@@ -9,7 +9,7 @@
     <meta property="og:title" content="{{ $seo['title'] }}" />
     <meta property="og:description" content="{{ $seo['description']  }}" />
     <meta property="og:url" content="{{ url($prod->url) }}"  />
-    <meta property="og:site_name" content="Rice Kakis | Asian Store" />
+    <meta property="og:site_name" content="Top Tim - Better way to stay in the gam" />
     <meta property="og:updated_time" content="{{ $prod->updated_at  }}" />
     <meta property="og:image" content="{{ asset($prod->image) }}" />
     <meta property="og:image:secure_url" content="{{ asset($prod->image) }}" />

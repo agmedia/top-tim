@@ -88,7 +88,7 @@ class Bank
                             'reference' => $pozivnabroj,
                         ),
                     'purpose'     => 'CMDT',
-                    'description' => 'Order Rice Kakis Asian Store',
+                    'description' => 'Order Top Tim',
                 ),
         );
 

@@ -58,7 +58,7 @@
                     <p style="font-size:12px">{{ __('front/cart.sb1') }} {{ $order->id }} {{ __('front/cart.sb2') }}.</p>                @endif
                 <br><br>
 
-                {{ __('front/cart.lp') }}<br>Rice Kakis | Asian Store
+                {{ __('front/cart.lp') }}<br>Top Tim - Better way to stay in the game
             </td>
         </tr>
 

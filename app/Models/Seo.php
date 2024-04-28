@@ -35,7 +35,7 @@ class Seo
      */
     public static function getAuthorData(Author $author, Category $cat = null, Category $subcat = null): array
     {
-        $title = $author->title . ' Rice Kakis | Asian Store';
+        $title = $author->title . ' Top Tim - Better way to stay in the game';
         $description =  $author->meta_description ;
 
         // Check if there is meta title or description and set vars.

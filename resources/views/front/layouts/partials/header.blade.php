@@ -89,8 +89,6 @@
                                 <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ route('catalog.route.page', ['page' => $page]) }}"><span class="d-flex align-items-center">{{ $page->title }}</span></a></h3>
                             </div>
                         @endforeach--}}
-
-
                         @if (isset($pages) && $pages)
                             @foreach($pages as $page)
 
@@ -113,6 +111,26 @@
 
                                     <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/kontakt"><span class="d-flex align-items-center">Kontakt</span></a></h3>
                                 </div>
+
+
+
+                                @if(auth()->user())
+
+                                    <div class="accordion-item border-bottom">
+
+                                        <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ route('login') }}"><span class="d-flex align-items-center"><i class=" ci-user me-2"></i> {{ __('front/ricekakis.my_account') }}</span></a></h3>
+                                    </div>
+
+
+                                @else
+
+                                    <div class="accordion-item border-bottom">
+
+                                        <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" data-tab-id="pills-signin-tab" aria-label="{{ __('front/ricekakis.login') }}" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal"><span class="d-flex align-items-center"><i class=" ci-user me-2"></i> {{ __('front/ricekakis.login') }}</span></a></h3>
+                                    </div>
+
+                                @endif
+
                         @endif
 
                     </div>

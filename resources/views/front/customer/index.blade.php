@@ -2,7 +2,7 @@
 
 
 @section ( 'title',  __('front/cart.moj_korisnicki_racun')  )
-@section ( 'description', 'Rice Kakis Azijski Webshop - autentični Bubble Tea u četiri okusa, japanski Mochi , Nudle, Korejske grickalice i slatkiši, te veliki izbor umaka i začina.' )
+@section ( 'description', 'Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija.' )
 
 @section('content')
 

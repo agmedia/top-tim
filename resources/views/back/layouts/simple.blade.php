@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <title>Rice Kakis | Asian Store</title>
+    <title>Top Tim - Better way to stay in the game</title>
 
-    <meta name="description" content="Rice Kakis | Asian Store">
-    <meta name="author" content="pixelcave">
+    <meta name="description" content="Top Tim - Better way to stay in the game">
+    <meta name="author" content="toptim">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- CSRF Token -->
