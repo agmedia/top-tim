@@ -331,7 +331,7 @@
                                                             <td>
                                                                 <span class="font-size-sm">
 
-                                                                    <select class="js-select2 form-select form-select-sm form-select-solid" id="color" name="color" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                                    <select class="js-select2 form-control form-control-sm form-select-solid" id="color" name="color" style="width: 100%;" data-placeholder="Odaberite opciju">
                                                                         <option></option>
                                                                         <option value="1" selected>Zelena</option>
                                                                         <option value="2">Plava</option>
