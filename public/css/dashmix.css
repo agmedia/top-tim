@@ -26944,6 +26944,19 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   box-shadow: 0 0 0 0.2rem rgba(49, 72, 55, 0.25);
   outline: 0;
 }
+
+
+.font-size-sm > .select2-container .select2-selection--single, .font-size-sm > .select2-container--default .select2-selection--single .select2-selection__rendered {
+
+    height: calc(1.2em + 0.75rem + 2px);
+
+}
+
+.font-size-sm > .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(1.2em + 0.75rem + 2px);
+}
+
+
 .is-valid + .select2-container--default .select2-selection--single,
 .is-valid + .select2-container--default .select2-selection--multiple, .is-valid + .select2-container--default.select2-container--focus .select2-selection--single,
 .is-valid + .select2-container--default.select2-container--focus .select2-selection--multiple {
