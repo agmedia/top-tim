@@ -26,7 +26,7 @@
             padding-top: 12px;
             padding-bottom: 12px;
             text-align: left;
-            background-color: #EF4D48;
+            background-color: #004b9b;
             color: white;
             border:none;
         }
