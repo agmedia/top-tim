@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <a class="navbar-brand d-none d-md-block me-1 flex-shrink-0 py-0" href="{{ route('index') }}">
                 <div class="logo-bg" style="background-color:#fff;margin-left:-30px; padding: 0 0px 0 30px; ">
-                    <img src="{{ asset('image/logo-top-tim.svg') }}" width="220"  alt="Top Tim - Better way to stay in the game" >
+                    <img src="{{ asset('image/logo-top-tim.svg') }}" width="210"  alt="Top Tim - Better way to stay in the game" >
                     <span class="arrow"></span>
                 </div>
             </a>

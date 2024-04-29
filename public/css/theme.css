@@ -148,7 +148,7 @@ h1, .h1 {
     border-width: 0.20em;
     display: -moz-inline-box;
     display: inline-block;    /* Use font-size to control the size of the arrow. */
-    font-size: 230px;
+    font-size: 185px;
     height: 0;
     line-height: 0;
     position: relative;
