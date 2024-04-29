@@ -318,7 +318,7 @@
                                                 <table class="table table-striped table-borderless table-vcenter">
                                                     <thead class="thead-light">
                                                     <tr>
-                                                        <th class="font-size-sm">Vrijednost</th>
+                                                        <th class="font-size-sm" style="width:25%">Vrijednost</th>
                                                         <th class="font-size-sm">Šifra</th>
                                                         <th class="font-size-sm">Količina</th>
                                                         <th class="font-size-sm">Cijena</th>
