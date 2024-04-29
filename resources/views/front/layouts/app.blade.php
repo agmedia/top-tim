@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title> @yield('title') </title>
     <!-- SEO Meta Tags-->
+    <script src="https://cmp.osano.com/AzZnFEUBLxxEr3ft2/c4f24af9-1095-4c0c-b7fb-308fed667ce8/osano.js"></script>
     <meta name="description" content="@yield('description')">
     <meta name="author" content="Top Tim - Better way to stay in the game">
     @stack('meta_tags')
