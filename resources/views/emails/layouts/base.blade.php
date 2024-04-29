@@ -261,7 +261,7 @@
         <!-- Email Header : BEGIN -->
         <tr>
             <td style="padding: 20px 0 15px 0; text-align: center">
-                <label class="large bold" style="color: white;">   <img src="{{ asset('image/logo-top-tim.svg') }}" alt="top-tim.com" border="0" style="max-width:200px;height: auto;"></label>
+                <label class="large bold" style="color: white;">   <img src="{{ asset('image/logo-top-tim.png') }}" alt="top-tim.com" border="0" style="max-width:300px;height: auto;"></label>
             </td>
         </tr>
         <!-- Email Header : END -->
