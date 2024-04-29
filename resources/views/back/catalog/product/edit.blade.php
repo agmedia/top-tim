@@ -40,6 +40,9 @@
                         <a class="nav-link" href="#atributi"><i class="si si-settings"></i> {{ __('back/products.atributi') }}</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#opcije"><i class="si si-settings"></i> {{ __('back/products.opcije') }}</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#slike"><i class="si si-picture"></i> {{ __('back/products.slike') }}</a>
                     </li>
                     <li class="nav-item ">
@@ -227,73 +230,213 @@
                                                 @livewire('back.layout.search.author-search', ['brand_id' => isset($product) ? $product->brand_id : 0])
                                             </div>
                                         </div>
+
                                         <div class="form-group row items-push mb-4">
-                                            <div class="col-md-12">
-                                                <label for="sastojci-editor">{{ __('back/products.sastojci') }}</label>
-                                                <ul class="nav nav-pills float-right">
-                                                    @foreach(ag_lang() as $lang)
-                                                        <li @if ($lang->code == current_locale()) class="active" @endif>
-                                                            <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#sastojci-{{ $lang->code }}">
-                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                                <div class="tab-content">
-                                                    @foreach(ag_lang() as $lang)
-                                                        <div id="sastojci-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <textarea id="sastojci-editor-{{ $lang->code }}" name="sastojci[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($product) ? $product->translation($lang->code)->sastojci : old('sastojci.*') !!}</textarea>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                            <div class="col-md-4">
+                                                <label for="spol">Spol</label>
+                                                <select class="js-select2 form-control" id="spol" name="spol" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                    <option></option>
+                                                    <option value="1">Muški</option>
+                                                    <option value="2">Ženski</option>
+                                                    <option value="3">Unisex</option>
+                                                </select>
+
                                             </div>
+
+
+                                            <div class="col-md-4">
+                                                <label for="kroj">Kroj</label>
+                                                <select class="js-select2 form-control" id="kroj" name="kroj" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                    <option></option>
+                                                    <option value="1">Standard Fit</option>
+                                                    <option value="2">Lose fit</option>
+                                                    <option value="3">Slim fit</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="tip-rukava">Tip rukava</label>
+                                                <select class="js-select2 form-control" id="tip-rukava" name="tip-rukava" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                    <option></option>
+                                                    <option value="1">Kratki rukavi</option>
+                                                    <option value="2">Dugi rukavi</option>
+                                                    <option value="3">Bez rukava</option>
+                                                </select>
+                                            </div>
+
+
+
+
+
                                         </div>
+
                                         <div class="form-group row items-push mb-4">
-                                            <div class="col-md-12">
-                                                <label for="podaci-editor">{{ __('back/products.podaci_o_prehrani') }}</label>
-                                                <ul class="nav nav-pills float-right">
-                                                    @foreach(ag_lang() as $lang)
-                                                        <li @if ($lang->code == current_locale()) class="active" @endif>
-                                                            <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#podaci-{{ $lang->code }}">
-                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                                <div class="tab-content">
-                                                    @foreach(ag_lang() as $lang)
-                                                        <div id="podaci-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <textarea id="podaci-editor-{{ $lang->code }}" name="podaci[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($product) ? $product->translation($lang->code)->podaci : old('podaci.*') !!}</textarea>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                            <div class="col-md-4">
+                                                <label for="materijal">Materijal</label>
+                                                <input type="text" class="form-control" value="" name="materijal" />
+
                                             </div>
+
+
+                                            <div class="col-md-4">
+                                                <label for="tekstil">Tekstil</label>
+                                                <select class="js-select2 form-control" id="tekstil" name="tekstil" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                    <option></option>
+                                                    <option value="1">French Terry</option>
+                                                    <option value="2">Poli Fiber</option>
+                                                    <option value="3">Softlock</option>
+                                                </select>
+                                            </div>
+
+
+
+
+
+
                                         </div>
-                                        <div class="form-group row items-push mb-4">
-                                            <div class="col-md-3">
-                                                <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
-                                                    <input type="checkbox" class="custom-control-input" id="product-switch" name="vegan"{{ (isset($product->vegan) and $product->vegan) ? 'checked' : '' }}>
-                                                    <label class="custom-control-label pt-1" for="product-switch">Vegan</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
-                                                    <input type="checkbox" class="custom-control-input" id="product-switch" name="vegetarian"{{ (isset($product->vegetarian) and $product->vegetarian) ? 'checked' : '' }}>
-                                                    <label class="custom-control-label pt-1" for="product-switch">Vegeterian</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="custom-control custom-switch custom-control-success block-options-item ml-4">
-                                                    <input type="checkbox" class="custom-control-input" id="product-switch" name="glutenfree"{{ (isset($product->glutenfree) and $product->glutenfree) ? 'checked' : '' }}>
-                                                    <label class="custom-control-label pt-1" for="product-switch">Glutein Free</label>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="tab-pane" id="opcije" role="tabpanel">
+                        <div class="block">
+                            <div class="block-content">
+                                <div class="row justify-content-center push">
+                                    <div class="col-md-12">
+                                            <div class="block-header p-0 mb-2">
+                                                <h3 class="block-title">Boja</h3>
+                                                <a class="btn btn-success btn-sm" href="">
+                                                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dodaj vrijednost</span>
+                                                </a>
+                                            </div>
+
+
+                                                <table class="table table-striped table-borderless table-vcenter">
+                                                    <thead class="thead-light">
+                                                    <tr>
+                                                        <th class="font-size-sm">Vrijednost</th>
+                                                        <th class="font-size-sm">Šifra</th>
+                                                        <th class="font-size-sm">Količina</th>
+                                                        <th class="font-size-sm">Cijena</th>
+                                                        <th class="text-right font-size-sm"  class="text-center">Obriši</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="font-size-sm">
+
+                                                                    <select class="js-select2 form-control form-control-sm" id="color" name="color" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                                        <option></option>
+                                                                        <option value="1" selected>Zelena</option>
+                                                                        <option value="2">Plava</option>
+                                                                        <option value="3">Crvena</option>
+                                                                    </select>
+                                                                    </span>
+
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
+                                                            </td>
+                                                            <td class="text-right font-size-sm">
+                                                                <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="font-size-sm">
+
+                                                                     <select class="js-select2 form-control form-control-sm" id="color2" name="color2" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                                        <option></option>
+                                                                        <option value="1" selected>Zelena</option>
+                                                                        <option value="2">Plava</option>
+                                                                        <option value="3">Crvena</option>
+                                                                    </select>
+                                                                    </span>
+
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
+                                                            </td>
+                                                            <td class="text-right font-size-sm">
+                                                                <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="font-size-sm">
+                                                                <select class="js-select2 form-control form-control-sm" id="color1" name="color1" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                                    <option></option>
+                                                                    <option value="1" selected>Zelena</option>
+                                                                    <option value="2">Plava</option>
+                                                                    <option value="3">Crvena</option>
+                                                                </select>
+                                                                    </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
+                                                            </td>
+                                                            <td class="text-right font-size-sm">
+                                                                <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                                            </td>
+                                                        </tr>
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-content ">
+                                <div class="row justify-content-center push">
+                                    <div class="col-md-12">
+                                        <button type="button" data-toggle="modal" data-target="#addoption" class="btn btn-success btn-sm">
+                                            <i class="far fa-fw fa-plus-square"></i> Dodaju novu opciju
+                                        </button>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                     <div class="tab-pane" id="slike" role="tabpanel">
                         <div class="block">
                             <div class="block-header block-header-default">
@@ -418,7 +561,46 @@
                 {{ method_field('DELETE') }}
             </form>
         @endif
+
     </div>
+
+
+
+    <!-- END Vertically Centered Block Modal -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="addoption" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Dodaj novu opciju</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                        <label for="opcije">Odaberi opciju</label>
+                        <select class="js-select2 form-control" id="opcije" name="opcije" style="width: 100%;" data-placeholder="Odaberite opciju">
+                            <option></option>
+                            <option value="1">Boja</option>
+                            <option value="1">Veličina</option>
+
+                        </select>
+
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn btn-hero-success"><i class="fas fa-save mr-1"></i> Snimi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 @push('js_after')
     <!-- Page JS Plugins -->
@@ -442,26 +624,7 @@
                     console.error(error);
                 });
             });
-            {!! ag_lang() !!}.forEach(function(item) {
-                ClassicEditor
-                .create(document.querySelector('#podaci-editor-' + item.code))
-                .then(editor => {
-                    console.log(editor);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-            });
-            {!! ag_lang() !!}.forEach(function(item) {
-                ClassicEditor
-                .create(document.querySelector('#sastojci-editor-' + item.code))
-                .then(editor => {
-                    console.log(editor);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-            });
+
             $('#category-select').select2({});
             $('#grupa-select').select2({
                 placeholder: '{{ __('back/products.odaberite') }}',
@@ -472,6 +635,43 @@
                 placeholder: '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
+
+            $('#spol').select2({
+                placeholder: '{{ __('back/products.odaberite') }}',
+                minimumResultsForSearch: Infinity
+            });
+
+            $('#kroj').select2({
+                placeholder: '{{ __('back/products.odaberite') }}',
+                minimumResultsForSearch: Infinity
+            });
+
+            $('#tip-rukava').select2({
+                placeholder: '{{ __('back/products.odaberite') }}',
+                minimumResultsForSearch: Infinity
+            });
+
+            $('#tekstil').select2({
+                placeholder: '{{ __('back/products.odaberite') }}',
+                minimumResultsForSearch: Infinity
+            });
+
+            $('#color').select2({
+                placeholder: '{{ __('back/products.odaberite') }}',
+                minimumResultsForSearch: Infinity
+            });
+
+            $('#color1').select2({
+                placeholder: '{{ __('back/products.odaberite') }}',
+                minimumResultsForSearch: Infinity
+            });
+
+            $('#color2').select2({
+                placeholder: '{{ __('back/products.odaberite') }}',
+                minimumResultsForSearch: Infinity
+            });
+
+
             $('#author-select').select2({
                 tags: true
             });

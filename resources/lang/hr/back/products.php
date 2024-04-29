@@ -114,7 +114,8 @@ return [
 
     'slika_je_obrisana' => 'Fotografija je uspješno izbrisana',
     'greska_u_brisanju' => 'Greška u brisanju fotografije..! Molimo pokušajte ponovo.',
-    'glavna_slika_se_nemoze_izbrisati' => 'Glavna slika se ne može izbrisati..!'
+    'glavna_slika_se_nemoze_izbrisati' => 'Glavna slika se ne može izbrisati..!',
+    'opcije' => 'Opcije'
 
 
 

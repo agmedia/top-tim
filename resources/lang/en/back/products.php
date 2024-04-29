@@ -110,7 +110,8 @@ return [
 
     'slika_je_obrisana' => 'The photo has been successfully deleted',
     'greska_u_brisanju' => 'Error deleting the photo..! Please try again.',
-    'glavna_slika_se_nemoze_izbrisati' => 'Main image cannot be deleted..!'
+    'glavna_slika_se_nemoze_izbrisati' => 'Main image cannot be deleted..!',
+    'opcije' => 'Options'
 
 
 ];
