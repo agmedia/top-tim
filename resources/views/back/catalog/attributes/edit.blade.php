@@ -5,7 +5,7 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Attributes edit</h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/attribute.naslov') }}</h1>
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@
 
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <label for="title-input">{{ __('back/attribute.tip') }}</label>
                                 <select class="js-select2 form-control form-control" id="tip" name="tip" style="width: 100%;" data-placeholder="Odaberite opciju">
                                     <option></option>
@@ -70,7 +70,7 @@
 
                             </div>
                             {{-- if tip == 2--}}
-                            <div class="form-group  mb-4">
+                            <div class="form-group  ">
                                 <div class="block-header p-0 mb-2">
                                     <h3 class="block-title">{{ __('back/attribute.vrijednosti_atributa') }}</h3>
                                     <a class="btn btn-success btn-sm" href="">
