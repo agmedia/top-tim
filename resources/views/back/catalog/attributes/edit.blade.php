@@ -33,7 +33,7 @@
                 </div>
                 <div class="block-content">
                     <div class="row justify-content-center push">
-                        <div class="col-md-10">
+                        <div class="col-md-12">
 
                             <div class="form-group">
                                 <label for="title-input">{{ __('back/attribute.pitanje') }}</label>
@@ -151,12 +151,12 @@
                 </div>
                 <div class="block-content bg-body-light">
                     <div class="row justify-content-center push">
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <button type="submit" class="btn btn-hero-success my-2">
                                 <i class="fas fa-save mr-1"></i> {{ __('back/attribute.snimi') }}
                             </button>
                         </div>
-                        <div class="col-md-5 text-right">
+                        <div class="col-md-6 text-right">
                             @if (isset($attributes))
 
                                 <a href="{{ route('attributes.destroy', ['attributes' => $attributes]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/attribute.obrisi') }}" onclick="event.preventDefault(); document.getElementById('delete-attribute-form{{ $attributes->id }}').submit();">
