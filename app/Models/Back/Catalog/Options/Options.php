@@ -1,20 +1,20 @@
 <?php
 
-namespace  App\Models\Back\Catalog\Attributes;
+namespace  App\Models\Back\Catalog\Options;
 
 use App\Models\Back\Settings\Category;
-use App\Models\Back\Catalog\Attributes\AttributesTranslation;
+use App\Models\Back\Catalog\Options\OptionsTranslation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class Attributes extends Model
+class Options extends Model
 {
 
     /**
      * @var string
      */
-    protected $table = 'attributes';
+    protected $table = 'options';
 
     /**
      * @var array
@@ -33,11 +33,11 @@ class Attributes extends Model
 
 
     /**
-     * @param array $attributes
+     * @param array $options
      */
-    public function __construct(array $attributes = [])
+    public function __construct(array $options = [])
     {
-        parent::__construct($attributes);
+        parent::__construct($options);
 
         $this->locale = current_locale();
     }
@@ -52,14 +52,14 @@ class Attributes extends Model
     public function translation($lang = null, bool $all = false)
     {
         if ($lang) {
-            return $this->hasOne(AttributesTranslation::class, 'attribute_id')->where('lang', $lang)->first();
+            return $this->hasOne(OptionsTranslation::class, 'option_id')->where('lang', $lang)->first();
         }
 
         if ($all) {
-            return $this->hasMany(AttributesTranslation::class, 'attribute_id');
+            return $this->hasMany(OptionsTranslation::class, 'option_id');
         }
 
-        return $this->hasOne(AttributesTranslation::class, 'attribute_id')->where('lang', $this->locale);
+        return $this->hasOne(OptionsTranslation::class, 'option_id')->where('lang', $this->locale);
     }
 
 
@@ -92,7 +92,7 @@ class Attributes extends Model
         $id = $this->insertGetId($this->createModelArray());
 
         if ($id) {
-            AttributesTranslation::create($id, $this->request);
+            OptionsTranslation::create($id, $this->request);
 
             return $this->find($id);
         }
@@ -111,7 +111,7 @@ class Attributes extends Model
         $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
-            AttributesTranslation::edit($this->id, $this->request);
+            OptionsTranslation::edit($this->id, $this->request);
 
             return $this;
         }

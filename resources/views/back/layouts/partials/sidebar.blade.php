@@ -84,6 +84,12 @@
                                 <span class="nav-main-link-name">{{ __('back/layout.sidebar.attribute') }}</span>
                             </a>
                         </li>
+
+                        <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->routeIs(['options', 'options.*']) ? ' active' : '' }}" href="{{ route('options') }}">
+                                <span class="nav-main-link-name">{{ __('back/layout.sidebar.option') }}</span>
+                            </a>
+                        </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->routeIs(['brands', 'brands.*']) ? ' active' : '' }}" href="{{ route('brands') }}">
                                 <span class="nav-main-link-name">{{ __('back/layout.sidebar.brands') }}</span>

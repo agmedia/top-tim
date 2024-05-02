@@ -322,7 +322,7 @@
                                                         <th class="font-size-sm">Šifra</th>
                                                         <th class="font-size-sm">Količina</th>
                                                         <th class="font-size-sm">Cijena</th>
-                                                        <th class="text-right font-size-sm"  class="text-center">Obriši</th>
+                                                        <th class="text-right font-size-sm"  class="text-center">Uredi</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -350,6 +350,7 @@
                                                                 <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
                                                             </td>
                                                             <td class="text-right font-size-sm">
+                                                                <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
                                                                 <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
                                                             </td>
                                                         </tr>
@@ -377,6 +378,7 @@
                                                                 <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
                                                             </td>
                                                             <td class="text-right font-size-sm">
+                                                                <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
                                                                 <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
                                                             </td>
                                                         </tr>
@@ -402,6 +404,7 @@
                                                                 <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
                                                             </td>
                                                             <td class="text-right font-size-sm">
+                                                                <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
                                                                 <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
                                                             </td>
                                                         </tr>

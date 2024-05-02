@@ -104,7 +104,8 @@ return [
         'catalog' => 'Catalog',
         'history' => 'History Log',
         'shipping' => 'Shipping Methods',
-        'attribute' => 'Attributes'
+        'attribute' => 'Attributes',
+        'option' => 'Options'
     ]
 
 ];

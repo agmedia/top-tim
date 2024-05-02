@@ -101,7 +101,8 @@ return [
         'catalog' => 'Katalog',
         'history' => 'Povijest Promjena',
         'shipping' => 'Načini Dostave',
-        'attribute' => 'Atributi'
+        'attribute' => 'Atributi',
+        'option' => 'Opcije'
     ]
 
 ];

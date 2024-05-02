@@ -33,7 +33,6 @@ class AttributesTranslation extends Model
                 'attribute_id'      => $id,
                 'lang'        => $lang->code,
                 'title'       => $request->title[$lang->code],
-                'description' => $request->description[$lang->code],
                 'created_at'  => Carbon::now(),
                 'updated_at'  => Carbon::now()
             ]);
@@ -59,7 +58,6 @@ class AttributesTranslation extends Model
         foreach (ag_lang() as $lang) {
             $saved = self::where('attribute_id', $id)->where('lang', $lang->code)->update([
                 'title'       => $request->title[$lang->code],
-                'description' => $request->description[$lang->code],
                 'updated_at'  => Carbon::now()
             ]);
 

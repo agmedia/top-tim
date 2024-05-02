@@ -7,6 +7,7 @@ use App\Http\Controllers\Back\Catalog\BrandController;
 use App\Http\Controllers\Back\Catalog\CategoryController;
 use App\Http\Controllers\Back\Catalog\ProductController;
 use App\Http\Controllers\Back\Catalog\AttributesController;
+use App\Http\Controllers\Back\Catalog\OptionsController;
 use App\Http\Controllers\Back\Catalog\PublisherController;
 use App\Http\Controllers\Back\DashboardController;
 use App\Http\Controllers\Back\Marketing\ReviewController;
@@ -135,13 +136,21 @@ Route::group(
             Route::patch('page/{page}', [PageController::class, 'update'])->name('pages.update');
             Route::delete('page/{page}', [PageController::class, 'destroy'])->name('pages.destroy');
 
-            // FAQ
+            // Atttributes
             Route::get('attributes', [AttributesController::class, 'index'])->name('attributes');
             Route::get('attribute/create', [AttributesController::class, 'create'])->name('attributes.create');
             Route::post('attribute', [AttributesController::class, 'store'])->name('attributes.store');
             Route::get('attribute/{attributes}/edit', [AttributesController::class, 'edit'])->name('attributes.edit');
             Route::patch('attribute/{attributes}', [AttributesController::class, 'update'])->name('attributes.update');
             Route::delete('attribute/{attributes}', [AttributesController::class, 'destroy'])->name('attributes.destroy');
+
+            // OPtions
+            Route::get('options', [OptionsController::class, 'index'])->name('options');
+            Route::get('option/create', [OptionsController::class, 'create'])->name('options.create');
+            Route::post('option', [OptionsController::class, 'store'])->name('options.store');
+            Route::get('option/{options}/edit', [OptionsController::class, 'edit'])->name('options.edit');
+            Route::patch('option/{options}', [OptionsController::class, 'update'])->name('options.update');
+            Route::delete('option/{options}', [OptionsController::class, 'destroy'])->name('options.destroy');
 
         });
 
