@@ -60,12 +60,12 @@
 
                             </div>
 
-                            <div class="form-group mb-4">
+                            <div class="form-group ">
                                 <label for="title-input">{{ __('back/option.tip') }}</label>
                                 <select class="js-select2 form-control form-control" id="tip" name="tip" style="width: 100%;" data-placeholder="Odaberite opciju">
                                     <option></option>
-                                    <option value="1" selected>Odabir (Select)</option>
-                                    <option value="2">Tekstualni unos (input text)</option>
+                                    <option value="1" selected>Boja</option>
+                                    <option value="2">Veličina</option>
                                 </select>
 
                             </div>
@@ -84,8 +84,10 @@
                                     <tr>
                                         <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/hr.png') }}" /></th>
                                         <th class="font-size-sm" style="width:35%"><img src="{{ asset('media/flags/en.png') }}" /></th>
+                                        <th class="font-size-sm" style="width:10%">Color</th>
+
                                         <th class="font-size-sm" style="width:10%">{{ __('back/option.sort') }}</th>
-                                        <th class="text-right font-size-sm"  style="width:20%">{{ __('back/option.uredi') }}</th>
+                                        <th class="text-right font-size-sm"  style="width:auto">{{ __('back/option.uredi') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -93,12 +95,18 @@
                                     <tr>
 
                                         <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Muški" name="value"></span>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Crna" name="value"></span>
                                         </td>
 
                                         <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Man" name="value"></span>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Black" name="value"></span>
                                         </td>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" value="#000000" name="color1"></span>
+                                        </td>
+
+
 
                                         <td>
                                             <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="1" name="qty"></span>
@@ -113,12 +121,18 @@
                                     <tr>
 
                                         <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Ženski" name="value"></span>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Crvena" name="value"></span>
                                         </td>
 
                                         <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Woman" name="value"></span>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Red" name="value"></span>
                                         </td>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" value="#ff0000" name="color1"></span>
+                                        </td>
+
+
 
                                         <td>
                                             <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="2" name="qty"></span>
@@ -182,29 +196,7 @@
 @endsection
 
 @push('js_after')
-    <script src="{{ asset('js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
 
-
-    <script>
-        $(() => {
-
-            {!! ag_lang() !!}.forEach(function(item) {
-                ClassicEditor
-                    .create(document.querySelector('#description-editor-' + item.code ))
-
-                    .then(editor => {
-                        console.log(editor);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-
-            });
-
-
-
-        })
-    </script>
 
 
 @endpush
