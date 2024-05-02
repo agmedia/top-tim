@@ -10,12 +10,13 @@
         </div>
     </div>
 
+
     <div class="content content-full content-boxed">
         @include('back.layouts.partials.session')
 
-        <form action="{{ isset($faq) ? route('attributes.update', ['attribute' => $attribute]) : route('attributes.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ isset($attributes) ? route('attributes.update', ['attributes' => $attributes]) : route('attributes.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @if (isset($attribute))
+            @if (isset($attributes))
                 {{ method_field('PATCH') }}
             @endif
             <div class="block">
@@ -25,7 +26,7 @@
                     </a>
                     <div class="block-options">
                         <div class="custom-control custom-switch custom-control-success">
-                            <input type="checkbox" class="custom-control-input" id="faq-switch" name="status"{{ (isset($attribute->status) and $attribute->status) ? 'checked' : '' }}>
+                            <input type="checkbox" class="custom-control-input" id="faq-switch" name="status"{{ (isset($attributes->status) and $attributes->status) ? 'checked' : '' }}>
                             <label class="custom-control-label" for="faq-switch">{{ __('back/attribute.aktiviraj') }}</label>
                         </div>
                     </div>
@@ -50,7 +51,7 @@
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($attribute) ? $attribute->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($attributes) ? $attributes->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
                                         </div>
                                     @endforeach
                                 </div>
@@ -77,7 +78,7 @@
                                     <div class="tab-content">
                                         @foreach(ag_lang() as $lang)
                                             <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($faq) ? $faq->translation($lang->code)->description : old('description.*') !!}</textarea>
+                                                <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($attributes) ? $attributes->translation($lang->code)->description : old('description.*') !!}</textarea>
                                             </div>
                                         @endforeach
                                     </div>
@@ -97,9 +98,9 @@
                             </button>
                         </div>
                         <div class="col-md-5 text-right">
-                        @if (isset($attribute))
+                        @if (isset($attributes))
 
-                                <a href="{{ route('attributes.destroy', ['attribute' => $attribute]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/attribute.obrisi') }}" onclick="event.preventDefault(); document.getElementById('delete-attribute-form{{ $attribute->id }}').submit();">
+                                <a href="{{ route('attributes.destroy', ['attributes' => $attributes]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/attribute.obrisi') }}" onclick="event.preventDefault(); document.getElementById('delete-attribute-form{{ $attributes->id }}').submit();">
                                     <i class="fa fa-trash-alt"></i> {{ __('back/attribute.obrisi') }}
                                 </a>
 
@@ -110,13 +111,15 @@
             </div>
         </form>
 
-        @if (isset($faq))
-            <form id="delete-attribute-form{{ $attribute->id }}" action="{{ route('attributes.destroy', ['attribute' => $attribute]) }}" method="POST" style="display: none;">
+        @if (isset($attributes))
+            <form id="delete-attribute-form{{ $attributes->id }}" action="{{ route('attributes.destroy', ['attributes' => $attributes]) }}" method="POST" style="display: none;">
                 @csrf
                 {{ method_field('DELETE') }}
             </form>
         @endif
     </div>
+
+
 @endsection
 
 @push('js_after')

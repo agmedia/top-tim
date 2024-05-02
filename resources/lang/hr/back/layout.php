@@ -100,7 +100,8 @@ return [
         'payments' => 'Načini plaćanja',
         'catalog' => 'Katalog',
         'history' => 'Povijest Promjena',
-        'shipping' => 'Načini Dostave'
+        'shipping' => 'Načini Dostave',
+        'attribute' => 'Atributi'
     ]
 
 ];

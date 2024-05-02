@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Back\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Models\Back\Catalog\Attributes;
+use App\Models\Back\Catalog\Attributes\Attributes;
 use Illuminate\Http\Request;
 
 class AttributesController extends Controller
@@ -66,6 +66,7 @@ class AttributesController extends Controller
      */
     public function edit(Attributes $attributes)
     {
+
         return view('back.catalog.attributes.edit', compact('attributes'));
     }
 
@@ -80,10 +81,10 @@ class AttributesController extends Controller
      */
     public function update(Request $request, Attributes $attributes)
     {
-        $updated = $attributes->validateRequest($request)->create();
+        $updated = $attributes->validateRequest($request)->edit();
 
         if ($updated) {
-            return redirect()->route('attributes.edit', ['attribute' => $updated])->with(['success' => 'Attributes was succesfully saved!']);
+            return redirect()->route('attributes.edit', ['attributes' => $updated])->with(['success' => 'Attributes was succesfully saved!']);
         }
 
         return redirect()->back()->with(['error' => 'Whoops..! There was an error saving the attribute.']);

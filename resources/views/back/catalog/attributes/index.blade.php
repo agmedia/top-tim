@@ -18,7 +18,7 @@
 
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">attribute ({{ $attributes->total() }})</h3>
+                <h3 class="block-title">{{ __('back/attribute.naslov') }} ({{ $attributes->total() }})</h3>
             </div>
             <div class="block-content">
                 <table class="table table-striped table-borderless table-vcenter">
@@ -35,7 +35,7 @@
                         <span class="font-size-sm">  {{ $attribute->translation->title }} </span>
                             </td>
                             <td class="text-right font-size-sm">
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('attributes.edit', ['attribute' => $attribute]) }}">
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('attributes.edit', ['attributes' => $attribute]) }}">
                                     <i class="fa fa-fw fa-pencil-alt"></i>
                                 </a>
                             </td>

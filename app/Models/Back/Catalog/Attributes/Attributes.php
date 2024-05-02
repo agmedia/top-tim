@@ -52,14 +52,14 @@ class Attributes extends Model
     public function translation($lang = null, bool $all = false)
     {
         if ($lang) {
-            return $this->hasOne(AttributtesTranslation::class, 'faq_id')->where('lang', $lang)->first();
+            return $this->hasOne(AttributesTranslation::class, 'attribute_id')->where('lang', $lang)->first();
         }
 
         if ($all) {
-            return $this->hasMany(AttributesTranslation::class, 'faq_id');
+            return $this->hasMany(AttributesTranslation::class, 'attribute_id');
         }
 
-        return $this->hasOne(AttributesTranslation::class, 'faq_id')->where('lang', $this->locale);
+        return $this->hasOne(AttributesTranslation::class, 'attribute_id')->where('lang', $this->locale);
     }
 
 
@@ -93,7 +93,7 @@ class Attributes extends Model
         $id = $this->insertGetId($this->createModelArray());
 
         if ($id) {
-            AttributesTranslation:create($id, $this->request);
+            AttributesTranslation::create($id, $this->request);
 
             return $this->find($id);
         }

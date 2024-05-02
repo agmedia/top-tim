@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Models\Back\Settings;
+namespace App\Http\Controllers\Back\Catalog;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Back\Catalog\Attributes\Attributes;
 use Illuminate\Http\Request;
 
-class FaqTranslation extends Model
+class AttributesTranslation extends Model
 {
 
     /**
      * @var string
      */
-    protected $table = 'faq_translations';
+    protected $table = 'attributes_translations';
 
     /**
      * @var array
@@ -30,7 +31,7 @@ class FaqTranslation extends Model
     {
         foreach (ag_lang() as $lang) {
             $saved = self::insertGetId([
-                'faq_id'      => $id,
+                'attribute_id'      => $id,
                 'lang'        => $lang->code,
                 'title'       => $request->title[$lang->code],
                 'description' => $request->description[$lang->code],
@@ -56,7 +57,7 @@ class FaqTranslation extends Model
     public static function edit(int $id, Request $request): bool
     {
         foreach (ag_lang() as $lang) {
-            $saved = self::where('faq_id', $id)->where('lang', $lang->code)->update([
+            $saved = self::where('attribute_id', $id)->where('lang', $lang->code)->update([
                 'title'       => $request->title[$lang->code],
                 'description' => $request->description[$lang->code],
                 'updated_at'  => Carbon::now()

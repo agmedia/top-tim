@@ -2,6 +2,7 @@
 
 namespace App\Models\Back\Settings;
 
+use App\Http\Controllers\FaqTranslation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

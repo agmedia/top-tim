@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\v2\FilterController;
 use App\Http\Controllers\Back\Catalog\BrandController;
 use App\Http\Controllers\Back\Catalog\CategoryController;
 use App\Http\Controllers\Back\Catalog\ProductController;
+use App\Http\Controllers\Back\Catalog\AttributesController;
 use App\Http\Controllers\Back\Catalog\PublisherController;
 use App\Http\Controllers\Back\DashboardController;
 use App\Http\Controllers\Back\Marketing\ReviewController;
@@ -138,9 +139,9 @@ Route::group(
             Route::get('attributes', [AttributesController::class, 'index'])->name('attributes');
             Route::get('attribute/create', [AttributesController::class, 'create'])->name('attributes.create');
             Route::post('attribute', [AttributesController::class, 'store'])->name('attributes.store');
-            Route::get('attribute/{attribute}/edit', [AttributesController::class, 'edit'])->name('attributes.edit');
-            Route::patch('attribute/{attribute}', [AttributesController::class, 'update'])->name('attributes.update');
-            Route::delete('attribute/{attribute}', [AttributesController::class, 'destroy'])->name('attributes.destroy');
+            Route::get('attribute/{attributes}/edit', [AttributesController::class, 'edit'])->name('attributes.edit');
+            Route::patch('attribute/{attributes}', [AttributesController::class, 'update'])->name('attributes.update');
+            Route::delete('attribute/{attributes}', [AttributesController::class, 'destroy'])->name('attributes.destroy');
 
         });
 

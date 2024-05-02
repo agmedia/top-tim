@@ -12,7 +12,7 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    
+
     'languages' => 'Languages',
     'fast_links' => 'Fast Links',
     'index' => 'Homepage',
@@ -45,7 +45,7 @@ return [
     'form' => [
         'title' => 'Title',
     ],
-    
+
     'table' => [
         'id' => 'ID',
         'title' => 'Title',
@@ -103,7 +103,8 @@ return [
         'payments' => 'Payment Methods',
         'catalog' => 'Catalog',
         'history' => 'History Log',
-        'shipping' => 'Shipping Methods'
+        'shipping' => 'Shipping Methods',
+        'attribute' => 'Attributes'
     ]
 
 ];
