@@ -50,7 +50,7 @@ class AttributesController extends Controller
         $stored = $attribute->validateRequest($request)->create();
 
         if ($stored) {
-            return redirect()->route('attributes.edit', ['attribute' => $stored])->with(['success' => 'Attribute was succesfully saved!']);
+            return redirect()->route('attributes.edit', ['attributes' => $stored])->with(['success' => 'Attribute was succesfully saved!']);
         }
 
         return redirect()->back()->with(['error' => 'Whoops..! There was an error saving the attribute.']);

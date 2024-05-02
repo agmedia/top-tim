@@ -60,33 +60,92 @@
 
                             </div>
 
-                            <div class="form-group row  mb-4">
-                                <div class="col-md-12">
-                                    <label for="description-editor">{{ __('back/faq.odgovor') }}</label>
+                            <div class="form-group">
+                                <label for="title-input">{{ __('back/attribute.tip') }}</label>
+                                <select class="js-select2 form-control form-control" id="tip" name="tip" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                    <option></option>
+                                    <option value="1" selected>Odabir (Select)</option>
+                                    <option value="2">Tekstualni unos (input text)</option>
+                                </select>
 
-                                    <ul class="nav nav-pills float-right">
-                                        @foreach(ag_lang() as $lang)
-                                            <li @if ($lang->code == current_locale()) class="active" @endif>
-                                                <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#description-{{ $lang->code }}">
-                                                    <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-
-
-                                    <div class="tab-content">
-                                        @foreach(ag_lang() as $lang)
-                                            <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($attributes) ? $attributes->translation($lang->code)->description : old('description.*') !!}</textarea>
-                                            </div>
-                                        @endforeach
-                                    </div>
-
-
-                                </div>
                             </div>
+                            {{-- if tip == 2--}}
+                            <div class="form-group  mb-4">
+                                <div class="block-header p-0 mb-2">
+                                    <h3 class="block-title">{{ __('back/attribute.vrijednosti_atributa') }}</h3>
+                                    <a class="btn btn-success btn-sm" href="">
+                                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/attribute.dodaj_vrijednost') }}</span>
+                                    </a>
+                                </div>
 
+
+                                <table class="table table-striped table-borderless table-vcenter">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/hr.png') }}" /></th>
+                                        <th class="font-size-sm" style="width:35%"><img src="{{ asset('media/flags/en.png') }}" /></th>
+                                        <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
+                                        <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.uredi') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Muški" name="value"></span>
+                                        </td>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Man" name="value"></span>
+                                        </td>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="1" name="qty"></span>
+                                        </td>
+                                        <td class="text-right font-size-sm">
+                                            <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
+
+                                            <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Ženski" name="value"></span>
+                                        </td>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Woman" name="value"></span>
+                                        </td>
+
+                                        <td>
+                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="2" name="qty"></span>
+                                        </td>
+                                        <td class="text-right font-size-sm">
+                                            <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
+
+                                            <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                        </td>
+                                    </tr>
+
+
+
+
+
+
+                                    </tbody>
+                                </table>
+
+
+
+
+
+
+
+                            </div>
+                            {{-- end if--}}
                         </div>
                     </div>
                 </div>
@@ -98,13 +157,13 @@
                             </button>
                         </div>
                         <div class="col-md-5 text-right">
-                        @if (isset($attributes))
+                            @if (isset($attributes))
 
                                 <a href="{{ route('attributes.destroy', ['attributes' => $attributes]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/attribute.obrisi') }}" onclick="event.preventDefault(); document.getElementById('delete-attribute-form{{ $attributes->id }}').submit();">
                                     <i class="fa fa-trash-alt"></i> {{ __('back/attribute.obrisi') }}
                                 </a>
 
-                        @endif
+                            @endif
                         </div>
                     </div>
                 </div>

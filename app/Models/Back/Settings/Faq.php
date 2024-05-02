@@ -2,7 +2,6 @@
 
 namespace App\Models\Back\Settings;
 
-use App\Http\Controllers\FaqTranslation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -111,7 +110,7 @@ class Faq extends Model
         $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
-            FaqTranslation::edit($id, $this->request);
+            FaqTranslation::edit($this->id, $this->request);
 
             return $this;
         }

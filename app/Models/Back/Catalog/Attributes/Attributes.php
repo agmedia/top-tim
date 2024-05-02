@@ -112,7 +112,7 @@ class Attributes extends Model
         $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
-            AttributesTranslation::edit($id, $this->request);
+            AttributesTranslation::edit($this->id, $this->request);
 
             return $this;
         }

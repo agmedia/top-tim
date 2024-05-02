@@ -15,14 +15,18 @@ return [
 
     'povratak' => 'Povratak',
     'aktiviraj' => 'Aktiviraj',
-    'pitanje' => 'Pitanje',
+    'pitanje' => 'Naziv atributa',
     'odgovor' => 'Odgovor',
-    'uredi' => 'Atributi uredi',
+    'uredi' => 'Uredi',
     'naslov' => 'Atributi',
     'dodaj_novi' => 'Dodaj novi',
     'nema' => 'Nema čestih pitanja...',
     'snimi' => 'Snimi',
-    'obrisi' => 'Obriši'
+    'obrisi' => 'Obriši',
+    'vrijednosti_atributa'  => 'Vrijednosti atributa',
+    'dodaj_vrijednost' => 'Dodaj vrijednost',
+    'sort' => 'Redosljed',
+    'tip' => 'Tip atributa'
 
 
 ];

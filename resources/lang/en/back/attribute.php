@@ -15,13 +15,17 @@ return [
 
     'povratak' => 'Back',
     'aktiviraj' => 'Publish',
-    'pitanje' => 'Question',
+    'pitanje' => 'Attribute title',
     'odgovor' => 'Answer',
     'uredi' => 'Attribute edit',
     'naslov' => 'Attributes',
     'dodaj_novi' => 'Add New',
     'nema' => 'No entries found...',
     'snimi' => 'Save',
-    'obrisi' => 'Delete'
+    'obrisi' => 'Delete',
+    'vrijednosti_atributa'  => 'Attribute values',
+    'dodaj_vrijednost' => 'Add value',
+    'sort' => 'Sort',
+    'tip' => 'Attribute type'
 
 ];
