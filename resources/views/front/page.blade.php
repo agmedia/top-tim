@@ -6,7 +6,7 @@
 
     @push('meta_tags')
 
-        <link rel="canonical" href="{{ env('APP_URL')}}/{{ current_locale() }}" />
+        <link rel="canonical" href="{{ env('APP_URL')}}{{ current_locale() }}" />
         <meta property="og:locale" content="hr_HR" />
         <meta property="og:site_name" content="Top Tim - Better way to stay in the game" />
         <meta property="og:type" content="website" />
