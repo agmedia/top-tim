@@ -133,6 +133,15 @@ Route::group(
             Route::get('page/{page}/edit', [PageController::class, 'edit'])->name('pages.edit');
             Route::patch('page/{page}', [PageController::class, 'update'])->name('pages.update');
             Route::delete('page/{page}', [PageController::class, 'destroy'])->name('pages.destroy');
+
+            // FAQ
+            Route::get('attributes', [AttributesController::class, 'index'])->name('attributes');
+            Route::get('attribute/create', [AttributesController::class, 'create'])->name('attributes.create');
+            Route::post('attribute', [AttributesController::class, 'store'])->name('attributes.store');
+            Route::get('attribute/{attribute}/edit', [AttributesController::class, 'edit'])->name('attributes.edit');
+            Route::patch('attribute/{attribute}', [AttributesController::class, 'update'])->name('attributes.update');
+            Route::delete('attribute/{attribute}', [AttributesController::class, 'destroy'])->name('attributes.destroy');
+
         });
 
         // NARUDŽBE
@@ -168,6 +177,10 @@ Route::group(
             Route::get('faq/{faq}/edit', [FaqController::class, 'edit'])->name('faqs.edit');
             Route::patch('faq/{faq}', [FaqController::class, 'update'])->name('faqs.update');
             Route::delete('faq/{faq}', [FaqController::class, 'destroy'])->name('faqs.destroy');
+
+
+
+
         });
 
         // KORISNICI
