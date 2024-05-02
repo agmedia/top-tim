@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models\Back\Settings;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
