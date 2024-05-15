@@ -5,6 +5,7 @@ namespace App\Models\Back\Catalog\Attributes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AttributesTranslation extends Model
 {
@@ -26,13 +27,14 @@ class AttributesTranslation extends Model
      *
      * @return bool
      */
-    public static function create(int $id, Request $request): bool
+    public static function create(int $id, Request $request, array $item): bool
     {
         foreach (ag_lang() as $lang) {
             $saved = self::insertGetId([
                 'attribute_id'      => $id,
                 'lang'        => $lang->code,
-                'title'       => $request->title[$lang->code],
+                'group_title' => $request->input('title')[$lang->code],
+                'title'       => $item['title'][$lang->code],
                 'created_at'  => Carbon::now(),
                 'updated_at'  => Carbon::now()
             ]);
@@ -52,12 +54,12 @@ class AttributesTranslation extends Model
      *
      * @return bool
      */
-    public static function edit(int $id, Request $request): bool
+    public static function edit(int $id, Request $request, array $item): bool
     {
-
         foreach (ag_lang() as $lang) {
             $saved = self::where('attribute_id', $id)->where('lang', $lang->code)->update([
-                'title'       => $request->title[$lang->code],
+                'group_title' => $request->input('title')[$lang->code],
+                'title'       => $item['title'][$lang->code],
                 'updated_at'  => Carbon::now()
             ]);
 

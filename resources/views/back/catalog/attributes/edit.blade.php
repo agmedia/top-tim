@@ -34,7 +34,6 @@
                 <div class="block-content">
                     <div class="row justify-content-center push">
                         <div class="col-md-12">
-
                             <div class="form-group">
                                 <label for="title-input">{{ __('back/attribute.pitanje') }}</label>
                                 <ul class="nav nav-pills float-right">
@@ -46,106 +45,27 @@
                                         </li>
                                     @endforeach
                                 </ul>
-
-
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($attributes) ? $attributes->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($attributes) && isset($attributes->translation($lang->code)->group_title) ? $attributes->translation($lang->code)->group_title : old('title.*') }}">
                                         </div>
                                     @endforeach
                                 </div>
-
-
-
                             </div>
 
                             <div class="form-group mb-4">
                                 <label for="title-input">{{ __('back/attribute.tip') }}</label>
-                                <select class="js-select2 form-control form-control" id="tip" name="tip" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                <select class="js-select2 form-control form-control" id="tip" name="type" style="width: 100%;" data-placeholder="Odaberite tip atributa...">
                                     <option></option>
-                                    <option value="1" selected>Odabir (Select)</option>
-                                    <option value="2">Tekstualni unos (input text)</option>
+                                    <option value="text" {{ (isset($attributes) and $attributes->type == 'text') ? 'selected' : '' }}>Tekstualni unos (input text)</option>
                                 </select>
 
                             </div>
-                            {{-- if tip == 2--}}
-                            <div class="form-group  ">
-                                <div class="block-header p-0 mb-2">
-                                    <h3 class="block-title">{{ __('back/attribute.vrijednosti_atributa') }}</h3>
-                                    <a class="btn btn-success btn-sm" href="">
-                                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/attribute.dodaj_vrijednost') }}</span>
-                                    </a>
-                                </div>
 
-
-                                <table class="table table-striped table-borderless table-vcenter">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/hr.png') }}" /></th>
-                                        <th class="font-size-sm" style="width:35%"><img src="{{ asset('media/flags/en.png') }}" /></th>
-                                        <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
-                                        <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.uredi') }}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    <tr>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Muški" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Man" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="1" name="qty"></span>
-                                        </td>
-                                        <td class="text-right font-size-sm">
-                                            <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-
-                                            <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Ženski" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Woman" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="2" name="qty"></span>
-                                        </td>
-                                        <td class="text-right font-size-sm">
-                                            <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-
-                                            <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                        </td>
-                                    </tr>
-
-
-
-
-
-
-                                    </tbody>
-                                </table>
-
-
-
-
-
-
-
+                            <div id="addition">
+                                @livewire('back.catalog.options-addition', ['values' => isset($attributes) ? $attributes : []])
                             </div>
-                            {{-- end if--}}
                         </div>
                     </div>
                 </div>

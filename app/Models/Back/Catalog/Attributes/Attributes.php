@@ -3,10 +3,10 @@
 namespace  App\Models\Back\Catalog\Attributes;
 
 use App\Models\Back\Settings\Category;
-use App\Models\Back\Catalog\Attributes\AttributesTranslation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Attributes extends Model
 {
@@ -64,6 +64,17 @@ class Attributes extends Model
 
 
     /**
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function getGroupAttribute($value)
+    {
+        return $this->translation->group_title;
+    }
+
+
+    /**
      * Validate new category Request.
      *
      * @param Request $request
@@ -73,7 +84,9 @@ class Attributes extends Model
     public function validateRequest(Request $request)
     {
         $request->validate([
-            'title'       => 'required'
+            'title.*' => 'required',
+            'type' => 'required',
+            'item' => 'required'
         ]);
 
         $this->request = $request;
@@ -89,15 +102,25 @@ class Attributes extends Model
      */
     public function create()
     {
-        $id = $this->insertGetId($this->createModelArray());
+        $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
 
-        if ($id) {
-            AttributesTranslation::create($id, $this->request);
+        foreach ($this->request->input('item') as $item) {
+            $id = $this->insertGetId([
+                'group'       => Str::slug($group),
+                'type'        => $this->request->input('type'),
+                'sort_order'  => $item['sort_order'] ?? 0,
+                'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                'updated_at'  => Carbon::now()
+            ]);
 
-            return $this->find($id);
+            if ($id) {
+                AttributesTranslation::create($id, $this->request, $item);
+            } else {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
 
@@ -108,15 +131,60 @@ class Attributes extends Model
      */
     public function edit()
     {
-        $id = $this->update($this->createModelArray('update'));
+        $values = Attributes::query()->where('group', $this->group)->get();
+        $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
+        $items = collect($this->request->input('item'));
 
-        if ($id) {
-            AttributesTranslation::edit($this->id, $this->request);
+        foreach ($values as $value) {
+            $item = $items->where('id', $value->id);
 
-            return $this;
+            if ( ! empty($item->first())) {
+                $saved = $value->update([
+                    'group'       => Str::slug($group),
+                    'type'        => $this->request->input('type'),
+                    'sort_order'  => $item->first()['sort_order'] ?? 0,
+                    'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                    'updated_at'  => Carbon::now()
+                ]);
+
+                if ($saved) {
+                    AttributesTranslation::edit($value->id, $this->request, $item->first());
+                } else {
+                    return false;
+                }
+            }
         }
 
-        return false;
+        foreach ($items->where('id', '==', '0') as $item) {
+            $id = $this->insertGetId([
+                'group'       => Str::slug($group),
+                'type'        => $this->request->input('type'),
+                'sort_order'  => $item['sort_order'] ?? 0,
+                'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                'updated_at'  => Carbon::now()
+            ]);
+
+            if ($id) {
+                AttributesTranslation::create($id, $this->request, $item);
+            } else {
+                return false;
+            }
+        }
+
+        if ($items->count() < $values->count()) {
+            $diff = $values->diffUsing($items, function ($one, $other) {
+                return $other['id'] - $one['id'];
+            });
+
+            if ($diff->count()) {
+                foreach ($diff as $item) {
+                    Attributes::query()->where('id', $item['id'])->delete();
+                }
+            }
+
+        }
+
+        return true;
     }
 
 
@@ -127,8 +195,11 @@ class Attributes extends Model
      */
     private function createModelArray(string $method = 'insert'): array
     {
+        $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
+
         $response = [
-            'group'       => null,
+            'group'       => Str::slug($group),
+            'type'        => $this->request->input('type'),
             'sort_order'  => 0,
             'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
             'updated_at'  => Carbon::now()

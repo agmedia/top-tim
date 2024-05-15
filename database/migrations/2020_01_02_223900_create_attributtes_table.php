@@ -16,7 +16,8 @@ class CreateAttributesTable extends Migration
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
             $table->string('group')->nullable();
-            $table->string('sort_order')->nullable();
+            $table->string('type')->nullable();
+            $table->integer('sort_order')->default(0);
             $table->boolean('status')->nullable();
             $table->timestamps();
         });
@@ -26,6 +27,7 @@ class CreateAttributesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('attribute_id')->index();
             $table->string('lang', 2)->default(config('app.locale'));
+            $table->string('group_title');
             $table->string('title');
             $table->text('description')->nullable();
             $table->timestamps();

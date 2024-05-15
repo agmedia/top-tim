@@ -31,9 +31,7 @@
                     <tbody>
                     @forelse ($attributes as $attribute)
                         <tr>
-                            <td>
-                        <span class="font-size-sm">  {{ $attribute->translation->title }} </span>
-                            </td>
+                            <td><span class="font-size-sm">{{ $attribute->group }}</span></td>
                             <td class="text-right font-size-sm">
                                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('attributes.edit', ['attributes' => $attribute]) }}">
                                     <i class="fa fa-fw fa-pencil-alt"></i>

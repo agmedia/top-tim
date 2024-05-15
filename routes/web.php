@@ -96,13 +96,21 @@ Route::group(
             Route::patch('product/{product}', [ProductController::class, 'update'])->name('products.update');
             Route::delete('product/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-            // IZDAVAČI
-            Route::get('publishers', [PublisherController::class, 'index'])->name('publishers');
-            Route::get('publisher/create', [PublisherController::class, 'create'])->name('publishers.create');
-            Route::post('publisher', [PublisherController::class, 'store'])->name('publishers.store');
-            Route::get('publisher/{publisher}/edit', [PublisherController::class, 'edit'])->name('publishers.edit');
-            Route::patch('publisher/{publisher}', [PublisherController::class, 'update'])->name('publishers.update');
-            Route::delete('publisher/{publisher}', [PublisherController::class, 'destroy'])->name('publishers.destroy');
+            // Atttributes
+            Route::get('attributes', [AttributesController::class, 'index'])->name('attributes');
+            Route::get('attribute/create', [AttributesController::class, 'create'])->name('attributes.create');
+            Route::post('attribute', [AttributesController::class, 'store'])->name('attributes.store');
+            Route::get('attribute/{attributes}/edit', [AttributesController::class, 'edit'])->name('attributes.edit');
+            Route::patch('attribute/{attributes}', [AttributesController::class, 'update'])->name('attributes.update');
+            Route::delete('attribute/{attributes}', [AttributesController::class, 'destroy'])->name('attributes.destroy');
+
+            // OPtions
+            Route::get('options', [OptionsController::class, 'index'])->name('options');
+            Route::get('option/create', [OptionsController::class, 'create'])->name('options.create');
+            Route::post('option', [OptionsController::class, 'store'])->name('options.store');
+            Route::get('option/{options}/edit', [OptionsController::class, 'edit'])->name('options.edit');
+            Route::patch('option/{options}', [OptionsController::class, 'update'])->name('options.update');
+            Route::delete('option/{options}', [OptionsController::class, 'destroy'])->name('options.destroy');
 
             // AUTORI
             Route::get('brands', [BrandController::class, 'index'])->name('brands');
@@ -120,14 +128,6 @@ Route::group(
             Route::patch('blog/{blog}', [BlogController::class, 'update'])->name('blogs.update');
             Route::delete('blog/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
 
-            // RECEPTI
-            Route::get('receptis', [ReceptiController::class, 'index'])->name('receptis');
-            Route::get('recepti/create', [ReceptiController::class, 'create'])->name('receptis.create');
-            Route::post('recepti', [ReceptiController::class, 'store'])->name('receptis.store');
-            Route::get('recepti/{recepti}/edit', [ReceptiController::class, 'edit'])->name('receptis.edit');
-            Route::patch('recepti/{recepti}', [ReceptiController::class, 'update'])->name('receptis.update');
-            Route::delete('recepti/{recepti}', [ReceptiController::class, 'destroy'])->name('receptis.destroy');
-
             // INFO PAGES
             Route::get('pages', [PageController::class, 'index'])->name('pages');
             Route::get('page/create', [PageController::class, 'create'])->name('pages.create');
@@ -135,22 +135,6 @@ Route::group(
             Route::get('page/{page}/edit', [PageController::class, 'edit'])->name('pages.edit');
             Route::patch('page/{page}', [PageController::class, 'update'])->name('pages.update');
             Route::delete('page/{page}', [PageController::class, 'destroy'])->name('pages.destroy');
-
-            // Atttributes
-            Route::get('attributes', [AttributesController::class, 'index'])->name('attributes');
-            Route::get('attribute/create', [AttributesController::class, 'create'])->name('attributes.create');
-            Route::post('attribute', [AttributesController::class, 'store'])->name('attributes.store');
-            Route::get('attribute/{attributes}/edit', [AttributesController::class, 'edit'])->name('attributes.edit');
-            Route::patch('attribute/{attributes}', [AttributesController::class, 'update'])->name('attributes.update');
-            Route::delete('attribute/{attributes}', [AttributesController::class, 'destroy'])->name('attributes.destroy');
-
-            // OPtions
-            Route::get('options', [OptionsController::class, 'index'])->name('options');
-            Route::get('option/create', [OptionsController::class, 'create'])->name('options.create');
-            Route::post('option', [OptionsController::class, 'store'])->name('options.store');
-            Route::get('option/{options}/edit', [OptionsController::class, 'edit'])->name('options.edit');
-            Route::patch('option/{options}', [OptionsController::class, 'update'])->name('options.update');
-            Route::delete('option/{options}', [OptionsController::class, 'destroy'])->name('options.destroy');
 
         });
 

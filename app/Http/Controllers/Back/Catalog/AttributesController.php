@@ -16,9 +16,9 @@ class AttributesController extends Controller
     public function index(Request $request)
     {
         if ($request->has('search') && ! empty($request->search)) {
-            $attributes = Attributes::where('title', 'like', '%' . $request->search . '%')->paginate(12);
+            $attributes = Attributes::query()->groupBy('group')->paginate(12);
         } else {
-            $attributes = Attributes::paginate(12);
+            $attributes = Attributes::query()->groupBy('group')->paginate(12);
         }
 
         return view('back.catalog.attributes.index', compact('attributes'));
