@@ -49,12 +49,15 @@ class OptionsAddition extends Component
 
     private function getEmptyItem(): array
     {
+        $titles = [];
+
+        foreach (ag_lang() as $lang) {
+            $titles[$lang->code] = '';
+        }
+
         return [
             'id' => 0,
-            'title' => [
-                'hr' => '',
-                'en' => ''
-            ],
+            'title' => $titles,
             'sort_order' => 0
         ];
     }

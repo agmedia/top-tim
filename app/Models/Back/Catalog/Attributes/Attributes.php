@@ -179,6 +179,7 @@ class Attributes extends Model
             if ($diff->count()) {
                 foreach ($diff as $item) {
                     Attributes::query()->where('id', $item['id'])->delete();
+                    AttributesTranslation::query()->where('attribute_id', $item['id'])->delete();
                 }
             }
 
@@ -188,25 +189,18 @@ class Attributes extends Model
     }
 
 
-    /**
-     * @param string $method
-     *
-     * @return array
-     */
-    private function createModelArray(string $method = 'insert'): array
+    public function getList()
     {
-        $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
+        $response = [];
+        $values = Attributes::query()->get();
 
-        $response = [
-            'group'       => Str::slug($group),
-            'type'        => $this->request->input('type'),
-            'sort_order'  => 0,
-            'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'updated_at'  => Carbon::now()
-        ];
-
-        if ($method == 'insert') {
-            $response['created_at'] = Carbon::now();
+        foreach ($values as $value) {
+            $response[$value->group]['group'] = $value->translation->group_title;
+            $response[$value->group]['items'][] = [
+                'id' => $value->id,
+                'title' => $value->translation->title,
+                'sort_order' => $value->sort_order
+            ];
         }
 
         return $response;

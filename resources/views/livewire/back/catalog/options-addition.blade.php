@@ -9,8 +9,9 @@
     <table class="table table-striped table-borderless table-vcenter">
         <thead class="thead-light">
         <tr>
-            <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/hr.png') }}" /></th>
-            <th class="font-size-sm" style="width:35%"><img src="{{ asset('media/flags/en.png') }}" /></th>
+            @foreach (ag_lang() as $lang)
+                <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" /></th>
+            @endforeach
             <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
             <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.uredi') }}</th>
         </tr>
@@ -19,12 +20,11 @@
         @foreach ($items as $key => $item)
             <tr>
                 <input type="hidden" name="item[{{ $key }}][id]" wire:model="items.{{ $key }}.id">
-                <td>
-                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.title.hr" name="item[{{ $key }}][title][hr]"></span>
-                </td>
-                <td>
-                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.title.en" name="item[{{ $key }}][title][en]"></span>
-                </td>
+                @foreach (ag_lang() as $lang)
+                    <td>
+                        <span class="font-size-sm"><input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.title.{{ $lang->code }}" name="item[{{ $key }}][title][{{ $lang->code }}]"></span>
+                    </td>
+                @endforeach
                 <td>
                     <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>
                 </td>
