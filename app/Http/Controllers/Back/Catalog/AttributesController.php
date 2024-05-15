@@ -84,7 +84,7 @@ class AttributesController extends Controller
         $updated = $attributes->validateRequest($request)->edit();
 
         if ($updated) {
-            return redirect()->route('attributes.edit', ['attributes' => $updated])->with(['success' => 'Attributes was succesfully saved!']);
+            return redirect()->route('attributes.edit', ['attributes' => $attributes->id])->with(['success' => 'Attributes was succesfully saved!']);
         }
 
         return redirect()->back()->with(['error' => 'Whoops..! There was an error saving the attribute.']);
