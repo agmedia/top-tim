@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Back\Catalog;
 
 use App\Helpers\Country;
 use App\Models\Back\Catalog\Attributes\Attributes;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class OptionsAddition extends Component
@@ -65,7 +66,7 @@ class OptionsAddition extends Component
 
     private function sortPredefinedItems()
     {
-        $values = Attributes::query()->where('group', $this->values->group)->get();
+        $values = Attributes::query()->where('group', Str::slug($this->values->group))->get();
 
         foreach ($values as $value) {
             $titles = [];

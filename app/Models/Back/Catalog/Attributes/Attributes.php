@@ -120,7 +120,7 @@ class Attributes extends Model
             }
         }
 
-        return true;
+        return $this->find($id);
     }
 
 

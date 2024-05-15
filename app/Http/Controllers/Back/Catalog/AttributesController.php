@@ -66,7 +66,7 @@ class AttributesController extends Controller
      */
     public function edit(Attributes $attributes)
     {
-
+        //dd($attributes->toArray());
         return view('back.catalog.attributes.edit', compact('attributes'));
     }
 
