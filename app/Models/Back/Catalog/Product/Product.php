@@ -4,6 +4,7 @@ namespace App\Models\Back\Catalog\Product;
 
 use App\Helpers\Helper;
 use App\Helpers\ProductHelper;
+use App\Models\Back\Catalog\Attributes\Attributes;
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Publisher;
@@ -122,6 +123,12 @@ class Product extends Model
     }
 
 
+    public function attributes()
+    {
+        return $this->hasManyThrough(Attributes::class, ProductAttribute::class, 'product_id', 'id', 'id', 'attribute_id');
+    }
+
+
     /**
      * @return Relation
      */
@@ -205,6 +212,7 @@ class Product extends Model
 
         if ($id) {
             $this->resolveCategories($id);
+            $this->resolveAttributes($id);
             ProductTranslation::create($id, $this->request);
 
             return $this->find($id);
@@ -227,6 +235,7 @@ class Product extends Model
 
         if ($updated) {
             $this->resolveCategories($this->id);
+            $this->resolveAttributes($this->id);
             ProductTranslation::edit($this->id, $this->request);
 
             return $this;
@@ -243,6 +252,7 @@ class Product extends Model
     {
         return [
             'categories'     => (new Category())->getList(false),
+            'attributes'     => (new Attributes())->getList(),
             'brands' => '',
             'images'         => ProductImage::getExistingImages($this),
             'taxes'          => Settings::get('tax', 'list')
@@ -431,6 +441,23 @@ class Product extends Model
     {
         if ( ! empty($this->request->category) && is_array($this->request->category)) {
             ProductCategory::storeData($this->request->category, $product_id);
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param int $product_id
+     *
+     * @return bool
+     */
+    private function resolveAttributes(int $product_id): bool
+    {
+        if ( ! empty($this->request->input('attributes')) && is_array($this->request->input('attributes'))) {
+            ProductAttribute::storeData($this->request->input('attributes'), $product_id);
 
             return true;
         }

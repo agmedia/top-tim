@@ -16,9 +16,9 @@ class OptionsController extends Controller
     public function index(Request $request)
     {
         if ($request->has('search') && ! empty($request->search)) {
-            $options = Options::where('title', 'like', '%' . $request->search . '%')->paginate(12);
+            $options = Options::query()->groupBy('group')->paginate(12);
         } else {
-            $options = Options::paginate(12);
+            $options = Options::query()->groupBy('group')->paginate(12);
         }
 
         return view('back.catalog.options.index', compact('options'));
@@ -45,9 +45,9 @@ class OptionsController extends Controller
      */
     public function store(Request $request)
     {
-        $attribute = new Options();
+        $option = new Options();
 
-        $stored = $attribute->validateRequest($request)->create();
+        $stored = $option->validateRequest($request)->create();
 
         if ($stored) {
             return redirect()->route('options.edit', ['options' => $stored])->with(['success' => 'Attribute was succesfully saved!']);
@@ -81,6 +81,7 @@ class OptionsController extends Controller
      */
     public function update(Request $request, Options $options)
     {
+        //dd($request->toArray());
         $updated = $options->validateRequest($request)->edit();
 
         if ($updated) {

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Back\Catalog;
 
 use App\Helpers\Country;
 use App\Models\Back\Catalog\Attributes\Attributes;
+use App\Models\Back\Catalog\Options\Options;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -15,6 +16,8 @@ class OptionsAddition extends Component
     public $items = [];
 
     public $item = [];
+
+    public $type = 'text';
 
 
     public function mount()
@@ -59,6 +62,7 @@ class OptionsAddition extends Component
         return [
             'id' => 0,
             'title' => $titles,
+            'color' => '#000000',
             'sort_order' => 0
         ];
     }
@@ -66,7 +70,11 @@ class OptionsAddition extends Component
 
     private function sortPredefinedItems()
     {
-        $values = Attributes::query()->where('group', Str::slug($this->values->group))->get();
+        if ($this->type == 'color') {
+            $values = Options::query()->where('group', Str::slug($this->values->group))->get();
+        } else {
+            $values = Attributes::query()->where('group', Str::slug($this->values->group))->get();
+        }
 
         foreach ($values as $value) {
             $titles = [];
@@ -78,6 +86,7 @@ class OptionsAddition extends Component
             array_push($this->items, [
                 'id' => $value->id,
                 'title' => $titles,
+                'color' => $value->value,
                 'sort_order' => $value->sort_order
             ]);
         }

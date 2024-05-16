@@ -119,12 +119,23 @@ class CreateProductsTable extends Migration
         Schema::create('product_category', function (Blueprint $table) {
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('category_id')->index();
-            
+
             $table->foreign('product_id')
-                ->references('id')->on('products');
-            
+                  ->references('id')->on('products');
+
             $table->foreign('category_id')
-                ->references('id')->on('categories');
+                  ->references('id')->on('categories');
+        });
+
+        Schema::create('product_attribute', function (Blueprint $table) {
+            $table->unsignedBigInteger('product_id')->index();
+            $table->unsignedBigInteger('attribute_id')->index();
+
+            $table->foreign('product_id')
+                  ->references('id')->on('products');
+
+            $table->foreign('attribute_id')
+                  ->references('id')->on('attributes');
         });
     }
 
@@ -141,6 +152,7 @@ class CreateProductsTable extends Migration
         Schema::dropIfExists('product_actions');
         Schema::dropIfExists('product_actions_translations');
         Schema::dropIfExists('product_category');
+        Schema::dropIfExists('product_attribute');
     }
 }
 

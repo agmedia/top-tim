@@ -26,14 +26,14 @@ class OptionsTranslation extends Model
      *
      * @return bool
      */
-    public static function create(int $id, Request $request): bool
+    public static function create(int $id, Request $request, array $item): bool
     {
         foreach (ag_lang() as $lang) {
             $saved = self::insertGetId([
-                'option_id'      => $id,
+                'option_id'   => $id,
                 'lang'        => $lang->code,
-                'title'       => $request->title[$lang->code],
-
+                'group_title' => $request->input('title')[$lang->code],
+                'title'       => $item['title'][$lang->code],
                 'created_at'  => Carbon::now(),
                 'updated_at'  => Carbon::now()
             ]);
@@ -53,13 +53,12 @@ class OptionsTranslation extends Model
      *
      * @return bool
      */
-    public static function edit(int $id, Request $request): bool
+    public static function edit(int $id, Request $request, array $item): bool
     {
-
         foreach (ag_lang() as $lang) {
             $saved = self::where('option_id', $id)->where('lang', $lang->code)->update([
-                'title'       => $request->title[$lang->code],
-
+                'group_title' => $request->input('title')[$lang->code],
+                'title'       => $item['title'][$lang->code],
                 'updated_at'  => Carbon::now()
             ]);
 

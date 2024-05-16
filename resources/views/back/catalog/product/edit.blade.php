@@ -93,7 +93,7 @@
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="name-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <input type="text" class="form-control" id="name-input-{{ $lang->code }}" name="name[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->name : old('name.*') }}" onkeyup="SetSEOPreview()">
+                                                            <input type="text" class="form-control" id="name-input-{{ $lang->code }}" name="name[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product->translation($lang->code)->name) ? $product->translation($lang->code)->name : old('name.*') }}" onkeyup="SetSEOPreview()">
                                                             @error('name')
                                                             <span class="text-danger font-italic">{{ __('back/products.naziv_je_potreban') }}</span>
                                                             @enderror
@@ -189,7 +189,7 @@
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($product) ? $product->translation($lang->code)->description : old('description.*') !!}</textarea>
+                                                            <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! isset($product->translation($lang->code)->description) ? $product->translation($lang->code)->description : old('description.*') !!}</textarea>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -231,104 +231,54 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row items-push mb-4">
-                                            <div class="col-md-4">
-                                                <label for="spol">Spol</label>
-                                                <select class="js-select2 form-control" id="spol" name="spol" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                    <option></option>
-                                                    <option value="1">Muški</option>
-                                                    <option value="2">Ženski</option>
-                                                    <option value="3">Unisex</option>
-                                                </select>
-
+                                        @if ( ! empty($data['attributes']))
+                                            <div class="form-group row items-push mb-4">
+                                                @foreach ($data['attributes'] as $attribute)
+                                                    <div class="col-md-4">
+                                                        <label for="spol">{{ $attribute['group'] }}</label>
+                                                        <select class="js-select2 form-control" id="spol" name="attributes[{{ \Illuminate\Support\Str::slug($attribute['group']) }}]" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                            <option></option>
+                                                            @foreach ($attribute['items'] as $item)
+                                                                <option value="{{ $item['id'] }}" {{ ((isset($product)) and (in_array($item['id'], $product->attributes()->pluck('id')->toArray()))) ? 'selected' : '' }}>{{ $item['title'] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                @endforeach
                                             </div>
-
-
-                                            <div class="col-md-4">
-                                                <label for="kroj">Kroj</label>
-                                                <select class="js-select2 form-control" id="kroj" name="kroj" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                    <option></option>
-                                                    <option value="1">Standard Fit</option>
-                                                    <option value="2">Lose fit</option>
-                                                    <option value="3">Slim fit</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label for="tip-rukava">Tip rukava</label>
-                                                <select class="js-select2 form-control" id="tip-rukava" name="tip-rukava" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                    <option></option>
-                                                    <option value="1">Kratki rukavi</option>
-                                                    <option value="2">Dugi rukavi</option>
-                                                    <option value="3">Bez rukava</option>
-                                                </select>
-                                            </div>
-
-
-
-
-
-                                        </div>
-
-                                        <div class="form-group row items-push mb-4">
-                                            <div class="col-md-4">
-                                                <label for="materijal">Materijal</label>
-                                                <input type="text" class="form-control" value="" name="materijal" />
-
-                                            </div>
-
-
-                                            <div class="col-md-4">
-                                                <label for="tekstil">Tekstil</label>
-                                                <select class="js-select2 form-control" id="tekstil" name="tekstil" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                    <option></option>
-                                                    <option value="1">French Terry</option>
-                                                    <option value="2">Poli Fiber</option>
-                                                    <option value="3">Softlock</option>
-                                                </select>
-                                            </div>
-
-
-
-
-
-
-                                        </div>
+                                        @endif
 
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                     <div class="tab-pane" id="opcije" role="tabpanel">
                         <div class="block">
                             <div class="block-content">
                                 <div class="row justify-content-center push">
                                     <div class="col-md-12">
-                                            <div class="block-header p-0 mb-2">
-                                                <h3 class="block-title">Boja</h3>
-                                                <a class="btn btn-success btn-sm" href="">
-                                                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dodaj vrijednost</span>
-                                                </a>
-                                            </div>
+                                        <div class="block-header p-0 mb-2">
+                                            <h3 class="block-title">Boja</h3>
+                                            <a class="btn btn-success btn-sm" href="">
+                                                <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dodaj vrijednost</span>
+                                            </a>
+                                        </div>
 
 
-                                                <table class="table table-striped table-borderless table-vcenter">
-                                                    <thead class="thead-light">
-                                                    <tr>
-                                                        <th class="font-size-sm" style="width:25%">Vrijednost</th>
-                                                        <th class="font-size-sm">Šifra</th>
-                                                        <th class="font-size-sm">Količina</th>
-                                                        <th class="font-size-sm">Cijena</th>
-                                                        <th class="text-right font-size-sm"  class="text-center">Uredi</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
+                                        <table class="table table-striped table-borderless table-vcenter">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th class="font-size-sm" style="width:25%">Vrijednost</th>
+                                                <th class="font-size-sm">Šifra</th>
+                                                <th class="font-size-sm">Količina</th>
+                                                <th class="font-size-sm">Cijena</th>
+                                                <th class="text-right font-size-sm"  class="text-center">Uredi</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
 
-                                                        <tr>
-                                                            <td>
+                                            <tr>
+                                                <td>
                                                                 <span class="font-size-sm">
 
                                                                     <select class="js-select2 form-control form-control-sm form-select-solid" id="color" name="color" style="width: 100%;" data-placeholder="Odaberite opciju">
@@ -339,24 +289,24 @@
                                                                     </select>
                                                                     </span>
 
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
-                                                            </td>
-                                                            <td class="text-right font-size-sm">
-                                                                <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-                                                                <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                                            </td>
-                                                        </tr>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
+                                                </td>
+                                                <td class="text-right font-size-sm">
+                                                    <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
+                                                    <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                                </td>
+                                            </tr>
 
-                                                        <tr>
-                                                            <td>
+                                            <tr>
+                                                <td>
                                                                 <span class="font-size-sm">
 
                                                                      <select class="js-select2 form-control form-control-sm" id="color2" name="color2" style="width: 100%;" data-placeholder="Odaberite opciju">
@@ -367,24 +317,24 @@
                                                                     </select>
                                                                     </span>
 
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
-                                                            </td>
-                                                            <td class="text-right font-size-sm">
-                                                                <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-                                                                <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                                            </td>
-                                                        </tr>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
+                                                </td>
+                                                <td class="text-right font-size-sm">
+                                                    <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
+                                                    <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                                </td>
+                                            </tr>
 
-                                                        <tr>
-                                                            <td>
+                                            <tr>
+                                                <td>
                                                                 <span class="font-size-sm">
                                                                 <select class="js-select2 form-control form-control-sm" id="color1" name="color1" style="width: 100%;" data-placeholder="Odaberite opciju">
                                                                     <option></option>
@@ -393,28 +343,28 @@
                                                                     <option value="3">Crvena</option>
                                                                 </select>
                                                                     </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
-                                                            </td>
-                                                            <td class="text-right font-size-sm">
-                                                                <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-                                                                <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                                            </td>
-                                                        </tr>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
+                                                </td>
+                                                <td>
+                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
+                                                </td>
+                                                <td class="text-right font-size-sm">
+                                                    <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
+                                                    <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
+                                                </td>
+                                            </tr>
 
 
 
 
 
-                                                    </tbody>
-                                                </table>
+                                            </tbody>
+                                        </table>
 
 
 
@@ -436,10 +386,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
                     <div class="tab-pane" id="slike" role="tabpanel">
                         <div class="block">
                             <div class="block-header block-header-default">
@@ -481,7 +427,7 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="meta_title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true" data-placement="top">
+                                                        <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($product->translation($lang->code)->meta_title) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true" data-placement="top">
                                                         <small class="form-text text-muted">
                                                             {{ __('back/products.70_znakova_max') }}
                                                         </small>
@@ -503,7 +449,7 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="meta-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($product) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
+                                                        <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ isset($product->translation($lang->code)->meta_description) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
                                                         <small class="form-text text-muted">
                                                             {{ __('back/products.160_znakova_max') }}
                                                         </small>
@@ -525,8 +471,8 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="slug-input-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}" value="{{ isset($product) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
-                                                        <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ isset($product) ? $product->translation($lang->code)->slug : old('slug.*') }}">
+                                                        <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}" value="{{ isset($product->translation($lang->code)->slug) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
+                                                        <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ isset($product->translation($lang->code)->slug) ? $product->translation($lang->code)->slug : old('slug.*') }}">
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -585,13 +531,13 @@
                 <div class="modal-body">
 
 
-                        <label for="opcije">Odaberi opciju</label>
-                        <select class="js-select2 form-control" id="opcije" name="opcije" style="width: 100%;" data-placeholder="Odaberite opciju">
-                            <option></option>
-                            <option value="1">Boja</option>
-                            <option value="1">Veličina</option>
+                    <label for="opcije">Odaberi opciju</label>
+                    <select class="js-select2 form-control" id="opcije" name="opcije" style="width: 100%;" data-placeholder="Odaberite opciju">
+                        <option></option>
+                        <option value="1">Boja</option>
+                        <option value="1">Veličina</option>
 
-                        </select>
+                    </select>
 
 
                 </div>

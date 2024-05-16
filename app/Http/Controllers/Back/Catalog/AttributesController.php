@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Back\Catalog;
 
 use App\Http\Controllers\Controller;
 use App\Models\Back\Catalog\Attributes\Attributes;
+use App\Models\Back\Catalog\Attributes\AttributesTranslation;
 use Illuminate\Http\Request;
 
 class AttributesController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -75,7 +77,7 @@ class AttributesController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Attributes                  $attributes
+     * @param Attributes               $attributes
      *
      * @return \Illuminate\Http\Response
      */
@@ -100,9 +102,12 @@ class AttributesController extends Controller
      */
     public function destroy(Request $request, Attributes $attributes)
     {
-        $destroyed = Attributes::destroy($attributes->id);
+        $for_d     = Attributes::query()->where('group', $attributes->group)->pluck('id');
+        $destroyed = Attributes::query()->where('group', $attributes->group)->delete();
 
         if ($destroyed) {
+            AttributesTranslation::query()->whereIn('attribute_id', $for_d)->delete();
+
             return redirect()->route('attributes')->with(['success' => 'Attribute was succesfully deleted!']);
         }
 

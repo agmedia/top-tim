@@ -12,6 +12,9 @@
             @foreach (ag_lang() as $lang)
                 <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" /></th>
             @endforeach
+            @if ($type == 'color')
+                <th class="font-size-sm" style="width:10%">Color</th>
+            @endif
             <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
             <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.uredi') }}</th>
         </tr>
@@ -25,6 +28,11 @@
                         <span class="font-size-sm"><input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.title.{{ $lang->code }}" name="item[{{ $key }}][title][{{ $lang->code }}]"></span>
                     </td>
                 @endforeach
+                @if ($type == 'color')
+                    <td>
+                        <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color" name="item[{{ $key }}][color]"></span>
+                    </td>
+                @endif
                 <td>
                     <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>
                 </td>

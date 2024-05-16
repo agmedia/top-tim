@@ -51,7 +51,7 @@
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($options) ? $options->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($options) ? $options->group : old('title.*') }}">
                                         </div>
                                     @endforeach
                                 </div>
@@ -62,102 +62,18 @@
 
                             <div class="form-group ">
                                 <label for="title-input">{{ __('back/option.tip') }}</label>
-                                <select class="js-select2 form-control form-control" id="tip" name="tip" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                <select class="js-select2 form-control form-control" id="tip" name="type" style="width: 100%;" data-placeholder="Odaberite opciju">
                                     <option></option>
-                                    <option value="1" selected>Boja</option>
-                                    <option value="2">Veličina</option>
+                                    <option value="color" selected>Boja</option>
+                                    <option value="size">Veličina</option>
                                 </select>
 
                             </div>
                             {{-- if tip == 2--}}
-                            <div class="form-group  ">
-                                <div class="block-header p-0 mb-2">
-                                    <h3 class="block-title">{{ __('back/option.vrijednosti_atributa') }}</h3>
-                                    <a class="btn btn-success btn-sm" href="">
-                                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/option.dodaj_vrijednost') }}</span>
-                                    </a>
+                            <div class="form-group">
+                                <div id="addition">
+                                    @livewire('back.catalog.options-addition', ['values' => isset($options) ? $options : [], 'type' => 'color'])
                                 </div>
-
-
-                                <table class="table table-striped table-borderless table-vcenter">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/hr.png') }}" /></th>
-                                        <th class="font-size-sm" style="width:35%"><img src="{{ asset('media/flags/en.png') }}" /></th>
-                                        <th class="font-size-sm" style="width:10%">Color</th>
-
-                                        <th class="font-size-sm" style="width:10%">{{ __('back/option.sort') }}</th>
-                                        <th class="text-right font-size-sm"  style="width:auto">{{ __('back/option.uredi') }}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    <tr>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Crna" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Black" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" value="#000000" name="color1"></span>
-                                        </td>
-
-
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="1" name="qty"></span>
-                                        </td>
-                                        <td class="text-right font-size-sm">
-                                            <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-
-                                            <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Crvena" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="Red" name="value"></span>
-                                        </td>
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" value="#ff0000" name="color1"></span>
-                                        </td>
-
-
-
-                                        <td>
-                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="2" name="qty"></span>
-                                        </td>
-                                        <td class="text-right font-size-sm">
-                                            <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-
-                                            <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                        </td>
-                                    </tr>
-
-
-
-
-
-
-                                    </tbody>
-                                </table>
-
-
-
-
-
-
-
                             </div>
                             {{-- end if--}}
                         </div>

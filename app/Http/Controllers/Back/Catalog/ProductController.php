@@ -7,6 +7,7 @@ use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductAction;
+use App\Models\Back\Catalog\Product\ProductAttribute;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Back\Catalog\Publisher;
@@ -116,6 +117,9 @@ class ProductController extends Controller
     {
         $data = $product->getRelationsData();
 
+        //dd($data['attributes']);
+        //dd($product->attributes);
+
         return view('back.catalog.product.edit', compact('product', 'data'));
     }
 
@@ -156,6 +160,7 @@ class ProductController extends Controller
     {
         ProductImage::where('product_id', $product->id)->delete();
         ProductCategory::where('product_id', $product->id)->delete();
+        ProductAttribute::where('product_id', $product->id)->delete();
 
         Storage::deleteDirectory(config('filesystems.disks.products.root') . $product->id);
 
