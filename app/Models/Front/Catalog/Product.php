@@ -7,6 +7,7 @@ use App\Helpers\ProductHelper;
 use App\Models\Back\Catalog\Product\ProductAction;
 use App\Models\Back\Marketing\Review;
 use App\Models\Back\Settings\Settings;
+use App\Models\Back\Catalog\Product\ProductAttribute;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -412,6 +413,16 @@ class Product extends Model
     public function categories()
     {
         return $this->hasManyThrough(Category::class, CategoryProducts::class, 'product_id', 'id', 'id', 'category_id');
+    }
+
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function attributes()
+    {
+        return $this->hasManyThrough(Attributes::class, ProductAttribute::class, 'product_id', 'id', 'id', 'attribute_id');
     }
 
 

@@ -58,7 +58,6 @@
 
 @section('content')
 
-
     <!-- Page title + breadcrumb-->
     <nav class="mb-4" aria-label="breadcrumb">
         <ol class="breadcrumb flex-lg-nowrap">
@@ -369,35 +368,20 @@
                    <h2 class="h6 mb-3">{{ $prod->name  }}</h2>
                    <div class=" fs-md pb-2 mb-4">
                        {!! $prod->description !!}
-
-
-
                            <ul class="list-unstyled fs-sm pb-2">
-                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Tip rukava:</span><span>Kratki rukavi</span></li>
-                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Kroj:</span><span>Standard Fit</span></li>
-                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Materijal:</span><span>65% Polyester 35% Cotton</span></li>
-                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Spol:</span><span>Muški</span></li>
-                               <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Tekstil:</span><span>Softlock</span></li>
-
+                               @if ($prod->attributes)
+                                 @foreach($prod->attributes as $attribute)
+                                       <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">{{ $attribute->translation->group_title  }}:</span><span>{{ $attribute->translation->title  }}</span></li>
+                                 @endforeach
+                               @endif
                                @if ($prod->brand)
                                    <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Proizvođač:</span> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand->translation->slug]) }}"><span>{{ $prod->brand->title}} </span></a></li>
                                @endif
-
-
                            </ul>
-
-
                    </div>
-
-
-
                </div>
                <div class="col-lg-5 col-sm-5 ">
-
-
-
                    @if ($prod->translation->sastojci or $prod->translation->podaci)
-
                       <h3 class="h6">{{ __('front/ricekakis.dodatne_informacije') }}</h3>
 
                    <!-- Light table with striped rows -->

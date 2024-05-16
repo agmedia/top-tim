@@ -20,6 +20,7 @@
         </tr>
         </thead>
         <tbody>
+
         @foreach ($items as $key => $item)
             <tr>
                 <input type="hidden" name="item[{{ $key }}][id]" wire:model="items.{{ $key }}.id">
@@ -49,17 +50,7 @@
 
 @push('js_after')
     <script>
-        document.addEventListener('livewire:load', function () {
-            /*$('#countries-select').select2({
-                placeholder: "{{ __('back/app.geozone.select_country') }}"
-            });
 
-            $('#countries-select').on('change', function (e) {
-                var data = $('#countries-select').select2("val");
-                console.log(data);
-                @this.stateSelected(data);
-            });*/
-        });
 
         Livewire.on('success_alert', () => {
 

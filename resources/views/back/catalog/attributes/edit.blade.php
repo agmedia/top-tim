@@ -101,30 +101,4 @@
 
 @endsection
 
-@push('js_after')
-    <script src="{{ asset('js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
 
-
-    <script>
-        $(() => {
-
-            {!! ag_lang() !!}.forEach(function(item) {
-                ClassicEditor
-                    .create(document.querySelector('#description-editor-' + item.code ))
-
-                    .then(editor => {
-                        console.log(editor);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-
-            });
-
-
-
-        })
-    </script>
-
-
-@endpush
