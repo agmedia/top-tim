@@ -309,7 +309,7 @@
 
 
                                                             <tr>
-                                                                <td colspan="5">
+                                                                <td colspan="6">
                                                                     <table class="table table-bordered   table-plain mb-0">
 
 
@@ -317,6 +317,7 @@
                                                                             <th class="font-size-sm" style="width:25%">Vrijednost</th>
                                                                             <th class="font-size-sm">Šifra</th>
                                                                             <th class="font-size-sm">Količina</th>
+                                                                            <th class="font-size-sm">+/-</th>
                                                                             <th class="font-size-sm">Cijena</th>
                                                                             <th class="text-right font-size-sm"  class="text-center">Uredi</th>
                                                                         </tr>
@@ -338,6 +339,14 @@
                                                                             <td>
                                                                                 <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" > </span>
                                                                             </td>
+
+                                                                            <td class="font-size-sm">
+                                                                                <select class="js-select2 form-control form-control-sm form-select-solid" id="select"  name="options" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                                                    <option value="+">+</option>
+                                                                                    <option value="-">-</option>
+                                                                                </select>
+                                                                            </td>
+
                                                                             <td>
                                                                                 <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" ></span>
                                                                             </td>
@@ -361,6 +370,12 @@
                                                                             <td>
                                                                                 <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" > </span>
                                                                             </td>
+                                                                            <td class="font-size-sm">
+                                                                                <select class="js-select2 form-control form-control-sm form-select-solid" id="select"  name="options" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                                                    <option value="+">+</option>
+                                                                                    <option value="-">-</option>
+                                                                                </select>
+                                                                            </td>
                                                                             <td>
                                                                                 <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" ></span>
                                                                             </td>
@@ -382,112 +397,7 @@
                                                         </tbody>
                                                     </table>
 
-                                                <table class="table table-striped table-bordered  table-vcenter">
-                                                    <thead class="thead-light">
-                                                    <tr>
-                                                        <th colspan="3" class="font-size-sm" style="width:25%">Vrijednost</th>
 
-                                                        <th class="text-right font-size-sm">Dodaj podopciju</th>
-                                                        <th class="text-right font-size-sm" style="width:10%" class="text-center">Uredi</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                    <tr>
-                                                        <td colspan="3" class="font-size-sm">
-                                                            <select class="js-select2 form-control form-control-sm form-select-solid" id="select"  name="options" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                                <option></option>
-
-                                                                <option value="5">Zelena</option>
-
-                                                            </select>
-                                                        </td>
-
-                                                        <td class="text-right font-size-sm">
-                                                            <span >    <a href="#"  class="btn btn-success btn-sm"><i class="far fa-fw fa-plus-square"></i> Dodaj vezanu opciju</a></span>
-                                                        </td>
-                                                        <td class="text-right font-size-sm">
-                                                            <a href="#"  class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
-                                                        </td>
-
-
-
-                                                    </tr>
-
-
-                                                    <tr>
-                                                        <td colspan="5">
-                                                            <table class="table table-bordered   table-plain mb-0">
-
-
-                                                                <tr class="thead-gray">
-                                                                    <th class="font-size-sm" style="width:25%">Vrijednost</th>
-                                                                    <th class="font-size-sm">Šifra</th>
-                                                                    <th class="font-size-sm">Količina</th>
-                                                                    <th class="font-size-sm">Cijena</th>
-                                                                    <th class="text-right font-size-sm"  class="text-center">Uredi</th>
-                                                                </tr>
-
-
-
-                                                                <tr>
-                                                                    <td class="font-size-sm">
-                                                                        <select class="js-select2 form-control form-control-sm form-select-solid" id="select"  name="options" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                                            <option></option>
-
-                                                                            <option value="5">XL</option>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="font-size-sm"> <input type="text" class="form-control form-control-sm"  name="options"> </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" > </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" ></span>
-                                                                    </td>
-                                                                    <td class="text-right font-size-sm">
-                                                                        <a href="#"  class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="font-size-sm">
-                                                                        <select class="js-select2 form-control form-control-sm form-select-solid" id="select"  name="options" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                                            <option></option>
-
-                                                                            <option value="5">Boja</option>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="font-size-sm"> <input type="text" class="form-control form-control-sm"  name="options"> </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" > </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" ></span>
-                                                                    </td>
-                                                                    <td class="text-right font-size-sm">
-                                                                        <a href="#"  class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
-                                                                    </td>
-                                                                </tr>
-
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-
-
-
-
-
-
-
-                                                    </tbody>
-                                                </table>
 
 
                                             </div>
