@@ -16,7 +16,7 @@
                 <th class="font-size-sm" style="width:10%">Color</th>
             @endif
             <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
-            <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.uredi') }}</th>
+            <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.obrisi') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -38,7 +38,7 @@
                     <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>
                 </td>
                 <td class="text-right font-size-sm">
-                    <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
+                    <button type="button" class="btn btn-sm btn-alt-success d-none"><i class="fa fa-save"></i></button>
 
                     <a href="javascript:void();" wire:click="deleteItem({{ $key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
                 </td>

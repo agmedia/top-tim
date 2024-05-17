@@ -54,11 +54,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mb-4">
+                            <div class="form-group mb-4 d-none">
                                 <label for="title-input">{{ __('back/attribute.tip') }}</label>
                                 <select class="js-select2 form-control form-control" id="tip" name="type" style="width: 100%;" data-placeholder="Odaberite tip atributa...">
                                     <option></option>
-                                    <option value="text" {{ (isset($attributes) and $attributes->type == 'text') ? 'selected' : '' }}>Tekstualni unos (input text)</option>
+                                   {{-- <option value="text" {{ (isset($attributes) and $attributes->type == 'text') ? 'selected' : '' }}>Tekstualni unos (input text)</option> --}}
+                                    <option value="text" selected>Tekstualni unos (input text)</option>
+
                                 </select>
 
                             </div>
