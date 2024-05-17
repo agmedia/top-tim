@@ -259,7 +259,7 @@
                                     <div class="col-md-12">
 
                                         <div id="addition">
-                                            @livewire('back.catalog.product-options-selection', ['values' => isset($product) ? $product->options()->get()->toArray() : []])
+                                            @livewire('back.catalog.product-options-selection', ['product' => isset($product) ? $product : null])
                                         </div>
 
                                     </div>

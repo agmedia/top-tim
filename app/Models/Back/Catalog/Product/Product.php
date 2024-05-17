@@ -141,6 +141,15 @@ class Product extends Model
     /**
      * @return Relation
      */
+    public function options()
+    {
+        return $this->hasMany(ProductOption::class, 'product_id');
+    }
+
+
+    /**
+     * @return Relation
+     */
     public function all_actions()
     {
         return $this->hasOne(ProductAction::class, 'product_id');
@@ -253,7 +262,8 @@ class Product extends Model
         return [
             'categories'     => (new Category())->getList(false),
             'attributes'     => (new Attributes())->getList(),
-            'brands' => '',
+            'options'        => [],//ProductOption::getExistingOptions($this),
+            'brands'         => '',
             'images'         => ProductImage::getExistingImages($this),
             'taxes'          => Settings::get('tax', 'list')
         ];

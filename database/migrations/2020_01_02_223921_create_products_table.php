@@ -71,7 +71,6 @@ class CreateProductsTable extends Migration
                   ->references('id')->on('products');
         });
 
-
         Schema::create('product_images_translations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_image_id')->index();
@@ -136,6 +135,24 @@ class CreateProductsTable extends Migration
 
             $table->foreign('attribute_id')
                   ->references('id')->on('attributes');
+        });
+
+        Schema::create('product_option', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('product_id')->index();
+            $table->unsignedBigInteger('option_id')->index();
+            $table->string('sku', 14)->default(0)->index();
+            $table->integer('quantity')->unsigned()->default(0);
+            $table->decimal('price', 15, 4)->default(0);
+            $table->text('data')->nullable();
+            $table->boolean('status')->default(true);
+            $table->timestamps();
+
+            $table->foreign('product_id')
+                  ->references('id')->on('products');
+
+            $table->foreign('option_id')
+                  ->references('id')->on('options');
         });
     }
 
