@@ -9,6 +9,18 @@
                 <a class="btn btn-hero-success my-2" href="{{ route('options.create') }}">
                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/option.dodaj_novi') }}</span>
                 </a>
+
+                <div class="dropdown dropleft push">
+                    <button type="button" class="btn btn-hero-success my-2 dropdown-toggle" style="margin-bottom: 0;" id="dropdown-dropleft-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ __('back/option.dodaj_novi') }}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdown-dropleft-dark" style="">
+                        <a class="dropdown-item" href="{{ route('options.create', ['type' => 'color']) }}">Boja</a>
+                        <a class="dropdown-item" href="{{ route('options.create', ['type' => 'size']) }}">Veličina</a>
+<!--                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:void(0)">Something else here</a>-->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
