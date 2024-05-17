@@ -257,133 +257,23 @@
                             <div class="block-content">
                                 <div class="row justify-content-center push">
                                     <div class="col-md-12">
-                                        <div class="block-header p-0 mb-2">
-                                            <h3 class="block-title">Boja</h3>
-                                            <a class="btn btn-success btn-sm" href="">
-                                                <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dodaj vrijednost</span>
-                                            </a>
+
+                                        <div id="addition">
+                                            @livewire('back.catalog.product-options-selection', ['values' => isset($product) ? $product->options()->get()->toArray() : []])
                                         </div>
-
-
-                                        <table class="table table-striped table-borderless table-vcenter">
-                                            <thead class="thead-light">
-                                            <tr>
-                                                <th class="font-size-sm" style="width:25%">Vrijednost</th>
-                                                <th class="font-size-sm">Šifra</th>
-                                                <th class="font-size-sm">Količina</th>
-                                                <th class="font-size-sm">Cijena</th>
-                                                <th class="text-right font-size-sm"  class="text-center">Uredi</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            <tr>
-                                                <td>
-                                                                <span class="font-size-sm">
-
-                                                                    <select class="js-select2 form-control form-control-sm form-select-solid" id="color" name="color" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                                        <option></option>
-                                                                        <option value="1" selected>Zelena</option>
-                                                                        <option value="2">Plava</option>
-                                                                        <option value="3">Crvena</option>
-                                                                    </select>
-                                                                    </span>
-
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
-                                                </td>
-                                                <td class="text-right font-size-sm">
-                                                    <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-                                                    <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                                <span class="font-size-sm">
-
-                                                                     <select class="js-select2 form-control form-control-sm" id="color2" name="color2" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                                        <option></option>
-                                                                        <option value="1" selected>Zelena</option>
-                                                                        <option value="2">Plava</option>
-                                                                        <option value="3">Crvena</option>
-                                                                    </select>
-                                                                    </span>
-
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
-                                                </td>
-                                                <td class="text-right font-size-sm">
-                                                    <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-                                                    <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                                <span class="font-size-sm">
-                                                                <select class="js-select2 form-control form-control-sm" id="color1" name="color1" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                                    <option></option>
-                                                                    <option value="1" selected>Zelena</option>
-                                                                    <option value="2">Plava</option>
-                                                                    <option value="3">Crvena</option>
-                                                                </select>
-                                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="8536" name="sku"> </span>
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" value="56" name="qty"> </span>
-                                                </td>
-                                                <td>
-                                                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" value="5,00" name="price"></span>
-                                                </td>
-                                                <td class="text-right font-size-sm">
-                                                    <button type="button" class="btn btn-sm btn-alt-success"><i class="fa fa-save"></i></button>
-                                                    <button onclick="event.preventDefault();" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></button>
-                                                </td>
-                                            </tr>
-
-
-
-
-
-                                            </tbody>
-                                        </table>
-
-
-
 
                                     </div>
                                 </div>
                             </div>
-                            <div class="block-content ">
+<!--                            <div class="block-content ">
                                 <div class="row justify-content-center push">
                                     <div class="col-md-12">
                                         <button type="button" data-toggle="modal" data-target="#addoption" class="btn btn-success btn-sm">
                                             <i class="far fa-fw fa-plus-square"></i> Dodaju novu opciju
                                         </button>
-
-
-
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <div class="tab-pane" id="slike" role="tabpanel">
