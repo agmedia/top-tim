@@ -4565,8 +4565,10 @@ var render = function render() {
       return _c("span", [Math.floor(product.stars) - item >= 0 ? _c("i", {
         staticClass: "star-rating-icon ci-star-filled active"
       }) : product.stars > 0 ? _c("i", {
+        staticClass: "star-rating-icon ci-star-half active"
+      }) : _c("i", {
         staticClass: "star-rating-icon ci-star"
-      }) : _vm._e()]);
+      })]);
     }), 0) : _vm._e()]), _vm._v(" "), product.quantity > 0 ? _c("div", {
       staticClass: "product-floating-btn"
     }, [_c("button", {

@@ -428,13 +428,13 @@
                        @for ($i = 0; $i < 5; $i++)
                            @if (floor($reviews->avg('stars')) - $i >= 1)
                                {{--Full Start--}}
-                               <i class="ci-star-filled fs-sm text-accent me-1"></i>
+                               <i class="star-rating-icon ci-star-filled active"></i>
                            @elseif ($reviews->avg('stars') - $i > 0)
                                {{--Half Start--}}
-                               <i class="ci-star fs-sm text-muted me-1"></i>
+                               <i class="star-rating-icon ci-star-half active"></i>
                            @else
                                {{--Empty Start--}}
-                               <i class="ci-star fs-sm text-muted me-1"></i>
+                               <i class="star-rating-icon ci-star"></i>
                            @endif
                        @endfor
 

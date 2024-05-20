@@ -28,7 +28,7 @@
                             <i class="star-rating-icon ci-star-filled active"></i>
                         @elseif ($product->reviews->avg('stars') - $i > 0)
                             {{--Half Start--}}
-                            <i class="star-rating-icon ci-star"></i>
+                            <i class="star-rating-icon ci-star-half active"></i>
                         @else
                             {{--Empty Start--}}
                             <i class="star-rating-icon ci-star"></i>
@@ -37,7 +37,7 @@
                 </div>
             @endif
 
-            
+
         </div>
         <div class="product-floating-btn">
             <add-to-cart-btn-simple id="{{ $product->id }}" available="{{ $product->quantity }}"></add-to-cart-btn-simple>
