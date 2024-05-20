@@ -4564,7 +4564,7 @@ var render = function render() {
     }, _vm._l(5, function (item) {
       return _c("span", [Math.floor(product.stars) - item >= 0 ? _c("i", {
         staticClass: "star-rating-icon ci-star-filled active"
-      }) : product.stars > 0 ? _c("i", {
+      }) : product.stars - item > -1 ? _c("i", {
         staticClass: "star-rating-icon ci-star-half active"
       }) : _c("i", {
         staticClass: "star-rating-icon ci-star"

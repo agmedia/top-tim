@@ -304,7 +304,10 @@
                         <div class="star-rating" v-if="product.stars">
                             <span v-for="item in 5 ">
                                 <i  v-if="Math.floor(product.stars) - item >= 0" class="star-rating-icon ci-star-filled active"></i>
-                                <i v-else-if="product.stars  > 0 " class="star-rating-icon ci-star-half active"></i>
+
+                                <i v-else-if="product.stars - item > -1 " class="star-rating-icon ci-star-half active"></i>
+
+
 
                                <i v-else class="star-rating-icon ci-star"></i>
                             </span>
