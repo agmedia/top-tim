@@ -300,6 +300,16 @@
                         <div class="product-price">
                             <span class="text-dark fs-md" v-if="!product.special">{{ product.main_price_text }} <small v-if="product.secondary_price_text ">{{ product.secondary_price_text }} </small></span>
                         </div>
+
+                        <div class="star-rating" v-if="product.stars">
+                            <span v-for="item in 5 ">
+                                <i  v-if="Math.floor(product.stars) - item >= 0" class="star-rating-icon ci-star-filled active"></i>
+                                <i v-else-if="product.stars  > 0 " class="star-rating-icon ci-star"></i>
+                            </span>
+
+                        </div>
+
+
                     </div>
                     <div class="product-floating-btn" v-if="product.quantity > 0">
                         <button class="btn btn-primary btn-shadow btn-sm" :disabled="product.disabled" v-on:click="add(product.id, product.quantity)" type="button">+<i class="ci-cart fs-base ms-1"></i></button>

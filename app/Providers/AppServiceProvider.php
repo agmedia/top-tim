@@ -32,7 +32,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if ( ! session()->has('locale')) {
+            session(['locale' => config('app.locale')]);
+        }
+
 
         /*  $uvjeti_kupnje = Page::where('subgroup', 'Uvjeti kupnje')->get();
           View::share('uvjeti_kupnje', $uvjeti_kupnje);
