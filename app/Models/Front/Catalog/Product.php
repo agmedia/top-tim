@@ -49,6 +49,7 @@ class Product extends Model
         'secondary_price_text',
         'secondary_special',
         'secondary_special_text',
+        'stars'
     ];
 
     /**
@@ -272,6 +273,17 @@ class Product extends Model
     public function getThumbAttribute($value)
     {
         return str_replace('.webp', '-thumb.webp', $this->image);
+    }
+
+
+    /**
+     * @param $value
+     *
+     * @return array|string|string[]
+     */
+    public function getStarsAttribute($value)
+    {
+        return $this->reviews()->avg('stars');
     }
 
 
