@@ -17,7 +17,7 @@ create table options_translations
 (
     id           bigint auto_increment
         primary key,
-    attribute_id bigint unsigned         not null,
+    option_id    bigint unsigned         not null,
     lang         varchar(2) default 'en' not null,
     group_title  varchar(191)            not null,
     title        varchar(191)            not null,

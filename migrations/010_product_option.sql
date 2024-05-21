@@ -5,6 +5,8 @@ create table product_option
     product_id bigint unsigned not null,
     option_id  bigint unsigned not null,
     sku        varchar(191)   not null,
+    parent     varchar(191)   not null,
+    parent_id  bigint unsigned not null,
     quantity   int unsigned default 0 not null,
     price      decimal(15, 4) not null,
     `data`     text null,

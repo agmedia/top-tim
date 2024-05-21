@@ -142,6 +142,8 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('option_id')->index();
             $table->string('sku', 14)->default(0)->index();
+            $table->string('parent')->default(null);
+            $table->unsignedBigInteger('parent_id')->index();
             $table->integer('quantity')->unsigned()->default(0);
             $table->decimal('price', 15, 4)->default(0);
             $table->text('data')->nullable();
