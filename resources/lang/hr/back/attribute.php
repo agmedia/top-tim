@@ -26,7 +26,9 @@ return [
     'vrijednosti_atributa'  => 'Vrijednosti atributa',
     'dodaj_vrijednost' => 'Dodaj vrijednost',
     'sort' => 'Redosljed',
-    'tip' => 'Tip atributa'
+    'tip' => 'Tip atributa',
+    'opcija_color' => 'Boja',
+    'opcija_size' => 'Veličina'
 
 
 ];

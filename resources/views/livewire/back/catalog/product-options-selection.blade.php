@@ -5,13 +5,14 @@
                 <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Jedna Opcija</span>
             </a>
             <a class="btn btn-success btn-sm" href="javascript:void(0);" wire:click="selectType(2)">
-                <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dve Opcije</span>
+                <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dvije Opcije</span>
             </a>
         </div>
     @elseif($step == 'select')
         <div class="row">
+            <div class="col-lg-4 col-12">
             <label for="first-option">Prva Opcija</label>
-            <select class="js-select2 form-control form-control-sm form-select-solid" wire:model="select_first_option" style="width: 100%;" data-placeholder="Odaberite opciju">
+            <select class="js-select2 form-control  form-select-solid" wire:model="select_first_option" style="width: 100%;" data-placeholder="Odaberite opciju">
                 <option></option>
                 @foreach ($select_options as $option)
                     <option value="{{ $option['id'] }}">{{ $option['title'] }}</option>
@@ -20,19 +21,19 @@
 
             @if ($type == 2)
                 <label for="second-option">Druga Opcija</label>
-                <select class="js-select2 form-control form-control-sm form-select-solid" wire:model="select_second_option" style="width: 100%;" data-placeholder="Odaberite opciju">
+                <select class="js-select2 form-control  form-select-solid" wire:model="select_second_option" style="width: 100%;" data-placeholder="Odaberite opciju">
                     <option></option>
                     @foreach ($select_options as $option)
                         <option value="{{ $option['id'] }}">{{ $option['title'] }}</option>
                     @endforeach
                 </select>
             @endif
-
+            </div>
         </div>
     @elseif($step == 'one')
         @foreach ($items as $group => $item)
             <div class="block-header p-0 mb-2" wire:ignore>
-                <h3 class="block-title">{{ $group }}</h3>
+                <h3 class="block-title">{{ __('back/attribute.opcija_'.$group) }} </h3>
                 <a class="btn btn-success btn-sm" href="javascript:void(0);" wire:click="addItem('{{ $group }}')">
                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/attribute.dodaj_vrijednost') }}</span>
                 </a>
@@ -44,8 +45,8 @@
                     <th class="font-size-sm" style="width:25%">Vrijednost</th>
                     <th class="font-size-sm">Šifra</th>
                     <th class="font-size-sm">Količina</th>
-                    <th class="font-size-sm">Cijena</th>
-                    <th class="text-right font-size-sm"  class="text-center">Uredi</th>
+                    <th class="font-size-sm">+/- Cijena</th>
+                    <th class="text-right font-size-sm"  class="text-center">{{ __('back/attribute.obrisi') }}</th>
                 </tr>
                 </thead>
                 <tbody>

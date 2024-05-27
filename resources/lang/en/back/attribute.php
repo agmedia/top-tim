@@ -26,6 +26,8 @@ return [
     'vrijednosti_atributa'  => 'Attribute values',
     'dodaj_vrijednost' => 'Add value',
     'sort' => 'Sort',
-    'tip' => 'Attribute type'
+    'tip' => 'Attribute type',
+    'opcija_color' => 'Boja',
+    'opcija_size' => 'Veličina'
 
 ];
