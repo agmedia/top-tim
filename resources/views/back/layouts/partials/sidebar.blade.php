@@ -15,7 +15,7 @@
     <div class="bg-header-light-blue">
         <div class="content-header bg-white-10">
             <!-- Logo -->
-            <a class="font-w600 text-white text-center tracking-wide" href="/">
+            <a class="font-w600 text-white text-center tracking-wide" href="{{ route('dashboard') }}">
                             <span class="smini-visible">
                                 B<span class="opacity-75">x</span>
                             </span>

@@ -105,6 +105,15 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
         return $this->translation->description;
     }
 
+    /**
+     * @return string
+     */
+    public function getSlugAttribute()
+    {
+        return $this->translation->slug;
+    }
+
+
 
     /**
      * @return string
