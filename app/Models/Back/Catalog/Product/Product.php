@@ -7,6 +7,7 @@ use App\Helpers\ProductHelper;
 use App\Models\Back\Catalog\Attributes\Attributes;
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
+use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Publisher;
 use App\Models\Back\Settings\Settings;
 use Carbon\Carbon;
@@ -243,6 +244,7 @@ class Product extends Model
         $updated = $this->update($this->createModelArray('update'));
 
         if ($updated) {
+            $this->resolveOptions();
             $this->resolveCategories($this->id);
             $this->resolveAttributes($this->id);
             ProductTranslation::edit($this->id, $this->request);
@@ -443,36 +445,64 @@ class Product extends Model
 
 
     /**
-     * @param int $product_id
+     * @param int|null $product_id
      *
-     * @return bool
+     * @return Product
      */
-    private function resolveCategories(int $product_id): bool
+    private function resolveCategories(int $product_id = null): Product
     {
-        if ( ! empty($this->request->category) && is_array($this->request->category)) {
-            ProductCategory::storeData($this->request->category, $product_id);
-
-            return true;
+        if ( ! empty($this->request->input('category')) && is_array($this->request->input('category'))) {
+            ProductCategory::storeData($this->request->input('category'), $product_id ?: $this->id);
         }
 
-        return false;
+        return $this;
     }
 
 
     /**
-     * @param int $product_id
+     * @param int|null $product_id
      *
-     * @return bool
+     * @return Product
      */
-    private function resolveAttributes(int $product_id): bool
+    private function resolveAttributes(int $product_id = null): Product
     {
         if ( ! empty($this->request->input('attributes')) && is_array($this->request->input('attributes'))) {
-            ProductAttribute::storeData($this->request->input('attributes'), $product_id);
-
-            return true;
+            ProductAttribute::storeData($this->request->input('attributes'), $product_id ?: $this->id);
         }
 
-        return false;
+        return $this;
+    }
+
+
+    /**
+     * @param int|null $product_id
+     *
+     * @return Product
+     */
+    private function resolveOptions(int $product_id = null): Product
+    {
+        if ( ! empty($this->request->input('options')) && is_array($this->request->input('options'))) {
+            $product_id = $product_id ?: $this->id;
+            $inputs = $this->request->input('options');
+            $groups = Options::query()->get()->unique('type')->pluck('type');
+
+            foreach ($groups as $group) {
+                $group = Str::slug($group);
+                
+                // single options
+                if (isset($inputs[$group][0]['value'])) {
+                    ProductOption::storeSingle($inputs[$group], $product_id);
+                }
+
+                // double (referenced) options
+                if (isset($inputs[$group][0]['main_id'])) {
+                    ProductOption::storeDouble($inputs[$group], $product_id);
+                }
+            }
+
+        }
+
+        return $this;
     }
 
 

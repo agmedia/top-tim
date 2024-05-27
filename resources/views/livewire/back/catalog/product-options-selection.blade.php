@@ -96,7 +96,7 @@
                 @foreach ($item['options'] as $key => $option)
                     <tr>
                         <td class="font-size-sm">
-                            <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}" wire:model="items.{{ $group }}.options.{{ $key }}.value" name="options[{{ $group }}][{{ $key }}][value]" style="width: 100%;" data-placeholder="Odaberite opciju">
+                            <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}" wire:model="items.{{ $group }}.options.{{ $key }}.value" name="options[{{ $group }}][{{ $key }}][main_id]" style="width: 100%;" data-placeholder="Odaberite opciju">
                                 <option></option>
                                 @foreach ($item['selections'] as $selection)
                                     <option value="{{ $selection['id'] }}">{{ $selection['title'] }}</option>
@@ -125,7 +125,7 @@
                                 @foreach ($item['options'][$key]['sub_options'] as $sub_key => $sub_option)
                                     <tr>
                                         <td class="font-size-sm">
-                                            <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}-{{ $sub_key }}" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.value" name="options[{{ $group }}][{{ $key }}][{{ $sub_key }}][value]" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                            <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}-{{ $sub_key }}" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.value" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][id]" style="width: 100%;" data-placeholder="Odaberite opciju">
                                                 <option></option>
                                                 @foreach ($item['sub_selections'] as $sub_selection)
                                                     <option value="{{ $sub_selection['id'] }}">{{ $sub_selection['title'] }}</option>
@@ -133,13 +133,13 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.sku" name="options[{{ $group }}][{{ $key }}][{{ $sub_key }}][sku]"> </span>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.sku" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][sku]"> </span>
                                         </td>
                                         <td>
-                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.qty" name="options[{{ $group }}][{{ $key }}][{{ $sub_key }}][qty]"> </span>
+                                            <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.qty" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][qty]"> </span>
                                         </td>
                                         <td>
-                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.price" name="options[{{ $group }}][{{ $key }}][{{ $sub_key }}][price]"></span>
+                                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.price" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][price]"></span>
                                         </td>
                                         <td class="text-right font-size-sm">
                                             <a href="javascript:void();" wire:click="deleteItem('{{ $group }}',{{ $key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>

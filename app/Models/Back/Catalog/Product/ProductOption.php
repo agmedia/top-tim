@@ -2,6 +2,7 @@
 
 namespace App\Models\Back\Catalog\Product;
 
+use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductImageTranslation;
 use Carbon\Carbon;
@@ -75,19 +76,88 @@ class ProductOption extends Model
     }
 
 
+    public function option()
+    {
+        return $this->hasOne(Options::class, 'id', 'option_id');
+    }
+
+
     /**
      * @return string
      */
     public function getTitleAttribute()
     {
         //dd($this->translation()->toArray());
-        return (isset($this->translation()->title) && $this->translation()->title) ? $this->translation()->title : '';
+        return $this->option()->first() ?: '';
     }
 
     /*******************************************************************************
      *                                Copyright : AGmedia                           *
      *                              email: filip@agmedia.hr                         *
      *******************************************************************************/
+
+    public static function storeSingle(array $options, int $product_id): array
+    {
+        $created = [];
+        self::query()->where('product_id', $product_id)->delete();
+        $product = Product::query()->find($product_id);
+
+        foreach ($options as $option) {
+            $opt = Options::query()->find(intval($option['value']) ?? 0);
+
+            if ($opt) {
+                $created[] = self::insert([
+                    'product_id'  => $product_id,
+                    'option_id' => $opt->id,
+                    'sku' => $option['sku'] ?? $product->sku,
+                    'parent' => 'single',
+                    'parent_id' => 0,
+                    'quantity' => $option['qty'] ?? 0,
+                    'price' => str_replace(',', '.', $option['price']) ?? 0,
+                    'data' => '[]',
+                    'status' => 1,
+                ]);
+            }
+        }
+
+        return $created;
+    }
+
+
+    public static function storeDouble(array $options, int $product_id): array
+    {
+        $created = [];
+        self::query()->where('product_id', $product_id)->delete();
+        $product = Product::query()->find($product_id);
+
+        foreach ($options as $option) {
+            $opt = Options::query()->find(intval($option['main_id']) ?? 0);
+
+            if ($opt && ! empty($option['sub_options'])) {
+                foreach ($option['sub_options'] as $sub_option) {
+                    $sub_opt = Options::query()->find(intval($sub_option['id']) ?? 0);
+
+                    if ($sub_opt) {
+                        $created[] = self::insert([
+                            'product_id'  => $product_id,
+                            'option_id' => $sub_opt->id,
+                            'sku' => $sub_option['sku'] ?? $product->sku,
+                            'parent' => 'option',
+                            'parent_id' => $opt->id,
+                            'quantity' => $sub_option['qty'] ?? 0,
+                            'price' => $sub_option['price'] ?? 0,
+                            'data' => '[]',
+                            'status' => 1,
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return $created;
+    }
+
+
 
     /**
      * @param Apartment|null $apartment

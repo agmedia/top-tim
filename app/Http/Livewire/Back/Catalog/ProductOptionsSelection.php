@@ -38,11 +38,11 @@ class ProductOptionsSelection extends Component
 
     public function mount()
     {
-        //dd($this->product);
+        //dd($this->product->options()->count());
 
         $this->setDefaultOptions();
 
-        if ($this->product) {
+        if ($this->product->options()->count()) {
             $this->setPredefinedIOptions();
         }
 
@@ -129,26 +129,59 @@ class ProductOptionsSelection extends Component
 
     private function setPredefinedIOptions()
     {
-        /*$values = $this->product->options()->get();
+        $values = $this->product->options()->get();
 
-        foreach ($values as $value) {
-            $titles = [];
+        //dd($values->toArray());
 
-            foreach (ag_lang() as $lang) {
-                $titles[$lang->code] = $value->translation($lang->code)->title;
+        if ($values->count()) {
+            $key = $values->first()->title->type;
+            //
+            if ($values->first()->parent == 'single') {
+                if ( ! isset($this->items[$key]['options'])) {
+                    $this->items[$key]['options'] = [];
+                }
+
+                if ( ! isset($this->items[$key]['selections'])) {
+                    $this->items[$key]['selections'] = [];
+                }
+
+                $this->first_option = $values->first()->option_id;
+                $this->type = 1;
+                $this->setDefaultOptions();
+                $this->step = 'one';
+
+                //
+                foreach ($values as $value) {
+                    $titles = [];
+
+                    foreach (ag_lang() as $lang) {
+                        $titles[$lang->code] = $value->title->translation($lang->code)->title;
+                    }
+
+
+                    $item = [
+                        'id' => $value->id,
+                        'value' => $value->option_id,
+                        'sku' => $value->sku,
+                        'qty' => $value->quantity,
+                        'price' => $value->price,
+                        'sub_options' => []
+                    ];
+
+
+
+                    $this->addItem($key, $item);
+                }
             }
+        }
 
-            array_push($this->items, [
-                'id' => $value->id,
-                'value' => $value->value,
-                'sku' => $value->sku,
-                'quantity' => $value->quantity,
-                'price' => $value->price
-            ]);
-        }*/
+        //dd($this->items);
     }
 
 
+    /**
+     * @return void
+     */
     private function setDefaultOptions()
     {
         $options = Options::query();
@@ -187,20 +220,6 @@ class ProductOptionsSelection extends Component
                 }
             }
         }
-
-
-        /*foreach ($options as $option) {
-            $this->items[$option->type]['options'] = [];
-            $this->items[$option->type]['selections'][] = [
-                'id' => $option->id,
-                'title' => $option->translation->title
-            ];
-
-            $this->select_options[$option->type] = [
-                'id' => $option->id,
-                'title' => $option->group
-            ];
-        }*/
-
+        // end else
     }
 }
