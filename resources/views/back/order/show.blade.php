@@ -144,7 +144,7 @@
                         <tr>
                             <td class="font-size-base d-none d-xl-block">
                                 @if ($record->status)
-                                    <span class="badge badge-pill badge-{{ $record->status->color }}">{{ $record->status->title }}</span>
+                                    <span class="badge badge-pill badge-{{ $record->status->color }}">{{ $record->status->title->{ current_locale() } }}</span>
                                 @else
                                     <small>{{ __('back/orders.komentar') }}</small>
                                 @endif
