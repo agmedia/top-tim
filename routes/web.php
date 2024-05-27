@@ -74,7 +74,7 @@ Route::group(
         Route::get('slugs', [DashboardController::class, 'slugs'])->name('slugs.revision');
         Route::get('statuses', [DashboardController::class, 'statuses'])->name('statuses.cron');
         Route::get('duplicate/{target?}', [DashboardController::class, 'duplicate'])->name('duplicate.revision');
-        Route::get('set/category-group', [DashboardController::class, 'setCategoryGroup'])->name('set.group');
+        Route::get('set/category-group', [DashboardController::class, 'setProductsURL'])->name('set.url');
         Route::get('set/pdv/products', [DashboardController::class, 'setPdvProducts'])->name('set.pdv.products');
         Route::get('set/unlimited-qty', [DashboardController::class, 'setProductsUnlimitedQty'])->name('set.unlimited');
 
@@ -427,7 +427,7 @@ Route::group(
      */
     Route::redirect('/sitemap.xml', '/sitemap');
     Route::get('sitemap/{sitemap?}', [HomeController::class, 'sitemapXML'])->name('sitemap');
-    Route::get('image-sitemap', [HomeController::class, 'sitemapImageXML'])->name('sitemap');
+    Route::get('image-sitemap', [HomeController::class, 'sitemapImageXML'])->name('sitemap-image');
     /**
      * Forgot password & login routes.
      */

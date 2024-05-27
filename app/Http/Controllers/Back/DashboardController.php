@@ -437,30 +437,26 @@ class DashboardController extends Controller
         return redirect()->route('dashboard');
     }
 
-
     /**
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function setCategoryGroup(Request $request)
+    public function setProductsURL(Request $request)
     {
-        Category::query()->update([
-            'group' => Helper::categoryGroupPath(true)
-        ]);
-
-        $products = Product::query()->where('push', 0)->get();
+        $products = Product::query()->get();
 
         foreach ($products as $product) {
-            $product->update([
-                'url'             => ProductHelper::url($product),
-                'category_string' => ProductHelper::categoryString($product),
-                'push'            => 1
-            ]);
+            foreach (ag_lang() as $lang) {
+                ProductTranslation::query()->where('product_id', $product->id)->where('lang', $lang->code)->update([
+                    'url' => ProductHelper::url($product, null, null, $lang->code)
+                ]);
+            }
         }
 
         return redirect()->route('dashboard');
     }
+
 
 
     /**

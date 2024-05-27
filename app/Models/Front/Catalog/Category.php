@@ -24,7 +24,7 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
     /**
      * @var string[]
      */
-    protected $appends = ['title', 'description', 'webp', 'thumb'];
+    protected $appends = ['title', 'description', 'webp', 'thumb','slug'];
 
     /**
      * @var string

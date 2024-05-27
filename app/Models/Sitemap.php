@@ -5,8 +5,9 @@ namespace App\Models;
 use App\Models\Front\Catalog\Author;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Product;
-use App\Models\Front\Catalog\Publisher;
+use App\Models\Front\Catalog\Brand;
 use App\Models\Front\Page;
+use App\Models\Front\Blog;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -80,13 +81,10 @@ class Sitemap
             return $this->getProducts();
         }
 
-        if ($sitemap == 'authors' || $sitemap == 'authors.xml') {
-            return $this->getAuthors();
+        if ($sitemap == 'brands' || $sitemap == 'brands.xml') {
+            return $this->getBrands();
         }
 
-        if ($sitemap == 'publishers' || $sitemap == 'publishers.xml') {
-            return $this->getPublishers();
-        }
 
         if ($sitemap == 'images' || $sitemap == 'img') {
             return $this->getImages();
@@ -99,11 +97,11 @@ class Sitemap
      */
     private function getImages(): array
     {
-        $products = Product::query()->active()->hasStock()->select('url', 'id', 'image')->with('images');
+        $products = Product::query()->active()->hasStock()->with('images');
 
         foreach ($products->get() as $product) {
             $this->response[$product->id] = [
-                'loc' => url($product->url)
+                'loc' => url($product->translation->url)
             ];
 
             $this->response[$product->id]['images'][] = [
@@ -126,8 +124,8 @@ class Sitemap
      */
     private function getPages()
     {
-        $pages = Page::query()->where('group', 'page')->where('slug', '!=', 'homepage')->where('status', '=', 1)->select('slug', 'status', 'updated_at')->get();
-        $blogs = Page::query()->where('group', 'blog')->where('status', '=', 1)->select('slug', 'status', 'updated_at')->get();
+        $pages = Page::query()->where('group', 'page')->where('status', '=', 1)->get();
+        $blogs = Blog::query()->where('status', '=', 1)->get();
 
         $this->response[] = [
             'url' => route('index'),
@@ -146,14 +144,14 @@ class Sitemap
 
         foreach ($pages as $page) {
             $this->response[] = [
-                'url' => route('catalog.route.page', ['page' => $page->slug]),
+                'url' => route('catalog.route.page', ['page' => $page->translation->slug]),
                 'lastmod' => $page->updated_at->tz('UTC')->toAtomString()
             ];
         }
 
         foreach ($blogs as $blog) {
             $this->response[] = [
-                'url' => route('catalog.route.blog', ['blog' => $blog->slug]),
+                'url' => route('catalog.route.blog', ['blog' => $blog->translation->slug]),
                 'lastmod' => $blog->updated_at->tz('UTC')->toAtomString()
             ];
         }
@@ -167,6 +165,7 @@ class Sitemap
     /**
      * @return array
      */
+
     private function getCategories()
     {
         $categories = Category::query()->active()->topList()->with('subcategories')->get();
@@ -194,11 +193,11 @@ class Sitemap
      */
     private function getProducts()
     {
-        $products = Product::query()->active()->hasStock()->select('url', 'updated_at')->get();
+        $products = Product::query()->active()->hasStock()->get();
 
         foreach ($products as $product) {
             $this->response[] = [
-                'url' => url($product->url),
+                'url' => url($product->translation->url),
                 'lastmod' => $product->updated_at->tz('UTC')->toAtomString()
             ];
         }
@@ -207,68 +206,30 @@ class Sitemap
     }
 
 
+
+
     /**
      * @return array
      */
-    private function getAuthors()
+    private function getBrands()
     {
-        $authors = Author::query()->active()->select('url', 'updated_at')->get();
+        $brands = Brand::query()->active()->get();
 
         $this->response[] = [
-            'url' => route('catalog.route.author'),
+            'url' => route('catalog.route.brand'),
             'lastmod' => Carbon::now()->startOfMonth()->tz('UTC')->toAtomString()
         ];
 
-        foreach ($authors as $author) {
+        foreach ($brands as $brand) {
             $this->response[] = [
-                'url' => url($author->url),
-                'lastmod' => $author->updated_at->tz('UTC')->toAtomString()
+                'url' => url($brand->translation->url),
+                'lastmod' => $brand->updated_at->tz('UTC')->toAtomString()
             ];
 
-            /*$cats = Category::query()->topList()->whereHas('products', function ($query) use ($author) {
-                $query->where('author_id', $author->id);
-            })->with('subcategories')->get();
-
-            if ($cats) {
-                foreach ($cats as $category) {
-                    $this->response[] = [
-                        'url' => route('catalog.route.author', ['author' => $author->slug, 'cat' => $category->slug]),
-                        'lastmod' => $author->updated_at->tz('UTC')->toAtomString()
-                    ];
-
-                    foreach ($category->subcategories()->get() as $subcategory) {
-                        $this->response[] = [
-                            'url' => route('catalog.route.author', ['author' => $author->slug, 'cat' => $category->slug, 'subcat' => $subcategory->slug]),
-                            'lastmod' => $author->updated_at->tz('UTC')->toAtomString()
-                        ];
-                    }
-                }
-            }*/
         }
 
         return $this->response;
     }
 
 
-    /**
-     * @return array
-     */
-    private function getPublishers()
-    {
-        $publishers = Publisher::query()->active()->select('url', 'updated_at')->get();
-
-        $this->response[] = [
-            'url' => route('catalog.route.publisher'),
-            'lastmod' => Carbon::now()->startOfMonth()->tz('UTC')->toAtomString()
-        ];
-
-        foreach ($publishers as $publisher) {
-            $this->response[] = [
-                'url' => url($publisher->url),
-                'lastmod' => $publisher->updated_at->tz('UTC')->toAtomString()
-            ];
-        }
-
-        return $this->response;
-    }
 }
