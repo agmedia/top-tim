@@ -90,7 +90,7 @@
                 <tr>
                     <th  class="font-size-sm" >Vrijednost</th>
                     <th class="text-right font-size-sm">Dodaj podopciju</th>
-                    <th class="text-right font-size-sm" style="width:10%" class="text-center">Uredi</th>
+                    <th class="text-right font-size-sm" style="width:10%" class="text-center">{{ __('back/option.obrisi') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -121,7 +121,7 @@
                                     <th class="font-size-sm">Šifra</th>
                                     <th class="font-size-sm">Količina</th>
                                     <th class="font-size-sm">+/- Cijena</th>
-                                    <th class="text-right font-size-sm"  class="text-center">Uredi</th>
+                                    <th class="text-right font-size-sm"  class="text-center">{{ __('back/option.obrisi') }}</th>
                                 </tr>
                                 @foreach ($item['options'][$key]['sub_options'] as $sub_key => $sub_option)
                                     <tr>
