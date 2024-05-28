@@ -26,6 +26,10 @@ class OptionsAddition extends Component
             $this->sortPredefinedItems();
         }
 
+        if (request()->has('type')) {
+            $this->type = request()->input('type');
+        }
+
         //dd($this->items);
     }
 
@@ -70,7 +74,7 @@ class OptionsAddition extends Component
 
     private function sortPredefinedItems()
     {
-        if ($this->type == 'color') {
+        if ($this->type == 'color' || $this->type == 'size') {
             $values = Options::query()->where('group', Str::slug($this->values->group))->get();
         } else {
             $values = Attributes::query()->where('group', Str::slug($this->values->group))->get();

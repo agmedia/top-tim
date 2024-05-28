@@ -72,7 +72,7 @@
                             {{-- if tip == 2--}}
                             <div class="form-group">
                                 <div id="addition">
-                                    @livewire('back.catalog.options-addition', ['values' => isset($options) ? $options : [], 'type' => 'color'])
+                                    @livewire('back.catalog.options-addition', ['values' => isset($options) ? $options : [], 'type' => isset($options) ? $options->type : 'text'])
                                 </div>
                             </div>
                             {{-- end if--}}
