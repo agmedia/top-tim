@@ -82,7 +82,7 @@
                                         </div>
                                     </div>
                                     <div class="@if ($image['default']) col-md-7 @else col-md-8 @endif pl-4">
-                                        <div class="row mb-2">
+                                        <div class="row mb-3">
                                             <div class="col-md-12">
                                                 <div class="form-group mb-2">
                                                     <label for="title-input" class="w-100">Naziv fotografije
@@ -128,8 +128,20 @@
                                             </div>
                                         </div>
 
+
+
+
                                         <div class="row mb-3">
-                                            <label class="col-sm-9 text-right font-size-sm pt-2" >Redosljed</label>
+                                            <div class="col-sm-6 text-left">
+                                                <select class="js-select2 form-control  form-select-solid" id="select-"  name="image_id[][value]"  data-placeholder="Odaberite opciju">
+                                                    <option value="0"> Pridruži opciju</option>
+                                                    <option value="">Crvena</option>
+                                                    <option value="">Plava</option>
+                                                    <option value="">Zelena</option>
+
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-3 text-right font-size-sm pt-2" >Redosljed</label>
                                             <div class="col-sm-3">
                                                 <input type="text" class="form-control js-tooltip-enabled" name="slim[{{ $image['id'] }}][sort_order]" value="{{ $image['sort_order'] }}" data-toggle="tooltip" data-placement="top" title="Sort Order">
                                             </div>
