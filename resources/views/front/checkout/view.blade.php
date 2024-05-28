@@ -20,39 +20,41 @@
         <h1 class="h2 mb-3 mb-md-0 me-3">{{ __('front/cart.potvrdite_narudzbu') }}</h1>
 
     </section>
-            <div class="row">
 
-                <section class="col-lg-12">
-                    <div class="steps steps-dark pt-2 pb-3 mb-2">
-                        <a class="step-item active" href="{{ route('kosarica') }}">
-                            <div class="step-progress"><span class="step-count">1</span></div>
-                            <div class="step-label"><i class="ci-cart"></i>{{ __('front/cart.kosarica') }}</div>
-                        </a>
-                        <a class="step-item active" href="{{ route('naplata', ['step' => 'podaci']) }}">
-                            <div class="step-progress"><span class="step-count">2</span></div>
-                            <div class="step-label"><i class="ci-user-circle"></i>{{ __('front/cart.podaci') }}</div>
-                        </a>
-                        <a class="step-item active" href="{{ route('naplata', ['step' => 'dostava']) }}">
-                            <div class="step-progress"><span class="step-count">3</span></div>
-                            <div class="step-label"><i class="ci-package"></i>{{ __('front/cart.dostava') }}</div>
-                        </a>
-                        <a class="step-item active" href="{{ route('naplata', ['step' => 'placanje']) }}">
-                            <div class="step-progress"><span class="step-count">4</span></div>
-                            <div class="step-label"><i class="ci-card"></i>{{ __('front/cart.placanje') }}</div>
-                        </a>
-                        <a class="step-item current active" href="{{ route('pregled') }}">
-                            <div class="step-progress"><span class="step-count">5</span></div>
-                            <div class="step-label"><i class="ci-check-circle"></i>{{ __('front/cart.pregledaj') }}</div>
-                        </a>
-                    </div>
-                </section>
-
-            </div>
 
     <div class="pb-5 mb-2 mt-5 mb-md-4">
         <div class="row">
 
             <section class="col-lg-8">
+
+                <div class="row">
+
+                    <section class="col-lg-12">
+                        <div class="steps steps-dark pt-2 pb-3 mb-2">
+                            <a class="step-item active" href="{{ route('kosarica') }}">
+                                <div class="step-progress"><span class="step-count">1</span></div>
+                                <div class="step-label"><i class="ci-cart"></i>{{ __('front/cart.kosarica') }}</div>
+                            </a>
+                            <a class="step-item active" href="{{ route('naplata', ['step' => 'podaci']) }}">
+                                <div class="step-progress"><span class="step-count">2</span></div>
+                                <div class="step-label"><i class="ci-user-circle"></i>{{ __('front/cart.podaci') }}</div>
+                            </a>
+                            <a class="step-item active" href="{{ route('naplata', ['step' => 'dostava']) }}">
+                                <div class="step-progress"><span class="step-count">3</span></div>
+                                <div class="step-label"><i class="ci-package"></i>{{ __('front/cart.dostava') }}</div>
+                            </a>
+                            <a class="step-item active" href="{{ route('naplata', ['step' => 'placanje']) }}">
+                                <div class="step-progress"><span class="step-count">4</span></div>
+                                <div class="step-label"><i class="ci-card"></i>{{ __('front/cart.placanje') }}</div>
+                            </a>
+                            <a class="step-item current active" href="{{ route('pregled') }}">
+                                <div class="step-progress"><span class="step-count">5</span></div>
+                                <div class="step-label"><i class="ci-check-circle"></i>{{ __('front/cart.pregledaj') }}</div>
+                            </a>
+                        </div>
+                    </section>
+
+                </div>
 
                <h2 class="h5 pt-1 pb-3 mb-3">{{ __('front/cart.pregledaj_potvrdi') }} </h2>
                 <div class="rounded-3 p-4 mt-3" style="border: 1px solid rgb(218, 225, 231); background-color: rgb(255, 255, 255) !important;">
