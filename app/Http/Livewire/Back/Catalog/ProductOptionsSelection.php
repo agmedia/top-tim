@@ -79,7 +79,7 @@ class ProductOptionsSelection extends Component
     {
         $this->setDefaultOptions();
 
-        if ($this->product->options()->count()) {
+        if ($this->product && $this->product->options()->count()) {
             $this->setPredefinedIOptions();
         }
     }
