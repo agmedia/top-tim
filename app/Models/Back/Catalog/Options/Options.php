@@ -209,7 +209,7 @@ class Options extends Model
         $values = Options::query()->get();
 
 
-        dd($values);
+
         foreach ($values as $value) {
             $response[$value->group]['group'] = $value->translation->group_title;
             $response[$value->group]['items'][] = [
