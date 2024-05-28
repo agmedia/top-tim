@@ -10,24 +10,60 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
+/**
+ *
+ */
 class ProductOptionsSelection extends Component
 {
 
+    /**
+     * @var array
+     */
     public $values = [];
 
+    /**
+     * @var array
+     */
     public $items = [];
 
+    /**
+     * @var array
+     */
     public $item = [];
 
+    /**
+     * @var array
+     */
     public $select_options = [];
 
+    /**
+     * @var int
+     */
     public $select_first_option = 0;
+
+    /**
+     * @var null
+     */
     public $first_option = null;
+
+    /**
+     * @var int
+     */
     public $select_second_option = 0;
+
+    /**
+     * @var null
+     */
     public $second_option = null;
 
+    /**
+     * @var string
+     */
     public $step = 'start';
 
+    /**
+     * @var int
+     */
     public $type = 0;
 
     /**
@@ -36,20 +72,25 @@ class ProductOptionsSelection extends Component
     public $product = null;
 
 
+    /**
+     * @return void
+     */
     public function mount()
     {
-        //dd($this->product->options()->count());
-
         $this->setDefaultOptions();
 
         if ($this->product->options()->count()) {
             $this->setPredefinedIOptions();
         }
-
-        //dd($this->items);
     }
 
 
+    /**
+     * @param string $key
+     * @param array  $item
+     *
+     * @return void
+     */
     public function addItem(string $key, array $item = [])
     {
         if (empty($item)) {
@@ -60,6 +101,13 @@ class ProductOptionsSelection extends Component
     }
 
 
+    /**
+     * @param string $key
+     * @param string $sub_key
+     * @param array  $item
+     *
+     * @return void
+     */
     public function addSubItem(string $key, string $sub_key, array $item = [])
     {
         if (empty($item)) {
@@ -67,16 +115,33 @@ class ProductOptionsSelection extends Component
         }
 
         array_push($this->items[$key]['options'][$sub_key]['sub_options'], $item);
-        dd($this->items);
     }
 
 
-    public function deleteItem(int $key)
+    /**
+     * @param string   $key
+     * @param int      $opt_key
+     * @param int|null $subopt_key
+     *
+     * @return void
+     */
+    public function deleteItem(string $key, int $opt_key, int $subopt_key = null)
     {
-        unset($this->items[$key]);
+        if ($subopt_key !== null) {
+            unset($this->items[$key]['options'][$opt_key]['sub_options'][$subopt_key]);
+
+            return;
+        }
+
+        unset($this->items[$key]['options'][$opt_key]);
     }
 
 
+    /**
+     * @param int $type
+     *
+     * @return void
+     */
     public function selectType(int $type)
     {
         $this->type = $type;
@@ -87,6 +152,11 @@ class ProductOptionsSelection extends Component
     }
 
 
+    /**
+     * @param $value
+     *
+     * @return void
+     */
     public function updatedSelectFirstOption($value)
     {
         $this->first_option = intval($value);
@@ -98,10 +168,14 @@ class ProductOptionsSelection extends Component
     }
 
 
+    /**
+     * @param $value
+     *
+     * @return void
+     */
     public function updatedSelectSecondOption($value)
     {
         $this->second_option = intval($value);
-        //dd($this->first_option, $this->second_option);
         if ($this->type == 2) {
             $this->setDefaultOptions();
             $this->step = 'two';
@@ -109,12 +183,18 @@ class ProductOptionsSelection extends Component
     }
 
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function render()
     {
         return view('livewire.back.catalog.product-options-selection');
     }
 
 
+    /**
+     * @return array
+     */
     private function getEmptyItem(): array
     {
         return [
@@ -128,11 +208,12 @@ class ProductOptionsSelection extends Component
     }
 
 
+    /**
+     * @return void
+     */
     private function setPredefinedIOptions()
     {
         $values = $this->product->options()->get();
-
-        //dd($values->toArray());
 
         if ($values->count()) {
             //
@@ -186,20 +267,11 @@ class ProductOptionsSelection extends Component
                 $this->setDefaultOptions();
                 $this->step = 'two';
 
-                //dd($values->groupBy('parent_id')->toArray());
-
                 //
                 foreach ($values->groupBy('parent_id') as $top_id => $value) {
-
-
-
-                    if ( ! isset($this->items[$key]['options'])) {
-                        $this->items[$key]['options'] = [];
-                    }
-
                     $sub_options = [];
 
-                    foreach ($value as $sub_key => $sub_value) {
+                    foreach ($value as $sub_value) {
                         $sub_item = [
                             'id' => 0,
                             'value' => $sub_value->option_id,
@@ -209,7 +281,6 @@ class ProductOptionsSelection extends Component
                             'sub_options' => []
                         ];
 
-                        //$this->addSubItem($key, $top_id, $sub_item);
                         array_push($sub_options, $sub_item);
                     }
 
@@ -222,16 +293,10 @@ class ProductOptionsSelection extends Component
                         'sub_options' => $sub_options
                     ];
 
-                    //$this->addItem($key, $item);
-
                     array_push($this->items[$key]['options'], $item);
                 }
-
-                //dd($this->items);
             }
         }
-
-        //dd($this->items);
     }
 
 

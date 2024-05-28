@@ -143,7 +143,7 @@
                                             <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.price" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][price]"></span>
                                         </td>
                                         <td class="text-right font-size-sm">
-                                            <a href="javascript:void();" wire:click="deleteItem('{{ $group }}',{{ $key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
+                                            <a href="javascript:void();" wire:click="deleteItem('{{ $group }}',{{ $key }},{{ $sub_key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
