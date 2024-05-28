@@ -76,9 +76,18 @@ class ProductOption extends Model
     }
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function option()
     {
         return $this->hasOne(Options::class, 'id', 'option_id');
+    }
+
+
+    public function top()
+    {
+        return $this->hasOne(Options::class, 'id', 'parent_id');
     }
 
 
