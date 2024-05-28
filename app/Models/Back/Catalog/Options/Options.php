@@ -109,6 +109,7 @@ class Options extends Model
                 'group'       => Str::slug($group),
                 'type'        => $this->request->input('type'),
                 'value'       => $item['color'] ?? '#000000',
+                'value_opt'       => $item['color_opt'] ?? '#FFFFF1',
                 'data'        => '',
                 'sort_order'  => $item['sort_order'] ?? 0,
                 'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
@@ -137,6 +138,8 @@ class Options extends Model
         $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
         $items = collect($this->request->input('item'));
 
+
+
         foreach ($values as $value) {
             $item = $items->where('id', $value->id);
 
@@ -149,6 +152,7 @@ class Options extends Model
                     'group'       => Str::slug($group),
                     'type'        => $this->request->input('type'),
                     'value'       => $item->first()['color'] ?? '#000000',
+                    'value_opt'   => $item->first()['color_opt'] ?? '#FFFFF1',
                     'sort_order'  => $item->first()['sort_order'] ?? 0,
                     'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
                     'updated_at'  => Carbon::now()
@@ -167,6 +171,7 @@ class Options extends Model
                 'group'       => Str::slug($group),
                 'type'        => $this->request->input('type'),
                 'value'       => $item['color'] ?? '#000000',
+                'value_opt'       => $item['color_opt'] ?? '#FFFFF1',
                 'data'        => '',
                 'sort_order'  => $item['sort_order'] ?? 0,
                 'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
@@ -203,12 +208,15 @@ class Options extends Model
         $response = [];
         $values = Options::query()->get();
 
+
+        dd($values);
         foreach ($values as $value) {
             $response[$value->group]['group'] = $value->translation->group_title;
             $response[$value->group]['items'][] = [
                 'id' => $value->id,
                 'title' => $value->translation->title,
                 'value' => $value->color,
+                'value_opt'       => $value->color_opt,
                 'sort_order' => $value->sort_order
             ];
         }

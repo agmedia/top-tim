@@ -13,13 +13,16 @@
                 <th class="font-size-sm" style="width:35%"> <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" /></th>
             @endforeach
             @if ($type == 'color')
-                <th class="font-size-sm" style="width:10%">Color</th>
+                <th class="font-size-sm" style="width:10%">Boja</th>
+
+                    <th class="font-size-sm" style="width:10%">Boja dodatna</th>
             @endif
             <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
             <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.obrisi') }}</th>
         </tr>
         </thead>
         <tbody>
+
 
         @foreach ($items as $key => $item)
             <tr>
@@ -32,6 +35,10 @@
                 @if ($type == 'color')
                     <td>
                         <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color" name="item[{{ $key }}][color]"></span>
+                    </td>
+
+                    <td id="{{ $key }}">
+                        <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color_opt"   name="item[{{ $key }}][color_opt]" ></span>
                     </td>
                 @endif
                 <td>
