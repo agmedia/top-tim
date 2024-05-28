@@ -53,7 +53,9 @@
         <div class="row">
 
             <section class="col-lg-8">
+
                <h2 class="h5 pt-1 pb-3 mb-3">{{ __('front/cart.pregledaj_potvrdi') }} </h2>
+                <div class="rounded-3 p-4 mt-3" style="border: 1px solid rgb(218, 225, 231); background-color: rgb(255, 255, 255) !important;">
                 <cart-view continueurl="{{ route('index') }}" checkouturl="{{ route('naplata') }}" buttons="false"></cart-view>
 
                 <div class="bg-secondary rounded-3 px-4 pt-4 pb-2">
@@ -104,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-
+                </div>
                 <div class="d-none d-lg-flex pt-0 mt-3">
                     {!! $data['payment_form'] !!}
                 </div>

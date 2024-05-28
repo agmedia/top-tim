@@ -135,6 +135,8 @@
             </div>
         @endif
 
+        <div class="rounded-3 p-4 mt-3" style="border: 1px solid rgb(218, 225, 231); background-color: rgb(255, 255, 255) !important;">
+
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
@@ -227,7 +229,7 @@
                     </div>
 
         </div>
-
+        </div>
         <div class="d-flex pt-4 mt-3">
             <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" href="{{ route('kosarica') }}"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">{{ __('front/cart.povratak_cart') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.povratak') }}</span></a></div>
             <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" wire:click="changeStep('dostava')" href="javascript:void(0);"><span class="d-none d-sm-inline">{{ __('front/cart.na_odabir_dostave') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.nastavi') }}</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
@@ -238,14 +240,16 @@
 
     @if ($step == 'dostava')
         <h2 class="h5 pt-1 pb-3 mb-3 ">{{ __('front/cart.odaberite_nacin_dostave') }}</h2>
+
+        <div class="rounded-3 p-4 mt-3" style="border: 1px solid rgb(218, 225, 231); background-color: rgb(255, 255, 255) !important;">
         <div class="table-responsive">
-            <table class="table table-hover fs-sm border-top">
+            <table class="table table-hover fs-sm ">
                 <thead>
-                <tr>
-                    <th class="align-middle"></th>
-                    <th class="align-middle">{{ __('front/cart.dostava') }}</th>
-                    <th class="align-middle">{{ __('front/cart.vrijeme_dostave') }}</th>
-                    <th class="align-middle">{{ __('front/cart.cijena') }}</th>
+                <tr class="bg-secondary ">
+
+                    <th colspan="2" class="align-middle border-bottom-0">{{ __('front/cart.dostava') }}</th>
+                    <th class="align-middle border-bottom-0">{{ __('front/cart.vrijeme_dostave') }}</th>
+                    <th class="align-middle border-bottom-0">{{ __('front/cart.cijena') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -289,7 +293,7 @@
         @else
             @error('shipping') <small class="text-danger">{{ __('front/cart.dostava_obavezna') }}</small> @enderror
         @endif
-
+        </div>
         <div class=" d-flex pt-4 mt-3">
             <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" wire:click="changeStep('podaci')" href="javascript:void(0);"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">{{ __('front/cart.povratak_na_unos_podataka') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.povratak') }}</span></a></div>
             <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" wire:click="changeStep('placanje')" href="javascript:void(0);"><span class="d-none d-sm-inline">{{ __('front/cart.na_odabir_placanja') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.nastavi') }}</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
@@ -299,8 +303,19 @@
 
     @if ($step == 'placanje')
         <h2 class="h5 pt-1 pb-3 mb-3 ">{{ __('front/cart.odaberite_nacin_placanja') }}</h2>
+        <div class="rounded-3 p-4 mt-3" style="border: 1px solid rgb(218, 225, 231); background-color: rgb(255, 255, 255) !important;">
         <div class="table-responsive">
-            <table class="table table-hover fs-sm border-top">
+            <table class="table table-hover fs-sm no-border">
+
+                <thead>
+                <tr class="bg-secondary ">
+                    <th colspan="2" class="align-middle border-bottom-0">{{ __('front/cart.odaberite_nacin_placanja') }}</th>
+
+
+
+                </tr>
+                </thead>
+
                 <tbody>
                 @foreach ($paymentMethods as $p_method)
                     <tr wire:click="selectPayment('{{ $p_method->code }}')" style="cursor: pointer;">
@@ -317,6 +332,7 @@
             </table>
         </div>
         @error('payment') <small class="text-danger">{{ __('front/cart.nacin_placanja_obavezan') }}</small> @enderror
+        </div>
         <div class=" d-flex pt-4 mt-3">
             <div class="w-50 pe-3"><a class="btn btn-outline-primary d-block w-100" wire:click="changeStep('dostava')" href="javascript:void(0);"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">{{ __('front/cart.povratak_na_odabir_dostave') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.povratak') }}</span></a></div>
             <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="{{ ($payment != '') ? route('pregled') : '#' }}"><span class="d-none d-sm-inline">{{ __('front/cart.pregledajte_narudzbu') }}</span><span class="d-inline d-sm-none">{{ __('front/cart.nastavi') }}</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
