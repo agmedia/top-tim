@@ -88,7 +88,7 @@
             <table class="table table-striped table-bordered  table-vcenter">
                 <thead class="thead-light">
                 <tr>
-                    <th colspan="3" class="font-size-sm" style="width:25%">Vrijednost</th>
+                    <th  class="font-size-sm" >Vrijednost</th>
                     <th class="text-right font-size-sm">Dodaj podopciju</th>
                     <th class="text-right font-size-sm" style="width:10%" class="text-center">Uredi</th>
                 </tr>
