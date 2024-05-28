@@ -200,7 +200,7 @@ class ProductOptionsSelection extends Component
         return [
             'id' => 0,
             'value' => '',
-            'sku' => $this->product->sku,
+            'sku' => isset($this->product->sku) ? $this->product->sku : '',
             'quantity' => 0,
             'price' => 0,
             'sub_options' => []
