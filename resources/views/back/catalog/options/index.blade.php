@@ -6,10 +6,6 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/option.naslov') }} </h1>
-                <a class="btn btn-hero-success my-2" href="{{ route('options.create') }}">
-                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/option.dodaj_novi') }}</span>
-                </a>
-
                 <div class="dropdown dropleft push">
                     <button type="button" class="btn btn-hero-success my-2 dropdown-toggle" style="margin-bottom: 0;" id="dropdown-dropleft-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ __('back/option.dodaj_novi') }}

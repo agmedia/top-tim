@@ -64,8 +64,8 @@
                                 <label for="title-input">{{ __('back/option.tip') }}</label>
                                 <select class="js-select2 form-control form-control" id="tip" name="type" style="width: 100%;" data-placeholder="Odaberite opciju">
                                     <option></option>
-                                    <option value="color" selected>Boja</option>
-                                    <option value="size">Veličina</option>
+                                    <option value="color" @if(request()->has('type') && request()->input('type') == 'color') selected @endif @if(isset($options) && $options->type == 'color') selected @endif>Boja</option>
+                                    <option value="size" @if(request()->has('type') && request()->input('type') == 'size') selected @endif @if(isset($options) && $options->type == 'size') selected @endif>Veličina</option>
                                 </select>
 
                             </div>
