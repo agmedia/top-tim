@@ -19,6 +19,7 @@ class OptionsAddition extends Component
 
     public $type = 'text';
 
+    public $show = false;
 
     public function mount()
     {
