@@ -37,17 +37,13 @@
 
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3" v-if="options.includes('size')">
                 <div class="d-flex justify-content-between align-items-center pb-1">
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
                 </div>
-                <select class="form-select" required id="product-size">
-                    <option value="">{{ trans.velicina }}</option>
-                    <option value="xs">XS</option>
-                    <option value="s">S</option>
-                    <option value="m">M</option>
-                    <option value="l">L</option>
-                    <option value="xl">XL</option>
+                <select class="form-select" required id="product-size" v-for="options in arr_options">
+                    <option value="">{{ trans.velicina }} </option>
+                    <option v-for="option in options.options"   v-bind:value="option.sku">{{ option.name }}</option>
                 </select>
             </div>
         </div>
@@ -72,23 +68,20 @@ export default {
             quantity: 1,
             has_in_cart: 0,
             disabled: false,
+            arr_options: [],
            trans: window.trans,
         }
     },
 
     mounted() {
-
-        console.log(this.options);
+        this.arr_options = JSON.parse(this.options);
         let cart = this.$store.state.storage.getCart();
             if(cart){
-
                 for (const key in cart.items) {
                     if (this.id == cart.items[key].id) {
                         this.has_in_cart = cart.items[key].quantity;
                     }
                 }
-
-
             }
 
         if (this.available == undefined) {

@@ -2076,11 +2076,12 @@ __webpack_require__.r(__webpack_exports__);
       quantity: 1,
       has_in_cart: 0,
       disabled: false,
+      arr_options: [],
       trans: window.trans
     };
   },
   mounted: function mounted() {
-    console.log(this.options);
+    this.arr_options = JSON.parse(this.options);
     var cart = this.$store.state.storage.getCart();
     if (cart) {
       for (var key in cart.items) {
@@ -3459,7 +3460,7 @@ var render = function render() {
     attrs: {
       id: "colorOption"
     }
-  }, [_vm._v("Bijela")])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("div", {
+  }, [_vm._v("Bijela")])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm.options.includes("size") ? _c("div", {
     staticClass: "mb-3"
   }, [_c("div", {
     staticClass: "d-flex justify-content-between align-items-center pb-1"
@@ -3470,37 +3471,25 @@ var render = function render() {
     }
   }, [_c("span", {
     staticClass: "text-danger"
-  }, [_vm._v("*")]), _vm._v(_vm._s(_vm.trans.velicina) + ":")]), _vm._m(1)]), _vm._v(" "), _c("select", {
-    staticClass: "form-select",
-    attrs: {
-      required: "",
-      id: "product-size"
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v(_vm._s(_vm.trans.velicina))]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "xs"
-    }
-  }, [_vm._v("XS")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "s"
-    }
-  }, [_vm._v("S")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "m"
-    }
-  }, [_vm._v("M")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "l"
-    }
-  }, [_vm._v("L")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "xl"
-    }
-  }, [_vm._v("XL")])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("*")]), _vm._v(_vm._s(_vm.trans.velicina) + ":")]), _vm._m(1)]), _vm._v(" "), _vm._l(_vm.arr_options, function (options) {
+    return _c("select", {
+      staticClass: "form-select",
+      attrs: {
+        required: "",
+        id: "product-size"
+      }
+    }, [_c("option", {
+      attrs: {
+        value: ""
+      }
+    }, [_vm._v(_vm._s(_vm.trans.velicina) + " ")]), _vm._v(" "), _vm._l(options.options, function (option) {
+      return _c("option", {
+        domProps: {
+          value: option.sku
+        }
+      }, [_vm._v(_vm._s(option.name))]);
+    })], 2);
+  })], 2) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "d-flex align-items-center pt-2 mw-500"
   }, [_c("input", {
     directives: [{

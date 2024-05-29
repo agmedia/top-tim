@@ -349,7 +349,6 @@ class Product extends Model
             }
         }
 
-        dd($response);
 
         return $response;
     }
