@@ -415,6 +415,8 @@ Route::group(
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
 //
     Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('pretrazi');
+
+    Route::post('newsletter', [HomeController::class, 'newsletter'])->name('newsletter');
 //
     Route::get('info/{page}', [CatalogRouteController::class, 'page'])->name('catalog.route.page');
     Route::get('blog/{blog?}', [CatalogRouteController::class, 'blog'])->name('catalog.route.blog');

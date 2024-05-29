@@ -10,6 +10,7 @@ use App\Mail\ContactFormMessage;
 use App\Models\Back\Marketing\Review;
 use App\Models\Front\Loyalty;
 use App\Models\Front\Page;
+use App\Models\Front\Newsletter;
 use App\Models\Sitemap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -89,6 +90,26 @@ class HomeController extends FrontBaseController
 
         return back()->with(['error' => 'Whoops..! Greška kod snimanja komentara']);
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function newsletter(Request $request)
+    {
+        $newsletter = new Newsletter();
+
+        $created_newsletter = $newsletter->validateRequest($request)->create();
+
+        if ($created_newsletter) {
+
+            return back()->with(['success' => 'Uspješna prijava']);
+        }
+
+        return back()->with(['error' => 'Whoops..! Upišite ispravan email']);
+    }
+
 
 
     /**
