@@ -315,6 +315,47 @@ class Product extends Model
 
 
     /**
+     * @return Relation
+     */
+    public function options()
+    {
+        return $this->hasMany(ProductOption::class, 'product_id');
+    }
+
+
+    public function optionsList()
+    {
+        $response = [];
+
+        if ($this->options()->count() > 0) {
+            $options = $this->options()->get();
+
+            if ( ! $options->first()->top) {
+                $key = $options->first()->option->type;
+
+                $response[$key]['group'] = $options->first()->option->group;
+
+                foreach ($options as $option) {
+                    $response[$key]['options'][] = [
+                        'id' => $option->id,
+                        'name' => $option->title->translation->title,
+                        'sku' => $option->sku,
+                        'value' => $option->title->value,
+                        'quantity' => $option->quantity,
+                        'price' => $option->price,
+                        'sort_order' => $option->title->sort_order,
+                    ];
+                }
+            }
+        }
+
+        dd($response);
+
+        return $response;
+    }
+
+
+    /**
      * @param $ocjena
      * @param $total
      *
