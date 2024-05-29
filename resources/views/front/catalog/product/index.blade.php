@@ -209,7 +209,7 @@
 
 
             @if ( $prod->quantity > 0)
-                    <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"></add-to-cart-btn>
+                    <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"  options="{{ $prod->optionsList() }}"></add-to-cart-btn>
             @endif
 
             <div class="accordion mb-4" id="productPanels">

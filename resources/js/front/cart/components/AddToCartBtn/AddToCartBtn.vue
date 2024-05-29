@@ -35,7 +35,6 @@
                     <label class="form-option-label rounded-circle" for="color7"><span class="form-option-color rounded-circle" style="background-color: #239752;"></span></label>
                 </div>
 
-
             </div>
 
             <div class="mb-3">
@@ -64,7 +63,8 @@
 export default {
     props: {
         id: String,
-        available: String
+        available: String,
+        options: String
     },
 
     data() {
@@ -77,6 +77,8 @@ export default {
     },
 
     mounted() {
+
+        console.log(this.options);
         let cart = this.$store.state.storage.getCart();
             if(cart){
 

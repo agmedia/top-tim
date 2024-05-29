@@ -2068,7 +2068,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     id: String,
-    available: String
+    available: String,
+    options: String
   },
   data: function data() {
     return {
@@ -2079,6 +2080,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    console.log(this.options);
     var cart = this.$store.state.storage.getCart();
     if (cart) {
       for (var key in cart.items) {
