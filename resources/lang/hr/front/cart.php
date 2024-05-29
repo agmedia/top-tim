@@ -208,6 +208,8 @@ return [
     'loyalty_use' => 'Primjeni',
     'loyalty_cancel' => 'Odbaci',
     'pogledajte_sve' => 'Pogledajte sve',
+    'boja' => 'Odabir boje',
+    'velicina'   => 'Odabir veličine',
 
 
 

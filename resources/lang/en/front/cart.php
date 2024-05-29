@@ -204,6 +204,8 @@ return [
     'loyalty_use' => 'Apply',
     'loyalty_cancel' => 'Cancel',
     'pogledajte_sve' => 'View all',
+    'boja' => 'Select color',
+    'velicina'   => 'Select size',
 
 
 
