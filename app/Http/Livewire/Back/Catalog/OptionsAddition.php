@@ -19,8 +19,6 @@ class OptionsAddition extends Component
 
     public $type = 'text';
 
-    public $show = false;
-
     public function mount()
     {
         if ( ! empty($this->values)) {
@@ -68,7 +66,8 @@ class OptionsAddition extends Component
             'id' => 0,
             'title' => $titles,
             'color' => '#000000',
-            'color_opt' => '#FFFFF1',
+            'color_opt' => NULL,
+            'color_opt_show' => false,
             'sort_order' => 0
         ];
     }
@@ -94,6 +93,7 @@ class OptionsAddition extends Component
                 'title' => $titles,
                 'color' => $value->value,
                 'color_opt' => $value->value_opt,
+                'color_opt_show' => $value->value_opt ?: false,
                 'sort_order' => $value->sort_order
             ]);
         }

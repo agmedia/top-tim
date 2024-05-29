@@ -14,8 +14,7 @@
             @endforeach
             @if ($type == 'color')
                 <th class="font-size-sm" style="width:10%">Boja</th>
-
-                    <th colspan="2"  class="font-size-sm" style="width:10%">Boja dodatna</th>
+                <th colspan="2"  class="font-size-sm" style="width:10%">Boja dodatna</th>
             @endif
             <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
             <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.obrisi') }}</th>
@@ -36,17 +35,14 @@
                     <td>
                         <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color" name="item[{{ $key }}][color]"></span>
                     </td>
-
                     <td>
-                        <span class="font-size-sm"> <input type="checkbox"  id="ch{{ $key }}" class="form-check" wire:click="$set('show',{{ $show ? 'false' : 'true' }})"></span>
+                        <span class="font-size-sm"> <input type="checkbox"  class="form-check"  wire:model="items.{{ $key }}.color_opt_show"></span>
                     </td>
-
-                        <td >
-                            @if($show)
-                            <span class="font-size-sm"  id="{{ $key }}"> <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color_opt"   name="item[{{ $key }}][color_opt]" ></span>
-                              @endif
-                        </td>
-
+                    <td>
+                        @if($items[$key]['color_opt_show'])
+                            <span class="font-size-sm"  > <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color_opt"   name="item[{{ $key }}][color_opt]" ></span>
+                        @endif
+                    </td>
                 @endif
                 <td>
                     <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>
@@ -64,21 +60,6 @@
 
 @push('js_after')
     <script>
-        function myFunction(id) {
-            const checkbox = document.getElementById('ch'+id)
-
-            checkbox.addEventListener('change', (event) => {
-                if (event.currentTarget.checked) {
-                    document.getElementById(id).style.display = "block";
-                } else {
-                    document.getElementById(id).style.display = "none";
-                }
-            })
-
-
-        }
-
-
         Livewire.on('success_alert', () => {
 
         });

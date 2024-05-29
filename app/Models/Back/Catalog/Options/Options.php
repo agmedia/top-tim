@@ -152,7 +152,7 @@ class Options extends Model
                     'group'       => Str::slug($group),
                     'type'        => $this->request->input('type'),
                     'value'       => $item->first()['color'] ?? '#000000',
-                    'value_opt'   => $item->first()['color_opt'] ?? '#FFFFF1',
+                    'value_opt'   => $item->first()['color_opt'] ?? NULL,
                     'sort_order'  => $item->first()['sort_order'] ?? 0,
                     'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
                     'updated_at'  => Carbon::now()
@@ -171,7 +171,7 @@ class Options extends Model
                 'group'       => Str::slug($group),
                 'type'        => $this->request->input('type'),
                 'value'       => $item['color'] ?? '#000000',
-                'value_opt'       => $item['color_opt'] ?? '#FFFFF1',
+                'value_opt'       => $item['color_opt'] ?? NULL,
                 'data'        => '',
                 'sort_order'  => $item['sort_order'] ?? 0,
                 'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
@@ -207,8 +207,6 @@ class Options extends Model
     {
         $response = [];
         $values = Options::query()->get();
-
-
 
         foreach ($values as $value) {
             $response[$value->group]['group'] = $value->translation->group_title;
