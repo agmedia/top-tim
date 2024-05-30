@@ -737,13 +737,34 @@ class Product extends Model
 
             if (is_string($request->input('brand'))) {
                 $value = $request->input('brand');
-                $brand = Brand::query()->whereHas('translation', function ($query) use ($value) {
-                    $query->where('slug', $value);
-                })->first();
 
-                if ($brand) {
+
+                if ($value) {
+                    if (strpos($value, '+') !== false) {
+                        $arr = explode('+', $value);
+
+
+
+                        $brand = Brand::query()->whereHas('translations', function ($query) use ($arr) {
+                            $query->whereIn('slug',$arr);
+                        });
+
+
+
+                    } else {
+                        $brand = Brand::query()->whereHas('translation', function ($query) use ($value) {
+                            $query->where('slug', $value);
+                        })->first();
+                    }
+                }
+
+
+
+                if (isset($brand)) {
                     array_push($auts, $brand->id);
                 }
+
+
             }
 
             $query->whereIn('brand_id', $auts);

@@ -102,6 +102,11 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
         return $this->hasOne(BrandTranslation::class, 'brand_id')->where('lang', $this->locale);
     }
 
+    public function translations()
+    {
+        return $this->hasMany(BrandTranslation::class, 'brand_id');
+    }
+
 
     /**
      * @return string
@@ -196,12 +201,12 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
 
-                    if ($request['brand']) {
+                 if ($request['brand']) {
                         if (strpos($request['brand'], '+') !== false) {
                             $arr = explode('+', $request['brand']);
-                            $pubs = Publisher::query()->whereIn('slug', $arr)->pluck('id');
+                          $pubs = Brand::query()->whereIn('slug', $arr)->pluck('id');
 
-                            $query->whereIn('brand_id', $pubs);
+                         $query->whereIn('brand_id', $pubs);
                         } else {
                             $query->where('brand_id', $request['brand']);
                         }
