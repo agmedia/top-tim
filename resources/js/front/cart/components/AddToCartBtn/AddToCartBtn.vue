@@ -1,6 +1,6 @@
 <template>
     <div class="cart  pb-2 mb-3">
-        <div class="mw-500" v-if="options.includes('color')">
+        <div class="mw-500" v-if="arr_options.color">
             <div class="fs-sm mb-4">
                 <span class="text-heading fw-medium me-1">
                     <span class="text-danger">*</span> {{ trans.boja }}:</span>
@@ -16,7 +16,7 @@
 
             </div>
         </div>
-        <div class="mw-500" v-if="options.includes('size')">
+        <div class="mw-500" v-if="arr_options.size">
             <div class="mb-3" >
                 <div class="d-flex justify-content-between align-items-center pb-1">
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
@@ -56,7 +56,7 @@ export default {
     mounted() {
         this.arr_options = JSON.parse(this.options);
 
-        console.log(this.options);
+        console.log(this.arr_options.size);
         let cart = this.$store.state.storage.getCart();
             if(cart){
                 for (const key in cart.items) {

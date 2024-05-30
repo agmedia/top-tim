@@ -327,6 +327,8 @@ class Product extends Model
     {
         $response = [];
 
+
+
         if ($this->options()->count() > 0) {
             $options = $this->options()->get();
 
@@ -357,7 +359,7 @@ class Product extends Model
                 }
             }
         }
-
+        Log::info($response);
 
         return $response;
     }

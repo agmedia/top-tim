@@ -2082,7 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.arr_options = JSON.parse(this.options);
-    console.log(this.options);
+    console.log(this.arr_options.size);
     var cart = this.$store.state.storage.getCart();
     if (cart) {
       for (var key in cart.items) {
@@ -3448,7 +3448,7 @@ var render = function render() {
     _c = _vm._self._c;
   return _c("div", {
     staticClass: "cart pb-2 mb-3"
-  }, [_vm.options.includes("color") ? _c("div", {
+  }, [_vm.arr_options.color ? _c("div", {
     staticClass: "mw-500"
   }, [_c("div", {
     staticClass: "fs-sm mb-4"
@@ -3494,7 +3494,7 @@ var render = function render() {
         style: option.style
       })])]);
     }), 0);
-  })], 2) : _vm._e(), _vm._v(" "), _vm.options.includes("size") ? _c("div", {
+  })], 2) : _vm._e(), _vm._v(" "), _vm.arr_options.size ? _c("div", {
     staticClass: "mw-500"
   }, [_c("div", {
     staticClass: "mb-3"
