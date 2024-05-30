@@ -35,6 +35,7 @@ Vue.component('add-to-cart-btn', require('./components/AddToCartBtn/AddToCartBtn
 Vue.component('add-to-cart-btn-simple', require('./components/AddToCartBtnSimple/AddToCartBtnSimple').default);
 // FILTERS
 Vue.component('filter-view', require('./../filter/components/Filter/Filter').default);
+Vue.component('filter-side-view', require('./../filter/components/Filter/Filterside').default);
 Vue.component('products-view', require('./../filter/components/ProductsList/ProductsList').default);
 Vue.component('pagination', require('./../filter/components/Pagination/LaravelVuePagination').default);
 

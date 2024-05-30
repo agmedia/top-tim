@@ -202,7 +202,14 @@
                    publisher="{{ isset($publisher) ? $publisher['slug'] : null }}">
     </products-view>
 
-
+    <filter-side-view ids="{{ isset($ids) ? $ids : null }}"
+                 group="{{ isset($group) ? $group : null }}"
+                 cat="{{ isset($cat) ? $cat : null }}"
+                 subcat="{{ isset($subcat) ? $subcat : null }}"
+                 author="{{ isset($author) ? $author['slug'] : null }}"
+                      brand="{{ isset($brand) ? $brand->translation->slug : null }}"
+                 publisher="{{ isset($publisher) ? $publisher['slug'] : null }}">
+    </filter-side-view>
 
 
 

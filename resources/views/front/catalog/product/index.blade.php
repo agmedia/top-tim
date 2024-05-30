@@ -230,7 +230,7 @@
                        @endif
                            @if ($prod->quantity)
 
-                                   <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong> {{ __('front/ricekakis.onstock') }} </li>
+                             <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong> {{ __('front/ricekakis.onstock') }} </li>
 
                            @else
                                <li><strong>{{ __('front/ricekakis.dostupnost') }}:</strong>{{ __('front/ricekakis.rasprodano') }}</li>

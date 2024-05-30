@@ -285,6 +285,9 @@ Route::prefix('api/v2')->group(function () {
         Route::post('/getPublishers', [FilterController::class, 'publishers']);
     });*/
 
+
+
+
     // SETTINGS
     Route::prefix('settings')->group(function () {
         // FRONT SETTINGS LIST
