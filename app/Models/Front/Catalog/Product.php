@@ -744,15 +744,14 @@ class Product extends Model
                         $arr = explode('+', $value);
 
 
-
                         $brand = Brand::query()->whereHas('translations', function ($query) use ($arr) {
-                            $query->whereIn('slug',$arr);
-                        });
+                            $query->whereIn('slug', $arr);
+                        })->get();
 
 
 
                     } else {
-                        $brand = Brand::query()->whereHas('translation', function ($query) use ($value) {
+                        $brandz = Brand::query()->whereHas('translation', function ($query) use ($value) {
                             $query->where('slug', $value);
                         })->first();
                     }
@@ -760,41 +759,20 @@ class Product extends Model
 
 
 
-                if ($brand) {
-                    array_push($auts, $brand->id);
+                if (isset($brand)) {
+                    foreach ($brand as $item) {
+                    array_push($auts, $item->id);
+                    }
+                }else{
+                    array_push($auts, $brandz->id);
                 }
-
-
             }
 
             $query->whereIn('brand_id', $auts);
         }
 
-        if ($request->has('nakladnik')) {
-            $pubs = [];
 
-            foreach ($request->input('nakladnik') as $key => $item) {
-                if (isset($item->id)) {
-                    array_push($pubs, $item->id);
-                } else {
-                    array_push($pubs, $key);
-                }
-            }
 
-            $query->whereIn('publisher_id', $pubs);
-        }
-
-        if ($request->has('start')) {
-            $query->where(function ($query) use ($request) {
-                $query->where('year', '>=', $request->input('start'))->orWhereNull('year');
-            });
-        }
-
-        if ($request->has('end')) {
-            $query->where(function ($query) use ($request) {
-                $query->where('year', '<=', $request->input('end'))->orWhereNull('year');
-            });
-        }
 
         if ($request->has('sort')) {
             $sort = $request->input('sort');
