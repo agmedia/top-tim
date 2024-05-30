@@ -55,8 +55,6 @@ export default {
 
     mounted() {
         this.arr_options = JSON.parse(this.options);
-
-        console.log(this.arr_options.size);
         let cart = this.$store.state.storage.getCart();
             if(cart){
                 for (const key in cart.items) {

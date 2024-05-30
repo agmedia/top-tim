@@ -2082,7 +2082,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.arr_options = JSON.parse(this.options);
-    console.log(this.arr_options.size);
     var cart = this.$store.state.storage.getCart();
     if (cart) {
       for (var key in cart.items) {
