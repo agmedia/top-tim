@@ -19,18 +19,15 @@
                                     <input type="search" v-model="searchBrand" class="form-control rounded-end pe-5" placeholder="Pretraži nakladnike"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                                 </div>
                                 <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;"  data-simplebar-auto-hide="false">
-
                                     <div class="simplebar-scroll-content">
                                         <div class="simplebar-content">
-
-
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="brand in brands">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" :id="brand.translation.slug" v-bind:value="brand.translation.slug" v-model="selectedBrands">
-                                            <label class="form-check-label widget-filter-item-text" :for="brand.translation.slug">{{ brand.title }}</label>
-                                        </div>
-                                        <span class="fs-xs text-muted"><a :href="origin + brand.url">{{ Number(brand.products_count).toLocaleString('hr-HR') }}</a></span>
-                                    </li>
+                                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="brand in brands">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" :id="brand.translation.slug" v-bind:value="brand.translation.slug" v-model="selectedBrands">
+                                                    <label class="form-check-label widget-filter-item-text" :for="brand.translation.slug">{{ brand.title }}</label>
+                                                </div>
+                                                <span class="fs-xs text-muted"><a :href="origin + brand.url">{{ Number(brand.products_count).toLocaleString('hr-HR') }}</a></span>
+                                            </li>
                                         </div>
                                     </div>
                                 </ul>
@@ -264,9 +261,9 @@ export default {
             this.brand = value.join('+');
             this.setQueryParamOther('brand', this.brand);
         },
-        searchAuthor(value) {
+        searchBrand(value) {
             if (value.length > 2 || value == '') {
-                return this.getAuthors();
+                return this.getBrands();
             }
         },
         $route(params) {
@@ -331,7 +328,6 @@ export default {
             axios.post('filter/getBrands', { params }).then(response => {
                 this.brands_loaded = true;
                 this.brands = response.data;
-
 
             });
         },

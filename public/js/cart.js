@@ -2978,9 +2978,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       this.brand = value.join('+');
       this.setQueryParamOther('brand', this.brand);
     },
-    searchAuthor: function searchAuthor(value) {
+    searchBrand: function searchBrand(value) {
       if (value.length > 2 || value == '') {
-        return this.getAuthors();
+        return this.getBrands();
       }
     },
     $route: function $route(params) {
