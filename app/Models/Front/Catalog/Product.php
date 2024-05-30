@@ -760,7 +760,7 @@ class Product extends Model
 
 
 
-                if (isset($brand)) {
+                if ($brand) {
                     array_push($auts, $brand->id);
                 }
 
