@@ -2082,6 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.arr_options = JSON.parse(this.options);
+    console.log(this.options);
     var cart = this.$store.state.storage.getCart();
     if (cart) {
       for (var key in cart.items) {
@@ -3447,7 +3448,7 @@ var render = function render() {
     _c = _vm._self._c;
   return _c("div", {
     staticClass: "cart pb-2 mb-3"
-  }, [_c("div", {
+  }, [_vm.options.includes("color") ? _c("div", {
     staticClass: "mw-500"
   }, [_c("div", {
     staticClass: "fs-sm mb-4"
@@ -3455,12 +3456,49 @@ var render = function render() {
     staticClass: "text-heading fw-medium me-1"
   }, [_c("span", {
     staticClass: "text-danger"
-  }, [_vm._v("*")]), _vm._v(" " + _vm._s(_vm.trans.boja) + ":")]), _c("span", {
+  }, [_vm._v("*")]), _vm._v(" " + _vm._s(_vm.trans.boja) + ":")]), _vm._v(" "), _c("span", {
     staticClass: "text-muted",
     attrs: {
       id: "colorOption"
     }
-  }, [_vm._v("Bijela")])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm.options.includes("size") ? _c("div", {
+  })]), _vm._v(" "), _vm._l(_vm.arr_options, function (options) {
+    return _c("div", {
+      staticClass: "position-relative me-n4 mb-3",
+      attrs: {
+        id: "select"
+      }
+    }, _vm._l(options.options, function (option, index) {
+      return _c("div", {
+        staticClass: "form-check form-option form-check-inline mb-2",
+        attrs: {
+          "data-target": index
+        }
+      }, [_c("input", {
+        staticClass: "form-check-input",
+        attrs: {
+          type: "radio",
+          name: "color",
+          id: "color" + index,
+          "data-bs-label": "colorOption"
+        },
+        domProps: {
+          value: option.name
+        }
+      }), _vm._v(" "), _c("label", {
+        staticClass: "form-option-label rounded-circle",
+        attrs: {
+          "for": "color" + index
+        }
+      }, [_c("span", {
+        staticClass: "form-option-color rounded-circle",
+        style: {
+          "background-color": option.value
+        }
+      })])]);
+    }), 0);
+  })], 2) : _vm._e(), _vm._v(" "), _vm.options.includes("size") ? _c("div", {
+    staticClass: "mw-500"
+  }, [_c("div", {
     staticClass: "mb-3"
   }, [_c("div", {
     staticClass: "d-flex justify-content-between align-items-center pb-1"
@@ -3471,7 +3509,7 @@ var render = function render() {
     }
   }, [_c("span", {
     staticClass: "text-danger"
-  }, [_vm._v("*")]), _vm._v(_vm._s(_vm.trans.velicina) + ":")]), _vm._m(1)]), _vm._v(" "), _vm._l(_vm.arr_options, function (options) {
+  }, [_vm._v("*")]), _vm._v(_vm._s(_vm.trans.velicina) + ":")]), _vm._m(0)]), _vm._v(" "), _vm._l(_vm.arr_options, function (options) {
     return _c("select", {
       staticClass: "form-select",
       attrs: {
@@ -3489,7 +3527,7 @@ var render = function render() {
         }
       }, [_vm._v(_vm._s(option.name))]);
     })], 2);
-  })], 2) : _vm._e()]), _vm._v(" "), _c("div", {
+  })], 2)]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "d-flex align-items-center pt-2 mw-500"
   }, [_c("input", {
     directives: [{
@@ -3538,184 +3576,6 @@ var render = function render() {
   }, [_vm._v(_vm._s(_vm.trans.imate) + " " + _vm._s(_vm.has_in_cart) + " " + _vm._s(_vm.trans.artikala_u_kosarici) + ".")]) : _vm._e()]);
 };
 var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "position-relative me-n4 mb-3",
-    attrs: {
-      id: "select"
-    }
-  }, [_c("div", {
-    staticClass: "form-check form-option form-check-inline mb-2",
-    attrs: {
-      "data-target": "0"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      name: "color",
-      id: "color1",
-      "data-bs-label": "colorOption",
-      value: "Bijela",
-      checked: ""
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color1"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#f7f7f7"
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option form-check-inline mb-2",
-    attrs: {
-      "data-target": "1"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      name: "color",
-      id: "color2",
-      "data-bs-label": "colorOption",
-      value: "Crvena"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color2"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#cd232d"
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option form-check-inline mb-2",
-    attrs: {
-      "data-target": "2"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      name: "color",
-      id: "color3",
-      "data-bs-label": "colorOption",
-      value: "Plava"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color3"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#3666ac"
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option form-check-inline mb-2",
-    attrs: {
-      "data-target": "3"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      name: "color",
-      id: "color4",
-      "data-bs-label": "colorOption",
-      value: "Žuta"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color4"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#e5cf50"
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option form-check-inline mb-2",
-    attrs: {
-      "data-target": "4"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      name: "color",
-      id: "color5",
-      "data-bs-label": "colorOption",
-      value: "Flouroscentno zelena"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color5"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#b2d245"
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option form-check-inline mb-2",
-    attrs: {
-      "data-target": "5"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      name: "color",
-      id: "color6",
-      "data-bs-label": "colorOption",
-      value: "Tamno crvena"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color6"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#c12f32"
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option form-check-inline mb-2",
-    attrs: {
-      "data-target": "6"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      name: "color",
-      id: "color7",
-      "data-bs-label": "colorOption",
-      value: "Zelena"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color7"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#239752"
-    }
-  })])])]);
-}, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("a", {

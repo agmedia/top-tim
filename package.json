@@ -43,6 +43,7 @@
         "composer": "^4.1.0",
         "laravel-vue-pagination": "^2.3.1",
         "vue-cookies": "^1.8.3",
-        "vue-router": "^3.5.2"
+        "vue-router": "^3.5.2",
+        "vue2-filters": "^0.14.0"
     }
 }

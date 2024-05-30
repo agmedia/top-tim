@@ -1,43 +1,21 @@
 <template>
     <div class="cart  pb-2 mb-3">
-        <div class="mw-500">
-            <div class="fs-sm mb-4"><span class="text-heading fw-medium me-1"><span class="text-danger">*</span> {{ trans.boja }}:</span><span class="text-muted" id="colorOption">Bijela</span></div>
-            <div class="position-relative me-n4 mb-3" id="select">
-                <div class="form-check form-option form-check-inline mb-2" data-target="0">
-                    <input class="form-check-input" type="radio" name="color"  id="color1" data-bs-label="colorOption" value="Bijela" checked>
-                    <label class="form-option-label rounded-circle" for="color1"><span class="form-option-color rounded-circle" style="background-color: #f7f7f7;"></span></label>
-                </div>
-                <div class="form-check form-option form-check-inline mb-2" data-target="1">
-                    <input class="form-check-input" type="radio" name="color"  id="color2" data-bs-label="colorOption" value="Crvena">
-                    <label class="form-option-label rounded-circle" for="color2"><span class="form-option-color rounded-circle" style="background-color: #cd232d;"></span></label>
-                </div>
-                <div class="form-check form-option form-check-inline mb-2" data-target="2">
-                    <input class="form-check-input" type="radio" name="color" id="color3"  data-bs-label="colorOption" value="Plava">
-                    <label class="form-option-label rounded-circle" for="color3"><span class="form-option-color rounded-circle" style="background-color: #3666ac;"></span></label>
-                </div>
-                <div class="form-check form-option form-check-inline mb-2" data-target="3">
-                    <input class="form-check-input" type="radio" name="color"  id="color4" data-bs-label="colorOption" value="Žuta">
-                    <label class="form-option-label rounded-circle" for="color4"><span class="form-option-color rounded-circle" style="background-color: #e5cf50;"></span></label>
-                </div>
-
-                <div class="form-check form-option form-check-inline mb-2" data-target="4">
-                    <input class="form-check-input" type="radio" name="color"  id="color5" data-bs-label="colorOption" value="Flouroscentno zelena">
-                    <label class="form-option-label rounded-circle" for="color5"><span class="form-option-color rounded-circle" style="background-color: #b2d245;"></span></label>
-                </div>
-
-                <div class="form-check form-option form-check-inline mb-2" data-target="5">
-                    <input class="form-check-input" type="radio" name="color"  id="color6" data-bs-label="colorOption" value="Tamno crvena">
-                    <label class="form-option-label rounded-circle" for="color6"><span class="form-option-color rounded-circle" style="background-color: #c12f32;"></span></label>
-                </div>
-
-                <div class="form-check form-option form-check-inline mb-2" data-target="6">
-                    <input class="form-check-input" type="radio" name="color"  id="color7" data-bs-label="colorOption" value="Zelena">
-                    <label class="form-option-label rounded-circle" for="color7"><span class="form-option-color rounded-circle" style="background-color: #239752;"></span></label>
+        <div class="mw-500" v-if="options.includes('color')">
+            <div class="fs-sm mb-4">
+                <span class="text-heading fw-medium me-1">
+                    <span class="text-danger">*</span> {{ trans.boja }}:</span>
+                    <span class="text-muted" id="colorOption"> </span>
+            </div>
+            <div class="position-relative me-n4 mb-3" id="select"  v-for="options in arr_options">
+                <div v-for="(option, index) in options.options" class="form-check form-option form-check-inline mb-2" :data-target="index" >  <!--:data-target="index" služi za slidanje slike  -->
+                    <input class="form-check-input" type="radio" name="color"  :id="'color' + index" data-bs-label="colorOption"  v-bind:value="option.name"  >
+                    <label class="form-option-label rounded-circle" :for="'color' + index"><span class="form-option-color rounded-circle" :style="{ 'background-color': option.value  }"></span></label>
                 </div>
 
             </div>
-
-            <div class="mb-3" v-if="options.includes('size')">
+        </div>
+        <div class="mw-500" v-if="options.includes('size')">
+            <div class="mb-3" >
                 <div class="d-flex justify-content-between align-items-center pb-1">
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
                 </div>
@@ -75,6 +53,8 @@ export default {
 
     mounted() {
         this.arr_options = JSON.parse(this.options);
+
+        console.log(this.options);
         let cart = this.$store.state.storage.getCart();
             if(cart){
                 for (const key in cart.items) {
