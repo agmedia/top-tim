@@ -3491,9 +3491,7 @@ var render = function render() {
         }
       }, [_c("span", {
         staticClass: "form-option-color rounded-circle",
-        style: {
-          "background-color": option.value
-        }
+        style: option.style
       })])]);
     }), 0);
   })], 2) : _vm._e(), _vm._v(" "), _vm.options.includes("size") ? _c("div", {

@@ -336,11 +336,20 @@ class Product extends Model
                 $response[$key]['group'] = $options->first()->option->group;
 
                 foreach ($options as $option) {
+                    if($option->title->value_opt){
+                        $style ='background: linear-gradient(45deg, '.$option->title->value.' 50%, '.$option->title->value_opt.' 50%);';
+                    }
+                    else{
+                        $style ='background-color:'.$option->title->value;
+                    }
+
                     $response[$key]['options'][] = [
                         'id' => $option->id,
                         'name' => $option->title->translation->title,
                         'sku' => $option->sku,
                         'value' => $option->title->value,
+                        'value_opt' => $option->title->value_opt,
+                        'style' => $style,
                         'quantity' => $option->quantity,
                         'price' => $option->price,
                         'sort_order' => $option->title->sort_order,
