@@ -3774,7 +3774,7 @@ var render = function render() {
       return _c("div", {
         staticClass: "form-check form-option form-check-inline mb-2",
         attrs: {
-          "data-target": index
+          "data-target": option.option_id
         }
       }, [_c("input", {
         staticClass: "form-check-input",

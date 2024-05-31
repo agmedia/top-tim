@@ -7,7 +7,7 @@
                     <span class="text-muted" id="colorOption"> </span>
             </div>
             <div class="position-relative me-n4 mb-3" id="select"  v-for="options in arr_options">
-                <div v-for="(option, index) in options.options" class="form-check form-option form-check-inline mb-2" :data-target="index" >  <!--:data-target="index" služi za slidanje slike  -->
+                <div v-for="(option, index) in options.options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id" >  <!--:data-target="index" služi za slidanje slike  -->
                     <input class="form-check-input" type="radio" name="color"  :id="'color' + index" data-bs-label="colorOption"  v-bind:value="option.name"  >
                     <label  class="form-option-label rounded-circle" :for="'color' + index">
                         <span  class="form-option-color rounded-circle" :style="option.style"></span>

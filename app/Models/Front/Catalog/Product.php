@@ -348,6 +348,7 @@ class Product extends Model
 
                     $response[$key]['options'][] = [
                         'id' => $option->id,
+                        'option_id' => $option->option_id,
                         'name' => $option->title->translation->title,
                         'sku' => $option->sku,
                         'value' => $option->title->value,

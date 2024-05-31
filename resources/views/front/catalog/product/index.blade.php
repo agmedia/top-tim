@@ -103,6 +103,7 @@
 
                             @if ( ! empty($prod->image))
 
+
                                 <div class="item single-product" data-target="0">
                                     <a class="link" href="{{ asset($prod->image) }}">
                                         <img  src="{{ asset($prod->image) }}" alt="{{ $prod->name }}" height="600" >
@@ -115,7 +116,7 @@
 
                             @if ($prod->images->count())
                                 @foreach ($prod->images as $key => $image)
-                                        <div class="item single-product" data-target="{{ $key + 1 }}">
+                                        <div class="item single-product" data-target="{{ $image->option_id }}">
                                             <a class="link" href="{{ asset($image->image) }}">
                                             <img  src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" >
                                             </a>
