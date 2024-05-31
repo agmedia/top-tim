@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back\Catalog;
 use App\Http\Controllers\Controller;
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
+use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductAction;
 use App\Models\Back\Catalog\Product\ProductAttribute;
@@ -117,10 +118,11 @@ class ProductController extends Controller
     {
         $data = $product->getRelationsData();
 
+        $color_options = Options::getColorList();
         //dd($data['options']);
         //dd($product->attributes);
 
-        return view('back.catalog.product.edit', compact('product', 'data'));
+        return view('back.catalog.product.edit', compact('product', 'data', 'color_options'));
     }
 
 

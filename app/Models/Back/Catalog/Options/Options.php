@@ -221,4 +221,26 @@ class Options extends Model
 
         return $response;
     }
+
+
+    /**
+     * @return array
+     */
+    public static function getColorList()
+    {
+        $response = [];
+        $values = Options::query()->where('type', 'color')->get();
+
+        foreach ($values as $value) {
+            $response[] = [
+                'id' => $value->id,
+                'title' => $value->translation->title,
+                'value' => $value->color,
+                'value_opt'       => $value->color_opt,
+                'sort_order' => $value->sort_order
+            ];
+        }
+
+        return $response;
+    }
 }

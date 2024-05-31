@@ -151,6 +151,7 @@ class ProductImage extends Model
 
         $id = $this->insertGetId([
             'product_id'   => $this->resource->id,
+            'option_id'    => (isset($new_image['option_id']) && $new_image['option_id']) ? $new_image['option_id'] : null,
             'image'        => config('filesystems.disks.products.url') . $path,
             'default'      => (isset($new_image['default']) && $new_image['default']) ? 1 : 0,
             'published'    => 1,
@@ -180,6 +181,7 @@ class ProductImage extends Model
     public function updateImageData(int $id, array $image_data): bool
     {
         $updated = $this->where('id', $id)->update([
+            'option_id'  => (isset($image_data['option_id']) && $image_data['option_id']) ? $image_data['option_id'] : null,
             'default'    => (isset($image_data['default']) && $image_data['default']) ? 1 : 0,
             'published'  => (isset($image_data['published']) and $image_data['published'] == 'on') ? 1 : 0,
             'sort_order' => (isset($image_data['sort_order']) && $image_data['sort_order']) ? $image_data['sort_order'] : 0,
@@ -269,6 +271,7 @@ class ProductImage extends Model
         foreach ($images as $image) {
             $response[$image->id] = [
                 'id'         => $image->id,
+                'option_id'  => $image->option_id,
                 'image'      => $image->image,
                 'default'    => $image->default,
                 'published'  => $image->published,

@@ -127,18 +127,13 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
                                         <div class="row mb-3">
                                             <div class="col-sm-6 text-left">
-                                                <select class="js-select2 form-control  form-select-solid" id="select-"  name="image_id[][value]"  data-placeholder="Odaberite opciju">
+                                                <select class="js-select2 form-control  form-select-solid" id="select-product-option" name="slim[{{ $image['id'] }}][option_id]"  data-placeholder="Odaberite opciju">
                                                     <option value="0"> Pridruži opciju</option>
-                                                    <option value="">Crvena</option>
-                                                    <option value="">Plava</option>
-                                                    <option value="">Zelena</option>
-
+                                                    @foreach ($color_options as $option)
+                                                        <option value="{{ $option['id'] }}" {{ ($image['option_id'] == $option['id']) ? 'selected' : '' }}>{{ $option['title'] }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <label class="col-sm-3 text-right font-size-sm pt-2" >Redosljed</label>
