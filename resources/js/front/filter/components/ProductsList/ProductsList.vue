@@ -259,6 +259,7 @@ export default {
                 end: this.end,
                 autor: this.autor,
                 brand: this.brend,
+                option: this.option,
                 nakladnik: this.nakladnik,
                 sort: this.sorting,
                 pojam: this.search_query,
@@ -280,6 +281,7 @@ export default {
             this.end = params.query.end ? params.query.end : '';
             this.autor = params.query.autor ? params.query.autor : '';
             this.brend = params.query.brand ? params.query.brand : '';
+            this.option = params.query.option ? params.query.option : '';
             this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
             this.page = params.query.page ? params.query.page : '';
             this.sorting = params.query.sort ? params.query.sort : '';
@@ -304,6 +306,7 @@ export default {
                 subcat: this.subcat,
                 autor: this.autor,
                 brand: this.brend ? this.brend : this.brand,
+                option: this.option ? this.option : this.option,
                 nakladnik: this.nakladnik,
                 start: this.start,
                 end: this.end,
@@ -317,6 +320,9 @@ export default {
 
             if (this.brend != '') {
                 params.brand = this.brend;
+            }
+            if (this.option != '') {
+                params.option = this.option;
             }
             if (this.publisher != '') {
                 params.nakladnik = this.publisher;

@@ -18,7 +18,7 @@
                                 <div class="input-group input-group-sm mb-2 autocomplete">
                                     <input type="search" v-model="searchBrand" class="form-control rounded-end pe-5" placeholder="Pretraži nakladnike"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                                 </div>
-                                <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;"  data-simplebar-auto-hide="false">
+                                <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
                                     <div class="simplebar-scroll-content">
                                         <div class="simplebar-content">
                                             <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="brand in brands">
@@ -37,116 +37,27 @@
                 </div>
                 <div class="col-lg-12 ">
                     <!-- Filter by Size-->
-                    <div class=" mb-grid-gutter">
-                        <div class=" px-2">
+                    <div class=" mb-grid-gutter"  v-if="show_options">
+                        <div class=" px-2" >
                             <div class="widget widget-filter">
-                                <h3 class="widget-title">Veličina</h3>
-                                <div class="input-group input-group-sm mb-2">
-                                    <input class="widget-filter-search form-control rounded-end pe-5" type="text" placeholder="Pretraži"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
-                                </div>
-                                <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11.5rem;" data-simplebar data-simplebar-auto-hide="false">
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-xs">
-                                            <label class="form-check-label widget-filter-item-text" for="size-xs">XS</label>
-                                        </div><span class="fs-xs text-muted">34</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-s">
-                                            <label class="form-check-label widget-filter-item-text" for="size-s">S</label>
-                                        </div><span class="fs-xs text-muted">57</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-m">
-                                            <label class="form-check-label widget-filter-item-text" for="size-m">M</label>
-                                        </div><span class="fs-xs text-muted">198</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-l">
-                                            <label class="form-check-label widget-filter-item-text" for="size-l">L</label>
-                                        </div><span class="fs-xs text-muted">72</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-xl">
-                                            <label class="form-check-label widget-filter-item-text" for="size-xl">XL</label>
-                                        </div><span class="fs-xs text-muted">46</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-39">
-                                            <label class="form-check-label widget-filter-item-text" for="size-39">39</label>
-                                        </div><span class="fs-xs text-muted">112</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-40">
-                                            <label class="form-check-label widget-filter-item-text" for="size-40">40</label>
-                                        </div><span class="fs-xs text-muted">85</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-41">
-                                            <label class="form-check-label widget-filter-item-text" for="size-40">41</label>
-                                        </div><span class="fs-xs text-muted">210</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-42">
-                                            <label class="form-check-label widget-filter-item-text" for="size-42">42</label>
-                                        </div><span class="fs-xs text-muted">57</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-43">
-                                            <label class="form-check-label widget-filter-item-text" for="size-43">43</label>
-                                        </div><span class="fs-xs text-muted">30</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-44">
-                                            <label class="form-check-label widget-filter-item-text" for="size-44">44</label>
-                                        </div><span class="fs-xs text-muted">61</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-45">
-                                            <label class="form-check-label widget-filter-item-text" for="size-45">45</label>
-                                        </div><span class="fs-xs text-muted">23</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-46">
-                                            <label class="form-check-label widget-filter-item-text" for="size-46">46</label>
-                                        </div><span class="fs-xs text-muted">19</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-47">
-                                            <label class="form-check-label widget-filter-item-text" for="size-47">47</label>
-                                        </div><span class="fs-xs text-muted">15</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-48">
-                                            <label class="form-check-label widget-filter-item-text" for="size-48">48</label>
-                                        </div><span class="fs-xs text-muted">12</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-49">
-                                            <label class="form-check-label widget-filter-item-text" for="size-49">49</label>
-                                        </div><span class="fs-xs text-muted">8</span>
-                                    </li>
-                                    <li class="widget-filter-item d-flex justify-content-between align-items-center">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="size-50">
-                                            <label class="form-check-label widget-filter-item-text" for="size-50">50</label>
-                                        </div><span class="fs-xs text-muted">6</span>
-                                    </li>
+                                <h3 class="widget-title">Veličina<span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
+                               <!--  <div class="input-group input-group-sm mb-2">
+                                    <input type="search" v-model="searchOption" class="form-control rounded-end pe-5" placeholder="Pretraži opcije"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                                </div> -->
+                                <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
+                                    <div class="simplebar-scroll-content">
+                                        <div class="simplebar-content">
+                                            <template  v-for="option in options">
+                                                <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-if="option.type==='size'">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" :id="option.id" v-bind:value="option.id" v-model="selectedOptions">
+                                                        <label class="form-check-label widget-filter-item-text" :for="option.id">{{ option.translation.title }}</label>
+                                                    </div>
+                                                    <span class="fs-xs text-muted">{{ Number(option.products_count).toLocaleString('hr-HR') }}</span>
+                                                </li>
+                                            </template>
+                                        </div>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -154,61 +65,41 @@
                 </div>
                 <div class="col-lg-12 ">
                     <!-- Filter by Color-->
-                    <div class=" mb-grid-gutter">
-                        <div class=" px-2">
-                            <div class="widget">
+
+                    <div class="mb-grid-gutter"  v-if="show_options">
+                        <div class=" px-2" >
+                            <div class="widget widget-filter2">
                                 <h3 class="widget-title">Boja</h3>
+
+
                                 <div class="d-flex flex-wrap">
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-blue-gray">
-                                        <label class="form-option-label rounded-circle" for="color-blue-gray"><span class="form-option-color rounded-circle" style="background-color: #b3c8db;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-blue-gray">Plava</label>
-                                    </div>
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-burgundy">
-                                        <label class="form-option-label rounded-circle" for="color-burgundy"><span class="form-option-color rounded-circle" style="background-color: #ca7295;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-burgundy">Crvena</label>
-                                    </div>
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-teal">
-                                        <label class="form-option-label rounded-circle" for="color-teal"><span class="form-option-color rounded-circle" style="background-color: #91c2c3;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-teal">Zelena</label>
-                                    </div>
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-brown">
-                                        <label class="form-option-label rounded-circle" for="color-brown"><span class="form-option-color rounded-circle" style="background-color: #9a8480;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-brown">Smeđa</label>
-                                    </div>
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-coral-red">
-                                        <label class="form-option-label rounded-circle" for="color-coral-red"><span class="form-option-color rounded-circle" style="background-color: #ff7072;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-coral-red">Crvena</label>
-                                    </div>
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-navy">
-                                        <label class="form-option-label rounded-circle" for="color-navy"><span class="form-option-color rounded-circle" style="background-color: #696dc8;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-navy">Plava</label>
-                                    </div>
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-charcoal">
-                                        <label class="form-option-label rounded-circle" for="color-charcoal"><span class="form-option-color rounded-circle" style="background-color: #4e4d4d;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-charcoal">Siva</label>
-                                    </div>
-                                    <div class="form-check form-option text-center mb-2 mx-1" style="width: 4rem;">
-                                        <input class="form-check-input" type="checkbox" id="color-sky-blue">
-                                        <label class="form-option-label rounded-circle" for="color-sky-blue"><span class="form-option-color rounded-circle" style="background-color: #8bcdf5;"></span></label>
-                                        <label class="d-block fs-xs text-muted mt-n1" for="color-sky-blue">Modra</label>
-                                    </div>
+
+                                    <template  v-for="optionb in options">
+
+                                        <div class="form-check form-option text-center mb-2 mx-1"  v-if="optionb.type==='color' && optionb.value_opt === null" >
+                                            <input class="form-check-input" type="checkbox" :id="optionb.id" v-bind:value="optionb.id" v-model="selectedOptions">
+
+                                            <label class="form-option-label rounded-circle" :for="optionb.id"><span class="form-option-color rounded-circle" v-bind:style="{ background: optionb.value}"></span></label>
+                                            <label class="d-block fs-xs text-muted mt-n1" :for="optionb.id">{{ optionb.translation.title }}</label>
+
+                                        </div>
+
+
+
+
+
+                                    </template>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 
 
 
@@ -234,18 +125,26 @@ export default {
             category: null,
             subcategory: null,
             brands: [],
+            options: [],
             selectedBrands: [],
+            selectedOptions: [],
             start: '',
             end: '',
             autor: '',
             brand: '',
+            option: '',
             nakladnik: '',
             search_query: '',
             searchBrand: '',
+            searchOption: '',
             show_brands: false,
+            show_options: false,
             brands_loaded: false,
+            options_loaded: false,
             origin: location.origin + '/',
             trans: window.trans,
+            activeColor: 'black',
+            fontSize: 12,
         }
     },
     //
@@ -264,6 +163,15 @@ export default {
         searchBrand(value) {
             if (value.length > 2 || value == '') {
                 return this.getBrands();
+            }
+        },
+        selectedOptions(value) {
+            this.option = value.join('+');
+            this.setQueryParamOther('option', this.option);
+        },
+        searchOption(value) {
+            if (value.length > 0 || value == '') {
+                return this.getOptions();
             }
         },
         $route(params) {
@@ -285,6 +193,12 @@ export default {
             this.show_brands = true;
             this.getBrands();
         }
+
+        if (this.option == '') {
+            this.show_options = true;
+            this.getOptions();
+        }
+
 
 
 
@@ -317,7 +231,6 @@ export default {
         },
 
 
-
         /**
          *
          **/
@@ -328,6 +241,21 @@ export default {
             axios.post('filter/getBrands', { params }).then(response => {
                 this.brands_loaded = true;
                 this.brands = response.data;
+
+            });
+        },
+
+
+        /**
+         *
+         **/
+        getOptions() {
+            this.options_loaded = false;
+            let params = this.setParams();
+
+            axios.post('filter/getOptions', { params }).then(response => {
+                this.options_loaded = true;
+                this.options = response.data;
 
             });
         },
@@ -369,6 +297,7 @@ export default {
                 end: this.end,
 
                 brand: this.brand,
+                option: this.option,
 
                 page: this.page,
                 pojam: this.search_query,
@@ -386,7 +315,7 @@ export default {
          *
          */
         checkNoFollowQuery(param) {
-            if (param.nakladnik || param.autor || param.brand || param.start || param.end) {
+            if (param.nakladnik || param.autor || param.option || param.brand || param.start || param.end) {
                 if (!document.querySelectorAll('meta[name="robots"]').length > 0) {
                     $('head').append('<meta name=robots content=noindex,nofollow>');
                 }
@@ -405,6 +334,7 @@ export default {
             this.end = params.query.end ? params.query.end : '';
 
             this.brand = params.query.brand ? params.query.brand : '';
+            this.option = params.query.option ? params.query.option : '';
 
             this.search_query = params.query.pojam ? params.query.pojam : '';
         },
@@ -419,13 +349,19 @@ export default {
                 cat: this.category ? this.category.id : this.cat,
                 subcat: this.subcategory ? this.subcategory.id : this.subcat,
                 brand: this.brand,
+                option: this.option,
                 search_brand: this.searchBrand,
+                search_option: this.searchOption,
                 pojam: this.search_query
             };
 
 
             if (this.brand != '') {
                 params.brand = this.brand;
+            }
+
+            if (this.option != '') {
+                params.option = this.option;
             }
 
 
@@ -445,6 +381,14 @@ export default {
                     this.selectedBrands = [this.brand];
                 }
             }
+
+            if (this.option != '') {
+                if ((this.option).includes('+')) {
+                    this.selectedOption = (this.option).split('+');
+                } else {
+                    this.selectedOption = [this.option];
+                }
+            }
         },
 
         /**
@@ -453,6 +397,7 @@ export default {
         cleanQuery() {
             this.$router.push({query: {}}).catch(()=>{});
             this.selectedBrands = [];
+            this.selectedOptions = [];
             this.start = '';
             this.end = '';
         },

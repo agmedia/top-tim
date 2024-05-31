@@ -145,6 +145,8 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
     }
 
 
+
+
     /**
      * @param $query
      *

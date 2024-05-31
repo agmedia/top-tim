@@ -63,10 +63,12 @@ class ProductOption extends Model
 
 
 
+
+
     public static function getList()
     {
         $response = [];
-        $values = Attributes::query()->get();
+        $values = Options::query()->get();
 
         foreach ($values as $value) {
             $response[$value->group]['group'] = $value->translation->group_title;

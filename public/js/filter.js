@@ -2015,6 +2015,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
               return this.getBrands();
           }
     },
+    searchOption: function searchOption(value) {
+          if (value.length > 2 || value == '') {
+              return this.getOptions();
+          }
+    },
+
     $route: function $route(params) {
       this.checkQuery(params);
     }
@@ -2035,8 +2041,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       this.getPublishers();
     }
 
+      if (this.option == '') {
+          this.show_optionss = true;
+          this.getOptions();
+      }
+
       if (this.brand == '') {
-          this.show_brandsrs = true;
+          this.show_brands = true;
           this.getBrands();
       }
 
@@ -2102,6 +2113,23 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       });
     },
 
+
+      /**
+       *
+       **/
+      getOptions: function getOptions() {
+          var _this4 = this;
+
+          this.options_loaded = false;
+          var params = this.setParams();
+          axios.post('filter/getOptions', {
+              params: params
+          }).then(function (response) {
+              _this4.options_loaded = true;
+              _this4.options = response.data;
+          });
+      },
+
     /**
      *
      **/
@@ -2145,6 +2173,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         start: this.start,
         end: this.end,
         autor: this.autor,
+          option: this.option,
         nakladnik: this.nakladnik,
         page: this.page,
         pojam: this.search_query
@@ -2166,6 +2195,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       this.start = params.query.start ? params.query.start : '';
       this.end = params.query.end ? params.query.end : '';
       this.autor = params.query.autor ? params.query.autor : '';
+        this.option= params.query.option ? params.query.option : '';
       this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
       this.search_query = params.query.pojam ? params.query.pojam : '';
     },
@@ -2180,6 +2210,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         cat: this.category ? this.category.id : this.cat,
         subcat: this.subcategory ? this.subcategory.id : this.subcat,
         author: this.author,
+        option: this.option,
         publisher: this.publisher,
         search_author: this.searchAuthor,
         search_publisher: this.searchPublisher,
@@ -2194,6 +2225,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         params.publisher = this.publisher;
       }
 
+
+       if (this.option != '') {
+            params.option = this.option;
+       }
+
       return params;
     },
     preselect: function preselect() {
@@ -2204,6 +2240,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           this.selectedAuthors = [this.autor];
         }
       }
+
+        if (this.option != '') {
+            if (this.option.includes('+')) {
+                this.selectedOptions = this.option.split('+');
+            } else {
+                this.selectedOptions = [this.option];
+            }
+        }
 
       if (this.nakladnik != '') {
         if (this.nakladnik.includes('+')) {
@@ -2223,6 +2267,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       })["catch"](function () {});
       this.selectedAuthors = [];
       this.selectedPublishers = [];
+      this.selectedOptions = [];
     },
 
     /**
@@ -2655,6 +2700,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     cat: String,
     subcat: String,
     author: String,
+    option: String,
     publisher: String
   },
   //
@@ -2663,6 +2709,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       products: {},
       autor: '',
       nakladnik: '',
+      option: '',
       start: '',
       end: '',
       sorting: '',
@@ -2773,6 +2820,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         start: this.start,
         end: this.end,
         autor: this.autor,
+        option: this.option,
         nakladnik: this.nakladnik,
         sort: this.sorting,
         pojam: this.search_query,
@@ -2797,6 +2845,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       this.end = params.query.end ? params.query.end : '';
       this.autor = params.query.autor ? params.query.autor : '';
       this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
+      this.option = params.query.option ? params.query.option : '';
       this.page = params.query.page ? params.query.page : '';
       this.sorting = params.query.sort ? params.query.sort : '';
       this.search_query = params.query.pojam ? params.query.pojam : '';
@@ -2819,6 +2868,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         cat: this.cat,
         subcat: this.subcat,
         autor: this.autor,
+        option: this.option,
         nakladnik: this.nakladnik,
         start: this.start,
         end: this.end,
@@ -2829,6 +2879,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       if (this.author != '') {
         params.autor = this.author;
       }
+       if (this.option= '') {
+            params.option = this.option;
+       }
 
       if (this.publisher != '') {
         params.nakladnik = this.publisher;

@@ -2952,18 +2952,26 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       category: null,
       subcategory: null,
       brands: [],
+      options: [],
       selectedBrands: [],
+      selectedOptions: [],
       start: '',
       end: '',
       autor: '',
       brand: '',
+      option: '',
       nakladnik: '',
       search_query: '',
       searchBrand: '',
+      searchOption: '',
       show_brands: false,
+      show_options: false,
       brands_loaded: false,
+      options_loaded: false,
       origin: location.origin + '/',
-      trans: window.trans
+      trans: window.trans,
+      activeColor: 'black',
+      fontSize: 12
     };
   },
   //
@@ -2983,6 +2991,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         return this.getBrands();
       }
     },
+    selectedOptions: function selectedOptions(value) {
+      this.option = value.join('+');
+      this.setQueryParamOther('option', this.option);
+    },
+    searchOption: function searchOption(value) {
+      if (value.length > 0 || value == '') {
+        return this.getOptions();
+      }
+    },
     $route: function $route(params) {
       this.checkQuery(params);
     }
@@ -2995,6 +3012,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     if (this.brand == '') {
       this.show_brands = true;
       this.getBrands();
+    }
+    if (this.option == '') {
+      this.show_options = true;
+      this.getOptions();
     }
     this.preselect();
   },
@@ -3040,6 +3061,20 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     /**
      *
      **/
+    getOptions: function getOptions() {
+      var _this3 = this;
+      this.options_loaded = false;
+      var params = this.setParams();
+      axios.post('filter/getOptions', {
+        params: params
+      }).then(function (response) {
+        _this3.options_loaded = true;
+        _this3.options = response.data;
+      });
+    },
+    /**
+     *
+     **/
     setQueryParam: function setQueryParam(type, value) {
       if (value.length > 3 && value.length < 5) {
         this.closeWindow();
@@ -3076,6 +3111,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         start: this.start,
         end: this.end,
         brand: this.brand,
+        option: this.option,
         page: this.page,
         pojam: this.search_query
       };
@@ -3092,7 +3128,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      *
      */
     checkNoFollowQuery: function checkNoFollowQuery(param) {
-      if (param.nakladnik || param.autor || param.brand || param.start || param.end) {
+      if (param.nakladnik || param.autor || param.option || param.brand || param.start || param.end) {
         if (!document.querySelectorAll('meta[name="robots"]').length > 0) {
           $('head').append('<meta name=robots content=noindex,nofollow>');
         }
@@ -3109,6 +3145,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       this.start = params.query.start ? params.query.start : '';
       this.end = params.query.end ? params.query.end : '';
       this.brand = params.query.brand ? params.query.brand : '';
+      this.option = params.query.option ? params.query.option : '';
       this.search_query = params.query.pojam ? params.query.pojam : '';
     },
     /**
@@ -3121,11 +3158,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         cat: this.category ? this.category.id : this.cat,
         subcat: this.subcategory ? this.subcategory.id : this.subcat,
         brand: this.brand,
+        option: this.option,
         search_brand: this.searchBrand,
+        search_option: this.searchOption,
         pojam: this.search_query
       };
       if (this.brand != '') {
         params.brand = this.brand;
+      }
+      if (this.option != '') {
+        params.option = this.option;
       }
       return params;
     },
@@ -3140,6 +3182,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           this.selectedBrands = [this.brand];
         }
       }
+      if (this.option != '') {
+        if (this.option.includes('+')) {
+          this.selectedOption = this.option.split('+');
+        } else {
+          this.selectedOption = [this.option];
+        }
+      }
     },
     /**
      *
@@ -3149,6 +3198,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         query: {}
       })["catch"](function () {});
       this.selectedBrands = [];
+      this.selectedOptions = [];
       this.start = '';
       this.end = '';
     },
@@ -3544,6 +3594,7 @@ Vue.directive('tooltip', function (el, binding) {
         end: this.end,
         autor: this.autor,
         brand: this.brend,
+        option: this.option,
         nakladnik: this.nakladnik,
         sort: this.sorting,
         pojam: this.search_query,
@@ -3566,6 +3617,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.end = params.query.end ? params.query.end : '';
       this.autor = params.query.autor ? params.query.autor : '';
       this.brend = params.query.brand ? params.query.brand : '';
+      this.option = params.query.option ? params.query.option : '';
       this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
       this.page = params.query.page ? params.query.page : '';
       this.sorting = params.query.sort ? params.query.sort : '';
@@ -3588,6 +3640,7 @@ Vue.directive('tooltip', function (el, binding) {
         subcat: this.subcat,
         autor: this.autor,
         brand: this.brend ? this.brend : this.brand,
+        option: this.option ? this.option : this.option,
         nakladnik: this.nakladnik,
         start: this.start,
         end: this.end,
@@ -3599,6 +3652,9 @@ Vue.directive('tooltip', function (el, binding) {
       }
       if (this.brend != '') {
         params.brand = this.brend;
+      }
+      if (this.option != '') {
+        params.option = this.option;
       }
       if (this.publisher != '') {
         params.nakladnik = this.publisher;
@@ -4717,6 +4773,7 @@ var render = function render() {
       "max-height": "11rem"
     },
     attrs: {
+      "data-simplebar": "",
       "data-simplebar-auto-hide": "false"
     }
   }, [_c("div", {
@@ -4774,7 +4831,147 @@ var render = function render() {
         href: _vm.origin + brand.url
       }
     }, [_vm._v(_vm._s(Number(brand.products_count).toLocaleString("hr-HR")))])])]);
-  }), 0)])])]) : _vm._e()])]) : _vm._e()]), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._m(2)])])]);
+  }), 0)])])]) : _vm._e()])]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-lg-12"
+  }, [_vm.show_options ? _c("div", {
+    staticClass: "mb-grid-gutter"
+  }, [_c("div", {
+    staticClass: "px-2"
+  }, [_c("div", {
+    staticClass: "widget widget-filter"
+  }, [_c("h3", {
+    staticClass: "widget-title"
+  }, [_vm._v("Veličina"), !_vm.options_loaded ? _c("span", {
+    staticClass: "spinner-border spinner-border-sm",
+    staticStyle: {
+      "float": "right"
+    }
+  }) : _vm._e()]), _vm._v(" "), _c("ul", {
+    staticClass: "widget-list widget-filter-list list-unstyled pt-1",
+    staticStyle: {
+      "max-height": "11rem"
+    },
+    attrs: {
+      "data-simplebar": "",
+      "data-simplebar-auto-hide": "false"
+    }
+  }, [_c("div", {
+    staticClass: "simplebar-scroll-content"
+  }, [_c("div", {
+    staticClass: "simplebar-content"
+  }, [_vm._l(_vm.options, function (option) {
+    return [option.type === "size" ? _c("li", {
+      staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
+    }, [_c("div", {
+      staticClass: "form-check"
+    }, [_c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: _vm.selectedOptions,
+        expression: "selectedOptions"
+      }],
+      staticClass: "form-check-input",
+      attrs: {
+        type: "checkbox",
+        id: option.id
+      },
+      domProps: {
+        value: option.id,
+        checked: Array.isArray(_vm.selectedOptions) ? _vm._i(_vm.selectedOptions, option.id) > -1 : _vm.selectedOptions
+      },
+      on: {
+        change: function change($event) {
+          var $$a = _vm.selectedOptions,
+            $$el = $event.target,
+            $$c = $$el.checked ? true : false;
+          if (Array.isArray($$a)) {
+            var $$v = option.id,
+              $$i = _vm._i($$a, $$v);
+            if ($$el.checked) {
+              $$i < 0 && (_vm.selectedOptions = $$a.concat([$$v]));
+            } else {
+              $$i > -1 && (_vm.selectedOptions = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+            }
+          } else {
+            _vm.selectedOptions = $$c;
+          }
+        }
+      }
+    }), _vm._v(" "), _c("label", {
+      staticClass: "form-check-label widget-filter-item-text",
+      attrs: {
+        "for": option.id
+      }
+    }, [_vm._v(_vm._s(option.translation.title))])]), _vm._v(" "), _c("span", {
+      staticClass: "fs-xs text-muted"
+    }, [_vm._v(_vm._s(Number(option.products_count).toLocaleString("hr-HR")))])]) : _vm._e()];
+  })], 2)])])])])]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-lg-12"
+  }, [_vm.show_options ? _c("div", {
+    staticClass: "mb-grid-gutter"
+  }, [_c("div", {
+    staticClass: "px-2"
+  }, [_c("div", {
+    staticClass: "widget widget-filter2"
+  }, [_c("h3", {
+    staticClass: "widget-title"
+  }, [_vm._v("Boja")]), _vm._v(" "), _c("div", {
+    staticClass: "d-flex flex-wrap"
+  }, [_vm._l(_vm.options, function (optionb) {
+    return [optionb.type === "color" && optionb.value_opt === null ? _c("div", {
+      staticClass: "form-check form-option text-center mb-2 mx-1"
+    }, [_c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: _vm.selectedOptions,
+        expression: "selectedOptions"
+      }],
+      staticClass: "form-check-input",
+      attrs: {
+        type: "checkbox",
+        id: optionb.id
+      },
+      domProps: {
+        value: optionb.id,
+        checked: Array.isArray(_vm.selectedOptions) ? _vm._i(_vm.selectedOptions, optionb.id) > -1 : _vm.selectedOptions
+      },
+      on: {
+        change: function change($event) {
+          var $$a = _vm.selectedOptions,
+            $$el = $event.target,
+            $$c = $$el.checked ? true : false;
+          if (Array.isArray($$a)) {
+            var $$v = optionb.id,
+              $$i = _vm._i($$a, $$v);
+            if ($$el.checked) {
+              $$i < 0 && (_vm.selectedOptions = $$a.concat([$$v]));
+            } else {
+              $$i > -1 && (_vm.selectedOptions = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+            }
+          } else {
+            _vm.selectedOptions = $$c;
+          }
+        }
+      }
+    }), _vm._v(" "), _c("label", {
+      staticClass: "form-option-label rounded-circle",
+      attrs: {
+        "for": optionb.id
+      }
+    }, [_c("span", {
+      staticClass: "form-option-color rounded-circle",
+      style: {
+        background: optionb.value
+      }
+    })]), _vm._v(" "), _c("label", {
+      staticClass: "d-block fs-xs text-muted mt-n1",
+      attrs: {
+        "for": optionb.id
+      }
+    }, [_vm._v(_vm._s(optionb.translation.title))])]) : _vm._e()];
+  })], 2)])])]) : _vm._e()])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -4790,552 +4987,6 @@ var staticRenderFns = [function () {
       "data-bs-dismiss": "offcanvas"
     }
   })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "col-lg-12"
-  }, [_c("div", {
-    staticClass: "mb-grid-gutter"
-  }, [_c("div", {
-    staticClass: "px-2"
-  }, [_c("div", {
-    staticClass: "widget widget-filter"
-  }, [_c("h3", {
-    staticClass: "widget-title"
-  }, [_vm._v("Veličina")]), _vm._v(" "), _c("div", {
-    staticClass: "input-group input-group-sm mb-2"
-  }, [_c("input", {
-    staticClass: "widget-filter-search form-control rounded-end pe-5",
-    attrs: {
-      type: "text",
-      placeholder: "Pretraži"
-    }
-  }), _c("i", {
-    staticClass: "ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"
-  })]), _vm._v(" "), _c("ul", {
-    staticClass: "widget-list widget-filter-list list-unstyled pt-1",
-    staticStyle: {
-      "max-height": "11.5rem"
-    },
-    attrs: {
-      "data-simplebar": "",
-      "data-simplebar-auto-hide": "false"
-    }
-  }, [_c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-xs"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-xs"
-    }
-  }, [_vm._v("XS")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("34")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-s"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-s"
-    }
-  }, [_vm._v("S")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("57")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-m"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-m"
-    }
-  }, [_vm._v("M")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("198")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-l"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-l"
-    }
-  }, [_vm._v("L")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("72")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-xl"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-xl"
-    }
-  }, [_vm._v("XL")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("46")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-39"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-39"
-    }
-  }, [_vm._v("39")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("112")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-40"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-40"
-    }
-  }, [_vm._v("40")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("85")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-41"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-40"
-    }
-  }, [_vm._v("41")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("210")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-42"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-42"
-    }
-  }, [_vm._v("42")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("57")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-43"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-43"
-    }
-  }, [_vm._v("43")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("30")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-44"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-44"
-    }
-  }, [_vm._v("44")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("61")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-45"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-45"
-    }
-  }, [_vm._v("45")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("23")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-46"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-46"
-    }
-  }, [_vm._v("46")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("19")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-47"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-47"
-    }
-  }, [_vm._v("47")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("15")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-48"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-48"
-    }
-  }, [_vm._v("48")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("12")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-49"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-49"
-    }
-  }, [_vm._v("49")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("8")])]), _vm._v(" "), _c("li", {
-    staticClass: "widget-filter-item d-flex justify-content-between align-items-center"
-  }, [_c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "size-50"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label widget-filter-item-text",
-    attrs: {
-      "for": "size-50"
-    }
-  }, [_vm._v("50")])]), _c("span", {
-    staticClass: "fs-xs text-muted"
-  }, [_vm._v("6")])])])])])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "col-lg-12"
-  }, [_c("div", {
-    staticClass: "mb-grid-gutter"
-  }, [_c("div", {
-    staticClass: "px-2"
-  }, [_c("div", {
-    staticClass: "widget"
-  }, [_c("h3", {
-    staticClass: "widget-title"
-  }, [_vm._v("Boja")]), _vm._v(" "), _c("div", {
-    staticClass: "d-flex flex-wrap"
-  }, [_c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-blue-gray"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-blue-gray"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#b3c8db"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-blue-gray"
-    }
-  }, [_vm._v("Plava")])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-burgundy"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-burgundy"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#ca7295"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-burgundy"
-    }
-  }, [_vm._v("Crvena")])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-teal"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-teal"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#91c2c3"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-teal"
-    }
-  }, [_vm._v("Zelena")])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-brown"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-brown"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#9a8480"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-brown"
-    }
-  }, [_vm._v("Smeđa")])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-coral-red"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-coral-red"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#ff7072"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-coral-red"
-    }
-  }, [_vm._v("Crvena")])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-navy"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-navy"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#696dc8"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-navy"
-    }
-  }, [_vm._v("Plava")])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-charcoal"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-charcoal"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#4e4d4d"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-charcoal"
-    }
-  }, [_vm._v("Siva")])]), _vm._v(" "), _c("div", {
-    staticClass: "form-check form-option text-center mb-2 mx-1",
-    staticStyle: {
-      width: "4rem"
-    }
-  }, [_c("input", {
-    staticClass: "form-check-input",
-    attrs: {
-      type: "checkbox",
-      id: "color-sky-blue"
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-option-label rounded-circle",
-    attrs: {
-      "for": "color-sky-blue"
-    }
-  }, [_c("span", {
-    staticClass: "form-option-color rounded-circle",
-    staticStyle: {
-      "background-color": "#8bcdf5"
-    }
-  })]), _vm._v(" "), _c("label", {
-    staticClass: "d-block fs-xs text-muted mt-n1",
-    attrs: {
-      "for": "color-sky-blue"
-    }
-  }, [_vm._v("Modra")])])])])])])]);
 }];
 render._withStripped = true;
 

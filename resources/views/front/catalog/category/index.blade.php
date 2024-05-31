@@ -197,18 +197,15 @@
                    group="{{ isset($group) ? $group : null }}"
                    cat="{{ isset($cat) ? $cat['id'] : null }}"
                    subcat="{{ isset($subcat) ? $subcat['id'] : null }}"
-                   author="{{ isset($author) ? $author['slug'] : null }}"
-                   brand="{{ isset($brand) ? $brand->translation->slug : null }}"
-                   publisher="{{ isset($publisher) ? $publisher['slug'] : null }}">
+                   brand="{{ isset($brand) ? $brand->translation->slug : null }}">
     </products-view>
 
     <filter-side-view ids="{{ isset($ids) ? $ids : null }}"
                  group="{{ isset($group) ? $group : null }}"
                  cat="{{ isset($cat) ? $cat : null }}"
                  subcat="{{ isset($subcat) ? $subcat : null }}"
-                 author="{{ isset($author) ? $author['slug'] : null }}"
-                      brand="{{ isset($brand) ? $brand->translation->slug : null }}"
-                 publisher="{{ isset($publisher) ? $publisher['slug'] : null }}">
+                 option="{{ isset($option) ? $option->translation->slug : null }}"
+                 brand="{{ isset($brand) ? $brand->translation->slug : null }}">
     </filter-side-view>
 
 

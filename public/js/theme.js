@@ -8,7 +8,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
  * Cartzilla | Bootstrap E-Commerce Template
  * Copyright 2023 Createx Studio
  * Theme core scripts
- * 
+ *
  * @author Createx Studio
  * @version 2.5.1
  */
@@ -60,7 +60,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
   /**
    * Cascading (Masonry) grid layout
-   * 
+   *
    * @requires https://github.com/desandro/imagesloaded
    * @requires https://github.com/Vestride/Shuffle
   */

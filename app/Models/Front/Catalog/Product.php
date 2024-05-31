@@ -8,6 +8,7 @@ use App\Models\Back\Catalog\Product\ProductAction;
 use App\Models\Back\Marketing\Review;
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\Catalog\Product\ProductAttribute;
+use App\Models\Front\Catalog\Options\Options;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -738,17 +739,13 @@ class Product extends Model
             if (is_string($request->input('brand'))) {
                 $value = $request->input('brand');
 
-
                 if ($value) {
                     if (strpos($value, '+') !== false) {
                         $arr = explode('+', $value);
 
-
                         $brand = Brand::query()->whereHas('translations', function ($query) use ($arr) {
                             $query->whereIn('slug', $arr);
                         })->get();
-
-
 
                     } else {
                         $brandz = Brand::query()->whereHas('translation', function ($query) use ($value) {
@@ -756,8 +753,6 @@ class Product extends Model
                         })->first();
                     }
                 }
-
-
 
                 if (isset($brand)) {
                     foreach ($brand as $item) {
@@ -771,6 +766,41 @@ class Product extends Model
             $query->whereIn('brand_id', $auts);
         }
 
+
+        if ($request->has('option')) {
+
+            $auts = [];
+
+            if (is_array($request->input('option'))) {
+                foreach ($request->input('option') as $key => $item) {
+                    if (isset($item->id)) {
+                        array_push($auts, $item->id);
+                    } else {
+                        array_push($auts, $key);
+                    }
+                }
+            }
+
+
+            if (is_string($request->input('option'))) {
+                $value = $request->input('option');
+
+                if ($value) {
+                        $option = ProductOption::query()->where('option_id', $value)->get();
+
+                }
+
+
+            }
+            foreach ($option as $item) {
+                array_push($auts, $item->product_id);
+            }
+
+
+
+
+            $query->whereIn('id', $auts);
+        }
 
 
 
@@ -799,6 +829,8 @@ class Product extends Model
         } else {
             $query->orderBy('created_at', 'desc');
         }
+
+
 
         return $query;
     }

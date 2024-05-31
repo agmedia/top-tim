@@ -7,6 +7,7 @@ use App\Models\Front\Catalog\Product;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Front\Catalog\Author;
 use App\Models\Front\Catalog\Brand;
+use App\Models\Front\Catalog\Options\Options;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Publisher;
 use Illuminate\Http\Request;
@@ -175,6 +176,10 @@ class FilterController extends Controller
             $request_data['brand'] = $params['brand'];
         }
 
+        if (isset($params['option']) && $params['option']) {
+            $request_data['option'] = $params['option'];
+        }
+
         if (isset($params['start']) && $params['start']) {
             $request_data['start'] = $params['start'];
         }
@@ -238,6 +243,30 @@ class FilterController extends Controller
                     ->toArray();
             })
         );
+    }
+
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function options(Request $request)
+    {
+
+        if ($request->has('params')) {
+            return response()->json(
+                (new Options())->filter($request->input('params'))
+                    ->get()
+                    ->toArray()
+
+            );
+        }
+
+
+
+
     }
 
 
