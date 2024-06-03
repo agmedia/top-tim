@@ -367,8 +367,6 @@ class Product extends Model
                 $response[$parent]['group'] = $options->first()->top->group;
 
                 foreach ($options as $option) {
-                    //dd($option->top->translation->title);
-
                     if ($option->title->value_opt){
                         $style ='background: linear-gradient(45deg, '.$option->title->value.' 50%, '.$option->title->value_opt.' 50%);';
                     } else {
@@ -389,17 +387,23 @@ class Product extends Model
                     ];
 
                     if ( ! isset($parents[$option->top->id])) {
+                        if ($option->top->value_opt){
+                            $substyle ='background: linear-gradient(45deg, '.$option->top->value.' 50%, '.$option->top->value_opt.' 50%);';
+                        } else {
+                            $substyle ='background-color:'.$option->top->value;
+                        }
+
                         $parents[$option->top->id] = [
                             'id' => $option->top->id,
                             'option_id' => $option->top->option_id,
                             'name' => $option->top->translation->title,
-                            'sku' => $option->top->sku,
-                            'value' => $option->top->translation->value,
-                            'value_opt' => $option->top->translation->value_opt,
-                            'style' => $style,
-                            'quantity' => $option->top->quantity,
-                            'price' => $option->top->price,
-                            'sort_order' => $option->top->translation->sort_order,
+                            'sku' => '',
+                            'value' => $option->top->value,
+                            'value_opt' => $option->top->value_opt,
+                            'style' => $substyle,
+                            'quantity' => 0,
+                            'price' => 0,
+                            'sort_order' => $option->top->sort_order,
                         ];
                     }
                 }
