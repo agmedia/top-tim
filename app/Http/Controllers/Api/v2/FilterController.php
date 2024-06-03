@@ -279,6 +279,7 @@ class FilterController extends Controller
                     'value_opt'  => $option->value_opt,
                     'group' => $option->group,
                     'type' => $option->type,
+                    'products_count' => $option->products_count,
                     'style'     => $style,
                     'sort_order' => $option->sort_order
                 ];
