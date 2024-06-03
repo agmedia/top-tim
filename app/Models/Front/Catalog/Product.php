@@ -328,8 +328,6 @@ class Product extends Model
     {
         $response = [];
 
-
-
         if ($this->options()->count() > 0) {
             $options = $this->options()->get();
 
@@ -359,9 +357,58 @@ class Product extends Model
                         'sort_order' => $option->title->sort_order,
                     ];
                 }
+
+            } else {
+                $key = $options->first()->option->type;
+                $parent = $options->first()->top->type;
+                $parents = [];
+
+                $response[$key]['group'] = $options->first()->option->group;
+                $response[$parent]['group'] = $options->first()->top->group;
+
+                foreach ($options as $option) {
+                    //dd($option->top->translation->title);
+
+                    if ($option->title->value_opt){
+                        $style ='background: linear-gradient(45deg, '.$option->title->value.' 50%, '.$option->title->value_opt.' 50%);';
+                    } else {
+                        $style ='background-color:'.$option->title->value;
+                    }
+
+                    $response[$key]['options'][] = [
+                        'id' => $option->id,
+                        'option_id' => $option->option_id,
+                        'name' => $option->title->translation->title,
+                        'sku' => $option->sku,
+                        'value' => $option->title->value,
+                        'value_opt' => $option->title->value_opt,
+                        'style' => $style,
+                        'quantity' => $option->quantity,
+                        'price' => $option->price,
+                        'sort_order' => $option->title->sort_order,
+                    ];
+
+                    if ( ! isset($parents[$option->top->id])) {
+                        $parents[$option->top->id] = [
+                            'id' => $option->top->id,
+                            'option_id' => $option->top->option_id,
+                            'name' => $option->top->translation->title,
+                            'sku' => $option->top->sku,
+                            'value' => $option->top->translation->value,
+                            'value_opt' => $option->top->translation->value_opt,
+                            'style' => $style,
+                            'quantity' => $option->top->quantity,
+                            'price' => $option->top->price,
+                            'sort_order' => $option->top->translation->sort_order,
+                        ];
+                    }
+                }
+
+                $response[$parent]['options'] = $parents;
             }
         }
-        Log::info($response);
+
+        //dd($response);
 
         return $response;
     }

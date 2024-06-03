@@ -2,7 +2,7 @@
 
 namespace App\Models\Front\Catalog;
 
-use App\Models\Back\Catalog\Options\Options;
+use App\Models\Front\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Attributes;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductImageTranslation;
