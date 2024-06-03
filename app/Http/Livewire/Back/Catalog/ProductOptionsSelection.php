@@ -250,7 +250,9 @@ class ProductOptionsSelection extends Component
 
             //
             if ($values->first()->parent == 'option') {
-                $key = $values->first()->top->first()->type;
+                $key = $values->first()->top->type;
+
+
 
                 if ( ! isset($this->items[$key]['options'])) {
                     $this->items[$key]['options'] = [];
@@ -261,7 +263,7 @@ class ProductOptionsSelection extends Component
                     $this->items[$key]['sub_selections'] = [];
                 }
 
-                $this->first_option = $values->first()->parent_id;
+               $this->first_option = $values->first()->parent_id;
                 $this->second_option = $values->first()->option_id;
                 $this->type = 2;
                 $this->setDefaultOptions();
@@ -272,6 +274,8 @@ class ProductOptionsSelection extends Component
                     $sub_options = [];
 
                     foreach ($value as $sub_value) {
+
+
                         $sub_item = [
                             'id' => 0,
                             'value' => $sub_value->option_id,
@@ -309,6 +313,8 @@ class ProductOptionsSelection extends Component
 
         if ( ! $this->type) {
             foreach ($options->get() as $option) {
+
+
                 $this->select_options[$option->type] = [
                     'id' => $option->id,
                     'title' => $option->group
@@ -320,6 +326,7 @@ class ProductOptionsSelection extends Component
 
             if ($default) {
                 foreach ($options->where('group', Str::slug($default->group))->get() as $option) {
+
                     $this->items[$option->type]['options'] = [];
                     $this->items[$option->type]['selections'][$option->id] = [
                         'id' => $option->id,
@@ -330,6 +337,7 @@ class ProductOptionsSelection extends Component
                 if ($this->type == 2 && $this->second_option) {
                     $sub_options = Options::query();
                     $sub_default = Options::query()->where('id', $this->second_option)->first();
+
 
                     foreach ($sub_options->where('group', Str::slug($sub_default->group))->get() as $sub_option) {
                         $this->items[$option->type]['sub_selections'][$sub_option->id] = [

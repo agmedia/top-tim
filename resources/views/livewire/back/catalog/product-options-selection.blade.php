@@ -165,15 +165,6 @@
 
 @push('product_scripts')
     <script>
-        document.addEventListener('livewire:load', function () {
-            @foreach ($items as $group => $item)
-            @foreach ($item['options'] as $key => $option)
-            $('#select-{{ $group }}-{{ $key }}').select2({
-                placeholder: "{{ __('back/app.geozone.select_country') }}"
-            });
-            @endforeach
-            @endforeach
-        });
 
         Livewire.on('success_alert', () => {
 
