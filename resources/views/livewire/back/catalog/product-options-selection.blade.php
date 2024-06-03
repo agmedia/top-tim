@@ -79,6 +79,8 @@
         @endforeach
     @elseif($step == 'two')
         @foreach ($items as $group => $item)
+
+
             <div class="block-header p-0 mb-2" >
                 <h3 class="block-title">Glavna opcija: {{ $group }}</h3>
                 <a class="btn btn-success btn-sm" href="javascript:void(0);" wire:click="addItem('{{ $group }}')">
@@ -95,6 +97,7 @@
                 </thead>
                 <tbody>
                 @foreach ($item['options'] as $key => $option)
+
                     <tr>
                         <td class="font-size-sm">
                             <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}" wire:model="items.{{ $group }}.options.{{ $key }}.value" name="options[{{ $group }}][{{ $key }}][main_id]" style="width: 100%;" data-placeholder="Odaberite opciju">
@@ -124,11 +127,13 @@
                                     <th class="text-right font-size-sm"  class="text-center">{{ __('back/option.obrisi') }}</th>
                                 </tr>
                                 @foreach ($item['options'][$key]['sub_options'] as $sub_key => $sub_option)
+
                                     <tr>
                                         <td class="font-size-sm">
                                             <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}-{{ $sub_key }}" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.value" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][id]" style="width: 100%;" data-placeholder="Odaberite opciju">
                                                 <option></option>
                                                 @foreach ($item['sub_selections'] as $sub_selection)
+
                                                     <option value="{{ $sub_selection['id'] }}">{{ $sub_selection['title'] }}</option>
                                                 @endforeach
                                             </select>

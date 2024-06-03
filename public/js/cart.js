@@ -3764,40 +3764,38 @@ var render = function render() {
     attrs: {
       id: "colorOption"
     }
-  })]), _vm._v(" "), _vm._l(_vm.arr_options, function (options) {
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "position-relative me-n4 mb-3",
+    attrs: {
+      id: "select"
+    }
+  }, _vm._l(_vm.arr_options.color.options, function (option, index) {
     return _c("div", {
-      staticClass: "position-relative me-n4 mb-3",
+      staticClass: "form-check form-option form-check-inline mb-2",
       attrs: {
-        id: "select"
+        "data-target": option.option_id
       }
-    }, _vm._l(options.options, function (option, index) {
-      return _c("div", {
-        staticClass: "form-check form-option form-check-inline mb-2",
-        attrs: {
-          "data-target": option.option_id
-        }
-      }, [_c("input", {
-        staticClass: "form-check-input",
-        attrs: {
-          type: "radio",
-          name: "color",
-          id: "color" + index,
-          "data-bs-label": "colorOption"
-        },
-        domProps: {
-          value: option.name
-        }
-      }), _vm._v(" "), _c("label", {
-        staticClass: "form-option-label rounded-circle",
-        attrs: {
-          "for": "color" + index
-        }
-      }, [_c("span", {
-        staticClass: "form-option-color rounded-circle",
-        style: option.style
-      })])]);
-    }), 0);
-  })], 2) : _vm._e(), _vm._v(" "), _vm.arr_options.size ? _c("div", {
+    }, [_c("input", {
+      staticClass: "form-check-input",
+      attrs: {
+        type: "radio",
+        name: "color",
+        id: "color" + index,
+        "data-bs-label": "colorOption"
+      },
+      domProps: {
+        value: option.name
+      }
+    }), _vm._v(" "), _c("label", {
+      staticClass: "form-option-label rounded-circle",
+      attrs: {
+        "for": "color" + index
+      }
+    }, [_c("span", {
+      staticClass: "form-option-color rounded-circle",
+      style: option.style
+    })])]);
+  }), 0)]) : _vm._e(), _vm._v(" "), _vm.arr_options.size ? _c("div", {
     staticClass: "mw-500"
   }, [_c("div", {
     staticClass: "mb-3"
@@ -3810,25 +3808,23 @@ var render = function render() {
     }
   }, [_c("span", {
     staticClass: "text-danger"
-  }, [_vm._v("*")]), _vm._v(_vm._s(_vm.trans.velicina) + ":")]), _vm._m(0)]), _vm._v(" "), _vm._l(_vm.arr_options, function (options) {
-    return _c("select", {
-      staticClass: "form-select",
-      attrs: {
-        required: "",
-        id: "product-size"
+  }, [_vm._v("*")]), _vm._v(_vm._s(_vm.trans.velicina) + ":")]), _vm._m(0)]), _vm._v(" "), _c("select", {
+    staticClass: "form-select",
+    attrs: {
+      required: "",
+      id: "product-size"
+    }
+  }, [_c("option", {
+    attrs: {
+      value: ""
+    }
+  }, [_vm._v(_vm._s(_vm.trans.velicina) + " ")]), _vm._v(" "), _vm._l(_vm.arr_options.size.options, function (option) {
+    return _c("option", {
+      domProps: {
+        value: option.sku
       }
-    }, [_c("option", {
-      attrs: {
-        value: ""
-      }
-    }, [_vm._v(_vm._s(_vm.trans.velicina) + " ")]), _vm._v(" "), _vm._l(options.options, function (option) {
-      return _c("option", {
-        domProps: {
-          value: option.sku
-        }
-      }, [_vm._v(_vm._s(option.name))]);
-    })], 2);
-  })], 2)]) : _vm._e(), _vm._v(" "), _c("div", {
+    }, [_vm._v(_vm._s(option.name))]);
+  })], 2)])]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "d-flex align-items-center pt-2 mw-500"
   }, [_c("input", {
     directives: [{

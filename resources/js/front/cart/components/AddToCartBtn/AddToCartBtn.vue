@@ -6,14 +6,13 @@
                     <span class="text-danger">*</span> {{ trans.boja }}:</span>
                     <span class="text-muted" id="colorOption"> </span>
             </div>
-            <div class="position-relative me-n4 mb-3" id="select"  v-for="options in arr_options">
-                <div v-for="(option, index) in options.options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id" >  <!--:data-target="index" služi za slidanje slike  -->
-                    <input class="form-check-input" type="radio" name="color"  :id="'color' + index" data-bs-label="colorOption"  v-bind:value="option.name"  >
+            <div class="position-relative me-n4 mb-3" id="select" >
+                <div v-for="(option, index) in  arr_options.color.options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id" >
+                    <input class="form-check-input" type="radio" name="color"  :id="'color' + index" data-bs-label="colorOption"  v-bind:value="option.name" />
                     <label  class="form-option-label rounded-circle" :for="'color' + index">
                         <span  class="form-option-color rounded-circle" :style="option.style"></span>
                     </label>
                 </div>
-
             </div>
         </div>
         <div class="mw-500" v-if="arr_options.size">
@@ -21,9 +20,9 @@
                 <div class="d-flex justify-content-between align-items-center pb-1">
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label><a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
                 </div>
-                <select class="form-select" required id="product-size" v-for="options in arr_options">
+                <select class="form-select" required id="product-size" >
                     <option value="">{{ trans.velicina }} </option>
-                    <option v-for="option in options.options"   v-bind:value="option.sku">{{ option.name }}</option>
+                    <option v-for="option in arr_options.size.options"   v-bind:value="option.sku">{{ option.name }}</option>
                 </select>
             </div>
         </div>
