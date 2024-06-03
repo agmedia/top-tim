@@ -256,12 +256,21 @@ class FilterController extends Controller
     {
 
         if ($request->has('params')) {
-            return response()->json(
-                (new Options())->filter($request->input('params'))
-                    ->get()
-                    ->toArray()
+            $response = [];
+            $options  = (new Options())->filter($request->input('params'))
+                                       ->get();
 
-            );
+            foreach ($options as $option) {
+                $response[$option->group][] = [
+                    'id'         => $option->id,
+                    'title'      => $option->translation->title,
+                    'value'      => $option->color,
+                    'value_opt'  => $option->color_opt,
+                    'sort_order' => $option->sort_order
+                ];
+            }
+
+            return response()->json($response);
         }
 
 
