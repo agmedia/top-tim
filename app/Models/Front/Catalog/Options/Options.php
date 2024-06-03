@@ -140,7 +140,7 @@ class Options extends Model
 
     public function filter(array $request, int $limit = 20): Builder
     {
-        Log::info($request);
+
         $query = (new Options())->newQuery();
 
         if (isset($request['search_option']) && $request['search_option']) {
@@ -148,18 +148,17 @@ class Options extends Model
 
             $query = Helper::searchByTitle($query, $request['search_option']);
 
+
+
         } else {
             $query->active();
-
             if ($request['group'] && ( ! isset($request['search_option']) || ! $request['search_option'])) {
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
-
                     if ($request['option']) {
                         if (strpos($request['option'], '+') !== false) {
                             $arr = explode('+', $request['option']);
                             $pubs = Options::query()->whereIn('id', $arr)->pluck('id');
-
                             $query->whereIn('option_id', $pubs);
                         } else {
                             $query->where('option_id', $request['option']);
@@ -167,17 +166,14 @@ class Options extends Model
                     }
                 });
             }
-
             if (! $request['group'] && $request['option']) {
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
                     $query->where('option_id', Option::where('id', $request['option'])->pluck('id')->first());
                 });
             }
-
             if (! $request['group'] && $request['ids']) {
                 $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
-
                 $query->whereHas('products', function ($query) use ($_ids) {
                     $query->active()->hasStock()->whereIn('id', $_ids);
                 });
@@ -187,6 +183,8 @@ class Options extends Model
         $query->limit($limit)
             ->withCount('products')
             ->orderBy('sort_order');
+
+
 
         return $query;
     }

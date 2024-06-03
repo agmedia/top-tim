@@ -8,6 +8,7 @@ use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Front\Catalog\Author;
 use App\Models\Front\Catalog\Brand;
 use App\Models\Front\Catalog\Options\Options;
+use App\Models\Front\Catalog\ProductOption;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Publisher;
 use Illuminate\Http\Request;
@@ -226,6 +227,7 @@ class FilterController extends Controller
     public function brands(Request $request)
     {
         if ($request->has('params')) {
+
             return response()->json(
                 (new Brand())->filter($request->input('params'))
                     ->get()
@@ -260,23 +262,38 @@ class FilterController extends Controller
             $options  = (new Options())->filter($request->input('params'))
                                        ->get();
 
-            foreach ($options as $option) {
-                $response[$option->group][] = [
+          foreach ($options as $option) {
+
+              if($option->value_opt){
+                  $style ='background: linear-gradient(45deg, '.$option->value.' 50%, '.$option->value_opt.' 50%);';
+              }
+              else{
+                  $style ='background-color:'.$option->value;
+              }
+
+
+                $response[] = [
                     'id'         => $option->id,
                     'title'      => $option->translation->title,
-                    'value'      => $option->color,
-                    'value_opt'  => $option->color_opt,
+                    'value'      => $option->value,
+                    'value_opt'  => $option->value_opt,
+                    'group' => $option->group,
+                    'type' => $option->type,
+                    'style'     => $style,
                     'sort_order' => $option->sort_order
                 ];
             }
+
+
 
             return response()->json($response);
         }
 
 
-
-
     }
+
+
+
 
 
 

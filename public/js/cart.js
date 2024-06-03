@@ -4841,7 +4841,7 @@ var render = function render() {
     staticClass: "widget widget-filter"
   }, [_c("h3", {
     staticClass: "widget-title"
-  }, [_vm._v("Veličina"), !_vm.options_loaded ? _c("span", {
+  }, [_vm._v("Veličina "), !_vm.options_loaded ? _c("span", {
     staticClass: "spinner-border spinner-border-sm",
     staticStyle: {
       "float": "right"
@@ -4903,7 +4903,7 @@ var render = function render() {
       attrs: {
         "for": option.id
       }
-    }, [_vm._v(_vm._s(option.translation.title))])]), _vm._v(" "), _c("span", {
+    }, [_vm._v(_vm._s(option.title))])]), _vm._v(" "), _c("span", {
       staticClass: "fs-xs text-muted"
     }, [_vm._v(_vm._s(Number(option.products_count).toLocaleString("hr-HR")))])]) : _vm._e()];
   })], 2)])])])])]) : _vm._e()]), _vm._v(" "), _c("div", {
@@ -4919,7 +4919,7 @@ var render = function render() {
   }, [_vm._v("Boja")]), _vm._v(" "), _c("div", {
     staticClass: "d-flex flex-wrap"
   }, [_vm._l(_vm.options, function (optionb) {
-    return [optionb.type === "color" && optionb.value_opt === null ? _c("div", {
+    return [optionb.type === "color" ? _c("div", {
       staticClass: "form-check form-option text-center mb-2 mx-1"
     }, [_c("input", {
       directives: [{
@@ -4962,16 +4962,26 @@ var render = function render() {
       }
     }, [_c("span", {
       staticClass: "form-option-color rounded-circle",
-      style: {
-        background: optionb.value
-      }
+      style: optionb.style
     })]), _vm._v(" "), _c("label", {
       staticClass: "d-block fs-xs text-muted mt-n1",
       attrs: {
         "for": optionb.id
       }
-    }, [_vm._v(_vm._s(optionb.translation.title))])]) : _vm._e()];
-  })], 2)])])]) : _vm._e()])])])]);
+    }, [_vm._v(_vm._s(optionb.title))])]) : _vm._e()];
+  })], 2)])])]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-lg-12"
+  }, [_c("button", {
+    staticClass: "btn btn-sm btn-primary mt-4",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: _vm.cleanQuery
+    }
+  }, [_c("i", {
+    staticClass: "ci-trash"
+  }), _vm._v(" Očisti sve")])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
