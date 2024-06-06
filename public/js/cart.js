@@ -3794,6 +3794,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
@@ -3818,10 +3822,11 @@ var render = function render() {
       id: "select"
     }
   }, _vm._l(_vm.color_options, function (option, index) {
+    var _domProps;
     return _c("div", {
       staticClass: "form-check form-option form-check-inline mb-2",
       attrs: {
-        "data-target": option.id
+        "data-target": option.option_id
       }
     }, [_c("input", {
       directives: [{
@@ -3833,14 +3838,12 @@ var render = function render() {
       staticClass: "form-check-input",
       attrs: {
         type: "radio",
-        disabled: true,
         id: option.id,
         "data-bs-label": "colorOption"
       },
-      domProps: {
-        value: option.id,
-        checked: _vm._q(_vm.color, option.id)
-      },
+      domProps: (_domProps = {
+        value: option.id
+      }, _defineProperty(_domProps, "value", option.name), _defineProperty(_domProps, "checked", _vm._q(_vm.color, option.id)), _domProps),
       on: {
         change: function change($event) {
           _vm.color = option.id;
@@ -3854,7 +3857,7 @@ var render = function render() {
     }, [_c("span", {
       staticClass: "form-option-color rounded-circle",
       style: option.style
-    })])]);
+    })]), _vm._v("\n\n                " + _vm._s(option.active) + "\n            ")]);
   }), 0)]) : _vm._e(), _vm._v(" "), _vm.size_options ? _c("div", {
     staticClass: "mw-500"
   }, [_c("div", {
@@ -3950,7 +3953,7 @@ var render = function render() {
     staticStyle: {
       width: "100%"
     }
-  }, [_vm._v(_vm._s(_vm.trans.imate) + " " + _vm._s(_vm.has_in_cart) + " " + _vm._s(_vm.trans.artikala_u_kosarici) + ".")]) : _vm._e()]);
+  }, [_vm._v(_vm._s(_vm.trans.imate) + " " + _vm._s(_vm.has_in_cart) + " " + _vm._s(_vm.trans.artikala_u_kosarici) + ".")]) : _vm._e(), _vm._v("d\n")]);
 };
 var staticRenderFns = [function () {
   var _vm = this,

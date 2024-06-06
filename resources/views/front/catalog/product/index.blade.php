@@ -585,7 +585,7 @@ $('#openReview').on('click', function(e) {
     });
 
 
- /*   $(".form-check").click(function(){
+  $(".form-check").click(function(){
         var artworkId = $(this).data('target');
 
         console.log(artworkId);
@@ -594,7 +594,7 @@ $('#openReview').on('click', function(e) {
         console.log(artIndex);
 
         $carousel.slick('slickGoTo', artIndex);
-    });*/
+    });
 
 </script>
 @endpush

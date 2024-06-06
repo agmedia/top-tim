@@ -7,9 +7,11 @@
                 <span class="text-muted" id="colorOption"> </span>
             </div>
             <div class="position-relative me-n4 mb-3" id="select" >
-                <div v-for="(option, index) in color_options" class="form-check form-option form-check-inline mb-2" :data-target="option.id" >
-                    <input class="form-check-input" type="radio" :disabled="true" :value="option.id" :id="option.id" v-model="color" data-bs-label="colorOption"/>
-                    <label class="form-option-label rounded-circle" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style"></span></label>
+                <div v-for="(option, index) in color_options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id" >
+                    <input class="form-check-input" type="radio" :value="option.id" :id="option.id"  v-model="color" data-bs-label="colorOption" v-bind:value="option.name" />
+                    <label class="form-option-label rounded-circle" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style"></span> </label>
+
+                    {{ option.active}}
                 </div>
             </div>
         </div>
@@ -29,7 +31,7 @@
             <input class="form-control me-3 mb-1" type="number" inputmode="numeric" pattern="[0-9]*" v-model="quantity" min="1" :max="available" style="width: 5rem;">
             <button class="btn btn-primary btn-shadow  w-100 mb-1 " @click="add()" :disabled="disabled"><i class="ci-cart"></i> {{trans.add_to_cart }}</button>
         </div>
-        <p style="width: 100%;" class="fs-sm fw-light text-danger mb-0" v-if="has_in_cart">{{ trans.imate }} {{ has_in_cart }} {{trans.artikala_u_kosarici }}.</p>
+        <p style="width: 100%;" class="fs-sm fw-light text-danger mb-0" v-if="has_in_cart">{{ trans.imate }} {{ has_in_cart }} {{trans.artikala_u_kosarici }}.</p>d
     </div>
 </template>
 <script>
