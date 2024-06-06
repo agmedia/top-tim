@@ -4,10 +4,6 @@ namespace App\Models\Front\Catalog;
 
 use App\Models\Front\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Attributes;
-use App\Models\Back\Catalog\Product\Product;
-use App\Models\Back\Catalog\Product\ProductImageTranslation;
-use Carbon\Carbon;
-use App\Helpers\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -50,6 +46,15 @@ class ProductOption extends Model
     public function top()
     {
         return $this->hasOne(Options::class, 'id', 'parent_id');
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
 

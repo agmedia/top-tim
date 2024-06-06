@@ -373,7 +373,7 @@ class Product extends Model
                         $style ='background-color:'.$option->title->value;
                     }
 
-                    $response[$key]['options'][] = [
+                    $response[$key]['options'][$option->option_id] = [
                         'id' => $option->id,
                         'option_id' => $option->option_id,
                         'name' => $option->title->translation->title,
@@ -384,6 +384,7 @@ class Product extends Model
                         'quantity' => $option->quantity,
                         'price' => $option->price,
                         'sort_order' => $option->title->sort_order,
+                        'active' => 1
                     ];
 
                     if ( ! isset($parents[$option->top->id])) {
@@ -394,8 +395,8 @@ class Product extends Model
                         }
 
                         $parents[$option->top->id] = [
-                            'id' => $option->top->id,
-                            'option_id' => $option->top->option_id,
+                            'id' => $option->id,
+                            'option_id' => $option->top->id,
                             'name' => $option->top->translation->title,
                             'sku' => '',
                             'value' => $option->top->value,
@@ -404,10 +405,12 @@ class Product extends Model
                             'quantity' => 0,
                             'price' => 0,
                             'sort_order' => $option->top->sort_order,
+                            'active' => 1
                         ];
                     }
                 }
 
+                $response['parent'] = $parent;
                 $response[$parent]['options'] = $parents;
             }
         }

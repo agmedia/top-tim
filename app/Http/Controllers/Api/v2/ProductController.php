@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v2;
 use App\Helpers\Helper;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductImage;
+use App\Models\Front\Catalog\ProductOption;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +31,61 @@ class ProductController extends Controller
         $products = $query->get();
 
         return response()->json($products);
+    }
+
+
+    public function options(ProductOption $option, Request $request)
+    {
+        Log::info('options($option)');
+        Log::info($option->toArray());
+        Log::info($request->toArray());
+
+        $full_list = $option->product()->first()->optionsList();
+        $options = (new ProductOption())->newQuery()->where('product_id', $option->product_id);
+        $response = [];
+
+        Log::info($full_list);
+
+        if ($request->has('is_parent') && $request->input('is_parent')) {
+            $options = $options->where('parent_id', $option->parent_id)->get();
+            $key = $option->title->type;
+
+            Log::info($key);
+            Log::info($options->toArray());
+
+            foreach ($full_list[$key]['options'] as $item_option) {
+                $response[$key]['options'][$item_option['option_id']] = $item_option;
+
+                $active = 0;
+
+                if ($options->where('option_id', $item_option['option_id'])->count() > 0) {
+                    $active = 1;
+                }
+
+                $response[$key]['options'][$item_option['option_id']]['active'] = $active;
+            }
+            //
+        } else {
+            $options = $options->where('option_id', $option->option_id)->get();
+            $key = $option->top->type;
+
+            Log::info($key);
+            Log::info($options->toArray());
+
+            foreach ($full_list[$key]['options'] as $item_option) {
+                $response[$key]['options'][$item_option['option_id']] = $item_option;
+
+                $active = 0;
+
+                if ($options->where('parent_id', $item_option['option_id'])->count() > 0) {
+                    $active = 1;
+                }
+
+                $response[$key]['options'][$item_option['option_id']]['active'] = $active;
+            }
+        }
+
+        return response()->json($response);
     }
 
 

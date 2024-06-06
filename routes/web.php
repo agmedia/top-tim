@@ -259,9 +259,11 @@ Route::prefix('api/v2')->group(function () {
         Route::get('/remove/{id}', [CartController::class, 'remove']);
         Route::get('/coupon/{coupon}', [CartController::class, 'coupon']);
         Route::get('/loyalty/{loyalty}', [CartController::class, 'loyalty']);
+        //Route::get('/options/{option}', [CartController::class, 'options']);
     });
 
     Route::get('/products/autocomplete', [\App\Http\Controllers\Api\v2\ProductController::class, 'autocomplete'])->name('products.autocomplete');
+    Route::get('/products/options/{option}', [\App\Http\Controllers\Api\v2\ProductController::class, 'options'])->name('products.check.options');
     Route::post('/products/image/delete', [\App\Http\Controllers\Api\v2\ProductController::class, 'destroyImage'])->name('products.destroy.image');
     Route::post('/products/change/status', [\App\Http\Controllers\Api\v2\ProductController::class, 'changeStatus'])->name('products.change.status');
     Route::post('products/update-item/single', [\App\Http\Controllers\Api\v2\ProductController::class, 'updateItem'])->name('products.update.item');

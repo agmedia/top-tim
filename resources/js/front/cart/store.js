@@ -118,6 +118,19 @@ class AgService {
 
     /**
      *
+     * @param option
+     * @returns {*}
+     */
+    checkOptions(option, is_parent) {
+        return axios.get('products/options/' + option + '?is_parent=' + is_parent)
+        .then(response => {
+            return response.data
+        })
+        .catch(error => { return this.returnError(messages.error) })
+    }
+
+    /**
+     *
      * @param coupon
      * @returns {*}
      */

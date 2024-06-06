@@ -64,6 +64,8 @@ class CatalogRouteController extends FrontBaseController
                 abort(404);
             }
 
+            //dd($prod->optionsList());
+
             $seo = Seo::getProductData($prod);
             $gdl = TagManager::getGoogleProductDataLayer($prod);
 
