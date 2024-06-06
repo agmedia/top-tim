@@ -2,13 +2,11 @@
     <div class="cart  pb-2 mb-3">
         <div class="mw-500" v-if="color_options">
             <div class="fs-sm mb-4">
-                <span class="text-heading fw-medium me-1">
-                    <span class="text-danger">*</span> {{ trans.boja }}:</span>
-                <span class="text-muted" id="colorOption"> </span>
+                <span class="text-heading fw-medium me-1"><span class="text-danger">*</span> {{ trans.boja }}:</span><span class="text-muted">{{ color_name }}</span>
             </div>
             <div class="position-relative me-n4 mb-3" id="select" >
-                <div v-for="(option, index) in color_options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id" >
-                    <input class="form-check-input" type="radio" :value="option.id" :id="option.id" :disabled="!option.active" v-model="color" data-bs-label="colorOption"  />
+                <div v-for="(option, index) in color_options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id">
+                    <input class="form-check-input" type="radio" :value="option.id" :id="option.id" :disabled="!option.active" v-model="color"/>
                     <label v-bind:class="{ opacity: !option.active }" class="form-option-label rounded-circle opacity-80" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style"></span> </label>
                 </div>
             </div>
@@ -16,7 +14,7 @@
         <div class="mw-500" v-if="size_options">
             <div class="mb-3" >
                 <div class="d-flex justify-content-between align-items-center pb-1 opac">
-                    <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label>
+                    <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label><span class="text-muted">{{ size_name }}</span>
                     <a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
                 </div>
                 <select class="form-select" required id="product-size" v-model="size">
@@ -56,7 +54,9 @@ export default {
             trans: window.trans,
             size: 0,
             color: '',
-            parent: ''
+            parent: '',
+            color_name: '',
+            size_name: ''
         }
     },
 //
@@ -160,26 +160,28 @@ export default {
         },
 
         checkAvailableOptions(option, type) {
-            console.log(option, type);
-
             let is_parent = (type == this.parent) ? 1 : 0;
 
-            let list = this.$store.state.service.checkOptions(option, is_parent).then((response) => {
-
+            this.$store.state.service.checkOptions(option, is_parent).then((response) => {
                 if (type == 'color') {
                     this.size_options = response.size.options;
 
-                    console.log('response')
-                    console.log(response.size.options)
+                    for (let item in this.color_options) {
+                        if (option == this.color_options[item].id) {
+                            this.color_name = this.color_options[item].name;
+                        }
+                    }
+
                 } else {
                     this.color_options = response.color.options;
 
-                    console.log('response')
-                    console.log(response.color.options)
+                    for (let item in this.size_options) {
+                        if (option == this.size_options[item].id) {
+                            this.size_name = this.size_options[item].name;
+                        }
+                    }
                 }
             });
-
-            console.log('list', list);
         }
     }
 };
