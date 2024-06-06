@@ -35,6 +35,7 @@
 <style>
 .opacity{
     opacity: 0.3 !important;
+    cursor: revert;
 }
 </style>
 <script>
