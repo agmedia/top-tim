@@ -102,7 +102,8 @@ return [
         'history' => 'Povijest Promjena',
         'shipping' => 'Načini Dostave',
         'attribute' => 'Atributi',
-        'option' => 'Opcije'
+        'option' => 'Opcije',
+        'tablica_velicina' => 'Tablica veličina'
     ]
 
 ];

@@ -24,6 +24,7 @@ use App\Http\Controllers\Back\Settings\App\PaymentController;
 use App\Http\Controllers\Back\Settings\App\ShippingController;
 use App\Http\Controllers\Back\Settings\App\TaxController;
 use App\Http\Controllers\Back\Settings\FaqController;
+use App\Http\Controllers\Back\Settings\SizeGuideController;
 use App\Http\Controllers\Back\Settings\HistoryController;
 use App\Http\Controllers\Back\Settings\PageController;
 use App\Http\Controllers\Back\Settings\QuickMenuController;
@@ -171,6 +172,15 @@ Route::group(
             Route::get('faq/{faq}/edit', [FaqController::class, 'edit'])->name('faqs.edit');
             Route::patch('faq/{faq}', [FaqController::class, 'update'])->name('faqs.update');
             Route::delete('faq/{faq}', [FaqController::class, 'destroy'])->name('faqs.destroy');
+
+
+            // SizeGuide
+            Route::get('sizeguides', [SizeGuideController::class, 'index'])->name('sizeguides');
+            Route::get('sizeguide/create', [SizeGuideController::class, 'create'])->name('sizeguides.create');
+            Route::post('sizeguide', [SizeGuideController::class, 'store'])->name('sizeguides.store');
+            Route::get('sizeguide/{sizeguide}/edit', [SizeGuideController::class, 'edit'])->name('sizeguides.edit');
+            Route::patch('sizeguide/{sizeguide}', [SizeGuideController::class, 'update'])->name('sizeguides.update');
+            Route::delete('sizeguide/{sizeguide}', [SizeGuideController::class, 'destroy'])->name('sizeguides.destroy');
 
 
 

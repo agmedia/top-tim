@@ -229,6 +229,11 @@
                                                 <label for="dm-post-edit-slug">Brand</label>
                                                 @livewire('back.layout.search.author-search', ['brand_id' => isset($product) ? $product->brand_id : 0])
                                             </div>
+
+                                            <div class="col-md-6">
+                                                <label for="dm-post-edit-slug">Tablica veličina</label>
+                                                @livewire('back.layout.search.sizeguide-search', ['sizeguide_id' => isset($product) ? $product->sizeguide_id : 0])
+                                            </div>
                                         </div>
 
                                         @if ( ! empty($data['attributes']))

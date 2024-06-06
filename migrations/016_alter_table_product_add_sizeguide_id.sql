@@ -1,0 +1,1 @@
+ALTER TABLE `products` ADD `sizeguide_id` BIGINT UNSIGNED NOT NULL DEFAULT '0';

@@ -193,11 +193,7 @@
                         <span class="nav-main-link-name">{{ __('back/layout.sidebar.settings') }}</span>
                     </a>
                     <ul class="nav-main-submenu">
-                      {{--  <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->routeIs(['api', 'api.*']) ? ' active' : '' }}" href="{{ route('api.index') }}">
-                                <span class="nav-main-link-name">API</span>
-                            </a>
-                        </li>
+
 
                         <li class="nav-main-item{{ request()->is([current_locale() . 'admin/settings/system/*']) ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -205,18 +201,17 @@
                             </a>
 
                             <ul class="nav-main-submenu">
+
+
+
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link{{ request()->routeIs(['application', 'application.*']) ? ' active' : '' }}" href="{{ route('application.settings') }}">
-                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.application') }}</span>
+                                    <a class="nav-main-link{{ request()->routeIs(['sizeguides', 'sizeguides.*']) ? ' active' : '' }}" href="{{ route('sizeguides') }}">
+                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.tablica_velicina') }}</span>
                                     </a>
                                 </li>
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link{{ request()->routeIs(['history', 'history.*']) ? ' active' : '' }}" href="{{ route('history') }}">
-                                        <span class="nav-main-link-name">{{ __('back/layout.sidebar.history') }}</span>
-                                    </a>
-                                </li>
+
                             </ul>
-                        </li> --}}
+                        </li>
 
                         @if (current_locale() != 'hr')
                             <li class="nav-main-item{{ request()->is([current_locale() . '/admin/settings/application/*']) ? ' open' : '' }}">

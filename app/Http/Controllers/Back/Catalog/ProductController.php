@@ -11,6 +11,7 @@ use App\Models\Back\Catalog\Product\ProductAction;
 use App\Models\Back\Catalog\Product\ProductAttribute;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Back\Catalog\Product\ProductImage;
+use App\Models\Back\Settings\SizeGuide;
 use App\Models\Back\Catalog\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

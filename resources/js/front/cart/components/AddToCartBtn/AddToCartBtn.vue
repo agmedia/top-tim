@@ -32,7 +32,6 @@
         <p style="width: 100%;" class="fs-sm fw-light text-danger mb-0" v-if="has_in_cart">{{ trans.imate }} {{ has_in_cart }} {{trans.artikala_u_kosarici }}.</p>
     </div>
 </template>
-
 <script>
 export default {
     props: {

@@ -79,6 +79,12 @@ return [
             'root' => public_path('media/img/category/'),
             'url' => 'media/img/category/'
         ],
+
+        'sizeguide' => [
+            'driver' => 'local',
+            'root' => public_path('media/img/sizeguide/'),
+            'url' => 'media/img/sizeguide/'
+        ],
         //
         'publisher' => [
             'driver' => 'local',

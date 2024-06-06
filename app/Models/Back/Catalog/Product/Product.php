@@ -148,6 +148,8 @@ class Product extends Model
     }
 
 
+
+
     /**
      * @return Relation
      */
@@ -396,6 +398,7 @@ class Product extends Model
     {
         $response = [
             'brand_id'     => $this->request->brand_id ?: 0,
+            'sizeguide_id'     => $this->request->sizeguide_id ?: 0,
             'action_id'    => $this->request->action ?: 0,
             'sku'          => $this->request->sku,
             'ean'          => $this->request->ean ?? '',
@@ -488,7 +491,7 @@ class Product extends Model
 
             foreach ($groups as $group) {
                 $group = Str::slug($group);
-                
+
                 // single options
                 if (isset($inputs[$group][0]['value'])) {
                     ProductOption::storeSingle($inputs[$group], $product_id);

@@ -7,6 +7,7 @@ use App\Helpers\ProductHelper;
 use App\Models\Back\Catalog\Product\ProductAction;
 use App\Models\Back\Marketing\Review;
 use App\Models\Back\Settings\Settings;
+use App\Models\Back\Settings\SizeGuide;
 use App\Models\Back\Catalog\Product\ProductAttribute;
 use App\Models\Front\Catalog\Options\Options;
 use Carbon\Carbon;
@@ -514,6 +515,16 @@ class Product extends Model
     public function brand()
     {
         return $this->hasOne(Brand::class, 'id', 'brand_id');
+    }
+
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function sizeguide()
+    {
+        return $this->hasOne(SizeGuide::class, 'id', 'sizeguide_id');
     }
 
 

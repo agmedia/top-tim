@@ -105,7 +105,8 @@ return [
         'history' => 'History Log',
         'shipping' => 'Shipping Methods',
         'attribute' => 'Attributes',
-        'option' => 'Options'
+        'option' => 'Options',
+        'tablica_velicina' => 'Size Quide'
     ]
 
 ];
