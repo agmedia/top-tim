@@ -39,7 +39,6 @@
             opacity: 1;
         }
     </style>
-
 @endpush
 {{--
 @if (isset($gdl))
@@ -99,14 +98,14 @@
                 <div class="" id="gallery"  style="max-height:750px">
                     <div class="main-image product-thumb">
 
-                        <div class=" slider slider-for  mb-3">
+                        <div class=" gallery slider slider-for  mb-3">
 
 
 
                             @if ($prod->images->count())
                                 @foreach ($prod->images as $key => $image)
                                         <div class="item single-product" data-target="{{ $image->option_id }}">
-                                            <a class="link" href="{{ asset($image->image) }}">
+                                            <a class="link" href="{{ asset($image->image) }}" >
                                             <img  src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" >
                                             </a>
                                         </div>
@@ -547,6 +546,9 @@
     <link rel="stylesheet" media="screen" href="{{ asset('js/slick/slick.css') }}">
     <link rel="stylesheet" media="screen" href="{{ asset('js/slick/slick-theme.css') }}">
     <script src="{{ asset('js/slick/slick.min.js') }}"></script>
+    <link rel="stylesheet" media="screen" href="{{ asset('js/simple-lightbox.css?v2.14.0') }}">
+    <script src="{{ asset('js/simple-lightbox.js?v2.14.0') }}"></script>
+
 <script type="application/ld+json">
 {!! collect($crumbs)->toJson() !!}
 </script>
@@ -561,11 +563,12 @@ $('#openReview').on('click', function(e) {
   document.getElementById("tabs_widget").scrollIntoView();
 });
 </script>
+    <script>
+        (function() {
+            var $gallery = new SimpleLightbox('.gallery a', {});
+        })();
+    </script>
 <script>
-
-
-
-
     var $carousel = $('.slider-for').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
