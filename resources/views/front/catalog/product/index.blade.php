@@ -98,7 +98,7 @@
                 <div class="" id="gallery"  style="max-height:750px">
                     <div class="main-image product-thumb">
 
-                        <div class=" gallery slider slider-for  mb-3">
+                        <div class="galerija slider slider-for  mb-3">
 
 
 
@@ -565,7 +565,7 @@ $('#openReview').on('click', function(e) {
 </script>
     <script>
         (function() {
-            var $gallery = new SimpleLightbox('.gallery a', {});
+            var $gallery = new SimpleLightbox('.galerija a', {});
         })();
     </script>
 <script>
