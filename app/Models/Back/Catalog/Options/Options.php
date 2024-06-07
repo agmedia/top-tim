@@ -134,7 +134,7 @@ class Options extends Model
      */
     public function edit()
     {
-        $values = Options::query()->where('group', $this->group)->get();
+        $values = Options::query() ->orderBy('title', 'desc')->where('group', $this->group)->get();
         $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
         $items = collect($this->request->input('item'));
 

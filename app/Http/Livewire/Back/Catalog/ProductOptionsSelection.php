@@ -97,7 +97,7 @@ class ProductOptionsSelection extends Component
             $item = $this->getEmptyItem();
         }
 
-        array_push($this->items[$key]['options'], $item);
+        array_unshift($this->items[$key]['options'], $item);
     }
 
 

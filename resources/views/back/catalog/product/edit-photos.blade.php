@@ -131,7 +131,7 @@
                                             <div class="col-sm-6 text-left">
                                                 <select class="js-select2 form-control  form-select-solid" id="select-product-option" name="slim[{{ $image['id'] }}][option_id]"  data-placeholder="Odaberite opciju">
                                                     <option value="0"> Pridruži opciju</option>
-                                                    @foreach ($color_options as $option)
+                                                    @foreach ($color_options  as $option)
                                                         <option value="{{ $option['id'] }}" {{ ($image['option_id'] == $option['id']) ? 'selected' : '' }}>{{ $option['title'] }}</option>
                                                     @endforeach
                                                 </select>
