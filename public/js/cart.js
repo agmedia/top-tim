@@ -2115,8 +2115,11 @@ __webpack_require__.r(__webpack_exports__);
       quantity: 1,
       has_in_cart: 0,
       disabled: false,
-      size_options: [],
-      color_options: [],
+      is_available: 0,
+      size_options: {},
+      color_options: {},
+      selected_size: {},
+      selected_color: {},
       trans: window.trans,
       size: 0,
       color: '',
@@ -2144,6 +2147,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     }
+    this.is_available = this.available;
     this.setOptionsSelection();
     this.checkAvailability();
   },
@@ -2153,16 +2157,19 @@ __webpack_require__.r(__webpack_exports__);
      */
     setOptionsSelection: function setOptionsSelection() {
       var res = JSON.parse(this.options);
-      console.log(res);
       this.parent = res.parent;
-      this.size_options = res.size.options;
-      this.color_options = res.color.options;
+      this.size_options = res.size ? res.size.options : {};
+      this.color_options = res.color ? res.color.options : {};
     },
     /**
      *
      */
     add: function add() {
       this.checkAvailability(true);
+      console.log('add():::');
+      console.log(this.is_available, this.disabled);
+      console.log(Object.keys(this.color_options).length, Object.keys(this.selected_color).length);
+      console.log(this.selected_size, this.selected_color);
       if (this.has_in_cart) {
         this.updateCart();
       } else {
@@ -2175,7 +2182,8 @@ __webpack_require__.r(__webpack_exports__);
     addToCart: function addToCart() {
       var item = {
         id: this.id,
-        quantity: this.quantity
+        quantity: this.quantity,
+        options: this.setRequestOptions()
       };
       this.$store.dispatch('addToCart', item);
     },
@@ -2183,13 +2191,14 @@ __webpack_require__.r(__webpack_exports__);
      *
      */
     updateCart: function updateCart() {
-      /*if (parseFloat(this.quantity) > parseFloat(this.available)) {
-          this.quantity = this.available;
+      /*if (parseFloat(this.quantity) > parseFloat(this.is_available)) {
+          this.quantity = this.is_available;
       }*/
 
       var item = {
         id: this.id,
         quantity: this.quantity,
+        options: this.setRequestOptions(),
         relative: true
       };
       this.$store.dispatch('updateCart', item);
@@ -2200,37 +2209,96 @@ __webpack_require__.r(__webpack_exports__);
      */
     checkAvailability: function checkAvailability() {
       var add = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      this.disabled = false;
       if (this.available == undefined) {
-        this.available = 0;
+        this.is_available = 0;
       }
       if (add) {
         this.has_in_cart = parseFloat(this.has_in_cart) + parseFloat(this.quantity);
       }
-      if (this.available <= this.has_in_cart) {
+      if (this.is_available <= this.has_in_cart) {
         this.disabled = true;
-        this.has_in_cart = this.available;
+        this.has_in_cart = this.is_available;
+      }
+      if (Object.keys(this.color_options).length && !Object.keys(this.selected_color).length) {
+        this.disabled = true;
+      }
+      if (Object.keys(this.size_options).length && !Object.keys(this.selected_size).length) {
+        this.disabled = true;
       }
     },
+    /**
+     *
+     * @param option
+     * @param type
+     */
     checkAvailableOptions: function checkAvailableOptions(option, type) {
       var _this = this;
       var is_parent = type == this.parent ? 1 : 0;
-      this.$store.state.service.checkOptions(option, is_parent).then(function (response) {
-        if (type == 'color') {
-          _this.size_options = response.size.options;
-          for (var item in _this.color_options) {
-            if (option == _this.color_options[item].id) {
-              _this.color_name = _this.color_options[item].name;
-            }
+      if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
+        this.$store.state.service.checkOptions(option, is_parent).then(function (response) {
+          if (type == 'color') {
+            _this.size_options = response.size.options;
+            _this.setSelectedColor(option);
+          } else {
+            _this.color_options = response.color.options;
+            _this.setSelectedSize(option);
           }
-        } else {
-          _this.color_options = response.color.options;
-          for (var _item in _this.size_options) {
-            if (option == _this.size_options[_item].id) {
-              _this.size_name = _this.size_options[_item].name;
-            }
-          }
+          _this.checkAvailability();
+        });
+      } else {
+        if (Object.keys(this.color_options).length) {
+          this.setSelectedColor(option);
         }
-      });
+        if (Object.keys(this.size_options).length) {
+          this.setSelectedSize(option);
+        }
+        this.checkAvailability();
+      }
+    },
+    /**
+     *
+     * @returns {{}}
+     */
+    setRequestOptions: function setRequestOptions() {
+      var response = {};
+      if (Object.keys(this.color_options).length) {
+        response = {
+          id: this.selected_color.id
+        };
+      }
+      if (Object.keys(this.size_options).length) {
+        response = {
+          id: this.selected_size.id
+        };
+      }
+      return response;
+    },
+    /**
+     *
+     * @param id
+     */
+    setSelectedColor: function setSelectedColor(id) {
+      for (var item in this.color_options) {
+        if (id == this.color_options[item].id) {
+          this.selected_color = this.color_options[item];
+          this.color_name = this.selected_color.name;
+          //this.is_available = this.selected_color.quantity;
+        }
+      }
+    },
+    /**
+     *
+     * @param id
+     */
+    setSelectedSize: function setSelectedSize(id) {
+      for (var item in this.size_options) {
+        if (id == this.size_options[item].id) {
+          this.selected_size = this.size_options[item];
+          this.size_name = this.selected_size.name;
+          //this.is_available = this.selected_size.quantity;
+        }
+      }
     }
   }
 });
@@ -6620,7 +6688,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "cart  pb-2 mb-3" }, [
-    _vm.color_options
+    Object.keys(this.color_options).length
       ? _c("div", { staticClass: "mw-500" }, [
           _c("div", { staticClass: "fs-sm mb-4" }, [
             _c("span", { staticClass: "text-heading fw-medium me-1" }, [
@@ -6695,7 +6763,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.size_options
+    Object.keys(this.size_options).length
       ? _c("div", { staticClass: "mw-500" }, [
           _c("div", { staticClass: "mb-3" }, [
             _c(
@@ -6789,7 +6857,7 @@ var render = function() {
           inputmode: "numeric",
           pattern: "[0-9]*",
           min: "1",
-          max: _vm.available
+          max: _vm.is_available
         },
         domProps: { value: _vm.quantity },
         on: {

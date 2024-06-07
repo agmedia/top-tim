@@ -1,6 +1,6 @@
 <template>
     <div class="cart  pb-2 mb-3">
-        <div class="mw-500" v-if="color_options">
+        <div class="mw-500" v-if="Object.keys(this.color_options).length">
             <div class="fs-sm mb-4">
                 <span class="text-heading fw-medium me-1"><span class="text-danger">*</span> {{ trans.boja }}:</span><span class="text-muted">{{ color_name }}</span>
             </div>
@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="mw-500" v-if="size_options">
+        <div class="mw-500" v-if="Object.keys(this.size_options).length">
             <div class="mb-3" >
                 <div class="d-flex justify-content-between align-items-center pb-1 opac">
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label><span class="text-muted">{{ size_name }}</span>
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="d-flex align-items-center pt-2 mw-500" >
-            <input class="form-control me-3 mb-1" type="number" inputmode="numeric" pattern="[0-9]*" v-model="quantity" min="1" :max="available" style="width: 5rem;">
+            <input class="form-control me-3 mb-1" type="number" inputmode="numeric" pattern="[0-9]*" v-model="quantity" min="1" :max="is_available" style="width: 5rem;">
             <button class="btn btn-primary btn-shadow  w-100 mb-1 " @click="add()" :disabled="disabled"><i class="ci-cart"></i> {{trans.add_to_cart }}</button>
         </div>
         <p style="width: 100%;" class="fs-sm fw-light text-danger mb-0" v-if="has_in_cart">{{ trans.imate }} {{ has_in_cart }} {{trans.artikala_u_kosarici }}.</p>
@@ -49,8 +49,11 @@ export default {
             quantity: 1,
             has_in_cart: 0,
             disabled: false,
-            size_options: [],
-            color_options: [],
+            is_available: 0,
+            size_options: {},
+            color_options: {},
+            selected_size: {},
+            selected_color: {},
             trans: window.trans,
             size: 0,
             color: '',
@@ -80,6 +83,8 @@ export default {
             }
         }
 
+        this.is_available = this.available;
+
         this.setOptionsSelection();
         this.checkAvailability();
     },
@@ -91,11 +96,9 @@ export default {
         setOptionsSelection() {
             let res = JSON.parse(this.options);
 
-            console.log(res)
-
             this.parent = res.parent;
-            this.size_options = res.size.options;
-            this.color_options = res.color.options;
+            this.size_options = res.size ? res.size.options : {};
+            this.color_options = res.color ? res.color.options : {};
         },
 
         /**
@@ -103,6 +106,11 @@ export default {
          */
         add() {
             this.checkAvailability(true);
+
+            console.log('add():::')
+            console.log(this.is_available, this.disabled)
+            console.log(Object.keys(this.color_options).length, Object.keys(this.selected_color).length)
+            console.log(this.selected_size, this.selected_color)
 
             if (this.has_in_cart) {
                 this.updateCart();
@@ -115,9 +123,11 @@ export default {
          *
          */
         addToCart() {
+
             let item = {
                 id: this.id,
-                quantity: this.quantity
+                quantity: this.quantity,
+                options: this.setRequestOptions()
             }
 
             this.$store.dispatch('addToCart', item);
@@ -127,13 +137,14 @@ export default {
          *
          */
         updateCart() {
-            /*if (parseFloat(this.quantity) > parseFloat(this.available)) {
-                this.quantity = this.available;
+            /*if (parseFloat(this.quantity) > parseFloat(this.is_available)) {
+                this.quantity = this.is_available;
             }*/
 
             let item = {
                 id: this.id,
                 quantity: this.quantity,
+                options: this.setRequestOptions(),
                 relative: true
             }
 
@@ -145,43 +156,112 @@ export default {
          * @param add
          */
         checkAvailability(add = false) {
+            this.disabled = false;
+
             if (this.available == undefined) {
-                this.available = 0;
+                this.is_available = 0;
             }
 
             if (add) {
                 this.has_in_cart = parseFloat(this.has_in_cart) + parseFloat(this.quantity);
             }
 
-            if (this.available <= this.has_in_cart) {
+            if (this.is_available <= this.has_in_cart) {
                 this.disabled = true;
-                this.has_in_cart = this.available;
+                this.has_in_cart = this.is_available;
+            }
+
+            if (Object.keys(this.color_options).length && !Object.keys(this.selected_color).length) {
+                this.disabled = true;
+            }
+            if (Object.keys(this.size_options).length && !Object.keys(this.selected_size).length) {
+                this.disabled = true;
             }
         },
 
+        /**
+         *
+         * @param option
+         * @param type
+         */
         checkAvailableOptions(option, type) {
             let is_parent = (type == this.parent) ? 1 : 0;
 
-            this.$store.state.service.checkOptions(option, is_parent).then((response) => {
-                if (type == 'color') {
-                    this.size_options = response.size.options;
+            if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
+                this.$store.state.service.checkOptions(option, is_parent).then((response) => {
+                    if (type == 'color') {
+                        this.size_options = response.size.options;
+                        this.setSelectedColor(option);
 
-                    for (let item in this.color_options) {
-                        if (option == this.color_options[item].id) {
-                            this.color_name = this.color_options[item].name;
-                        }
+                    } else {
+                        this.color_options = response.color.options;
+                        this.setSelectedSize(option);
                     }
 
-                } else {
-                    this.color_options = response.color.options;
+                    this.checkAvailability();
+                });
 
-                    for (let item in this.size_options) {
-                        if (option == this.size_options[item].id) {
-                            this.size_name = this.size_options[item].name;
-                        }
-                    }
+            } else {
+                if (Object.keys(this.color_options).length) {
+                    this.setSelectedColor(option);
                 }
-            });
+
+                if (Object.keys(this.size_options).length) {
+                    this.setSelectedSize(option);
+                }
+
+                this.checkAvailability();
+            }
+        },
+
+        /**
+         *
+         * @returns {{}}
+         */
+        setRequestOptions() {
+            let response = {};
+
+            if (Object.keys(this.color_options).length) {
+                response = {
+                    id: this.selected_color.id
+                };
+            }
+
+            if (Object.keys(this.size_options).length) {
+                response = {
+                    id: this.selected_size.id
+                };
+            }
+
+            return response;
+        },
+
+        /**
+         *
+         * @param id
+         */
+        setSelectedColor(id) {
+            for (let item in this.color_options) {
+                if (id == this.color_options[item].id) {
+                    this.selected_color = this.color_options[item];
+                    this.color_name = this.selected_color.name;
+                    //this.is_available = this.selected_color.quantity;
+                }
+            }
+        },
+
+        /**
+         *
+         * @param id
+         */
+        setSelectedSize(id) {
+            for (let item in this.size_options) {
+                if (id == this.size_options[item].id) {
+                    this.selected_size = this.size_options[item];
+                    this.size_name = this.selected_size.name;
+                    //this.is_available = this.selected_size.quantity;
+                }
+            }
         }
     }
 };

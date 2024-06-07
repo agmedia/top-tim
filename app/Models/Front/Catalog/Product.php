@@ -356,6 +356,7 @@ class Product extends Model
                         'quantity' => $option->quantity,
                         'price' => $option->price,
                         'sort_order' => $option->title->sort_order,
+                        'active' => 1
                     ];
                 }
 

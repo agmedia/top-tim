@@ -21,7 +21,7 @@ class CartController extends Controller
     protected $user;
 
     /**
-     * @var
+     * @var AgCart
      */
     protected $cart;
 

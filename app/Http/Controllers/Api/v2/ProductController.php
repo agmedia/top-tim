@@ -47,8 +47,8 @@ class ProductController extends Controller
 
         } else {
             $options = $options->where('option_id', $option->option_id)->get();
-            $key = $option->top->type;
-            $column = 'parent_id';
+            $key = $option->top ? $option->top->type : $option->title->type;
+            $column = $option->top ? 'parent_id' : 'option_id';
         }
 
         foreach ($full_list[$key]['options'] as $item_option) {
