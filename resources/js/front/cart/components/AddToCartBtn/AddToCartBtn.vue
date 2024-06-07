@@ -195,31 +195,36 @@ export default {
         checkAvailableOptions(option, type) {
             let is_parent = (type == this.parent) ? 1 : 0;
 
-            if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
-                this.$store.state.service.checkOptions(option, is_parent).then((response) => {
-                    if (type == 'color') {
-                        this.size_options = response.size.options;
-                        this.setSelectedColor(option);
+            console.log(option)
+            if (option != 0) {
+                if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
+                    this.$store.state.service.checkOptions(option, is_parent).then((response) => {
+                        if (type == 'color') {
+                            this.size_options = response.size.options;
+                            this.setSelectedColor(option);
 
-                    } else {
-                        this.color_options = response.color.options;
+                        } else {
+                            this.color_options = response.color.options;
+                            this.setSelectedSize(option);
+                        }
+
+                        this.checkAvailability();
+                    });
+
+                } else {
+                    if (Object.keys(this.color_options).length) {
+                        this.setSelectedColor(option);
+                    }
+
+                    if (Object.keys(this.size_options).length) {
                         this.setSelectedSize(option);
                     }
 
                     this.checkAvailability();
-                });
-
-            } else {
-                if (Object.keys(this.color_options).length) {
-                    this.setSelectedColor(option);
                 }
 
-                if (Object.keys(this.size_options).length) {
-                    this.setSelectedSize(option);
-                }
-
-                this.checkAvailability();
             }
+
         },
 
         /**
@@ -269,6 +274,7 @@ export default {
                     this.size_name = this.selected_size.name;
                     //this.is_available = this.selected_size.quantity;
                 }
+
             }
         }
     }

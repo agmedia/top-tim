@@ -2197,25 +2197,28 @@ __webpack_require__.r(__webpack_exports__);
     checkAvailableOptions: function checkAvailableOptions(option, type) {
       var _this = this;
       var is_parent = type == this.parent ? 1 : 0;
-      if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
-        this.$store.state.service.checkOptions(option, is_parent).then(function (response) {
-          if (type == 'color') {
-            _this.size_options = response.size.options;
-            _this.setSelectedColor(option);
-          } else {
-            _this.color_options = response.color.options;
-            _this.setSelectedSize(option);
+      console.log(option);
+      if (option != 0) {
+        if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
+          this.$store.state.service.checkOptions(option, is_parent).then(function (response) {
+            if (type == 'color') {
+              _this.size_options = response.size.options;
+              _this.setSelectedColor(option);
+            } else {
+              _this.color_options = response.color.options;
+              _this.setSelectedSize(option);
+            }
+            _this.checkAvailability();
+          });
+        } else {
+          if (Object.keys(this.color_options).length) {
+            this.setSelectedColor(option);
           }
-          _this.checkAvailability();
-        });
-      } else {
-        if (Object.keys(this.color_options).length) {
-          this.setSelectedColor(option);
+          if (Object.keys(this.size_options).length) {
+            this.setSelectedSize(option);
+          }
+          this.checkAvailability();
         }
-        if (Object.keys(this.size_options).length) {
-          this.setSelectedSize(option);
-        }
-        this.checkAvailability();
       }
     },
     /**
