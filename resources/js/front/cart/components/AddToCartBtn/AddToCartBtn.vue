@@ -14,8 +14,10 @@
         <div class="mw-500" v-if="Object.keys(this.size_options).length">
             <div class="mb-3" >
                 <div class="d-flex justify-content-between align-items-center pb-1 opac">
-                    <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}:</label><span class="text-muted">{{ size_name }}</span>
-                    <a class="nav-link-style fs-sm" href="#size-chart" data-bs-toggle="modal"><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
+                    <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}: <span class="text-muted">{{ size_name }}</span></label>
+
+
+                    <a v-if="sizeguide" class="nav-link-style fs-sm gal" :href="sizeguide" ><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
                 </div>
                 <select class="form-select" required id="product-size" v-model="size">
                     <option value="0">{{ trans.velicina }} </option>
@@ -32,16 +34,21 @@
 </template>
 <style>
 .opacity{
-    opacity: 0.3 !important;
+    opacity: 0.2 !important;
     cursor: revert;
+    filter:grayscale(1);
 }
 </style>
+
+
+
 <script>
 export default {
     props: {
         id: String,
         available: String,
-        options: String
+        options: String,
+        sizeguide: String
     },
 
     data() {
@@ -59,7 +66,8 @@ export default {
             color: '',
             parent: '',
             color_name: '',
-            size_name: ''
+            size_name: '',
+
         }
     },
 //
@@ -266,3 +274,5 @@ export default {
     }
 };
 </script>
+
+

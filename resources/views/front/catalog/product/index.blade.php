@@ -40,7 +40,7 @@
         }
     </style>
 @endpush
-{{--
+
 @if (isset($gdl))
 @section('google_data_layer')
      <script>
@@ -53,7 +53,7 @@
              } });
      </script>
  @endsection
-@endif--}}
+@endif
 
 @section('content')
 
@@ -198,7 +198,7 @@
 
 
             @if ( $prod->quantity > 0)
-                    <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"  options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
+                    <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"  sizeguide="{{ isset($prod->sizeguide) ? $prod->sizeguide->image : null }}" options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
             @endif
 
             <div class="accordion mb-4" id="productPanels">
@@ -316,7 +316,7 @@
                                  @endforeach
                                @endif
                                @if ($prod->brand)
-                                   <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Proizvođač:</span> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand->translation->slug]) }}"><span>{{ $prod->brand->title}} </span></a></li>
+                                   <li class="d-flex justify-content-between pb-3 pt-2 border-bottom"><span class="fw-bold">Brand:</span> <a href="{{ route('catalog.route.brand', ['brand' => $prod->brand->translation->slug]) }}"><span>{{ $prod->brand->title}} </span></a></li>
                                @endif
                            </ul>
                    </div>
@@ -521,23 +521,7 @@
 </section>
     @endif
 
-    <!-- Size chart modal-->
-    <div class="modal fade" id="size-chart">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header bg-secondary">
 
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-0">
-                    @if ($prod->sizeguide)
-                       <img src="{{ $prod->sizeguide->image }}" />
-                    @endif
-
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 
@@ -600,4 +584,10 @@ $('#openReview').on('click', function(e) {
     });
 
 </script>
+
+    <script>
+        (function() {
+            var $gallery = new SimpleLightbox('a.gal', {});
+        })();
+    </script>
 @endpush
