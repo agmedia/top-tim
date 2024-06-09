@@ -20,7 +20,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class AgCart extends Model
+class AgCart_Attributes extends Model
 {
 
     /**
@@ -29,7 +29,7 @@ class AgCart extends Model
     private $cart_id;
 
     /**
-     * @var
+     * @var Cart
      */
     private $cart;
 
@@ -133,6 +133,7 @@ class AgCart extends Model
      */
     public function check($request)
     {
+        //$message = Helper::resolveCache('cart')->remember($this->cart_id, config('cache.cart_life'), function () use ($request) {
         $products = Product::whereIn('id', $request['ids'])->pluck('quantity', 'id');
         $message  = null;
 
@@ -142,22 +143,32 @@ class AgCart extends Model
 
                 $product = Product::where('id', intval($id))->first();
 
-                $message = 'Nažalost, artikl ' . substr($product->name, 0, 150) . ' više nije dostupan.';
+                $message = 'Nažalost, knjiga ' . substr($product->name, 0, 150) . ' više nije dostupna.';
             }
         }
 
         return $message;
+
+        //});
+
+        return [
+            'cart'    => $this->get(),
+            'message' => $message
+        ];
     }
 
 
     /**
-     * @param      $request
-     * @param null $id
+     * @param Request $request
+     * @param         $id
      *
-     * @return array
+     * @return array|string[]
      */
     public function add(Request $request, $id = null)
     {
+        Log::info('$request->toArray() i $id iz add()');
+        Log::info($request->toArray());
+        Log::info($id);
         // Updejtaj artikl sa apsolutnom količinom.
         foreach ($this->cart->getContent() as $item) {
             if ($item->id == $request['item']['id']) {
@@ -180,7 +191,7 @@ class AgCart extends Model
                     $relative = true;
                 }
 
-                return $this->updateCartItem($item->id, $quantity, $relative);
+                return $this->updateCartItem($item->id, $quantity, $relative, $request);
             }
         }
 
@@ -276,6 +287,7 @@ class AgCart extends Model
      */
     public function resolveItemRequest($item)
     {
+
         return new Request([
             'item' => [
                 'id'       => $item['id'],
@@ -314,9 +326,6 @@ class AgCart extends Model
     public function setCartConditions()
     {
         $this->cart->clearCartConditions();
-
-        Log::info('setCartConditions()');
-        Log::info($this->loyalty);
 
         $shipping_method    = ShippingMethod::condition($this->cart);
         $payment_method     = PaymentMethod::condition($this->cart);
@@ -371,7 +380,7 @@ class AgCart extends Model
      *
      * @return array
      */
-    private function addToCart(Request $request): array
+    private function addToCart($request): array
     {
         $this->cart->add($this->structureCartItem($request));
 
@@ -383,10 +392,11 @@ class AgCart extends Model
      * @param      $id
      * @param      $quantity
      * @param bool $relative
+     * @param      $request
      *
      * @return array
      */
-    private function updateCartItem($id, $quantity, bool $relative): array
+    private function updateCartItem($id, $quantity, bool $relative, $request): array
     {
         $this->cart->update($id, [
             'quantity' => [
@@ -395,16 +405,56 @@ class AgCart extends Model
             ],
         ]);
 
+        // Options
+        if (isset($request['item']['options']['id'])) {
+            $item = json_decode($this->cart->get($id), true);
+            $option_id = $request['item']['options']['id'];
+            $product_option = ProductOption::query()->find($option_id);
+
+            if ($product_option) {
+                $attributes = $item['attributes'];
+                $name = CartHelper::resolveItemOptionName($product_option);
+                $qty  = ($attributes['options'][$option_id]['quantity'] ?? 0) + $quantity;
+
+                Log::info('Item iz updateCartItem(...)');
+                Log::info($item);
+
+                $attributes['options'][$option_id] = [
+                    'id'       => $product_option->id,
+                    'sku'      => $product_option->sku,
+                    'name'     => $name,
+                    'quantity' => $qty,
+                ];
+
+                $this->cart->update($id, [
+                    'attributes' => $attributes,
+                ]);
+
+                //
+                if ($product_option->price != 0) {
+                    $this->cart->removeItemCondition($id, $name);
+
+                    $condition = new CartCondition([
+                        'name'   => CartHelper::resolveItemOptionName($product_option),
+                        'type'   => 'option',
+                        'value'  => $product_option->price * $qty
+                    ]);
+
+                    $this->cart->addItemCondition($id, $condition);
+                }
+            }
+        }
+
         return $this->get();
     }
 
 
     /**
-     * @param $request
+     * @param Request $request
      *
      * @return array
      */
-    private function structureCartItem(Request $request)
+    private function structureCartItem(Request $request): array
     {
         $product = Product::where('id', $request['item']['id'])->first();
 
@@ -414,11 +464,9 @@ class AgCart extends Model
             return ['error' => 'Nažalost nema dovoljnih količina artikla..!'];
         }
 
-        $item_data = $this->setItemData($product, $request);
-
         $response = [
-            'id'              => $item_data['id'],
-            'name'            => $item_data['name'],
+            'id'              => $product->id,
+            'name'            => $product->name,
             'price'           => $product->price,
             'sec_price'       => $product->secondary_price,
             'quantity'        => $request['item']['quantity'],
@@ -437,28 +485,6 @@ class AgCart extends Model
         }
 
         return $response;
-    }
-
-
-    private function setItemData(Product $product, Request $request): array
-    {
-        $data = [
-            'id'   => $product->sku,
-            'name' => $product->name
-        ];
-
-        if (isset($request['item']['options']['id'])) {
-            $product_option = ProductOption::query()->find($request['item']['options']['id']);
-
-            if ($product_option) {
-                $data = [
-                    'id'   => $product_option->sku,
-                    'name' => $product->name . ', ' . CartHelper::resolveItemOptionName($product_option)
-                ];
-            }
-        }
-
-        return $data;
     }
 
 
@@ -486,7 +512,6 @@ class AgCart extends Model
 
     /**
      * @param Product $product
-     * @param Request $request
      *
      * @return array
      * @throws \Darryldecode\Cart\Exceptions\InvalidConditionException

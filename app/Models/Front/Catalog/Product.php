@@ -479,25 +479,25 @@ class Product extends Model
 
 
     /**
-     * @return string
+     * @return bool
      */
-    public function coupon(): string
+    public function coupon(): bool
     {
         $action = $this->action;
         $coupon_session_key = config('session.cart') . '_coupon';
-        $coupon_ok = '';
+        $coupon = false;
 
         if ( ! $action || ($action && ! $action->coupon)) {
-            $coupon_ok = '';
+            return $coupon;
         }
 
         if ($action && $action->status) {
             if ((isset($action->coupon) && $action->coupon) && session()->has($coupon_session_key) && session($coupon_session_key) == $action->coupon) {
-                $coupon_ok = true;
+                $coupon = true;
             }
         }
 
-        return $coupon_ok;
+        return $coupon;
     }
 
 

@@ -150,6 +150,14 @@ class HomeController extends FrontBaseController
      */
     public function imageCache(Request $request)
     {
+        if ( ! $request->has('src')) {
+            return asset('media/img/knjiga-detalj.jpg');
+        }
+
+        if ( ! \App\Helpers\Image::checkIsValidImage($request->input('src'))) {
+            return asset(config('settings.image_default'));
+        }
+
         $src = $request->input('src');
 
         $cacheimage = Image::cache(function($image) use ($src) {
@@ -168,7 +176,7 @@ class HomeController extends FrontBaseController
     public function thumbCache(Request $request)
     {
         if ( ! $request->has('src')) {
-            return asset('media/img/knjiga-detalj.jpg');
+            return asset(config('settings.image_default'));
         }
 
         $cacheimage = Image::cache(function($image) use ($request) {
@@ -185,7 +193,9 @@ class HomeController extends FrontBaseController
                 $width = $request->input('size');
             }
 
-            $image->make($request->input('src'))->resize($width, $height);
+            $src = \App\Helpers\Image::checkIsValidImage($request->input('src'));
+
+            $image->make($src)->resize($width, $height);
 
         }, config('imagecache.lifetime'));
 

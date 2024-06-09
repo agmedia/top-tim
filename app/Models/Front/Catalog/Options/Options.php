@@ -24,6 +24,8 @@ class Options extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $appends = ['name'];
+
     /**
      * @var Request
      */
@@ -74,6 +76,17 @@ class Options extends Model
     public function getGroupAttribute($value)
     {
         return $this->translation->group_title;
+    }
+
+
+    /**
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function getNameAttribute($value)
+    {
+        return $this->translation->title;
     }
 
 

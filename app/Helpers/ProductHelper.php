@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Orders\OrderProduct;
 use App\Models\Front\Catalog\Category;
+use App\Models\Front\Catalog\ProductOption;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -192,4 +193,5 @@ class ProductHelper
 
         return preg_replace('/ face=("|\')(.*?)("|\')/', '', $clean);
     }
+
 }

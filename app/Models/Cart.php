@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Models\Front\AgCart;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -71,7 +72,7 @@ class Cart extends Model
      *
      * @return bool
      */
-    public static function checkLogged($cart, $session_id = null)
+    public static function checkLogged(AgCart $cart, $session_id = null)
     {
         if (Auth::user()) {
             $has_cart = Cart::where('user_id', Auth::user()->id)->first();
