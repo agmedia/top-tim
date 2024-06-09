@@ -33,24 +33,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12">
+
                     <!-- Filter by Size-->
-                    <div class=" mb-grid-gutter"  v-if="show_options">
-                        <div class=" px-2" >
-
-
+                    <div class=" mb-grid-gutter" v-if="show_options">
+                        <div class=" px-2">
                             <div class="widget widget-filter">
                                 <h3 class="widget-title">Veličina <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
-                                <!--  <div class="input-group input-group-sm mb-2">
-                                     <input type="search" v-model="searchOption" class="form-control rounded-end pe-5" placeholder="Pretraži opcije"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
-                                 </div> -->
                                 <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
                                     <div class="simplebar-scroll-content">
                                         <div class="simplebar-content">
-                                            <template  v-for="option in options">
-                                                <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-if="option.type==='size'">
+                                            <template v-for="option in options">
+                                                <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-if="option.type == 'size'">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" :id="option.id" v-bind:value="option.id" v-model="selectedOptions">
+                                                        <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions">
                                                         <label class="form-check-label widget-filter-item-text" :for="option.id">{{ option.title }}</label>
                                                     </div>
                                                     <span class="fs-xs text-muted">{{ Number(option.products_count).toLocaleString('hr-HR') }}</span>
@@ -63,27 +59,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12 ">
-                    <!-- Filter by Color-->
+                <div class="col-lg-12">
 
-                    <div class="mb-grid-gutter"  v-if="show_options">
+                    <!-- Filter by Color-->
+                    <div class="mb-grid-gutter" v-if="show_options">
                         <div class=" px-2" >
                             <div class="widget widget-filter2">
-                                <h3 class="widget-title">Boja</h3>
+                                <h3 class="widget-title">Boja <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="d-flex flex-wrap">
-
-                                    <template  v-for="optionb in options">
-
-                                        <div class="form-check form-option text-center mb-2 mx-1"  v-if="optionb.type==='color' " >
-                                            <input class="form-check-input" type="checkbox" :id="optionb.id" v-bind:value="optionb.id" v-model="selectedOptions">
-
+                                    <template v-for="optionb in options">
+                                        <div class="form-check form-option text-center mb-2 mx-1" v-if="optionb.type == 'color'">
+                                            <input class="form-check-input" type="checkbox" :id="optionb.id" :value="optionb.id" v-model="selectedOptions">
                                             <label class="form-option-label rounded-circle" :for="optionb.id"><span class="form-option-color rounded-circle" :style="optionb.style "></span></label>
                                             <label class="d-block fs-xs text-muted mt-n1" :for="optionb.id">{{ optionb.title }}</label>
-
                                         </div>
-
                                     </template>
-
                                 </div>
                             </div>
                         </div>
@@ -110,10 +100,7 @@ export default {
         group: String,
         cat: String,
         subcat: String,
-
-
     },
-
 
     //
     data() {
@@ -178,13 +165,9 @@ export default {
 
     //
     mounted() {
-
         this.checkQuery(this.$route);
         this.checkCategory();
         this.getCategories();
-
-
-
 
         if (this.brand == '') {
             this.show_brands = true;
@@ -195,9 +178,6 @@ export default {
             this.show_options = true;
             this.getOptions();
         }
-
-
-
 
         this.preselect();
     },
@@ -227,7 +207,6 @@ export default {
             }
         },
 
-
         /**
          *
          **/
@@ -242,7 +221,6 @@ export default {
             });
         },
 
-
         /**
          *
          **/
@@ -250,15 +228,11 @@ export default {
             this.options_loaded = false;
             let params = this.setParams();
 
-
-
             axios.post('filter/getOptions', { params }).then(response => {
                 this.options_loaded = true;
                 this.options = response.data;
-
             });
         },
-
 
         /**
          *
@@ -371,8 +345,6 @@ export default {
          *
          */
         preselect() {
-
-
             if (this.brand != '') {
                 if ((this.brand).includes('+')) {
                     this.selectedBrands = (this.brand).split('+');

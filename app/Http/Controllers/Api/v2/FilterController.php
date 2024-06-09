@@ -62,7 +62,7 @@ class FilterController extends Controller
      */
     private function resolveCategoryArray($categories, string $type, $target = null, string $parent_slug = null): array
     {
-        $locale = session('locale');
+        $locale   = session('locale');
         $response = [];
 
         foreach ($categories as $category) {
@@ -112,9 +112,9 @@ class FilterController extends Controller
 
         if ($type == 'brand') {
             $route = route('catalog.route.brand', [
-                'brand' => $target,
-                'cat'       => $parent_slug ?: $category->translation($locale)->slug,
-                'subcat'    => $parent_slug ? $category->translation($locale)->slug : null
+                'brand'  => $target,
+                'cat'    => $parent_slug ?: $category->translation($locale)->slug,
+                'subcat' => $parent_slug ? $category->translation($locale)->slug : null
             ]);
 
             return LaravelLocalization::getLocalizedUrl($locale, $route);
@@ -230,23 +230,22 @@ class FilterController extends Controller
 
             return response()->json(
                 (new Brand())->filter($request->input('params'))
-                    ->get()
-                    ->toArray()
+                             ->get()
+                             ->toArray()
             );
         }
 
         return response()->json(
             Helper::resolveCache('brands')->remember('featured', config('cache.life'), function () {
                 return Brand::query()->active()
-                    ->featured()
-                    ->basicData()
-                    ->withCount('products')
-                    ->get()
-                    ->toArray();
+                            ->featured()
+                            ->basicData()
+                            ->withCount('products')
+                            ->get()
+                            ->toArray();
             })
         );
     }
-
 
 
     /**
@@ -256,48 +255,36 @@ class FilterController extends Controller
      */
     public function options(Request $request)
     {
-
         if ($request->has('params')) {
             $response = [];
             $options  = (new Options())->filter($request->input('params'))
                                        ->get();
 
-          foreach ($options as $option) {
+            foreach ($options as $option) {
+                if ($option->value_opt) {
+                    $style = 'background: linear-gradient(45deg, ' . $option->value . ' 50%, ' . $option->value_opt . ' 50%);';
 
-              if($option->value_opt){
-                  $style ='background: linear-gradient(45deg, '.$option->value.' 50%, '.$option->value_opt.' 50%);';
-              }
-              else{
-                  $style ='background-color:'.$option->value;
-              }
-
+                } else {
+                    $style = 'background-color:' . $option->value;
+                }
 
                 $response[] = [
-                    'id'         => $option->id,
-                    'title'      => $option->translation->title,
-                    'value'      => $option->value,
-                    'value_opt'  => $option->value_opt,
-                    'group' => $option->group,
-                    'type' => $option->type,
+                    'id'             => $option->id,
+                    'title'          => $option->translation->title,
+                    'value'          => $option->value,
+                    'value_opt'      => $option->value_opt,
+                    'group'          => $option->group,
+                    'type'           => $option->type,
                     'products_count' => $option->products_count,
-                    'style'     => $style,
-                    'sort_order' => $option->sort_order
+                    'style'          => $style,
+                    'sort_order'     => $option->sort_order
                 ];
             }
-
-
 
             return response()->json($response);
         }
 
 
     }
-
-
-
-
-
-
-
 
 }

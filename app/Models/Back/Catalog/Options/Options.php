@@ -1,6 +1,6 @@
 <?php
 
-namespace  App\Models\Back\Catalog\Options;
+namespace App\Models\Back\Catalog\Options;
 
 use App\Models\Back\Settings\Category;
 use Carbon\Carbon;
@@ -85,8 +85,8 @@ class Options extends Model
     {
         $request->validate([
             'title.*' => 'required',
-            'type' => 'required',
-            'item' => 'required'
+            'type'    => 'required',
+            'item'    => 'required'
         ]);
 
         $this->request = $request;
@@ -106,14 +106,14 @@ class Options extends Model
 
         foreach ($this->request->input('item') as $item) {
             $id = $this->insertGetId([
-                'group'       => Str::slug($group),
-                'type'        => $this->request->input('type'),
-                'value'       => $item['color'] ?? '#000000',
-                'value_opt'       => $item['color_opt'] ?? '#FFFFF1',
-                'data'        => '',
-                'sort_order'  => $item['sort_order'] ?? 0,
-                'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-                'updated_at'  => Carbon::now()
+                'group'      => Str::slug($group),
+                'type'       => $this->request->input('type'),
+                'value'      => $item['color'] ?? '#000000',
+                'value_opt'  => $item['color_opt'] ?? '#FFFFF1',
+                'data'       => '',
+                'sort_order' => $item['sort_order'] ?? 0,
+                'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                'updated_at' => Carbon::now()
             ]);
 
             if ($id) {
@@ -134,11 +134,9 @@ class Options extends Model
      */
     public function edit()
     {
-        $values = Options::query() ->orderBy('title', 'desc')->where('group', $this->group)->get();
-        $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
-        $items = collect($this->request->input('item'));
-
-
+        $values = Options::query()->orderBy('title', 'desc')->where('group', $this->group)->get();
+        $group  = $this->request->input('title')[config('app.locale')] ?? 'hr';
+        $items  = collect($this->request->input('item'));
 
         foreach ($values as $value) {
             $item = $items->where('id', $value->id);
@@ -149,13 +147,13 @@ class Options extends Model
 
             if ( ! empty($item->first())) {
                 $saved = $value->update([
-                    'group'       => Str::slug($group),
-                    'type'        => $this->request->input('type'),
-                    'value'       => $item->first()['color'] ?? '#000000',
-                    'value_opt'   => $item->first()['color_opt'] ?? NULL,
-                    'sort_order'  => $item->first()['sort_order'] ?? 0,
-                    'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-                    'updated_at'  => Carbon::now()
+                    'group'      => Str::slug($group),
+                    'type'       => $this->request->input('type'),
+                    'value'      => $item->first()['color'] ?? '#000000',
+                    'value_opt'  => $item->first()['color_opt'] ?? null,
+                    'sort_order' => $item->first()['sort_order'] ?? 0,
+                    'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                    'updated_at' => Carbon::now()
                 ]);
 
                 if ($saved) {
@@ -168,14 +166,14 @@ class Options extends Model
 
         foreach ($items->where('id', '==', '0') as $item) {
             $id = $this->insertGetId([
-                'group'       => Str::slug($group),
-                'type'        => $this->request->input('type'),
-                'value'       => $item['color'] ?? '#000000',
-                'value_opt'       => $item['color_opt'] ?? NULL,
-                'data'        => '',
-                'sort_order'  => $item['sort_order'] ?? 0,
-                'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-                'updated_at'  => Carbon::now()
+                'group'      => Str::slug($group),
+                'type'       => $this->request->input('type'),
+                'value'      => $item['color'] ?? '#000000',
+                'value_opt'  => $item['color_opt'] ?? null,
+                'data'       => '',
+                'sort_order' => $item['sort_order'] ?? 0,
+                'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                'updated_at' => Carbon::now()
             ]);
 
             if ($id) {
@@ -196,25 +194,27 @@ class Options extends Model
                     OptionsTranslation::query()->where('option_id', $item['id'])->delete();
                 }
             }
-
         }
 
         return true;
     }
 
 
+    /**
+     * @return array
+     */
     public function getList()
     {
         $response = [];
-        $values = Options::query()->get();
+        $values   = Options::query()->get();
 
         foreach ($values as $value) {
-            $response[$value->group]['group'] = $value->translation->group_title;
+            $response[$value->group]['group']   = $value->translation->group_title;
             $response[$value->group]['items'][] = [
-                'id' => $value->id,
-                'title' => $value->translation->title,
-                'value' => $value->color,
-                'value_opt'       => $value->color_opt,
+                'id'         => $value->id,
+                'title'      => $value->translation->title,
+                'value'      => $value->color,
+                'value_opt'  => $value->color_opt,
                 'sort_order' => $value->sort_order
             ];
         }
@@ -229,14 +229,14 @@ class Options extends Model
     public static function getColorList()
     {
         $response = [];
-        $values = Options::query()->where('type', 'color')->get();
+        $values   = Options::query()->where('type', 'color')->get();
 
         foreach ($values as $value) {
             $response[] = [
-                'id' => $value->id,
-                'title' => $value->translation->title,
-                'value' => $value->color,
-                'value_opt'       => $value->color_opt,
+                'id'         => $value->id,
+                'title'      => $value->translation->title,
+                'value'      => $value->color,
+                'value_opt'  => $value->color_opt,
                 'sort_order' => $value->sort_order
             ];
         }

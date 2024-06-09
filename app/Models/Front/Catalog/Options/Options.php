@@ -1,6 +1,6 @@
 <?php
 
-namespace  App\Models\Front\Catalog\Options;
+namespace App\Models\Front\Catalog\Options;
 
 use App\Helpers\Helper;
 use App\Helpers\ProductHelper;
@@ -24,6 +24,9 @@ class Options extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    /**
+     * @var string[]
+     */
     protected $appends = ['name'];
 
     /**
@@ -90,36 +93,35 @@ class Options extends Model
     }
 
 
-
+    /**
+     * @return array
+     */
     public function getList()
     {
         $response = [];
-        $values = Options::query()->get();
+        $values   = Options::query()->get();
 
         foreach ($values as $value) {
 
-            if($value->color_opt){
-                $style ='background: linear-gradient(45deg, '.$value->color.' 50%, '.$value->color_opt.' 50%);';
-            }
-            else{
-                $style ='background-color:'.$value->color;
+            if ($value->color_opt) {
+                $style = 'background: linear-gradient(45deg, ' . $value->color . ' 50%, ' . $value->color_opt . ' 50%);';
+            } else {
+                $style = 'background-color:' . $value->color;
             }
 
-
-            $response[$value->group]['group'] = $value->translation->group_title;
+            $response[$value->group]['group']   = $value->translation->group_title;
             $response[$value->group]['items'][] = [
-                'id' => $value->id,
-                'title' => $value->translation->title,
-                'value' => $value->color,
-                'style' => $style,
-                'value_opt'       => $value->color_opt,
+                'id'         => $value->id,
+                'title'      => $value->translation->title,
+                'value'      => $value->color,
+                'style'      => $style,
+                'value_opt'  => $value->color_opt,
                 'sort_order' => $value->sort_order
             ];
         }
 
         return $response;
     }
-
 
 
     /**
@@ -129,6 +131,8 @@ class Options extends Model
     {
         return $this->hasManyThrough(Product::class, ProductOption::class, 'option_id', 'id', 'id', 'product_id');
     }
+
+
     /**
      * @param $query
      *
@@ -151,9 +155,14 @@ class Options extends Model
     }
 
 
+    /**
+     * @param array $request
+     * @param int   $limit
+     *
+     * @return Builder
+     */
     public function filter(array $request, int $limit = 20): Builder
     {
-
         $query = (new Options())->newQuery();
 
         if (isset($request['search_option']) && $request['search_option']) {
@@ -161,16 +170,15 @@ class Options extends Model
 
             $query = Helper::searchByTitle($query, $request['search_option']);
 
-
-
         } else {
             $query->active();
+
             if ($request['group'] && ( ! isset($request['search_option']) || ! $request['search_option'])) {
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
                     if ($request['option']) {
                         if (strpos($request['option'], '+') !== false) {
-                            $arr = explode('+', $request['option']);
+                            $arr  = explode('+', $request['option']);
                             $pubs = Options::query()->whereIn('id', $arr)->pluck('id');
                             $query->whereIn('option_id', $pubs);
                         } else {
@@ -179,13 +187,15 @@ class Options extends Model
                     }
                 });
             }
-            if (! $request['group'] && $request['option']) {
+
+            if ( ! $request['group'] && $request['option']) {
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
                     $query->where('option_id', Option::where('id', $request['option'])->pluck('id')->first());
                 });
             }
-            if (! $request['group'] && $request['ids']) {
+
+            if ( ! $request['group'] && $request['ids']) {
                 $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
                 $query->whereHas('products', function ($query) use ($_ids) {
                     $query->active()->hasStock()->whereIn('id', $_ids);
@@ -194,10 +204,8 @@ class Options extends Model
         }
 
         $query->limit($limit)
-            ->withCount('products')
-            ->orderBy('sort_order');
-
-
+              ->withCount('products')
+              ->orderBy('sort_order');
 
         return $query;
     }
