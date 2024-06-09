@@ -195,7 +195,6 @@ export default {
         checkAvailableOptions(option, type) {
             let is_parent = (type == this.parent) ? 1 : 0;
 
-            console.log(option)
             if (option != 0) {
                 if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
                     this.$store.state.service.checkOptions(option, is_parent).then((response) => {
@@ -223,6 +222,17 @@ export default {
                     this.checkAvailability();
                 }
 
+            } else {
+                if (type == 'color') {
+                    for (let item in this.size_options) {
+                        this.size_options[item].active = 1;
+                    }
+
+                } else {
+                    for (let item in this.color_options) {
+                        this.color_options[item].active = 1;
+                    }
+                }
             }
 
         },
@@ -258,7 +268,6 @@ export default {
                 if (id == this.color_options[item].id) {
                     this.selected_color = this.color_options[item];
                     this.color_name = this.selected_color.name;
-                    //this.is_available = this.selected_color.quantity;
                 }
             }
         },
@@ -272,7 +281,6 @@ export default {
                 if (id == this.size_options[item].id) {
                     this.selected_size = this.size_options[item];
                     this.size_name = this.selected_size.name;
-                    //this.is_available = this.selected_size.quantity;
                 }
 
             }
