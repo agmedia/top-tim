@@ -189,22 +189,12 @@ class Options extends Model
                  if ($request['option']) {
                      if (strpos($request['option'], '+') !== false) {
                          $arr  = explode('+', $request['option']);
-                         $pubs = Options::query()->whereIn('id', $arr)->pluck('id');
-                         $query->whereIn('option_id', $pubs);
+                         $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique;
                      } else {
-                         $query->where('option_id', $request['option']);
+                         $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique;
                      }
-                 }
-             })->orWhereHas('subproducts', function ($query) use ($request) {
-                 $query = ProductHelper::queryCategories($query, $request);
-                 if ($request['option']) {
-                     if (strpos($request['option'], '+') !== false) {
-                         $arr  = explode('+', $request['option']);
-                         $pubs = Options::query()->whereIn('id', $arr)->pluck('id');
-                         $query->whereIn('option_id', $pubs);
-                     } else {
-                         $query->where('option_id', $request['option']);
-                     }
+
+                     $query->whereIn('id', $pids);
                  }
              });
             }
