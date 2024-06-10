@@ -406,7 +406,22 @@ class AgCart extends Model
      */
     private function structureCartItem(Request $request)
     {
-        $product = Product::where('id', $request['item']['id'])->first();
+        $product = Product::query()->where('id', $request['item']['id'])
+                                   ->orWhere('sku', $request['item']['id'])
+                                   ->first();
+
+        Log::info('structureCartItem(Request $request):::::::');
+        Log::info($request->toArray());
+
+        if ( ! $product) {
+            $product_option = ProductOption::query()->where('sku', $request['item']['id'])->first();
+
+            if ($product_option) {
+                $request->request->add(['options' => ['id' => $product_option->id]]);
+                $product = $product_option->product()->first();
+            }
+        }
+
 
         $product->dataLayer = TagManager::getGoogleProductDataLayer($product);
 
@@ -440,6 +455,12 @@ class AgCart extends Model
     }
 
 
+    /**
+     * @param Product $product
+     * @param Request $request
+     *
+     * @return array
+     */
     private function setItemData(Product $product, Request $request): array
     {
         $data = [
