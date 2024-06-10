@@ -67,18 +67,17 @@
                             <div class="widget widget-filter2">
                                 <h3 class="widget-title">Boja <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="d-flex flex-wrap">
-                                    <template v-for="optionb in options">
-                                        <div class="form-check form-option text-center mb-2 mx-1" v-if="optionb.type == 'color'">
-                                            <input class="form-check-input" type="checkbox" :id="optionb.id" :value="optionb.id" v-model="selectedOptions">
-                                            <label class="form-option-label rounded-circle" :for="optionb.id"><span class="form-option-color rounded-circle" :style="optionb.style "></span></label>
-                                            <label class="d-block fs-xs text-muted mt-n1" :for="optionb.id">{{ optionb.title }}</label>
+                                    <template v-for="option in options">
+                                        <div class="form-check form-option text-center mb-2 mx-1" v-if="option.type == 'color'">
+                                            <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions">
+                                            <label class="form-option-label rounded-circle" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style "></span></label>
+                                            <label class="d-block fs-xs text-muted mt-n1" :for="option.id">{{ option.title }}</label>
                                         </div>
                                     </template>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="col-lg-12">
                     <button type="button" class="btn btn-sm btn-primary mt-4" v-on:click="cleanQuery"><i class=" ci-trash"></i> Očisti sve</button>
@@ -100,6 +99,7 @@ export default {
         group: String,
         cat: String,
         subcat: String,
+        bladeoptions:String,
     },
 
     //

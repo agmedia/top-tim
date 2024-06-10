@@ -204,7 +204,7 @@
                  group="{{ isset($group) ? $group : null }}"
                  cat="{{ isset($cat) ? $cat : null }}"
                  subcat="{{ isset($subcat) ? $subcat : null }}"
-                 option="{{ isset($option) ? $option->translation->slug : null }}"
+                 bladeoptions="{{ isset($option) ? $option->id : null }}"
                  brand="{{ isset($brand) ? $brand->translation->slug : null }}">
     </filter-side-view>
 

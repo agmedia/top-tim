@@ -255,6 +255,9 @@ class FilterController extends Controller
      */
     public function options(Request $request)
     {
+Log::info('----');
+        Log::info($request->toArray());
+        Log::info('----');
         if ($request->has('params')) {
             $response = [];
             $options  = (new Options())->filter($request->input('params'))

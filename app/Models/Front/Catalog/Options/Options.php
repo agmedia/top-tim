@@ -134,6 +134,16 @@ class Options extends Model
 
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function subproducts()
+    {
+        return $this->hasManyThrough(Product::class, ProductOption::class, 'parent_id', 'id', 'id', 'product_id');
+    }
+
+
+
+    /**
      * @param $query
      *
      * @return mixed
@@ -173,31 +183,50 @@ class Options extends Model
         } else {
             $query->active();
 
-            if ($request['group'] && ( ! isset($request['search_option']) || ! $request['search_option'])) {
-                $query->whereHas('products', function ($query) use ($request) {
-                    $query = ProductHelper::queryCategories($query, $request);
-                    if ($request['option']) {
-                        if (strpos($request['option'], '+') !== false) {
-                            $arr  = explode('+', $request['option']);
-                            $pubs = Options::query()->whereIn('id', $arr)->pluck('id');
-                            $query->whereIn('option_id', $pubs);
-                        } else {
-                            $query->where('option_id', $request['option']);
-                        }
-                    }
-                });
+         if ($request['group'] && ( ! isset($request['search_option']) || ! $request['search_option'])) {
+             $query->whereHas('products', function ($query) use ($request) {
+                 $query = ProductHelper::queryCategories($query, $request);
+                 if ($request['option']) {
+                     if (strpos($request['option'], '+') !== false) {
+                         $arr  = explode('+', $request['option']);
+                         $pubs = Options::query()->whereIn('id', $arr)->pluck('id');
+                         $query->whereIn('option_id', $pubs);
+                     } else {
+                         $query->where('option_id', $request['option']);
+                     }
+                 }
+             })->orWhereHas('subproducts', function ($query) use ($request) {
+                 $query = ProductHelper::queryCategories($query, $request);
+                 if ($request['option']) {
+                     if (strpos($request['option'], '+') !== false) {
+                         $arr  = explode('+', $request['option']);
+                         $pubs = Options::query()->whereIn('id', $arr)->pluck('id');
+                         $query->whereIn('option_id', $pubs);
+                     } else {
+                         $query->where('option_id', $request['option']);
+                     }
+                 }
+             });
             }
 
             if ( ! $request['group'] && $request['option']) {
+
+
                 $query->whereHas('products', function ($query) use ($request) {
                     $query = ProductHelper::queryCategories($query, $request);
-                    $query->where('option_id', Option::where('id', $request['option'])->pluck('id')->first());
+                    $query->where('option_id', Options::where('id', $request['option'])->pluck('id')->first());
+                })->orwhereHas('subproducts', function ($query) use ($request) {
+                    $query = ProductHelper::queryCategories($query, $request);
+                    $query->where('option_id', Options::where('id', $request['option'])->pluck('id')->first());
                 });
             }
 
             if ( ! $request['group'] && $request['ids']) {
+
                 $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
                 $query->whereHas('products', function ($query) use ($_ids) {
+                    $query->active()->hasStock()->whereIn('id', $_ids);
+                })->orwhereHas('subproducts', function ($query) use ($_ids) {
                     $query->active()->hasStock()->whereIn('id', $_ids);
                 });
             }

@@ -67,7 +67,7 @@ if ( ! function_exists('logiraj_vrijeme')) {
 
         $log_end1 = microtime(true);
         $sec1 = number_format(($log_end1 - $log_start1), 2, ',', '.');
-        Log::info($log_text . ' --- Time: ' . $sec1 . ' sec.');
+
     }
 }
 
@@ -82,7 +82,7 @@ if ( ! function_exists('ag_lang')) {
         if ($main) {
             return LanguageHelper::getMain();
         }
-        
+
         return LanguageHelper::list();
     }
 }
@@ -99,11 +99,11 @@ if ( ! function_exists('current_locale')) {
     function current_locale(bool $native = false): string
     {
         $current = LanguageHelper::getCurrentLocale();
-        
+
         if ($native) {
             return config('laravellocalization.supportedLocales.' . $current . '.regional');
         }
-        
+
         return $current;
     }
 }
