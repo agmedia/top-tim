@@ -107,9 +107,9 @@ class Options extends Model
             $response[$value->group]['items'][] = [
                 'id'         => $value->id,
                 'title'      => $value->translation->title,
-                'value'      => $value->color,
+                'value'      => $value->value,
                 'style'      => OptionHelper::getStyle($value),
-                'value_opt'  => $value->color_opt,
+                'value_opt'  => $value->value_opt,
                 'sort_order' => $value->sort_order
             ];
         }

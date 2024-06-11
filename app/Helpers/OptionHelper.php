@@ -14,7 +14,7 @@ class OptionHelper
      */
     public static function getStyle(Options $option = null): string
     {
-        if ($option->color_opt) {
+        if ($option->value_opt) {
             return 'background: linear-gradient(45deg, ' . $option->value . ' 50%, ' . $option->value_opt . ' 50%);';
         }
 
