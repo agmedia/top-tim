@@ -3,6 +3,7 @@
 namespace App\Models\Front\Catalog\Options;
 
 use App\Helpers\Helper;
+use App\Helpers\OptionHelper;
 use App\Helpers\ProductHelper;
 use App\Models\Front\Catalog\Product;
 use App\Models\Front\Catalog\ProductOption;
@@ -102,19 +103,12 @@ class Options extends Model
         $values   = Options::query()->get();
 
         foreach ($values as $value) {
-
-            if ($value->color_opt) {
-                $style = 'background: linear-gradient(45deg, ' . $value->color . ' 50%, ' . $value->color_opt . ' 50%);';
-            } else {
-                $style = 'background-color:' . $value->color;
-            }
-
             $response[$value->group]['group']   = $value->translation->group_title;
             $response[$value->group]['items'][] = [
                 'id'         => $value->id,
                 'title'      => $value->translation->title,
                 'value'      => $value->color,
-                'style'      => $style,
+                'style'      => OptionHelper::getStyle($value),
                 'value_opt'  => $value->color_opt,
                 'sort_order' => $value->sort_order
             ];

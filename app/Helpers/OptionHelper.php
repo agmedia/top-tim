@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Helpers;
+
+use App\Models\Front\Catalog\Options\Options;
+
+class OptionHelper
+{
+
+    /**
+     * @param Options|null $option
+     *
+     * @return string
+     */
+    public static function getStyle(Options $option = null): string
+    {
+        if ($option->color_opt) {
+            return 'background: linear-gradient(45deg, ' . $option->color . ' 50%, ' . $option->color_opt . ' 50%);';
+        }
+
+        return 'background-color:' . ($option->color ?? '');
+    }
+}

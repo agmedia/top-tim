@@ -338,13 +338,6 @@ class Product extends Model
                 $response[$key]['group'] = $options->first()->option->group;
 
                 foreach ($options as $option) {
-                    if($option->title->value_opt){
-                        $style ='background: linear-gradient(45deg, '.$option->title->value.' 50%, '.$option->title->value_opt.' 50%);';
-                    }
-                    else{
-                        $style ='background-color:'.$option->title->value;
-                    }
-
                     $response[$key]['options'][] = [
                         'id' => $option->id,
                         'option_id' => $option->option_id,
@@ -352,7 +345,7 @@ class Product extends Model
                         'sku' => $option->sku,
                         'value' => $option->title->value,
                         'value_opt' => $option->title->value_opt,
-                        'style' => $style,
+                        'style' => ProductHelper::getColorOptionStyle($option),
                         'quantity' => $option->quantity,
                         'price' => $option->price,
                         'sort_order' => $option->title->sort_order,
@@ -369,12 +362,6 @@ class Product extends Model
                 $response[$parent]['group'] = $options->first()->top->group;
 
                 foreach ($options as $option) {
-                    if ($option->title->value_opt){
-                        $style ='background: linear-gradient(45deg, '.$option->title->value.' 50%, '.$option->title->value_opt.' 50%);';
-                    } else {
-                        $style ='background-color:'.$option->title->value;
-                    }
-
                     $response[$key]['options'][$option->option_id] = [
                         'id' => $option->id,
                         'option_id' => $option->option_id,
@@ -382,7 +369,7 @@ class Product extends Model
                         'sku' => $option->sku,
                         'value' => $option->title->value,
                         'value_opt' => $option->title->value_opt,
-                        'style' => $style,
+                        'style' => ProductHelper::getColorOptionStyle($option),
                         'quantity' => $option->quantity,
                         'price' => $option->price,
                         'sort_order' => $option->title->sort_order,
@@ -390,12 +377,6 @@ class Product extends Model
                     ];
 
                     if ( ! isset($parents[$option->top->id])) {
-                        if ($option->top->value_opt){
-                            $substyle ='background: linear-gradient(45deg, '.$option->top->value.' 50%, '.$option->top->value_opt.' 50%);';
-                        } else {
-                            $substyle ='background-color:'.$option->top->value;
-                        }
-
                         $parents[$option->top->id] = [
                             'id' => $option->id,
                             'option_id' => $option->top->id,
@@ -403,7 +384,7 @@ class Product extends Model
                             'sku' => '',
                             'value' => $option->top->value,
                             'value_opt' => $option->top->value_opt,
-                            'style' => $substyle,
+                            'style' => ProductHelper::getColorOptionStyle($option, true),
                             'quantity' => 0,
                             'price' => 0,
                             'sort_order' => $option->top->sort_order,
@@ -563,8 +544,8 @@ class Product extends Model
     public function category()
     {
         return $this->hasOneThrough(Category::class, CategoryProducts::class, 'product_id', 'id', 'id', 'category_id')
-            ->where('parent_id', 0)
-            ->first();
+                    ->where('parent_id', 0)
+                    ->first();
     }
 
 
@@ -574,8 +555,8 @@ class Product extends Model
     public function subcategory()
     {
         return $this->hasOneThrough(Category::class, CategoryProducts::class, 'product_id', 'id', 'id', 'category_id')
-            ->where('parent_id', '!=', 0)
-            ->first();
+                    ->where('parent_id', '!=', 0)
+                    ->first();
     }
 
 
@@ -759,23 +740,10 @@ class Product extends Model
         }
 
         if ($request->has('group')) {
-            // Akcije
-            if ($request->input('group') == 'snizenja') {
-                /*$query->where('special', '!=', '')
-                    ->where(function ($query) {
-                        $query->whereDate('special_from', '<=', now())->orWhereNull('special_from');
-                    })
-                    ->where(function ($query) {
-                        $query->whereDate('special_to', '>=', now())->orWhereNull('special_to');
-                    });*/
-            } else {
-                // Kategorija...
-                $group = $request->input('group');
-
-                $query->whereHas('categories', function ($query) use ($request, $group) {
-                    $query->where('group', 'like', '%' . $group . '%');
-                });
-            }
+            // Kategorije ili grupa kategorije...
+            $query->whereHas('categories', function ($query) use ($request) {
+                $query->where('group', 'like', '%' . $request->input('group') . '%');
+            });
         }
 
         if ($request->has('cat')) {
@@ -823,7 +791,7 @@ class Product extends Model
 
                 if (isset($brand)) {
                     foreach ($brand as $item) {
-                    array_push($auts, $item->id);
+                        array_push($auts, $item->id);
                     }
                 }else{
                     array_push($auts, $brandz->id);
@@ -833,40 +801,40 @@ class Product extends Model
             $query->whereIn('brand_id', $auts);
         }
 
-
+        //
         if ($request->has('option')) {
-
-            $auts = [];
+            $opts_ids = [];
 
             if (is_array($request->input('option'))) {
                 foreach ($request->input('option') as $key => $item) {
                     if (isset($item->id)) {
-                        array_push($auts, $item->id);
+                        array_push($opts_ids, $item->id);
                     } else {
-                        array_push($auts, $key);
+                        array_push($opts_ids, $key);
                     }
                 }
             }
-
 
             if (is_string($request->input('option'))) {
                 $value = $request->input('option');
 
                 if ($value) {
-                        $option = ProductOption::query()->where('option_id', $value)->get();
+                    if (strpos($value, '+') !== false) {
+                        $arr = explode('+', $value);
 
+                        foreach ($arr as $id) {
+                            array_push($opts_ids, $id);
+                        }
+
+                    } else {
+                        array_push($opts_ids, intval($request->input('option')));
+                    }
                 }
-
-
-            }
-            foreach ($option as $item) {
-                array_push($auts, $item->product_id);
             }
 
+            $pids = ProductOption::query()->whereIn('option_id', $opts_ids)->orWhereIn('parent_id', $opts_ids)->pluck('product_id');
 
-
-
-            $query->whereIn('id', $auts);
+            $query->whereIn('id', $pids);
         }
 
 

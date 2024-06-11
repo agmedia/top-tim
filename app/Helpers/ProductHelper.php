@@ -194,4 +194,31 @@ class ProductHelper
         return preg_replace('/ face=("|\')(.*?)("|\')/', '', $clean);
     }
 
+
+    /**
+     * @param ProductOption $option
+     *
+     * @return string
+     */
+    public static function getColorOptionStyle(ProductOption $option, bool $parent = false): string
+    {
+        if ($parent) {
+            if ($option->top->value_opt) {
+                return 'background: linear-gradient(45deg, ' . $option->top->value . ' 50%, ' . $option->top->value_opt . ' 50%);';
+
+            } else {
+                return 'background-color:' . $option->top->value;
+            }
+        }
+
+        if ($option->title->value_opt) {
+            return 'background: linear-gradient(45deg, ' . $option->title->value . ' 50%, ' . $option->title->value_opt . ' 50%);';
+
+        } else {
+            return 'background-color:' . $option->title->value;
+        }
+
+        return '';
+    }
+
 }

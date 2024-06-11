@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Helpers\Helper;
+use App\Helpers\OptionHelper;
 use App\Models\Front\Catalog\Product;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Front\Catalog\Author;
@@ -138,6 +139,9 @@ class FilterController extends Controller
      */
     public function products(Request $request)
     {
+        Log::info('public function products(Request $request) ----');
+        Log::info($request->toArray());
+
         if ( ! $request->has('params')) {
             return response()->json(['status' => 300, 'message' => 'Error!']);
         }
@@ -255,22 +259,15 @@ class FilterController extends Controller
      */
     public function options(Request $request)
     {
-Log::info('----');
+        Log::info('public function options(Request $request) ----');
         Log::info($request->toArray());
-        Log::info('----');
+
         if ($request->has('params')) {
             $response = [];
             $options  = (new Options())->filter($request->input('params'))
                                        ->get();
 
             foreach ($options as $option) {
-                if ($option->value_opt) {
-                    $style = 'background: linear-gradient(45deg, ' . $option->value . ' 50%, ' . $option->value_opt . ' 50%);';
-
-                } else {
-                    $style = 'background-color:' . $option->value;
-                }
-
                 $response[] = [
                     'id'             => $option->id,
                     'title'          => $option->translation->title,
@@ -279,7 +276,7 @@ Log::info('----');
                     'group'          => $option->group,
                     'type'           => $option->type,
                     'products_count' => $option->products_count,
-                    'style'          => $style,
+                    'style'          => OptionHelper::getStyle($option),
                     'sort_order'     => $option->sort_order
                 ];
             }
