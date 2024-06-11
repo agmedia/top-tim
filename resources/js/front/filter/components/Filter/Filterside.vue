@@ -34,12 +34,11 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-
                     <!-- Filter by Size-->
                     <div class=" mb-grid-gutter" v-if="show_options">
                         <div class=" px-2">
                             <div class="widget widget-filter">
-                                <h3 class="widget-title">Veličina <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
+                                <h3  class="widget-title"  v-if="show_size">Veličina <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
                                     <div class="simplebar-scroll-content">
                                         <div class="simplebar-content">
@@ -60,15 +59,14 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-
                     <!-- Filter by Color-->
                     <div class="mb-grid-gutter" v-if="show_options">
                         <div class=" px-2" >
                             <div class="widget widget-filter2">
-                                <h3 class="widget-title">Boja <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
+                                <h3 class="widget-title" v-if="show_color">Boja <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="d-flex flex-wrap">
                                     <template v-for="option in options">
-                                        <div class="form-check form-option text-center mb-2 mx-1" v-if="option.type == 'color'" v-tooltip :title="option.title ">
+                                        <div class="form-check form-option text-center mb-2 mx-1" v-if="option.type == 'color'" :title="option.title ">
                                             <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions">
                                             <label class="form-option-label rounded-circle" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style "></span></label>
                                             <label class="d-block fs-xs text-muted mt-n1" :for="option.id"></label>
@@ -122,6 +120,8 @@ export default {
             searchBrand: '',
             searchOption: '',
             show_brands: false,
+            show_size: false,
+            show_color: false,
             show_options: false,
             brands_loaded: false,
             options_loaded: false,
@@ -230,6 +230,22 @@ export default {
             axios.post('filter/getOptions', { params }).then(response => {
                 this.options_loaded = true;
                 this.options = response.data;
+
+                for (const element of this.options) { // You can use `let` instead of `const` if you like
+                   if(element.type =='size'){
+                       this.show_size = true;
+                   }
+
+                }
+
+                for (const element of this.options) { // You can use `let` instead of `const` if you like
+                    if(element.type =='color'){
+                        this.show_color = true;
+                    }
+                }
+
+
+
             });
         },
 
