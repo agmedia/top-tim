@@ -14,7 +14,7 @@
                             <div class="widget widget-filter mb-4 pb-4 border-bottom" v-if="show_brands">
                                 <h3 class="widget-title">Brands<span v-if="!brands_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="input-group input-group-sm mb-2 autocomplete">
-                                    <input type="search" v-model="searchBrand" class="form-control rounded-end pe-5" placeholder="Pretraži nakladnike"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                                    <input type="search" v-model="searchBrand" class="form-control rounded-end pe-5" placeholder="Pretraži brandove"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                                 </div>
                                 <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
                                     <div class="simplebar-scroll-content">
