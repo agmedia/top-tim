@@ -190,6 +190,18 @@ class Options extends Model
 
                         $query->whereIn('id', $pids);
                     }
+                })->orwhereHas('subproducts', function ($query) use ($request) {
+                    $query = ProductHelper::queryCategories($query, $request);
+                    if ($request['option']) {
+                        if (strpos($request['option'], '+') !== false) {
+                            $arr  = explode('+', $request['option']);
+                            $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique;
+                        } else {
+                            $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique;
+                        }
+
+                        $query->whereIn('id', $pids);
+                    }
                 });
             }
 

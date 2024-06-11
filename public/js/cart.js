@@ -5083,7 +5083,10 @@ var render = function render() {
     staticClass: "d-flex flex-wrap"
   }, [_vm._l(_vm.options, function (option) {
     return [option.type == "color" ? _c("div", {
-      staticClass: "form-check form-option text-center mb-2 mx-1"
+      staticClass: "form-check form-option text-center mb-2 mx-1",
+      staticStyle: {
+        width: "5rem"
+      }
     }, [_c("input", {
       directives: [{
         name: "model",
