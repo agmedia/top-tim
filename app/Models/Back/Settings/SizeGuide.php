@@ -75,7 +75,7 @@ class SizeGuide extends Model
     public function validateRequest(Request $request)
     {
         $request->validate([
-            'title'       => 'required',
+            'title.*'       => 'required',
             'image' => 'required'
         ]);
 
