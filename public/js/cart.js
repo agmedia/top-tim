@@ -4912,7 +4912,7 @@ var render = function render() {
     staticClass: "form-control rounded-end pe-5",
     attrs: {
       type: "search",
-      placeholder: "Pretraži nakladnike"
+      placeholder: "Pretraži brandove"
     },
     domProps: {
       value: _vm.searchBrand
