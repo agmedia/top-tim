@@ -2,6 +2,7 @@
 
 namespace App\Models\Front\Catalog;
 
+use App\Helpers\OptionHelper;
 use App\Models\Front\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Attributes;
 use Illuminate\Database\Eloquent\Model;
@@ -80,7 +81,8 @@ class ProductOption extends Model
             $response[$value->group]['items'][] = [
                 'id' => $value->id,
                 'title' => $value->translation->title,
-                'sort_order' => $value->sort_order
+                'sort_order' => $value->sort_order,
+                'style'      => OptionHelper::getStyle($value),
             ];
         }
 

@@ -68,10 +68,10 @@
                                 <h3 class="widget-title">Boja <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="d-flex flex-wrap">
                                     <template v-for="option in options">
-                                        <div class="form-check form-option text-center mb-2 mx-1" v-if="option.type == 'color'" style="width:5rem">
+                                        <div class="form-check form-option text-center mb-2 mx-1" v-if="option.type == 'color'" >
                                             <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions">
                                             <label class="form-option-label rounded-circle" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style "></span></label>
-                                            <label class="d-block fs-xs text-muted mt-n1" :for="option.id">{{ option.title }}</label>
+                                            <label class="d-block fs-xs text-muted mt-n1" :for="option.id">{{ option}}</label>
                                         </div>
                                     </template>
                                 </div>

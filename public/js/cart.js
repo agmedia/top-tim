@@ -5083,10 +5083,7 @@ var render = function render() {
     staticClass: "d-flex flex-wrap"
   }, [_vm._l(_vm.options, function (option) {
     return [option.type == "color" ? _c("div", {
-      staticClass: "form-check form-option text-center mb-2 mx-1",
-      staticStyle: {
-        width: "5rem"
-      }
+      staticClass: "form-check form-option text-center mb-2 mx-1"
     }, [_c("input", {
       directives: [{
         name: "model",
@@ -5134,7 +5131,7 @@ var render = function render() {
       attrs: {
         "for": option.id
       }
-    }, [_vm._v(_vm._s(option.title))])]) : _vm._e()];
+    }, [_vm._v(_vm._s(option))])]) : _vm._e()];
   })], 2)])])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
   }, [_c("button", {
