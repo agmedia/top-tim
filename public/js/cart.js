@@ -4225,7 +4225,7 @@ var render = function render() {
         width: "5rem"
       },
       attrs: {
-        src: item.associatedModel.image,
+        src: item.attributes.slika,
         alt: item.name,
         title: item.name
       }

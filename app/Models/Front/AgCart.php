@@ -11,6 +11,7 @@ use App\Models\Front\Catalog\ProductAction;
 use App\Models\Front\Catalog\ProductOption;
 use App\Models\Front\Checkout\PaymentMethod;
 use App\Models\Front\Checkout\ShippingMethod;
+use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\TagManager;
 use Darryldecode\Cart\CartCondition;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
@@ -492,15 +493,29 @@ class AgCart extends Model
     private function structureCartItemAttributes(Product $product, Request $request): array
     {
         $options = [];
-
+        $product_option = [];
         if (isset($request['item']['options']['id'])) {
             $options = $this->structureItemOptions($request['item']['options']['id'], $request['item']['quantity']);
+
+            $product_option = ProductOption::query()->find($request['item']['options']['id']);
         }
+
+
+        $product_image = ProductImage::query()->where('option_id', $product_option->parent_id )->first();
+
+
+        if($product_image){
+            $image = $product_image->image;
+        } else{
+            $image = $product->image;
+        }
+
 
         return [
             'path'    => $product->url,
             'tax'     => $product->tax($product->tax_id),
-            'options' => $options
+            'options' => $options,
+            'slika' => $image
         ];
     }
 
@@ -572,6 +587,8 @@ class AgCart extends Model
                     'sku'      => $product_option->sku,
                     'name'     => CartHelper::resolveItemOptionName($product_option),
                     'quantity' => $quantity,
+
+
                 ];
             }
         }
