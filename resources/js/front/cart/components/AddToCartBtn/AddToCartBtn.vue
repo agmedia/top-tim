@@ -104,7 +104,9 @@ export default {
         setOptionsSelection() {
             let res = JSON.parse(this.options);
 
-            this.parent = res.parent;
+            console.log('default options array', res.parent)
+
+            this.parent = res.parent ? res.parent : null;
             this.size_options = res.size ? res.size.options : {};
             this.color_options = res.color ? res.color.options : {};
         },
@@ -198,6 +200,7 @@ export default {
             if (option != 0) {
                 if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
                     this.$store.state.service.checkOptions(option, is_parent).then((response) => {
+                        console.log(response)
                         if (type == 'color') {
                             this.size_options = response.size.options;
                             this.setSelectedColor(option);
@@ -244,17 +247,14 @@ export default {
         setRequestOptions() {
             let response = {};
 
-            if (Object.keys(this.color_options).length) {
-                response = {
-                    id: this.selected_color.id
-                };
-            }
+            console.log('this.selected_color, this.selected_size, this.parent');
+            console.log(this.selected_color, this.selected_size, this.parent);
 
-            if (Object.keys(this.size_options).length) {
-                response = {
-                    id: this.selected_size.id
-                };
-            }
+            response.id = this.id;
+            response.parent_id = this.parent == 'color' ? this.selected_color.option_id : this.selected_size.option_id;
+            response.option_id = this.parent == 'color' ? this.selected_size.option_id : this.selected_color.option_id;
+
+            console.log(response);
 
             return response;
         },
