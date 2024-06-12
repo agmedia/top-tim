@@ -163,7 +163,22 @@ class AgCart extends Model
         foreach ($this->cart->getContent() as $item) {
             if ($item->id == $request['item']['id']) {
                 $quantity = $request['item']['quantity'];
-                $product  = Product::where('id', $request['item']['id'])->first();
+                $product  = Product::query()->where('id', $request['item']['id'])
+                                   ->orWhere('sku', $request['item']['id'])
+                                   ->first();
+
+                if ( ! $product) {
+                    $product_option = ProductOption::query()->where('sku', $request['item']['id'])->first();
+
+                    if ($product_option) {
+                        $request->request->add(['options' => ['id' => $product_option->id]]);
+                        $product = $product_option->product()->first();
+                    }
+                }
+
+                if ( ! $product) {
+                    return ['error' => 'Došlo je do greške.!! Molimo pokušajte ponovo ili kontaktirajte administratora.'];
+                }
 
                 if ($quantity > $product->quantity) {
                     return ['error' => 'Nažalost nema dovoljnih količina artikla..!'];
