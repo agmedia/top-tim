@@ -197,7 +197,7 @@
 
 
 
-            @if ( $prod->quantity > 0)
+            @if ( $prod->quantity > 0 )
                     <add-to-cart-btn id="{{ $prod->id }}" available="{{ $prod->quantity }}"  sizeguide="{{ isset($prod->sizeguide) ? $prod->sizeguide->image : null }}" options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
             @endif
 
@@ -322,38 +322,7 @@
                    </div>
                </div>
                <div class="col-lg-5 col-sm-5 ">
-                   @if ($prod->translation->sastojci or $prod->translation->podaci)
-                      <h3 class="h6">{{ __('front/ricekakis.dodatne_informacije') }}</h3>
 
-                   <!-- Light table with striped rows -->
-
-                   <!-- Dark table with striped rows -->
-                       <div class="table-responsive">
-                           <table class="table table-light table-striped fs-sm">
-
-                               <tbody>
-
-                               @if ($prod->translation->sastojci)
-                                   <tr>
-                                       <th>{{ __('front/ricekakis.sastojci') }}</th>
-                                   </tr>
-                                   <tr>
-                                         <td>{!! $prod->translation->sastojci !!}</td>
-                                   </tr>
-                               @endif
-                               @if ($prod->translation->podaci)
-                                   <tr>
-                                       <th>{{ __('front/ricekakis.podaci_o_prehrani') }}</th>
-                                   </tr>
-                                   <tr>
-                                        <td>{!! $prod->translation->podaci !!}</td>
-                                   </tr>
-                               @endif
-
-                               </tbody>
-                           </table>
-                       </div>
-                   @endif
 
                </div>
            </div>

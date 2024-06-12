@@ -39,9 +39,17 @@
 
 
         </div>
-        <div class="product-floating-btn">
-            <add-to-cart-btn-simple id="{{ $product->id }}" available="{{ $product->quantity }}"></add-to-cart-btn-simple>
-        </div>
+            @if($product->quantity > 0 && !$product->has_option)
+               <div class="product-floating-btn">
+                   <add-to-cart-btn-simple id="{{ $product->id }}" available="{{ $product->quantity }}"></add-to-cart-btn-simple>
+              </div>
+            @endif
+
+            @if($product->quantity > 0 && $product->has_option)
+                <div class="product-floating-btn">
+                    <a class="btn btn-primary btn-shadow btn-sm" href="{{ url($product->url) }}">+<i class="ci-cart fs-base ms-1"></i></a>
+                </div>
+            @endif
     </div>
 </div>
 

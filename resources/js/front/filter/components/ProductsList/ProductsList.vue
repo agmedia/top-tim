@@ -3,13 +3,7 @@
         <!-- Toolbar-->
         <div class="d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2">
             <div class="d-flex flex-wrap pb-3">
-
-
-
                 <button class="btn btn-outline-secondary bg-white btn-icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter me-2"></i> Filter</button>
-
-
-
             </div>
 
             <div class="d-flex flex-wrap ">
@@ -48,6 +42,8 @@
             <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in products.data">
                 <div class="card product-card card-static pb-3">
 
+
+
                     <span class="badge bg-warning mt-1 ms-1 badge-end"  v-if="product.quantity <= 0">{{ trans.rasprodano }}</span>
                     <span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow" v-if="product.special">-{{ ($store.state.service.getDiscountAmount(product.price, product.special)) }}%</span>
 
@@ -83,8 +79,11 @@
 
 
                     </div>
-                    <div class="product-floating-btn" v-if="product.quantity > 0">
+                    <div class="product-floating-btn" v-if="product.quantity > 0 && !product.has_option">
                         <button class="btn btn-primary btn-shadow btn-sm" :disabled="product.disabled" v-on:click="add(product.id, product.quantity)" type="button">+<i class="ci-cart fs-base ms-1"></i></button>
+                    </div>
+                    <div class="product-floating-btn" v-if="product.quantity > 0 && product.has_option">
+                        <a class="btn btn-primary btn-shadow btn-sm" :href="origin + product.url">+<i class="ci-cart fs-base ms-1"></i></a>
                     </div>
                 </div>
             </div>
