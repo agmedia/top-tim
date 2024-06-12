@@ -51,7 +51,8 @@ class Product extends Model
         'secondary_price_text',
         'secondary_special',
         'secondary_special_text',
-        'stars'
+        'stars',
+        'has_option'
     ];
 
     /**
@@ -286,6 +287,15 @@ class Product extends Model
     public function getStarsAttribute($value)
     {
         return $this->reviews()->avg('stars');
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function getHasOptionAttribute()
+    {
+        return $this->options()->count() > 0;
     }
 
 
