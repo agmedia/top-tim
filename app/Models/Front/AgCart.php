@@ -316,9 +316,6 @@ class AgCart extends Model
     {
         $this->cart->clearCartConditions();
 
-        Log::info('setCartConditions()');
-        Log::info($this->loyalty);
-
         $shipping_method    = ShippingMethod::condition($this->cart);
         $payment_method     = PaymentMethod::condition($this->cart);
         $special_condition  = Helper::hasSpecialCartCondition($this->cart);
@@ -408,8 +405,8 @@ class AgCart extends Model
     private function structureCartItem(Request $request)
     {
         $product = Product::query()->where('id', $request['item']['id'])
-                                   ->orWhere('sku', $request['item']['id'])
-                                   ->first();
+                          ->orWhere('sku', $request['item']['id'])
+                          ->first();
 
         Log::info('structureCartItem(Request $request):::::::');
         Log::info($request->toArray());
@@ -423,6 +420,9 @@ class AgCart extends Model
             }
         }
 
+        if ( ! $product) {
+            return ['error' => 'Došlo je do greške.!! Molimo pokušajte ponovo ili kontaktirajte administratora.'];
+        }
 
         $product->dataLayer = TagManager::getGoogleProductDataLayer($product);
 
@@ -470,7 +470,11 @@ class AgCart extends Model
         ];
 
         if (isset($request['item']['options']['id'])) {
-            $product_option = ProductOption::query()->find($request['item']['options']['id']);
+            $option_data    = $request['item']['options'];
+            $product_option = ProductOption::query()->where('product_id', $option_data['id'])
+                                           ->where('option_id', $option_data['option_id'])
+                                           ->where('parent_id', $option_data['parent_id'])
+                                           ->first();
 
             if ($product_option) {
                 $data = [
@@ -492,30 +496,31 @@ class AgCart extends Model
      */
     private function structureCartItemAttributes(Product $product, Request $request): array
     {
+        $image   = $product->image;
         $options = [];
-        $product_option = [];
+
         if (isset($request['item']['options']['id'])) {
-            $options = $this->structureItemOptions($request['item']['options']['id'], $request['item']['quantity']);
+            $option_data    = $request['item']['options'];
+            $product_option = ProductOption::query()->where('product_id', $option_data['id'])
+                                           ->where('option_id', $option_data['option_id'])
+                                           ->where('parent_id', $option_data['parent_id'])
+                                           ->first();
 
-            $product_option = ProductOption::query()->find($request['item']['options']['id']);
+            if ($product_option) {
+                $options       = $this->structureItemOptions($product_option->id, $request['item']['quantity']);
+                $product_image = ProductImage::query()->where('option_id', $product_option->parent_id)->first();
+
+                if ($product_image) {
+                    $image = $product_image->image;
+                }
+            }
         }
-
-
-        $product_image = ProductImage::query()->where('option_id', $product_option->parent_id )->first();
-
-
-        if($product_image){
-            $image = $product_image->image;
-        } else{
-            $image = $product->image;
-        }
-
 
         return [
             'path'    => $product->url,
             'tax'     => $product->tax($product->tax_id),
             'options' => $options,
-            'slika' => $image
+            'slika'   => $image
         ];
     }
 
@@ -553,14 +558,14 @@ class AgCart extends Model
         }
 
         if (isset($request['item']['options']['id'])) {
-            $option_id = $request['item']['options']['id'];
+            $option_id      = $request['item']['options']['id'];
             $product_option = ProductOption::query()->find($option_id);
 
             if ($product_option && $product_option->price != 0) {
                 $conditions[] = new CartCondition([
-                    'name'   => CartHelper::resolveItemOptionName($product_option),
-                    'type'   => 'option',
-                    'value'  => $product_option->price
+                    'name'  => CartHelper::resolveItemOptionName($product_option),
+                    'type'  => 'option',
+                    'value' => $product_option->price
                 ]);
             }
         }
@@ -587,7 +592,6 @@ class AgCart extends Model
                     'sku'      => $product_option->sku,
                     'name'     => CartHelper::resolveItemOptionName($product_option),
                     'quantity' => $quantity,
-
 
                 ];
             }
