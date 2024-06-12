@@ -265,7 +265,7 @@ class FilterController extends Controller
         if ($request->has('params')) {
             $response = [];
             $options  = (new Options())->filter($request->input('params'))
-                                       ->get();
+                                       ->get()->sortBy('translation.title');
 
             foreach ($options as $option) {
                 $response[] = [
