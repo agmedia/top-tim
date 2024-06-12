@@ -25,7 +25,7 @@
         <div class="d-sm-flex justify-content-between align-items-center my-2 pb-3 border-bottom" v-for="item in $store.state.cart.items">
             <div class="d-flex align-items-center text-start">
                 <a class="d-inline-block flex-shrink-0 me-3" :href="base_path + item.attributes.path">
-                    <img :src="item.associatedModel.image" width="120" :alt="item.name" :title="item.name">
+                    <img :src="item.attributes.slika" width="120" :alt="item.name" :title="item.name">
                 </a>
                 <div class="py-2">
                     <h3 class="product-title fs-base mb-2"><a :href="base_path + item.attributes.path">{{ item.name }}</a></h3>

@@ -4337,7 +4337,7 @@ var render = function render() {
       }
     }, [_c("img", {
       attrs: {
-        src: item.associatedModel.image,
+        src: item.attributes.slika,
         width: "120",
         alt: item.name,
         title: item.name
