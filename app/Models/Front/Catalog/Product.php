@@ -865,11 +865,11 @@ class Product extends Model
             }
 
             if ($sort == 'naziv_up') {
-                $query->orderBy('name');
+                $query->orderBy(ProductTranslation::query()->select('name')->whereColumn('product_translations.product_id', 'products.id')->where('product_translations.lang', current_locale()));
             }
 
             if ($sort == 'naziv_down') {
-                $query->orderBy('name', 'desc');
+                $query->orderByDesc(ProductTranslation::query()->select('name')->whereColumn('product_translations.product_id', 'products.id')->where('product_translations.lang', current_locale()));
             }
         } else {
             $query->orderBy('created_at', 'desc');
