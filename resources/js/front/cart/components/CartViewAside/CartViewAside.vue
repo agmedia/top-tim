@@ -19,7 +19,7 @@
                     <h2 class="widget-title text-center mb-2">{{ trans.sazetak}}</h2>
 
                     <div class="d-flex align-items-center py-2 border-bottom" v-for="item in $store.state.cart.items">
-                        <a class="d-block flex-shrink-0" :href="base_path + item.attributes.path"><img :src="item.associatedModel.image" :alt="item.name" width="64"></a>
+                        <a class="d-block flex-shrink-0" :href="base_path + item.attributes.path"><img :src="item.attributes.slika" :alt="item.name" width="64"></a>
                         <div class="ps-2">
                             <h6 class="widget-product-title"><a :href="base_path + item.attributes.path">{{ item.name }}</a></h6>
                             <div class="widget-product-meta"><span class="text-primary me-2">
