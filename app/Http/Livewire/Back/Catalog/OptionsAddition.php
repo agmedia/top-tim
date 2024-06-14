@@ -39,7 +39,7 @@ class OptionsAddition extends Component
             $item = $this->getEmptyItem();
         }
 
-        array_push($this->items, $item);
+        array_unshift($this->items, $item);
     }
 
 
@@ -76,7 +76,8 @@ class OptionsAddition extends Component
     private function sortPredefinedItems()
     {
         if ($this->type == 'color' || $this->type == 'size') {
-            $values = Options::query()->where('group', Str::slug($this->values->group))->get();
+            $values = Options::query()->where('group', Str::slug($this->values->group))->get()->sortBy('translation.title');
+
         } else {
             $values = Attributes::query()->where('group', Str::slug($this->values->group))->get();
         }
