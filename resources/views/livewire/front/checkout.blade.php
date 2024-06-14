@@ -180,7 +180,7 @@
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label" for="checkout-city">{{ __('front/cart.grad') }} <span class="text-danger">*</span></label>
-                    <input name="city" class="form-control @error('address.city') is-invalid @enderror" type="text" wire:model.defer="address.city">
+                    <input name="city" class="form-control @error('address.city') is-invalid @enderror" maxlength="5" type="text" wire:model.defer="address.city">
                     @error('address.city') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.grad_warning') }}</div> @enderror
                 </div>
             </div>

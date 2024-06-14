@@ -130,7 +130,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="input-zip">{{ __('back/user.user_zip') }}</label>
-                                <input type="text" class="form-control" id="input-zip" name="zip" value="{{ isset($user) ? $user->details->zip : old('zip') }}">
+                                <input type="text" class="form-control" id="input-zip" maxlength="5" name="zip" value="{{ isset($user) ? $user->details->zip : old('zip') }}">
                             </div>
                             <div class="form-group">
                                 <label for="input-state">{{ __('back/user.user_country') }}</label>
