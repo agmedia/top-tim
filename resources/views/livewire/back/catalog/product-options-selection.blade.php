@@ -97,12 +97,16 @@
                 </thead>
                 <tbody>
                 @foreach ($item['options'] as $key => $option)
+                    @php
+                    $selections = collect($item['selections'])->sortBy('title')
+                    @endphp
 
                     <tr>
                         <td class="font-size-sm">
                             <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}" wire:model="items.{{ $group }}.options.{{ $key }}.value" name="options[{{ $group }}][{{ $key }}][main_id]" style="width: 100%;" data-placeholder="Odaberite opciju">
                                 <option></option>
-                                @foreach ($item['selections'] as $selection)
+
+                                @foreach ($selections as $selection)
                                     <option value="{{ $selection['id'] }}">{{ $selection['title'] }}</option>
                                 @endforeach
                             </select>
