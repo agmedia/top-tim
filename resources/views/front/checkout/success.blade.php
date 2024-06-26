@@ -35,7 +35,7 @@
                         <p> {{ __('front/cart.sb4') }}</p>
                         <p> {{ __('front/cart.sb5') }}</p>
                         <p>{{ __('front/cart.sb6') }}  {{number_format($data['order']['total'], 2)}} €<br>
-                            {{ __('front/cart.sb7') }}: HR98 2402 0061 1011 2296 1<br>
+                            {{ __('front/cart.sb7') }}:  HR5824070001100095118 <br>
                             {{ __('front/cart.sb8') }}: {{ $data['order']['id'] }}-{{date('ym')}}</p>
                         <p>{{ __('front/cart.sb9') }}</p>
                         <p><img src="{{ asset('media/img/qr/'.$data['order']['id']) }}.jpg"></p>
