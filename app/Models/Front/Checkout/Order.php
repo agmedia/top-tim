@@ -3,6 +3,7 @@
 namespace App\Models\Front\Checkout;
 
 use App\Helpers\Helper;
+use App\Helpers\ProductHelper;
 use App\Models\Back\Orders\OrderHistory;
 use App\Models\Back\Orders\OrderProduct;
 use App\Models\Back\Orders\OrderTotal;
@@ -245,17 +246,24 @@ class Order extends Model
         foreach ($this->order['cart']['items'] as $item) {
             $discount = 0;
             $price    = $item->price;
+            $data = ProductHelper::collectCartItemData($item);
+
+            $has_option = ProductHelper::hasOptionFromCartItem($item);
 
             if ($this->checkSpecial($item->associatedModel)) {
                 $price    = $item->associatedModel->special;
                 $discount = Helper::calculateDiscount($item->price, $price);
             }
 
-            //Log::info(print_r($item, true));
+            Log::info('updateProducts(int $order_id) ::: print_r($item, true)');
+            Log::info(print_r($item, true));
+            Log::info($has_option);
+            Log::info($data);
 
             OrderProduct::insert([
                 'order_id'   => $order_id,
-                'product_id' => $item->id,
+                'product_id' => $item->associatedModel->id,
+                'sku'        => $item->id,
                 'name'       => $item->name,
                 'quantity'   => $item->quantity,
                 'org_price'  => $item->price,

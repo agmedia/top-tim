@@ -32,6 +32,8 @@ class CheckoutController extends FrontBaseController
     {
         $gdl = TagManager::getGoogleCartDataLayer($this->shoppingCart()->get());
 
+        Log::info($this->shoppingCart()->get());
+
         return view('front.checkout.cart', compact('gdl'));
     }
 

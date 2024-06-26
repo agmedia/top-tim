@@ -6,6 +6,7 @@ use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Orders\OrderProduct;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\ProductOption;
+use Darryldecode\Cart\ItemCollection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -219,6 +220,27 @@ class ProductHelper
         }
 
         return '';
+    }
+
+
+    public static function collectCartItemData(ItemCollection $item)
+    {
+        return [
+            'id' => $item->associatedModel->id,
+            'sku' => $item->id
+        ];
+    }
+
+
+    public static function hasOptionFromCartItem(ItemCollection $item)
+    {
+        if (isset($item['attributes']['options']) && ! empty($item['attributes']['options'])) {
+            $option = collect($item['attributes']['options'])->first();
+
+            return $option;
+        }
+
+        return false;
     }
 
 }
