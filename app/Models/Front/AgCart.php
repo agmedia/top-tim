@@ -288,9 +288,9 @@ class AgCart extends Model
     /**
      * @param $item
      *
-     * @return array[]
+     * @return Request
      */
-    public function resolveItemRequest($item)
+    public function resolveItemRequest($item): Request
     {
         return new Request([
             'item' => [
@@ -487,7 +487,7 @@ class AgCart extends Model
             'name' => $product->name
         ];
 
-        if (isset($request['item']['options']) && isset($request['item']['options']['id'])) {
+        if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
             $option_data    = $request['item']['options'];
             $product_option = ProductOption::query()->where('product_id', $option_data['id'])
                                            ->where('option_id', $option_data['option_id'])
