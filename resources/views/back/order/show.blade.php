@@ -45,17 +45,10 @@
                         <tbody class="js-gallery">
                         @foreach ($order->products as $product)
                             <tr>
-
-
-
-
                                 <td class="text-center"> <a class="img-link img-link-zoom-in img-lightbox" href="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}">
                                         <img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="80px"/>
                                     </a>
                                 </td>
-
-
-
                                 <td><strong>{{ $product->name }} -  {{ $product->product->sku }}</strong></td>
                                 <td>{{ $product->product->polica }}</td>
                                 <td class="text-center"><strong>{{ $product->quantity }}</strong></td>
