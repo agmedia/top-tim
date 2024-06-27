@@ -401,6 +401,9 @@ class AgCart extends Model
      */
     private function updateCartItem($id, $quantity, bool $relative): array
     {
+        /*Log::info('updateCartItem($id, $quantity, bool $relative): array..............');
+        Log::info($id . ' - ' . $quantity);*/
+
         $this->cart->update($id, [
             'quantity' => [
                 'relative' => $relative,
@@ -423,8 +426,8 @@ class AgCart extends Model
                           ->orWhere('sku', $request['item']['id'])
                           ->first();
 
-        Log::info('structureCartItem(Request $request):::::::');
-        Log::info($request->toArray());
+        /*Log::info('structureCartItem(Request $request):::::::');
+        Log::info($request->toArray());*/
 
         if ( ! $product) {
             $product_option = ProductOption::query()->where('sku', $request['item']['id'])->first();
@@ -484,7 +487,7 @@ class AgCart extends Model
             'name' => $product->name
         ];
 
-        if (isset($request['item']['options']['id'])) {
+        if (isset($request['item']['options']) && isset($request['item']['options']['id'])) {
             $option_data    = $request['item']['options'];
             $product_option = ProductOption::query()->where('product_id', $option_data['id'])
                                            ->where('option_id', $option_data['option_id'])
