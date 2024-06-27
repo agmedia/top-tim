@@ -134,13 +134,13 @@ class Checkout extends Component
         if (CheckoutSession::hasShipping()) {
             $this->shipping = CheckoutSession::getShipping();
         } else {
-            $this->selectShipping('gls');
+            $this->selectShipping('flat');
         }
 
         if (CheckoutSession::hasPayment()) {
             $this->payment = CheckoutSession::getPayment();
         } else {
-            $this->selectPayment('corvus');
+            $this->selectPayment('wspay');
         }
 
         if (CheckoutSession::hasComment()) {
