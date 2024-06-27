@@ -36,12 +36,12 @@
 <table id="products">
     <tr>
 
-        <th style="text-align: center;" width="15%">#</th>
-        <th style="text-align: center;" width="40%">{{ __('front/cart.proizvod') }}</th>
+        <th style="text-align: center;" width="20%">#</th>
+        <th style="text-align: center;" width="30%">{{ __('front/cart.proizvod') }}</th>
 
-        <th style="text-align: center;" width="10%">{{ __('front/cart.kol') }}</th>
-        <th style="text-align: right;" width="10%">{{ __('front/cart.cijena') }}</th>
-        <th style="text-align: right;" width="15%">{{ __('front/cart.ukupno') }}</th>
+        <th style="text-align: center;" width="15%">{{ __('front/cart.kol') }}</th>
+        <th style="text-align: right;" width="15%">{{ __('front/cart.cijena') }}</th>
+        <th style="text-align: right;" width="20%">{{ __('front/cart.ukupno') }}</th>
     </tr>
     @foreach ($order->products as $product)
         <tr>
