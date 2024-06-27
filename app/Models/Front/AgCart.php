@@ -517,7 +517,7 @@ class AgCart extends Model
         $image   = $product->image;
         $options = [];
 
-        if (isset($request['item']['options']['id'])) {
+        if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
             $option_data    = $request['item']['options'];
             $product_option = ProductOption::query()->where('product_id', $option_data['id'])
                                            ->where('option_id', $option_data['option_id'])
