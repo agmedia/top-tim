@@ -3,8 +3,12 @@
 @section ( 'description', 'Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija.' )
 @section('content')
 
+
+
     <!-- Order Details Modal-->
     @foreach ($orders as $order)
+
+
         <div class="modal fade" id="order-details{{ $order->id }}">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">

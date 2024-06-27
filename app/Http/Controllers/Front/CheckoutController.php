@@ -32,7 +32,7 @@ class CheckoutController extends FrontBaseController
     {
         $gdl = TagManager::getGoogleCartDataLayer($this->shoppingCart()->get());
 
-        Log::info($this->shoppingCart()->get());
+       // Log::info($this->shoppingCart()->get());
 
         return view('front.checkout.cart', compact('gdl'));
     }
@@ -114,8 +114,8 @@ class CheckoutController extends FrontBaseController
     {
         $order = new Order();
 
-        Log::info('Response Corvus::::::::::::::::::::::::::::::::::::::');
-        Log::info($request->toArray());
+        //Log::info('Response Corvus::::::::::::::::::::::::::::::::::::::');
+       // Log::info($request->toArray());
 
         if ($request->has('provjera')) {
             $order->setData($request->input('provjera'));

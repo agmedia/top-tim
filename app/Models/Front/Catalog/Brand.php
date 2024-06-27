@@ -54,7 +54,7 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
      */
     public function getLocalizedRouteKey($locale)
     {
-        Log::info('$locale = ' . $locale);
+        //Log::info('$locale = ' . $locale);
 
         return $this->translation($locale)->slug;
     }
@@ -71,9 +71,9 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
         //$fallback = $this->locale == 'en' ? 'hr' : 'en';
 
         /*Log::info('$fallback = ' . $fallback);*/
-        Log::info('$value = ' . $value);
-        Log::info('$this->locale = ' . $this->locale);
-        Log::info('current_locale() = ' . current_locale());
+       // Log::info('$value = ' . $value);
+       // Log::info('$this->locale = ' . $this->locale);
+       // Log::info('current_locale() = ' . current_locale());
 
         return static::query()->whereHas('translation', function ($query) use ($value) {
             $query->where('slug', $value);
@@ -188,7 +188,7 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
      */
     public function filter(array $request, int $limit = 20): Builder
     {
-        Log::info($request);
+        //Log::info($request);
         $query = (new Brand())->newQuery();
 
         if (isset($request['search_brand']) && $request['search_brand']) {

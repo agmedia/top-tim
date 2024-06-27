@@ -108,7 +108,7 @@ class WidgetGroupController extends Controller
      */
     public function destroy(Request $request)
     {
-        Log::info($request->toArray());
+        //Log::info($request->toArray());
         if ($request->has('id')) {
             $deleted = WidgetGroup::destroy($request->input('id'));
 

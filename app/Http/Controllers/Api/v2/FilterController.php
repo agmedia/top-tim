@@ -139,8 +139,8 @@ class FilterController extends Controller
      */
     public function products(Request $request)
     {
-        Log::info('public function products(Request $request) ----');
-        Log::info($request->toArray());
+       // Log::info('public function products(Request $request) ----');
+      //  Log::info($request->toArray());
 
         if ( ! $request->has('params')) {
             return response()->json(['status' => 300, 'message' => 'Error!']);
@@ -259,8 +259,8 @@ class FilterController extends Controller
      */
     public function options(Request $request)
     {
-        Log::info('public function options(Request $request) ----');
-        Log::info($request->toArray());
+       // Log::info('public function options(Request $request) ----');
+       // Log::info($request->toArray());
 
         if ($request->has('params')) {
             $response = [];

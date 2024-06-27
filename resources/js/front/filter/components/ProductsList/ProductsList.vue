@@ -348,14 +348,15 @@ export default {
          */
         checkAvailables() {
             let cart = this.$store.state.storage.getCart();
+            if (cart) {
+                for (let i = 0; i < this.products.data.length; i++) {
+                    this.products.data[i].disabled = false;
 
-            for (let i = 0; i < this.products.data.length; i++) {
-                this.products.data[i].disabled = false;
-
-                for (const key in cart.items) {
-                    if (this.products.data[i].id == cart.items[key].id) {
-                        if (this.products.data[i].quantity <= cart.items[key].quantity) {
-                            this.products.data[i].disabled = true;
+                    for (const key in cart.items) {
+                        if (this.products.data[i].id == cart.items[key].id) {
+                            if (this.products.data[i].quantity <= cart.items[key].quantity) {
+                                this.products.data[i].disabled = true;
+                            }
                         }
                     }
                 }
@@ -379,11 +380,12 @@ export default {
          */
         add(id, product_quantity) {
             let cart = this.$store.state.storage.getCart();
-
-            for (const key in cart.items) {
-                if (id == cart.items[key].id) {
-                    if (product_quantity <= cart.items[key].quantity) {
-                        return window.ToastWarning.fire('Nažalost nema dovoljnih količina artikla..!');
+            if (cart) {
+                for (const key in cart.items) {
+                    if (id == cart.items[key].id) {
+                        if (product_quantity <= cart.items[key].quantity) {
+                            return window.ToastWarning.fire('Nažalost nema dovoljnih količina artikla..!');
+                        }
                     }
                 }
             }

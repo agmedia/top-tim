@@ -87,8 +87,8 @@ class Loyalty extends Model
      */
     public static function calculateLoyalty(int $points = 0): int
     {
-        Log::info('calculateLoyalty:: $points');
-        Log::info($points);
+       // Log::info('calculateLoyalty:: $points');
+       // Log::info($points);
 
         if (auth()->user() && $points) {
             $user_id = auth()->user()->id;

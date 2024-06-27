@@ -166,9 +166,9 @@ class AgCart_Attributes extends Model
      */
     public function add(Request $request, $id = null)
     {
-        Log::info('$request->toArray() i $id iz add()');
-        Log::info($request->toArray());
-        Log::info($id);
+        //Log::info('$request->toArray() i $id iz add()');
+       // Log::info($request->toArray());
+       // Log::info($id);
         // Updejtaj artikl sa apsolutnom količinom.
         foreach ($this->cart->getContent() as $item) {
             if ($item->id == $request['item']['id']) {
@@ -416,8 +416,8 @@ class AgCart_Attributes extends Model
                 $name = CartHelper::resolveItemOptionName($product_option);
                 $qty  = ($attributes['options'][$option_id]['quantity'] ?? 0) + $quantity;
 
-                Log::info('Item iz updateCartItem(...)');
-                Log::info($item);
+              //  Log::info('Item iz updateCartItem(...)');
+              //  Log::info($item);
 
                 $attributes['options'][$option_id] = [
                     'id'       => $product_option->id,

@@ -35,8 +35,8 @@ class Import
                     $image = Storage::disk('local')->get('temp/' . $id . '.jpg');
                     $img = Image::make($image);
                 } catch (\Exception $e) {
-                    Log::info('Error downloading image: ' . $image);
-                    Log::info($e->getMessage());
+                    //Log::info('Error downloading image: ' . $image);
+                    //Log::info($e->getMessage());
                 }
 
                 $str = $id . '/' . Str::limit(Str::slug($name)) . '-' . $time . '.';
@@ -212,7 +212,7 @@ class Import
     {
         if ($publisher) {
 
-            Log::info('$publisher..... ' . $publisher);
+            //Log::info('$publisher..... ' . $publisher);
 
             $exist = Publisher::where('title', $publisher)->first();
 
