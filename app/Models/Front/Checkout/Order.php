@@ -256,16 +256,17 @@ class Order extends Model
             }
 
           //  Log::info('updateProducts(int $order_id) ::: print_r($item, true)');
-           Log::info(print_r($item, true));
+          // Log::info(print_r($item, true));
          //   Log::info($has_option);
             //Log::info($data);
 
-
+            $image = $item->attributes->slika;
 
             OrderProduct::insert([
                 'order_id'   => $order_id,
                 'product_id' => $item->associatedModel->id,
                 'sku'        => $item->id,
+                'image'      => $image,
                 'name'       => $item->name,
                 'quantity'   => $item->quantity,
                 'org_price'  => $item->price,

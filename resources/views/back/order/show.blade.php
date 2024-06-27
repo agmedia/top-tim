@@ -49,8 +49,8 @@
 
 
 
-                                <td class="text-center"> <a class="img-link img-link-zoom-in img-lightbox" href="{{ $product->product->image ? asset($product->product->image) : asset('media/avatars/avatar0.jpg') }}">
-                                        <img src="{{ $product->product->image ? asset($product->product->image) : asset('media/avatars/avatar0.jpg') }}" height="80px"/>
+                                <td class="text-center"> <a class="img-link img-link-zoom-in img-lightbox" href="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}">
+                                        <img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="80px"/>
                                     </a>
                                 </td>
 
