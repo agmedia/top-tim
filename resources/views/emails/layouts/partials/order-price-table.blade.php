@@ -39,13 +39,13 @@
         <th style="text-align: center;" width="20%">#</th>
         <th style="text-align: center;" width="30%">{{ __('front/cart.proizvod') }}</th>
 
-        <th style="text-align: center;" width="15%">{{ __('front/cart.kol') }}</th>
-        <th style="text-align: right;" width="15%">{{ __('front/cart.cijena') }}</th>
+        <th style="text-align: center;" width="10%">{{ __('front/cart.kol') }}</th>
+        <th style="text-align: right;" width="20%">{{ __('front/cart.cijena') }}</th>
         <th style="text-align: right;" width="20%">{{ __('front/cart.ukupno') }}</th>
     </tr>
     @foreach ($order->products as $product)
         <tr>
-            <td><img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="70px"/> </td>
+            <td><img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="60px"/> </td>
             <td>{{ $product->name }} </td>
             <td style="text-align: center;">{{ $product->quantity }}</td>
             <td style="text-align: right;">€ {{ number_format($product->price, 2, ',', '.') }}</td>
