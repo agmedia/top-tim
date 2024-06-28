@@ -31,6 +31,7 @@ use App\Http\Controllers\Back\Settings\QuickMenuController;
 use App\Http\Controllers\Back\Settings\SettingsController;
 use App\Http\Controllers\Back\Settings\System\ApplicationController;
 use App\Http\Controllers\Back\UserController;
+use App\Http\Controllers\Back\DiscountController;
 use App\Http\Controllers\Back\Widget\WidgetController;
 use App\Http\Controllers\Back\Widget\WidgetGroupController;
 use App\Http\Controllers\Front\CatalogRouteController;
@@ -193,6 +194,10 @@ Route::group(
         Route::post('user', [UserController::class, 'store'])->name('users.store');
         Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::patch('user/{user}', [UserController::class, 'update'])->name('users.update');
+
+
+        // POPUSTI
+        Route::get('discounts', [DiscountController::class, 'index'])->name('discounts');
 
         // WIDGETS
         Route::prefix('widgets')->group(function () {

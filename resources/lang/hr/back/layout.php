@@ -80,6 +80,7 @@ return [
         'recipe' => 'Recepti',
         'widgets' => 'Widgets',
         'users' => 'Korisnici',
+        'discounts' => 'Rabati',
         'application' => 'Aplikacija',
         'my_profile' => 'Moj profil',
         'settings' => 'Postavke',

@@ -163,6 +163,13 @@
                     </a>
                 </li>
 
+                <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->routeIs(['discounts', 'discounts.*']) ? ' active' : '' }}" href="{{ route('discounts') }}">
+                           <i class="nav-main-link-icon si si-tag"></i>
+                           <span class="nav-main-link-name">{{ __('back/layout.sidebar.discounts') }}</span>
+                      </a>
+                </li>
+
                 <li class="nav-main-heading">{{ __('back/layout.sidebar.application') }}</li>
 
                 <li class="nav-main-item">

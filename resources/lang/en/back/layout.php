@@ -84,6 +84,7 @@ return [
         'blog' => 'Blog',
         'widgets' => 'Widgets',
         'users' => 'Users',
+        'discounts' => 'Discounts',
         'application' => 'Application',
         'my_profile' => 'My Account',
         'settings' => 'Settings',
