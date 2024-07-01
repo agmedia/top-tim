@@ -94,11 +94,12 @@ class ProductOption extends Model
     {
         $product_option = ProductOption::query()->where(function ($query) use ($data) {
             $query->where('product_id', $data['id'])->orWhere('id', $data['id']);
-        })
-                                       ->where('option_id', $data['option_id']);
+        })->where('option_id', $data['option_id']);
 
         if (isset($data['parent_id']) && $data['parent_id']) {
             $product_option->where('parent_id', $data['parent_id']);
+        } else {
+            $product_option->where('parent_id', 0);
         }
 
         return $product_option->first();
