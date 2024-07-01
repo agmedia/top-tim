@@ -520,22 +520,7 @@ class AgCart extends Model
 
         if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
             Log::info('1');
-            $option_data    = $request['item']['options'];
-            $product_option = ProductOption::query()->where(function ($query) use ($option_data) {
-                $query->where('product_id', $option_data['id'])->orWhere('id', $option_data['id']);
-            })
-                                           ->where('option_id', $option_data['option_id'])
-                                           ->where('parent_id', $option_data['parent_id'])
-                                           ->first();
-
-
-
-            /*if ( ! $product_option) {
-                $product_option = ProductOption::query()->where('id', $option_data['id'])
-                                               ->where('option_id', $option_data['option_id'])
-                                               ->where('parent_id', $option_data['parent_id'])
-                                               ->first();
-            }*/
+            $product_option = ProductOption::getFromCartData($request['item']['options']);
 
             if ($product_option) {
                 Log::info('2');
@@ -564,11 +549,8 @@ class AgCart extends Model
         $options = [];
 
         if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
-            $option_data    = $request['item']['options'];
-            $product_option = ProductOption::query()->where('product_id', $option_data['id'])
-                                           ->where('option_id', $option_data['option_id'])
-                                           ->where('parent_id', $option_data['parent_id'])
-                                           ->first();
+
+            $product_option = ProductOption::getFromCartData($request['item']['options']);
 
             if ($product_option) {
                 $options       = $this->structureItemOptions($product_option->id, $request['item']['quantity']);
