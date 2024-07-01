@@ -81,10 +81,12 @@ class Cart extends Model
                 $cart_items = $cart->getCartItems(true);
                 $cart_data = json_decode($has_cart->cart_data, true);
 
+                Log::info('Cart::checkLogged(AgCart $cart, $session_id = null).........');
+
                 if (isset($cart_data['items'])) {
                     foreach ($cart_data['items'] as $item) {
                         $has_item_in_cart = $cart_items->where('id', $item['id'])->first();
-
+                        Log::info($item['id']);
                         if ( ! $has_item_in_cart) {
                             $cart->add($cart->resolveItemRequest($item));
                         }

@@ -5,6 +5,7 @@ namespace App\Models\Front;
 use App\Helpers\CartHelper;
 use App\Helpers\Currency;
 use App\Helpers\Helper;
+use App\Helpers\ProductHelper;
 use App\Models\Back\Marketing\Action;
 use App\Models\Front\Catalog\Product;
 use App\Models\Front\Catalog\ProductAction;
@@ -162,6 +163,9 @@ class AgCart extends Model
         // Updejtaj artikl sa apsolutnom količinom.
         foreach ($this->cart->getContent() as $item) {
             if ($item->id == $request['item']['id']) {
+
+                Log::info('$item->id == $request[item][id]');
+
                 $quantity = $request['item']['quantity'];
                 $product  = Product::query()->where('id', $request['item']['id'])
                                    ->orWhere('sku', $request['item']['id'])
@@ -199,6 +203,8 @@ class AgCart extends Model
                 return $this->updateCartItem($item->id, $quantity, $relative);
             }
         }
+
+        Log::info('ELSE ::: $item->id != $request[item][id]');
 
         return $this->addToCart($request);
     }
@@ -292,12 +298,28 @@ class AgCart extends Model
      */
     public function resolveItemRequest($item): Request
     {
-        return new Request([
+        Log::info('public function resolveItemRequest($item): Request');
+        Log::info($item['id']);
+
+        $request = [
             'item' => [
                 'id'       => $item['id'],
-                'quantity' => $item['quantity']
+                'quantity' => $item['quantity'],
+                'options'  => $item['attributes']['options'] ?? []
             ]
-        ]);
+        ];
+
+        $has_options = ProductHelper::hasOptionFromCartItem($item);
+
+        if ($has_options) {
+            Log::info('HAS OPTION');
+            Log::info($has_options);
+            $request['item']['options'] = $has_options;
+        }
+
+        Log::info($request);
+
+        return new Request($request);
     }
 
 
@@ -426,14 +448,20 @@ class AgCart extends Model
                           ->orWhere('sku', $request['item']['id'])
                           ->first();
 
-        /*Log::info('structureCartItem(Request $request):::::::');
-        Log::info($request->toArray());*/
+        Log::info('structureCartItem(Request $request):::::::');
+        Log::info($request->toArray());
+
+        if ($product) {
+            Log::info('structureCartItem(Request $request)::::::: PRODUCT FOUND');
+        }
 
         if ( ! $product) {
+            Log::info('structureCartItem(Request $request)::::::: NOT PRODUCT FOUND');
             $product_option = ProductOption::query()->where('sku', $request['item']['id'])->first();
 
             if ($product_option) {
-                $request->request->add(['options' => ['id' => $product_option->id]]);
+                Log::info('structureCartItem(Request $request)::::::: PRODUCT OPTION FOUND');
+                //$request->request->add(['options' => ['id' => $product_option->id]]);
                 $product = $product_option->product()->first();
             }
         }
@@ -482,25 +510,43 @@ class AgCart extends Model
      */
     private function setItemData(Product $product, Request $request): array
     {
+        Log::info('setItemData(Product $product, Request $request): array :::::::: $data');
+        Log::info($request->toArray());
+
         $data = [
             'id'   => $product->sku,
             'name' => $product->name
         ];
 
         if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
+            Log::info('1');
             $option_data    = $request['item']['options'];
-            $product_option = ProductOption::query()->where('product_id', $option_data['id'])
+            $product_option = ProductOption::query()->where(function ($query) use ($option_data) {
+                $query->where('product_id', $option_data['id'])->orWhere('id', $option_data['id']);
+            })
                                            ->where('option_id', $option_data['option_id'])
                                            ->where('parent_id', $option_data['parent_id'])
                                            ->first();
 
+
+
+            /*if ( ! $product_option) {
+                $product_option = ProductOption::query()->where('id', $option_data['id'])
+                                               ->where('option_id', $option_data['option_id'])
+                                               ->where('parent_id', $option_data['parent_id'])
+                                               ->first();
+            }*/
+
             if ($product_option) {
+                Log::info('2');
                 $data = [
                     'id'   => $product_option->sku,
                     'name' => $product->name . ', ' . CartHelper::resolveItemOptionName($product_option)
                 ];
             }
         }
+
+        Log::info($data);
 
         return $data;
     }

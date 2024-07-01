@@ -223,24 +223,39 @@ class ProductHelper
     }
 
 
-    public static function collectCartItemData(ItemCollection $item)
+    /**
+     * @param array $item
+     *
+     * @return array
+     */
+    public static function hasOptionFromCartItem(array $item): array
     {
-        return [
-            'id' => $item->associatedModel->id,
-            'sku' => $item->id
-        ];
-    }
+        Log::info('public static function hasOptionFromCartItem(array $item)');
+        Log::info('1');
+        Log::info($item);
 
+        //return [];
 
-    public static function hasOptionFromCartItem(ItemCollection $item)
-    {
         if (isset($item['attributes']['options']) && ! empty($item['attributes']['options'])) {
+            Log::info('2');
             $option = collect($item['attributes']['options'])->first();
+
+            Log::info($option);
+            $product_option = ProductOption::query()->find($option['id']);
+
+            if ($product_option) {
+                Log::info('3');
+                Log::info('public static function hasOptionFromCartItem(array $item): array ::::::: ');
+                $option['option_id'] = $product_option->option_id;
+                $option['parent_id'] = $product_option->parent_id;
+            }
 
             return $option;
         }
 
-        return false;
+        Log::info('4');
+
+        return [];
     }
 
 }

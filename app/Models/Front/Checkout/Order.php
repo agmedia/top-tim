@@ -246,19 +246,11 @@ class Order extends Model
         foreach ($this->order['cart']['items'] as $item) {
             $discount = 0;
             $price    = $item->price;
-            $data = ProductHelper::collectCartItemData($item);
-
-            $has_option = ProductHelper::hasOptionFromCartItem($item);
 
             if ($this->checkSpecial($item->associatedModel)) {
                 $price    = $item->associatedModel->special;
                 $discount = Helper::calculateDiscount($item->price, $price);
             }
-
-          //  Log::info('updateProducts(int $order_id) ::: print_r($item, true)');
-          // Log::info(print_r($item, true));
-         //   Log::info($has_option);
-            //Log::info($data);
 
             $image = $item->attributes->slika;
 
