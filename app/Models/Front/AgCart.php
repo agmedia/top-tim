@@ -562,7 +562,7 @@ class AgCart extends Model
                     $product_image->where('option_id', $product_option->option_id);
                 }
 
-                $product_image->first();
+                $product_image = $product_image->first();
 
                 if ($product_image) {
                     $image = $product_image->image;
