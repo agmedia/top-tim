@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Orders\OrderProduct;
 use App\Models\Front\Catalog\Category;
@@ -10,6 +11,7 @@ use Darryldecode\Cart\ItemCollection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class ProductHelper
 {
@@ -256,6 +258,23 @@ class ProductHelper
         Log::info('4');
 
         return [];
+    }
+
+
+    /**
+     * @param string $sku
+     *
+     * @return bool
+     */
+    public static function isDuplicateOptionSku(string $sku): bool
+    {
+        $exist = Options::query()->where('sku', $sku)->first();
+
+        if ($exist) {
+            return true;
+        }
+
+        return false;
     }
 
 }

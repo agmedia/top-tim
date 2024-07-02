@@ -2,6 +2,7 @@
 
 namespace App\Models\Back\Catalog\Product;
 
+use App\Helpers\ProductHelper;
 use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductImageTranslation;
@@ -9,6 +10,7 @@ use Carbon\Carbon;
 use App\Helpers\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class ProductOption extends Model
 {
@@ -115,10 +117,14 @@ class ProductOption extends Model
             $opt = Options::query()->find(intval($option['value']) ?? 0);
 
             if ($opt) {
+                if (ProductHelper::isDuplicateOptionSku($option['sku'])) {
+                    throw ValidationException::withMessages(['sku_dupl' => $option['sku'] . ' - Šifra već postoji...']);
+                }
+
                 $created[] = self::insert([
                     'product_id'  => $product_id,
                     'option_id' => $opt->id,
-                    'sku' => $option['sku'] ?? $product->sku,
+                    'sku' => $option['sku'],
                     'parent' => 'single',
                     'parent_id' => 0,
                     'quantity' => $option['qty'] ?? 0,
@@ -147,10 +153,14 @@ class ProductOption extends Model
                     $sub_opt = Options::query()->find(intval($sub_option['id']) ?? 0);
 
                     if ($sub_opt) {
+                        if (ProductHelper::isDuplicateOptionSku($sub_option['sku'])) {
+                            throw ValidationException::withMessages(['sku_dupl' => $sub_option['sku'] . ' - Šifra već postoji...']);
+                        }
+
                         $created[] = self::insert([
                             'product_id'  => $product_id,
                             'option_id' => $sub_opt->id,
-                            'sku' => $sub_option['sku'] ?? $product->sku,
+                            'sku' => $sub_option['sku'],
                             'parent' => 'option',
                             'parent_id' => $opt->id,
                             'quantity' => $sub_option['qty'] ?? 0,
