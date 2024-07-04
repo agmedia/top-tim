@@ -164,9 +164,9 @@
                 </li>
 
                 <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->routeIs(['discounts', 'discounts.*']) ? ' active' : '' }}" href="{{ route('discounts') }}">
+                      <a class="nav-main-link{{ request()->routeIs(['user_groups', 'user_groups.*']) ? ' active' : '' }}" href="{{ route('user_groups') }}">
                            <i class="nav-main-link-icon si si-tag"></i>
-                           <span class="nav-main-link-name">{{ __('back/layout.sidebar.discounts') }}</span>
+                           <span class="nav-main-link-name">User Groups</span>
                       </a>
                 </li>
 

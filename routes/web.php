@@ -31,7 +31,7 @@ use App\Http\Controllers\Back\Settings\QuickMenuController;
 use App\Http\Controllers\Back\Settings\SettingsController;
 use App\Http\Controllers\Back\Settings\System\ApplicationController;
 use App\Http\Controllers\Back\UserController;
-use App\Http\Controllers\Back\DiscountController;
+use App\Http\Controllers\Back\UserGroupController;
 use App\Http\Controllers\Back\Widget\WidgetController;
 use App\Http\Controllers\Back\Widget\WidgetGroupController;
 use App\Http\Controllers\Front\CatalogRouteController;
@@ -198,6 +198,12 @@ Route::group(
 
         // POPUSTI
         Route::get('discounts', [DiscountController::class, 'index'])->name('discounts');
+
+
+        // GRUPE KORISNIKA
+        Route::get('user_groups', [UserGroupController::class, 'index'])->name('user_groups');
+        Route::get('user_groups/create', [UserGroupController::class, 'create'])->name('user_groups.create');
+        Route::post('user_groups', [UserGroupController::class, 'store'])->name('user_groups.store');
 
         // WIDGETS
         Route::prefix('widgets')->group(function () {
