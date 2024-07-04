@@ -102,11 +102,13 @@ class UserGroup extends Model
     {
         $parent = $this->request->parent ?: 0;
 
-        foreach ($this->request->input('item') as $item) {
+      //  dd($this->request->toArray());
+
+        foreach ($this->request->input('title') as $item) {
             $id = $this->insertGetId([
                 'parent_id'  => $parent,
-                'sort_order' => $item['sort_order'] ?? 0,
                 'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
 
