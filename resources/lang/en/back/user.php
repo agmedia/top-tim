@@ -49,5 +49,12 @@ return [
     'nova_lozinka' => 'New password',
     'potvrdi_lozinku' => 'Repeat new password',
     'korisnicki_podaci' => 'User data',
-    'user_loyalty' => 'Loyalty Points Total'
+    'user_loyalty' => 'Loyalty Points Total',
+    'user_group' => 'User group',
+    'new_user_group' => 'New user group',
+    'naziv_grupe' => 'Group name',
+    'group_search' => 'Search groups..',
+    'all_users_groups' => 'All user groups',
+    'glavna_grupa' => 'Main group',
+    'odaberi_glavnu_grupu' => 'Select main group',
 ];

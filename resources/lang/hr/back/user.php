@@ -55,7 +55,6 @@ return [
     'naziv_grupe' => 'Naziv grupe',
     'group_search' => 'Pretraži grupe..',
     'all_users_groups' => 'Sve grupe korisnika',
-    'naziv_grupe' => 'Naziv grupe',
     'glavna_grupa' => 'Glavna grupa',
     'odaberi_glavnu_grupu' => 'Glavna grupa',
 
