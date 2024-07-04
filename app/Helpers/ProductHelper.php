@@ -262,13 +262,13 @@ class ProductHelper
 
 
     /**
-     * @param string $sku
+     * @param int $id
      *
      * @return bool
      */
-    public static function isDuplicateOptionSku(string $sku): bool
+    public static function isDuplicateOptionSku(int $id): bool
     {
-        $exist = Options::query()->where('sku', $sku)->first();
+        $exist = Options::query()->where('id', $id)->first();
 
         if ($exist) {
             return true;
