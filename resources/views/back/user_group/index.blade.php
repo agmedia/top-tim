@@ -61,7 +61,7 @@
 
                             <tr>
                                 <td>
-
+                                {{ $user_group->translation->title}}
                                 </td>
 
                                 <td class="text-center font-size-sm">
@@ -69,7 +69,7 @@
                                 </td>
 
                                 <td class="text-right font-size-base">
-                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('users.edit', ['user' => $user]) }}">
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('user_groups.edit', ['user_groups' => $user_group]) }}">
                                         <i class="fa fa-fw fa-pencil-alt"></i>
                                     </a>
                                 </td>

@@ -63,5 +63,60 @@ class UserGroupController extends Controller
 
 
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param Publisher $user_groups
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(UserGroup $user_groups)
+    {
+        return view('back.user_group.edit', compact('user_groups'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Publisher                $publisher
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, UserGroup $user_groups)
+    {
+        $updated = $user_groups->validateRequest($request)->edit();
+
+        if ($updated) {
+
+            return redirect()->route('back.user_group.edit', ['user_groups' => $updated])->with(['success' => 'Autor je uspješno snimljen!']);
+        }
+
+        return redirect()->back()->with(['error' => 'Oops..! Greška prilikom snimanja.']);
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, UserGroup $user_groups)
+    {
+        $destroyed = UserGroup::destroy($user_groups->id);
+
+        if ($destroyed) {
+            return redirect()->route('user_groups')->with(['success' => 'Autor je uspješno izbrisan!']);
+        }
+
+        return redirect()->back()->with(['error' => 'Oops..! Greška prilikom brisanja.']);
+    }
+
+
+
+
+
 
 }

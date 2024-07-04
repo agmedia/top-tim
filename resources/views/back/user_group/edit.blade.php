@@ -51,7 +51,7 @@
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($user_groups) ? $user_groups : old('title.*') }}">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($user_groups) ? $user_groups->translation($lang->code)->title : old('title.*') }}">
                                         </div>
                                     @endforeach
                                 </div>
@@ -75,7 +75,7 @@
                         <div class="col-md-6 text-right">
                             @if (isset($user_groups))
 
-                                <a href="{{ route('options.destroy', ['user_groups' => $user_groups]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/option.obrisi') }}" onclick="event.preventDefault(); document.getElementById('delete-option-form{{ $user_groups->id }}').submit();">
+                                <a href="{{ route('user_groups.destroy', ['user_groups' => $user_groups]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/option.obrisi') }}" onclick="event.preventDefault(); document.getElementById('delete-option-form{{ $user_groups->id }}').submit();">
                                     <i class="fa fa-trash-alt"></i> {{ __('back/option.obrisi') }}
                                 </a>
 
