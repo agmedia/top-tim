@@ -117,8 +117,8 @@ class ProductOption extends Model
             $opt = Options::query()->find(intval($option['value']) ?? 0);
 
             if ($opt) {
-                if (ProductHelper::isDuplicateOptionSku($option['sku'])) {
-                    throw ValidationException::withMessages(['sku_dupl' => $option['sku'] . ' - Šifra već postoji...']);
+                if (ProductHelper::isDuplicateOptionSku(intval($option['value']))) {
+                    throw ValidationException::withMessages(['sku_dupl' => intval($option['value']) . ' - Šifra već postoji...']);
                 }
 
                 $created[] = self::insert([
@@ -153,8 +153,8 @@ class ProductOption extends Model
                     $sub_opt = Options::query()->find(intval($sub_option['id']) ?? 0);
 
                     if ($sub_opt) {
-                        if (ProductHelper::isDuplicateOptionSku($sub_option['sku'])) {
-                            throw ValidationException::withMessages(['sku_dupl' => $sub_option['sku'] . ' - Šifra već postoji...']);
+                        if (ProductHelper::isDuplicateOptionSku(intval($sub_option['id']))) {
+                            throw ValidationException::withMessages(['sku_dupl' => intval($sub_option['id']) . ' - Šifra već postoji...']);
                         }
 
                         $created[] = self::insert([
