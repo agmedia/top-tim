@@ -121,6 +121,24 @@ class UserGroup extends Model
     }
 
 
+    public function edit()
+    {
+        $updated = $this->update([
+            'parent_id'  => $parent,
+            'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'updated_at' => Carbon::now()
+        ]);
+
+        if ($updated) {
+            UserGroupTranslation::edit($this->id, $this->request);
+
+            return $this;
+        }
+
+        return false;
+    }
+
+
 
     /**
      * @return array

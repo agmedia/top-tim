@@ -56,7 +56,7 @@ class UserGroupTranslation extends Model
     {
         foreach (ag_lang() as $lang) {
             $saved = self::where('user_group_id', $id)->where('lang', $lang->code)->update([
-                'title'       => $item['title'][$lang->code],
+                'title'       => $request->input('title')[$lang->code],
                 'updated_at'  => Carbon::now()
             ]);
 

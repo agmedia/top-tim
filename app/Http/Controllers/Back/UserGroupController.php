@@ -110,7 +110,7 @@ class UserGroupController extends Controller
 
         if ($destroyed) {
             UserGroupTranslation::query()->where('user_group_id', $user_groups->id)->delete();
-            
+
             return redirect()->route('user_groups')->with(['success' => 'Autor je uspješno izbrisan!']);
         }
 
