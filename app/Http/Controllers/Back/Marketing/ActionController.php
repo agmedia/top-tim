@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Marketing\Action;
 use App\Models\Back\Settings\Settings;
+use App\Models\Back\UserGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -33,8 +34,9 @@ class ActionController extends Controller
     {
         $groups = Settings::get('action', 'group_list');
         $types = Settings::get('action', 'type_list');
+        $user_groups = (new UserGroup())->getList();
 
-        return view('back.marketing.action.edit', compact('groups', 'types'));
+        return view('back.marketing.action.edit', compact('groups', 'types', 'user_groups'));
     }
 
 

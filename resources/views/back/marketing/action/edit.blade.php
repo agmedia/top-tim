@@ -135,6 +135,18 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="form-group row items-push mb-2 mt-3">
+                                        <div class="col-md-6 pt-2"><label for="group-select">Akcija se odnosi samo na grupu korisnika:</label></div>
+                                        <div class="col-md-6">
+                                            <select class="form-control" id="user-group-select" name="user_group">
+                                                <option></option>
+                                                @foreach ($user_groups['items'] as $group)
+                                                    <option value="{{ $group['id'] }}" {{ (isset($action) and $group['id'] == $action->user_group_id) ? 'selected="selected"' : '' }}>{{ $group['title'] }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -184,6 +196,11 @@
 
     <script>
         $(() => {
+            //
+            $('#user-group-select').select2({
+                placeholder: '-- Molimo odaberite grupu korisnika --',
+                minimumResultsForSearch: Infinity
+            });
             /**
              *
              */
