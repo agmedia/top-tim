@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Back\UserGroup;
 use App\Models\Back\UserGroupTranslation;
+use App\Models\Front\Catalog\Brand;
 use Illuminate\Http\Request;
 
 class UserGroupController extends Controller
@@ -18,8 +19,13 @@ class UserGroupController extends Controller
     public function index(Request $request)
     {
 
+        $query = (new UserGroup())->newQuery();
         if ($request->has('search') && ! empty($request->search)) {
-            $user_groups = UserGroup::query()->paginate(30);
+            $value = $request->search;
+            $user_groups = UserGroup::query()->whereHas('translation', function ($query) use ($value) {
+                $query->where('title', 'like', '%' . $value . '%');
+            })->paginate(30);
+
         } else {
             $user_groups = UserGroup::query()->paginate(30);
         }
@@ -96,7 +102,7 @@ class UserGroupController extends Controller
 
         if ($updated) {
 
-            return redirect()->route('user_groups.edit', ['user_groups' => $updated])->with(['success' => 'Autor je uspješno snimljen!']);
+            return redirect()->route('user_groups.edit', ['user_groups' => $updated])->with(['success' => 'Grupa je uspješno snimljena!']);
         }
 
         return redirect()->back()->with(['error' => 'Oops..! Greška prilikom snimanja.']);
@@ -117,7 +123,7 @@ class UserGroupController extends Controller
         if ($destroyed) {
             UserGroupTranslation::query()->where('user_group_id', $user_groups->id)->delete();
 
-            return redirect()->route('user_groups')->with(['success' => 'Autor je uspješno izbrisan!']);
+            return redirect()->route('user_groups')->with(['success' => 'Grupa je uspješno izbrisana!']);
         }
 
         return redirect()->back()->with(['error' => 'Oops..! Greška prilikom brisanja.']);

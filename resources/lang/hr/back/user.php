@@ -49,7 +49,15 @@ return [
     'nova_lozinka' => 'Nova lozinka',
     'potvrdi_lozinku' => 'Potvrdite novu lozinke',
     'korisnicki_podaci' => 'Korisnički podaci',
-    'user_loyalty' => 'Loyalty bodovi ukupno'
+    'user_loyalty' => 'Loyalty bodovi ukupno',
+    'user_group' => 'Grupa korisnika',
+    'new_user_group' => 'Nova grupa korisnika',
+    'naziv_grupe' => 'Naziv grupe',
+    'group_search' => 'Pretraži grupe..',
+    'all_users_groups' => 'Sve grupe korisnika',
+    'naziv_grupe' => 'Naziv grupe',
+    'glavna_grupa' => 'Glavna grupa',
+    'odaberi_glavnu_grupu' => 'Glavna grupa',
 
 
 

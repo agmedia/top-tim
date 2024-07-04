@@ -35,7 +35,7 @@
                     <div class="row justify-content-center push">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="title-input">{{ __('back/option.pitanje') }}</label>
+                                <label for="title-input">{{ __('back/user.naziv_grupe') }}</label>
                                 <ul class="nav nav-pills float-right">
                                     @foreach(ag_lang() as $lang)
                                         <li @if ($lang->code == current_locale()) class="active" @endif>
@@ -55,11 +55,11 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="group-select">Glavna grupa</label>
+                                <label for="group-select">{{ __('back/user.glavna_grupa') }}</label>
                                 <select class="js-select2 form-control" id="group-select" name="parent_id" style="width: 100%;">
                                     @foreach ($groups['items'] as $user_group)
-                                        <option value="">Odaberi glavnu grupu</option>
-                                    @if($user_group['id'] != $user_groups->id)
+                                        <option value="">{{ __('back/user.odaberi_glavnu_grupu') }}</option>
+                                    @if(isset($user_groups->id) and $user_group['id'] != $user_groups->id)
                                         <option value="{{ $user_group['id'] }}">{{ $user_group['title'] }}</option>
                                         @endif
                                     @endforeach

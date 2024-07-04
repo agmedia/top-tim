@@ -166,7 +166,7 @@
                 <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->routeIs(['user_groups', 'user_groups.*']) ? ' active' : '' }}" href="{{ route('user_groups') }}">
                            <i class="nav-main-link-icon si si-tag"></i>
-                           <span class="nav-main-link-name">User Groups</span>
+                           <span class="nav-main-link-name">{{ __('back/user.user_group') }}</span>
                       </a>
                 </li>
 
