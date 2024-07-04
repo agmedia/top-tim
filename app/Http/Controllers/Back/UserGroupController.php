@@ -90,7 +90,7 @@ class UserGroupController extends Controller
 
         if ($updated) {
 
-            return redirect()->route('back.user_group.edit', ['user_groups' => $updated])->with(['success' => 'Autor je uspješno snimljen!']);
+            return redirect()->route('user_groups.edit', ['user_groups' => $updated])->with(['success' => 'Autor je uspješno snimljen!']);
         }
 
         return redirect()->back()->with(['error' => 'Oops..! Greška prilikom snimanja.']);

@@ -206,7 +206,7 @@ Route::group(
         Route::post('user_groups', [UserGroupController::class, 'store'])->name('user_groups.store');
         Route::get('user_groups/{user_groups}/edit', [UserGroupController::class, 'edit'])->name('user_groups.edit');
         Route::patch('user_groups/{user_groups}', [UserGroupController::class, 'update'])->name('user_groups.update');
-        Route::delete('user_groups/{user_groups}}', [UserGroupController::class, 'destroy'])->name('user_groups.destroy');
+        Route::delete('user_groups/{user_groups}', [UserGroupController::class, 'destroy'])->name('user_groups.destroy');
 
         // WIDGETS
         Route::prefix('widgets')->group(function () {
