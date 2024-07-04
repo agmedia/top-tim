@@ -554,10 +554,10 @@ class AgCart extends Model
 
             if ($product_option) {
                 $options       = $this->structureItemOptions($product_option->id, $request['item']['quantity']);
-                $product_image = ProductImage::query();
+                $product_image = ProductImage::query()->where('product_id', $product->id);
 
                 if ($product_option->parent_id) {
-                    $product_image->where('option_id', $product_option->parent_id);
+                    $product_image->where('option_id', $product_option->parent_id)->orWhere('option_id', $product_option->option_id);
                 } else {
                     $product_image->where('option_id', $product_option->option_id);
                 }
