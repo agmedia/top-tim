@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 
 use App\Models\Back\UserGroup;
+use App\Models\Back\UserGroupTranslation;
 use Illuminate\Http\Request;
 
 class UserGroupController extends Controller
@@ -108,6 +109,8 @@ class UserGroupController extends Controller
         $destroyed = UserGroup::destroy($user_groups->id);
 
         if ($destroyed) {
+            UserGroupTranslation::query()->where('user_group_id', $user_groups->id)->delete();
+            
             return redirect()->route('user_groups')->with(['success' => 'Autor je uspješno izbrisan!']);
         }
 
