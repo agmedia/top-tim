@@ -21,7 +21,7 @@
             @endif
             <div class="block">
                 <div class="block-header block-header-default">
-                    <a class="btn btn-light" href="{{ route('options') }}">
+                    <a class="btn btn-light" href="{{ route('user_groups') }}">
                         <i class="fa fa-arrow-left mr-1"></i> {{ __('back/option.povratak') }}
                     </a>
                     <div class="block-options">
@@ -34,7 +34,6 @@
                 <div class="block-content">
                     <div class="row justify-content-center push">
                         <div class="col-md-12">
-
                             <div class="form-group">
                                 <label for="title-input">{{ __('back/option.pitanje') }}</label>
                                 <ul class="nav nav-pills float-right">
@@ -46,8 +45,6 @@
                                         </li>
                                     @endforeach
                                 </ul>
-
-
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
@@ -55,13 +52,19 @@
                                         </div>
                                     @endforeach
                                 </div>
-
-
-
                             </div>
 
-
-
+                            <div class="form-group">
+                                <label for="group-select">Glavna grupa</label>
+                                <select class="js-select2 form-control" id="group-select" name="parent_id" style="width: 100%;">
+                                    @foreach ($groups['items'] as $user_group)
+                                        <option value="">Odaberi glavnu grupu</option>
+                                    @if($user_group['id'] != $user_groups->id)
+                                        <option value="{{ $user_group['id'] }}">{{ $user_group['title'] }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

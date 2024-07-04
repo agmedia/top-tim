@@ -35,7 +35,11 @@ class UserGroupController extends Controller
      */
     public function create()
     {
-        return view('back.user_group.edit');
+        $user_groups = new UserGroup();
+        $groups = $user_groups->getList();
+
+
+        return view('back.user_group.edit', compact('groups'));
     }
 
 
@@ -73,7 +77,9 @@ class UserGroupController extends Controller
      */
     public function edit(UserGroup $user_groups)
     {
-        return view('back.user_group.edit', compact('user_groups'));
+
+        $groups = $user_groups->getList();
+        return view('back.user_group.edit', compact('user_groups', 'groups'));
     }
 
     /**

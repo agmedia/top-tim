@@ -100,7 +100,7 @@ class UserGroup extends Model
      */
     public function create()
     {
-        $parent = $this->request->parent ?: 0;
+        $parent = $this->request->parent_id ?: 0;
 
       //  dd($this->request->toArray());
 
@@ -123,8 +123,8 @@ class UserGroup extends Model
 
     public function edit()
     {
-        $parent = $this->request->parent ?: 0;
-        
+        $parent = $this->request->parent_id ?: 0;
+
         $updated = $this->update([
             'parent_id'  => $parent,
             'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
