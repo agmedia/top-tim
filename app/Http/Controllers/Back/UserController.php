@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
+use App\Models\Back\UserGroup;
 use App\Models\Front\Loyalty;
 use App\Models\Roles\Role;
 use App\Models\User;
@@ -67,8 +68,9 @@ class UserController extends Controller
     {
         $roles = Role::selectList();
         $points = Loyalty::hasLoyaltyTotal($user->id);
+        $user_groups = (new UserGroup())->getList();
 
-        return view('back.user.edit', compact('user', 'roles', 'points'));
+        return view('back.user.edit', compact('user', 'roles', 'points', 'user_groups'));
     }
     
     

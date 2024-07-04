@@ -19,6 +19,7 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable
 {
+
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
@@ -93,7 +94,7 @@ class User extends Authenticatable
     {
         $request->validate([
             'username' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255']
+            'email'    => ['required', 'string', 'email', 'max:255']
         ]);
 
         $this->request = $request;
@@ -112,13 +113,13 @@ class User extends Authenticatable
     public function validateFrontRequest(Request $request)
     {
         $request->validate([
-            'fname' => ['required', 'string', 'max:255'],
-            'lname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'fname'   => ['required', 'string', 'max:255'],
+            'lname'   => ['required', 'string', 'max:255'],
+            'email'   => ['required', 'string', 'email', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
-            'city' => ['required', 'string', 'max:255'],
-            'zip' => ['required', 'string', 'max:255'],
-            'state' => ['required', 'string', 'max:255']
+            'city'    => ['required', 'string', 'max:255'],
+            'zip'     => ['required', 'string', 'max:255'],
+            'state'   => ['required', 'string', 'max:255']
         ]);
 
         $this->request = $request;
@@ -157,8 +158,8 @@ class User extends Authenticatable
             'city'       => $this->request->city,
             'state'      => $this->request->state,
             'phone'      => $this->request->phone,
-            'company'      => $this->request->company,
-            'oib'      => $this->request->oib,
+            'company'    => $this->request->company,
+            'oib'        => $this->request->oib,
             'avatar'     => 'media/avatars/avatar1.jpg',
             'bio'        => '',
             'social'     => '',
@@ -183,9 +184,9 @@ class User extends Authenticatable
 
         if (isset($this->request->username)) {
             $this->update([
-                'name'     => $this->request->username,
-                'email'    => $this->request->email,
-                'updated_at'       => Carbon::now()
+                'name'       => $this->request->username,
+                'email'      => $this->request->email,
+                'updated_at' => Carbon::now()
             ]);
         }
 
@@ -207,7 +208,7 @@ class User extends Authenticatable
         }
 
         if ($this->id) {
-            if (!isset($this->request->role)){
+            if ( ! isset($this->request->role)) {
                 $this->request->role = 'customer';
             }
 
@@ -216,22 +217,23 @@ class User extends Authenticatable
             }
 
             UserDetail::where('user_id', $this->id)->update([
-                'user_id'    => $this->id,
-                'fname'      => $this->request->fname,
-                'lname'      => $this->request->lname,
-                'address'    => $this->request->address,
-                'zip'        => $this->request->zip,
-                'city'       => $this->request->city,
-                'state'      => $this->request->state,
-                'phone'      => $this->request->phone,
-                'company'    => $this->request->company,
-                'oib'        => $this->request->oib,
-                'avatar'     => 'media/avatars/avatar1.jpg',
-                'bio'        => '',
-                'social'     => '',
-                'role'       => $this->request->role,
-                'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-                'updated_at' => Carbon::now()
+                'user_id'       => $this->id,
+                'user_group_id' => $this->request->user_group,
+                'fname'         => $this->request->fname,
+                'lname'         => $this->request->lname,
+                'address'       => $this->request->address,
+                'zip'           => $this->request->zip,
+                'city'          => $this->request->city,
+                'state'         => $this->request->state,
+                'phone'         => $this->request->phone,
+                'company'       => $this->request->company,
+                'oib'           => $this->request->oib,
+                'avatar'        => 'media/avatars/avatar1.jpg',
+                'bio'           => '',
+                'social'        => '',
+                'role'          => $this->request->role,
+                'status'        => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+                'updated_at'    => Carbon::now()
             ]);
 
             return $this->find($this->id);

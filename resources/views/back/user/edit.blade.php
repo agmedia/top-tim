@@ -164,6 +164,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <h2 class="content-heading pt-0">
+                        <i class="fa fa-fw fa-user-circle text-muted mr-1"></i> Promjena korisničke grupe
+                    </h2>
+                    <div class="row push">
+                        <div class="col-lg-4">
+                            <p class="text-muted">{{ __('back/user.user_role_label') }}</p>
+                        </div>
+                        <div class="col-lg-8 col-xl-5">
+                            <div class="form-group row">
+                                <label for="price-input">Korisnička grupa</label>
+                                <select class="form-control" id="user-group-select" name="user_group">
+                                    <option></option>
+                                    @foreach ($user_groups['items'] as $group)
+                                        <option value="{{ $group['id'] }}" {{ (isset($user) and $group['id'] == $user->details->user_group_id) ? 'selected="selected"' : '' }}>{{ $group['title'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="block-content bg-body-light">
                     <div class="row justify-content-center push">
@@ -188,6 +209,11 @@
     <script>
         $(() => {
             $('#role-select').select2({
+                minimumResultsForSearch: Infinity
+            });
+            //
+            $('#user-group-select').select2({
+                placeholder: '-- Molimo odaberite grupu korisnika --',
                 minimumResultsForSearch: Infinity
             });
         });

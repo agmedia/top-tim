@@ -124,9 +124,9 @@ class Action extends Model
      */
     public function edit()
     {
-        $data    = $this->getRequestData();
+        $data       = $this->getRequestData();
         $deactivate = $this->shouldDeactivateProducts($this->status, $data['status']);
-        $updated = $this->update($this->getModelArray(false));
+        $updated    = $this->update($this->getModelArray(false));
 
         if ($updated) {
             ActionTranslation::edit($updated, $this->request);
@@ -234,9 +234,9 @@ class Action extends Model
     }
 
     /*******************************************************************************
-    *                                Copyright : AGmedia                           *
-    *                              email: filip@agmedia.hr                         *
-    *******************************************************************************/
+     *                                Copyright : AGmedia                           *
+     *                              email: filip@agmedia.hr                         *
+     *******************************************************************************/
 
     /**
      * @param bool $insert
@@ -248,16 +248,17 @@ class Action extends Model
         $data = $this->getRequestData();
 
         $response = [
-            'type'       => $this->request->type,
-            'discount'   => $this->request->discount,
-            'group'      => $this->request->group,
-            'links'      => $data['links']->flatten()->toJson(),
-            'date_start' => $data['start'],
-            'date_end'   => $data['end'],
-            'coupon'     => $this->request->coupon,
-            'quantity'   => $data['coupon_quantity'],
-            'status'     => $data['status'],
-            'updated_at' => Carbon::now()
+            'type'          => $this->request->type,
+            'discount'      => $this->request->discount,
+            'group'         => $this->request->group,
+            'links'         => $data['links']->flatten()->toJson(),
+            'date_start'    => $data['start'],
+            'date_end'      => $data['end'],
+            'user_group_id' => $this->request->user_group,
+            'coupon'        => $this->request->coupon,
+            'quantity'      => $data['coupon_quantity'],
+            'status'        => $data['status'],
+            'updated_at'    => Carbon::now()
         ];
 
         if ($insert) {
@@ -280,10 +281,10 @@ class Action extends Model
         }
 
         return [
-            'links'  => $links,
-            'status' => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-            'start'  => $this->request->date_start ? Carbon::make($this->request->date_start) : null,
-            'end'    => $this->request->date_end ? Carbon::make($this->request->date_end) : null,
+            'links'           => $links,
+            'status'          => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'start'           => $this->request->date_start ? Carbon::make($this->request->date_start) : null,
+            'end'             => $this->request->date_end ? Carbon::make($this->request->date_end) : null,
             'coupon_quantity' => (isset($this->request->coupon_quantity) and $this->request->coupon_quantity == 'on') ? 1 : 0,
         ];
     }
