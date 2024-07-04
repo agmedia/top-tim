@@ -26,13 +26,13 @@ class UserGroupTranslation extends Model
      *
      * @return bool
      */
-    public static function create(int $id, Request $request, array $item): bool
+    public static function create(int $id, Request $request): bool
     {
         foreach (ag_lang() as $lang) {
             $saved = self::insertGetId([
                 'user_group_id'   => $id,
                 'lang'        => $lang->code,
-                'title'       => $item['title'][$lang->code],
+                'title'       => $request->input('title')[$lang->code],
                 'created_at'  => Carbon::now(),
                 'updated_at'  => Carbon::now()
             ]);
@@ -52,7 +52,7 @@ class UserGroupTranslation extends Model
      *
      * @return bool
      */
-    public static function edit(int $id, Request $request, array $item): bool
+    public static function edit(int $id, Request $request): bool
     {
         foreach (ag_lang() as $lang) {
             $saved = self::where('user_group_id', $id)->where('lang', $lang->code)->update([

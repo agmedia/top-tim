@@ -104,19 +104,17 @@ class UserGroup extends Model
 
       //  dd($this->request->toArray());
 
-        foreach ($this->request->input('title') as $item) {
-            $id = $this->insertGetId([
-                'parent_id'  => $parent,
-                'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+        $id = $this->insertGetId([
+            'parent_id'  => $parent,
+            'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
 
-            if ($id) {
-                UserGroupTranslation::create($id, $this->request, $item);
-            } else {
-                return false;
-            }
+        if ($id) {
+            UserGroupTranslation::create($id, $this->request);
+        } else {
+            return false;
         }
 
         return $this->find($id);
