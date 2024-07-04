@@ -262,6 +262,9 @@
                             <div class="block-content">
                                 <div class="row justify-content-center push">
                                     <div class="col-md-12">
+                                        @error('sku_opt')
+                                        <span class="text-danger small font-italic">{{ $message }}</span>
+                                        @enderror
                                         <div id="addition">
                                              @livewire('back.catalog.product-options-selection', ['product' => isset($product) ? $product : null])
                                         </div>

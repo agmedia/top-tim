@@ -210,7 +210,7 @@ class Product extends Model
         }
 
         if ($this->isDuplicateOptionSku()) {
-            throw ValidationException::withMessages(['sku_dupl' => 'Šifra opcije već postoji...']);
+            throw ValidationException::withMessages(['sku_opt' => 'Šifra opcije već postoji...']);
         }
 
         return $this;
@@ -547,7 +547,7 @@ class Product extends Model
                         $opt = Options::query()->find(intval($option['value']) ?? 0);
 
                         if ($opt) {
-                            if (ProductHelper::isDuplicateOptionSku($option['sku'])) {
+                            if (ProductHelper::isDuplicateOptionSku($option['sku'], $opt->id)) {
                                 return true;
                             }
                         }
@@ -564,7 +564,7 @@ class Product extends Model
                                 $sub_opt = Options::query()->find(intval($sub_option['id']) ?? 0);
 
                                 if ($sub_opt) {
-                                    if (ProductHelper::isDuplicateOptionSku($sub_option['sku'])) {
+                                    if (ProductHelper::isDuplicateOptionSku($sub_option['sku'], $sub_opt->id)) {
                                         return true;
                                     }
                                 }
