@@ -209,6 +209,10 @@ class Product extends Model
             throw ValidationException::withMessages(['sku_dupl' => $this->request->sku . ' - Šifra već postoji...']);
         }
 
+        if ($this->isDuplicateOptionSku()) {
+            throw ValidationException::withMessages(['sku_dupl' => 'Šifra opcije već postoji...']);
+        }
+
         return $this;
     }
 
@@ -518,6 +522,57 @@ class Product extends Model
 
         if (isset($this->id) && $exist && $exist->id != $this->id) {
             return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @return bool
+     * @throws ValidationException
+     */
+    private function isDuplicateOptionSku()
+    {
+        if ( ! empty($this->request->input('options')) && is_array($this->request->input('options'))) {
+            $inputs = $this->request->input('options');
+            $groups = Options::query()->get()->unique('type')->pluck('type');
+
+            foreach ($groups as $group) {
+                $group = Str::slug($group);
+
+                // single options
+                if (isset($inputs[$group][0]['value'])) {
+                    foreach ($inputs[$group] as $option) {
+                        $opt = Options::query()->find(intval($option['value']) ?? 0);
+
+                        if ($opt) {
+                            if (ProductHelper::isDuplicateOptionSku($option['sku'])) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                // double (referenced) options
+                if (isset($inputs[$group][0]['main_id'])) {
+                    foreach ($inputs[$group] as $option) {
+                        $opt = Options::query()->find(intval($option['main_id']) ?? 0);
+
+                        if ($opt && ! empty($option['sub_options'])) {
+                            foreach ($option['sub_options'] as $sub_option) {
+                                $sub_opt = Options::query()->find(intval($sub_option['id']) ?? 0);
+
+                                if ($sub_opt) {
+                                    if (ProductHelper::isDuplicateOptionSku($sub_option['sku'])) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return false;
