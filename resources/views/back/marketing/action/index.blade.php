@@ -54,21 +54,27 @@
 
 
                         @forelse ($actions as $action)
+
+
                             <tr>
                                 <td class="font-size-sm">
                                     <a class="font-w600" href="{{ route('actions.edit', ['action' => $action]) }}">{{ $action->translation->title }}</a>
                                 </td>
                                 <td class="font-size-sm">{{ $action->date_start ? \Illuminate\Support\Carbon::make($action->date_start)->format('d.m.Y') : '' }}</td>
                                 <td class="font-size-sm">{{ $action->date_end ? \Illuminate\Support\Carbon::make($action->date_end)->format('d.m.Y') : '' }}</td>
+
                                 <td class="font-size-sm">{{ $action->discount }}</td>
+                                <td class=font-size-sm">
+                                    @if($action->userGroup)
+                                    {{ $action->userGroup->translation->title ?: ''}}
+                                    @endif
+
+                                </td>
                                 <td class="text-center font-size-sm">
                                     @include('back.layouts.partials.status', ['status' => $action->coupon, 'simple' => true])
                                     {{ $action->coupon ?: '' }}
                                 </td>
-                                <td class="text-center font-size-sm">
-                                    {{ $action->user_group->translation->title }}
 
-                                </td>
 
                                 <td class="text-center font-size-sm">
                                     @include('back.layouts.partials.status', ['status' => $action->status, 'simple' => true])
