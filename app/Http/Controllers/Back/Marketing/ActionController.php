@@ -24,12 +24,12 @@ class ActionController extends Controller
         if ($request->has('search')) {
             $actions->whereHas('userGroup', function ($query) use ($request) {
                 $query->whereHas('translation', function ($query) use ($request) {
-                    $query->where('name', 'like', '%' . $request->input('search') . '%');
+                    $query->where('title', 'like', '%' . $request->input('search') . '%');
                 });
             });
         }
 
-        $actions->paginate(12);
+        $actions = $actions->paginate(12);
 
         $user_groups = (new UserGroup())->getList();
 
