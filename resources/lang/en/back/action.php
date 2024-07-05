@@ -23,6 +23,7 @@ return [
     'from' => 'From',
     'to' => 'To',
     'action' => 'Discount',
+    'grupa' => 'Customer Group',
     'status' => 'Status',
     'edit' => 'Edit',
     'no_action' => 'No discounts or extra set so far...',

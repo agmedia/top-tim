@@ -23,6 +23,7 @@ return [
     'from' => 'Vrijedi od',
     'to' => 'Vrijedi do',
     'action' => 'Popust',
+    'grupa' => 'Grupa korisnika',
     'status' => 'Status',
     'edit' => 'Uredi',
     'no_action' => 'Nema akcija...',

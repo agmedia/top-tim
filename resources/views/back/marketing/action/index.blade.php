@@ -43,12 +43,16 @@
                             <th>{{ __('back/action.from') }}</th>
                             <th>{{ __('back/action.to') }}</th>
                             <th>{{ __('back/action.action') }}</th>
+                            <th>{{ __('back/action.grupa') }}</th>
                             <th class="text-center font-size-sm">{{ __('back/action.kupon_kod') }}</th>
                             <th class="text-center font-size-sm">{{ __('back/action.status') }}</th>
                             <th class="text-right" style="width: 10%;">{{ __('back/action.edit') }}</th>
                         </tr>
                         </thead>
                         <tbody>
+
+
+
                         @forelse ($actions as $action)
                             <tr>
                                 <td class="font-size-sm">
@@ -61,6 +65,11 @@
                                     @include('back.layouts.partials.status', ['status' => $action->coupon, 'simple' => true])
                                     {{ $action->coupon ?: '' }}
                                 </td>
+                                <td class="text-center font-size-sm">
+                                    {{ $action->user_group_id->translation->title }}
+
+                                </td>
+
                                 <td class="text-center font-size-sm">
                                     @include('back.layouts.partials.status', ['status' => $action->status, 'simple' => true])
                                 </td>

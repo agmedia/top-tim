@@ -20,8 +20,9 @@ class ActionController extends Controller
     public function index(Request $request)
     {
         $actions = Action::paginate(12);
+        $user_groups = (new UserGroup())->getList();
 
-        return view('back.marketing.action.index', compact('actions'));
+        return view('back.marketing.action.index', compact('actions', 'user_groups'));
     }
 
 
