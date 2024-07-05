@@ -58,7 +58,7 @@
                                 <label for="group-select">{{ __('back/user.glavna_grupa') }}</label>
                                 <select class="js-select2 form-control" id="group-select" name="parent_id" style="width: 100%;">
                                     @foreach ($groups['items'] as $user_group)
-                                        <option value="">{{ __('back/user.odaberi_glavnu_grupu') }}</option>
+                                        <option value="0">{{ __('back/user.odaberi_glavnu_grupu') }}</option>
                                     @if(isset($user_groups->id) and $user_group['id'] != $user_groups->id)
                                         <option value="{{ $user_group['id'] }}">{{ $user_group['title'] }}</option>
                                         @endif

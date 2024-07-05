@@ -33,7 +33,7 @@
                 <div class="col-md-7">
                     <div class="block">
                         <div class="block-header block-header-default">
-                            <a class="btn btn-light" href="{{ back()->getTargetUrl() }}">
+                            <a class="btn btn-light" href="{{ route('actions') }}">
                                 <i class="fa fa-arrow-left mr-1"></i> {{ __('back/action.back') }}
                             </a>
                             <div class="block-options">
@@ -144,6 +144,7 @@
                                                 @foreach ($user_groups['items'] as $group)
                                                     <option value="{{ $group['id'] }}" {{ (isset($action) and $group['id'] == $action->user_group_id) ? 'selected="selected"' : '' }}>{{ $group['title'] }}</option>
                                                 @endforeach
+
                                             </select>
                                         </div>
                                     </div>

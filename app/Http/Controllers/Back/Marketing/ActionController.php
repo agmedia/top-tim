@@ -73,8 +73,9 @@ class ActionController extends Controller
     {
         $groups = Settings::get('action', 'group_list');
         $types = Settings::get('action', 'type_list');
+        $user_groups = (new UserGroup())->getList();
 
-        return view('back.marketing.action.edit', compact('action', 'groups', 'types'));
+        return view('back.marketing.action.edit', compact('action', 'groups', 'types', 'user_groups'));
     }
 
 
