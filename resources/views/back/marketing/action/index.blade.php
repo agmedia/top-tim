@@ -66,7 +66,7 @@
                                     {{ $action->coupon ?: '' }}
                                 </td>
                                 <td class="text-center font-size-sm">
-                                    {{ $action->user_group_id->translation->title }}
+                                    {{ $action->user_group->translation->title }}
 
                                 </td>
 

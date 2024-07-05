@@ -5,6 +5,7 @@ namespace App\Models\Back\Marketing;
 use App\Helpers\Helper;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductCategory;
+use App\Models\Back\UserGroup;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -62,6 +63,12 @@ class Action extends Model
         }
 
         return $this->hasOne(ActionTranslation::class, 'product_action_id')->where('lang', $this->locale);
+    }
+
+
+    public function userGroup()
+    {
+        return $this->hasOne(UserGroup::class, 'id', 'user_group_id');
     }
 
 
