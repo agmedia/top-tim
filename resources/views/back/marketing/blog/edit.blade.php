@@ -25,7 +25,7 @@
 
             <div class="block">
                 <div class="block-header block-header-default">
-                    <a class="btn btn-light" href="{{ back()->getTargetUrl() }}">
+                    <a class="btn btn-light" href="{{ route('blogs') }}">
                         <i class="fa fa-arrow-left mr-1"></i> {{ __('back/blog.povratak') }}
                     </a>
                     <div class="block-options">
@@ -56,7 +56,7 @@
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($brand) ? $brand->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($blog) ? $blog->translation($lang->code)->title : old('title.*') }}" onkeyup="SetSEOPreview()">
                                         </div>
                                     @endforeach
                                 </div>

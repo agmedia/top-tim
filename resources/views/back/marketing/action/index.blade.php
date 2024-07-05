@@ -30,6 +30,18 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">{{ __('back/action.action_all') }} ({{ $actions->total() }})</h3>
 
+                <div class="block-options">
+                    <!-- Search Form -->
+                    <form action="{{ route('actions') }}" method="GET">
+                        <div class="block-options-item">
+                            <input type="text" class="form-control" id="search-input" name="search" placeholder="{{ __('back/user.group_search') }}" value="{{ request()->query('search') }}">
+                        </div>
+                        <div class="block-options-item">
+                            <a href="{{ route('actions') }}" class="btn btn-hero-sm btn-secondary"><i class="fa fa-search-minus"></i> {{ __('back/user.clear') }}</a>
+                        </div>
+                    </form>
+                </div>
+
             </div>
 
 

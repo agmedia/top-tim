@@ -78,7 +78,7 @@ class Blog extends Model
     public function validateRequest(Request $request)
     {
         $request->validate([
-            'title' => 'required'
+            'title.*' => 'required'
         ]);
 
         $this->request = $request;
@@ -116,7 +116,7 @@ class Blog extends Model
         $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
-            PageTranslation::edit($id, $this->request);
+            PageTranslation::edit($this->id, $this->request);
 
             return $this;
         }
