@@ -19,7 +19,18 @@ class ActionController extends Controller
      */
     public function index(Request $request)
     {
-        $actions = Action::paginate(12);
+        $actions = Action::query();
+
+        if ($request->has('search')) {
+            $actions->whereHas('userGroup', function ($query) use ($request) {
+                $query->whereHas('translation', function ($query) use ($request) {
+                    $query->where('name', 'like', '%' . $request->input('search') . '%');
+                });
+            });
+        }
+
+        $actions->paginate(12);
+
         $user_groups = (new UserGroup())->getList();
 
         return view('back.marketing.action.index', compact('actions', 'user_groups'));
