@@ -294,14 +294,31 @@ class Order extends Model
         if ($request->has('search') && ! empty($request->input('search'))) {
             $query->where(function ($query) use ($request) {
                 $query->where('id', 'like', '%' . $request->input('search') . '%')
-                      ->orWhere('payment_fname', 'like', '%' . $request->input('search'))
-                      ->orWhere('payment_lname', 'like', '%' . $request->input('search'))
-                      ->orWhere('payment_email', 'like', '%' . $request->input('search'));
+                    ->orWhere('payment_fname', 'like', '%' . $request->input('search'))
+                    ->orWhere('payment_lname', 'like', '%' . $request->input('search'))
+                    ->orWhere('payment_email', 'like', '%' . $request->input('search'));
             });
+
+            //
+            $preg = explode(' ', $request->input('search'), 3);
+
+            if (isset ($preg[1]) && in_array($preg[1], $preg) && ! isset($preg[2])) {
+                $query->where('payment_fname', 'like', '%' . $preg[0] . '%')
+                    ->orWhere('payment_fname', 'like', '%' . $preg[1] . '%')
+                    ->orWhere('payment_lname', 'like', '%' . $preg[0] . '%')
+                    ->orWhere('payment_lname', 'like', '%' . $preg[1] . '%');
+
+            } elseif (isset ($preg[2]) && in_array($preg[2], $preg)) {
+                $query->where('payment_fname', 'like', $preg[0] . '%')
+                    ->orWhere('payment_lname', 'like', $preg[1] . '%')
+                    ->orWhere('payment_lname', 'like', '%' . $preg[1] . '%')
+                    ->orWhere('payment_lname', 'like', '%' . $preg[2] . '%');
+            }
         }
 
         return $query->orderBy('created_at', 'desc');
     }
+
 
 
     /**

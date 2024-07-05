@@ -100,7 +100,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="font-size-sm text-center" colspan="7">
+                                <td class="font-size-sm text-center" colspan="8">
                                     <label for="">{{ __('back/action.no_action') }}</label>
                                 </td>
                             </tr>
