@@ -29,8 +29,8 @@ class UserController extends Controller
 
         return view('back.user.index', compact('users'));
     }
-    
-    
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -40,8 +40,8 @@ class UserController extends Controller
     {
         return view('back.user.edit');
     }
-    
-    
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -55,8 +55,8 @@ class UserController extends Controller
 
 
     }
-    
-    
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -72,8 +72,8 @@ class UserController extends Controller
 
         return view('back.user.edit', compact('user', 'roles', 'points', 'user_groups'));
     }
-    
-    
+
+
     /**
      * Update the specified resource in storage.
      *
@@ -92,8 +92,8 @@ class UserController extends Controller
 
         return redirect()->back()->with(['error' => 'Oops..! Greška prilikom snimanja.']);
     }
-    
-    
+
+
     /**
      * Remove the specified resource from storage.
      *

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Back\UserGroup;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,6 +40,11 @@ class UserDetail extends Model
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+    }
+
+    public function group()
+    {
+        return $this->hasOne(UserGroup::class, 'id', 'user_group_id');
     }
 
 

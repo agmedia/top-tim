@@ -46,6 +46,7 @@
                         <thead>
                         <tr>
                             <th>{{ __('back/user.title_user') }}</th>
+                            <th>{{ __('back/action.grupa') }}</th>
                             <th>Email</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">{{ __('back/user.role') }}</th>
@@ -53,10 +54,20 @@
                         </tr>
                         </thead>
                         <tbody>
+
+
                         @foreach ($users as $user)
+
+
                             <tr>
                                 <td>
                                     <a class="font-w600" href="{{ route('users.edit', ['user' => $user]) }}">{{ $user->name }}</a>
+                                </td>
+                                <td>
+                                    @if($user->details->Group)
+                                    {{ $user->details->Group->translation->title ?: ''}}
+                                     @endif
+
                                 </td>
                                 <td>{{ $user->email }}</td>
                                 <td class="text-center font-size-sm">

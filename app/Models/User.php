@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Back\UserGroup;
 use App\Models\Front\Loyalty;
 use App\Models\Roles\Role;
 use Carbon\Carbon;
@@ -80,6 +81,15 @@ class User extends Authenticatable
     public function details()
     {
         return $this->hasOne(UserDetail::class, 'user_id');
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function Group()
+    {
+        return $this->hasOne(UserGroup::class, 'user_id');
     }
 
 
