@@ -5461,17 +5461,17 @@ var render = function render() {
       }
     })])]) : _vm._e(), _vm._v(" "), _c("div", {
       staticClass: "product-price"
-    }, [product.special ? _c("span", {
+    }, [product.main_price > product.main_special ? _c("span", {
       staticClass: "fs-sm text-muted"
-    }, [_c("small", [_vm._v("NC 30 dana: " + _vm._s(product.main_price_text) + " ")]), _vm._v(" "), product.secondary_price_text ? _c("small", [_vm._v(_vm._s(product.secondary_price_text) + " ")]) : _vm._e()]) : _vm._e()]), _vm._v(" "), _c("div", {
+    }, [_c("small", [_vm._v("NC 30 dana: " + _vm._s(product.main_price_text) + " ")])]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
-    }, [product.special ? _c("span", {
+    }, [product.main_price > product.main_special ? _c("span", {
       staticClass: "text-red fs-md"
-    }, [_vm._v(_vm._s(product.main_special_text) + " "), product.secondary_special_text ? _c("small", [_vm._v(_vm._s(product.secondary_special_text) + " ")]) : _vm._e()]) : _vm._e()]), _vm._v(" "), _c("div", {
+    }, [_vm._v(_vm._s(product.main_special_text) + " ")]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
-    }, [!product.special ? _c("span", {
+    }, [product.main_price <= product.main_special ? _c("span", {
       staticClass: "text-dark fs-md"
-    }, [_vm._v(_vm._s(product.main_price_text) + " "), product.secondary_price_text ? _c("small", [_vm._v(_vm._s(product.secondary_price_text) + " ")]) : _vm._e()]) : _vm._e()]), _vm._v(" "), product.stars ? _c("div", {
+    }, [_vm._v(_vm._s(product.main_price_text) + " ")]) : _vm._e()]), _vm._v(" "), product.stars ? _c("div", {
       staticClass: "star-rating"
     }, _vm._l(5, function (item) {
       return _c("span", [Math.floor(product.stars) - item >= 0 ? _c("i", {

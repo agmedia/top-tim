@@ -56,13 +56,13 @@
                             <div class="fs-sm me-2"><span v-html="product.category_string"></span></div>
                         </div>
                         <div class="product-price">
-                            <span class="fs-sm text-muted"  v-if="product.special"><small>NC 30 dana: {{ product.main_price_text }} </small> <small v-if="product.secondary_price_text">{{ product.secondary_price_text }} </small></span>
+                            <span class="fs-sm text-muted"  v-if="product.main_price > product.main_special"><small>NC 30 dana: {{ product.main_price_text }} </small> </span>
                         </div>
                         <div class="product-price">
-                            <span class="text-red fs-md" v-if="product.special">{{ product.main_special_text }} <small v-if="product.secondary_special_text">{{ product.secondary_special_text }} </small></span>
+                            <span class="text-red fs-md" v-if="product.main_price > product.main_special">{{ product.main_special_text }} </span>
                         </div>
                         <div class="product-price">
-                            <span class="text-dark fs-md" v-if="!product.special">{{ product.main_price_text }} <small v-if="product.secondary_price_text ">{{ product.secondary_price_text }} </small></span>
+                            <span class="text-dark fs-md" v-if="product.main_price <= product.main_special ">{{ product.main_price_text }} </span>
                         </div>
 
                         <div class="star-rating" v-if="product.stars">
