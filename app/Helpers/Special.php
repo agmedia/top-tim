@@ -74,6 +74,10 @@ class Special
     {
         $action = $product_action ?: $this->action;
 
+        if ( ! $action) {
+            return $this->product->price;
+        }
+
         return Helper::calculateDiscountPrice($this->product->price, $action->discount, $action->type);
     }
 
@@ -111,6 +115,10 @@ class Special
     public function checkDates(ProductAction $product_action = null): bool
     {
         $action = $product_action ?: $this->action;
+
+        if ( ! $action) {
+            return false;
+        }
 
         $from = now()->subDay();
         $to = now()->addDay();
