@@ -7,6 +7,7 @@ use App\Models\Front\Catalog\ProductAction;
 use App\Models\Front\Catalog\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
@@ -87,7 +88,7 @@ class Special
         if ( ! $action) {
             return $this->product->price;
         }
-
+        
         if ($this->isProductOnAction($action)) {
             return Helper::calculateDiscountPrice($this->product->price, $action->discount, $action->type);
         }
@@ -197,7 +198,7 @@ class Special
     {
         $action = $product_action ?: $this->action;
 
-        $ids = collect($action->action_list)->flatten()->toArray();
+        $ids = explode(',', substr(str_replace('"', '', $action->links), 1, -1));
 
         if ($action->group == 'product') {
             return $ids;
