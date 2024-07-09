@@ -62,7 +62,6 @@ class Product extends Model
      */
     protected $eur;
 
-
     /**
      * @var string
      */
@@ -97,7 +96,7 @@ class Product extends Model
      *
      * @return Model|never|null
      */
-    public function resolveRouteBinding($value, $field = NULL)
+    public function resolveRouteBinding($value, $field = null)
     {
         return static::whereHas('translation', function ($query) use ($value) {
             $query->where('slug', $value);
@@ -129,7 +128,6 @@ class Product extends Model
     {
         return $this->hasMany(ProductTranslation::class, 'product_id');
     }*/
-
 
     /**
      * @return string
@@ -244,6 +242,7 @@ class Product extends Model
         return null;
     }
 
+
     /**
      * @return string
      */
@@ -351,61 +350,61 @@ class Product extends Model
 
                 foreach ($options as $option) {
                     $response[$key]['options'][] = [
-                        'id' => $option->id,
-                        'option_id' => $option->option_id,
-                        'name' => $option->title->translation->title,
-                        'sku' => $option->sku,
-                        'value' => $option->title->value,
-                        'value_opt' => $option->title->value_opt,
-                        'style' => ProductHelper::getColorOptionStyle($option),
-                        'quantity' => $option->quantity,
-                        'price' => $option->price,
+                        'id'         => $option->id,
+                        'option_id'  => $option->option_id,
+                        'name'       => $option->title->translation->title,
+                        'sku'        => $option->sku,
+                        'value'      => $option->title->value,
+                        'value_opt'  => $option->title->value_opt,
+                        'style'      => ProductHelper::getColorOptionStyle($option),
+                        'quantity'   => $option->quantity,
+                        'price'      => $option->price,
                         'sort_order' => $option->title->sort_order,
-                        'active' => 1
+                        'active'     => 1
                     ];
                 }
 
             } else {
-                $key = $options->first()->option->type;
-                $parent = $options->first()->top->type;
+                $key     = $options->first()->option->type;
+                $parent  = $options->first()->top->type;
                 $parents = [];
 
-                $response[$key]['group'] = $options->first()->option->group;
+                $response[$key]['group']    = $options->first()->option->group;
                 $response[$parent]['group'] = $options->first()->top->group;
 
                 foreach ($options as $option) {
                     $response[$key]['options'][$option->option_id] = [
-                        'id' => $option->id,
-                        'option_id' => $option->option_id,
-                        'name' => $option->title->translation->title,
-                        'sku' => $option->sku,
-                        'value' => $option->title->value,
-                        'value_opt' => $option->title->value_opt,
-                        'style' => ProductHelper::getColorOptionStyle($option),
-                        'quantity' => $option->quantity,
-                        'price' => $option->price,
+                        'id'         => $option->id,
+                        'option_id'  => $option->option_id,
+                        'name'       => $option->title->translation->title,
+                        'sku'        => $option->sku,
+                        'value'      => $option->title->value,
+                        'value_opt'  => $option->title->value_opt,
+                        'style'      => ProductHelper::getColorOptionStyle($option),
+                        'quantity'   => $option->quantity,
+                        'price'      => $option->price,
                         'sort_order' => $option->title->sort_order,
-                        'active' => 1
+                        'active'     => 1
                     ];
 
                     if ( ! isset($parents[$option->top->id])) {
                         $parents[$option->top->id] = [
-                            'id' => $option->id,
-                            'option_id' => $option->top->id,
-                            'name' => $option->top->translation->title,
-                            'sku' => '',
-                            'value' => $option->top->value,
-                            'value_opt' => $option->top->value_opt,
-                            'style' => ProductHelper::getColorOptionStyle($option, true),
-                            'quantity' => 0,
-                            'price' => 0,
+                            'id'         => $option->id,
+                            'option_id'  => $option->top->id,
+                            'name'       => $option->top->translation->title,
+                            'sku'        => '',
+                            'value'      => $option->top->value,
+                            'value_opt'  => $option->top->value_opt,
+                            'style'      => ProductHelper::getColorOptionStyle($option, true),
+                            'quantity'   => 0,
+                            'price'      => 0,
                             'sort_order' => $option->top->sort_order,
-                            'active' => 1
+                            'active'     => 1
                         ];
                     }
                 }
 
-                $response['parent'] = $parent;
+                $response['parent']           = $parent;
                 $response[$parent]['options'] = $parents;
             }
         }
@@ -422,7 +421,8 @@ class Product extends Model
      *
      * @return float|void
      */
-    public function percentreviews($ocjena, $total) {
+    public function percentreviews($ocjena, $total)
+    {
         if ($total) {
             return round(($ocjena / $total) * 100, 2);
         }
@@ -436,23 +436,14 @@ class Product extends Model
      */
     public function special()
     {
-        $special = new Special($this, $this->action);
+        $special = new Special($this);
 
-        if (Auth::check() && $special->userHasGroupDiscount()) {
-            $action = $special->getUserGroupAction();
-            $coupon_ok = $special->checkCoupon($action);
-            $dates_ok = $special->checkDates($action);
-
-            if ($coupon_ok && $dates_ok) {
-                return $special->getUUserGroupDiscount($action);
-            }
-        }
-
-        $coupon_ok = $special->checkCoupon();
-        $dates_ok = $special->checkDates();
+        $action    = $special->resolveAction();
+        $coupon_ok = $special->checkCoupon($action);
+        $dates_ok  = $special->checkDates($action);
 
         if ($coupon_ok && $dates_ok) {
-            return $special->getUUserGroupDiscount();
+            return $special->getDiscountPrice($action);
         }
 
         return $this->price;
@@ -464,21 +455,10 @@ class Product extends Model
      */
     public function coupon(): bool
     {
-        $action = $this->action;
-        $coupon_session_key = config('session.cart') . '_coupon';
-        $coupon = false;
+        $special = new Special($this);
+        $action  = $special->resolveAction();
 
-        if ( ! $action || ($action && ! $action->coupon)) {
-            return $coupon;
-        }
-
-        if ($action && $action->status) {
-            if ((isset($action->coupon) && $action->coupon) && session()->has($coupon_session_key) && session($coupon_session_key) == $action->coupon) {
-                $coupon = true;
-            }
-        }
-
-        return $coupon;
+        return $special->checkCoupon($action);
     }
 
 
@@ -498,7 +478,6 @@ class Product extends Model
     {
         return $this->hasOne(Brand::class, 'id', 'brand_id');
     }
-
 
 
     /**
@@ -526,7 +505,6 @@ class Product extends Model
     {
         return $this->hasManyThrough(Category::class, CategoryProducts::class, 'product_id', 'id', 'id', 'category_id');
     }
-
 
 
     /**
@@ -793,7 +771,7 @@ class Product extends Model
                     foreach ($brand as $item) {
                         array_push($auts, $item->id);
                     }
-                }else{
+                } else {
                     array_push($auts, $brandz->id);
                 }
             }
@@ -837,8 +815,6 @@ class Product extends Model
             $query->whereIn('id', $pids);
         }
 
-
-
         if ($request->has('sort')) {
             $sort = $request->input('sort');
 
@@ -864,8 +840,6 @@ class Product extends Model
         } else {
             $query->orderBy('created_at', 'desc');
         }
-
-
 
         return $query;
     }

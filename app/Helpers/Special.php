@@ -6,6 +6,7 @@ use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Front\Catalog\ProductAction;
 use App\Models\Front\Catalog\Product;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -31,20 +32,24 @@ class Special
     protected $action;
 
     /**
-     * @var
+     * @var ProductAction|null
      */
     protected $user_group_action;
+
+    /**
+     * @var Collection|null
+     */
+    private $active_actions;
 
 
     /**
      * @param Product|null       $product
      * @param ProductAction|null $product_action
      */
-    public function __construct(Product $product = null, ProductAction $product_action = null)
+    public function __construct(Product $product = null)
     {
         $this->user    = Auth::user();
         $this->product = $product;
-        $this->action  = $product_action;
     }
 
 
@@ -58,6 +63,28 @@ class Special
 
 
     /**
+     * @return ProductAction|null
+     */
+    public function getAction(): ?ProductAction
+    {
+        return $this->action;
+    }
+
+
+    /**
+     * @return ProductAction|null
+     */
+    public function resolveAction(): ?ProductAction
+    {
+        if (Auth::check() && $this->userHasGroupDiscount()) {
+            return $this->getUserGroupAction();
+        }
+
+        return $this->getAction();
+    }
+
+
+    /**
      * @return bool
      */
     public function userHasGroupDiscount(): bool
@@ -65,11 +92,21 @@ class Special
         $group_id = $this->user->details->group ? $this->user->details->group->id : null;
 
         if ($group_id) {
-            $this->user_group_action = ProductAction::query()->where('user_group_id', $group_id)->active()->first();
+            $this->active_actions = ProductAction::query()->where('user_group_id', $group_id)->active()->get();
 
-            if ($this->user_group_action) {
+            if ($this->active_actions->count()) {
+                $this->user_group_action = $this->getBestAction();
+
                 return true;
             }
+        }
+
+        $this->active_actions = ProductAction::query()->where('user_group_id', 0)->active()->get();
+
+        if ($this->active_actions->count()) {
+            $this->action = $this->getBestAction();
+
+            return true;
         }
 
         return false;
@@ -81,7 +118,7 @@ class Special
      *
      * @return float|int
      */
-    public function getUUserGroupDiscount(ProductAction $product_action = null): float|int
+    public function getDiscountPrice(ProductAction|null $product_action = null): float|int
     {
         $action = $product_action ?: $this->action;
 
@@ -102,7 +139,7 @@ class Special
      *
      * @return bool
      */
-    public function checkCoupon(ProductAction $product_action = null): bool
+    public function checkCoupon(ProductAction|null $product_action = null): bool
     {
         $action             = $product_action ?: $this->action;
         $coupon_session_key = config('session.cart') . '_coupon';
@@ -127,7 +164,7 @@ class Special
      *
      * @return bool
      */
-    public function checkDates(ProductAction $product_action = null): bool
+    public function checkDates(ProductAction|null $product_action = null): bool
     {
         $action = $product_action ?: $this->action;
 
@@ -158,7 +195,7 @@ class Special
      *
      * @return bool
      */
-    public function isProductOnAction(ProductAction $product_action = null): bool
+    public function isProductOnAction(ProductAction|null $product_action = null): bool
     {
         $action = $product_action ?: $this->action;
 
@@ -179,7 +216,7 @@ class Special
     /**
      * @return bool
      */
-    public function isActionOnAllProducts(ProductAction $product_action = null): bool
+    public function isActionOnAllProducts(ProductAction|null $product_action = null): bool
     {
         if (in_array($product_action->group, ['all', 'total'])) {
             return true;
@@ -194,7 +231,7 @@ class Special
      *
      * @return array
      */
-    public function getActionProductsList(ProductAction $product_action = null): array
+    public function getActionProductsList(ProductAction|null $product_action = null): array
     {
         $action = $product_action ?: $this->action;
 
@@ -213,6 +250,36 @@ class Special
         }
 
         return [];
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getBestAction()
+    {
+        if ($this->active_actions->count() > 1) {
+            $price          = $this->product->price;
+            $best_action_id = 0;
+
+            foreach ($this->active_actions as $action) {
+                $coupon_ok = $this->checkCoupon($action);
+                $dates_ok  = $this->checkDates($action);
+
+                if ($coupon_ok && $dates_ok) {
+                    $temp_price = $this->getDiscountPrice($action);
+
+                    if ($price > $temp_price) {
+                        $price          = $temp_price;
+                        $best_action_id = $action->id;
+                    }
+                }
+            }
+
+            return $this->active_actions->where('id', $best_action_id)->first();
+        }
+
+        return $this->active_actions->first();
     }
 
 }
