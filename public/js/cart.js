@@ -5428,9 +5428,9 @@ var render = function render() {
       staticClass: "card product-card card-static pb-3"
     }, [product.quantity <= 0 ? _c("span", {
       staticClass: "badge bg-warning mt-1 ms-1 badge-end"
-    }, [_vm._v(_vm._s(_vm.trans.rasprodano))]) : _vm._e(), _vm._v(" "), product.special ? _c("span", {
+    }, [_vm._v(_vm._s(_vm.trans.rasprodano))]) : _vm._e(), _vm._v(" "), Number(product.main_price) > Number(product.main_special) ? _c("span", {
       staticClass: "badge rounded-pill bg-red mt-1 ms-1 badge-shadow"
-    }, [_vm._v("-" + _vm._s(_vm.$store.state.service.getDiscountAmount(product.price, product.special)) + "%")]) : _vm._e(), _vm._v(" "), _c("a", {
+    }, [_vm._v("-" + _vm._s(_vm.$store.state.service.getDiscountAmount(product.main_price, product.main_special)) + "%")]) : _vm._e(), _vm._v(" "), _c("a", {
       staticClass: "card-img-top d-block pb-2 overflow-hidden",
       attrs: {
         href: _vm.origin + product.url
@@ -5461,15 +5461,15 @@ var render = function render() {
       }
     })])]) : _vm._e(), _vm._v(" "), _c("div", {
       staticClass: "product-price"
-    }, [product.main_price > product.main_special ? _c("span", {
+    }, [Number(product.main_price) > Number(product.main_special) ? _c("span", {
       staticClass: "fs-sm text-muted"
     }, [_c("small", [_vm._v("NC 30 dana: " + _vm._s(product.main_price_text) + " ")])]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
-    }, [product.main_price > product.main_special ? _c("span", {
+    }, [Number(product.main_price) > Number(product.main_special) ? _c("span", {
       staticClass: "text-red fs-md"
     }, [_vm._v(_vm._s(product.main_special_text) + " ")]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
-    }, [product.main_price <= product.main_special ? _c("span", {
+    }, [Number(product.main_price) < Number(product.main_special) ? _c("span", {
       staticClass: "text-dark fs-md"
     }, [_vm._v(_vm._s(product.main_price_text) + " ")]) : _vm._e()]), _vm._v(" "), product.stars ? _c("div", {
       staticClass: "star-rating"
