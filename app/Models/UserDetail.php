@@ -21,6 +21,15 @@ class UserDetail extends Model
 
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function group()
+    {
+        return $this->hasOne(UserGroup::class, 'id', 'user_group_id');
+    }
+
+
+    /**
      * @param $products
      * @param $order_id
      *
@@ -40,11 +49,6 @@ class UserDetail extends Model
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-    }
-
-    public function group()
-    {
-        return $this->hasOne(UserGroup::class, 'id', 'user_group_id');
     }
 
 

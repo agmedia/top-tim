@@ -4,6 +4,7 @@ namespace App\Models\Front\Catalog;
 
 use App\Helpers\Currency;
 use App\Helpers\ProductHelper;
+use App\Helpers\Special;
 use App\Models\Back\Catalog\Product\ProductAction;
 use App\Models\Back\Marketing\Review;
 use App\Models\Back\Settings\Settings;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
 use Bouncer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -434,35 +436,23 @@ class Product extends Model
      */
     public function special()
     {
-        $action = $this->action;
-        $coupon_session_key = config('session.cart') . '_coupon';
-        $coupon_ok = false;
+        $special = new Special($this, $this->action);
 
-        if ( ! $action || ($action && ! $action->coupon)) {
-            $coupon_ok = true;
-        }
+        if (Auth::check() && $special->userHasGroupDiscount()) {
+            $action = $special->getUserGroupAction();
+            $coupon_ok = $special->checkCoupon($action);
+            $dates_ok = $special->checkDates($action);
 
-        if (isset($action->status) && $action->status) {
-            if ((isset($action->coupon) && $action->coupon) && session()->has($coupon_session_key) && session($coupon_session_key) == $action->coupon) {
-                $coupon_ok = true;
+            if ($coupon_ok && $dates_ok) {
+                return $special->getUUserGroupDiscount($action);
             }
         }
 
-        // If special is set, return special.
-        if ($this->special && $coupon_ok) {
-            $from = now()->subDay();
-            $to = now()->addDay();
+        $coupon_ok = $special->checkCoupon();
+        $dates_ok = $special->checkDates();
 
-            if ($this->special_from && $this->special_from != '0000-00-00 00:00:00') {
-                $from = Carbon::make($this->special_from);
-            }
-            if ($this->special_to && $this->special_to != '0000-00-00 00:00:00') {
-                $to = Carbon::make($this->special_to);
-            }
-
-            if ($from <= now() && now() <= $to) {
-                return $this->special;
-            }
+        if ($coupon_ok && $dates_ok) {
+            return $special->getUUserGroupDiscount();
         }
 
         return $this->price;
