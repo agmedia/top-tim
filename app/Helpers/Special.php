@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Front\Catalog\ProductAction;
 use App\Models\Front\Catalog\Product;
 use Carbon\Carbon;
@@ -40,9 +41,18 @@ class Special
      */
     public function __construct(Product $product = null, ProductAction $product_action = null)
     {
-        $this->user = Auth::user();
+        $this->user    = Auth::user();
         $this->product = $product;
-        $this->action = $product_action;
+        $this->action  = $product_action;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getUserGroupAction(): ?ProductAction
+    {
+        return $this->user_group_action;
     }
 
 
@@ -78,7 +88,11 @@ class Special
             return $this->product->price;
         }
 
-        return Helper::calculateDiscountPrice($this->product->price, $action->discount, $action->type);
+        if ($this->isProductOnAction($action)) {
+            return Helper::calculateDiscountPrice($this->product->price, $action->discount, $action->type);
+        }
+
+        return $this->product->price;
     }
 
 
@@ -89,9 +103,9 @@ class Special
      */
     public function checkCoupon(ProductAction $product_action = null): bool
     {
-        $action = $product_action ?: $this->action;
+        $action             = $product_action ?: $this->action;
         $coupon_session_key = config('session.cart') . '_coupon';
-        $coupon = false;
+        $coupon             = false;
 
         if ( ! $action || ($action && ! $action->coupon)) {
             $coupon = true;
@@ -121,7 +135,7 @@ class Special
         }
 
         $from = now()->subDay();
-        $to = now()->addDay();
+        $to   = now()->addDay();
 
         if ($action->date_start && $action->date_start != '0000-00-00 00:00:00') {
             $from = Carbon::make($action->date_start);
@@ -139,20 +153,65 @@ class Special
 
 
     /**
-     * @return mixed
+     * @param ProductAction|null $product_action
+     *
+     * @return bool
      */
-    public function getUserGroupAction(): ?ProductAction
+    public function isProductOnAction(ProductAction $product_action = null): bool
     {
-        return $this->user_group_action;
+        $action = $product_action ?: $this->action;
+
+        if ($this->isActionOnAllProducts($action)) {
+            return true;
+        }
+
+        $ids = $this->getActionProductsList($action);
+
+        if (in_array($this->product->id, $ids)) {
+            return true;
+        }
+
+        return false;
     }
 
 
     /**
-     * @return ProductAction|null
+     * @return bool
      */
-    public function getAction(): ?ProductAction
+    public function isActionOnAllProducts(ProductAction $product_action = null): bool
     {
-        return $this->action;
+        if (in_array($product_action->group, ['all', 'total'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param ProductAction|null $product_action
+     *
+     * @return array
+     */
+    public function getActionProductsList(ProductAction $product_action = null): array
+    {
+        $action = $product_action ?: $this->action;
+
+        $ids = collect($action->action_list)->flatten()->toArray();
+
+        if ($action->group == 'product') {
+            return $ids;
+        }
+
+        if ($action->group == 'category') {
+            return ProductCategory::query()->whereIn('category_id', $ids)->pluck('product_id')->unique()->toArray();
+        }
+
+        if ($action->group == 'brand') {
+            return Product::query()->whereIn('brand_id', $ids)->pluck('id')->unique()->toArray();
+        }
+
+        return [];
     }
 
 }
