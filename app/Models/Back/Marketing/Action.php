@@ -304,7 +304,7 @@ class Action extends Model
      */
     private function shouldUpdateProducts(array $data): bool
     {
-        if ($this->request->group == 'total') {
+        if ($this->request->group == 'total' || $this->request->user_group) {
             return false;
         }
 

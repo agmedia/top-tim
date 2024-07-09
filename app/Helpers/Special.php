@@ -88,7 +88,7 @@ class Special
         if ( ! $action) {
             return $this->product->price;
         }
-        
+
         if ($this->isProductOnAction($action)) {
             return Helper::calculateDiscountPrice($this->product->price, $action->discount, $action->type);
         }
