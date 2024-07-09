@@ -5,7 +5,7 @@ namespace App\Models\Front\Catalog;
 use App\Helpers\Currency;
 use App\Helpers\ProductHelper;
 use App\Helpers\Special;
-use App\Models\Back\Catalog\Product\ProductAction;
+use App\Models\Front\Catalog\ProductAction;
 use App\Models\Back\Marketing\Review;
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\Settings\SizeGuide;
