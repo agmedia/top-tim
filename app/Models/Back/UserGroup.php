@@ -147,7 +147,7 @@ class UserGroup extends Model
      */
     public function getList()
     {
-        $response = [];
+        $response = ['items' => []];
         $values   = UserGroup::query()->get();
 
         foreach ($values as $value) {
