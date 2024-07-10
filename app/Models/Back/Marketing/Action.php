@@ -231,6 +231,8 @@ class Action extends Model
             if ($products_updated) {
                 if ($complete) {
                     $action->delete();
+
+                    ActionTranslation::query()->where('product_action_id', $action_id)->delete();
                 }
 
                 return true;
