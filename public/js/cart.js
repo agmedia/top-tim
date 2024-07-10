@@ -5471,7 +5471,9 @@ var render = function render() {
       staticClass: "product-price"
     }, [Number(product.main_price) < Number(product.main_special) ? _c("span", {
       staticClass: "text-dark fs-md"
-    }, [_vm._v(_vm._s(product.main_price_text) + " ")]) : _vm._e()]), _vm._v(" "), product.stars ? _c("div", {
+    }, [_vm._v(_vm._s(product.main_price_text) + " ")]) : _c("span", {
+      staticClass: "text-dark fs-md"
+    }, [_vm._v(_vm._s(product.main_price_text) + " ")])]), _vm._v(" "), product.stars ? _c("div", {
       staticClass: "star-rating"
     }, _vm._l(5, function (item) {
       return _c("span", [Math.floor(product.stars) - item >= 0 ? _c("i", {
