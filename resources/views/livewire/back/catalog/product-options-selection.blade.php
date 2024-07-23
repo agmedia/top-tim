@@ -37,6 +37,9 @@
                 <a class="btn btn-success btn-sm" href="javascript:void(0);" wire:click="addItem('{{ $group }}')">
                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">{{ __('back/attribute.dodaj_vrijednost') }}</span>
                 </a>
+                <a class="btn btn-info btn-sm" href="javascript:void(0);" wire:click="addAllDefaultItems('{{ $group }}')">
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dodaj sve predefinirane vrijednosti</span>
+                </a>
             </div>
 
             <table class="table table-striped table-borderless table-vcenter">

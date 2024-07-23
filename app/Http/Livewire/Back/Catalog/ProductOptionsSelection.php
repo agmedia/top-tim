@@ -6,6 +6,7 @@ use App\Helpers\Country;
 use App\Models\Back\Catalog\Attributes\Attributes;
 use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Product;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -137,6 +138,17 @@ class ProductOptionsSelection extends Component
     }
 
 
+    public function addAllDefaultItems(string $key)
+    {
+        $values = Options::query()->where('type', $key)
+                         ->orWhere('group', $key)
+                         ->get()
+                         ->sortBy('translation.title');
+
+        $this->setDefaultOptionsList($values, $key);
+    }
+
+
     /**
      * @param int $type
      *
@@ -205,6 +217,23 @@ class ProductOptionsSelection extends Component
             'price' => 0,
             'sub_options' => []
         ];
+    }
+
+
+    public function setDefaultOptionsList(Collection $values = null, string $key = null)
+    {
+        foreach ($values as $i => $value) {
+            $item = [
+                'id' => $i,
+                'value' => $value->id,
+                'sku' => isset($this->product->sku) ? $this->product->sku : '',
+                'qty' => 0,
+                'price' => 0,
+                'sub_options' => []
+            ];
+
+            $this->addItem($key, $item);
+        }
     }
 
 
