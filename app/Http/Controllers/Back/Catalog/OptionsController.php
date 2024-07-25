@@ -50,7 +50,7 @@ class OptionsController extends Controller
         $stored = $option->validateRequest($request)->create();
 
         if ($stored) {
-            return redirect()->route('options.edit', ['options' => $option->id])->with(['success' => 'Attribute was succesfully saved!']);
+            return redirect()->route('options.edit', ['options' => $stored ])->with(['success' => 'Attribute was succesfully saved!']);
         }
 
         return redirect()->back()->with(['error' => 'Whoops..! There was an error saving the attribute.']);
@@ -80,7 +80,7 @@ class OptionsController extends Controller
      */
     public function update(Request $request, Options $options)
     {
-        //dd($request->toArray());
+
         $updated = $options->validateRequest($request)->edit();
 
         if ($updated) {
