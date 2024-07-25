@@ -340,11 +340,13 @@ class ProductOptionsSelection extends Component
     {
         $options = Options::query();
 
+
+
         if ( ! $this->type) {
             foreach ($options->get() as $option) {
 
 
-                $this->select_options[$option->type] = [
+                $this->select_options[$option->group] = [
                     'id' => $option->id,
                     'title' => $option->group
                 ];
