@@ -156,7 +156,7 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
      */
     public function subcategories()
     {
-        return $this->hasMany(Category::class, 'parent_id', 'id')->where('status', 1)->with('translation');
+        return $this->hasMany(Category::class, 'parent_id', 'id')->where('status', 1)->with('translation')->orderBy('sort_order');
     }
 
 
