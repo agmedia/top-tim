@@ -611,9 +611,8 @@ class AgCart extends Model
             }
         }
 
-        if (isset($request['item']['options']['id'])) {
-            $option_id      = $request['item']['options']['id'];
-            $product_option = ProductOption::query()->find($option_id);
+        if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
+            $product_option = ProductOption::getFromCartData($request['item']['options']);
 
             if ($product_option && $product_option->price != 0) {
                 $conditions[] = new CartCondition([
