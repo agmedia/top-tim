@@ -104,7 +104,7 @@ export default {
         setOptionsSelection() {
             let res = JSON.parse(this.options);
 
-            console.log('default options array', res.parent)
+            console.log('default options array', res)
 
             this.parent = res.parent ? res.parent : null;
             this.size_options = res.size ? res.size.options : {};
@@ -247,12 +247,16 @@ export default {
         setRequestOptions() {
             let response = {};
 
-            console.log('this.selected_color, this.selected_size, this.parent');
-            console.log(this.selected_color, this.selected_size, this.parent);
+            console.log('this.selected_color, this.selected_size, this.color_options, this.size_options');
+            console.log(this.selected_color);
+            console.log(this.selected_size);
+            console.log(this.color_options);
+            console.log(this.size_options);
+            console.log(this.parent);
 
             response.id = this.id;
-            response.parent_id = this.parent == 'color' ? this.selected_color.option_id : this.selected_size.option_id;
-            response.option_id = this.parent == 'color' ? this.selected_size.option_id : this.selected_color.option_id;
+            response.parent_id = (this.parent && this.parent == 'color') ? this.selected_color.option_id : (this.parent ? this.selected_size.option_id : undefined);
+            response.option_id = this.parent == 'color' ? this.selected_size.option_id : (this.selected_color.option_id ? this.selected_color.option_id : this.selected_size.option_id);
 
             console.log(response);
 
