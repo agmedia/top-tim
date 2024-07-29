@@ -4,6 +4,8 @@ namespace App\Helpers;
 
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
+use App\Models\Back\Catalog\Product\ProductImage;
+use App\Models\Back\Catalog\Product\ProductImageTranslation;
 use App\Models\Back\Catalog\Publisher;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -67,6 +69,46 @@ class Import
         }
 
         return $response;
+    }
+
+
+    /**
+     * @param        $product_id
+     * @param string $path
+     * @param string $name
+     * @param        $default
+     * @param        $sort_order
+     *
+     * @return bool
+     */
+    public function saveImageToDB($product_id, string $path, string $name, $default = 0, $sort_order = 0): bool
+    {
+        $new_image_id = ProductImage::query()->insertGetId([
+            'product_id' => $product_id,
+            'image'      => $path,
+            'default'    => $default,
+            'published'  => 1,
+            'sort_order' => $sort_order,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        if ($new_image_id) {
+            foreach (ag_lang() as $lang) {
+                ProductImageTranslation::query()->insertGetId([
+                    'product_image_id' => $new_image_id,
+                    'lang'             => $lang->code,
+                    'title'            => $name,
+                    'alt'              => $name,
+                    'created_at'       => Carbon::now(),
+                    'updated_at'       => Carbon::now()
+                ]);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -237,6 +279,20 @@ class Import
         }
 
         return config('settings.unknown_publisher');
+    }
+
+
+    public function getFromURL(string $url)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
     }
 
 

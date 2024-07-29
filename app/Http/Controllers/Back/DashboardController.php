@@ -41,38 +41,35 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $data['today']      = Order::whereDate('created_at', Carbon::today())->count();
-        $data['proccess']   = Order::whereIn('order_status_id', [1, 2, 3])->count();
-        $data['finished']   = Order::whereIn('order_status_id', [4, 5, 6, 7])->count();
-        $data['this_month'] = Order::whereMonth('created_at', '=', Carbon::now()->month)->count();
+        $data['today']            = Order::whereDate('created_at', Carbon::today())->count();
+        $data['proccess']         = Order::whereIn('order_status_id', [1, 2, 3])->count();
+        $data['finished']         = Order::whereIn('order_status_id', [4, 5, 6, 7])->count();
+        $data['this_month']       = Order::whereMonth('created_at', '=', Carbon::now()->month)->count();
         $data['this_month_total'] = Order::whereMonth('created_at', '=', Carbon::now()->month)->whereIn('order_status_id', [4, 1, 2, 3])->sum('total');
 
-        $data['this_month_total'] =  number_format($data['this_month_total'], 2,'.','');
+        $data['this_month_total'] = number_format($data['this_month_total'], 2, '.', '');
 
+        $data['users'] = UserDetail::whereIn('role', ['customer'])->count();
 
-        $data['users']   = UserDetail::whereIn('role', ['customer'])->count();
+        $data['comments']     = Review::whereIn('status', ['0'])->count();
+        $data['zeroproducts'] = Product::whereIn('quantity', ['0'])->count();
 
-        $data['comments']   = Review::whereIn('status', ['0'])->count();
-        $data['zeroproducts']   = Product::whereIn('quantity', ['0'])->count();
+        $orders = Order::last()->with('products')->get();
 
-        $orders   = Order::last()->with('products')->get();
-
-        $ordersfinished   = Order::finished()->with('products')->get();
-        $products = $ordersfinished->map(function ($item) {
+        $ordersfinished = Order::finished()->with('products')->get();
+        $products       = $ordersfinished->map(function ($item) {
             return $item->products()->get();
         })->take(9)->flatten();
 
-
         $bestsellers = DB::table('order_products')
-            ->leftJoin('orders','orders.id','=','order_products.order_id')
-            ->select('order_products.name','order_products.product_id',
-                DB::raw('SUM(order_products.quantity) as total'))
-            ->groupBy('order_products.product_id')
-            ->whereIn('orders.order_status_id', [1, 2, 3, 4])
-            ->orderBy('total','desc')
-            ->limit(10)
-            ->get();
-
+                         ->leftJoin('orders', 'orders.id', '=', 'order_products.order_id')
+                         ->select('order_products.name', 'order_products.product_id',
+                             DB::raw('SUM(order_products.quantity) as total'))
+                         ->groupBy('order_products.product_id')
+                         ->whereIn('orders.order_status_id', [1, 2, 3, 4])
+                         ->orderBy('total', 'desc')
+                         ->limit(10)
+                         ->get();
 
         $chart     = new Chart();
         $this_year = json_encode($chart->setDataByYear(
@@ -82,8 +79,7 @@ class DashboardController extends Controller
             Order::chartData($chart->setQueryParams(true))
         ));
 
-
-       // dd($data['users']);
+        // dd($data['users']);
 
         return view('back.dashboard', compact('data', 'orders', 'bestsellers', 'products', 'this_year', 'last_year'));
     }
@@ -97,30 +93,44 @@ class DashboardController extends Controller
     public function import(Request $request)
     {
         $import = new Import();
+        $xml    = new \SimpleXMLElement($import->getFromURL('https://yakimasport.com/modules/pricewars2/service.php?id_xml=23'));
         $count  = 0;
-        $temp = DB::table('temp_products')->get();
 
-        foreach ($temp as $item) {
-            $exist = Product::query()->where('sku', $item->sku)->first();
+        foreach ($xml->group->o as $item) {
+            $sku  = '';
+            $ean  = '';
+            $name = ProductHelper::cleanHTML((string) $item->name);
+            $desc = ProductHelper::cleanHTML((string) $item->desc);
+
+            foreach ($item->attrs->a as $attr) {
+                if ((string) $attr['name'] == 'Kod_producenta') {
+                    $sku = 'YKM' . $attr;
+                }
+                if ((string) $attr['name'] == 'EAN') {
+                    $ean = (string) $attr;
+                }
+            }
+
+            $exist = Product::query()->where('sku', $sku)->first();
 
             if ( ! $exist) {
                 $new_product_id = Product::query()->insertGetId([
-                    'brand_id'     => 0,
-                    'action_id'    => 0,
-                    'sku'          => $item->sku,
-                    'ean'          => '',
-                    'price'        => $item->price ?: 0,
-                    'quantity'     => 1,
-                    'decrease'     => 1,
-                    'tax_id'       => 1,
-                    'vegan'        => 0,
-                    'vegetarian'   => 0,
-                    'glutenfree'   => 0,
-                    'sort_order'   => 0,
-                    'push'         => 0,
-                    'status'       => 1,
-                    'created_at'   => Carbon::now(),
-                    'updated_at'   => Carbon::now()
+                    'brand_id'   => 12,
+                    'action_id'  => 0,
+                    'sku'        => $sku,
+                    'ean'        => $ean,
+                    'price'      => (float) $item['price'] ?: 0,
+                    'quantity'   => (int) $item['stock'] ?: 0,
+                    'decrease'   => 1,
+                    'tax_id'     => 1,
+                    'vegan'      => 0,
+                    'vegetarian' => 0,
+                    'glutenfree' => 0,
+                    'sort_order' => 0,
+                    'push'       => 0,
+                    'status'     => 1,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
                 ]);
 
                 if ($new_product_id) {
@@ -128,62 +138,34 @@ class DashboardController extends Controller
                         ProductTranslation::query()->insertGetId([
                             'product_id'       => $new_product_id,
                             'lang'             => $lang->code,
-                            'name'             => $item->name,
-                            'description'      => $item->category . '<br><br>' . ProductHelper::cleanHTML($item->description),
-                            'podaci'           => ProductHelper::cleanHTML($item->podaci),
-                            'sastojci'         => ProductHelper::cleanHTML($item->sastojci),
-                            'meta_title'       => $item->meta_title,
-                            'meta_description' => $item->meta_description,
-                            'slug'             => Str::slug($item->slug),
+                            'name'             => $name,
+                            'description'      => $desc,
+                            'podaci'           => '',
+                            'sastojci'         => '',
+                            'meta_title'       => $name,
+                            'meta_description' => $desc,
+                            'slug'             => Str::slug($name),
                             'created_at'       => Carbon::now(),
                             'updated_at'       => Carbon::now()
                         ]);
                     }
 
-                    $images_arr = explode(', ', $item->images);
+                    $main_image = $import->resolveImages((string) $item->imgs->main['url'], $name, $new_product_id);
 
-                    foreach ($images_arr as $key => $image) {
-                        $path = $import->resolveImages($image, $item->name, $new_product_id);
+                    Product::query()->where('id', $new_product_id)->update([
+                        'image' => $main_image
+                    ]);
 
-                        if ($path) {
-                            $default = 0;
+                    $import->saveImageToDB($new_product_id, $main_image, $name, 1);
 
-                            if ( ! $key) {
-                                Product::query()->where('id', $new_product_id)->update([
-                                    'image' => $path
-                                ]);
+                    foreach ($item->imgs->i as $img) {
+                        $image = $import->resolveImages((string) $img['url'], $name, $new_product_id);
 
-                                $default = 1;
-                            }
-
-                            $new_image_id = ProductImage::query()->insertGetId([
-                                'product_id' => $new_product_id,
-                                'image'      => $path,
-                                'default'    => $default,
-                                'published'  => 1,
-                                'sort_order' => $key,
-                                'created_at' => Carbon::now(),
-                                'updated_at' => Carbon::now()
-                            ]);
-
-                            if ($new_image_id) {
-                                foreach (ag_lang() as $lang) {
-                                    ProductImageTranslation::query()->insertGetId([
-                                        'product_image_id' => $new_image_id,
-                                        'lang'             => $lang->code,
-                                        'title'            => $item->name,
-                                        'alt'              => $item->name,
-                                        'created_at'       => Carbon::now(),
-                                        'updated_at'       => Carbon::now()
-                                    ]);
-                                }
-                            }
-                        }
+                        $import->saveImageToDB($new_product_id, $image, $name);
                     }
 
                     $count++;
                 }
-
             }
         }
 
@@ -284,7 +266,7 @@ class DashboardController extends Controller
                     $time = Str::random(9);
                     $product->update([
                         'slug' => $product->slug . '-' . $time,
-                        'url' => $product->url . '-' . $time,
+                        'url'  => $product->url . '-' . $time,
                     ]);
                 }
             }
@@ -310,12 +292,12 @@ class DashboardController extends Controller
         $authors = Brand::query()->pluck('id')->diff($products)->flatten();
 
         Brand::whereIn('id', $authors)->update([
-            'status' => 0,
+            'status'     => 0,
             'updated_at' => now()
         ]);
 
         Brand::whereNotIn('id', $authors)->update([
-            'status' => 1,
+            'status'     => 1,
             'updated_at' => now()
         ]);
 
@@ -330,12 +312,12 @@ class DashboardController extends Controller
         $publishers = Publisher::query()->pluck('id')->diff($products)->flatten();
 
         Publisher::whereIn('id', $publishers)->update([
-            'status' => 0,
+            'status'     => 0,
             'updated_at' => now()
         ]);
 
         Publisher::whereNotIn('id', $publishers)->update([
-            'status' => 1,
+            'status'     => 1,
             'updated_at' => now()
         ]);
 
@@ -345,7 +327,7 @@ class DashboardController extends Controller
         if ($categories_off) {
             foreach ($categories_off as $category) {
                 Category::where('id', $category['id'])->update([
-                    'status' => 0,
+                    'status'     => 0,
                     'updated_at' => now()
                 ]);
             }
@@ -356,7 +338,7 @@ class DashboardController extends Controller
         if ($categories_on) {
             foreach ($categories_on as $category) {
                 Category::where('id', $category['id'])->update([
-                    'status' => 1,
+                    'status'     => 1,
                     'updated_at' => now()
                 ]);
             }
@@ -366,12 +348,12 @@ class DashboardController extends Controller
         $products = Product::where('quantity', 0)->pluck('id');
 
         Product::whereIn('id', $products)->update([
-            'status' => 0,
+            'status'     => 0,
             'updated_at' => now()
         ]);
 
         Product::whereNotIn('id', $products)->update([
-            'status' => 1,
+            'status'     => 1,
             'updated_at' => now()
         ]);
 
@@ -437,6 +419,7 @@ class DashboardController extends Controller
         return redirect()->route('dashboard');
     }
 
+
     /**
      * @param Request $request
      *
@@ -458,7 +441,6 @@ class DashboardController extends Controller
     }
 
 
-
     /**
      * @param Request $request
      *
@@ -471,7 +453,7 @@ class DashboardController extends Controller
         Product::query()->whereIn('id', $products)->update([
             'quantity' => 100,
             'decrease' => 0,
-            'status' => 1
+            'status'   => 1
         ]);
 
         return redirect()->route('dashboard')->with(['success' => 'Proizvodi su namješteni na neograničenu količinu..! ' . $products->count() . ' proizvoda obnovljeno.']);
