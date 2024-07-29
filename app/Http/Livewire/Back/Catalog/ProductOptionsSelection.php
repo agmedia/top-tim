@@ -72,6 +72,11 @@ class ProductOptionsSelection extends Component
      */
     public $product = null;
 
+    /**
+     * @var string
+     */
+    public $option_title = '';
+
 
     /**
      * @return void
@@ -138,10 +143,14 @@ class ProductOptionsSelection extends Component
     }
 
 
+    /**
+     * @param string $key
+     *
+     * @return void
+     */
     public function addAllDefaultItems(string $key)
     {
-        $values = Options::query()->where('type', $key)
-                         ->orWhere('group', $key)
+        $values = Options::query()->where('group', $key)
                          ->get()
                          ->sortBy('translation.title');
 
@@ -210,25 +219,31 @@ class ProductOptionsSelection extends Component
     private function getEmptyItem(): array
     {
         return [
-            'id' => 0,
-            'value' => '',
-            'sku' => isset($this->product->sku) ? $this->product->sku : '',
-            'quantity' => 0,
-            'price' => 0,
+            'id'          => 0,
+            'value'       => '',
+            'sku'         => isset($this->product->sku) ? $this->product->sku : '',
+            'quantity'    => 0,
+            'price'       => 0,
             'sub_options' => []
         ];
     }
 
 
+    /**
+     * @param Collection|null $values
+     * @param string|null     $key
+     *
+     * @return void
+     */
     public function setDefaultOptionsList(Collection $values = null, string $key = null)
     {
         foreach ($values as $i => $value) {
             $item = [
-                'id' => $i,
-                'value' => $value->id,
-                'sku' => isset($this->product->sku) ? $this->product->sku : '',
-                'qty' => 0,
-                'price' => 0,
+                'id'          => $i,
+                'value'       => $value->id,
+                'sku'         => isset($this->product->sku) ? $this->product->sku : '',
+                'qty'         => 0,
+                'price'       => 0,
                 'sub_options' => []
             ];
 
@@ -247,7 +262,7 @@ class ProductOptionsSelection extends Component
         if ($values->count()) {
             //
             if ($values->first()->parent == 'single') {
-                $key = $values->first()->title->type;
+                $key = Str::slug($values->first()->title->group);
 
                 if ( ! isset($this->items[$key]['options'])) {
                     $this->items[$key]['options'] = [];
@@ -258,18 +273,18 @@ class ProductOptionsSelection extends Component
                 }
 
                 $this->first_option = $values->first()->option_id;
-                $this->type = 1;
+                $this->type         = 1;
                 $this->setDefaultOptions();
                 $this->step = 'one';
 
                 //
                 foreach ($values as $value) {
                     $item = [
-                        'id' => $value->id,
-                        'value' => $value->option_id,
-                        'sku' => $value->sku,
-                        'qty' => $value->quantity,
-                        'price' => $value->price,
+                        'id'          => $value->id,
+                        'value'       => $value->option_id,
+                        'sku'         => $value->sku,
+                        'qty'         => $value->quantity,
+                        'price'       => $value->price,
                         'sub_options' => []
                     ];
 
@@ -279,22 +294,20 @@ class ProductOptionsSelection extends Component
 
             //
             if ($values->first()->parent == 'option') {
-                $key = $values->first()->top->type;
-
-
+                $key = Str::slug($values->first()->top->group);
 
                 if ( ! isset($this->items[$key]['options'])) {
                     $this->items[$key]['options'] = [];
                 }
 
                 if ( ! isset($this->items[$key]['selections'])) {
-                    $this->items[$key]['selections'] = [];
+                    $this->items[$key]['selections']     = [];
                     $this->items[$key]['sub_selections'] = [];
                 }
 
-               $this->first_option = $values->first()->parent_id;
+                $this->first_option  = $values->first()->parent_id;
                 $this->second_option = $values->first()->option_id;
-                $this->type = 2;
+                $this->type          = 2;
                 $this->setDefaultOptions();
                 $this->step = 'two';
 
@@ -303,14 +316,12 @@ class ProductOptionsSelection extends Component
                     $sub_options = [];
 
                     foreach ($value as $sub_value) {
-
-
                         $sub_item = [
-                            'id' => 0,
-                            'value' => $sub_value->option_id,
-                            'sku' => $sub_value->sku,
-                            'qty' => $sub_value->quantity,
-                            'price' => $sub_value->price,
+                            'id'          => 0,
+                            'value'       => $sub_value->option_id,
+                            'sku'         => $sub_value->sku,
+                            'qty'         => $sub_value->quantity,
+                            'price'       => $sub_value->price,
                             'sub_options' => []
                         ];
 
@@ -318,11 +329,11 @@ class ProductOptionsSelection extends Component
                     }
 
                     $item = [
-                        'id' => 0,
-                        'value' => $top_id,
-                        'sku' => '',
-                        'qty' => 0,
-                        'price' => 0,
+                        'id'          => 0,
+                        'value'       => $top_id,
+                        'sku'         => '',
+                        'qty'         => 0,
+                        'price'       => 0,
                         'sub_options' => $sub_options
                     ];
 
@@ -340,27 +351,29 @@ class ProductOptionsSelection extends Component
     {
         $options = Options::query();
 
-
-
         if ( ! $this->type) {
             foreach ($options->get() as $option) {
-
-
-                $this->select_options[$option->group] = [
-                    'id' => $option->id,
+                $this->select_options[Str::slug($option->group)] = [
+                    'id'    => $option->id,
                     'title' => $option->group
                 ];
             }
 
+            $this->option_title = $options->first()->group;
+
         } else {
+
             $default = Options::query()->where('id', $this->first_option)->first();
 
-            if ($default) {
-                foreach ($options->where('group', Str::slug($default->group))->get() as $option) {
+            $this->option_title = $default->group;
 
-                    $this->items[$option->type]['options'] = [];
-                    $this->items[$option->type]['selections'][$option->id] = [
-                        'id' => $option->id,
+            if ($default) {
+                $group = Str::slug($default->group);
+
+                foreach ($options->where('group', $group)->get() as $option) {
+                    $this->items[$group]['options']                 = [];
+                    $this->items[$group]['selections'][$option->id] = [
+                        'id'    => $option->id,
                         'title' => $option->translation->title
                     ];
                 }
@@ -369,13 +382,14 @@ class ProductOptionsSelection extends Component
                     $sub_options = Options::query();
                     $sub_default = Options::query()->where('id', $this->second_option)->first();
 
-
                     foreach ($sub_options->where('group', Str::slug($sub_default->group))->get() as $sub_option) {
-                        $this->items[$option->type]['sub_selections'][$sub_option->id] = [
-                            'id' => $sub_option->id,
+                        $this->items[$group]['sub_selections'][$sub_option->id] = [
+                            'id'    => $sub_option->id,
                             'title' => $sub_option->translation->title
                         ];
                     }
+
+                    //dd($this->items);
                 }
             }
         }
