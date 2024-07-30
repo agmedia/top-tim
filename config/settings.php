@@ -27,7 +27,7 @@ return [
     'publisher_path'       => 'nakladnik',
     'group_path'           => 'Kategorija proizvoda',
     'eng_default_category' => 358,
-    'default_category'     => 2,
+    'default_category'     => 108,
     'unknown_author'       => 6,
     'unknown_publisher'    => 6,
     'image_size_ratio' => '600x600',
