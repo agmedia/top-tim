@@ -7,6 +7,7 @@ use App\Models\Back\Catalog\Category;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Bouncer;
 
@@ -53,6 +54,9 @@ class ProductTranslation extends Model
                 return false;
             }
 
+            self::query()->where('id', $saved)->update([
+                'url' => ProductHelper::url(Product::query()->where('id', $id)->first())
+            ]);
         }
 
         return true;
@@ -78,13 +82,16 @@ class ProductTranslation extends Model
                 'meta_title'       => $request->meta_title[$lang->code],
                 'meta_description' => $request->meta_description[$lang->code],
                 'slug'             => $slug,
-                'url'              => $slug,
                 'updated_at'       => Carbon::now()
             ]);
 
             if ( ! $saved) {
                 return false;
             }
+            
+            self::query()->where('product_id', $id)->where('lang', $lang->code)->update([
+                'url' => ProductHelper::url(Product::query()->where('id', $id)->first())
+            ]);
         }
 
         return true;
