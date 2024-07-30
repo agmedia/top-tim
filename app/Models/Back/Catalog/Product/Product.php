@@ -491,7 +491,7 @@ class Product extends Model
         if ( ! empty($this->request->input('options')) && is_array($this->request->input('options'))) {
             $product_id = $product_id ?: $this->id;
             $inputs = $this->request->input('options');
-            $groups = Options::query()->get()->unique('type')->pluck('type');
+            $groups = Options::query()->get()->unique('group')->pluck('group');
 
             foreach ($groups as $group) {
                 $group = Str::slug($group);

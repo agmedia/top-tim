@@ -88,7 +88,7 @@ class ProductTranslation extends Model
             if ( ! $saved) {
                 return false;
             }
-            
+
             self::query()->where('product_id', $id)->where('lang', $lang->code)->update([
                 'url' => ProductHelper::url(Product::query()->where('id', $id)->first())
             ]);
