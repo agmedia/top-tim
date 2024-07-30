@@ -21,6 +21,7 @@ return [
         'back'  => 30
     ],
 
+
     'search_keyword'       => 'pojam',
     'author_path'          => 'author',
     'brand_path'          => 'brand',
