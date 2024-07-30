@@ -238,10 +238,15 @@ class ProductOptionsSelection extends Component
     public function setDefaultOptionsList(Collection $values = null, string $key = null)
     {
         foreach ($values as $i => $value) {
+            $sku = '';
+            if (isset($this->product->sku)) {
+                $sku = substr($this->product->sku . $value->translation->title, 0, 13);
+            }
+
             $item = [
                 'id'          => $i,
                 'value'       => $value->id,
-                'sku'         => isset($this->product->sku) ? $this->product->sku : '',
+                'sku'         => $sku,
                 'qty'         => 0,
                 'price'       => 0,
                 'sub_options' => []
