@@ -134,19 +134,6 @@ class DashboardController extends Controller
                 ]);
 
                 if ($new_product_id) {
-                    ProductCategory::insert([
-                        'product_id'  => $new_product_id,
-                        'category_id' => 39,
-                    ],[
-                        'product_id'  => $new_product_id,
-                        'category_id' => config('settings.default_category'),
-                    ]);
-
-
-
-                    $prod = Product::query()->find($new_product_id);
-                    $url = ProductHelper::url($prod);
-
                     foreach (ag_lang() as $lang) {
                         ProductTranslation::query()->insertGetId([
                             'product_id'       => $new_product_id,
@@ -158,12 +145,33 @@ class DashboardController extends Controller
                             'meta_title'       => $name,
                             'meta_description' => $desc,
                             'slug'             => Str::slug($name),
-                            'url'              => $url,
+                            'url'              => '',
                             'created_at'       => Carbon::now(),
                             'updated_at'       => Carbon::now()
                         ]);
                     }
 
+                    // categories
+                    ProductCategory::insert([
+                        'product_id'  => $new_product_id,
+                        'category_id' => 39,
+                    ]);
+
+                    ProductCategory::query()->insert([
+                        'product_id'  => $new_product_id,
+                        'category_id' => config('settings.default_category'),
+                    ]);
+
+                    $prod = Product::query()->find($new_product_id);
+                    $url = ProductHelper::url($prod);
+
+                    Log::info($url);
+
+                    ProductTranslation::query()->where('product_id', $new_product_id)->update([
+                        'url' => $url,
+                    ]);
+
+                    // images
                     $main_image = $import->resolveImages((string) $item->imgs->main['url'], $name, $new_product_id);
 
                     Product::query()->where('id', $new_product_id)->update([
