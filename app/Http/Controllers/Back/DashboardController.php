@@ -136,13 +136,13 @@ class DashboardController extends Controller
                 if ($new_product_id) {
                     ProductCategory::insert([
                         'product_id'  => $new_product_id,
+                        'category_id' => 39,
+                    ], [
+                        'product_id'  => $new_product_id,
                         'category_id' => config('settings.default_category'),
                     ]);
 
-                    ProductCategory::insert([
-                        'product_id'  => $new_product_id,
-                        'category_id' => 39,
-                    ]);
+
 
                     $prod = Product::query()->find($new_product_id);
                     $url = ProductHelper::url($prod);
