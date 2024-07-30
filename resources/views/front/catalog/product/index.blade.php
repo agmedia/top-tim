@@ -106,7 +106,7 @@
                                 @foreach ($prod->images as $key => $image)
                                         <div class="item single-product" data-target="{{ $image->option_id }}">
                                             <a class="link" href="{{ asset($image->image) }}" >
-                                            <img  src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" >
+                                            <img  src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" style="max-height:600px">
                                             </a>
                                         </div>
                                 @endforeach
