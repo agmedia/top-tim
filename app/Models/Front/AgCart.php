@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use function Symfony\Component\Translation\t;
 
 class AgCart extends Model
 {
@@ -482,6 +483,7 @@ class AgCart extends Model
             'id'              => $item_data['id'],
             'name'            => $item_data['name'],
             'price'           => $product->price,
+            'price_text'      => Currency::main($product->price, true),
             'sec_price'       => $product->secondary_price,
             'quantity'        => $request['item']['quantity'],
             'associatedModel' => $product,
@@ -489,6 +491,16 @@ class AgCart extends Model
         ];
 
         $conditions = $this->structureCartItemConditions($product, $request);
+        $price = $product->price;
+
+        foreach ($conditions as $condition) {
+            $value = $condition->getValue();
+
+            if ($value) {
+                //$response['price'] = $price + $condition->getValue();
+                $response['price_text'] = Currency::main($price + $condition->getValue(), true);
+            }
+        }
 
         if ($conditions) {
             $response['conditions'] = $conditions;
@@ -640,12 +652,12 @@ class AgCart extends Model
             $product_option = ProductOption::query()->find($product_option_id);
 
             if ($product_option) {
-                $options[$product_option->id] = [
+                $options['option'] = [
                     'id'       => $product_option->id,
                     'sku'      => $product_option->sku,
                     'name'     => CartHelper::resolveItemOptionName($product_option),
                     'quantity' => $quantity,
-
+                    'price'    => $product_option->price,
                 ];
             }
         }

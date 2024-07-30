@@ -37,6 +37,10 @@
                             {{ item.associatedModel.action.title }} ({{ Math.round(item.associatedModel.action.discount).toFixed(0) }}
                             {{ item.associatedModel.action.type == 'F' ? 'kn' : '%' }})
                         </span>
+                        <span class="text-primary fs-md fw-light" style="margin-left: 20px;"
+                              v-if="item.attributes.options.option && item.attributes.options.option.price != '0.0000'">
+                           Opcija:  {{ Math.round(Number(item.attributes.options.option.price)).toFixed(2) }} EUR
+                        </span>
                     </div>
 
                     <div class="fs-sm text-dark pt-1" v-if="item.associatedModel.secondary_price">

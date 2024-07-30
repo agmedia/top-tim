@@ -2,7 +2,7 @@
     <div class="cart  pb-2 mb-3">
         <div class="mw-500" v-if="Object.keys(this.color_options).length">
             <div class="fs-sm mb-4">
-                <span class="text-heading fw-medium me-1"><span class="text-danger">*</span> {{ trans.boja }}:</span><span class="text-muted">{{ color_name }}</span>
+                <span class="text-heading fw-medium me-1"><span class="text-danger">*</span> {{ trans.boja }}:</span><span class="text-muted">{{ color_name }} <span class="text-warning">{{ extra_price }}</span></span>
             </div>
             <div class="position-relative me-n4 mb-3" id="select" >
                 <div v-for="(option, index) in color_options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id">
@@ -67,7 +67,7 @@ export default {
             parent: '',
             color_name: '',
             size_name: '',
-
+            extra_price: ''
         }
     },
 //
@@ -272,6 +272,14 @@ export default {
                 if (id == this.color_options[item].id) {
                     this.selected_color = this.color_options[item];
                     this.color_name = this.selected_color.name;
+
+                    if (this.selected_color.price != '0.0000') {
+                        let price = Number(this.selected_color.price);
+
+                        this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
+                    } else {
+                        this.extra_price = '';
+                    }
                 }
             }
         },
@@ -285,6 +293,14 @@ export default {
                 if (id == this.size_options[item].id) {
                     this.selected_size = this.size_options[item];
                     this.size_name = this.selected_size.name;
+
+                    if (this.selected_size.price != '0.0000') {
+                        let price = Number(this.selected_size.price);
+
+                        this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
+                    } else {
+                        this.extra_price = '';
+                    }
                 }
 
             }
