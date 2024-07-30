@@ -496,15 +496,17 @@ class Product extends Model
             foreach ($groups as $group) {
                 $group = Str::slug($group);
 
-                // single options
-                if (isset($inputs[$group][0]['value'])) {
-                    ProductOption::storeSingle($inputs[$group], $product_id);
+                if ( ! empty($inputs[$group])) {
+                    foreach ($inputs[$group] as $option) {
+                        if (isset($option['main_id'])) {
+                            ProductOption::storeDouble($inputs[$group], $product_id);
+                        } elseif (isset($option['value'])) {
+                            ProductOption::storeSingle($inputs[$group], $product_id);
+                        }
+                    }
                 }
 
-                // double (referenced) options
-                if (isset($inputs[$group][0]['main_id'])) {
-                    ProductOption::storeDouble($inputs[$group], $product_id);
-                }
+                
             }
 
         }
