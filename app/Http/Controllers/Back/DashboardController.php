@@ -137,7 +137,7 @@ class DashboardController extends Controller
                     ProductCategory::insert([
                         'product_id'  => $new_product_id,
                         'category_id' => 39,
-                    ], [
+                    ],[
                         'product_id'  => $new_product_id,
                         'category_id' => config('settings.default_category'),
                     ]);
