@@ -5117,7 +5117,7 @@ var render = function render() {
     staticClass: "widget widget-filter mb-4 pb-4 border-bottom"
   }, [_c("h3", {
     staticClass: "widget-title"
-  }, [_vm._v("Tip rukava"), !_vm.attributes_loaded ? _c("span", {
+  }, [_vm._v("Atributi"), !_vm.attributes_loaded ? _c("span", {
     staticClass: "spinner-border spinner-border-sm",
     staticStyle: {
       "float": "right"
