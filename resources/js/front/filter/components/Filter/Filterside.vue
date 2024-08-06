@@ -47,14 +47,11 @@
                                     <div class="simplebar-scroll-content">
                                         <div class="simplebar-content">
                                             <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="attribute in attributes" >
-
-                                                <div class="form-check" v-if="attribute.group == 'Tip rukava'">
+                                                <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes">
-                                                    <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.translation.title }} </label>
+                                                    <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.translation.title }}</label>
                                                 </div>
-                                                <span  v-if="attribute.group == 'Tip rukava'" class="fs-xs text-muted">{{ Number(attribute.products_count).toLocaleString('hr-HR') }}</span>
-
-
+                                                <span class="fs-xs text-muted">{{ Number(attribute.products_count).toLocaleString('hr-HR') }}</span>
                                             </li>
                                         </div>
                                     </div>

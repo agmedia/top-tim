@@ -5163,7 +5163,7 @@ var render = function render() {
   }, _vm._l(_vm.attributes, function (attribute) {
     return _c("li", {
       staticClass: "widget-filter-item d-flex justify-content-between align-items-center mb-1"
-    }, [attribute.group == "Tip rukava" ? _c("div", {
+    }, [_c("div", {
       staticClass: "form-check"
     }, [_c("input", {
       directives: [{
@@ -5204,9 +5204,9 @@ var render = function render() {
       attrs: {
         "for": attribute.id
       }
-    }, [_vm._v(_vm._s(attribute.translation.title) + " ")])]) : _vm._e(), _vm._v(" "), attribute.group == "Tip rukava" ? _c("span", {
+    }, [_vm._v(_vm._s(attribute.translation.title))])]), _vm._v(" "), _c("span", {
       staticClass: "fs-xs text-muted"
-    }, [_vm._v(_vm._s(Number(attribute.products_count).toLocaleString("hr-HR")))]) : _vm._e()]);
+    }, [_vm._v(_vm._s(Number(attribute.products_count).toLocaleString("hr-HR")))])]);
   }), 0)])])]) : _vm._e()])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
   }, [_vm.show_options ? _c("div", {
