@@ -39,19 +39,22 @@
                     <div class=" mb-grid-gutter" v-if="show_attributes">
                         <div class=" px-2">
                             <div class="widget widget-filter mb-4 pb-4 border-bottom" v-if="show_attributes">
-                                <h3 class="widget-title">Attributes<span v-if="!attributes_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
+                                <h3 class="widget-title">Tip rukava<span v-if="!attributes_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="input-group input-group-sm mb-2 autocomplete">
                                     <input type="search" v-model="searchAttribute" class="form-control rounded-end pe-5" placeholder="Pretraži atribute"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                                 </div>
                                 <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
                                     <div class="simplebar-scroll-content">
                                         <div class="simplebar-content">
-                                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="attribute in attributes">
-                                                <div class="form-check">
+                                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="attribute in attributes" >
+
+                                                <div class="form-check" v-if="attribute.group == 'Tip rukava'">
                                                     <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes">
-                                                    <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.translation.title }}</label>
+                                                    <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.translation.title }} </label>
                                                 </div>
-                                                <span class="fs-xs text-muted">{{ Number(attribute.products_count).toLocaleString('hr-HR') }}</span>
+                                                <span  v-if="attribute.group == 'Tip rukava'" class="fs-xs text-muted">{{ Number(attribute.products_count).toLocaleString('hr-HR') }}</span>
+
+
                                             </li>
                                         </div>
                                     </div>
