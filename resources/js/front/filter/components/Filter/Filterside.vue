@@ -39,7 +39,7 @@
                     <div class=" mb-grid-gutter" v-if="show_attributes">
                         <div class=" px-2">
                             <div class="widget widget-filter mb-4 pb-4 border-bottom" v-if="show_attributes">
-                                <h3 class="widget-title">Tip rukava<span v-if="!attributes_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
+                                <h3 class="widget-title">Atributi<span v-if="!attributes_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="input-group input-group-sm mb-2 autocomplete">
                                     <input type="search" v-model="searchAttribute" class="form-control rounded-end pe-5" placeholder="Pretraži atribute"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                                 </div>
