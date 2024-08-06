@@ -2,7 +2,11 @@
 
     namespace App\Models\Front\Catalog;
 
+    use App\Helpers\Helper;
+    use App\Helpers\ProductHelper;
+    use App\Models\Back\Catalog\Product\ProductAttribute;
     use Carbon\Carbon;
+    use Illuminate\Database\Eloquent\Builder;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Http\Request;
     use Illuminate\Support\Str;
@@ -73,7 +77,77 @@
         }
 
 
+        /**
+         * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+         */
+        public function products()
+        {
+            return $this->hasManyThrough(Product::class, ProductAttribute::class, 'attribute_id', 'id', 'id', 'product_id');
+        }
 
+
+        /**
+         * @param $query
+         *
+         * @return mixed
+         */
+        public function scopeActive($query)
+        {
+            return $query->where('status', 1);
+        }
+
+
+        /**
+         * @param array $request
+         * @param int   $limit
+         *
+         * @return Builder
+         */
+        public function filter(array $request, int $limit = 20): Builder
+        {
+            $query = (new Attributes())->newQuery();
+
+            if (isset($request['search_attribute']) && $request['search_attribute']) {
+                $query->active();
+
+                $query = Helper::searchByTitle($query, $request['search_attribute']);
+
+            } else {
+                $query->active();
+
+                if ($request['group'] && ( ! isset($request['search_attribute']) || ! $request['search_attribute'])) {
+                    $query->whereHas('products', function ($query) use ($request) {
+                        $query = ProductHelper::queryCategories($query, $request);
+                        if ($request['attribute']) {
+                            if (strpos($request['attribute'], '+') !== false) {
+                                $arr  = explode('+', $request['option']);
+                                $pids = ProductAttribute::query()->whereIn('attribute_id', $arr)->pluck('product_id')->unique;
+                            } else {
+                                $pids = ProductAttribute::query()->where('attribute_id', $request['option'])->pluck('product_id')->unique;
+                            }
+
+                            $query->whereIn('id', $pids);
+                        }
+                    });
+                }
+
+                if ( ! $request['group'] && $request['ids']) {
+
+                    $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
+                    $query->whereHas('products', function ($query) use ($_ids) {
+                        $query->active()->hasStock()->whereIn('id', $_ids);
+                    })->orwhereHas('subproducts', function ($query) use ($_ids) {
+                        $query->active()->hasStock()->whereIn('id', $_ids);
+                    });
+                }
+            }
+
+            $query->limit($limit)
+                  ->withCount('products')
+                  ->orderBy('sort_order');
+
+            return $query;
+        }
 
     }
 

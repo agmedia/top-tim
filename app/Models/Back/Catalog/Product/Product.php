@@ -506,7 +506,7 @@ class Product extends Model
                     }
                 }
 
-                
+
             }
 
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v2;
 
 use App\Helpers\Helper;
 use App\Helpers\OptionHelper;
+use App\Models\Front\Catalog\Attributes;
 use App\Models\Front\Catalog\Product;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Front\Catalog\Author;
@@ -261,9 +262,9 @@ class FilterController extends Controller
     {
        // Log::info('public function options(Request $request) ----');
        // Log::info($request->toArray());
+        $response = [];
 
         if ($request->has('params')) {
-            $response = [];
             $options  = (new Options())->filter($request->input('params'))
                                        ->get()->sortBy('translation.title');
 
@@ -280,11 +281,23 @@ class FilterController extends Controller
                     'sort_order'     => $option->sort_order
                 ];
             }
-
-            return response()->json($response);
         }
 
+        return response()->json($response);
+    }
 
+
+    public function attributes(Request $request)
+    {
+        if ($request->has('params')) {
+            return response()->json(
+                (new Attributes())->filter($request->input('params'))
+                             ->get()
+                             ->toArray()
+            );
+        }
+
+        return response()->json();
     }
 
 }

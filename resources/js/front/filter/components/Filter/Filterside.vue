@@ -33,6 +33,34 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Filter by Attributes -->
+                <div class="col-lg-12" >
+                    <div class=" mb-grid-gutter" v-if="show_attributes">
+                        <div class=" px-2">
+                            <div class="widget widget-filter mb-4 pb-4 border-bottom" v-if="show_attributes">
+                                <h3 class="widget-title">Attributes<span v-if="!attributes_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
+                                <div class="input-group input-group-sm mb-2 autocomplete">
+                                    <input type="search" v-model="searchAttribute" class="form-control rounded-end pe-5" placeholder="Pretraži atribute"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                                </div>
+                                <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
+                                    <div class="simplebar-scroll-content">
+                                        <div class="simplebar-content">
+                                            <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="attribute in attributes">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes">
+                                                    <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.translation.title }}</label>
+                                                </div>
+                                                <span class="fs-xs text-muted">{{ Number(attribute.products_count).toLocaleString('hr-HR') }}</span>
+                                            </li>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-lg-12">
                     <!-- Filter by Size-->
                     <div class=" mb-grid-gutter" v-if="show_options">
@@ -113,23 +141,29 @@ export default {
             category: null,
             subcategory: null,
             brands: [],
+            attributes: [],
             options: [],
             selectedBrands: [],
+            selectedAttributes: [],
             selectedOptions: [],
             start: '',
             end: '',
             autor: '',
             brand: '',
+            attribute: '',
             option: '',
             nakladnik: '',
             search_query: '',
             searchBrand: '',
+            searchAttribute: '',
             searchOption: '',
             show_brands: false,
+            show_attributes: false,
             show_size: false,
             show_color: false,
             show_options: false,
             brands_loaded: false,
+            attributes_loaded: false,
             options_loaded: false,
             origin: location.origin + '/',
             trans: window.trans,
@@ -155,6 +189,17 @@ export default {
                 return this.getBrands();
             }
         },
+        //
+        selectedAttributes(value) {
+            this.attribute = value.join('+');
+            this.setQueryParamOther('attribute', this.attribute);
+        },
+        searchAttribute(value) {
+            if (value.length > 2 || value == '') {
+                return this.getAttributes();
+            }
+        },
+        //
         selectedOptions(value) {
             this.option = value.join('+');
             this.setQueryParamOther('option', this.option);
@@ -178,6 +223,10 @@ export default {
         if (this.brand == '') {
             this.show_brands = true;
             this.getBrands();
+        }
+        if (this.attribute == '') {
+            this.show_attributes = true;
+            this.getAttributes();
         }
 
         if (this.option == '') {
@@ -223,6 +272,22 @@ export default {
                 this.brands_loaded = true;
                 this.brands = response.data;
 
+            });
+        },
+
+        /**
+         *
+         **/
+        getAttributes() {
+            this.attributes_loaded = false;
+            let params = this.setParams();
+
+            axios.post('filter/getAttributes', { params }).then(response => {
+                this.attributes_loaded = true;
+                this.attributes = response.data;
+
+                console.log('attributi')
+                console.log(response.data)
             });
         },
 
@@ -289,10 +354,9 @@ export default {
             let params = {
                 start: this.start,
                 end: this.end,
-
                 brand: this.brand,
+                attribute: this.attribute,
                 option: this.option,
-
                 page: this.page,
                 pojam: this.search_query,
             };
@@ -309,7 +373,7 @@ export default {
          *
          */
         checkNoFollowQuery(param) {
-            if (param.nakladnik || param.autor || param.option || param.brand || param.start || param.end) {
+            if (param.nakladnik || param.autor || param.option || param.brand || param.attribute || param.start || param.end) {
                 if (!document.querySelectorAll('meta[name="robots"]').length > 0) {
                     $('head').append('<meta name=robots content=noindex,nofollow>');
                 }
@@ -328,6 +392,7 @@ export default {
             this.end = params.query.end ? params.query.end : '';
 
             this.brand = params.query.brand ? params.query.brand : '';
+            this.attribute = params.query.attribute ? params.query.attribute : '';
             this.option = params.query.option ? params.query.option : '';
 
             this.search_query = params.query.pojam ? params.query.pojam : '';
@@ -343,15 +408,20 @@ export default {
                 cat: this.category ? this.category.id : this.cat,
                 subcat: this.subcategory ? this.subcategory.id : this.subcat,
                 brand: this.brand,
+                attribute: this.attribute,
                 option: this.option,
                 search_brand: this.searchBrand,
+                search_attribute: this.searchAttribute,
                 search_option: this.searchOption,
                 pojam: this.search_query
             };
 
-
             if (this.brand != '') {
                 params.brand = this.brand;
+            }
+
+            if (this.attribute != '') {
+                params.attribute = this.attribute;
             }
 
             if (this.option != '') {
@@ -374,6 +444,14 @@ export default {
                 }
             }
 
+            if (this.attribute != '') {
+                if ((this.attribute).includes('+')) {
+                    this.selectedAttributes = (this.attribute).split('+');
+                } else {
+                    this.selectedAttributes = [this.attribute];
+                }
+            }
+
             if (this.option != '') {
                 if ((this.option).includes('+')) {
                     this.selectedOption = (this.option).split('+');
@@ -389,6 +467,7 @@ export default {
         cleanQuery() {
             this.$router.push({query: {}}).catch(()=>{});
             this.selectedBrands = [];
+            this.selectedAttributes = [];
             this.selectedOptions = [];
             this.start = '';
             this.end = '';
