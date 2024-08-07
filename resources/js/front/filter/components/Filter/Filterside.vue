@@ -36,7 +36,7 @@
 
                 <!-- Filter by Attributes -->
                 <div class="col-lg-12" >
-                    <div class=" mb-grid-gutter" v-if="show_attributes">
+                    <div class=" mb-grid-gutter" v-if="attributes.length">
                         <div class=" px-2">
                             <div class="widget widget-filter mb-4 pb-4 border-bottom" v-if="show_attributes">
                                 <h3 class="widget-title">Atributi<span v-if="!attributes_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
@@ -49,7 +49,7 @@
                                             <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="attribute in attributes" >
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes">
-                                                    <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.translation.title }}</label>
+                                                    <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.title }}</label>
                                                 </div>
                                                 <span class="fs-xs text-muted">{{ Number(attribute.products_count).toLocaleString('hr-HR') }}</span>
                                             </li>
@@ -220,16 +220,16 @@ export default {
         this.checkCategory();
         this.getCategories();
 
-        if (this.brand == '') {
+        if (this.brand === '') {
             this.show_brands = true;
             this.getBrands();
         }
-        if (this.attribute == '') {
+        if (this.attribute === '') {
             this.show_attributes = true;
             this.getAttributes();
         }
 
-        if (this.option == '') {
+        if (this.option === '') {
             this.show_options = true;
             this.getOptions();
         }

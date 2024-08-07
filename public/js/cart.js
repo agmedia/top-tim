@@ -3185,15 +3185,15 @@ Vue.directive('tooltip', function (el, binding) {
     this.checkQuery(this.$route);
     this.checkCategory();
     this.getCategories();
-    if (this.brand == '') {
+    if (this.brand === '') {
       this.show_brands = true;
       this.getBrands();
     }
-    if (this.attribute == '') {
+    if (this.attribute === '') {
       this.show_attributes = true;
       this.getAttributes();
     }
-    if (this.option == '') {
+    if (this.option === '') {
       this.show_options = true;
       this.getOptions();
     }
@@ -5115,7 +5115,7 @@ var render = function render() {
     }, [_vm._v(_vm._s(Number(brand.products_count).toLocaleString("hr-HR")))])])]);
   }), 0)])])]) : _vm._e()])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
-  }, [_vm.show_attributes ? _c("div", {
+  }, [_vm.attributes.length ? _c("div", {
     staticClass: "mb-grid-gutter"
   }, [_c("div", {
     staticClass: "px-2"
@@ -5210,7 +5210,7 @@ var render = function render() {
       attrs: {
         "for": attribute.id
       }
-    }, [_vm._v(_vm._s(attribute.translation.title))])]), _vm._v(" "), _c("span", {
+    }, [_vm._v(_vm._s(attribute.title))])]), _vm._v(" "), _c("span", {
       staticClass: "fs-xs text-muted"
     }, [_vm._v(_vm._s(Number(attribute.products_count).toLocaleString("hr-HR")))])]);
   }), 0)])])]) : _vm._e()])]) : _vm._e()]), _vm._v(" "), _c("div", {

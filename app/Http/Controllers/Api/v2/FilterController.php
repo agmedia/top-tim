@@ -289,15 +289,36 @@ class FilterController extends Controller
 
     public function attributes(Request $request)
     {
+
+        $response = [];
         if ($request->has('params')) {
-            return response()->json(
-                (new Attributes())->filter($request->input('params'))
-                             ->get()
-                             ->toArray()
-            );
+             $attributes  = (new Attributes())->filter($request->input('params'))
+            ->get()->sortBy('translation.title');
+
+             foreach ($attributes as $attribute) {
+
+
+
+                 if($attribute->group != 'Materijal'){
+
+                     $response[] = [
+                         'id'             => $attribute->id,
+                         'title'          => $attribute->translation->title,
+                         'group'          => $attribute->group,
+                         'type'           => $attribute->type,
+                         'products_count' => $attribute->products_count,
+                         'sort_order'     => $attribute->sort_order
+                     ];
+
+                 }
+
+             }
+
         }
 
-        return response()->json();
+        return response()->json($response);
+
+
     }
 
 }
