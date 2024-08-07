@@ -185,7 +185,7 @@ export default {
             this.setQueryParamOther('brand', this.brand);
         },
         searchBrand(value) {
-            if (value.length > 2 || value == '') {
+            if (value.length > 2 || value === '') {
                 return this.getBrands();
             }
         },
@@ -195,7 +195,7 @@ export default {
             this.setQueryParamOther('attribute', this.attribute);
         },
         searchAttribute(value) {
-            if (value.length > 2 || value == '') {
+            if (value.length > 2 || value === '') {
                 return this.getAttributes();
             }
         },
@@ -205,7 +205,7 @@ export default {
             this.setQueryParamOther('option', this.option);
         },
         searchOption(value) {
-            if (value.length > 0 || value == '') {
+            if (value.length > 0 || value === '') {
                 return this.getOptions();
             }
         },
@@ -253,10 +253,10 @@ export default {
          *
          **/
         checkCategory() {
-            if (this.cat != '') {
+            if (this.cat !== '') {
                 this.category = JSON.parse(this.cat);
             }
-            if (this.subcat != '') {
+            if (this.subcat !== '') {
                 this.subcategory = JSON.parse(this.subcat);
             }
         },
@@ -297,20 +297,19 @@ export default {
         getOptions() {
             this.options_loaded = false;
             let params = this.setParams();
-
             axios.post('filter/getOptions', { params }).then(response => {
                 this.options_loaded = true;
                 this.options = response.data;
 
                 for (const element of this.options) { // You can use `let` instead of `const` if you like
-                   if(element.type =='size'){
+                   if(element.type ==='size'){
                        this.show_size = true;
                    }
 
                 }
 
                 for (const element of this.options) { // You can use `let` instead of `const` if you like
-                    if(element.type =='color'){
+                    if(element.type ==='color'){
                         this.show_color = true;
                     }
                 }
@@ -329,7 +328,7 @@ export default {
                 this.$router.push({query: this.resolveQuery()}).catch(()=>{});
             }
 
-            if (value == '') {
+            if (value === '') {
                 this.closeWindow();
                 this.$router.push({query: this.resolveQuery()}).catch(()=>{});
             }
@@ -342,7 +341,7 @@ export default {
             this.closeWindow();
             this.$router.push({query: this.resolveQuery()}).catch(()=>{});
 
-            if (value == '') {
+            if (value === '') {
                 this.$router.push({query: this.resolveQuery()}).catch(()=>{});
             }
         },
@@ -416,15 +415,15 @@ export default {
                 pojam: this.search_query
             };
 
-            if (this.brand != '') {
+            if (this.brand !== '') {
                 params.brand = this.brand;
             }
 
-            if (this.attribute != '') {
+            if (this.attribute !== '') {
                 params.attribute = this.attribute;
             }
 
-            if (this.option != '') {
+            if (this.option !== '') {
                 params.option = this.option;
             }
 
@@ -436,7 +435,7 @@ export default {
          *
          */
         preselect() {
-            if (this.brand != '') {
+            if (this.brand !== '') {
                 if ((this.brand).includes('+')) {
                     this.selectedBrands = (this.brand).split('+');
                 } else {
@@ -444,7 +443,7 @@ export default {
                 }
             }
 
-            if (this.attribute != '') {
+            if (this.attribute !== '') {
                 if ((this.attribute).includes('+')) {
                     this.selectedAttributes = (this.attribute).split('+');
                 } else {
@@ -452,7 +451,7 @@ export default {
                 }
             }
 
-            if (this.option != '') {
+            if (this.option !== '') {
                 if ((this.option).includes('+')) {
                     this.selectedOption = (this.option).split('+');
                 } else {

@@ -3152,7 +3152,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.setQueryParamOther('brand', this.brand);
     },
     searchBrand: function searchBrand(value) {
-      if (value.length > 2 || value == '') {
+      if (value.length > 2 || value === '') {
         return this.getBrands();
       }
     },
@@ -3162,7 +3162,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.setQueryParamOther('attribute', this.attribute);
     },
     searchAttribute: function searchAttribute(value) {
-      if (value.length > 2 || value == '') {
+      if (value.length > 2 || value === '') {
         return this.getAttributes();
       }
     },
@@ -3172,7 +3172,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.setQueryParamOther('option', this.option);
     },
     searchOption: function searchOption(value) {
-      if (value.length > 0 || value == '') {
+      if (value.length > 0 || value === '') {
         return this.getOptions();
       }
     },
@@ -3217,10 +3217,10 @@ Vue.directive('tooltip', function (el, binding) {
      *
      **/
     checkCategory: function checkCategory() {
-      if (this.cat != '') {
+      if (this.cat !== '') {
         this.category = JSON.parse(this.cat);
       }
-      if (this.subcat != '') {
+      if (this.subcat !== '') {
         this.subcategory = JSON.parse(this.subcat);
       }
     },
@@ -3272,7 +3272,7 @@ Vue.directive('tooltip', function (el, binding) {
           for (_iterator.s(); !(_step = _iterator.n()).done;) {
             var element = _step.value;
             // You can use `let` instead of `const` if you like
-            if (element.type == 'size') {
+            if (element.type === 'size') {
               _this4.show_size = true;
             }
           }
@@ -3287,7 +3287,7 @@ Vue.directive('tooltip', function (el, binding) {
           for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
             var _element = _step2.value;
             // You can use `let` instead of `const` if you like
-            if (_element.type == 'color') {
+            if (_element.type === 'color') {
               _this4.show_color = true;
             }
           }
@@ -3308,7 +3308,7 @@ Vue.directive('tooltip', function (el, binding) {
           query: this.resolveQuery()
         })["catch"](function () {});
       }
-      if (value == '') {
+      if (value === '') {
         this.closeWindow();
         this.$router.push({
           query: this.resolveQuery()
@@ -3323,7 +3323,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.$router.push({
         query: this.resolveQuery()
       })["catch"](function () {});
-      if (value == '') {
+      if (value === '') {
         this.$router.push({
           query: this.resolveQuery()
         })["catch"](function () {});
@@ -3393,13 +3393,13 @@ Vue.directive('tooltip', function (el, binding) {
         search_option: this.searchOption,
         pojam: this.search_query
       };
-      if (this.brand != '') {
+      if (this.brand !== '') {
         params.brand = this.brand;
       }
-      if (this.attribute != '') {
+      if (this.attribute !== '') {
         params.attribute = this.attribute;
       }
-      if (this.option != '') {
+      if (this.option !== '') {
         params.option = this.option;
       }
       return params;
@@ -3408,21 +3408,21 @@ Vue.directive('tooltip', function (el, binding) {
      *
      */
     preselect: function preselect() {
-      if (this.brand != '') {
+      if (this.brand !== '') {
         if (this.brand.includes('+')) {
           this.selectedBrands = this.brand.split('+');
         } else {
           this.selectedBrands = [this.brand];
         }
       }
-      if (this.attribute != '') {
+      if (this.attribute !== '') {
         if (this.attribute.includes('+')) {
           this.selectedAttributes = this.attribute.split('+');
         } else {
           this.selectedAttributes = [this.attribute];
         }
       }
-      if (this.option != '') {
+      if (this.option !== '') {
         if (this.option.includes('+')) {
           this.selectedOption = this.option.split('+');
         } else {
@@ -3836,6 +3836,7 @@ Vue.directive('tooltip', function (el, binding) {
         autor: this.autor,
         brand: this.brend,
         option: this.option,
+        attribute: this.attribute,
         nakladnik: this.nakladnik,
         sort: this.sorting,
         pojam: this.search_query,
@@ -3859,6 +3860,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.autor = params.query.autor ? params.query.autor : '';
       this.brend = params.query.brand ? params.query.brand : '';
       this.option = params.query.option ? params.query.option : '';
+      this.attribute = params.query.attribute ? params.query.attribute : '';
       this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
       this.page = params.query.page ? params.query.page : '';
       this.sorting = params.query.sort ? params.query.sort : '';
@@ -3882,22 +3884,26 @@ Vue.directive('tooltip', function (el, binding) {
         autor: this.autor,
         brand: this.brend ? this.brend : this.brand,
         option: this.option ? this.option : this.option,
+        attribute: this.attribute ? this.attribute : this.attribute,
         nakladnik: this.nakladnik,
         start: this.start,
         end: this.end,
         sort: this.sorting,
         pojam: this.search_query
       };
-      if (this.author != '') {
+      if (this.author !== '') {
         params.autor = this.author;
       }
-      if (this.brend != '') {
+      if (this.brend !== '') {
         params.brand = this.brend;
       }
-      if (this.option != '') {
+      if (this.attribute !== '') {
+        params.attribute = this.attribute;
+      }
+      if (this.option !== '') {
         params.option = this.option;
       }
-      if (this.publisher != '') {
+      if (this.publisher !== '') {
         params.nakladnik = this.publisher;
       }
       return params;

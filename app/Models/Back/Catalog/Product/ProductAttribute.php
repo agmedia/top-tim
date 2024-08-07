@@ -5,7 +5,7 @@ namespace App\Models\Back\Catalog\Product;
 use App\Models\Back\Catalog\Attributes\Attributes;
 use App\Models\Back\Catalog\Category;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Log;
 class ProductAttribute extends Model
 {
 
@@ -33,6 +33,9 @@ class ProductAttribute extends Model
 
         foreach ($attributes as $attribute) {
             $att = Attributes::query()->find($attribute);
+
+          Log::info('Attributes ----');
+          Log::info($att ->toArray());
 
             if ($att) {
                 $created[] = self::insert([

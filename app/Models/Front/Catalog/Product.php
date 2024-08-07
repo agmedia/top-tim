@@ -815,6 +815,43 @@ class Product extends Model
             $query->whereIn('id', $pids);
         }
 
+
+        if ($request->has('attribute')) {
+            $opts_ids = [];
+
+            if (is_array($request->input('attribute'))) {
+                foreach ($request->input('attribute') as $key => $item) {
+                    if (isset($item->id)) {
+                        array_push($opts_ids, $item->id);
+                    } else {
+                        array_push($opts_ids, $key);
+                    }
+                }
+            }
+
+            if (is_string($request->input('attribute'))) {
+                $value = $request->input('attribute');
+
+                if ($value) {
+                    if (strpos($value, '+') !== false) {
+                        $arr = explode('+', $value);
+
+                        foreach ($arr as $id) {
+                            array_push($opts_ids, $id);
+                        }
+
+                    } else {
+                        array_push($opts_ids, intval($request->input('attribute')));
+                    }
+                }
+            }
+
+            $pids = ProductAttribute::query()->whereIn('attribute_id', $opts_ids)->pluck('product_id');
+
+            $query->whereIn('id', $pids);
+        }
+
+
         if ($request->has('sort')) {
             $sort = $request->input('sort');
 
