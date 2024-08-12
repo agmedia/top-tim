@@ -94,7 +94,7 @@ class DashboardController extends Controller
     public function import(Request $request)
     {
         $import = new Import();
-        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/lopte-rukomet.xml'));
+        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/lopte-ostalo.xml'));
         $count  = 0;
 
         foreach ($xml->row as $item) {
@@ -116,7 +116,12 @@ class DashboardController extends Controller
                 }
                 elseif (str_contains($sku, 'Joma') ) {
                     $brand_id = 10;
-                } else{
+                }
+
+                elseif (str_contains($sku, '[SS') ) {
+                    $brand_id = 10;
+                }
+                else{
                     $brand_id = '';
                 }
 
@@ -171,7 +176,7 @@ class DashboardController extends Controller
 
                             ProductAttribute::query()->insert([
                                 'product_id'  => $new_product_id,
-                                'attribute_id' => 27,
+                                'attribute_id' => 28,
                             ]);
 
                             $prod = Product::query()->find($new_product_id);
