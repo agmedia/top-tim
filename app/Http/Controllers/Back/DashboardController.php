@@ -99,6 +99,7 @@ class DashboardController extends Controller
 
         foreach ($xml->row as $item) {
             $sku  = $item->Sku;
+            $price  = $item->Price;
             $ean  = '';
             $name = ProductHelper::cleanHTML((string) $item->Name);
             //$desc = ProductHelper::cleanHTML((string) $item->desc);
@@ -128,7 +129,7 @@ class DashboardController extends Controller
                             'action_id'  => 0,
                             'sku'        => $sku,
                             'ean'        => $ean,
-                            'price'      => (float) $item['Price'] ?: 0,
+                            'price'      => $price,
                             'quantity'   => '1',
                             'decrease'   => 1,
                             'tax_id'     => 1,
