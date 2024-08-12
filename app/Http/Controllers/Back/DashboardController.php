@@ -94,7 +94,7 @@ class DashboardController extends Controller
     public function import(Request $request)
     {
         $import = new Import();
-        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/lopte-nogomet.xml'));
+        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/lopte-fotsal.xml'));
         $count  = 0;
 
         foreach ($xml->row as $item) {
