@@ -171,7 +171,7 @@ class DashboardController extends Controller
 
                             ProductAttribute::query()->insert([
                                 'product_id'  => $new_product_id,
-                                'attribute_id' => 24,
+                                'attribute_id' => 25,
                             ]);
 
                             $prod = Product::query()->find($new_product_id);
