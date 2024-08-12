@@ -14,6 +14,7 @@ use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Mjerilo;
 use App\Models\Back\Catalog\Product\Product;
+use App\Models\Back\Catalog\Product\ProductAttribute;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Back\Catalog\Product\ProductImageTranslation;
@@ -93,101 +94,113 @@ class DashboardController extends Controller
     public function import(Request $request)
     {
         $import = new Import();
-        $xml    = new \SimpleXMLElement($import->getFromURL('https://yakimasport.com/modules/pricewars2/service.php?id_xml=23'));
+        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/lopte-nogomet.xml'));
         $count  = 0;
 
-        foreach ($xml->group->o as $item) {
-            $sku  = '';
+        foreach ($xml->row as $item) {
+            $sku  = $item->Sku;
             $ean  = '';
-            $name = ProductHelper::cleanHTML((string) $item->name);
-            $desc = ProductHelper::cleanHTML((string) $item->desc);
+            $name = ProductHelper::cleanHTML((string) $item->Name);
+            //$desc = ProductHelper::cleanHTML((string) $item->desc);
 
-            foreach ($item->attrs->a as $attr) {
-                if ((string) $attr['name'] == 'Kod_producenta') {
-                    $sku = 'YKM' . $attr;
+            if (str_contains($sku, 'YS') ) {
+
+            } else{
+
+
+                if (str_contains($sku, 'Zeus') ) {
+
+                    $brand_id = 11;
+
                 }
-                if ((string) $attr['name'] == 'EAN') {
-                    $ean = (string) $attr;
+                elseif (str_contains($sku, 'Joma') ) {
+                    $brand_id = 10;
+                } else{
+                    $brand_id = '';
                 }
-            }
 
-            $exist = Product::query()->where('sku', $sku)->first();
 
-            if ( ! $exist) {
-                $new_product_id = Product::query()->insertGetId([
-                    'brand_id'   => 12,
-                    'action_id'  => 0,
-                    'sku'        => $sku,
-                    'ean'        => $ean,
-                    'price'      => (float) $item['price'] ?: 0,
-                    'quantity'   => (int) $item['stock'] ?: 0,
-                    'decrease'   => 1,
-                    'tax_id'     => 1,
-                    'vegan'      => 0,
-                    'vegetarian' => 0,
-                    'glutenfree' => 0,
-                    'sort_order' => 0,
-                    'push'       => 0,
-                    'status'     => 1,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]);
+                    $exist = Product::query()->where('sku', $sku)->first();
 
-                if ($new_product_id) {
-                    foreach (ag_lang() as $lang) {
-                        ProductTranslation::query()->insertGetId([
-                            'product_id'       => $new_product_id,
-                            'lang'             => $lang->code,
-                            'name'             => $name,
-                            'description'      => $desc,
-                            'podaci'           => '',
-                            'sastojci'         => '',
-                            'meta_title'       => $name,
-                            'meta_description' => $desc,
-                            'slug'             => Str::slug($name),
-                            'url'              => '',
-                            'created_at'       => Carbon::now(),
-                            'updated_at'       => Carbon::now()
+                    if ( ! $exist) {
+                        $new_product_id = Product::query()->insertGetId([
+                            'brand_id'   => $brand_id,
+                            'action_id'  => 0,
+                            'sku'        => $sku,
+                            'ean'        => $ean,
+                            'price'      => (float) $item['price'] ?: 0,
+                            'quantity'   => (int) $item['stock'] ?: 0,
+                            'decrease'   => 1,
+                            'tax_id'     => 1,
+                            'sort_order' => 0,
+                            'push'       => 0,
+                            'status'     => 1,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
                         ]);
+
+                        if ($new_product_id) {
+                            foreach (ag_lang() as $lang) {
+                                ProductTranslation::query()->insertGetId([
+                                    'product_id'       => $new_product_id,
+                                    'lang'             => $lang->code,
+                                    'name'             => $name,
+                                    'description'      => '',
+
+                                    'meta_title'       => $name,
+                                    'meta_description' => $sku,
+                                    'slug'             => Str::slug($name),
+                                    'url'              => '',
+                                    'created_at'       => Carbon::now(),
+                                    'updated_at'       => Carbon::now()
+                                ]);
+                            }
+
+                            // categories
+                            ProductCategory::insert([
+                                'product_id'  => $new_product_id,
+                                'category_id' => 39,
+                            ]);
+
+                            ProductCategory::query()->insert([
+                                'product_id'  => $new_product_id,
+                                'category_id' => 89,
+                            ]);
+
+
+                            ProductAttribute::query()->insert([
+                                'product_id'  => $new_product_id,
+                                'attribute_id' => 24,
+                            ]);
+
+                            $prod = Product::query()->find($new_product_id);
+                            $url = ProductHelper::url($prod);
+
+                            Log::info($url);
+
+                            ProductTranslation::query()->where('product_id', $new_product_id)->update([
+                                'url' => $url,
+                            ]);
+
+                            // images
+                            $main_image = $import->resolveImages((string) $item->Image, $name, $new_product_id);
+
+                            Product::query()->where('id', $new_product_id)->update([
+                                'image' => $main_image
+                            ]);
+
+                            $import->saveImageToDB($new_product_id, $main_image, $name, 1);
+
+                           /* foreach ($item->imgs->i as $img) {
+                                $image = $import->resolveImages((string) $img['url'], $name, $new_product_id);
+
+                                $import->saveImageToDB($new_product_id, $image, $name);
+                            }*/
+
+                            $count++;
+                        }
                     }
 
-                    // categories
-                    ProductCategory::insert([
-                        'product_id'  => $new_product_id,
-                        'category_id' => 39,
-                    ]);
-
-                    ProductCategory::query()->insert([
-                        'product_id'  => $new_product_id,
-                        'category_id' => config('settings.default_category'),
-                    ]);
-
-                    $prod = Product::query()->find($new_product_id);
-                    $url = ProductHelper::url($prod);
-
-                    Log::info($url);
-
-                    ProductTranslation::query()->where('product_id', $new_product_id)->update([
-                        'url' => $url,
-                    ]);
-
-                    // images
-                    $main_image = $import->resolveImages((string) $item->imgs->main['url'], $name, $new_product_id);
-
-                    Product::query()->where('id', $new_product_id)->update([
-                        'image' => $main_image
-                    ]);
-
-                    $import->saveImageToDB($new_product_id, $main_image, $name, 1);
-
-                    foreach ($item->imgs->i as $img) {
-                        $image = $import->resolveImages((string) $img['url'], $name, $new_product_id);
-
-                        $import->saveImageToDB($new_product_id, $image, $name);
-                    }
-
-                    $count++;
-                }
             }
         }
 
