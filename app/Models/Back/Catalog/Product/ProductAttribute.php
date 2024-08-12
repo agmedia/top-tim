@@ -34,8 +34,8 @@ class ProductAttribute extends Model
         foreach ($attributes as $attribute) {
             $att = Attributes::query()->find($attribute);
 
-          Log::info('Attributes ----');
-          Log::info($att ->toArray());
+       //   Log::info('Attributes ----');
+       //   Log::info($att ->toArray());
 
             if ($att) {
                 $created[] = self::insert([
