@@ -5128,7 +5128,7 @@ var render = function render() {
     staticStyle: {
       "float": "right"
     }
-  }) : _vm._e()]), _vm._v(" "), _c("div", {
+  }) : _vm._e()]), _vm._v(" "), _vm.attributes.length > 6 ? _c("div", {
     staticClass: "input-group input-group-sm mb-2 autocomplete"
   }, [_c("input", {
     directives: [{
@@ -5153,7 +5153,7 @@ var render = function render() {
     }
   }), _c("i", {
     staticClass: "ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"
-  })]), _vm._v(" "), _c("ul", {
+  })]) : _vm._e(), _vm._v(" "), _c("ul", {
     staticClass: "widget-list widget-filter-list list-unstyled pt-1",
     staticStyle: {
       "max-height": "11rem"
