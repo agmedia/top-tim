@@ -484,7 +484,7 @@ class DashboardController extends Controller
 
         foreach ($products as $product) {
             foreach (ag_lang() as $lang) {
-                $slug = ProductTranslation::resolveSlug($product->id, new Request(['slug' => [$lang => Str::slug($product->translation->name)]]), $lang);
+                $slug = ProductTranslation::resolveSlug($product->id, new Request(['slug' => [$lang->code => Str::slug($product->translation->name)]]), $lang->code, 'update');
 
                 ProductTranslation::query()->where('product_id', $product->id)->where('lang', $lang->code)->update([
                     'slug' => $slug
