@@ -94,7 +94,7 @@ class DashboardController extends Controller
     public function import(Request $request)
     {
         $import = new Import();
-        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/odbojka-stupovi.xml'));
+        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/skakacke-discipline.xml'));
         $count  = 0;
 
         foreach ($xml->row as $item) {
@@ -180,13 +180,13 @@ class DashboardController extends Controller
 
                             ProductCategory::query()->insert([
                                 'product_id'  => $new_product_id,
-                                'category_id' => 92,
+                                'category_id' => 93,
                             ]);
 
 
                        ProductAttribute::query()->insert([
                                 'product_id'  => $new_product_id,
-                                'attribute_id' => 44,
+                                'attribute_id' => 45,
                             ]);
 
                             $prod = Product::query()->find($new_product_id);
