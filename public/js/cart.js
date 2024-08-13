@@ -5123,7 +5123,7 @@ var render = function render() {
     staticClass: "widget widget-filter mb-4 pb-4 border-bottom"
   }, [_c("h3", {
     staticClass: "widget-title"
-  }, [_vm._v("Atributi"), !_vm.attributes_loaded ? _c("span", {
+  }, [_vm._v("Filteri"), !_vm.attributes_loaded ? _c("span", {
     staticClass: "spinner-border spinner-border-sm",
     staticStyle: {
       "float": "right"
@@ -5140,7 +5140,7 @@ var render = function render() {
     staticClass: "form-control rounded-end pe-5",
     attrs: {
       type: "search",
-      placeholder: "Pretraži atribute"
+      placeholder: "Pretraži filtere"
     },
     domProps: {
       value: _vm.searchAttribute
