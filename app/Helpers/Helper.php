@@ -234,7 +234,11 @@ class Helper
     {
         $related = [];
 
-        if ($cat) {
+        if ($subcat) {
+            $related = $subcat->products()->inRandomOrder()->take(10)->groupBy('id')->get();
+        }
+
+       else  {
             $related = $cat->products()->inRandomOrder()->take(10)->groupBy('id')->get();
         }
 
