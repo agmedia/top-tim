@@ -127,6 +127,10 @@ class DashboardController extends Controller
                 elseif (str_contains($sku, '[MS') ) {
                     $brand_id = 9;
                 }
+
+                elseif (str_contains($sku, 'Macron') ) {
+                    $brand_id = 9;
+                }
                 else{
                     $brand_id = '';
                 }
