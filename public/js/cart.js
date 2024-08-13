@@ -5739,7 +5739,7 @@ var staticRenderFns = [function () {
       "data-bs-target": "#offcanvasRight"
     }
   }, [_c("i", {
-    staticClass: "ci-filter me-2"
+    staticClass: "ci-filter-alt me-2"
   }), _vm._v(" Filter")])]);
 }, function () {
   var _vm = this,
