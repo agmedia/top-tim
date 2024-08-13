@@ -309,7 +309,7 @@ class DashboardController extends Controller
      */
     public function slugs()
     {
-        $slugs = Product::query()->groupBy('slug')->havingRaw('COUNT(id) > 1')->pluck('slug', 'id')->toArray();
+        $slugs = Product::query()->groupBy('translation.slug')->havingRaw('COUNT(id) > 1')->pluck('slug', 'id')->toArray();
 
         foreach ($slugs as $slug) {
             $products = Product::where('slug', $slug)->get();
@@ -484,8 +484,14 @@ class DashboardController extends Controller
 
         foreach ($products as $product) {
             foreach (ag_lang() as $lang) {
+                $slug = ProductTranslation::resolveSlug($product->id, new Request(['slug' => [$lang => Str::slug($product->translation->name)]]), $lang);
+
                 ProductTranslation::query()->where('product_id', $product->id)->where('lang', $lang->code)->update([
-                    'url' => ProductHelper::url($product, null, null, $lang->code)
+                    'slug' => $slug
+                ]);
+
+                ProductTranslation::query()->where('product_id', $product->id)->where('lang', $lang->code)->update([
+                    'url' => ProductHelper::url($product)
                 ]);
             }
         }
