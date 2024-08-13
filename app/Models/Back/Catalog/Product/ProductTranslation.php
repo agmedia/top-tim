@@ -104,7 +104,7 @@ class ProductTranslation extends Model
      *
      * @return string
      */
-    private static function resolveSlug(int $id, Request $request, string $lang, string $target = 'insert'): string
+    public static function resolveSlug(int $id, Request $request, string $lang, string $target = 'insert'): string
     {
         $slug = isset($request->slug[$lang]) ? Str::slug($request->slug[$lang]) : Str::slug($request->name[$lang]);
 

@@ -157,6 +157,8 @@ class DashboardController extends Controller
 
                         if ($new_product_id) {
                             foreach (ag_lang() as $lang) {
+                                $slug = ProductTranslation::resolveSlug($new_product_id, new Request(['slug' => [$lang => Str::slug($name)]]), $lang);
+
                                 ProductTranslation::query()->insertGetId([
                                     'product_id'       => $new_product_id,
                                     'lang'             => $lang->code,
@@ -165,7 +167,7 @@ class DashboardController extends Controller
 
                                     'meta_title'       => $name,
                                     'meta_description' => $sku,
-                                    'slug'             => Str::slug($name),
+                                    'slug'             => $slug,
                                     'url'              => '',
                                     'created_at'       => Carbon::now(),
                                     'updated_at'       => Carbon::now()
