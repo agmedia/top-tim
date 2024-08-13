@@ -63,7 +63,7 @@
 
                 <div class="col-lg-12">
                     <!-- Filter by Size-->
-                    <div class=" mb-grid-gutter" v-if="show_options">
+                    <div class=" mb-grid-gutter" v-if="options.length">
                         <div class=" px-2">
                             <div class="widget widget-filter">
                                 <h3  class="widget-title"  v-if="show_size">Veličina <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="col-lg-12">
                     <!-- Filter by Color-->
-                    <div class="mb-grid-gutter" v-if="show_options">
+                    <div class="mb-grid-gutter" v-if="options.lengths">
                         <div class=" px-2" >
                             <div class="widget widget-filter2">
                                 <h3 class="widget-title" v-if="show_color">Boja <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>

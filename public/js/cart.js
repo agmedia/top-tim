@@ -5215,7 +5215,7 @@ var render = function render() {
     }, [_vm._v(_vm._s(Number(attribute.products_count).toLocaleString("hr-HR")))])]);
   }), 0)])])]) : _vm._e()])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
-  }, [_vm.show_options ? _c("div", {
+  }, [_vm.options.length ? _c("div", {
     staticClass: "mb-grid-gutter"
   }, [_c("div", {
     staticClass: "px-2"
@@ -5290,7 +5290,7 @@ var render = function render() {
     }, [_vm._v(_vm._s(Number(option.products_count).toLocaleString("hr-HR")))])]) : _vm._e()];
   })], 2)])])])])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
-  }, [_vm.show_options ? _c("div", {
+  }, [_vm.options.lengths ? _c("div", {
     staticClass: "mb-grid-gutter"
   }, [_c("div", {
     staticClass: "px-2"
