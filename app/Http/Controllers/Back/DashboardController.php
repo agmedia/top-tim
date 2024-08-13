@@ -94,7 +94,7 @@ class DashboardController extends Controller
     public function import(Request $request)
     {
         $import = new Import();
-        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/rugby.xml'));
+        $xml    = new \SimpleXMLElement($import->getFromURL('https://www.toptim.agmedia.rocks/baseball.xml'));
         $count  = 0;
 
         foreach ($xml->row as $item) {
@@ -123,6 +123,9 @@ class DashboardController extends Controller
                 }
                 elseif (str_contains($sku, '[RS') ) {
                     $brand_id = 16;
+                }
+                elseif (str_contains($sku, '[MS') ) {
+                    $brand_id = 9;
                 }
                 else{
                     $brand_id = '';
@@ -173,7 +176,7 @@ class DashboardController extends Controller
 
                             ProductCategory::query()->insert([
                                 'product_id'  => $new_product_id,
-                                'category_id' => 103,
+                                'category_id' => 102,
                             ]);
 
 
