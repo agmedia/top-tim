@@ -3721,15 +3721,16 @@ Vue.directive('tooltip', function (el, binding) {
     cat: String,
     subcat: String,
     author: String,
-    publisher: String,
-    brand: String
+    publisher: String
   },
   //
   data: function data() {
     return {
       products: {},
       autor: '',
-      brend: '',
+      brand: '',
+      option: '',
+      attribute: '',
       nakladnik: '',
       start: '',
       end: '',
@@ -3839,7 +3840,7 @@ Vue.directive('tooltip', function (el, binding) {
         start: this.start,
         end: this.end,
         autor: this.autor,
-        brand: this.brend,
+        brand: this.brand,
         option: this.option,
         attribute: this.attribute,
         nakladnik: this.nakladnik,
@@ -3887,7 +3888,7 @@ Vue.directive('tooltip', function (el, binding) {
         cat: this.cat,
         subcat: this.subcat,
         autor: this.autor,
-        brand: this.brend ? this.brend : this.brand,
+        brand: this.brand ? this.brand : this.brand,
         option: this.option ? this.option : this.option,
         attribute: this.attribute ? this.attribute : this.attribute,
         nakladnik: this.nakladnik,
@@ -3899,8 +3900,8 @@ Vue.directive('tooltip', function (el, binding) {
       if (this.author !== '') {
         params.autor = this.author;
       }
-      if (this.brend !== '') {
-        params.brand = this.brend;
+      if (this.brand !== '') {
+        params.brand = this.brand;
       }
       if (this.attribute !== '') {
         params.attribute = this.attribute;
