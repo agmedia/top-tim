@@ -56,39 +56,29 @@ class Export
         }
 
         $row = 2;
-        $letter_iterator = 0;
-        $first_sub_letter_iterator = 0;
-        $second_sub_letter_iterator = 0;
 
         //
         $products = Product::query()->with('translation')->get();
         
         foreach ($products as $product) {
-            if ( ! isset($this->coordinate_letters[$letter_iterator])) {
-                $coordinate = $this->coordinate_letters[$first_sub_letter_iterator] . $this->coordinate_letters[$second_sub_letter_iterator];
-            } else {
-                $coordinate = $this->coordinate_letters[$letter_iterator];
-            }
-
-            $active_sheet->setCellValue($coordinate . $row, $product->sku);
-            $active_sheet->setCellValue($coordinate . $row, $product->translation->name);
-            $active_sheet->setCellValue($coordinate . $row, $product->price);
-            $active_sheet->setCellValue($coordinate . $row, $product->price);
-            $active_sheet->setCellValue($coordinate . $row, $product->price);
-            $active_sheet->setCellValue($coordinate . $row, 'EUR');
-            $active_sheet->setCellValue($coordinate . $row, 'kom');
-            $active_sheet->setCellValue($coordinate . $row, '25');
-            $active_sheet->setCellValue($coordinate . $row, $product->ean);
-            $active_sheet->setCellValue($coordinate . $row, $product->ean);
-            $active_sheet->setCellValue($coordinate . $row, '');
-            $active_sheet->setCellValue($coordinate . $row, '');
-            $active_sheet->setCellValue($coordinate . $row, '');
-            $active_sheet->setCellValue($coordinate . $row, $product->ean);
-            $active_sheet->setCellValue($coordinate . $row, $product->translation->description);
-            $active_sheet->setCellValue($coordinate . $row, $product->brand ? $product->brand->translation->title : '');
+            $active_sheet->setCellValue('A' . $row, $product->sku);
+            $active_sheet->setCellValue('B' . $row, $product->translation->name);
+            $active_sheet->setCellValue('C' . $row, $product->price);
+            $active_sheet->setCellValue('D' . $row, $product->price);
+            $active_sheet->setCellValue('E' . $row, $product->price);
+            $active_sheet->setCellValue('F' . $row, 'EUR');
+            $active_sheet->setCellValue('G' . $row, 'kom');
+            $active_sheet->setCellValue('H' . $row, '25');
+            $active_sheet->setCellValue('I' . $row, $product->ean);
+            $active_sheet->setCellValue('J' . $row, $product->ean);
+            $active_sheet->setCellValue('K' . $row, '');
+            $active_sheet->setCellValue('L' . $row, '');
+            $active_sheet->setCellValue('M' . $row, '');
+            $active_sheet->setCellValue('N' . $row, $product->ean);
+            $active_sheet->setCellValue('O' . $row, $product->translation->description);
+            $active_sheet->setCellValue('P' . $row, $product->brand ? $product->brand->translation->title : '');
             
             $row++;
-            $letter_iterator++;
         }
 
         try {
