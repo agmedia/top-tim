@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Back;
 
+use App\Helpers\ApiHelper;
 use App\Helpers\Chart;
+use App\Helpers\Csv;
 use App\Helpers\Helper;
 use App\Helpers\Import;
 use App\Helpers\ProductHelper;
@@ -20,9 +22,11 @@ use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Back\Catalog\Product\ProductImageTranslation;
 use App\Models\Back\Catalog\Product\ProductTranslation;
 use App\Models\Back\Catalog\Publisher;
+use App\Models\Back\Jobs;
 use App\Models\Back\Marketing\Review;
 use App\Models\Back\Orders\Order;
 use App\Models\Back\Orders\OrderProduct;
+use App\Models\Back\Settings\Api\Export;
 use App\Models\User;
 use App\Models\UserDetail;
 use Carbon\Carbon;
@@ -533,6 +537,25 @@ class DashboardController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with(['success' => 'PDV je obnovljen na kategoriji svezalice..! ' . $ids->count() . ' proizvoda obnovljeno.']);
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function exportToExcel(Request $request)
+    {
+        $export = new Export();
+
+        $exported = $export->toExcel();
+
+        if ($exported) {
+            return redirect()->route('dashboard')->with(['success' => 'Proizvodi su exportani!']);
+        }
+
+        return redirect()->route('dashboard')->with(['error' => 'Greška prilikom Exporta, molimo pokušajte ponovo ili kontaktirajte administratora!']);
     }
 
 }

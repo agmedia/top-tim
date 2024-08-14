@@ -79,6 +79,7 @@ Route::group(
         Route::get('set/category-group', [DashboardController::class, 'setProductsURL'])->name('set.url');
         Route::get('set/pdv/products', [DashboardController::class, 'setPdvProducts'])->name('set.pdv.products');
         Route::get('set/unlimited-qty', [DashboardController::class, 'setProductsUnlimitedQty'])->name('set.unlimited');
+        Route::get('export/products/excel', [DashboardController::class, 'exportToExcel'])->name('export.excel');
 
         // CATALOG
         Route::prefix('catalog')->group(function () {
