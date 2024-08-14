@@ -5546,7 +5546,7 @@ var render = function render() {
       onclick: "window.location.replace(location.pathname);"
     }
   }, [_c("i", {
-    staticClass: "ci-loading me-2"
+    staticClass: "ci-loading me-0 me-sm-2"
   }), _vm._v(" "), _c("span", {
     staticClass: "d-none d-sm-inline-block"
   }, [_vm._v("Očisti")])]) : _vm._e()]), _vm._v(" "), _c("div", {
