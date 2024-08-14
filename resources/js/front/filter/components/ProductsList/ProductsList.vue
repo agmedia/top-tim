@@ -3,7 +3,10 @@
         <!-- Toolbar-->
         <div class="d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2">
             <div class="d-flex flex-wrap pb-3">
-                <button class="btn btn-outline-secondary bg-white btn-icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-2"></i> Filter</button>
+                <button class="btn btn-outline-secondary bg-white btn-icon me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-2"></i> Filter</button>
+                <button v-if="this.attribute || this.brand ||  this.option" class="btn btn-outline-secondary bg-white btn-icon" type="button" onclick="window.location.replace(location.pathname);" ><i class="ci-loading me-2"></i> Očisti</button>
+
+
             </div>
 
             <div class="d-flex flex-wrap ">
@@ -282,7 +285,7 @@ export default {
             this.start = params.query.start ? params.query.start : '';
             this.end = params.query.end ? params.query.end : '';
             this.autor = params.query.autor ? params.query.autor : '';
-            this.brend = params.query.brand ? params.query.brand : '';
+            this.brand = params.query.brand ? params.query.brand : '';
             this.option = params.query.option ? params.query.option : '';
             this.attribute = params.query.attribute ? params.query.attribute : '';
             this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';

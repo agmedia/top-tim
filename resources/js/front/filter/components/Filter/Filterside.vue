@@ -12,7 +12,7 @@
                     <div class=" mb-grid-gutter" v-if="show_brands">
                         <div class=" px-2">
                             <div class="widget widget-filter mb-4 pb-4 border-bottom" v-if="show_brands">
-                                <h3 class="widget-title">Brands<span v-if="!brands_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
+                                <h3 class="widget-title" >Brands<span v-if="!brands_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
                                 <div class="input-group input-group-sm mb-2 autocomplete">
                                     <input type="search" v-model="searchBrand" class="form-control rounded-end pe-5" placeholder="Pretraži brandove"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                                 </div>
@@ -21,7 +21,7 @@
                                         <div class="simplebar-content">
                                             <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="brand in brands">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" :id="brand.translation.slug" v-bind:value="brand.translation.slug" v-model="selectedBrands">
+                                                    <input class="form-check-input" type="checkbox" :id="brand.translation.slug" v-bind:value="brand.translation.slug" v-model="selectedBrands" @click="closeSidebar">
                                                     <label class="form-check-label widget-filter-item-text" :for="brand.translation.slug">{{ brand.title }}</label>
                                                 </div>
                                                 <span class="fs-xs text-muted"><a :href="origin + brand.url">{{ Number(brand.products_count).toLocaleString('hr-HR') }}</a></span>
@@ -48,7 +48,7 @@
                                         <div class="simplebar-content">
                                             <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-for="attribute in attributes" >
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes">
+                                                    <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes" @click="closeSidebar">
                                                     <label class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.title }}</label>
                                                 </div>
                                                 <span class="fs-xs text-muted">{{ Number(attribute.products_count).toLocaleString('hr-HR') }}</span>
@@ -73,7 +73,7 @@
                                             <template v-for="option in options">
                                                 <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1" v-if="option.type == 'size'">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions">
+                                                        <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions" @click="closeSidebar">
                                                         <label class="form-check-label widget-filter-item-text" :for="option.id">{{ option.title }}</label>
                                                     </div>
                                                     <span class="fs-xs text-muted">{{ Number(option.products_count).toLocaleString('hr-HR') }}</span>
@@ -477,6 +477,14 @@ export default {
          */
         closeWindow() {
             $('#shop-sidebar').removeClass('collapse show');
+        },
+
+        closeSidebar() {
+
+
+            let myOffcanvas = document.getElementById('offcanvasRight');
+            let bsOffcanvas = bootstrap.Offcanvas.getInstance(myOffcanvas);
+            bsOffcanvas.hide();
         }
     }
 };

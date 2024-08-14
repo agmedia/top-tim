@@ -3448,6 +3448,11 @@ Vue.directive('tooltip', function (el, binding) {
      */
     closeWindow: function closeWindow() {
       $('#shop-sidebar').removeClass('collapse show');
+    },
+    closeSidebar: function closeSidebar() {
+      var myOffcanvas = document.getElementById('offcanvasRight');
+      var bsOffcanvas = bootstrap.Offcanvas.getInstance(myOffcanvas);
+      bsOffcanvas.hide();
     }
   }
 });
@@ -3858,7 +3863,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.start = params.query.start ? params.query.start : '';
       this.end = params.query.end ? params.query.end : '';
       this.autor = params.query.autor ? params.query.autor : '';
-      this.brend = params.query.brand ? params.query.brand : '';
+      this.brand = params.query.brand ? params.query.brand : '';
       this.option = params.query.option ? params.query.option : '';
       this.attribute = params.query.attribute ? params.query.attribute : '';
       this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
@@ -5084,6 +5089,7 @@ var render = function render() {
         checked: Array.isArray(_vm.selectedBrands) ? _vm._i(_vm.selectedBrands, brand.translation.slug) > -1 : _vm.selectedBrands
       },
       on: {
+        click: _vm.closeSidebar,
         change: function change($event) {
           var $$a = _vm.selectedBrands,
             $$el = $event.target,
@@ -5188,6 +5194,7 @@ var render = function render() {
         checked: Array.isArray(_vm.selectedAttributes) ? _vm._i(_vm.selectedAttributes, attribute.id) > -1 : _vm.selectedAttributes
       },
       on: {
+        click: _vm.closeSidebar,
         change: function change($event) {
           var $$a = _vm.selectedAttributes,
             $$el = $event.target,
@@ -5263,6 +5270,7 @@ var render = function render() {
         checked: Array.isArray(_vm.selectedOptions) ? _vm._i(_vm.selectedOptions, option.id) > -1 : _vm.selectedOptions
       },
       on: {
+        click: _vm.closeSidebar,
         change: function change($event) {
           var $$a = _vm.selectedOptions,
             $$el = $event.target,
@@ -5528,7 +5536,17 @@ var render = function render() {
     staticClass: "col"
   }, [_c("div", {
     staticClass: "d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2"
-  }, [_vm._m(0), _vm._v(" "), _c("div", {
+  }, [_c("div", {
+    staticClass: "d-flex flex-wrap pb-3"
+  }, [_vm._m(0), _vm._v(" "), this.attribute || this.brand || this.option ? _c("button", {
+    staticClass: "btn btn-outline-secondary bg-white btn-icon",
+    attrs: {
+      type: "button",
+      onclick: "window.location.replace(location.pathname);"
+    }
+  }, [_c("i", {
+    staticClass: "ci-loading me-2"
+  }), _vm._v(" Očisti")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "d-flex flex-wrap"
   }, [_c("div", {
     staticClass: "d-flex align-items-center flex-nowrap me-0 pb-3"
@@ -5729,10 +5747,8 @@ var render = function render() {
 var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "d-flex flex-wrap pb-3"
-  }, [_c("button", {
-    staticClass: "btn btn-outline-secondary bg-white btn-icon",
+  return _c("button", {
+    staticClass: "btn btn-outline-secondary bg-white btn-icon me-2",
     attrs: {
       type: "button",
       "data-bs-toggle": "offcanvas",
@@ -5740,7 +5756,7 @@ var staticRenderFns = [function () {
     }
   }, [_c("i", {
     staticClass: "ci-filter-alt me-2"
-  }), _vm._v(" Filter")])]);
+  }), _vm._v(" Filter")]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
