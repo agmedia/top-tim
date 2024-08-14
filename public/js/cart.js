@@ -5547,7 +5547,9 @@ var render = function render() {
     }
   }, [_c("i", {
     staticClass: "ci-loading me-2"
-  }), _vm._v(" Očisti")]) : _vm._e()]), _vm._v(" "), _c("div", {
+  }), _vm._v(" "), _c("span", {
+    staticClass: "d-none d-sm-inline-block"
+  }, [_vm._v("Očisti")])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "d-flex flex-wrap"
   }, [_c("div", {
     staticClass: "d-flex align-items-center flex-nowrap me-0 pb-3"
