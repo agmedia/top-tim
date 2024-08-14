@@ -74,9 +74,8 @@ class Export
             $active_sheet->setCellValue('K' . $row, '');
             $active_sheet->setCellValue('L' . $row, '');
             $active_sheet->setCellValue('M' . $row, '');
-            $active_sheet->setCellValue('N' . $row, $product->ean);
-            $active_sheet->setCellValue('O' . $row, $product->translation->description);
-            $active_sheet->setCellValue('P' . $row, $product->brand ? $product->brand->translation->title : '');
+            $active_sheet->setCellValue('N' . $row, $product->translation->description);
+            $active_sheet->setCellValue('O' . $row, $product->brand ? $product->brand->translation->title : '');
             
             $row++;
         }
