@@ -470,6 +470,7 @@ export default {
             this.selectedOptions = [];
             this.start = '';
             this.end = '';
+            window.location.replace(location.pathname);
         },
 
         /**
@@ -485,6 +486,7 @@ export default {
             let myOffcanvas = document.getElementById('offcanvasRight');
             let bsOffcanvas = bootstrap.Offcanvas.getInstance(myOffcanvas);
             bsOffcanvas.hide();
+
         }
     }
 };

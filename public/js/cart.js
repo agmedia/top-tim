@@ -3442,6 +3442,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.selectedOptions = [];
       this.start = '';
       this.end = '';
+      window.location.replace(location.pathname);
     },
     /**
      *
