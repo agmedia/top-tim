@@ -207,8 +207,16 @@ class Export
 
             if ($product->options()->count() > 0) {
                 foreach ($product->options()->get() as $option) {
+                    $name = $product->translation->name . ', ' . $option->option->translation->group_title . ': ' . $option->option->translation->title;
+
+                    if ($option->parent_id) {
+                        if ($option->top) {
+                            $name = $product->translation->name . ', ' . $option->top->translation->group_title . ': ' . $option->top->translation->title . ', ' . $option->option->translation->group_title . ': ' . $option->option->translation->title;
+                        }
+                    }
+
                     $active_sheet->setCellValue('A' . $row, $product->sku . '-' . $option->sku);
-                    $active_sheet->setCellValue('B' . $row, $product->translation->name . ', ' . $option->option->translation->group_title . ': ' . $option->option->translation->title);
+                    $active_sheet->setCellValue('B' . $row, $name);
                     $active_sheet->setCellValue('C' . $row, $product->price + $option->price);
                     $active_sheet->setCellValue('D' . $row, $product->price + $option->price);
                     $active_sheet->setCellValue('E' . $row, $product->price + $option->price);
