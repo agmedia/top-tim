@@ -42,7 +42,6 @@
                             <br>
 
                             <a href="{{ route('set.unlimited') }}" class="btn btn-hero-sm btn-rounded btn-hero-danger mb-3 mr-3">Set Unlimited Quantity</a>
-                            <a href="{{ route('export.excel') }}" class="btn btn-hero-sm btn-rounded btn-hero-info mb-3 mr-3">Export to Excel</a>
                             {{--<a href="{{ route('statuses.cron') }}" class="btn btn-hero-sm btn-rounded btn-hero-success mb-3 mr-3">Statuses</a>--}}
                             {{-- <a href="{{ route('slugs.revision') }}" class="btn btn-hero-sm btn-rounded btn-hero-primary mb-3 mr-3">Slugs revision</a>--}}
                              {{--<a href="{{ route('duplicate.revision', ['target' => 'images']) }}" class="btn btn-hero-sm btn-rounded btn-hero-primary mb-3 mr-3">Duplicate Images revision</a>--}}
@@ -52,6 +51,22 @@
                 </div>
             </div>
         @endif
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Admin dashboard</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <a href="{{ route('export.excel') }}" class="btn btn-hero-sm btn-rounded btn-hero-info mb-3 mr-3">Export to Excel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- Overview -->
