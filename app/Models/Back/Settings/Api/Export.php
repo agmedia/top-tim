@@ -137,8 +137,8 @@ class Export
             $active_sheet->setCellValue('F' . $row, 'EUR');
             $active_sheet->setCellValue('G' . $row, 'kom');
             $active_sheet->setCellValue('H' . $row, '25');
-            $active_sheet->setCellValue('I' . $row, $product->ean);
-            $active_sheet->setCellValue('J' . $row, $product->ean);
+            $active_sheet->setCellValue('I' . $row, '');
+            $active_sheet->setCellValue('J' . $row, '');
             $active_sheet->setCellValue('K' . $row, '');
             $active_sheet->setCellValue('L' . $row, '');
             $active_sheet->setCellValue('M' . $row, '');
@@ -204,17 +204,17 @@ class Export
             $row++;
 
             if ($product->options()->count() > 0) {
-                foreach ($product->options as $option) {
-                    $active_sheet->setCellValue('A' . $row, $option->sku);
-                    $active_sheet->setCellValue('B' . $row, $product->translation->name . ', ' . $option->option->group_title . ': ' . $option->option->title);
+                foreach ($product->options()->get() as $option) {
+                    $active_sheet->setCellValue('A' . $row, $product->sku . '-' . $option->sku);
+                    $active_sheet->setCellValue('B' . $row, $product->translation->name . ', ' . $option->option->translation->group_title . ': ' . $option->option->translation->title);
                     $active_sheet->setCellValue('C' . $row, $product->price + $option->price);
                     $active_sheet->setCellValue('D' . $row, $product->price + $option->price);
                     $active_sheet->setCellValue('E' . $row, $product->price + $option->price);
                     $active_sheet->setCellValue('F' . $row, 'EUR');
                     $active_sheet->setCellValue('G' . $row, 'kom');
                     $active_sheet->setCellValue('H' . $row, '25');
-                    $active_sheet->setCellValue('I' . $row, $option->sku);
-                    $active_sheet->setCellValue('J' . $row, $option->sku);
+                    $active_sheet->setCellValue('I' . $row, '');
+                    $active_sheet->setCellValue('J' . $row, '');
                     $active_sheet->setCellValue('K' . $row, '');
                     $active_sheet->setCellValue('L' . $row, '');
                     $active_sheet->setCellValue('M' . $row, '');
@@ -276,6 +276,8 @@ class Export
                     $active_sheet->setCellValue('BO' . $row, '');
                     $active_sheet->setCellValue('BP' . $row, '');
                     $active_sheet->setCellValue('BQ' . $row, '');
+
+                    $row++;
                 }
             }
         }
