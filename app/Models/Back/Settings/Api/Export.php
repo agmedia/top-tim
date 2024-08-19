@@ -127,14 +127,14 @@ class Export
 
         //
         $products = Product::query()->with('translation')->get();
-        
+
         foreach ($products as $product) {
             if ( ! $product->options()->count()) {
                 $active_sheet->setCellValue('A' . $row, $product->sku);
                 $active_sheet->setCellValue('B' . $row, $product->translation->name);
                 $active_sheet->setCellValue('C' . $row, $product->price);
-                $active_sheet->setCellValue('D' . $row, $product->price);
-                $active_sheet->setCellValue('E' . $row, $product->price);
+                $active_sheet->setCellValue('D' . $row, '');
+                $active_sheet->setCellValue('E' . $row, '');
                 $active_sheet->setCellValue('F' . $row, 'EUR');
                 $active_sheet->setCellValue('G' . $row, 'kom');
                 $active_sheet->setCellValue('H' . $row, '25');
