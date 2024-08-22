@@ -106,7 +106,9 @@ class ProductTranslation extends Model
      */
     public static function resolveSlug(int $id, Request $request, string $lang, string $target = 'insert'): string
     {
-        $slug = isset($request->slug[$lang]) ? trim(Str::slug($request->slug[$lang])) : trim(Str::slug($request->name[$lang]));
+        //$slug = isset($request->slug[$lang]) ? trim(Str::slug($request->slug[$lang])) : trim(Str::slug($request->name[$lang]));
+
+        $slug = ProductTranslation::resolveSlug($product->id, new Request(['slug' => [$lang => Str::slug($product->translation->name)]]), $lang);
 
         if ($target == 'update') {
             $product = Product::query()->where('id', $id)->first();
