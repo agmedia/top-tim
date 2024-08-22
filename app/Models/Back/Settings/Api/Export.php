@@ -218,8 +218,8 @@ class Export
                     $active_sheet->setCellValue('A' . $row, $product->sku . '-' . $option->sku);
                     $active_sheet->setCellValue('B' . $row, $name);
                     $active_sheet->setCellValue('C' . $row, $product->price + $option->price);
-                    $active_sheet->setCellValue('D' . $row, $product->price + $option->price);
-                    $active_sheet->setCellValue('E' . $row, $product->price + $option->price);
+                    $active_sheet->setCellValue('D' . $row, '');
+                    $active_sheet->setCellValue('E' . $row, '');
                     $active_sheet->setCellValue('F' . $row, 'EUR');
                     $active_sheet->setCellValue('G' . $row, 'kom');
                     $active_sheet->setCellValue('H' . $row, '25');
