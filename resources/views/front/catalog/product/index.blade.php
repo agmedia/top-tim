@@ -196,7 +196,7 @@
             </div>
 
             <div class="mb-3">
-               <span class=" fs-xs  text-blue me-1">   {{ __('front/ricekakis.nopdv') }}: {{ $prod->main_price / 1.25 }} € </span>
+               <span class=" fs-xs  text-blue me-1">   {{ __('front/ricekakis.nopdv') }}: {{ number_format(($prod->main_price / 1.25), 2, ',') }} € </span>
             </div>
 
 
