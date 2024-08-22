@@ -875,7 +875,7 @@ class Product extends Model
                 $query->orderByDesc(ProductTranslation::query()->select('name')->whereColumn('product_translations.product_id', 'products.id')->where('product_translations.lang', current_locale()));
             }
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('price');
         }
 
         return $query;
