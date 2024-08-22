@@ -160,7 +160,7 @@
        </a>
    </div>
 
-   <h1 class="h3 fs-3 fw-medium">{{ $prod->name }}</h1>
+   <h1 class="h3 fs-3 fw-medium mb-0">{{ $prod->name }}</h1>
 
             <div class="mb-3">
                <span class="fs-sm text-muted me-1">
