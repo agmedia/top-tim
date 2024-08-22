@@ -19,13 +19,9 @@
             </div>
         </div>
     </section>
-
-
     <footer class="footer bg-light pt-3">
-
         <div class="px-lg-5 pt-2 pb-4">
             <div class="mx-auto px-3" >
-
                 <div class="row py-lg-3 ">
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex"><i class="ci-gift link-primary" style="font-size: 2.25rem;"></i>
@@ -92,6 +88,8 @@
                                             @endif
                                         @endforeach
                                     @endif
+
+                                        <li class="widget-list-item">  <a class="widget-list-link" href="{{ current_locale() }}/faq">{{ __('front/cart.faq') }}</a>   </li>
                                         <li class="widget-list-item"><a class="widget-list-link" href="{{ current_locale() }}/kontakt">{{ __('front/ricekakis.kontaktirajte_nas') }}</a>
                                         </li>
                                 </ul>
@@ -116,10 +114,14 @@
                         </div>
 
                 </div>
+                <hr class="hr-light mb-4">
+                <div class="row py-lg-2">
+                        <div class="col-lg-12 mb-lg-0 mb-4">
+                       <small>Sve cijene iskazane su u eurima i uključuju PDV. Trudimo se dati što bolji i točniji opis i sliku. Unatoč tome, ne možemo garantirati da su svi navedeni podaci i slike u potpunosti točni. Ne odgovaramo za eventualne pogreške nastale u opisu proizvoda, greške prilikom štampanja te promjene cijena.</small>
+                      </div>
+                 </div>
             </div>
         </div>
-
-
         <div class="bg-darker px-lg-5 py-3">
             <div class="d-sm-flex justify-content-between align-items-center mx-auto px-3" >
                 <div class="fs-sm text-white  text-center text-sm-start py-3">Top Tim d.o.o. © {{ __('front/ricekakis.sva_prava') }}. Web by <a class="text-white" href="https://www.agmedia.hr" target="_blank" rel="noopener">AG media</a></div>

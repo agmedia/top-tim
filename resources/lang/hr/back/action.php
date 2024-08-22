@@ -29,6 +29,7 @@ return [
     'no_action' => 'Nema akcija...',
     'save' => 'Snimi',
     'delete' => 'Obriši',
+    'lock' => 'Zaključaj',
     'back' => 'Povratak',
     'publish' => 'Aktiviraj',
     'title_insert' => 'Upišite naziv akcije',

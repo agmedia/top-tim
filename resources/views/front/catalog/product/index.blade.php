@@ -164,11 +164,11 @@
 
        <div class="mb-1">
            @if ($prod->main_price > $prod->main_special)
-               <span class="h3 fw-normal text-accent me-1">{{ $prod->main_special_text }}</span>
+               <span class="h3 fw-bold font-title text-blue me-1">{{ $prod->main_special_text }}</span>
                <span class="text-muted fs-lg me-3">*{{ $prod->main_price_text }}</span>
 
            @else
-               <span class="h3 fw-normal text-accent me-1">{{ $prod->main_price_text }}</span>
+               <span class="h3 fw-bold font-title text-blue me-1">{{ $prod->main_price_text }}</span>
            @endif
 
        </div>
@@ -185,14 +185,18 @@
            @endif
            @if ($prod->main_price > $prod->main_special )
 
-               <div class="mb-3 mt-1 text-start">
+               <div class="mb-1 mt-1 text-start">
                    <span class=" fs-sm text-muted me-1">  {{ __('front/ricekakis.lowest_price') }}</span>
                </div>
 
            @endif
 
-            <div class="mb-3 mt-1 text-start">
-                <span class=" fs-xs text-muted me-1">  {{ __('front/ricekakis.pdv') }}</span>
+            <div class="mb-1 mt-1 text-start">
+                <span class=" fs-xs text-muted me-1">  {{ __('front/ricekakis.pdv') }}   </span>
+            </div>
+
+            <div class="mb-3">
+               <span class=" fs-xs  text-blue me-1">   {{ __('front/ricekakis.nopdv') }}: {{ $prod->main_price / 1.25 }} € </span>
             </div>
 
 

@@ -28,6 +28,7 @@ return [
     'edit' => 'Edit',
     'no_action' => 'No discounts or extra set so far...',
     'save' => 'Save',
+    'lock' => 'Lock',
     'delete' => 'Delete',
     'back' => 'Back',
     'publish' => 'Publish',

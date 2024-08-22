@@ -130,6 +130,9 @@ h3.accordion-header, h3.product-title { font-family: 'Poppins', sans-serif;}
 
 span.text-red{color:#05519e!important}
 .red a{color:#05519e!important}
+
+.text-blue {color:#05519e!important}
+
 h1, .h1 {
     font-size: calc(1.375rem + 1.5vw);
 }

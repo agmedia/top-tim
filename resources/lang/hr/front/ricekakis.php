@@ -83,6 +83,7 @@ return [
     'hvala_vam_za_narudzbu' => 'Hvala vam za narudžbu',
     'dobili_ste_narudzbu' => 'Dobili ste novu narudžbu',
     'pdv' => 'U cijenu je uključen PDV.',
+    'nopdv' => 'Cijena bez PDV-a:',
     'boja' => 'Odabir boje',
     'velicina'   => 'Odabir veličine',
     'tech_desc' => 'Tehnička specifikacija',
