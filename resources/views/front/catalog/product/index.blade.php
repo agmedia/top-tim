@@ -162,6 +162,11 @@
 
    <h1 class="h3 fs-3 fw-medium">{{ $prod->name }}</h1>
 
+            <div class="mb-3">
+               <span class="fs-sm text-muted me-1">
+                   {{ __('front/ricekakis.sifra') }}: {{ $prod->sku }}</span>
+            </div>
+
        <div class="mb-1">
            @if ($prod->main_price > $prod->main_special)
                <span class="h3 fw-bold font-title text-blue me-1">{{ $prod->main_special_text }}</span>
@@ -198,6 +203,7 @@
             <div class="mb-3">
                <span class=" fs-xs  text-blue me-1">   {{ __('front/ricekakis.nopdv') }}: {{ number_format(($prod->main_price / 1.25), 2, ',') }} € </span>
             </div>
+
 
 
 
