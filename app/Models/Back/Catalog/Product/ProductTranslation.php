@@ -75,7 +75,7 @@ class ProductTranslation extends Model
             $slug = static::resolveSlug($id, $request, $lang->code, 'update');
 
             $saved = self::where('product_id', $id)->where('lang', $lang->code)->update([
-                'name'             => $request->name[$lang->code],
+                'name'             => trim($request->name[$lang->code]),
                 'description'      => ProductHelper::cleanHTML($request->description[$lang->code]),
                 //'podaci'           => ProductHelper::cleanHTML($request->podaci[$lang->code]),
                 //'sastojci'         => ProductHelper::cleanHTML($request->sastojci[$lang->code]),
@@ -104,9 +104,9 @@ class ProductTranslation extends Model
      *
      * @return string
      */
-    private static function resolveSlug(int $id, Request $request, string $lang, string $target = 'insert'): string
+    public static function resolveSlug(int $id, Request $request, string $lang, string $target = 'insert'): string
     {
-        $slug = isset($request->slug[$lang]) ? Str::slug($request->slug[$lang]) : Str::slug($request->name[$lang]);
+        $slug = isset($request->slug[$lang]) ? trim(Str::slug($request->slug[$lang])) : trim(Str::slug($request->name[$lang]));
 
         if ($target == 'update') {
             $product = Product::query()->where('id', $id)->first();
