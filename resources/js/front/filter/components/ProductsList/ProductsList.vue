@@ -3,8 +3,8 @@
         <!-- Toolbar-->
         <div class="d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2">
             <div class="d-flex flex-wrap pb-3">
-                <button class="btn btn-outline-secondary bg-white btn-icon me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-2"></i> Filter</button>
-                <button v-if="this.attribute || this.brand ||  this.option" class="btn btn-outline-secondary bg-white btn-icon" type="button" onclick="window.location.replace(location.pathname);" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
+                <button class="btn btn-primary btn-icon me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-2"></i> Filter</button>
+                <button v-if="this.attribute || this.brand ||  this.option" class="btn btn-danger bg-red btn-icon" type="button" onclick="window.location.replace(location.pathname);" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
 
 
             </div>

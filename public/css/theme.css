@@ -3426,19 +3426,19 @@ textarea.form-control-lg {
 
 .btn-danger {
     --cz-btn-color: #000;
-    --cz-btn-bg: #f34770;
-    --cz-btn-border-color: #f34770;
+    --cz-btn-bg: #d41712;
+    --cz-btn-border-color: #d41712;
     --cz-btn-hover-color: #000;
-    --cz-btn-hover-bg: #f56385;
-    --cz-btn-hover-border-color: #f4597e;
+    --cz-btn-hover-bg: #d41712;
+    --cz-btn-hover-border-color: #d41712;
     --cz-btn-focus-shadow-rgb: 207, 60, 95;
     --cz-btn-active-color: #000;
-    --cz-btn-active-bg: #f56c8d;
-    --cz-btn-active-border-color: #f4597e;
+    --cz-btn-active-bg: #d41712;
+    --cz-btn-active-border-color:#d41712;
     --cz-btn-active-shadow: unset;
     --cz-btn-disabled-color: #000;
-    --cz-btn-disabled-bg: #f34770;
-    --cz-btn-disabled-border-color: #f34770;
+    --cz-btn-disabled-bg: #d41712;
+    --cz-btn-disabled-border-color: #d41712;
 }
 
 .btn-light {
@@ -14941,10 +14941,10 @@ input[type=search]::-webkit-search-results-decoration {
     --cz-btn-color: #fff;
     --cz-btn-hover-color: #fff;
     --cz-btn-active-color: #fff;
-    --cz-btn-hover-bg: #f12152;
-    --cz-btn-active-bg: #f12152;
-    --cz-btn-hover-border-color: #f12152;
-    --cz-btn-active-border-color: #f12152;
+    --cz-btn-hover-bg: #d41712;
+    --cz-btn-active-bg: #d41712;
+    --cz-btn-hover-border-color: #d41712;
+    --cz-btn-active-border-color: #d41712;
     --cz-btn-disabled-color: #fff;
 }
 

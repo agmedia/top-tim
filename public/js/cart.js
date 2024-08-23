@@ -5541,7 +5541,7 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "d-flex flex-wrap pb-3"
   }, [_vm._m(0), _vm._v(" "), this.attribute || this.brand || this.option ? _c("button", {
-    staticClass: "btn btn-outline-secondary bg-white btn-icon",
+    staticClass: "btn btn-danger bg-red btn-icon",
     attrs: {
       type: "button",
       onclick: "window.location.replace(location.pathname);"
@@ -5752,7 +5752,7 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("button", {
-    staticClass: "btn btn-outline-secondary bg-white btn-icon me-2",
+    staticClass: "btn btn-primary btn-icon me-2",
     attrs: {
       type: "button",
       "data-bs-toggle": "offcanvas",
