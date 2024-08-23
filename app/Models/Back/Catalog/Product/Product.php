@@ -135,7 +135,7 @@ class Product extends Model
      */
     public function images()
     {
-        return $this->hasMany(ProductImage::class, 'product_id')->orderBy('price_up');
+        return $this->hasMany(ProductImage::class, 'product_id')->orderBy('sort_order');
     }
 
 

@@ -147,7 +147,7 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
      */
     public function products()
     {
-        return $this->hasManyThrough(Product::class, CategoryProducts::class, 'category_id', 'id', 'id', 'product_id')->where('status', 1)->where('quantity', '>', 0)->orderBy('price_up');
+        return $this->hasManyThrough(Product::class, CategoryProducts::class, 'category_id', 'id', 'id', 'product_id')->where('status', 1)->where('quantity', '>', 0)->orderBy('sort_order');
     }
 
 
