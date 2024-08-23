@@ -295,11 +295,13 @@ class FilterController extends Controller
              $attributes  = (new Attributes())->filter($request->input('params'))
             ->get()->sortBy('translation.title');
 
+
+
              foreach ($attributes as $attribute) {
 
 
 
-                 if($attribute->group != 'Materijal'){
+                 if($attribute->group != 'Materijal' && $attribute->group != 'Dimenzije' ) {
 
                      $response[] = [
                          'id'             => $attribute->id,

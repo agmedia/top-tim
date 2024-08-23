@@ -33,7 +33,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Filter by Attributes -->
                 <div class="col-lg-12" >
                     <div class=" mb-grid-gutter" v-if="attributes.length">
@@ -60,7 +59,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-12">
                     <!-- Filter by Size-->
                     <div class=" mb-grid-gutter" v-if="options.length">
