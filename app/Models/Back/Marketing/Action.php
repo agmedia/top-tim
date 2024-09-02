@@ -7,6 +7,7 @@ use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Back\UserGroup;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -266,6 +267,7 @@ class Action extends Model
             'user_group_id' => $this->request->user_group,
             'coupon'        => $this->request->coupon,
             'quantity'      => $data['coupon_quantity'],
+            'lock'          => $data['lock'],
             'status'        => $data['status'],
             'updated_at'    => Carbon::now()
         ];
@@ -295,6 +297,7 @@ class Action extends Model
             'start'           => $this->request->date_start ? Carbon::make($this->request->date_start) : null,
             'end'             => $this->request->date_end ? Carbon::make($this->request->date_end) : null,
             'coupon_quantity' => (isset($this->request->coupon_quantity) and $this->request->coupon_quantity == 'on') ? 1 : 0,
+            'lock'            => (isset($this->request->lock) and $this->request->lock == 'on') ? 1 : 0,
         ];
     }
 
@@ -353,19 +356,69 @@ class Action extends Model
      */
     private function resolveTarget($links)
     {
-        if ($this->request->group == 'product') {
-            return $links;
-        }
+        if (in_array($this->request->group, ['product', 'category', 'brand', 'all'])) {
+            $products = Product::query();
 
-        if ($this->request->group == 'category') {
-            return ProductCategory::whereIn('category_id', $links)->pluck('product_id')->unique();
-        }
+            if ($this->request->group == 'product') {
+                $products->whereIn('id', $links);
+            }
 
-        if ($this->request->group == 'brand') {
-            return Product::whereIn('brand_id', $links)->pluck('id')->unique();
+            if ($this->request->group == 'category') {
+                $ids = ProductCategory::whereIn('category_id', $links)->pluck('product_id')->unique();
+
+                $products->whereIn('id', $ids);
+            }
+
+            if ($this->request->group == 'brand') {
+                return $products->whereIn('brand_id', $links);
+            }
+
+            $products = $this->removeLockedActionsProducts($products);
+
+            return $products->pluck('id')
+                            ->unique();
         }
 
         return $this->request->group;
+    }
+
+
+    /**
+     * @param Builder $products
+     *
+     * @return Builder
+     */
+    private function removeLockedActionsProducts(Builder $products): Builder
+    {
+        $locked_actions = Action::query()->where('lock', 1)->get();
+
+        foreach ($locked_actions as $locked_action) {
+            $links = json_decode($locked_action->links, true);
+
+            if ($locked_action->group == 'product') {
+                $products->whereNotIn('id', $links);
+            }
+
+            if ($locked_action->group == 'category') {
+                $ids = ProductCategory::whereIn('category_id', $links)->pluck('product_id')->unique();
+
+                $products->whereNotIn('id', $ids);
+            }
+
+            if ($locked_action->group == 'brand') {
+                $products->whereNotIn('brand_id', $links);
+            }
+
+            if ($locked_action->group == 'all') {
+                $ids = Product::query()->pluck('id')->unique();
+
+                $products->whereNotIn('id', $ids);
+            }
+        }
+
+        //dd($products->pluck('id'));
+
+        return $products;
     }
 
 
@@ -377,13 +430,8 @@ class Action extends Model
      */
     private function updateProducts($target, int $id, $start, $end): void
     {
-        $query = [];
-
-        if ($target == 'all') {
-            $products = Product::pluck('price', 'id');
-        } else {
-            $products = Product::whereIn('id', $target)->pluck('price', 'id');
-        }
+        $query    = [];
+        $products = Product::query()->whereIn('id', $target)->pluck('price', 'id');
 
         foreach ($products->all() as $k_id => $price) {
             $query[] = [

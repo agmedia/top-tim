@@ -80,7 +80,7 @@ class Special
             return $this->getUserGroupAction();
         }
 
-        return $this->getAction();
+        return $this->setupAvailableActions()->getAction();
     }
 
 
@@ -282,4 +282,18 @@ class Special
         return $this->active_actions->first();
     }
 
+
+    /**
+     * @return Special
+     */
+    private function setupAvailableActions(): Special
+    {
+        $this->active_actions = ProductAction::query()->active()->get();
+
+        if ($this->active_actions->count()) {
+            $this->action = $this->getBestAction();
+        }
+
+        return $this;
+    }
 }
