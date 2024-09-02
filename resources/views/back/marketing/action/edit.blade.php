@@ -37,10 +37,10 @@
                                 <i class="fa fa-arrow-left mr-1"></i> {{ __('back/action.back') }}
                             </a>
                             <div class="block-options">
-                            {{--  <div class="custom-control custom-switch custom-control-info block-options-item ml-4">
+                                <div class="custom-control custom-switch custom-control-info block-options-item ml-4">
                                     <input type="checkbox" class="custom-control-input" id="lock-switch" name="lock" @if (isset($action) and $action->lock) checked @endif>
                                     <label class="custom-control-label pt-1" for="lock-switch">{{ __('back/action.lock') }}</label>
-                                </div>--}}
+                                </div>
                                 <div class="custom-control custom-switch custom-control-success">
                                     <input type="checkbox" class="custom-control-input" id="status-switch" name="status" @if (isset($action) and $action->status) checked @endif>
                                     <label class="custom-control-label" for="status-switch">{{ __('back/action.publish') }}</label>
