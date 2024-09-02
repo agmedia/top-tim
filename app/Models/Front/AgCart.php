@@ -163,7 +163,11 @@ class AgCart extends Model
     {
         // Updejtaj artikl sa apsolutnom količinom.
         foreach ($this->cart->getContent() as $item) {
-            if ($item->id == $request['item']['id']) {
+            Log::info('$item->ids');
+            Log::info($item);
+            Log::info($request['item']['id']);
+
+            if ($item->associatedModel->id == $request['item']['id']) {
 
                 Log::info('$item->id == $request[item][id]');
 
@@ -185,7 +189,10 @@ class AgCart extends Model
                     return ['error' => 'Došlo je do greške.!! Molimo pokušajte ponovo ili kontaktirajte administratora.'];
                 }
 
-                if ($quantity > $product->quantity) {
+                Log::info($quantity);
+                Log::info($product->quantity);
+
+                if (($quantity + $item->quantity) > $product->quantity) {
                     return ['error' => 'Nažalost nema dovoljnih količina artikla..!'];
                 }
 
