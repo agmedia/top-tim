@@ -67,6 +67,7 @@ class OptionsAddition extends Component
             'title' => $titles,
             'color' => '#000000',
             'color_opt' => NULL,
+            'option_sku' => NULL,
             'color_opt_show' => false,
             'sort_order' => 0
         ];
@@ -94,6 +95,7 @@ class OptionsAddition extends Component
                 'title' => $titles,
                 'color' => $value->value,
                 'color_opt' => $value->value_opt,
+                'option_sku' => $value->option_sku,
                 'color_opt_show' => $value->value_opt ?: false,
                 'sort_order' => $value->sort_order
             ]);

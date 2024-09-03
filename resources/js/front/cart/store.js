@@ -49,7 +49,7 @@ class AgService {
                 return false;
             }
 
-            /*let product = response.data.items[item.id].associatedModel;
+         /*   let product = response.data.items[item.id].associatedModel;
 
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({ ecommerce: null });

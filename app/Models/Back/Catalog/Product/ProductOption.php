@@ -184,7 +184,7 @@ class ProductOption extends Model
         $response = [];
         $options  = $product->options()->get();
 
-        dd($options->toArray());
+
 
         foreach ($options as $image) {
             $response[$image->id] = [

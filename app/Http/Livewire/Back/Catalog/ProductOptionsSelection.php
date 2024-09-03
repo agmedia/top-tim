@@ -360,6 +360,7 @@ class ProductOptionsSelection extends Component
             foreach ($options->get() as $option) {
                 $this->select_options[Str::slug($option->group)] = [
                     'id'    => $option->id,
+                    'option_sku'    => $option->option_sku,
                     'title' => $option->group
                 ];
             }
@@ -379,6 +380,7 @@ class ProductOptionsSelection extends Component
                     $this->items[$group]['options']                 = [];
                     $this->items[$group]['selections'][$option->id] = [
                         'id'    => $option->id,
+                        'option_sku'    => $option->option_sku,
                         'title' => $option->translation->title
                     ];
                 }
@@ -390,6 +392,7 @@ class ProductOptionsSelection extends Component
                     foreach ($sub_options->where('group', Str::slug($sub_default->group))->get() as $sub_option) {
                         $this->items[$group]['sub_selections'][$sub_option->id] = [
                             'id'    => $sub_option->id,
+                            'option_sku'    => $option->option_sku,
                             'title' => $sub_option->translation->title
                         ];
                     }

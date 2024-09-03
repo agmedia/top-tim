@@ -110,6 +110,7 @@ class Options extends Model
                 'type'       => $this->request->input('type'),
                 'value'      => $item['color'] ?? '#000000',
                 'value_opt'  => $item['color_opt'] ?? '#FFFFF1',
+                'option_sku'  => $item['option_sku'] ?? null,
                 'data'       => '',
                 'sort_order' => $item['sort_order'] ?? 0,
                 'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
@@ -151,6 +152,7 @@ class Options extends Model
                     'type'       => $this->request->input('type'),
                     'value'      => $item->first()['color'] ?? '#000000',
                     'value_opt'  => $item->first()['color_opt'] ?? null,
+                    'option_sku'  => $item->first()['option_sku'] ?? null,
                     'sort_order' => $item->first()['sort_order'] ?? 0,
                     'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
                     'updated_at' => Carbon::now()
@@ -170,6 +172,7 @@ class Options extends Model
                 'type'       => $this->request->input('type'),
                 'value'      => $item['color'] ?? '#000000',
                 'value_opt'  => $item['color_opt'] ?? null,
+                'option_sku'  => $item['option_sku'] ?? null,
                 'data'       => '',
                 'sort_order' => $item['sort_order'] ?? 0,
                 'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
@@ -214,6 +217,7 @@ class Options extends Model
                 'id'         => $value->id,
                 'title'      => $value->translation->title,
                 'value'      => $value->color,
+                'option_sku'  => $value->option_sku,
                 'value_opt'  => $value->color_opt,
                 'sort_order' => $value->sort_order
             ];
@@ -237,6 +241,7 @@ class Options extends Model
                 'title'      => $value->translation->title,
                 'value'      => $value->color,
                 'value_opt'  => $value->color_opt,
+                'option_sku'  => $value->option_sku,
                 'sort_order' => $value->sort_order
             ];
         }

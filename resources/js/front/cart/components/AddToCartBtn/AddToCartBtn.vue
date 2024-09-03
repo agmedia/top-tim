@@ -21,7 +21,7 @@
                 </div>
                 <select class="form-select" required id="product-size" v-model="size">
                     <option value="0">{{ trans.velicina }} </option>
-                    <option v-for="option in size_options" :disabled="!option.active" v-bind:value="option.id">{{ option.name }}</option>
+                    <option v-for="option in size_options" :disabled="!option.active" v-bind:value="option.id">{{ option.name }} </option>
                 </select>
             </div>
         </div>
