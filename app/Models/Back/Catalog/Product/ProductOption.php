@@ -120,7 +120,7 @@ class ProductOption extends Model
                 $created[] = self::insert([
                     'product_id'  => $product_id,
                     'option_id' => $opt->id,
-                    'sku' => $option['sku'],
+                    'sku' => $product->sku . '-' . $opt->option_sku,
                     'parent' => 'single',
                     'parent_id' => 0,
                     'quantity' => $option['qty'] ?? 0,
@@ -152,7 +152,7 @@ class ProductOption extends Model
                         $created[] = self::insert([
                             'product_id'  => $product_id,
                             'option_id' => $sub_opt->id,
-                            'sku' => $sub_option['sku'],
+                            'sku' => $product->sku . '-' . $opt->option_sku . '-' . $sub_opt->option_sku,
                             'parent' => 'option',
                             'parent_id' => $opt->id,
                             'quantity' => $sub_option['qty'] ?? 0,
