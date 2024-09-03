@@ -46,7 +46,7 @@
                 <thead class="thead-light">
                 <tr>
                     <th class="font-size-sm" style="width:25%">Vrijednost</th>
-                    <th class="font-size-sm">Šifra</th>
+                    <th class="font-size-sm">Šifra <small>(auto)</small></th>
                     <th class="font-size-sm">Količina</th>
                     <th class="font-size-sm">+/- Cijena</th>
                     <th class="text-right font-size-sm"  class="text-center">{{ __('back/attribute.obrisi') }}</th>
@@ -64,7 +64,7 @@
                             </select>
                         </td>
                         <td>
-                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sku" name="options[{{ $group }}][{{ $key }}][sku]"> </span>
+                            <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sku" name="options[{{ $group }}][{{ $key }}][sku]" readonly> </span>
                         </td>
                         <td>
                             <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.qty" name="options[{{ $group }}][{{ $key }}][qty]"> </span>
@@ -127,7 +127,7 @@
                                 <table class="table table-bordered table-plain mb-0">
                                     <tr class="thead-gray">
                                         <th class="font-size-sm" style="width:25%">Vrijednost</th>
-                                        <th class="font-size-sm">Šifra</th>
+                                        <th class="font-size-sm">Šifra <small>(auto)</small></th>
                                         <th class="font-size-sm">Količina</th>
                                         <th class="font-size-sm">+/- Cijena</th>
                                         <th class="text-right font-size-sm"  class="text-center">{{ __('back/option.obrisi') }}</th>
