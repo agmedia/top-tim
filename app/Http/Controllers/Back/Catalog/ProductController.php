@@ -120,7 +120,7 @@ class ProductController extends Controller
         $data = $product->getRelationsData();
 
         $color_options = Options::getColorList();
-        //dd($data['options']);
+
         //dd($product->attributes);
 
         return view('back.catalog.product.edit', compact('product', 'data', 'color_options'));

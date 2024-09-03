@@ -145,7 +145,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.sku" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][sku]"> </span>
+                                                <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.sku" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][sku]" readonly > </span>
                                             </td>
                                             <td>
                                                 <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.qty" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][qty]"> </span>

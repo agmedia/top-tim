@@ -209,7 +209,7 @@ class Options extends Model
     public function getList()
     {
         $response = [];
-        $values   = Options::query()->get();
+        $values   = Options::query()->orderBy('sort_order','asc')->get();
 
         foreach ($values as $value) {
             $response[$value->group]['group']   = $value->translation->group_title;
@@ -233,7 +233,7 @@ class Options extends Model
     public static function getColorList()
     {
         $response = [];
-        $values   = Options::query()->where('type', 'color')->get();
+        $values   = Options::query()->where('type', 'color')->orderBy('sort_order','asc')->get();
 
         foreach ($values as $value) {
             $response[] = [
