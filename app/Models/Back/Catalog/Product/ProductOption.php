@@ -107,6 +107,12 @@ class ProductOption extends Model
      *                              email: filip@agmedia.hr                         *
      *******************************************************************************/
 
+    /**
+     * @param array $options
+     * @param int   $product_id
+     *
+     * @return array
+     */
     public static function storeSingle(array $options, int $product_id): array
     {
         $created = [];
@@ -135,6 +141,12 @@ class ProductOption extends Model
     }
 
 
+    /**
+     * @param array $options
+     * @param int   $product_id
+     *
+     * @return array
+     */
     public static function storeDouble(array $options, int $product_id): array
     {
         $created = [];
@@ -168,6 +180,16 @@ class ProductOption extends Model
         return $created;
     }
 
+
+    /**
+     * @param int $product_id
+     *
+     * @return mixed
+     */
+    public static function deleteAll(int $product_id): mixed
+    {
+        return self::query()->where('product_id', $product_id)->delete();
+    }
 
 
     /**

@@ -512,10 +512,12 @@ class Product extends Model
                         }
                     }
                 }
-
-
             }
+        }
 
+        //
+        if (empty($this->request->input('options'))) {
+            ProductOption::deleteAll($product_id);
         }
 
         return $this;
