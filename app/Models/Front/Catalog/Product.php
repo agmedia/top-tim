@@ -373,7 +373,9 @@ class Product extends Model
                 $response[$parent]['group'] = $options->first()->top->group;
 
                 foreach ($options as $option) {
-                    $response[$key]['options'][$option->option_id] = [
+
+
+                    $response[$key]['options'][$option->id] = [
                         'id'         => $option->id,
                         'option_id'  => $option->option_id,
                         'name'       => $option->title->translation->title,

@@ -29,7 +29,7 @@
                 <input type="hidden" name="item[{{ $key }}][id]" wire:model="items.{{ $key }}.id">
                 @foreach (ag_lang() as $lang)
                     <td>
-                        <span class="font-size-sm"><input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.title.{{ $lang->code }}" name="item[{{ $key }}][title][{{ $lang->code }}]"></span>
+                        <span class="font-size-sm"><input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.title.{{ $lang->code }}" name="item[{{ $key }}][title][{{ $lang->code }}]" required></span>
                     </td>
                 @endforeach
                 @if ($type == 'color')
@@ -47,7 +47,7 @@
                 @endif
 
                 <td>
-                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.option_sku" name="item[{{ $key }}][option_sku]"></span>
+                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.option_sku" name="item[{{ $key }}][option_sku]" required></span>
                 </td>
                 <td>
                     <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>

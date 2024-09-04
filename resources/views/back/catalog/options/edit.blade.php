@@ -51,7 +51,7 @@
                                 <div class="tab-content">
                                     @foreach(ag_lang() as $lang)
                                         <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($options) ? $options->group : old('title.*') }}">
+                                            <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($options) ? $options->group : old('title.*') }}" >
                                         </div>
                                     @endforeach
                                 </div>
