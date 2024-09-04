@@ -158,6 +158,24 @@ class ProductOptionsSelection extends Component
     }
 
 
+
+    /**
+     * @param string $key
+     *
+     * @return void
+     */
+    public function addAllDefaultSubItems(string $key, int $opt_key)
+    {
+
+        $second_option = Options::query()->where('id', $this->second_option)->first();
+        $values = Options::query()->where('group', $second_option->group)
+            ->get()
+            ->sortBy('translation.title');
+
+        $this->setDefaultOptionsSubList($values, $key, $opt_key);
+    }
+
+
     /**
      * @param int $type
      *
@@ -246,13 +264,37 @@ class ProductOptionsSelection extends Component
             $item = [
                 'id'          => $i,
                 'value'       => $value->id,
-                'sku'         => $sku,
-                'qty'         => 0,
+                'sku'         => '',
+                'qty'         => 100,
                 'price'       => 0,
                 'sub_options' => []
             ];
 
             $this->addItem($key, $item);
+        }
+    }
+
+
+    /**
+     * @param Collection|null $values
+     * @param string|null     $key
+     *
+     * @return void
+     */
+    public function setDefaultOptionsSubList(Collection $values = null, string $key = null, int $opt_key = null )
+    {
+        foreach ($values as $i => $value) {
+
+            $item = [
+                'id'          => $i,
+                'value'       => $value->id,
+                'sku'         => '',
+                'qty'         => 100,
+                'price'       => 0,
+                'sub_options' => []
+            ];
+
+            $this->addSubItem($key, $opt_key,  $item);
         }
     }
 
