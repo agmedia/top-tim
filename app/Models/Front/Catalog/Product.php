@@ -375,7 +375,7 @@ class Product extends Model
                 foreach ($options as $option) {
 
 
-                    $response[$key]['options'][$option->id] = [
+                    $response[$key]['options'][$option->option_id] = [
                         'id'         => $option->id,
                         'option_id'  => $option->option_id,
                         'name'       => $option->title->translation->title,
