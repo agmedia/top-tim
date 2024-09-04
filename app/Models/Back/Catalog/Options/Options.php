@@ -135,9 +135,11 @@ class Options extends Model
      */
     public function edit()
     {
-        $values = Options::query()->orderBy('id', 'desc')->where('group', $this->group)->get();
+        $values = Options::query()->where('group', Str::slug($this->group))->get();
         $group  = $this->request->input('title')[config('app.locale')] ?? 'hr';
         $items  = collect($this->request->input('item'));
+
+
 
         foreach ($values as $value) {
             $item = $items->where('id', $value->id);
@@ -157,6 +159,8 @@ class Options extends Model
                     'status'     => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
                     'updated_at' => Carbon::now()
                 ]);
+
+
 
                 if ($saved) {
                     OptionsTranslation::edit($value->id, $this->request, $item->first());

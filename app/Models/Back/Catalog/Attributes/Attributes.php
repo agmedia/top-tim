@@ -131,7 +131,7 @@ class Attributes extends Model
      */
     public function edit()
     {
-        $values = Attributes::query()->where('group', $this->group)->get();
+        $values = Attributes::query()->where('group', Str::slug($this->group))->get();
         $group = $this->request->input('title')[config('app.locale')] ?? 'hr';
         $items = collect($this->request->input('item'));
 
@@ -146,6 +146,8 @@ class Attributes extends Model
                     'status'      => (isset($this->request->status) and $this->request->status == 'on') ? 1 : 0,
                     'updated_at'  => Carbon::now()
                 ]);
+
+
 
                 if ($saved) {
                     AttributesTranslation::edit($value->id, $this->request, $item->first());
