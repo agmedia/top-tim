@@ -1,5 +1,27 @@
 <template>
-    <div class="cart  pb-2 mb-3">
+    <div class="cart pb-2 mb-3">
+        <div class="mb-1" v-if="context_product.main_price > context_product.main_special">
+            <span class="h3 fw-bold font-title text-blue me-1">{{ context_product.main_special_text }}</span>
+            <span class="text-muted fs-lg me-3">*{{ $store.state.service.formatMainPrice(price) }}</span>
+        </div>
+        <div class="mb-1" v-else>
+            <span class="h3 fw-bold font-title text-blue me-1">{{ $store.state.service.formatMainPrice(price) }}</span>
+        </div>
+
+        <div class="mb-1 mt-1 text-start" v-if="context_product.main_price > context_product.main_special">
+            <span class="fs-sm text-muted me-1">{{ trans.lowest_price }}</span>
+        </div>
+
+        <div class="mb-1 mt-1 text-start">
+            <span class="fs-xs text-muted me-1">{{ trans.pdv }}</span>
+        </div>
+
+        <div class="mb-3">
+            <span class=" fs-xs  text-blue me-1">{{ trans.nopdv }}: {{ $store.state.service.formatMainPrice(price / 1.25) }} </span>
+        </div>
+
+
+
         <div class="mw-500" v-if="Object.keys(this.color_options).length">
             <div class="fs-sm mb-4">
                 <span class="text-heading fw-medium me-1"><span class="text-danger">*</span> {{ trans.boja }}:</span><span class="text-muted">{{ color_name }} <span class="text-warning">{{ extra_price }}</span></span>
@@ -45,7 +67,7 @@
 <script>
 export default {
     props: {
-        id: String,
+        product: String,
         available: String,
         options: String,
         sizeguide: String
@@ -53,6 +75,7 @@ export default {
 
     data() {
         return {
+            id: '',
             quantity: 1,
             has_in_cart: 0,
             disabled: false,
@@ -67,7 +90,9 @@ export default {
             parent: '',
             color_name: '',
             size_name: '',
-            extra_price: ''
+            extra_price: '',
+            context_product: {},
+            price: 0
         }
     },
 //
@@ -81,6 +106,12 @@ export default {
     },
     //
     mounted() {
+        console.log(this.trans);
+        this.context_product = JSON.parse(this.product);
+
+        this.id = this.context_product.id;
+        this.price = this.context_product.main_price;
+
         let cart = this.$store.state.storage.getCart();
 
         if (cart) {
@@ -274,10 +305,12 @@ export default {
                     this.color_name = this.selected_color.name;
 
                     if (this.selected_color.price != '0.0000') {
+                        this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2)
                         let price = Number(this.selected_color.price);
 
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
                     } else {
+                        this.price = this.context_product.main_price;
                         this.extra_price = '';
                     }
                 }
@@ -295,10 +328,12 @@ export default {
                     this.size_name = this.selected_size.name;
 
                     if (this.selected_size.price != '0.0000') {
+                        this.price = Number(this.context_product.main_price) + Number(this.selected_size.price)
                         let price = Number(this.selected_size.price);
 
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
                     } else {
+                        this.price = this.context_product.main_price
                         this.extra_price = '';
                     }
                 }

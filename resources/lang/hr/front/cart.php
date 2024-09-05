@@ -176,6 +176,8 @@ return [
     'pdv_ukljucen' => 'PDV uključen u cijenu. Od toga',
     'pdv_artikli' => 'PDV artikli i',
     'pdv_dostava' => 'PDV dostava',
+    'pdv' => 'U cijenu je uključen PDV.',
+    'nopdv' => 'Cijena bez PDV-a:',
     '404_text' => 'Čini se da ne možemo pronaći stranicu koju tražite.',
     '404_subtext' => 'Evo nekoliko korisnih veza umjesto toga',
     'home_bck'=> 'Povratak na naslovnicu',
@@ -210,7 +212,7 @@ return [
     'pogledajte_sve' => 'Pogledajte sve',
     'boja' => 'Odabir boje',
     'velicina'   => 'Odabir veličine',
-
+    'lowest_price' => '*Najniža cijena u zadnjih 30 dana.',
 
 
 

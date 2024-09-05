@@ -105,4 +105,21 @@ class ProductOption extends Model
         return $product_option->first();
     }
 
+
+    /**
+     * @param float|int $price
+     *
+     * @return string
+     */
+    public static function hasPriceAddition(float|int $price): string
+    {
+        $price_addition = '';
+
+        if ($price > 0) {
+            $price_addition = ' +' . $price;
+        }
+
+        return $price_addition;
+    }
+
 }

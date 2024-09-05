@@ -42,6 +42,10 @@ class ProductController extends Controller
      */
     public function options(ProductOption $option, Request $request)
     {
+        Log::info('public function options(ProductOption $option, Request $request)');
+        Log::info($option);
+        Log::info($request->toArray());
+
         $full_list = $option->product()->first()->optionsList();
         $options = (new ProductOption())->newQuery()->where('product_id', $option->product_id);
         $response = [];
@@ -68,6 +72,8 @@ class ProductController extends Controller
 
             $response[$key]['options'][$item_option['option_id']]['active'] = $active;
         }
+
+        Log::info($response);
 
         return response()->json($response);
     }

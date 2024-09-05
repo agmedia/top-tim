@@ -355,7 +355,7 @@ class Product extends Model
                     $response[$key]['options'][] = [
                         'id'         => $option->id,
                         'option_id'  => $option->option_id,
-                        'name'       => $option->title->translation->title,
+                        'name'       => $option->title->translation->title . ProductOption::hasPriceAddition($option->price),
                         'sku'        => $option->sku,
                         'value'      => $option->title->value,
                         'value_opt'  => $option->title->value_opt,
@@ -379,7 +379,7 @@ class Product extends Model
                     $response[$key]['options'][$option->option_id] = [
                         'id'         => $option->id,
                         'option_id'  => $option->option_id,
-                        'name'       => $option->title->translation->title,
+                        'name'       => $option->title->translation->title . ProductOption::hasPriceAddition($option->price),
                         'sku'        => $option->sku,
                         'value'      => $option->title->value,
                         'value_opt'  => $option->title->value_opt,
@@ -394,7 +394,7 @@ class Product extends Model
                         $parents[$option->top->id] = [
                             'id'         => $option->id,
                             'option_id'  => $option->top->id,
-                            'name'       => $option->top->translation->title,
+                            'name'       => $option->top->translation->title . ProductOption::hasPriceAddition($option->price),
                             'sku'        => '',
                             'value'      => $option->top->value,
                             'value_opt'  => $option->top->value_opt,
@@ -413,7 +413,7 @@ class Product extends Model
         }
 
         //dd($response);
-        //Log::info($response);
+        Log::info($response);
 
         return $response;
     }
