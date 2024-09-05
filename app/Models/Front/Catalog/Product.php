@@ -336,6 +336,9 @@ class Product extends Model
     }
 
 
+    /**
+     * @return array
+     */
     public function optionsList()
     {
         $response = [];
@@ -373,8 +376,6 @@ class Product extends Model
                 $response[$parent]['group'] = $options->first()->top->group;
 
                 foreach ($options as $option) {
-
-
                     $response[$key]['options'][$option->option_id] = [
                         'id'         => $option->id,
                         'option_id'  => $option->option_id,
@@ -412,6 +413,7 @@ class Product extends Model
         }
 
         //dd($response);
+        //Log::info($response);
 
         return $response;
     }

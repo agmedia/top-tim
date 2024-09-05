@@ -167,7 +167,7 @@ class AgCart extends Model
             Log::info($item);
             Log::info($request['item']['id']);
 
-            if ($item->associatedModel->id == $request['item']['id']) {
+            if ($item->id == $request['item']['id']) {
 
                 Log::info('$item->id == $request[item][id]');
 
@@ -484,7 +484,7 @@ class AgCart extends Model
             return ['error' => 'Nažalost nema dovoljnih količina artikla..!'];
         }
 
-        $item_data = $this->setItemData($product, $request);
+        $item_data = $this->setItemData($product, $request); // check for price
 
         $response = [
             'id'              => $item_data['id'],

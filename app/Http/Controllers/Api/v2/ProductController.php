@@ -34,6 +34,12 @@ class ProductController extends Controller
     }
 
 
+    /**
+     * @param ProductOption $option
+     * @param Request       $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function options(ProductOption $option, Request $request)
     {
         $full_list = $option->product()->first()->optionsList();
