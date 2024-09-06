@@ -81,6 +81,8 @@ class ProductController extends Controller
             }
         }
 
+        $response[$key]['options'] = collect($response[$key]['options'])->sortBy('sort_order', SORT_NATURAL)->values()->all();
+
         return response()->json($response);
     }
 
