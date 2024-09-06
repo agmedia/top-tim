@@ -415,10 +415,10 @@ class Product extends Model
                 $response['parent']           = $parent;
                 $response[$parent]['options'] = $parents;
 
-                $response[$parent]['options'] = collect($response[$parent]['options'])->sortBy('sort_order');
+                $response[$parent]['options'] = collect($response[$parent]['options'])->sortBy('sort_order', SORT_NATURAL)->values()->all();
             }
 
-            $response[$key]['options'] = collect($response[$key]['options'])->sortBy('sort_order');
+            $response[$key]['options'] = collect($response[$key]['options'])->sortBy('sort_order', SORT_NATURAL)->values()->all();
         }
 
         //dd($response);

@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="mw-500" v-if="Object.keys(this.size_options).length">
+        <div class="mw-500" v-if="Object.keys(this.size_options).length && size_disabled">
             <div class="mb-3" >
                 <div class="d-flex justify-content-between align-items-center pb-1 opac">
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}: <span class="text-muted">{{ size_name }}</span></label>
@@ -41,7 +41,7 @@
 
                     <a v-if="sizeguide" class="nav-link-style fs-sm gal" :href="sizeguide" ><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
                 </div>
-                <select class="form-select" required id="product-size" v-model="size" :disabled="!size_disabled">
+                <select class="form-select" required id="product-size" v-model="size">
                     <option value="0">{{ trans.velicina }} </option>
                     <option v-for="option in size_options" :disabled="!option.active" v-bind:value="option.id">{{ option.name }} </option>
                 </select>
@@ -107,7 +107,6 @@ export default {
     },
     //
     mounted() {
-        console.log(this.trans);
         this.context_product = JSON.parse(this.product);
 
         this.id = this.context_product.id;
@@ -136,9 +135,12 @@ export default {
         setOptionsSelection() {
             let res = JSON.parse(this.options);
 
-            console.log('default options array', res)
-
             this.parent = res.parent ? res.parent : null;
+
+            if (!this.parent) {
+                this.size_disabled = true;
+            }
+
             this.size_options = res.size ? res.size.options : {};
             this.color_options = res.color ? res.color.options : {};
         },
@@ -148,11 +150,6 @@ export default {
          */
         add() {
             this.checkAvailability(true);
-
-            console.log('add():::')
-            console.log(this.is_available, this.disabled)
-            console.log(Object.keys(this.color_options).length, Object.keys(this.selected_color).length)
-            console.log(this.selected_size, this.selected_color)
 
             if (this.has_in_cart) {
                 this.updateCart();
@@ -232,7 +229,6 @@ export default {
             if (option != 0) {
                 if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
                     this.$store.state.service.checkOptions(option, is_parent).then((response) => {
-                        console.log('response', response, type)
                         if (type == 'color') {
                             this.size_options = response.size.options;
                             this.setSelectedColor(option);
@@ -280,18 +276,9 @@ export default {
         setRequestOptions() {
             let response = {};
 
-            console.log('this.selected_color, this.selected_size, this.color_options, this.size_options');
-            console.log(this.selected_color);
-            console.log(this.selected_size);
-            console.log(this.color_options);
-            console.log(this.size_options);
-            console.log(this.parent);
-
             response.id = this.id;
             response.parent_id = (this.parent && this.parent == 'color') ? this.selected_color.option_id : (this.parent ? this.selected_size.option_id : undefined);
             response.option_id = this.parent == 'color' ? this.selected_size.option_id : (this.selected_color.option_id ? this.selected_color.option_id : this.selected_size.option_id);
-
-            console.log(response);
 
             return response;
         },
