@@ -78,7 +78,7 @@ class Image
 
         $img = $img->resize($img_ratio['width'], null, function ($constraint) {
             $constraint->aspectRatio();
-        })->resizeCanvas($img_ratio['width'], $img_ratio['height']);
+        })->resizeCanvas('50', '50', 'center', true);
 
         $path_jpg  = $path . 'jpg';
         $path_webp = $path . 'webp';
@@ -92,7 +92,7 @@ class Image
 
         $img = $img->resize($thumb_ratio['width'], null, function ($constraint) {
             $constraint->aspectRatio();
-        })->resizeCanvas($thumb_ratio['width'], $thumb_ratio['height']);
+        })->resizeCanvas('10', '10', 'center', true);
 
         $path_webp_thumb = $path_thumb . 'webp';
         Storage::disk($disk)->put($path_webp_thumb, $img->encode('webp'));
