@@ -50,31 +50,35 @@ class ProductController extends Controller
             $options = $options->where('parent_id', $option->parent_id)->get();
             $key = $option->title->type;
 
-        } else {
-            $options = $options->where('option_id', $option->option_id)->get();
-            $key = $option->top ? $option->top->type : $option->title->type;
-        }
+            foreach ($options as $_option) {
+                $active = 0;
 
-        foreach ($options as $_option) {
-            $active = 0;
+                if ($_option->quantity > 0) {
+                    $active = 1;
+                }
 
-            if ($_option->quantity > 0) {
-                $active = 1;
+                $response[$key]['options'][$_option->option_id] = [
+                    'id'         => $_option->id,
+                    'option_id'  => $_option->option_id,
+                    'name'       => $_option->title->translation->title . ProductOption::hasPriceAddition($_option->price),
+                    'sku'        => $_option->sku,
+                    'value'      => $_option->title->value,
+                    'value_opt'  => $_option->title->value_opt,
+                    'style'      => ProductHelper::getColorOptionStyle($_option),
+                    'quantity'   => $_option->quantity,
+                    'price'      => $_option->price,
+                    'sort_order' => $_option->title->sort_order,
+                    'active'     => $active
+                ];
             }
 
-            $response[$key]['options'][$_option->option_id] = [
-                'id'         => $_option->id,
-                'option_id'  => $_option->option_id,
-                'name'       => $_option->title->translation->title . ProductOption::hasPriceAddition($_option->price),
-                'sku'        => $_option->sku,
-                'value'      => $_option->title->value,
-                'value_opt'  => $_option->title->value_opt,
-                'style'      => ProductHelper::getColorOptionStyle($_option),
-                'quantity'   => $_option->quantity,
-                'price'      => $_option->price,
-                'sort_order' => $_option->title->sort_order,
-                'active'     => $active
-            ];
+        } else {
+            $full_list = $option->product->optionsList();
+            $key = $option->top ? $option->top->type : $option->title->type;
+
+            foreach ($full_list[$key]['options'] as $item_option) {
+                $response[$key]['options'][$item_option['option_id']] = $item_option;
+            }
         }
 
         return response()->json($response);
