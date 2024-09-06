@@ -99,7 +99,9 @@ export default {
 //
     watch: {
         size(value) {
-            this.checkAvailableOptions(value, 'size');
+            if (value) {
+                this.checkAvailableOptions(value, 'size');
+            }
         },
         color(value) {
             this.checkAvailableOptions(value, 'color');
@@ -304,6 +306,8 @@ export default {
                     }
                 }
             }
+
+            this.size = 0;
         },
 
         /**
