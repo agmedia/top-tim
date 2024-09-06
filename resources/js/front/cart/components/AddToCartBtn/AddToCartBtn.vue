@@ -41,7 +41,7 @@
 
                     <a v-if="sizeguide" class="nav-link-style fs-sm gal" :href="sizeguide" ><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
                 </div>
-                <select class="form-select" required id="product-size" v-model="size">
+                <select class="form-select" required id="product-size" v-model="size" :disabled="!size_disabled">
                     <option value="0">{{ trans.velicina }} </option>
                     <option v-for="option in size_options" :disabled="!option.active" v-bind:value="option.id">{{ option.name }} </option>
                 </select>
@@ -92,7 +92,8 @@ export default {
             size_name: '',
             extra_price: '',
             context_product: {},
-            price: 0
+            price: 0,
+            size_disabled: false
         }
     },
 //
@@ -231,10 +232,11 @@ export default {
             if (option != 0) {
                 if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
                     this.$store.state.service.checkOptions(option, is_parent).then((response) => {
-                        console.log(response)
+                        console.log('response', response, type)
                         if (type == 'color') {
                             this.size_options = response.size.options;
                             this.setSelectedColor(option);
+                            this.size_disabled = true;
 
                         } else {
                             this.color_options = response.color.options;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Helpers\Helper;
+use App\Helpers\ProductHelper;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Front\Catalog\ProductOption;
@@ -42,38 +43,39 @@ class ProductController extends Controller
      */
     public function options(ProductOption $option, Request $request)
     {
-        Log::info('public function options(ProductOption $option, Request $request)');
-        Log::info($option);
-        Log::info($request->toArray());
-
-        $full_list = $option->product()->first()->optionsList();
         $options = (new ProductOption())->newQuery()->where('product_id', $option->product_id);
         $response = [];
 
         if ($request->has('is_parent') && $request->input('is_parent')) {
             $options = $options->where('parent_id', $option->parent_id)->get();
             $key = $option->title->type;
-            $column = 'option_id';
 
         } else {
             $options = $options->where('option_id', $option->option_id)->get();
             $key = $option->top ? $option->top->type : $option->title->type;
-            $column = $option->top ? 'parent_id' : 'option_id';
         }
 
-        foreach ($full_list[$key]['options'] as $item_option) {
-            $response[$key]['options'][$item_option['option_id']] = $item_option;
-
+        foreach ($options as $_option) {
             $active = 0;
 
-            if ($options->where($column, $item_option['option_id'])->count() > 0) {
+            if ($_option->quantity > 0) {
                 $active = 1;
             }
 
-            $response[$key]['options'][$item_option['option_id']]['active'] = $active;
+            $response[$key]['options'][$_option->option_id] = [
+                'id'         => $_option->id,
+                'option_id'  => $_option->option_id,
+                'name'       => $_option->title->translation->title . ProductOption::hasPriceAddition($_option->price),
+                'sku'        => $_option->sku,
+                'value'      => $_option->title->value,
+                'value_opt'  => $_option->title->value_opt,
+                'style'      => ProductHelper::getColorOptionStyle($_option),
+                'quantity'   => $_option->quantity,
+                'price'      => $_option->price,
+                'sort_order' => $_option->title->sort_order,
+                'active'     => $active
+            ];
         }
-
-        Log::info($response);
 
         return response()->json($response);
     }

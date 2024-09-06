@@ -391,10 +391,15 @@ class Product extends Model
                     ];
 
                     if ( ! isset($parents[$option->top->id])) {
+                        $active = 1;
+
+                        if ( ! $option->quantity) {
+                            $active = 0;
+                        }
                         $parents[$option->top->id] = [
                             'id'         => $option->id,
                             'option_id'  => $option->top->id,
-                            'name'       => $option->top->translation->title . ProductOption::hasPriceAddition($option->price),
+                            'name'       => $option->top->translation->title,
                             'sku'        => '',
                             'value'      => $option->top->value,
                             'value_opt'  => $option->top->value_opt,
@@ -402,18 +407,22 @@ class Product extends Model
                             'quantity'   => 0,
                             'price'      => 0,
                             'sort_order' => $option->top->sort_order,
-                            'active'     => 1
+                            'active'     => $active
                         ];
                     }
                 }
 
                 $response['parent']           = $parent;
                 $response[$parent]['options'] = $parents;
+
+                $response[$parent]['options'] = collect($response[$parent]['options'])->sortBy('sort_order');
             }
+
+            $response[$key]['options'] = collect($response[$key]['options'])->sortBy('sort_order');
         }
 
         //dd($response);
-        Log::info($response);
+        //Log::info($response);
 
         return $response;
     }
