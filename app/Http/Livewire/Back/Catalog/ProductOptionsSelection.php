@@ -240,7 +240,7 @@ class ProductOptionsSelection extends Component
             'id'          => 0,
             'value'       => '',
             'sku'         => '',
-            'qty'    => 100,
+            'qty'    => 1000,
             'price'       => 0,
             'sub_options' => []
         ];
@@ -265,7 +265,7 @@ class ProductOptionsSelection extends Component
                 'id'          => $i,
                 'value'       => $value->id,
                 'sku'         => '',
-                'qty'         => 100,
+                'qty'         => 1000,
                 'price'       => 0,
                 'sub_options' => []
             ];
@@ -289,7 +289,7 @@ class ProductOptionsSelection extends Component
                 'id'          => $i,
                 'value'       => $value->id,
                 'sku'         => '',
-                'qty'         => 100,
+                'qty'         => 1000,
                 'price'       => 0,
                 'sub_options' => []
             ];
