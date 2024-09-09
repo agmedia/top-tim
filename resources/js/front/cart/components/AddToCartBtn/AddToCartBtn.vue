@@ -96,7 +96,7 @@ export default {
             size_disabled: false
         }
     },
-//
+    //
     watch: {
         size(value) {
             if (value) {
@@ -108,13 +108,21 @@ export default {
         }
     },
     //
-    mounted() {
+    beforeMount() {
         this.context_product = JSON.parse(this.product);
 
         this.id = this.context_product.id;
         this.price = this.context_product.main_price;
+    },
+    //
+    mounted() {
+
 
         let cart = this.$store.state.storage.getCart();
+
+        setTimeout(() => {
+            this.price = this.context_product.main_price;
+        }, 200);
 
         if (cart) {
             for (const key in cart.items) {
