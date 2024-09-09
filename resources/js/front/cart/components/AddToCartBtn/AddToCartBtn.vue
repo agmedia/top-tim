@@ -2,10 +2,10 @@
     <div class="cart pb-2 mb-3">
         <div class="mb-1" v-if="context_product.main_price > context_product.main_special">
             <span class="h3 fw-bold font-title text-blue me-1">{{ context_product.main_special_text }}</span>
-            <span class="text-muted fs-lg me-3">*{{ Math.fround(Number(price)).toFixed(2) }}€</span>
+            <span class="text-muted fs-lg me-3">*{{ Math.fround(Number(price).toLocaleString()).toFixed(2) }}€</span>
         </div>
         <div class="mb-1" v-else>
-            <span class="h3 fw-bold font-title text-blue me-1">{{ Math.fround(Number(price)).toFixed(2) }}€</span>
+            <span class="h3 fw-bold font-title text-blue me-1">{{ Math.fround(Number(price).toLocaleString()).toFixed(2) }}€</span>
         </div>
 
         <div class="mb-1 mt-1 text-start" v-if="context_product.main_price > context_product.main_special">
@@ -17,7 +17,7 @@
         </div>
 
         <div class="mb-3">
-            <span class=" fs-xs  text-blue me-1">{{ trans.nopdv }}: {{ Math.fround(Number(price / 1.25)).toFixed(2)  }}€ </span>
+            <span class=" fs-xs  text-blue me-1">{{ trans.nopdv }}: {{ Math.fround(Number(price / 1.25).toLocaleString()).toFixed(2)  }}€ </span>
         </div>
 
 
