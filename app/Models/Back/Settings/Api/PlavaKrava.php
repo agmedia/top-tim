@@ -9,6 +9,7 @@ use App\Helpers\ProductHelper;
 use App\Helpers\Query;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductCategory;
+use App\Models\Back\Catalog\Product\ProductTranslation;
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\TempTable;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PlavaKrava
 {
@@ -34,10 +36,10 @@ class PlavaKrava
      */
     public function upload(Request $request)
     {
-        $saved = Storage::disk('assets')->putFileAs('xls/', $request->file('file'), 'plava-krava.xlsx');
+        $saved = Storage::disk('assets')->putFileAs('xls/', $request->file('file'), 'toptim-import.xlsx');
 
         if ($saved) {
-            return public_path('assets/xls/plava-krava.xlsx');
+            return public_path('assets/xls/toptim-import.xlsx');
         }
 
         return false;
@@ -72,76 +74,104 @@ class PlavaKrava
         $count = 0;
 
         foreach ($data as $key => $item) {
-            if ($key > 1) {
-                $exist = Product::query()->where('sku', $item[6])->first();
+            if ($key > 0) {
+                $exist = Product::query()->where('sku', $item[2])->first();
 
-                if ( ! $exist && ! empty($item[3])) {
+                if ( ! $exist && ! empty($item[2])) {
                     $import       = new Import();
-                    $publisher_id = 0;
-                    $author_id    = 0;
 
-                    if (isset($item[2])) {
-                        $publisher_id = $import->resolvePublisher($item[2]);
-                    }
-                    if ($item[1]) {
-                        $author_id = $import->resolveAuthor($item[1]);
-                    }
+                    $brand_id = 11;
 
                     $id = Product::query()->insertGetId([
-                        'author_id'            => $author_id,
-                        'publisher_id'         => $publisher_id,
                         'action_id'            => 0,
-                        'name'                 => $item[3],
-                        'sku'                  => $item[6],
-                        'polica'               => null,
-                        'isbn'                 => $item[6],
-                        'description'          => $item[7],
-                        'slug'                 => Helper::resolveSlug($item, '3'),
-                        'price'                => $item[12],
-                        'quantity'             => $item[13] ?: 0,
+                        'brand_id'             => $brand_id,
+                        'sku'                  => $item[2],
+                        'price'                => $item[8],
+                        'quantity'             => $item[9] ?: 0,
                         'decrease'             => 1,
                         'tax_id'               => config('settings.default_tax_id'),
                         'special'              => null,
                         'special_from'         => null,
                         'special_to'           => null,
-                        'meta_title'           => $item[16],
-                        'meta_description'     => $item[17],
-                        'pages'                => $item[18],
-                        'dimensions'           => $item[19],
-                        'origin'               => $item[22],
-                        'letter'               => null,
-                        'condition'            => null,
-                        'binding'              => $item[20],
-                        'year'                 => $item[21],
-                        'shipping_time'        => '2-4 dana',
-                        'youtube_product_url'  => '',
-                        'youtube_channel'      => '',
-                        'goodreads_author_url' => '',
-                        'goodreads_book_url'   => '',
-                        'author_web_url'       => '',
-                        'serial_web_url'       => '',
-                        'wiki_url'             => '',
-                        'viewed'               => 0,
                         'sort_order'           => 0,
                         'push'                 => 0,
-                        'status'               => $item[23] ? 1 : 0,
+                        'status'               => 1,
                         'created_at'           => Carbon::now(),
-                        'updated_at'           => Carbon::now()
+                        'updated_at'           => Carbon::now(),
+                        'sizeguide_id'         => 18,
                     ]);
 
                     if ($id) {
-                        $image = config('settings.image_default');
-                        try {
-                            $image_path = public_path('/media/img/products/plava-krava/' . $item[10]);
-                            $image = $import->resolveImages($image_path, $item[3], $id);
-                        } catch (\ErrorException $e) {
-                            Log::info('Image not imported. Product SKU: (' . $item[6] . ') - ' . $item[3]);
-                            Log::info($e->getMessage());
+
+                        foreach (ag_lang() as $lang) {
+                            $slug = ProductTranslation::resolveSlug($id, new Request(['slug' => [$lang->code => Str::slug($item[0])]]), $lang->code);
+
+                            ProductTranslation::query()->insertGetId([
+                                'product_id'       => $id,
+                                'lang'             => $lang->code,
+                                'name'             => $item[0],
+                                'description'      => $item[4],
+                                'meta_title'       => $item[11],
+                                'meta_description' => $item[12],
+                                'slug'             => $slug,
+                                'url'              => '',
+                                'created_at'       => Carbon::now(),
+                                'updated_at'       => Carbon::now()
+                            ]);
                         }
 
-                        $categories = $import->resolveStringCategories($item[9]);
 
-                        ProductCategory::storeData($categories, $id);
+
+
+
+
+                        $images = explode(', ',$item[7]);
+
+                        $len = count($images);
+
+                        $image = config('settings.image_default');
+
+
+                        foreach($images as $index => $img){
+                            if ($index == 0) {
+                                try {
+
+                                    $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $item[0] . '/' . $img);
+                                    $image = $import->resolveImages($image_path, $item[2], $id);
+                                    $import->saveImageToDB($id, $image, $img, 1);
+                                } catch (\ErrorException $e) {
+                                    Log::info('Image not imported. Product SKU: (' . $item[2] . ') - ' . $img);
+                                    Log::info($e->getMessage());
+                                }
+                            } else{
+
+
+                                $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $item[0] . '/' . $img);
+                                $image = $import->resolveImages($image_path, $item[2], $id);
+
+                                     $import->saveImageToDB($id, $image, $img);
+
+
+
+                            }
+
+                        }
+
+                      //  $categories = $import->resolveStringCategories($item[6]);
+
+                      //  ProductCategory::storeData($categories, $id);
+
+
+                        // categories
+                        ProductCategory::insert([
+                            'product_id'  => $id,
+                            'category_id' => 39,
+                        ]);
+
+                        ProductCategory::query()->insert([
+                            'product_id'  => $id,
+                            'category_id' => 100,
+                        ]);
 
                         $product = Product::query()->find($id);
 

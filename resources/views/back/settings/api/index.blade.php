@@ -39,7 +39,7 @@
                             <div class="row">
                                 <div class="col-md-8 mb-4">
                                     <div id="accordion2" role="tablist" aria-multiselectable="true">
-                                        <div class="block block-rounded mb-1">
+                                   <!--     <div class="block block-rounded mb-1">
                                             <div class="block-header block-header-default" role="tab" id="akademska_knjiga_tab">
                                                 <a class="font-w600" data-toggle="collapse" data-parent="#accordion2" href="#akademska_knjiga" aria-expanded="true" aria-controls="akademska_knjiga">Akademska Knjiga .mk</a>
                                             </div>
@@ -87,10 +87,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="block block-rounded mb-1">
                                             <div class="block-header block-header-default" role="tab" id="plava_krava_tab">
-                                                <a class="font-w600" data-toggle="collapse" data-parent="#accordion2" href="#plava_krava" aria-expanded="true" aria-controls="plava_krava">Plava-Krava.hr</a>
+                                                <a class="font-w600" data-toggle="collapse" data-parent="#accordion2" href="#plava_krava" aria-expanded="true" aria-controls="plava_krava">Top Tim import</a>
                                             </div>
                                             <div id="plava_krava" class="collapse" role="tabpanel" aria-labelledby="plava_krava_tab">
                                                 <div class="block-content px-1">
