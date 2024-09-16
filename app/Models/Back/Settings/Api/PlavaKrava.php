@@ -7,7 +7,10 @@ use App\Helpers\Helper;
 use App\Helpers\Import;
 use App\Helpers\ProductHelper;
 use App\Helpers\Query;
+use App\Models\Back\Catalog\Attributes\Attributes;
+use App\Models\Back\Catalog\Attributes\AttributesTranslation;
 use App\Models\Back\Catalog\Product\Product;
+use App\Models\Back\Catalog\Product\ProductAttribute;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Back\Catalog\Product\ProductTranslation;
 use App\Models\Back\Settings\Settings;
@@ -121,7 +124,41 @@ class PlavaKrava
                         }
 
 
+                        // Materijal
+                        $exist = AttributesTranslation::query()->where(['group_title', 'Materijal'])->where('title', $item[14])->first();
 
+                        if ($exist) {
+                            ProductAttribute::query()->insertGetId([
+                                'product_id'       => $id,
+                                'attribute_id'     => $exist->id,
+                            ]);
+                        } else {
+                            $atr_id = Attributes::query()->insertGetId([
+                                'group'       => Str::slug('Materijal'),
+                                'type'        => 'text',
+                                'sort_order'  => 0,
+                                'status'      => 1,
+                                'inserted_at'  => Carbon::now(),
+                                'updated_at'  => Carbon::now()
+                            ]);
+
+                            if ($atr_id) {
+                                AttributesTranslation::insertGetId([
+                                    'attribute_id' => $atr_id,
+                                    'lang'         => 'hr',
+                                    'group_title'  => 'Materijal',
+                                    'title'        => $item[14],
+                                    'created_at'   => Carbon::now(),
+                                    'updated_at'   => Carbon::now()
+                                ]);
+
+                                ProductAttribute::query()->insertGetId([
+                                    'product_id'       => $id,
+                                    'attribute_id'     => $atr_id,
+                                ]);
+                            }
+                        }
+                        // End Materijal
 
 
 
