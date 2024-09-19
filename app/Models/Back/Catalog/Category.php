@@ -299,7 +299,7 @@ class Category extends Model
 
     public static function getParents(): array
     {
-        $response = [];
+        $response[0] = 'Glavna Kategorija';
 
         $tops = self::query()->where('parent_id', 0)->with('translation')->get();
 
