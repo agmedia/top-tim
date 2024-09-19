@@ -3580,7 +3580,7 @@ textarea.form-control-lg {
 .btn-outline-danger {
     --cz-btn-color: #d41712;
     --cz-btn-border-color: #d41712;
-    --cz-btn-hover-color: #000;
+    --cz-btn-hover-color: #d41712!important;
     --cz-btn-hover-bg: #d41712;
     --cz-btn-hover-border-color: #d41712;
     --cz-btn-focus-shadow-rgb: 207, 60, 95;
