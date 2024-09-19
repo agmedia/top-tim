@@ -143,7 +143,7 @@ class Category extends Model
 
         foreach ($groups as $group) {
             if ($full) {
-                $cats = $this->where('group', $group)->where('parent_id', 0)->with('subcategories', 'translation')->withCount('products')->get();
+                $cats = $this->where('group', $group)->where('parent_id', 0)->with('subcategories', 'translation')->withCount('products')->orderBy('sort_order')->get();
             } else {
                 $cats = [];
                 $fill = $this->where('group', $group)->where('parent_id', 0)->with('subcategories', 'translation')->withCount('products')->get();

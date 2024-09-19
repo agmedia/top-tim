@@ -18,8 +18,10 @@
             <!-- Main Content -->
             <div class="content content-full">
             @include('back.layouts.partials.session')
+
+
                 <div id="accordion" role="tablist" aria-multiselectable="true">
-                    @forelse($categoriess->sortBy('sort_order') as $group => $categories)
+                    @forelse($categoriess as $group => $categories)
                         <h3 class="{{ ! $loop->first ? 'mt-5' : '' }}"><small class="font-weight-light">{{ __('back/categories.grupa_kategorija') }}: </small><small>{{ $group }}</small> <small class="font-weight-light">{{ $categories->count() }}</small></h3>
 
                         @forelse($categories as $category)
@@ -39,7 +41,7 @@
                                 @if ($category->subcategories)
                                     <div id="accordion_q{{ $category->id }}" class="collapse @if($loop->first) false @endif" role="tabpanel" aria-labelledby="accordion_h{{ $category->id }}" data-parent="#accordion">
                                         <div class="block-content pb-4">
-                                            @foreach($category->subcategories()->get() as $subcategory)
+                                            @foreach($category->subcategories()->orderBy('sort_order')->get() as $subcategory)
                                                 <a href="{{ route('category.edit', ['category' => $subcategory]) }}" class="btn btn-sm mb-3  @if ($subcategory->products()->count() == 0) btn-warning @else btn-success @endif js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="{{ __('back/categories.uredi') }}">
                                                     {{ $subcategory->translation->title }} - {{ $subcategory->products()->count() }}
                                                 </a>
