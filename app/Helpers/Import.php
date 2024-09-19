@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
+use App\Models\Back\Catalog\CategoryTranslation;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Back\Catalog\Product\ProductImageTranslation;
 use App\Models\Back\Catalog\Publisher;
@@ -171,26 +172,34 @@ class Import
      */
     private function saveCategory(string $name, int $parent = 0, int $sort_order = 0)
     {
-        $exist = Category::where('title', $name)->first();
+        $exist = CategoryTranslation::query()->where('title', $name)->first();
 
         if ( ! $exist) {
-            return Category::insertGetId([
-                'parent_id'        => $parent,
+            $main_id = Category::insertGetId([
+                'parent_id'  => $parent,
+                'group'      => 'kategorija-proizvoda',
+                'sort_order' => $sort_order,
+                'status'     => 1,
+                'updated_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+
+            CategoryTranslation::insertGetId([
+                'category_id'      => $main_id,
+                'lang'             => 'hr',
                 'title'            => $name,
                 'description'      => '',
                 'meta_title'       => $name,
-                'meta_description' => $name,
-                'group'            => Helper::categoryGroupPath(true),
-                'lang'             => 'hr',
-                'sort_order'       => $sort_order,
-                'status'           => 1,
+                'meta_description' => '',
                 'slug'             => Str::slug($name),
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now()
             ]);
+
+            return $main_id;
         }
 
-        return $exist->id;
+        return $exist->category_id;
     }
 
 
