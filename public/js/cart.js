@@ -5641,7 +5641,7 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2"
   }, [_c("div", {
-    staticClass: "d-flex flex-wrap pb-3"
+    staticClass: "d-flex flex-wrap pb-2"
   }, [_vm._m(0), _vm._v(" "), _vm._l(_vm.attributes, function (attribute) {
     return _vm.attributes.length && _vm.subcat ? _c("span", [attribute.group === "Dodatna kategorizacija" ? _c("button", {
       staticClass: "btn btn-light btn-icon me-1 mb-2"
@@ -5695,10 +5695,10 @@ var render = function render() {
     staticClass: "ci-loading me-0 me-sm-2"
   }), _vm._v(" "), _c("span", {
     staticClass: "d-none d-sm-inline-block"
-  }, [_vm._v("Očisti")])]) : _vm._e()], 2)]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Očisti")])]) : _vm._e()], 2), _vm._v(" "), _c("div", {
     staticClass: "d-flex flex-wrap"
   }, [_c("div", {
-    staticClass: "d-flex align-items-center flex-nowrap me-2 pb-3"
+    staticClass: "d-flex align-items-center flex-nowrap mb-2"
   }, [_c("select", {
     directives: [{
       name: "model",
@@ -5746,7 +5746,7 @@ var render = function render() {
       value: "naziv_down"
     }
   }, [_vm._v(_vm._s(_vm.trans.z_a))])])]), _vm._v(" "), _c("div", {
-    staticClass: "d-flex pb-3 d-none"
+    staticClass: "d-flex mb-2 d-none"
   }, [_c("span", {
     staticClass: "fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block"
   }, [_vm._v(_vm._s(_vm.products.total ? Number(_vm.products.total).toLocaleString("hr-HR") : 0) + " " + _vm._s(_vm.trans.artikala))])]), _vm._v(" "), _c("div", {
@@ -5765,7 +5765,7 @@ var render = function render() {
         return _vm.onerow();
       }
     }
-  }, [_vm._v("1")])])]), _vm._v(" "), _vm.products.total ? _c("div", {
+  }, [_vm._v("1")])])])]), _vm._v(" "), _vm.products.total ? _c("div", {
     staticClass: "row row-cols-xxxl-5 row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 g-0 mx-n2 mb-5",
     attrs: {
       id: "product-grid"
