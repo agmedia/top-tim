@@ -311,7 +311,7 @@ class PlavaKrava
 
 
                         // attr
-                        $attributes = explode('\\', $item[6]);
+                        $attributes = explode('/', $item[6]);
                         $group = 'Dodatna kategorizacija';
 
                         if (isset($attributes[2])) {

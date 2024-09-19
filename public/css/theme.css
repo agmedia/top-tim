@@ -3578,19 +3578,19 @@ textarea.form-control-lg {
 }
 
 .btn-outline-danger {
-    --cz-btn-color: #f34770;
-    --cz-btn-border-color: #f34770;
+    --cz-btn-color: #d41712;
+    --cz-btn-border-color: #d41712;
     --cz-btn-hover-color: #000;
-    --cz-btn-hover-bg: #f34770;
-    --cz-btn-hover-border-color: #f34770;
-    --cz-btn-focus-shadow-rgb: 243, 71, 112;
+    --cz-btn-hover-bg: #d41712;
+    --cz-btn-hover-border-color: #d41712;
+    --cz-btn-focus-shadow-rgb: 207, 60, 95;
     --cz-btn-active-color: #000;
-    --cz-btn-active-bg: #f34770;
-    --cz-btn-active-border-color: #f34770;
+    --cz-btn-active-bg: #d41712;
+    --cz-btn-active-border-color: #d41712;
     --cz-btn-active-shadow: unset;
-    --cz-btn-disabled-color: #f34770;
+    --cz-btn-disabled-color: #d41712;
     --cz-btn-disabled-bg: transparent;
-    --cz-btn-disabled-border-color: #f34770;
+    --cz-btn-disabled-border-color: #d41712;
     --cz-gradient: none;
 }
 
@@ -14979,7 +14979,7 @@ input[type=search]::-webkit-search-results-decoration {
 }
 
 .btn-light {
-    --cz-btn-border-color: #fff !important;
+    --cz-btn-border-color: #dae1e7 !important;
     --cz-btn-hover-border-color: #fff !important;
     --cz-btn-active-border-color: #fff !important;
     --cz-btn-hover-bg: #fff !important;

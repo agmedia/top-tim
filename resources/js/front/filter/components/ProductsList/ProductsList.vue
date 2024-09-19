@@ -2,17 +2,32 @@
     <section class="col">
         <!-- Toolbar-->
         <div class="d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2">
-            <div class="d-flex flex-wrap pb-3">
-                <button class="btn btn-primary btn-icon me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-2"></i> Filter</button>
-                <button v-if="this.attribute || this.brand ||  this.option" class="btn btn-danger bg-red btn-icon" type="button" onclick="window.location.replace(location.pathname);" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
+            <div class="d-flex flex-wrap pb-3 " >
+                <button class="btn btn-primary btn-icon me-1 mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-1"></i> <span class="d-none d-sm-inline-block">Filteri</span></button>
 
 
+
+                        <span v-if="attributes.length" v-for="attribute in attributes"  >
+
+                            <button v-if="attribute.group === 'Dodatna kategorizacija' " class="btn btn-light btn-icon me-1 mb-2">
+                                <input  class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes" >
+                                <label   class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.title }}</label>
+                            </button>
+
+                        </span>
+
+
+
+
+
+                <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" onclick="window.location.replace(location.pathname);" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
             </div>
+        </div>
 
             <div class="d-flex flex-wrap ">
 
 
-                <div class="d-flex align-items-center flex-nowrap me-0  pb-3">
+                <div class="d-flex align-items-center flex-nowrap me-2  pb-3">
                     <select class="form-select pe-2" style="max-width: 120px;" v-model="sorting">
                         <option value="">{{ trans.sortiraj }}</option>
                         <option value="novi">{{ trans.najnovije }}</option>
@@ -23,18 +38,20 @@
                     </select>
                 </div>
 
+                <div class="d-flex pb-3 d-none"><span class="fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }} {{ trans.artikala }}</span></div>
+                <div class="d-flex d-sm-none pb-3">
+                    <button class="btn btn-outline-secondary bg-white btn-icon nav-link-style  me-1" v-on:click="tworow()" >2</button>
+
+                    <button class="btn btn-outline-secondary bg-white  btn-icon btn-sm nav-link-style " v-on:click="onerow()">1</button>
+                </div>
+
+
             </div>
 
 
-            <div class="d-flex pb-3 d-none"><span class="fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }} {{ trans.artikala }}</span></div>
-            <div class="d-flex d-sm-none pb-3">
-                <button class="btn btn-outline-secondary bg-white btn-icon nav-link-style  me-1" v-on:click="tworow()" >2</button>
-
-                <button class="btn btn-outline-secondary bg-white  btn-icon btn-sm nav-link-style " v-on:click="onerow()">1</button>
-            </div>
 
 
-        </div>
+
 
         <!-- Offcanvas -->
 
@@ -157,10 +174,12 @@ export default {
             brand: '',
             option: '',
             attribute: '',
+            selectedAttributes: [],
             nakladnik: '',
             start: '',
             end: '',
             sorting: '',
+            attributes: [],
             search_query: '',
             page: 1,
             origin: location.origin + '/',
@@ -178,11 +197,19 @@ export default {
         },
         $route(params) {
             this.checkQuery(params);
-        }
+        },
+        selectedAttributes(value) {
+            this.attribute = value.join('+');
+            this.setQueryParamOther('attribute', this.attribute);
+        },
     },
     //
     mounted() {
         this.checkQuery(this.$route);
+        if (this.attribute === '') {
+            this.show_attributes = true;
+            this.getAttributes();
+        }
     },
 
     methods: {
@@ -252,6 +279,18 @@ export default {
             this.$router.push({query: this.resolveQuery()}).catch(()=>{});
 
             if (value == '' || value == 1) {
+                this.$router.push({query: this.resolveQuery()}).catch(()=>{});
+            }
+        },
+
+        /**
+         *
+         **/
+        setQueryParamOther(type, value) {
+
+            this.$router.push({query: this.resolveQuery()}).catch(()=>{});
+
+            if (value === '') {
                 this.$router.push({query: this.resolveQuery()}).catch(()=>{});
             }
         },
@@ -358,6 +397,19 @@ export default {
             }
         },
 
+        getAttributes() {
+
+            let params = this.setParams();
+
+            axios.post('filter/getAttributes', { params }).then(response => {
+
+                this.attributes = response.data;
+
+                console.log('attributi')
+                console.log(response.data)
+            });
+        },
+
         /**
          *
          */
@@ -410,6 +462,39 @@ export default {
                 quantity: 1
             })
         },
+
+
+
+        /**
+         *
+         */
+        preselect() {
+
+
+            if (this.attribute !== '') {
+                if ((this.attribute).includes('+')) {
+                    this.selectedAttributes = (this.attribute).split('+');
+                } else {
+                    this.selectedAttributes = [this.attribute];
+                }
+            }
+
+
+        },
+
+        /**
+         *
+         */
+        cleanQuery() {
+            this.$router.push({query: {}}).catch(()=>{});
+
+            this.selectedAttributes = [];
+
+            this.start = '';
+            this.end = '';
+            window.location.replace(location.pathname);
+        },
+
 
         /**
          *

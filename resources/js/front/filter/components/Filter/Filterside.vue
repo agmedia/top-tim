@@ -224,7 +224,7 @@ export default {
         }
         if (this.attribute === '') {
             this.show_attributes = true;
-            this.getAttributes();
+           // this.getAttributes();
         }
 
         if (this.option === '') {

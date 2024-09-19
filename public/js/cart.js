@@ -3204,7 +3204,7 @@ Vue.directive('tooltip', function (el, binding) {
     }
     if (this.attribute === '') {
       this.show_attributes = true;
-      this.getAttributes();
+      // this.getAttributes();
     }
     if (this.option === '') {
       this.show_options = true;
@@ -3745,10 +3745,12 @@ Vue.directive('tooltip', function (el, binding) {
       brand: '',
       option: '',
       attribute: '',
+      selectedAttributes: [],
       nakladnik: '',
       start: '',
       end: '',
       sorting: '',
+      attributes: [],
       search_query: '',
       page: 1,
       origin: location.origin + '/',
@@ -3766,11 +3768,19 @@ Vue.directive('tooltip', function (el, binding) {
     },
     $route: function $route(params) {
       this.checkQuery(params);
+    },
+    selectedAttributes: function selectedAttributes(value) {
+      this.attribute = value.join('+');
+      this.setQueryParamOther('attribute', this.attribute);
     }
   },
   //
   mounted: function mounted() {
     this.checkQuery(this.$route);
+    if (this.attribute === '') {
+      this.show_attributes = true;
+      this.getAttributes();
+    }
   },
   methods: {
     /**
@@ -3840,6 +3850,19 @@ Vue.directive('tooltip', function (el, binding) {
         query: this.resolveQuery()
       })["catch"](function () {});
       if (value == '' || value == 1) {
+        this.$router.push({
+          query: this.resolveQuery()
+        })["catch"](function () {});
+      }
+    },
+    /**
+     *
+     **/
+    setQueryParamOther: function setQueryParamOther(type, value) {
+      this.$router.push({
+        query: this.resolveQuery()
+      })["catch"](function () {});
+      if (value === '') {
         this.$router.push({
           query: this.resolveQuery()
         })["catch"](function () {});
@@ -3939,6 +3962,17 @@ Vue.directive('tooltip', function (el, binding) {
         }
       }
     },
+    getAttributes: function getAttributes() {
+      var _this3 = this;
+      var params = this.setParams();
+      axios.post('filter/getAttributes', {
+        params: params
+      }).then(function (response) {
+        _this3.attributes = response.data;
+        console.log('attributi');
+        console.log(response.data);
+      });
+    },
     /**
      *
      */
@@ -3985,6 +4019,30 @@ Vue.directive('tooltip', function (el, binding) {
         id: id,
         quantity: 1
       });
+    },
+    /**
+     *
+     */
+    preselect: function preselect() {
+      if (this.attribute !== '') {
+        if (this.attribute.includes('+')) {
+          this.selectedAttributes = this.attribute.split('+');
+        } else {
+          this.selectedAttributes = [this.attribute];
+        }
+      }
+    },
+    /**
+     *
+     */
+    cleanQuery: function cleanQuery() {
+      this.$router.push({
+        query: {}
+      })["catch"](function () {});
+      this.selectedAttributes = [];
+      this.start = '';
+      this.end = '';
+      window.location.replace(location.pathname);
     },
     /**
      *
@@ -5584,8 +5642,51 @@ var render = function render() {
     staticClass: "d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2"
   }, [_c("div", {
     staticClass: "d-flex flex-wrap pb-3"
-  }, [_vm._m(0), _vm._v(" "), this.attribute || this.brand || this.option ? _c("button", {
-    staticClass: "btn btn-danger bg-red btn-icon",
+  }, [_vm._m(0), _vm._v(" "), _vm._l(_vm.attributes, function (attribute) {
+    return _vm.attributes.length ? _c("span", [attribute.group === "Dodatna kategorizacija" ? _c("button", {
+      staticClass: "btn btn-light btn-icon me-1 mb-2"
+    }, [_c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: _vm.selectedAttributes,
+        expression: "selectedAttributes"
+      }],
+      staticClass: "form-check-input",
+      attrs: {
+        type: "checkbox",
+        id: attribute.id
+      },
+      domProps: {
+        value: attribute.id,
+        checked: Array.isArray(_vm.selectedAttributes) ? _vm._i(_vm.selectedAttributes, attribute.id) > -1 : _vm.selectedAttributes
+      },
+      on: {
+        change: function change($event) {
+          var $$a = _vm.selectedAttributes,
+            $$el = $event.target,
+            $$c = $$el.checked ? true : false;
+          if (Array.isArray($$a)) {
+            var $$v = attribute.id,
+              $$i = _vm._i($$a, $$v);
+            if ($$el.checked) {
+              $$i < 0 && (_vm.selectedAttributes = $$a.concat([$$v]));
+            } else {
+              $$i > -1 && (_vm.selectedAttributes = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+            }
+          } else {
+            _vm.selectedAttributes = $$c;
+          }
+        }
+      }
+    }), _vm._v(" "), _c("label", {
+      staticClass: "form-check-label widget-filter-item-text",
+      attrs: {
+        "for": attribute.id
+      }
+    }, [_vm._v(_vm._s(attribute.title))])]) : _vm._e()]) : _vm._e();
+  }), _vm._v(" "), this.attribute || this.brand || this.option ? _c("button", {
+    staticClass: "btn btn-outline-danger bg-white btn-icon me-1 mb-2",
     attrs: {
       type: "button",
       onclick: "window.location.replace(location.pathname);"
@@ -5594,10 +5695,10 @@ var render = function render() {
     staticClass: "ci-loading me-0 me-sm-2"
   }), _vm._v(" "), _c("span", {
     staticClass: "d-none d-sm-inline-block"
-  }, [_vm._v("Očisti")])]) : _vm._e()]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Očisti")])]) : _vm._e()], 2)]), _vm._v(" "), _c("div", {
     staticClass: "d-flex flex-wrap"
   }, [_c("div", {
-    staticClass: "d-flex align-items-center flex-nowrap me-0 pb-3"
+    staticClass: "d-flex align-items-center flex-nowrap me-2 pb-3"
   }, [_c("select", {
     directives: [{
       name: "model",
@@ -5644,7 +5745,7 @@ var render = function render() {
     attrs: {
       value: "naziv_down"
     }
-  }, [_vm._v(_vm._s(_vm.trans.z_a))])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.z_a))])])]), _vm._v(" "), _c("div", {
     staticClass: "d-flex pb-3 d-none"
   }, [_c("span", {
     staticClass: "fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block"
@@ -5796,15 +5897,17 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("button", {
-    staticClass: "btn btn-primary btn-icon me-2",
+    staticClass: "btn btn-primary btn-icon me-1 mb-2",
     attrs: {
       type: "button",
       "data-bs-toggle": "offcanvas",
       "data-bs-target": "#offcanvasRight"
     }
   }, [_c("i", {
-    staticClass: "ci-filter-alt me-2"
-  }), _vm._v(" Filter")]);
+    staticClass: "ci-filter-alt me-1"
+  }), _vm._v(" "), _c("span", {
+    staticClass: "d-none d-sm-inline-block"
+  }, [_vm._v("Filteri")])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
