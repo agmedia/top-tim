@@ -150,8 +150,6 @@ class Import
     {
         $categories = explode('/', $categories);
 
-
-
         if (isset($categories[0])) {
             $top_id = $this->saveCategory($categories[0]);
             $response[] = $top_id;
@@ -174,8 +172,12 @@ class Import
      */
     private function saveCategory(string $name, int $parent = 0, int $sort_order = 0)
     {
-        $exist = CategoryTranslation::query()->where('title', $name)->first();
+        $exist = CategoryTranslation::query()->where('title', $name)
+                                             ->whereHas('category', function ($query) use ($parent) {
+                                                 return $query->where('parent_id', $parent);
+                                             })->first();
 
+        
         if ( ! $exist) {
             $main_id = Category::insertGetId([
                 'parent_id'  => $parent,
@@ -200,6 +202,8 @@ class Import
 
             return $main_id;
         }
+
+        $cat = Category::query()->where('id', $exist->category_id)->where('parent_id', $parent)->first();
 
         return $exist->category_id;
     }
