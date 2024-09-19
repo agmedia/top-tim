@@ -109,11 +109,17 @@ class PlavaKrava
                         foreach (ag_lang() as $lang) {
                             $slug = ProductTranslation::resolveSlug($id, new Request(['slug' => [$lang->code => Str::slug($item[0])]]), $lang->code);
 
+                            if($item[21] != ''){
+                                $description = '<p>'.$item[4] .'</p><p>'.$item[21].'</p>';
+                            }else{
+                                $description = '<p>'.$item[4] .'</p>';
+                            }
+
                             ProductTranslation::query()->insertGetId([
                                 'product_id'       => $id,
                                 'lang'             => $lang->code,
                                 'name'             => $item[0],
-                                'description'      => $item[4],
+                                'description'      => $description,
                                 'meta_title'       => $item[11],
                                 'meta_description' => $item[12],
                                 'slug'             => $slug,
@@ -207,6 +213,46 @@ class PlavaKrava
                         // End Kroj
 
 
+                        // Dimenzije
+                        if($item[18] != ''){
+
+                            $exist = AttributesTranslation::query()->where('group_title', 'Dimenzije')->where('title', $item[18])->first();
+
+                            if ($exist) {
+                                ProductAttribute::query()->insertGetId([
+                                    'product_id'       => $id,
+                                    'attribute_id'     => $exist->id,
+                                ]);
+                            } else {
+                                $atr_id = Attributes::query()->insertGetId([
+                                    'group'       => Str::slug('Dimenzije'),
+                                    'type'        => 'text',
+                                    'sort_order'  => 0,
+                                    'status'      => 1,
+                                    'created_at'  => Carbon::now(),
+                                    'updated_at'  => Carbon::now()
+                                ]);
+
+                                if ($atr_id) {
+                                    AttributesTranslation::insertGetId([
+                                        'attribute_id' => $atr_id,
+                                        'lang'         => 'hr',
+                                        'group_title'  => 'Dimenzije',
+                                        'title'        => $item[18],
+                                        'created_at'   => Carbon::now(),
+                                        'updated_at'   => Carbon::now()
+                                    ]);
+
+                                    ProductAttribute::query()->insertGetId([
+                                        'product_id'       => $id,
+                                        'attribute_id'     => $atr_id,
+                                    ]);
+                                }
+                            }
+
+                        }
+                        // End Kroj
+
 
 
                         $images = explode(', ',$item[7]);
@@ -297,7 +343,7 @@ class PlavaKrava
                                         'attribute_id' => $atr_id,
                                         'lang'         => 'hr',
                                         'group_title'  => $group,
-                                        'title'        => $item[17],
+                                        'title'        => $title,
                                         'created_at'   => Carbon::now(),
                                         'updated_at'   => Carbon::now()
                                     ]);
