@@ -82,7 +82,7 @@ class PlavaKrava
 
                 if ( ! $exist && ! empty($item[2])) {
                     $import       = new Import();
-
+                    $name = str_replace('/', '-', $item[0]);
                     $brand_id = 11;
 
                     $id = Product::query()->insertGetId([
@@ -107,7 +107,7 @@ class PlavaKrava
                     if ($id) {
 
                         foreach (ag_lang() as $lang) {
-                            $slug = ProductTranslation::resolveSlug($id, new Request(['slug' => [$lang->code => Str::slug($item[0])]]), $lang->code);
+                            $slug = ProductTranslation::resolveSlug($id, new Request(['slug' => [$lang->code => Str::slug($name)]]), $lang->code);
 
                             if($item[21] != ''){
                                 $description = '<p>'.$item[4] .'</p><p>'.$item[21].'</p>';
@@ -118,7 +118,7 @@ class PlavaKrava
                             ProductTranslation::query()->insertGetId([
                                 'product_id'       => $id,
                                 'lang'             => $lang->code,
-                                'name'             => $item[0],
+                                'name'             => $name,
                                 'description'      => $description,
                                 'meta_title'       => $item[11],
                                 'meta_description' => $item[12],
@@ -267,7 +267,7 @@ class PlavaKrava
                             if ($index == 0) {
                                 try {
 
-                                    $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $item[0] . '/' . $img);
+                                    $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $name . '/' . $img);
                                     $image = $import->resolveImages($image_path, $item[2], $id);
                                     $import->saveImageToDB($id, $image, $img, 1);
                                 } catch (\ErrorException $e) {
@@ -277,7 +277,7 @@ class PlavaKrava
                             } else{
 
 
-                                $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $item[0] . '/' . $img);
+                                $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $name . '/' . $img);
                                 $image = $import->resolveImages($image_path, $item[2], $id);
 
                                      $import->saveImageToDB($id, $image, $img);
