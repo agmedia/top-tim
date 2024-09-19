@@ -177,7 +177,7 @@ class Import
                                                  return $query->where('parent_id', $parent);
                                              })->first();
 
-        
+
         if ( ! $exist) {
             $main_id = Category::insertGetId([
                 'parent_id'  => $parent,
@@ -202,8 +202,6 @@ class Import
 
             return $main_id;
         }
-
-        $cat = Category::query()->where('id', $exist->category_id)->where('parent_id', $parent)->first();
 
         return $exist->category_id;
     }

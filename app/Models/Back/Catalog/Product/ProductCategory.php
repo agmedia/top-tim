@@ -4,6 +4,7 @@ namespace App\Models\Back\Catalog\Product;
 
 use App\Models\Back\Catalog\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class ProductCategory extends Model
 {
@@ -51,5 +52,21 @@ class ProductCategory extends Model
         }
 
         return $created;
+    }
+
+
+    /**
+     * @param Request $request
+     * @param int     $category_id
+     *
+     * @return void
+     */
+    public static function checkProductTransfer(Request $request, int $category_id): void
+    {
+        $category = Category::query()->find($category_id);
+
+        if ($category->parent_id != $request->input('parent')) {
+            self::query()->where('category_id', $category->parent_id)->delete();
+        }
     }
 }
