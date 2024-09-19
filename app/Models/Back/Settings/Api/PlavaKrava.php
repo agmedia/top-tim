@@ -125,40 +125,87 @@ class PlavaKrava
 
 
                         // Materijal
-                        $exist = AttributesTranslation::query()->where(['group_title', 'Materijal'])->where('title', $item[14])->first();
+                        if($item[14] != ''){
 
-                        if ($exist) {
-                            ProductAttribute::query()->insertGetId([
-                                'product_id'       => $id,
-                                'attribute_id'     => $exist->id,
-                            ]);
-                        } else {
-                            $atr_id = Attributes::query()->insertGetId([
-                                'group'       => Str::slug('Materijal'),
-                                'type'        => 'text',
-                                'sort_order'  => 0,
-                                'status'      => 1,
-                                'inserted_at'  => Carbon::now(),
-                                'updated_at'  => Carbon::now()
-                            ]);
+                        $exist = AttributesTranslation::query()->where('group_title', 'Materijal')->where('title', $item[14])->first();
 
-                            if ($atr_id) {
-                                AttributesTranslation::insertGetId([
-                                    'attribute_id' => $atr_id,
-                                    'lang'         => 'hr',
-                                    'group_title'  => 'Materijal',
-                                    'title'        => $item[14],
-                                    'created_at'   => Carbon::now(),
-                                    'updated_at'   => Carbon::now()
-                                ]);
-
+                            if ($exist) {
                                 ProductAttribute::query()->insertGetId([
                                     'product_id'       => $id,
-                                    'attribute_id'     => $atr_id,
+                                    'attribute_id'     => $exist->id,
                                 ]);
+                            } else {
+                                $atr_id = Attributes::query()->insertGetId([
+                                    'group'       => Str::slug('Materijal'),
+                                    'type'        => 'text',
+                                    'sort_order'  => 0,
+                                    'status'      => 1,
+                                    'created_at'  => Carbon::now(),
+                                    'updated_at'  => Carbon::now()
+                                ]);
+
+                                if ($atr_id) {
+                                    AttributesTranslation::insertGetId([
+                                        'attribute_id' => $atr_id,
+                                        'lang'         => 'hr',
+                                        'group_title'  => 'Materijal',
+                                        'title'        => $item[14],
+                                        'created_at'   => Carbon::now(),
+                                        'updated_at'   => Carbon::now()
+                                    ]);
+
+                                    ProductAttribute::query()->insertGetId([
+                                        'product_id'       => $id,
+                                        'attribute_id'     => $atr_id,
+                                    ]);
+                                }
                             }
+
                         }
                         // End Materijal
+
+
+
+                        // Kroj
+                        if($item[17] != ''){
+
+                            $exist = AttributesTranslation::query()->where('group_title', 'Kroj')->where('title', $item[17])->first();
+
+                            if ($exist) {
+                                ProductAttribute::query()->insertGetId([
+                                    'product_id'       => $id,
+                                    'attribute_id'     => $exist->id,
+                                ]);
+                            } else {
+                                $atr_id = Attributes::query()->insertGetId([
+                                    'group'       => Str::slug('Kroj'),
+                                    'type'        => 'text',
+                                    'sort_order'  => 0,
+                                    'status'      => 1,
+                                    'created_at'  => Carbon::now(),
+                                    'updated_at'  => Carbon::now()
+                                ]);
+
+                                if ($atr_id) {
+                                    AttributesTranslation::insertGetId([
+                                        'attribute_id' => $atr_id,
+                                        'lang'         => 'hr',
+                                        'group_title'  => 'Kroj',
+                                        'title'        => $item[17],
+                                        'created_at'   => Carbon::now(),
+                                        'updated_at'   => Carbon::now()
+                                    ]);
+
+                                    ProductAttribute::query()->insertGetId([
+                                        'product_id'       => $id,
+                                        'attribute_id'     => $atr_id,
+                                    ]);
+                                }
+                            }
+
+                        }
+                        // End Kroj
+
 
 
 
