@@ -180,7 +180,7 @@ class Import
                 'group'      => 'kategorija-proizvoda',
                 'sort_order' => $sort_order,
                 'status'     => 1,
-                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
 

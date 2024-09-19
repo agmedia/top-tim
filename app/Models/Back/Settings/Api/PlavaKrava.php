@@ -261,6 +261,7 @@ class PlavaKrava
 
                         $image = config('settings.image_default');
 
+                        $item[6] = str_replace('\\', '/', $item[6]);
 
                         foreach($images as $index => $img){
                             if ($index == 0) {
