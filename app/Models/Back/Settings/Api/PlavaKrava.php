@@ -241,21 +241,17 @@ class PlavaKrava
 
                         }
 
-                      //  $categories = $import->resolveStringCategories($item[6]);
-
-                      //  ProductCategory::storeData($categories, $id);
-
+                        //  ProductCategory::storeData($categories, $id);
 
                         // categories
-                        ProductCategory::insert([
-                            'product_id'  => $id,
-                            'category_id' => 39,
-                        ]);
+                        $categories = $import->resolveStringCategories($item[6]);
 
-                        ProductCategory::query()->insert([
-                            'product_id'  => $id,
-                            'category_id' => 100,
-                        ]);
+                        foreach ($categories as $category) {
+                            ProductCategory::insert([
+                                'product_id'  => $id,
+                                'category_id' => $category,
+                            ]);
+                        }
 
                         $product = Product::query()->find($id);
 
@@ -264,6 +260,55 @@ class PlavaKrava
                             'url'             => ProductHelper::url($product),
                             'category_string' => ProductHelper::categoryString($product)
                         ]);
+                        // end categories
+
+
+                        // attr
+                        $attributes = explode('\\', $item[6]);
+                        $group = 'Dodatna kategorizacija';
+
+                        if (isset($attributes[2])) {
+                            $title = $attributes[2];
+
+                            if (isset($attributes[3])) {
+                                $title = $attributes[2] . ' i ' . $attributes[3];
+                            }
+
+                            //
+                            $exist = AttributesTranslation::query()->where('group_title', $group)->where('title', $title)->first();
+
+                            if ($exist) {
+                                ProductAttribute::query()->insertGetId([
+                                    'product_id'       => $id,
+                                    'attribute_id'     => $exist->id,
+                                ]);
+                            } else {
+                                $atr_id = Attributes::query()->insertGetId([
+                                    'group'       => Str::slug($group),
+                                    'type'        => 'text',
+                                    'sort_order'  => 0,
+                                    'status'      => 1,
+                                    'created_at'  => Carbon::now(),
+                                    'updated_at'  => Carbon::now()
+                                ]);
+
+                                if ($atr_id) {
+                                    AttributesTranslation::insertGetId([
+                                        'attribute_id' => $atr_id,
+                                        'lang'         => 'hr',
+                                        'group_title'  => $group,
+                                        'title'        => $item[17],
+                                        'created_at'   => Carbon::now(),
+                                        'updated_at'   => Carbon::now()
+                                    ]);
+
+                                    ProductAttribute::query()->insertGetId([
+                                        'product_id'       => $id,
+                                        'attribute_id'     => $atr_id,
+                                    ]);
+                                }
+                            }
+                        }
 
                         $count++;
                     }

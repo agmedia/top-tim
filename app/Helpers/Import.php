@@ -147,15 +147,16 @@ class Import
      */
     public function resolveStringCategories(string $categories)
     {
-        $default = config('settings.eng_default_category');
-        $response[] = $default;
+        $categories = explode('\\', $categories);
 
-        $categories = explode(', ', $categories);
+        if (isset($categories[0])) {
+            $top_id = $this->saveCategory($categories[0]);
+            $response[] = $top_id;
+        }
 
-        if ( ! isset($categories[1])) {
-            $response[] = $this->saveCategory($categories[0]);
-        } else {
-            $response[] = $this->saveCategory($categories[1], $default);
+        if (isset($categories[1])) {
+            $sub_id = $this->saveCategory($categories[1], $top_id);
+            $response[] = $sub_id;
         }
 
         return $response;
