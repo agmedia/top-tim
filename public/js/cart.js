@@ -5643,7 +5643,7 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "d-flex flex-wrap pb-3"
   }, [_vm._m(0), _vm._v(" "), _vm._l(_vm.attributes, function (attribute) {
-    return _vm.attributes.length ? _c("span", [attribute.group === "Dodatna kategorizacija" ? _c("button", {
+    return _vm.attributes.length && _vm.subcat ? _c("span", [attribute.group === "Dodatna kategorizacija" ? _c("button", {
       staticClass: "btn btn-light btn-icon me-1 mb-2"
     }, [_c("input", {
       directives: [{

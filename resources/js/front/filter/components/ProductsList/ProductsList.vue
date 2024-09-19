@@ -7,7 +7,7 @@
 
 
 
-                        <span v-if="attributes.length" v-for="attribute in attributes"  >
+                        <span v-if="attributes.length && subcat" v-for="attribute in attributes"  >
 
                             <button v-if="attribute.group === 'Dodatna kategorizacija' " class="btn btn-light btn-icon me-1 mb-2">
                                 <input  class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes" >
