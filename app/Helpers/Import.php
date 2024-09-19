@@ -148,7 +148,9 @@ class Import
      */
     public function resolveStringCategories(string $categories)
     {
-        $categories = explode('\\', $categories);
+        $categories = explode('/', $categories);
+
+
 
         if (isset($categories[0])) {
             $top_id = $this->saveCategory($categories[0]);
