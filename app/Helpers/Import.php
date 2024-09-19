@@ -31,7 +31,7 @@ class Import
         if ($image) {
             $time = time() . Str::random(9);
 
-            $image_saved = Storage::disk('local')->put('temp/' . $id . '.jpg', file_get_contents(urlencode($image)));
+            $image_saved = Storage::disk('local')->put('temp/' . $id . '.jpg', file_get_contents($image));
 
             if ($image_saved) {
                 try {
