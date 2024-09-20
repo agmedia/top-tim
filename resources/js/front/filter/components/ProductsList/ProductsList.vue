@@ -2,8 +2,10 @@
     <section class="col">
         <!-- Toolbar-->
         <div class="d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2">
-            <div class="d-flex flex-wrap pb-2 " >
-                <button class="btn btn-primary btn-icon me-1 mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-1"></i> <span class="d-none d-sm-inline-block">Filteri</span></button>
+            <div class="d-flex flex-wrap pb-2 w-100" >
+                <button class="btn btn-light btn-icon me-1 mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-1"></i> <span class="d-none d-sm-inline-block">Filteri</span></button>
+
+
                         <span v-if="attributes.length && subcat" v-for="attribute in attributes"  >
                             <div v-if="attribute.group === 'Dodatna kategorizacija' " >
                                 <label   class="btn btn-light btn-icon me-1 mb-2" :for="attribute.id">
@@ -11,11 +13,11 @@
                                 </label>
                             </div>
                         </span>
-                <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" v-on:click="cleanQuery()" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
-            </div>
 
-            <div class="d-flex flex-wrap ">
-                <div class="d-flex align-items-center flex-nowrap   mb-2">
+
+                <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" v-on:click="cleanQuery()" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
+
+                <div class="d-flex ms-md-auto ms-0  mb-2">
                     <select class="form-select pe-2" style="max-width: 120px;" v-model="sorting">
                         <option value="">{{ trans.sortiraj }}</option>
                         <option value="novi">{{ trans.najnovije }}</option>
@@ -25,9 +27,13 @@
                         <option value="naziv_down">{{ trans.z_a }}</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="d-flex d-none">
+
 
                 <div class="d-flex mb-2 d-none"><span class="fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }} {{ trans.artikala }}</span></div>
-                <div class="d-flex d-sm-none pb-3">
+                <div class="d-flex d-none pb-3">
                     <button class="btn btn-outline-secondary bg-white btn-icon nav-link-style  me-1" v-on:click="tworow()" >2</button>
 
                     <button class="btn btn-outline-secondary bg-white  btn-icon btn-sm nav-link-style " v-on:click="onerow()">1</button>

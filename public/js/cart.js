@@ -5642,7 +5642,7 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2"
   }, [_c("div", {
-    staticClass: "d-flex flex-wrap pb-2"
+    staticClass: "d-flex flex-wrap pb-2 w-100"
   }, [_vm._m(0), _vm._v(" "), _vm._l(_vm.attributes, function (attribute) {
     return _vm.attributes.length && _vm.subcat ? _c("span", [attribute.group === "Dodatna kategorizacija" ? _c("div", [_c("label", {
       staticClass: "btn btn-light btn-icon me-1 mb-2",
@@ -5698,10 +5698,8 @@ var render = function render() {
     staticClass: "ci-loading me-0 me-sm-2"
   }), _vm._v(" "), _c("span", {
     staticClass: "d-none d-sm-inline-block"
-  }, [_vm._v("Očisti")])]) : _vm._e()], 2), _vm._v(" "), _c("div", {
-    staticClass: "d-flex flex-wrap"
-  }, [_c("div", {
-    staticClass: "d-flex align-items-center flex-nowrap mb-2"
+  }, [_vm._v("Očisti")])]) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "d-flex ms-md-auto ms-0 mb-2"
   }, [_c("select", {
     directives: [{
       name: "model",
@@ -5748,12 +5746,14 @@ var render = function render() {
     attrs: {
       value: "naziv_down"
     }
-  }, [_vm._v(_vm._s(_vm.trans.z_a))])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.z_a))])])])], 2), _vm._v(" "), _c("div", {
+    staticClass: "d-flex d-none"
+  }, [_c("div", {
     staticClass: "d-flex mb-2 d-none"
   }, [_c("span", {
     staticClass: "fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block"
   }, [_vm._v(_vm._s(_vm.products.total ? Number(_vm.products.total).toLocaleString("hr-HR") : 0) + " " + _vm._s(_vm.trans.artikala))])]), _vm._v(" "), _c("div", {
-    staticClass: "d-flex d-sm-none pb-3"
+    staticClass: "d-flex d-none pb-3"
   }, [_c("button", {
     staticClass: "btn btn-outline-secondary bg-white btn-icon nav-link-style me-1",
     on: {
@@ -5900,7 +5900,7 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("button", {
-    staticClass: "btn btn-primary btn-icon me-1 mb-2",
+    staticClass: "btn btn-light btn-icon me-1 mb-2",
     attrs: {
       type: "button",
       "data-bs-toggle": "offcanvas",
