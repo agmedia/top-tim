@@ -118,16 +118,16 @@
                 if ($request['group'] && ( ! isset($request['search_attribute']) || ! $request['search_attribute'])) {
                     $query->whereHas('products', function ($query) use ($request) {
                         $query = ProductHelper::queryCategories($query, $request);
-                        if ($request['attribute']) {
+                      /*  if ($request['attribute']) {
                             if (strpos($request['attribute'], '+') !== false) {
                                 $arr  = explode('+', $request['option']);
-                                $pids = ProductAttribute::query()->whereIn('attribute_id', $arr)->pluck('product_id')->unique;
+                                $pids = ProductAttribute::query()->whereIn('attribute_id', $arr)->pluck('product_id')->unique();
                             } else {
                                 $pids = ProductAttribute::query()->where('attribute_id', $request['option'])->pluck('product_id')->unique;
                             }
 
-                            $query->whereIn('id', $pids);
-                        }
+                            $query->whereIn('id', $pids->toArray());
+                        }*/
                     });
                 }
 

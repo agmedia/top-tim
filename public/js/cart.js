@@ -3969,6 +3969,7 @@ Vue.directive('tooltip', function (el, binding) {
         params: params
       }).then(function (response) {
         _this3.attributes = response.data;
+        _this3.preselect();
         console.log('attributi');
         console.log(response.data);
       });
@@ -4042,7 +4043,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.selectedAttributes = [];
       this.start = '';
       this.end = '';
-      window.location.replace(location.pathname);
+      //window.location.replace(location.pathname);
     },
     /**
      *
@@ -5643,8 +5644,11 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "d-flex flex-wrap pb-2"
   }, [_vm._m(0), _vm._v(" "), _vm._l(_vm.attributes, function (attribute) {
-    return _vm.attributes.length && _vm.subcat ? _c("span", [attribute.group === "Dodatna kategorizacija" ? _c("button", {
-      staticClass: "btn btn-light btn-icon me-1 mb-2"
+    return _vm.attributes.length && _vm.subcat ? _c("span", [attribute.group === "Dodatna kategorizacija" ? _c("div", [_c("label", {
+      staticClass: "btn btn-light btn-icon me-1 mb-2",
+      attrs: {
+        "for": attribute.id
+      }
     }, [_c("input", {
       directives: [{
         name: "model",
@@ -5679,12 +5683,7 @@ var render = function render() {
           }
         }
       }
-    }), _vm._v(" "), _c("label", {
-      staticClass: "form-check-label widget-filter-item-text",
-      attrs: {
-        "for": attribute.id
-      }
-    }, [_vm._v(_vm._s(attribute.title))])]) : _vm._e()]) : _vm._e();
+    }), _vm._v(" " + _vm._s(attribute.title) + "\n                            ")])]) : _vm._e()]) : _vm._e();
   }), _vm._v(" "), this.attribute || this.brand || this.option ? _c("button", {
     staticClass: "btn btn-outline-danger bg-white btn-icon me-1 mb-2",
     attrs: {

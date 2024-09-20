@@ -4,29 +4,17 @@
         <div class="d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2">
             <div class="d-flex flex-wrap pb-2 " >
                 <button class="btn btn-primary btn-icon me-1 mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-1"></i> <span class="d-none d-sm-inline-block">Filteri</span></button>
-
-
-
                         <span v-if="attributes.length && subcat" v-for="attribute in attributes"  >
-
-                            <button v-if="attribute.group === 'Dodatna kategorizacija' " class="btn btn-light btn-icon me-1 mb-2">
-                                <input  class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes" >
-                                <label   class="form-check-label widget-filter-item-text" :for="attribute.id">{{ attribute.title }}</label>
-                            </button>
-
+                            <div v-if="attribute.group === 'Dodatna kategorizacija' " >
+                                <label   class="btn btn-light btn-icon me-1 mb-2" :for="attribute.id">
+                                    <input  class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes" > {{ attribute.title }}
+                                </label>
+                            </div>
                         </span>
-
-
-
-
-
                 <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" v-on:click="cleanQuery()" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
             </div>
 
-
             <div class="d-flex flex-wrap ">
-
-
                 <div class="d-flex align-items-center flex-nowrap   mb-2">
                     <select class="form-select pe-2" style="max-width: 120px;" v-model="sorting">
                         <option value="">{{ trans.sortiraj }}</option>
@@ -404,6 +392,7 @@ export default {
             axios.post('filter/getAttributes', { params }).then(response => {
 
                 this.attributes = response.data;
+                this.preselect();
 
                 console.log('attributi')
                 console.log(response.data)
@@ -492,7 +481,7 @@ export default {
 
             this.start = '';
             this.end = '';
-           window.location.replace(location.pathname);
+           //window.location.replace(location.pathname);
         },
 
 
