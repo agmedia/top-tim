@@ -3777,10 +3777,10 @@ Vue.directive('tooltip', function (el, binding) {
   //
   mounted: function mounted() {
     this.checkQuery(this.$route);
-    if (this.attribute === '') {
-      this.show_attributes = true;
-      this.getAttributes();
-    }
+    // if (this.attribute === '') {
+    this.show_attributes = true;
+    this.getAttributes();
+    //  }
   },
   methods: {
     /**
@@ -4042,7 +4042,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.selectedAttributes = [];
       this.start = '';
       this.end = '';
-      //  window.location.replace(location.pathname);
+      window.location.replace(location.pathname);
     },
     /**
      *
