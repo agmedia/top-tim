@@ -163,10 +163,21 @@
         @if ($cat && ! $subcat)
 
             @if ($cat->subcategories()->count())
-                <section class="py-2 mb-1">
+                <section class="py-2 pb-0 mb-0">
+                    <div class="scrolling-wrapper">
+                    @foreach ($cat->subcategories as $item)
+                       <span  >
 
-                    <div class="tns-carousel">
-                        <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "controls": true, "autoHeight": false, "responsive": {"0":{"items":2, "gutter": 10},"480":{"items":2, "gutter": 10},"800":{"items":4, "gutter": 20}, "1300":{"items":5, "gutter": 30}, "1800":{"items":6, "gutter": 30}}}'>
+                                <a   class="btn btn-light btn-icon me-1 mb-0" href="{{ route('catalog.route', ['group' => $group, 'cat' => $cat->translation->slug, 'subcat' => $item->translation->slug]) }}">
+                                    {{ $item->translation->title }}
+                                </a>
+
+                        </span>
+
+                    @endforeach
+                    </div>
+                  {{--   <div class="tns-carousel">
+                        <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "controls": true, "autoHeight": false, "responsive": {"0":{"items":2, "gutter": 10},"480":{"items":2, "gutter": 10},"800":{"items":4, "gutter": 20}, "1300":{"items":6, "gutter": 20}, "1800":{"items":6, "gutter": 20}}}'>
                             @foreach ($cat->subcategories as $item)
                                 <!-- Product-->
                                 <div class="article mb-grid-gutter">
@@ -180,7 +191,7 @@
                             @endforeach
                         </div>
                     </div>
-
+                --}}
 
 
 
@@ -278,13 +289,13 @@
 
 @push('js_after')
     <style>
-        @media only screen and (max-width: 1040px) {
+
             .scrolling-wrapper {
                 overflow-x: scroll;
                 overflow-y: hidden;
                 white-space: nowrap;
                 padding-bottom: 15px;
             }
-        }
+
     </style>
 @endpush
