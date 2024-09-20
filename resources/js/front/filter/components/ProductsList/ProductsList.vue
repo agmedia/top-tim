@@ -20,7 +20,7 @@
 
 
 
-                <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" onclick="window.location.replace(location.pathname);" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
+                <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" v-on:click="cleanQuery()" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
             </div>
 
 
@@ -492,7 +492,7 @@ export default {
 
             this.start = '';
             this.end = '';
-            window.location.replace(location.pathname);
+          //  window.location.replace(location.pathname);
         },
 
 

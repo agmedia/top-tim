@@ -4042,7 +4042,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.selectedAttributes = [];
       this.start = '';
       this.end = '';
-      window.location.replace(location.pathname);
+      //  window.location.replace(location.pathname);
     },
     /**
      *
@@ -5688,8 +5688,12 @@ var render = function render() {
   }), _vm._v(" "), this.attribute || this.brand || this.option ? _c("button", {
     staticClass: "btn btn-outline-danger bg-white btn-icon me-1 mb-2",
     attrs: {
-      type: "button",
-      onclick: "window.location.replace(location.pathname);"
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.cleanQuery();
+      }
     }
   }, [_c("i", {
     staticClass: "ci-loading me-0 me-sm-2"
