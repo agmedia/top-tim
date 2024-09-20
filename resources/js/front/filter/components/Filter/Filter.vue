@@ -28,14 +28,17 @@
                     <div class="collapse show" :id="'id'+ cat.id" v-if="cat.subs && category && (category.id == cat.id)" data-bs-parent="#shop-categories">
                         <div class="px-grid-gutter pt-1 pb-4">
                             <div class="widget widget-links">
+
+                                <ul class="widget-list mb-2 mt-3" >
+                                    <li class="widget-list-item red"><a class="widget-list-link" :href="cat.url">{{ trans.pogledajte_sve }}</a></li>
+                                </ul>
+
                                 <ul class="widget-list" v-for="sub in cat.subs" >
                                     <li class="widget-list-item pb-1 pt-1" :class="{'active': (subcategory && subcategory.id == sub.id)}">
                                         <a class="widget-list-link" :href="sub.url">{{ sub.title }} </a>
                                     </li>
                                 </ul>
-                                <ul class="widget-list mt-2" >
-                                    <li class="widget-list-item red"><a class="widget-list-link" :href="cat.url">{{ trans.pogledajte_sve }}</a></li>
-                                </ul>
+
                             </div>
                         </div>
                     </div>
@@ -45,12 +48,14 @@
                         <div class="px-grid-gutter pt-1 pb-4 ">
                             <div class="widget widget-links">
 
+                                <ul class="widget-list mb-2 mt-3" >
+                                    <li class="widget-list-item red"><a class="widget-list-link" :href="cat.url">{{ trans.pogledajte_sve }}</a></li>
+                                </ul>
+
                                 <ul class="widget-list" v-for="subcategory in cat.subs" >
                                     <li class="widget-list-item pb-1 pt-1"><a class="widget-list-link" :href="subcategory.url">{{ subcategory.title }} </a></li>
                                 </ul>
-                                <ul class="widget-list mt-2" >
-                                    <li class="widget-list-item red"><a class="widget-list-link" :href="cat.url">{{ trans.pogledajte_sve }}</a></li>
-                                </ul>
+
                             </div>
                         </div>
                     </div>

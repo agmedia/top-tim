@@ -5028,7 +5028,16 @@ var render = function render() {
       staticClass: "px-grid-gutter pt-1 pb-4"
     }, [_c("div", {
       staticClass: "widget widget-links"
-    }, [_vm._l(cat.subs, function (sub) {
+    }, [_c("ul", {
+      staticClass: "widget-list mb-2 mt-3"
+    }, [_c("li", {
+      staticClass: "widget-list-item red"
+    }, [_c("a", {
+      staticClass: "widget-list-link",
+      attrs: {
+        href: cat.url
+      }
+    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])]), _vm._v(" "), _vm._l(cat.subs, function (sub) {
       return _c("ul", {
         staticClass: "widget-list"
       }, [_c("li", {
@@ -5042,16 +5051,7 @@ var render = function render() {
           href: sub.url
         }
       }, [_vm._v(_vm._s(sub.title) + " ")])])]);
-    }), _vm._v(" "), _c("ul", {
-      staticClass: "widget-list mt-2"
-    }, [_c("li", {
-      staticClass: "widget-list-item red"
-    }, [_c("a", {
-      staticClass: "widget-list-link",
-      attrs: {
-        href: cat.url
-      }
-    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])])], 2)])]) : _c("div", {
+    })], 2)])]) : _c("div", {
       staticClass: "collapse",
       attrs: {
         id: "id" + cat.id,
@@ -5061,7 +5061,16 @@ var render = function render() {
       staticClass: "px-grid-gutter pt-1 pb-4"
     }, [_c("div", {
       staticClass: "widget widget-links"
-    }, [_vm._l(cat.subs, function (subcategory) {
+    }, [_c("ul", {
+      staticClass: "widget-list mb-2 mt-3"
+    }, [_c("li", {
+      staticClass: "widget-list-item red"
+    }, [_c("a", {
+      staticClass: "widget-list-link",
+      attrs: {
+        href: cat.url
+      }
+    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])]), _vm._v(" "), _vm._l(cat.subs, function (subcategory) {
       return _c("ul", {
         staticClass: "widget-list"
       }, [_c("li", {
@@ -5072,16 +5081,7 @@ var render = function render() {
           href: subcategory.url
         }
       }, [_vm._v(_vm._s(subcategory.title) + " ")])])]);
-    }), _vm._v(" "), _c("ul", {
-      staticClass: "widget-list mt-2"
-    }, [_c("li", {
-      staticClass: "widget-list-item red"
-    }, [_c("a", {
-      staticClass: "widget-list-link",
-      attrs: {
-        href: cat.url
-      }
-    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])])], 2)])])]);
+    })], 2)])])]);
   }), 0)]) : _vm._e()]);
 };
 var staticRenderFns = [];
