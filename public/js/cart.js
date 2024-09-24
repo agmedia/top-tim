@@ -4969,7 +4969,7 @@ var render = function render() {
     }, [_vm.category && _vm.category.id == cat.id ? _c("h3", {
       staticClass: "accordion-header px-grid-gutter bg-default"
     }, [cat.subs ? _c("button", {
-      staticClass: "accordion-button collapsed py-3",
+      staticClass: "accordion-button collapsed py-3 fw-bold",
       attrs: {
         type: "button",
         "data-bs-toggle": "collapse",
@@ -4980,7 +4980,7 @@ var render = function render() {
     }, [_c("span", {
       staticClass: "d-flex align-items-center"
     }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
-      staticClass: "nav-link-style d-block fs-md fw-normal py-3",
+      staticClass: "nav-link-style d-block fs-md fw-bold py-3",
       "class": {
         active: _vm.category.id == cat.id
       },
@@ -5006,9 +5006,9 @@ var render = function render() {
         "aria-controls": "id" + cat.id
       }
     }, [_c("span", {
-      staticClass: "d-flex align-items-center"
+      staticClass: "d-flex align-items-center fw-bold"
     }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
-      staticClass: "nav-link-style d-block fs-md fw-normal py-3",
+      staticClass: "nav-link-style d-block fs-md fw-bold py-3",
       attrs: {
         href: cat.url,
         role: "link"
@@ -5026,19 +5026,10 @@ var render = function render() {
         "data-bs-parent": "#shop-categories"
       }
     }, [_c("div", {
-      staticClass: "px-grid-gutter pt-1 pb-4"
+      staticClass: "px-grid-gutter pt-1 mt-2 pb-4"
     }, [_c("div", {
       staticClass: "widget widget-links"
-    }, [_c("ul", {
-      staticClass: "widget-list mb-2 mt-3"
-    }, [_c("li", {
-      staticClass: "widget-list-item red"
-    }, [_c("a", {
-      staticClass: "widget-list-link",
-      attrs: {
-        href: cat.url
-      }
-    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])]), _vm._v(" "), _vm._l(cat.subs, function (sub) {
+    }, [_vm._l(cat.subs, function (sub) {
       return _c("ul", {
         staticClass: "widget-list"
       }, [_c("li", {
@@ -5047,23 +5038,13 @@ var render = function render() {
           active: _vm.subcategory && _vm.subcategory.id == sub.id
         }
       }, [_c("a", {
-        staticClass: "widget-list-link",
+        staticClass: "widget-list-link fw-bold",
         attrs: {
           href: sub.url
         }
       }, [_vm._v(_vm._s(sub.title) + " ")])])]);
-    })], 2)])]) : _c("div", {
-      staticClass: "collapse",
-      attrs: {
-        id: "id" + cat.id,
-        "data-bs-parent": "#shop-categories"
-      }
-    }, [_c("div", {
-      staticClass: "px-grid-gutter pt-1 pb-4"
-    }, [_c("div", {
-      staticClass: "widget widget-links"
-    }, [_c("ul", {
-      staticClass: "widget-list mb-2 mt-3"
+    }), _vm._v(" "), _c("ul", {
+      staticClass: "widget-list mb-2 mt-2"
     }, [_c("li", {
       staticClass: "widget-list-item red"
     }, [_c("a", {
@@ -5071,18 +5052,37 @@ var render = function render() {
       attrs: {
         href: cat.url
       }
-    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])]), _vm._v(" "), _vm._l(cat.subs, function (subcategory) {
+    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])])], 2)])]) : _c("div", {
+      staticClass: "collapse",
+      attrs: {
+        id: "id" + cat.id,
+        "data-bs-parent": "#shop-categories"
+      }
+    }, [_c("div", {
+      staticClass: "px-grid-gutter pt-1 pb-4 mt-2"
+    }, [_c("div", {
+      staticClass: "widget widget-links"
+    }, [_vm._l(cat.subs, function (subcategory) {
       return _c("ul", {
         staticClass: "widget-list"
       }, [_c("li", {
         staticClass: "widget-list-item pb-1 pt-1"
       }, [_c("a", {
-        staticClass: "widget-list-link",
+        staticClass: "widget-list-link fw-bold",
         attrs: {
           href: subcategory.url
         }
       }, [_vm._v(_vm._s(subcategory.title) + " ")])])]);
-    })], 2)])])]);
+    }), _vm._v(" "), _c("ul", {
+      staticClass: "widget-list mb-2 mt-2"
+    }, [_c("li", {
+      staticClass: "widget-list-item red"
+    }, [_c("a", {
+      staticClass: "widget-list-link",
+      attrs: {
+        href: cat.url
+      }
+    }, [_vm._v(_vm._s(_vm.trans.pogledajte_sve))])])])], 2)])])]);
   }), 0)]) : _vm._e()]);
 };
 var staticRenderFns = [];

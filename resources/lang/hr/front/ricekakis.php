@@ -16,7 +16,7 @@ return [
     'recepti' => 'Recepti',
 
     'icons_t1' => 'Besplatna dostava HR',
-    'icons_d1' => 'Besplatna dostava za narudžbe > 45€',
+    'icons_d1' => 'Besplatna dostava za narudžbe > 150€',
 
     'icons_t2' => 'Program vjernosti',
     'icons_d2' => 'Osvoji bodove s svakom narudžbom i recenzijom',

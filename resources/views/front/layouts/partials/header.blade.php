@@ -64,13 +64,9 @@
 </header>
 
 <!-- Sidebar menu-->
-<aside class="offcanvas offcanvas-expand w-100 border-end zindex-lg-5 pt-lg-5" id="sideNav" style="max-width: 18.875rem;">
+<aside class="offcanvas offcanvas-expand w-100 border-end zindex-lg-5 pt-lg-5 mt-3" id="sideNav" style="max-width: 18.875rem;">
     <div class="pt-2 d-none d-lg-block"></div>
-    <ul class="nav nav-tabs nav-justified mt-0 mt-lg-5 mb-0" role="tablist" >
-        <li class="nav-item"><a class="nav-link fw-medium active" href="#categories" data-bs-toggle="tab" role="tab">{{ __('front/ricekakis.categories') }}</a></li>
-        <li class="nav-item"><a class="nav-link fw-medium" href="#menu" data-bs-toggle="tab" role="tab">Info</a></li>
-        <li class="nav-item d-lg-none"><a class="nav-link " href="#" data-bs-dismiss="offcanvas" aria-label="Close Navigation" role="tab"><i class="ci-close fs-xs me-2"></i></a></li>
-    </ul>
+
     <div class="offcanvas-body px-0 pt-3 pb-0" data-simplebar>
         <div class="tab-content">
             <filter-view ids="{{ isset($ids) ? $ids : null }}"

@@ -49,7 +49,7 @@
     --cz-font-sans-serif: 'Poppins', sans-serif;
     --cz-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --cz-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-    --cz-body-font-family: var(--cz-font-sans-serif);
+    --cz-body-font-family: 'Poppins', sans-serif;
     --cz-body-font-size: 1rem;
     --cz-body-font-weight: 400;
     --cz-body-line-height: 1.5;
