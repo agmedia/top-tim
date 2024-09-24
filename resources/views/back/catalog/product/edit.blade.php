@@ -11,12 +11,20 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/products.artikl_edit') }}</h1>
+
+                <a class="flex btn btn-outline-primary" target="_blank" href="{{ url($product->translation->url) }}">
+                    <i class="fa fa-fw fa-eye"></i>
+                </a>
+
+
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('products') }}">{{ __('back/products.artikli') }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ __('back/products.novi_artikl') }}</li>
                     </ol>
                 </nav>
+
+
             </div>
         </div>
     </div>
@@ -50,6 +58,12 @@
                             <i class="si si-link"></i> {{ __('back/products.seo') }}
                         </a>
                     </li>
+
+
+
+
+
+
                 </ul>
                 <div class="block-content tab-content">
                     <div class="tab-pane active" id="osnovno" role="tabpanel">
