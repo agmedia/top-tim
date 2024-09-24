@@ -103,7 +103,7 @@
          *
          * @return Builder
          */
-        public function filter(array $request, int $limit = 20): Builder
+        public function filter(array $request, int $limit = 1000): Builder
         {
             $query = (new Attributes())->newQuery();
 

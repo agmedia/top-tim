@@ -200,6 +200,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="tab-pane" id="atributi" role="tabpanel">
                         <div class="block">
                             <div class="block-content">
@@ -215,7 +216,7 @@
                                                             <option value="{{ $id }}" class="font-weight-bold small" {{ ((isset($product)) and (in_array($id, $product->categories()->pluck('id')->toArray()))) ? 'selected' : '' }}>{{ $category['title'] }}</option>
                                                             @if ( ! empty($category['subs']))
                                                                 @foreach ($category['subs'] as $sub_id => $subcategory)
-                                                                    <option value="{{ $sub_id }}" class="pl-3 text-sm" {{ ((isset($product) && $product->subcategory()) and ($sub_id == $product->subcategory()->id)) ? 'selected' : '' }}>{{ $category['title'] . ' >> ' . $subcategory['title'] }}</option>
+                                                                    <option value="{{ $sub_id }}" class="pl-3 text-sm" {{ ((isset($product) && $product->subcategory()) and in_array($sub_id, $product->subcategories()->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $category['title'] . ' >> ' . $subcategory['title'] }}</option>
                                                                 @endforeach
                                                             @endif
                                                         @endforeach
