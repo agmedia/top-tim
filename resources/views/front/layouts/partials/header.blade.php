@@ -18,9 +18,13 @@
             </a>
             <!-- Search-->
             <form action="{{ route('pretrazi') }}" id="search-form-first" class="w-100 d-none d-lg-flex flex-nowrap mx-4" method="get">
-                <div class="input-group "><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
-                    <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="{{ __('front/ricekakis.search_products') }}">
+                <div class="dropdown">
+                    <input type="text" name="{{ config('settings.search_keyword') }}" class="form-control form-control-lg" placeholder="Type Here..." id="search_box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeyup="javascript:load_data(this.value)" />
+                    <span id="search_result"></span>
                 </div>
+                {{--<div class="input-group "><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                    <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="{{ __('front/ricekakis.search_products') }}">
+                </div>--}}
             </form>
             <!-- Toolbar-->
             <div class="navbar-toolbar d-flex flex-shrink-0 align-items-center ms-xl-2">
@@ -87,48 +91,28 @@
                         @endforeach--}}
                         @if (isset($pages) && $pages)
                             @foreach($pages as $page)
-
                                 @if($page->translation->title !='Naslovnica' and $page->group =='page' )
-
                                     <div class="accordion-item border-bottom">
-
                                         <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/info/{{ $page->translation->slug }}"><span class="d-flex align-items-center">{{ $page->translation->title }}</span></a></h3>
                                     </div>
-
                                 @endif
                             @endforeach
-
                                 <div class="accordion-item border-bottom">
-
                                     <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/faq"><span class="d-flex align-items-center">{{ __('front/cart.faq') }}</span></a></h3>
                                 </div>
-
                                 <div class="accordion-item border-bottom">
-
                                     <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/kontakt"><span class="d-flex align-items-center">Kontakt</span></a></h3>
                                 </div>
-
-
-
                                 @if(auth()->user())
-
                                     <div class="accordion-item border-bottom">
-
                                         <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ route('login') }}"><span class="d-flex align-items-center"><i class=" ci-user me-2"></i> {{ __('front/ricekakis.my_account') }}</span></a></h3>
                                     </div>
-
-
                                 @else
-
                                     <div class="accordion-item border-bottom">
-
                                         <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" data-tab-id="pills-signin-tab" aria-label="{{ __('front/ricekakis.login') }}" href="signin-tab"  role="button" data-bs-toggle="modal" data-bs-target="#signin-modal"><span class="d-flex align-items-center"><i class=" ci-user me-2"></i> {{ __('front/ricekakis.login') }}</span></a></h3>
                                     </div>
-
                                 @endif
-
                         @endif
-
                     </div>
                 </div>
             </div>
@@ -142,3 +126,50 @@
 
     </div>
 </aside>
+
+@push('js_after')
+    <script>
+        function load_data(query) {
+            if(query.length > 2) {
+                console.log(query);
+
+                $.ajax({
+                    method: 'get',
+                    url: '{{ route('api.front.autocomplete') }}' + '?pojam_api=' + query,
+                    success: function(json) {
+                        console.log(json);
+
+                        if (json.length > 0) {
+                            let html = '<ul class="list-group">';
+                            html += '<li class="list-group-item d-flex justify-content-between align-items-center"><b class="text-primary"><i>Rezultati:</i></b></li>';
+
+                            json.forEach(function (item) {
+                                html += '<a href="' + item.url + '"><li class="list-group-item text-muted" style="cursor:pointer">' +
+                                    '<i class="fas fa-history mr-3"></i>' + item.name + '<i class="far fa-trash-alt float-right mt-1"></i>' +
+                                    '</li></a>';
+                            });
+
+                            html += '</ul>';
+
+                            document.getElementById('search_result').innerHTML = html;
+                        } else {
+                            let html = '<div class="list-group"><a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a></div>';
+
+                            document.getElementById('search_result').innerHTML = html;
+                        }
+
+                        /*if (json.status) {
+                            document.location = json.redirect;
+                        }*/
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+            else {
+                document.getElementById('search_result').innerHTML = '';
+            }
+        }
+    </script>
+@endpush

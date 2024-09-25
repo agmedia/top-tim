@@ -408,6 +408,7 @@ Route::group(
      */
     Route::prefix('api/v2')->group(function () {
         // SEARCH
+        Route::get('pretrazi/autocomplete', [CatalogRouteController::class, 'search'])->name('api.front.autocomplete');
         Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('api.front.search');
         // FILTER
         Route::prefix('filter')->group(function () {

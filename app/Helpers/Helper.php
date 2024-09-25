@@ -109,67 +109,37 @@ class Helper
      *
      * @return array|false|Collection
      */
-    public static function search(string $target = '', bool $builder = false)
+    public static function search(string $target = '', bool $builder = false, bool $api = false)
     {
         if ($target != '') {
             $response = collect();
 
+            Log::info('target' . $target);
 
-            $products = Product::query()->whereHas('translation', function ($query) use ($target) {
+            // Search products.
+            $products = Product::query()->whereHas('translation', function (Builder $query) use ($target) {
                 $query->where('name', 'like', '%' . $target . '%');
-            })->orwhereHas('translation', function ($query) use ($target) {
+            })/*->orwhereHas('translation', function ($query) use ($target) {
                 $query->where('meta_description', 'like', '%' . $target . '%');
             })->orWhere('sku', 'like', '%' . $target . '%')
-                ->orwhereHas('translation', function ($query) use ($target) {
-                $query->where( 'sastojci', 'like', '%' . $target . '%');
-            })->orwhereHas('translation', function ($query) use ($target) {
+                               ->orwhereHas('translation', function ($query) use ($target) {
+                                   $query->where( 'sastojci', 'like', '%' . $target . '%');
+                               })->orwhereHas('translation', function ($query) use ($target) {
                     $query->where('podaci', 'like', '%' . $target . '%');
-            })->orwhereHas('translation', function ($query) use ($target) {
+                })->orwhereHas('translation', function ($query) use ($target) {
                     $query->where('description', 'like', '%' . $target . '%');
-                })->pluck('id');
+                })*/->pluck('id');
 
+            // If API and count is too small
+            // search additionaly.
 
-
-           /* $products = Product::query()->where('name', 'like', '%' . $target . '%')
-                               ->orWhere('meta_description', 'like', '%' . $target . '%')
-                               ->orWhere('sku', 'like', '%' . $target . '%')
-                               ->orWhere('isbn', 'like', '%' . $target . '%')
-                                ->orWhere('category_string', 'like', '%' . $target . '%')
-                                 ->orWhere('sastojci', 'like', '%' . $target . '%')
-                                  ->orWhere('podaci', 'like', '%' . $target . '%')
-                              ->orWhere('description', 'like', '%' . $target . '%')
-                               ->pluck('id');
-           */
+            if ($api) {
+                $products = $products->take(10);
+            }
 
             if ( ! $products->count()) {
                 $products = collect();
             }
-
-           // $preg = explode(' ', $target, 3);
-
-           /* if (isset ($preg[1]) && in_array($preg[1], $preg) && ! isset($preg[2])) {
-                $authors = Brand::active()->where('title', 'like', '%' . $preg[0] . '%' . $preg[1] . '%')
-                                 ->orWhere('title', 'like', '%' . $preg[1] . '% ' . $preg[0] . '%')
-                                 ->with('products')->get();
-
-            } elseif (isset ($preg[2]) && in_array($preg[2], $preg)) {
-                $authors = Brand::active()->where('title', 'like', $preg[0] . '%' . $preg[1] . '%' . $preg[2] . '%')
-                                 ->orWhere('title', 'like', $preg[2] . '%' . $preg[1] . '% ' . $preg[0] . '%')
-                                 ->orWhere('title', 'like', $preg[0] . '%' . $preg[2] . '% ' . $preg[1] . '%')
-                                 ->orWhere('title', 'like', $preg[1] . '%' . $preg[0] . '% ' . $preg[2] . '%')
-                                 ->orWhere('title', 'like', $preg[1] . '%' . $preg[2] . '% ' . $preg[0] . '%')
-                                 ->with('products')->get();
-
-            } else {
-                $authors = Brand::active()->where('title', 'like', '%' . $preg[0] . '%')
-                                 ->with('products')->get();
-            }
-
-            foreach ($authors as $author) {
-                $products = $products->merge($author->products->pluck('id'));
-            }
-
-           */
 
             $response->put('products', $products->unique()->flatten());
 
