@@ -133,9 +133,10 @@ body {
     padding:8px;
     font-size:0.9em;
     line-height: 30px;
+    background-color: #05519e;
 }
 .live-search .result-text a.view-all-results {
-    color:#111111;
+    color:#fff;
 }
 
 .grw-net-widget {
