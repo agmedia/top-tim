@@ -164,7 +164,7 @@
 
                             document.getElementById('search_result').innerHTML = html;
                         } else {
-                            let html = '<div class="list-group"><a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a></div>';
+                            let html = '<div class="result-text"><a href="#" class="view-all-results">Nema pronađenih rezultata</a></div>';
 
                             document.getElementById('search_result').innerHTML = html;
                         }
