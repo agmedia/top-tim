@@ -342,6 +342,7 @@ class CatalogRouteController extends FrontBaseController
 
                 $response[] = [
                     'id' => $id,
+                    'sku' => $item->sku,
                     'name' => $item->name,
                     'url' => url($item->url),
                     'main_price' => $item->main_price,
