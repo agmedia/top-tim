@@ -164,12 +164,12 @@ class Helper
                 $query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%');
                 $query->orWhere('name', 'like', '%' . $preg[1] . '%' . $preg[0] . '%');
 
-                foreach ($preg as $word) {
+                /*foreach ($preg as $word) {
                     $query->orWhere('name', 'like', '%' . $word . '%');
                 }
                 foreach (array_reverse($preg) as $word) {
                     $query->orWhere('name', 'like', '%' . $word . '%');
-                }
+                }*/
                 /*$query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%')
                       ->orWhere('name', 'like', '%' . $preg[0] . '%')
                       ->orWhere('name', 'like', '%' . $preg[1] . '%');*/
