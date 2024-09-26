@@ -159,8 +159,11 @@ class Helper
     {
         $preg = explode(' ', $search, 3);
         if (isset ($preg[1]) && in_array($preg[1], $preg) && ! isset($preg[2])) {
-            $query->whereHas('translation', function ($query) use ($preg) {
-                $query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%');
+            $query->whereHas('translation', function (Builder $query) use ($preg) {
+                $query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%')
+                      ->orWhere('name', 'like', '%' . $preg[0] . '%')
+                      ->orWhere('name', 'like', '%' . $preg[1] . '%');
+                
             })->orwhereHas('translation', function ($query) use ($preg) {
                 $query->where('name', 'like', '%' . $preg[1] . '% ' . $preg[0] . '%');
             });
