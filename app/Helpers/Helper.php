@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -115,13 +116,13 @@ class Helper
             $response = collect();
 
             // Search products.
-            $products = Product::query()->whereHas('translation', function (Builder $query) use ($target) {
+            $products = Product::query()/*->whereHas('translation', function (Builder $query) use ($target) {
                 $query->where('name', 'like', '%' . $target . '%');
-            })->orWhere('sku', 'like', '%' . $target . '%')->orwhereHas('translation', function ($query) use ($target) {
+            })*//*->orWhere('sku', 'like', '%' . $target . '%')->orwhereHas('translation', function ($query) use ($target) {
                 $query->where('meta_description', 'like', '%' . $target . '%');
             })->orWhere('sku', 'like', '%' . $target . '%')->orwhereHas('translation', function ($query) use ($target) {
                     $query->where('description', 'like', '%' . $target . '%');
-                });
+                })*/;
 
             $products = self::searchByName($products, $target);
             $products = $products->pluck('id');
@@ -160,13 +161,22 @@ class Helper
         $preg = explode(' ', $search, 3);
         if (isset ($preg[1]) && in_array($preg[1], $preg) && ! isset($preg[2])) {
             $query->whereHas('translation', function (Builder $query) use ($preg) {
-                $query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%')
+                $query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%');
+                $query->orWhere('name', 'like', '%' . $preg[1] . '%' . $preg[0] . '%');
+
+                foreach ($preg as $word) {
+                    $query->orWhere('name', 'like', '%' . $word . '%');
+                }
+                foreach (array_reverse($preg) as $word) {
+                    $query->orWhere('name', 'like', '%' . $word . '%');
+                }
+                /*$query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%')
                       ->orWhere('name', 'like', '%' . $preg[0] . '%')
-                      ->orWhere('name', 'like', '%' . $preg[1] . '%');
-                
-            })->orwhereHas('translation', function ($query) use ($preg) {
+                      ->orWhere('name', 'like', '%' . $preg[1] . '%');*/
+
+            })/*->orwhereHas('translation', function ($query) use ($preg) {
                 $query->where('name', 'like', '%' . $preg[1] . '% ' . $preg[0] . '%');
-            });
+            })*/;
 
         } elseif (isset ($preg[2]) && in_array($preg[2], $preg)) {
             $query->whereHas('translation', function ($query) use ($preg) {
