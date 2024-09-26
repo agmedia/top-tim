@@ -330,7 +330,7 @@ class CatalogRouteController extends FrontBaseController
 
         if ($request->has(config('settings.search_keyword') . '_api')) {
             $search = Helper::search(
-                $request->input(config('settings.search_keyword') . '_api'), true
+                $request->input(config('settings.search_keyword') . '_api'), true, true
             );
 
             $response = [];
