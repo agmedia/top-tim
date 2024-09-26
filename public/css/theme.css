@@ -93,6 +93,51 @@ body {
     display:none;
 }
 
+.dropresults{
+
+}
+/* Live Search Results */
+.live-search {
+    width:100%;
+    background:#ffffff;
+    position:absolute;
+
+}
+
+.live-search .table.products {
+    margin-bottom:0;
+}
+.live-search .table.products tr {
+    cursor:pointer;
+}
+.live-search .table.products tr:hover {
+    background:#fcfcfc;
+}
+.live-search .table.products tr td.image{
+    padding:8px!important;
+    width:80px;
+    margin-right:20px;
+}
+.live-search .table.products tr td.price{
+  text-align: right;
+    padding: 8px 15px 5px 0 !important;
+    vertical-align: middle;
+    font-size:14px
+}
+.live-search .table.products tr td.main {
+    padding: 8px 5px 5px 0 !important;
+    vertical-align: middle;
+}
+.live-search .result-text{
+    text-align: center;
+    padding:8px;
+    font-size:0.9em;
+    line-height: 30px;
+}
+.live-search .result-text a.view-all-results {
+    color:#111111;
+}
+
 .grw-net-widget {
 
     margin-left: 0px!important;
@@ -207,7 +252,7 @@ h1, .h1 {
     background-size: auto;
     background-repeat: repeat no-repeat;
     background-position: 20vw bottom;
-    background-image: url("/img/meandar.svg");
+
 }
 
 @media(max-width:850px) {
@@ -240,7 +285,7 @@ h1, .h1 {
     background-size: auto;
     background-repeat: repeat no-repeat;
     background-position: 43vw bottom;
-    background-image: url("/img/meandar-red.svg");
+
     background-color: #fff;
     border-bottom: 2px solid #fff;
     border-top: 2px solid #fff;

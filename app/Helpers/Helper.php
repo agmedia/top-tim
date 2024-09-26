@@ -119,7 +119,7 @@ class Helper
             // Search products.
             $products = Product::query()->whereHas('translation', function (Builder $query) use ($target) {
                 $query->where('name', 'like', '%' . $target . '%');
-            })/*->orwhereHas('translation', function ($query) use ($target) {
+            })->orWhere('sku', 'like', '%' . $target . '%')/*->orwhereHas('translation', function ($query) use ($target) {
                 $query->where('meta_description', 'like', '%' . $target . '%');
             })->orWhere('sku', 'like', '%' . $target . '%')
                                ->orwhereHas('translation', function ($query) use ($target) {
@@ -134,7 +134,7 @@ class Helper
             // search additionaly.
 
             if ($api) {
-                $products = $products->take(10);
+                $products = $products->take(5);
             }
 
             if ( ! $products->count()) {

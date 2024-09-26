@@ -18,13 +18,17 @@
             </a>
             <!-- Search-->
             <form action="{{ route('pretrazi') }}" id="search-form-first" class="w-100 d-none d-lg-flex flex-nowrap mx-4" method="get">
-                <div class="dropdown">
-                    <input type="text" name="{{ config('settings.search_keyword') }}" class="form-control form-control-lg" placeholder="Type Here..." id="search_box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeyup="javascript:load_data(this.value)" />
-                    <span id="search_result"></span>
+                {{--  <div class="dropdown input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                   <input type="text" name="{{ config('settings.search_keyword') }}" class="form-control rounded-start w-100" placeholder="Type Here..." id="search_box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onkeyup="javascript:load_data(this.value)" />
+                   <span id="search_result"></span>
+               </div>--}}
+                <div class="dropdown w-100">
+            <div class="input-group "><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                   <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="{{ __('front/ricekakis.search_products') }}" id="search_box" data-toggle="dropdown" aria-haspopup="true" autocomplete="off" aria-expanded="false" onkeyup="javascript:load_data(this.value)">
+               </div>
+
+                <div id="search_result" class="live-search"></div>
                 </div>
-                {{--<div class="input-group "><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
-                    <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="{{ __('front/ricekakis.search_products') }}">
-                </div>--}}
             </form>
             <!-- Toolbar-->
             <div class="navbar-toolbar d-flex flex-shrink-0 align-items-center ms-xl-2">
@@ -133,23 +137,30 @@
             if(query.length > 2) {
                 console.log(query);
 
+             let all =  '{{ route('pretrazi') }}' + '?pojam=' + query;
+
                 $.ajax({
                     method: 'get',
                     url: '{{ route('api.front.autocomplete') }}' + '?pojam_api=' + query,
+
                     success: function(json) {
                         console.log(json);
 
                         if (json.length > 0) {
-                            let html = '<ul class="list-group">';
-                            html += '<li class="list-group-item d-flex justify-content-between align-items-center"><b class="text-primary"><i>Rezultati:</i></b></li>';
+                            let html = '<table class="table products"> <tbody>';
+
 
                             json.forEach(function (item) {
-                                html += '<a href="' + item.url + '"><li class="list-group-item text-muted" style="cursor:pointer">' +
-                                    '<i class="fas fa-history mr-3"></i>' + item.name + '<i class="far fa-trash-alt float-right mt-1"></i>' +
-                                    '</li></a>';
+                                html += '<tr><td class="image"><a href="' + item.url + '">' + '<img  width="80" alt="' + item.name + ' " src="' + item.image + '">' + '</td>' +
+                                    '<td class="main"><a href="' + item.url + '">' + item.name + '</a> <br><small> ' + item.sku + '</small></td><td class="price"><div class="price"><span class="price">' + item.main_price_text + '</span></div>' +
+                                    '</td></tr>';
                             });
 
-                            html += '</ul>';
+
+
+                            html += '</tbody></table>';
+
+                            html += '<div class="result-text"><a href="' + all  + '" class="view-all-results">Pogledaj sve rezultate </a> </div>';
 
                             document.getElementById('search_result').innerHTML = html;
                         } else {
