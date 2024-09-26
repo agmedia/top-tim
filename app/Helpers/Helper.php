@@ -119,16 +119,11 @@ class Helper
             // Search products.
             $products = Product::query()->whereHas('translation', function (Builder $query) use ($target) {
                 $query->where('name', 'like', '%' . $target . '%');
-            })->orWhere('sku', 'like', '%' . $target . '%')/*->orwhereHas('translation', function ($query) use ($target) {
+            })->orWhere('sku', 'like', '%' . $target . '%')->orwhereHas('translation', function ($query) use ($target) {
                 $query->where('meta_description', 'like', '%' . $target . '%');
-            })->orWhere('sku', 'like', '%' . $target . '%')
-                               ->orwhereHas('translation', function ($query) use ($target) {
-                                   $query->where( 'sastojci', 'like', '%' . $target . '%');
-                               })->orwhereHas('translation', function ($query) use ($target) {
-                    $query->where('podaci', 'like', '%' . $target . '%');
-                })->orwhereHas('translation', function ($query) use ($target) {
+            })->orWhere('sku', 'like', '%' . $target . '%')->orwhereHas('translation', function ($query) use ($target) {
                     $query->where('description', 'like', '%' . $target . '%');
-                })*/->pluck('id');
+                })->pluck('id');
 
             // If API and count is too small
             // search additionaly.
