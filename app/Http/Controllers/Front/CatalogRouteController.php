@@ -338,7 +338,7 @@ class CatalogRouteController extends FrontBaseController
             foreach ($search['products'] as $id) {
                 $item = Product::query()->where('id', $id)->first();
 
-                Log::info('id = '.$id);
+                //Log::info('id = '.$id);
 
                 $response[] = [
                     'id' => $id,

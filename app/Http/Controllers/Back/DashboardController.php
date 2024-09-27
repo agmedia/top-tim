@@ -198,7 +198,7 @@ class DashboardController extends Controller
                             $prod = Product::query()->find($new_product_id);
                             $url = ProductHelper::url($prod);
 
-                            Log::info($url);
+                          //  Log::info($url);
 
                             ProductTranslation::query()->where('product_id', $new_product_id)->update([
                                 'url' => $url,

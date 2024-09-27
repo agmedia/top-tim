@@ -234,22 +234,22 @@ class ProductHelper
      */
     public static function hasOptionFromCartItem(array $item): array
     {
-        Log::info('public static function hasOptionFromCartItem(array $item)');
-        Log::info('1');
-        Log::info($item);
+      //  Log::info('public static function hasOptionFromCartItem(array $item)');
+       // Log::info('1');
+      //  Log::info($item);
 
         //return [];
 
         if (isset($item['attributes']['options']) && ! empty($item['attributes']['options'])) {
-            Log::info('2');
+           // Log::info('2');
             $option = collect($item['attributes']['options'])->first();
 
-            Log::info($option);
+          //  Log::info($option);
             $product_option = ProductOption::query()->find($option['id']);
 
             if ($product_option) {
-                Log::info('3');
-                Log::info('public static function hasOptionFromCartItem(array $item): array ::::::: ');
+                //Log::info('3');
+               // Log::info('public static function hasOptionFromCartItem(array $item): array ::::::: ');
                 $option['option_id'] = $product_option->option_id;
                 $option['parent_id'] = $product_option->parent_id;
             }
@@ -257,7 +257,7 @@ class ProductHelper
             return $option;
         }
 
-        Log::info('4');
+      //  Log::info('4');
 
         return [];
     }
