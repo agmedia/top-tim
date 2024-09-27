@@ -209,9 +209,9 @@ class Options extends Model
 
                 $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
                 $query->whereHas('products', function ($query) use ($_ids) {
-                    $query->where('products.status', 1)->whereIn('products.id', $_ids);
+                    $query->where('products.status', 1)->where('products.quantity', '!=', 0)->whereIn('products.id', $_ids);
                 })->orwhereHas('subproducts', function ($query) use ($_ids) {
-                    $query->where('products.status', 1)->whereIn('products.id', $_ids);
+                    $query->where('products.status', 1)->where('products.quantity', '!=', 0)->whereIn('products.id', $_ids);
                 });
             }
         }

@@ -135,8 +135,8 @@
 
                     $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
                     $query->whereHas('products', function ($query) use ($_ids) {
-                        $query->active()->hasStock()->whereIn('id', $_ids);
-                    ;
+                        $query->where('products.status', 1)->where('products.quantity', '!=', 0)->whereIn('products.id', $_ids);
+
                     });
                 }
             }
