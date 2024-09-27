@@ -3455,7 +3455,7 @@ Vue.directive('tooltip', function (el, binding) {
       this.selectedOptions = [];
       this.start = '';
       this.end = '';
-      window.location.replace(location.pathname);
+      // window.location.replace(location.pathname);
     },
     /**
      *
@@ -5217,13 +5217,7 @@ var render = function render() {
       attrs: {
         "for": brand.translation.slug
       }
-    }, [_vm._v(_vm._s(brand.title))])]), _vm._v(" "), _c("span", {
-      staticClass: "fs-xs text-muted"
-    }, [_c("a", {
-      attrs: {
-        href: _vm.origin + brand.url
-      }
-    }, [_vm._v(_vm._s(Number(brand.products_count).toLocaleString("hr-HR")))])])]);
+    }, [_vm._v(_vm._s(brand.title))])])]);
   }), 0)])])]) : _vm._e()])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
   }, [_vm.attributes.length ? _c("div", {
@@ -5476,19 +5470,7 @@ var render = function render() {
         "for": option.id
       }
     })]) : _vm._e()];
-  })], 2)])])]) : _vm._e()]), _vm._v(" "), _c("div", {
-    staticClass: "col-lg-12"
-  }, [_c("button", {
-    staticClass: "btn btn-sm btn-primary mt-4",
-    attrs: {
-      type: "button"
-    },
-    on: {
-      click: _vm.cleanQuery
-    }
-  }, [_c("i", {
-    staticClass: "ci-trash"
-  }), _vm._v(" Očisti sve")])])])])]);
+  })], 2)])])]) : _vm._e()])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,

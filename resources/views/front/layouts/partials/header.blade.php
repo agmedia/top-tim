@@ -151,9 +151,7 @@
 
 
                             json.forEach(function (item) {
-                                html += '<tr><td class="image"><a href="' + item.url + '">' + '<img  width="80" alt="' + item.name + ' " src="' + item.image + '">' + '</td>' +
-                                    '<td class="main"><a href="' + item.url + '">' + item.name + '</a> <br><small> ' + item.sku + '</small></td><td class="price"><div class="price"><span class="price">' + item.main_price_text + '</span></div>' +
-                                    '</td></tr>';
+                                html += '<tr><td class="image"><a href="' + item.url + '">' + '<img  width="80" alt="' + item.name + ' " src="' + item.image + '">' + '</a></td>' + '<td class="main"><a href="' + item.url + '">' + item.name + ' <br><small> ' + item.sku + '</small></a></td><td class="price"><a href="' + item.url + '"><div class="price"><span class="price">' + item.main_price_text + '</span></div>' + '</a></td></tr>';
                             });
 
 

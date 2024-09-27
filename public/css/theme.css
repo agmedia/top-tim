@@ -104,6 +104,12 @@ body {
 
 }
 
+.live-search tr a{
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
 .live-search .table.products {
     margin-bottom:0;
 }

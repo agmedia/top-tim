@@ -24,7 +24,7 @@
                                                     <input class="form-check-input" type="checkbox" :id="brand.translation.slug" v-bind:value="brand.translation.slug" v-model="selectedBrands" @click="closeSidebar">
                                                     <label class="form-check-label widget-filter-item-text" :for="brand.translation.slug">{{ brand.title }}</label>
                                                 </div>
-                                                <span class="fs-xs text-muted"><a :href="origin + brand.url">{{ Number(brand.products_count).toLocaleString('hr-HR') }}</a></span>
+                                              <!--  <span class="fs-xs text-muted"><a :href="origin + brand.url">{{-- Number(brand.products_count).toLocaleString('hr-HR') --}}</a></span> -->
                                             </li>
                                         </div>
                                     </div>
@@ -103,9 +103,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
+              <!--  <div class="col-lg-12">
                     <button type="button" class="btn btn-sm btn-primary mt-4" v-on:click="cleanQuery"><i class=" ci-trash"></i> Očisti sve</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -468,7 +468,7 @@ export default {
             this.selectedOptions = [];
             this.start = '';
             this.end = '';
-            window.location.replace(location.pathname);
+           // window.location.replace(location.pathname);
         },
 
         /**
