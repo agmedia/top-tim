@@ -216,8 +216,8 @@ export default {
             this.products_loaded = false;
             let params = this.setParams();
 
-            console.log('tu sam...')
-            console.log(params)
+            //console.log('tu sam...')
+          //  console.log(params)
 
             axios.post('filter/getProducts', { params }).then(response => {
                 this.products_loaded = true;
@@ -229,8 +229,8 @@ export default {
                     this.checkAvailables();
                 }
 
-                console.log('Response::data.data')
-                console.log(response.data.data)
+               // console.log('Response::data.data')
+               // console.log(response.data.data)
 
                 if (params.pojam != '' && !this.products.total) {
                     this.search_zero_result = true;
@@ -400,8 +400,8 @@ export default {
                 this.attributes = response.data;
                 this.preselect();
 
-                console.log('attributi')
-                console.log(response.data)
+             //   console.log('attributi')
+              //  console.log(response.data)
             });
         },
 

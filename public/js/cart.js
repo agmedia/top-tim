@@ -3792,8 +3792,10 @@ Vue.directive('tooltip', function (el, binding) {
       this.navigation_zero_result = false;
       this.products_loaded = false;
       var params = this.setParams();
-      console.log('tu sam...');
-      console.log(params);
+
+      //console.log('tu sam...')
+      //  console.log(params)
+
       axios.post('filter/getProducts', {
         params: params
       }).then(function (response) {
@@ -3804,8 +3806,10 @@ Vue.directive('tooltip', function (el, binding) {
         if (_this.$store.state.storage.getCart()) {
           _this.checkAvailables();
         }
-        console.log('Response::data.data');
-        console.log(response.data.data);
+
+        // console.log('Response::data.data')
+        // console.log(response.data.data)
+
         if (params.pojam != '' && !_this.products.total) {
           _this.search_zero_result = true;
         }
@@ -3970,8 +3974,9 @@ Vue.directive('tooltip', function (el, binding) {
       }).then(function (response) {
         _this3.attributes = response.data;
         _this3.preselect();
-        console.log('attributi');
-        console.log(response.data);
+
+        //   console.log('attributi')
+        //  console.log(response.data)
       });
     },
     /**
