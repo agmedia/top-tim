@@ -209,9 +209,9 @@ class Options extends Model
 
                 $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
                 $query->whereHas('products', function ($query) use ($_ids) {
-                    $query->active()->hasStock()->whereIn('id', $_ids);
+                  //  $query->active()->hasStock()->whereIn('id', $_ids);
                 })->orwhereHas('subproducts', function ($query) use ($_ids) {
-                    $query->active()->hasStock()->whereIn('id', $_ids);
+                  //  $query->active()->hasStock()->whereIn('id', $_ids);
                 });
             }
         }
@@ -219,6 +219,7 @@ class Options extends Model
         $query->limit($limit)
               ->withCount('products')
               ->orderBy('sort_order');
+
 
         return $query;
     }

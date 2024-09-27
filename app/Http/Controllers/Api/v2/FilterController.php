@@ -264,6 +264,9 @@ class FilterController extends Controller
        // Log::info($request->toArray());
         $response = [];
 
+
+
+
         if ($request->has('params')) {
             $options  = (new Options())->filter($request->input('params'))
                                        ->get()->sortBy('translation.title');
