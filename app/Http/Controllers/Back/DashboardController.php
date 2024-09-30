@@ -15,11 +15,13 @@ use App\Mail\OrderSent;
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Mjerilo;
+use App\Models\Back\Catalog\Options\OptionsTranslation;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductAttribute;
 use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Back\Catalog\Product\ProductImageTranslation;
+use App\Models\Back\Catalog\Product\ProductOption;
 use App\Models\Back\Catalog\Product\ProductTranslation;
 use App\Models\Back\Catalog\Publisher;
 use App\Models\Back\Jobs;
@@ -37,6 +39,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOption\Option;
 
 class DashboardController extends Controller
 {
@@ -110,7 +113,7 @@ class DashboardController extends Controller
 
             if (str_contains($sku, 'YS') ) {
 
-            } else{
+            } else {
 
 
                 if (str_contains($sku, 'Zeus') ) {
@@ -227,6 +230,80 @@ class DashboardController extends Controller
         }
 
         return redirect()->route('dashboard')->with(['success' => 'Import je uspješno obavljen..! ' . $count . ' proizvoda importano.']);
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request) {
+        $items = DB::table('temp_products')->get();
+        $count_single = 0;
+        $count_double = 0;
+
+        foreach ($items as $item) {
+            $product = Product::query()->where('sku', $item->sku)->first();
+
+            if ($product && ! $product->vegan) {
+                $option_trans = OptionsTranslation::query()->where('title', $item->boja)->first();
+
+                if ($option_trans) {
+                    $option = Option::query()->where('id', $option_trans->option_id)->first();
+
+                    if ($option && $item->velicine && $item->velicine != '' && $item->boja && $item->boja != '') {
+
+                        // Store double option
+                        $sizes = explode(',', $option->velicine);
+                        $sub_option_array = [];
+
+                        foreach ($sizes as $size) {
+                            $sub_option_trans = OptionsTranslation::query()->where('title', $size)->first();
+
+                            if ($sub_option_trans) {
+                                $sub_option = Option::query()->where('id', $sub_option_trans->option_id)->first();
+
+                                if ($sub_option) {
+                                    $sub_option_array[] = [
+                                        'id' => $sub_option->id,
+                                        'qty' => 1000,
+                                        'price' => '0.0000'
+                                    ];
+                                }
+                            }
+                        }
+
+                        if ( ! empty($sub_option_array)) {
+                            $color_array =[0 => [
+                                'main_id' => $option->id,
+                                'sub_options' => $sub_option_array
+                            ]];
+
+                            ProductOption::storeDouble($color_array, $product->id);
+
+                            $count_double++;
+                        }
+
+                    }
+
+                    // Store single option
+                    if ($option && $item->velicine == '' && $item->boja && $item->boja != '') {
+                        $color_array =[0 => [
+                            'value' => $option->id,
+                            'qty' => 1000,
+                            'price' => '0.0000'
+                        ]];
+
+                        ProductOption::storeSingle($color_array, $product->id);
+
+                        $count_single++;
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('dashboard')->with(['success' => 200, 'single' => $count_single, 'double' => $count_double]);
     }
 
 

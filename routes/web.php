@@ -71,6 +71,7 @@ Route::group(
 
         Route::get('setRoles', [DashboardController::class, 'setRoles'])->name('roles.set');
         Route::get('import', [DashboardController::class, 'import'])->name('import.initial');
+        Route::get('update', [DashboardController::class, 'update'])->name('update.initial');
         Route::get('mailing-test', [DashboardController::class, 'mailing'])->name('mailing.test');
         Route::get('letters', [DashboardController::class, 'letters'])->name('letters.import');
         Route::get('slugs', [DashboardController::class, 'slugs'])->name('slugs.revision');
