@@ -15,6 +15,7 @@ use App\Mail\OrderSent;
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Mjerilo;
+use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Options\OptionsTranslation;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductAttribute;
@@ -39,7 +40,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOption\Option;
 
 class DashboardController extends Controller
 {
@@ -250,7 +250,7 @@ class DashboardController extends Controller
                 $option_trans = OptionsTranslation::query()->where('title', $item->boja)->first();
 
                 if ($option_trans) {
-                    $option = Option::query()->where('id', $option_trans->option_id)->first();
+                    $option = Options::query()->where('id', $option_trans->option_id)->first();
 
                     if ($option && $item->velicine && $item->velicine != '' && $item->boja && $item->boja != '') {
 
@@ -262,7 +262,7 @@ class DashboardController extends Controller
                             $sub_option_trans = OptionsTranslation::query()->where('title', $size)->first();
 
                             if ($sub_option_trans) {
-                                $sub_option = Option::query()->where('id', $sub_option_trans->option_id)->first();
+                                $sub_option = Options::query()->where('id', $sub_option_trans->option_id)->first();
 
                                 if ($sub_option) {
                                     $sub_option_array[] = [
