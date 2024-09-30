@@ -109,7 +109,7 @@ class Options extends Model
                 'group'      => Str::slug($group),
                 'type'       => $this->request->input('type'),
                 'value'      => $item['color'] ?? '#000000',
-                'value_opt'  => $item['color_opt'] ?? null,
+                'value_opt'  => $item['color_opt'] ?? '#FFFFF1',
                 'option_sku'  => $item['option_sku'] ?? null,
                 'data'       => '',
                 'sort_order' => $item['sort_order'] ?? 0,
