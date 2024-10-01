@@ -5397,12 +5397,10 @@ var render = function render() {
       attrs: {
         "for": option.id
       }
-    }, [_vm._v(_vm._s(option.title))])]), _vm._v(" "), _c("span", {
-      staticClass: "fs-xs text-muted"
-    }, [_vm._v(_vm._s(Number(option.products_count).toLocaleString("hr-HR")))])]) : _vm._e()];
+    }, [_vm._v(_vm._s(option.title))])])]) : _vm._e()];
   })], 2)])])])])]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-12"
-  }, [_vm.options.lengths ? _c("div", {
+  }, [_vm.options.length ? _c("div", {
     staticClass: "mb-grid-gutter"
   }, [_c("div", {
     staticClass: "px-2"

@@ -74,7 +74,7 @@
                                                         <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions" @click="closeSidebar">
                                                         <label class="form-check-label widget-filter-item-text" :for="option.id">{{ option.title }}</label>
                                                     </div>
-                                                    <span class="fs-xs text-muted">{{ Number(option.products_count).toLocaleString('hr-HR') }}</span>
+
                                                 </li>
                                             </template>
                                         </div>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-lg-12">
                     <!-- Filter by Color-->
-                    <div class="mb-grid-gutter" v-if="options.lengths">
+                    <div class="mb-grid-gutter" v-if="options.length">
                         <div class=" px-2" >
                             <div class="widget widget-filter2">
                                 <h3 class="widget-title" v-if="show_color">Boja <span v-if="!options_loaded" class="spinner-border spinner-border-sm" style="float: right;"></span></h3>
