@@ -193,7 +193,7 @@ class Helper
 
         } else {
             $query->whereHas('translation', function ($query) use ($preg) {
-                $query->where('name', 'like', '%' . $preg[0] . '%');
+                $query->where('name', 'like', '%' . $preg[0] . '%')->orWhere('sku', 'like', '%' . $preg[0]. '%');
             });
         }
 
