@@ -252,10 +252,11 @@ class DashboardController extends Controller
                 if ($option_trans) {
                     $option = Options::query()->where('id', $option_trans->option_id)->first();
 
+
                     if ($option && $item->velicine && $item->velicine != '' && $item->boja && $item->boja != '') {
 
                         // Store double option
-                        $sizes = explode(',', $option->velicine);
+                        $sizes = explode(',', $item->velicine);
                         $sub_option_array = [];
 
                         foreach ($sizes as $size) {
@@ -282,6 +283,10 @@ class DashboardController extends Controller
 
                             ProductOption::storeDouble($color_array, $product->id);
 
+                            $this->storeImage($item->image, $option->id);
+
+                            Product::query()->where('id', $product->id)->update(['vegan' => 1]);
+
                             $count_double++;
                         }
 
@@ -297,6 +302,10 @@ class DashboardController extends Controller
 
                         ProductOption::storeSingle($color_array, $product->id);
 
+                        $this->storeImage($item->image, $option->id);
+
+                        Product::query()->where('id', $product->id)->update(['vegan' => 1]);
+
                         $count_single++;
                     }
                 }
@@ -304,6 +313,26 @@ class DashboardController extends Controller
         }
 
         return redirect()->route('dashboard')->with(['success' => 200, 'single' => $count_single, 'double' => $count_double]);
+    }
+
+
+    /**
+     * @param string     $image
+     * @param int|string $option_id
+     *
+     * @return void
+     */
+    private function storeImage(string $image, int|string $option_id): void
+    {
+        if ($image && $image != '') {
+            $pt_image = ProductImageTranslation::query()->where('title', $image)->first();
+
+            if ($pt_image) {
+                ProductImage::query()->where('id', $pt_image->product_image_id)->update([
+                    'option_id' => $option_id,
+                ]);
+            }
+        }
     }
 
 
