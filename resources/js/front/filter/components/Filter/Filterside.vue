@@ -93,7 +93,7 @@
                                 <div class="d-flex flex-wrap">
                                     <template v-for="option in options">
                                         <div class="form-check form-option text-center mb-2 mx-1" v-if="option.type == 'color'"  v-tooltip:top="option.title"  >
-                                            <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions">
+                                            <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="selectedOptions" @click="closeSidebar">
                                             <label class="form-option-label rounded-circle" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style "></span></label>
                                             <label class="d-block fs-xs text-muted mt-n1" :for="option.id"></label>
                                         </div>

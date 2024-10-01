@@ -260,8 +260,8 @@ class FilterController extends Controller
      */
     public function options(Request $request)
     {
-       // Log::info('public function options(Request $request) ----');
-       // Log::info($request->toArray());
+    //    Log::info('public function options(Request $request) ----');
+     //   Log::info($request->toArray());
         $response = [];
 
 
@@ -270,6 +270,8 @@ class FilterController extends Controller
         if ($request->has('params')) {
             $options  = (new Options())->filter($request->input('params'))
                                        ->get()->sortBy('translation.title');
+
+
 
             foreach ($options as $option) {
                 $response[] = [
@@ -285,6 +287,8 @@ class FilterController extends Controller
                 ];
             }
         }
+
+//Log::info($response);
 
         return response()->json($response);
     }

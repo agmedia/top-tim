@@ -5442,6 +5442,7 @@ var render = function render() {
         checked: Array.isArray(_vm.selectedOptions) ? _vm._i(_vm.selectedOptions, option.id) > -1 : _vm.selectedOptions
       },
       on: {
+        click: _vm.closeSidebar,
         change: function change($event) {
           var $$a = _vm.selectedOptions,
             $$el = $event.target,

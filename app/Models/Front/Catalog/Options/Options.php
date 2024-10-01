@@ -169,10 +169,14 @@ class Options extends Model
     {
         $query = (new Options())->newQuery();
 
+
+
         if (isset($request['search_option']) && $request['search_option']) {
             $query->active();
 
             $query = Helper::searchByTitle($query, $request['search_option']);
+
+
 
         } else {
             $query->active();
