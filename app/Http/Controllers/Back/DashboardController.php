@@ -246,7 +246,7 @@ class DashboardController extends Controller
         foreach ($items as $item) {
             $product = Product::query()->where('sku', $item->sku)->first();
 
-            if ($product && ! $product->vegan) {
+            if ($product) {
                 $option_trans = OptionsTranslation::query()->where('title', $item->boja)->first();
 
                 if ($option_trans) {
@@ -285,7 +285,7 @@ class DashboardController extends Controller
 
                             $this->storeImage($item->image, $option->id);
 
-                            Product::query()->where('id', $product->id)->update(['vegan' => 1]);
+
 
                             $count_double++;
                         }
@@ -304,7 +304,7 @@ class DashboardController extends Controller
 
                         $this->storeImage($item->image, $option->id);
 
-                        Product::query()->where('id', $product->id)->update(['vegan' => 1]);
+
 
                         $count_single++;
                     }
@@ -312,7 +312,7 @@ class DashboardController extends Controller
             }
         }
 
-        return redirect()->route('dashboard')->with(['success' => 200, 'single' => $count_single, 'double' => $count_double]);
+        return redirect()->route('dashboard')->with(['success' => $count_single.' + ' .$count_double, 'single' => $count_single, 'double' => $count_double]);
     }
 
 
