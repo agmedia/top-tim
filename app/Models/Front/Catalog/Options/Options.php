@@ -165,7 +165,7 @@ class Options extends Model
      *
      * @return Builder
      */
-    public function filter(array $request, int $limit = 20): Builder
+    public function filter(array $request, int $limit = 500): Builder
     {
         $query = (new Options())->newQuery();
 
@@ -187,9 +187,9 @@ class Options extends Model
                     if ($request['option']) {
                         if (strpos($request['option'], '+') !== false) {
                             $arr  = explode('+', $request['option']);
-                            $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique;
+                            $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique();
                         } else {
-                            $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique;
+                            $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique();
                         }
 
                         $query->whereIn('id', $pids);
@@ -199,9 +199,9 @@ class Options extends Model
                     if ($request['option']) {
                         if (strpos($request['option'], '+') !== false) {
                             $arr  = explode('+', $request['option']);
-                            $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique;
+                            $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique();
                         } else {
-                            $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique;
+                            $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique();
                         }
 
                         $query->whereIn('id', $pids);
@@ -212,6 +212,8 @@ class Options extends Model
             if ( ! $request['group'] && $request['ids']) {
 
                 $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
+
+
                 $query->whereHas('products', function ($query) use ($_ids) {
                     $query->where('products.status', 1)->where('products.quantity', '!=', 0)->whereIn('products.id', $_ids);
                 })->orwhereHas('subproducts', function ($query) use ($_ids) {
