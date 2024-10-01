@@ -237,7 +237,9 @@ class Options extends Model
     public static function getColorList()
     {
         $response = [];
-        $values   = Options::query()->where('type', 'color')->orderBy('sort_order','asc')->get();
+        $values   = Options::query()->where('type', 'color')->with('translation', function ($query) {
+            $query->orderBy('title','asc');
+        })->get();
 
         foreach ($values as $value) {
             $response[] = [
@@ -249,6 +251,7 @@ class Options extends Model
                 'sort_order' => $value->sort_order
             ];
         }
+        $response = collect($response)->sortBy('title')->toArray();
 
         return $response;
     }
