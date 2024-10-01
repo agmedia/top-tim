@@ -162,21 +162,18 @@ class Options extends Model
     /**
      * @param array $request
      * @param int   $limit
+     *                    If $limit is 0 result is not limited.
      *
      * @return Builder
      */
-    public function filter(array $request, int $limit = 500): Builder
+    public function filter(array $request, int $limit = 20): Builder
     {
         $query = (new Options())->newQuery();
-
-
 
         if (isset($request['search_option']) && $request['search_option']) {
             $query->active();
 
             $query = Helper::searchByTitle($query, $request['search_option']);
-
-
 
         } else {
             $query->active();
@@ -222,8 +219,11 @@ class Options extends Model
             }
         }
 
-        $query->limit($limit)
-              ->withCount('products')
+        if ($limit) {
+            $query->limit($limit);
+        }
+
+        $query->withCount('products')
               ->orderBy('sort_order');
 
 

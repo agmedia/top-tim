@@ -13,6 +13,7 @@ use App\Models\Front\Catalog\Options\Options;
 use App\Models\Front\Catalog\ProductOption;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Publisher;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -258,20 +259,13 @@ class FilterController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function options(Request $request)
+    public function options(Request $request): JsonResponse
     {
-    //    Log::info('public function options(Request $request) ----');
-     //   Log::info($request->toArray());
         $response = [];
 
-
-
-
         if ($request->has('params')) {
-            $options  = (new Options())->filter($request->input('params'))
+            $options  = (new Options())->filter($request->input('params'), 0)
                                        ->get()->sortBy('translation.title');
-
-
 
             foreach ($options as $option) {
                 $response[] = [
@@ -287,8 +281,6 @@ class FilterController extends Controller
                 ];
             }
         }
-
-//Log::info($response);
 
         return response()->json($response);
     }
