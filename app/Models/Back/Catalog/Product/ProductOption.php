@@ -116,7 +116,7 @@ class ProductOption extends Model
     public static function storeSingle(array $options, int $product_id): array
     {
         $created = [];
-        //self::query()->where('product_id', $product_id)->delete();
+        self::query()->where('product_id', $product_id)->delete();
         $product = Product::query()->find($product_id);
 
         foreach ($options as $option) {
@@ -150,7 +150,7 @@ class ProductOption extends Model
     public static function storeDouble(array $options, int $product_id): array
     {
         $created = [];
-        //self::query()->where('product_id', $product_id)->delete();
+        self::query()->where('product_id', $product_id)->delete();
         $product = Product::query()->find($product_id);
 
         foreach ($options as $option) {
