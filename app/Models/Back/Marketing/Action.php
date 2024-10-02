@@ -370,7 +370,7 @@ class Action extends Model
             }
 
             if ($this->request->group == 'brand') {
-                return $products->whereIn('brand_id', $links);
+                $products->whereIn('brand_id', $links);
             }
 
             $products = $this->removeLockedActionsProducts($products);
