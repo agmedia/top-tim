@@ -466,6 +466,12 @@ class Action extends Model
             $id = $action_id;
         }
 
+        $has_products = Product::query()->where('action_id', $id)->count();
+
+        if (( ! $has_products) or ($has_products == 0) ) {
+            return 1;
+        }
+
         return Product::where('action_id', $id)->update([
             'action_id'    => 0,
             'special'      => null,
