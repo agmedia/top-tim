@@ -248,13 +248,7 @@ class CheckoutController extends FrontBaseController
 
     public function successMyposNotify(Request $request)
     {
-
-      return 'OK';
-
-
-
-
-
+        return response('OK', 200);
     }
 
 
