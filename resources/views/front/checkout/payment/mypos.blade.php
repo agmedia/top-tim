@@ -1,4 +1,4 @@
-<form name="pay" class="needs-validation w-100" action="{{ $data['action'] }}" novalidate method="POST">
+<form name="pay" class="needs-validation w-100" action="{{ route('pregled') }}" novalidate method="GET">
     <div class="d-block pt-0 pb-2  text-start" >
         <div class="alert alert-info  d-flex"  role="alert">
             <div class="alert-icon">

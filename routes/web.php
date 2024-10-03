@@ -446,6 +446,10 @@ Route::group(
     Route::get('/narudzba', [CheckoutController::class, 'order'])->name('checkout');
     Route::get('/uspjeh', [CheckoutController::class, 'success'])->name('checkout.success');
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
+
+    Route::post('/mypos/uspjeh', [CheckoutController::class, 'successMypos'])->name('checkout.success.myposs');
+
+
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
 //
     Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('pretrazi');
