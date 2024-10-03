@@ -125,7 +125,7 @@ class MyPos
      *
      * @return bool
      */
-    public function finishOrder(Order $order, Request $request)
+    public function finishOrder(Order $order, Request $request): bool
     {
 
 

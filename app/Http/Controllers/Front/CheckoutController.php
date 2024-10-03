@@ -222,7 +222,7 @@ class CheckoutController extends FrontBaseController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successMypos(Request $request): bool
+    public function successMypos(Request $request)
     {
 
         $id = str_replace('toptim','', $request->get('OrderID'));
@@ -237,7 +237,7 @@ class CheckoutController extends FrontBaseController
 
         $this->forgetCheckoutCache();
 
-        return response()->json(['status' => 0, 'message' => 'OK']);
+        return response()->json(['status' => 0, 'message' => 'Accepted']);
 
 
     }
