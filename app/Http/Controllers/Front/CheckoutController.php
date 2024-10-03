@@ -114,14 +114,14 @@ class CheckoutController extends FrontBaseController
     {
         $order = new Order();
 
-
+        Log::info($request);
 
 
         if ($request->has('IPCmethod')) {
             $toptim_orderid = str_replace('toptim','', $request->get('OrderID'));
             $order->setData($toptim_orderid);
 
-            echo 'OK';
+
         }
 
 
@@ -136,7 +136,8 @@ class CheckoutController extends FrontBaseController
         if ($order->finish($request)) {
 
             if ($request->has('IPCmethod')) {
-                return redirect()->route('checkout.success.mypos');
+
+                return redirect()->route('checkout.success');
             }
 
             return redirect()->route('checkout.success');
@@ -214,6 +215,7 @@ class CheckoutController extends FrontBaseController
         }
 
         return response()->json(['status' => 1, 'message' => 'Failed']);
+
     }
 
 
@@ -224,7 +226,7 @@ class CheckoutController extends FrontBaseController
      */
     public function successMypos(Request $request)
     {
-
+        Log::info($request);
         $id = str_replace('toptim','', $request->get('OrderID'));
 
         $order = Order::query()->where('id', $id)->first();
@@ -237,7 +239,20 @@ class CheckoutController extends FrontBaseController
 
         $this->forgetCheckoutCache();
 
-        return response()->json(['status' => 0, 'message' => 'Accepted']);
+     //   return response()->json(['status' => 200, 'message' => 'OK']);
+
+
+
+
+    }
+
+    public function successMyposNotify(Request $request)
+    {
+
+      return 'OK';
+
+
+
 
 
     }
