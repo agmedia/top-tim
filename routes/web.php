@@ -447,7 +447,7 @@ Route::group(
     Route::get('/uspjeh', [CheckoutController::class, 'success'])->name('checkout.success');
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
 
-    Route::post('/mypos/uspjeh', [CheckoutController::class, 'successMypos'])->name('checkout.success.myposs');
+    Route::post('/mypos/uspjeh', [CheckoutController::class, 'successMypos'])->name('checkout.success.mypos');
 
 
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
