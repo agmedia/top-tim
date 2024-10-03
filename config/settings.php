@@ -93,7 +93,7 @@ return [
     'payment' => [
         'providers' => [
             'wspay'  => \App\Models\Front\Checkout\Payment\Wspay::class,
-            'mypos'  => \App\Models\Front\Checkout\Payment\Mypos::class,
+            'mypos'  => \App\Models\Front\Checkout\Payment\MyPos::class,
             //'payway' => \App\Models\Front\Checkout\Payment\Payway::class,
             //'corvus' => \App\Models\Front\Checkout\Payment\Corvus::class,
            // 'keks'   => \App\Models\Front\Checkout\Payment\Keks::class,

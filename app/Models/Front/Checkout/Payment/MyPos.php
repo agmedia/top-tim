@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
  * Class Corvus
  * @package App\Models\Front\Checkout\Payment
  */
-class Mypos
+class MyPos
 {
 
     /**
