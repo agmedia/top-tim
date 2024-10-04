@@ -504,4 +504,4 @@ Route::group(
     });
 });
 
-Route::any('/hr/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
+Route::any('/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
