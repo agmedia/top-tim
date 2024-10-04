@@ -15,8 +15,9 @@
             @if ($type == 'color')
                 <th class="font-size-sm" style="width:10%">Boja</th>
                 <th colspan="2"  class="font-size-sm" style="width:10%">Boja dodatna</th>
-            @endif
+
                 <th class="font-size-sm" style="width:10%">{{ __('Šifra') }}</th>
+                @endif
             <th class="font-size-sm" style="width:10%">{{ __('back/attribute.sort') }}</th>
             <th class="text-right font-size-sm"  style="width:20%">{{ __('back/attribute.obrisi') }}</th>
         </tr>
@@ -44,11 +45,12 @@
                             <span class="font-size-sm"  > <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color_opt"   name="item[{{ $key }}][color_opt]" ></span>
                         @endif
                     </td>
-                @endif
+
 
                 <td>
                     <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.option_sku" name="item[{{ $key }}][option_sku]" required></span>
                 </td>
+                @endif
                 <td>
                     <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>
                 </td>
