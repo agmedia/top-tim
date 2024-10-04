@@ -251,23 +251,7 @@ class CheckoutController extends FrontBaseController
     }
 
 
-    public function successMyposNotify(Request $request)
-    {
-        Log::info($request);
-        $id = str_replace('toptim','', $request->get('OrderID'));
 
-        $order = Order::query()->where('id', $id)->first();
-
-        $order->setData($id)->finish($request);
-
-        $order->update([
-            'order_status_id' => config('settings.order.new_status')
-        ]);
-
-        $this->forgetCheckoutCache();
-
-        return response('OK', 200);
-    }
 
 
 
