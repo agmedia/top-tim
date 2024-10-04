@@ -395,9 +395,8 @@ Route::prefix('api/v2')->group(function () {
     return phpinfo();
 })->name('index');*/
 
+Route::post('/mypos/narudzba', [CheckoutController::class, 'orderMypos'])->name('checkout.success.mypos');
 Route::post('/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
-
-Route::post('/mypos/uspjeh', [CheckoutController::class, 'successMypos'])->name('checkout.success.mypos');
 
 /**
  * FRONT ROUTES
@@ -447,13 +446,9 @@ Route::group(
     Route::get('/kosarica', [CheckoutController::class, 'cart'])->name('kosarica');
     Route::get('/naplata', [CheckoutController::class, 'checkout'])->name('naplata');
     Route::get('/pregled', [CheckoutController::class, 'view'])->name('pregled');
-    Route::match(['get', 'post'], '/narudzba', [CheckoutController::class, 'order'])->name('checkout');
+    Route::get('/narudzba', [CheckoutController::class, 'order'])->name('checkout');
     Route::get('/uspjeh', [CheckoutController::class, 'success'])->name('checkout.success');
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
-
-
-
-
 
 
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');

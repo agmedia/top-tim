@@ -114,14 +114,6 @@ class CheckoutController extends FrontBaseController
     {
         $order = new Order();
 
-        if ($request->has('IPCmethod')) {
-            $toptim_orderid = str_replace('toptim','', $request->get('OrderID'));
-            $order->setData($toptim_orderid);
-
-
-        }
-
-
         if ($request->has('provjera')) {
             $order->setData($request->input('provjera'));
         }
@@ -131,12 +123,6 @@ class CheckoutController extends FrontBaseController
         }
 
         if ($order->finish($request)) {
-
-            if ($request->has('IPCmethod')) {
-
-                return redirect()->route('checkout.success');
-            }
-
             return redirect()->route('checkout.success');
         }
 
@@ -160,8 +146,6 @@ class CheckoutController extends FrontBaseController
         if ($order) {
             $cart = $this->shoppingCart();
 
-            //Log::info($cart->get());
-
             $order->decreaseItems($order->products);
 
             Loyalty::resolveOrder($cart->get(), $order);
@@ -170,11 +154,6 @@ class CheckoutController extends FrontBaseController
                 Mail::to(config('mail.admin'))->send(new OrderReceived($order));
                 Mail::to($order->payment_email)->send(new OrderSent($order));
             })->afterResponse();
-
-
-            // Sent labels to gls
-          //  $gls   = new Gls($order);
-           // $label = $gls->resolve();
 
             $this->forgetCheckoutCache();
 
@@ -194,39 +173,38 @@ class CheckoutController extends FrontBaseController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successMypos(Request $request)
+    public function orderMypos(Request $request)
     {
-        Log::info($request);
-        $id = str_replace('toptim','', $request->get('OrderID'));
+        Log::info('orderMypos:: $request...');
+        Log::info($request->toArray());
 
-        $order = Order::query()->where('id', $id)->first();
+        $order = new Order();
 
-        $order->setData($id)->finish($request);
+        if ($request->has('IPCmethod')) {
+            $toptim_orderid = str_replace('toptim','', $request->get('OrderID'));
+            $order->setData($toptim_orderid);
 
-        $order->update([
-            'order_status_id' => config('settings.order.new_status')
-        ]);
+            if ($order->isCreated() && $order->finish($request)) {
+                $this->resolveFinishedOrder($toptim_orderid);
 
-        $this->forgetCheckoutCache();
+                return redirect()->route('checkout.success');
+            }
 
-       // return response('OK', 200);
+            return redirect()->route('checkout.error');
+        }
 
-          return response()->json(['status' => 200, 'message' => 'OK']);
-
-
-
-
+        return redirect()->route('front.checkout.checkout', ['step' => '']);
     }
+
+
 
     public function successMyposNotify(Request $request)
     {
+        Log::info('successMyposNotify:: $request...');
+        Log::info($request->toArray());
 
         return response('OK', 200);
     }
-
-
-
-
 
 
     /**
@@ -242,6 +220,33 @@ class CheckoutController extends FrontBaseController
      *                                Copyright : AGmedia                           *
      *                              email: filip@agmedia.hr                         *
      *******************************************************************************/
+
+    /**
+     * @param $id
+     *
+     * @return void
+     */
+    private function resolveFinishedOrder($id): void
+    {
+        $order = \App\Models\Back\Orders\Order::where('id', $id)->first();
+
+        $cart = $this->shoppingCart();
+
+        $order->decreaseItems($order->products);
+
+        Loyalty::resolveOrder($cart->get(), $order);
+
+        dispatch(function () use ($order) {
+            Mail::to(config('mail.admin'))->send(new OrderReceived($order));
+            Mail::to($order->payment_email)->send(new OrderSent($order));
+        })->afterResponse();
+
+        $this->forgetCheckoutCache();
+
+        $cart->flush()->resolveDB();
+
+        TagManager::getGoogleSuccessDataLayer($order);
+    }
 
     /**
      * @return array
