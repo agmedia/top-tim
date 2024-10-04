@@ -203,7 +203,7 @@ class CheckoutController extends FrontBaseController
         Log::info('successMyposNotify:: $request...');
         Log::info($request->toArray());
 
-        return response('OK', 200);
+        echo 'OK';
     }
 
 
