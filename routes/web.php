@@ -447,7 +447,7 @@ Route::group(
     Route::get('/kosarica', [CheckoutController::class, 'cart'])->name('kosarica');
     Route::get('/naplata', [CheckoutController::class, 'checkout'])->name('naplata');
     Route::get('/pregled', [CheckoutController::class, 'view'])->name('pregled');
-    Route::get('/narudzba', [CheckoutController::class, 'order'])->name('checkout');
+    Route::match(['get', 'post'], '/narudzba', [CheckoutController::class, 'order'])->name('checkout');
     Route::get('/uspjeh', [CheckoutController::class, 'success'])->name('checkout.success');
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
 

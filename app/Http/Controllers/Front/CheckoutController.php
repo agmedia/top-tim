@@ -209,9 +209,9 @@ class CheckoutController extends FrontBaseController
 
         $this->forgetCheckoutCache();
 
-        return response('OK', 200);
+       // return response('OK', 200);
 
-        //   return response()->json(['status' => 200, 'message' => 'OK']);
+          return response()->json(['status' => 200, 'message' => 'OK']);
 
 
 
@@ -220,10 +220,6 @@ class CheckoutController extends FrontBaseController
 
     public function successMyposNotify(Request $request)
     {
-
-
-
-
 
         return response('OK', 200);
     }
