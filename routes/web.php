@@ -449,7 +449,7 @@ Route::group(
 
     Route::post('/mypos/uspjeh', [CheckoutController::class, 'successMypos'])->name('checkout.success.mypos');
 
-    Route::any('/hr/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
+
 
 
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
@@ -503,3 +503,5 @@ Route::group(
         return view('front.404');
     });
 });
+
+Route::any('/hr/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
