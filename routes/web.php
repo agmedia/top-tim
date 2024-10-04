@@ -449,7 +449,7 @@ Route::group(
 
     Route::post('/mypos/uspjeh', [CheckoutController::class, 'successMypos'])->name('checkout.success.mypos');
 
-    Route::post('/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
+    Route::any('/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
 
 
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
