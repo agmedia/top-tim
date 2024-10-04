@@ -89,8 +89,8 @@ class MyPos
             }
 
             $purchase = new \Mypos\IPC\Purchase($cnf);
-            $purchase->setUrlCancel('https://www.toptim.agmedia.rocks/mypos/notify'); //User comes here after purchase cancelation
-            $purchase->setUrlOk('https://www.toptim.agmedia.rocks/mypos/notify'); //User comes here after purchase success
+            $purchase->setUrlCancel('https://www.toptim.agmedia.rocks/narudzba'); //User comes here after purchase cancelation
+            $purchase->setUrlOk('https://www.toptim.agmedia.rocks/narudzba'); //User comes here after purchase success
             $purchase->setUrlNotify('https://www.toptim.agmedia.rocks/mypos/notify'); //IPC sends POST reuquest to this address with purchase status
             $purchase->setOrderID('toptim'.$this->order->id); //Some unique ID
             $purchase->setCurrency('EUR');
@@ -143,7 +143,7 @@ class MyPos
 
         $data = $responce->getData(CASE_LOWER);
 
-        Log::info($data);
+
 
         return true;
 
