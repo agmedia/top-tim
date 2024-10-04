@@ -245,7 +245,7 @@ class CheckoutController extends FrontBaseController
 
         $data = $responce->getData(CASE_LOWER);
 
-        Log::info($data);
+
 
         return response('OK', 200);
     }
