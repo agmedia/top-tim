@@ -166,12 +166,10 @@ class ProductOptionsSelection extends Component
      */
     public function addAllDefaultSubItems(string $key, int $opt_key)
     {
-
         $second_option = Options::query()->where('id', $this->second_option)->first();
-        $values = Options::query()->where('group', $second_option->group)
+        $values = Options::query()->where('group', Str::slug($second_option->group))
             ->get()
             ->sortBy('translation.title');
-
         $this->setDefaultOptionsSubList($values, $key, $opt_key);
     }
 
