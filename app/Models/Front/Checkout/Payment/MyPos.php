@@ -109,6 +109,7 @@ class MyPos
         try {
             $purchase->process();
         } catch (\Mypos\IPC\IPC_Exception $e) {
+            Log::info('process exception');
             Log::info($e->getMessage());
             //Invalid params. To see details use "echo $ex->getMessage();"
         }
@@ -117,8 +118,23 @@ class MyPos
 
     public function callback(Request $request)
     {
-        Log::info('callback function');
-        Log::info($request->toArray());
+
+        $payment_method = $this->getPayment();
+        $url = $payment_method->data->test ? $this->url['test'] : $this->url['live'];
+
+        $cnf = $this->setConfig($url);
+
+        try{
+            $responce = \Mypos\IPC\Response::getInstance($cnf, $request->toArray(), \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST);
+        }catch(\Mypos\IPC\IPC_Exception $e){
+            //Display Some general error or redirect to merchant store home page
+
+            Log::info('notify exception');
+            Log::info($e->getMessage());
+        }
+
+        $data = $responce->getData(CASE_LOWER);
+        Log::info($data);
     }
 
 
@@ -198,6 +214,9 @@ class MyPos
 
     public function notify(Request $request)
     {
+        Log::info('public function notify(Request $request) notify');
+        Log::info($request->toArray());
+
         $payment_method = $this->getPayment();
         $url = $payment_method->data->test ? $this->url['test'] : $this->url['live'];
 
@@ -207,20 +226,40 @@ class MyPos
             $responce = \Mypos\IPC\Response::getInstance($cnf, $request->toArray(), \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST);
             $data = $responce->getData(CASE_LOWER);
 
+            Log::info('public function notify(Request $request) data');
             Log::info($data);
+
+
+
+            if($data['ipcmethod'] == 'IPCPurchaseNotify'){
+
+                return response('OK', 200);
+
+            } else if($data['ipcmethod'] == 'IPCPurchaseCancel'){
+
+                //odi na cancel
+
+
+            } else if($data['ipcmethod'] == 'IPCPurchaseOK'){
+
+                //završi narudžbi i odi na success
+            }
+
+
             // Ako je OK tu finish order pa idemo dalje na OK...
 
         } catch (\Mypos\IPC\IPC_Exception $e) {
+            Log::info('notify exception');
             Log::info($e->getMessage());
             //Display Some general error or redirect to merchant store home page
         }
     }
-    
-    
+
+
     /*******************************************************************************
-    *                                Copyright : AGmedia                           *
-    *                              email: filip@agmedia.hr                         *
-    *******************************************************************************/
+     *                                Copyright : AGmedia                           *
+     *                              email: filip@agmedia.hr                         *
+     *******************************************************************************/
 
     private function setConfig(string $url)
     {
@@ -238,11 +277,9 @@ class MyPos
 
     private function getPayment()
     {
-        Log::info('private function getPayment()');
-        Log::info($this->order->payment_code);
-        $payment = new PaymentMethod($this->order->payment_code);
+        $payment = new PaymentMethod('mypos');
         $payment = $payment->getMethod();
-        Log::info($payment->first()->code);
+
         return $payment->first();
     }
 
@@ -270,9 +307,9 @@ class MyPos
 
 
     /*******************************************************************************
-    *                                Copyright : AGmedia                           *
-    *                              email: filip@agmedia.hr                         *
-    *******************************************************************************/
+     *                                Copyright : AGmedia                           *
+     *                              email: filip@agmedia.hr                         *
+     *******************************************************************************/
 
 
     /**
