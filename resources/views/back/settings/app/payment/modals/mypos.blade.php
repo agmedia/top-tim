@@ -95,11 +95,11 @@
                                                     </div>
                                                     <div class="col-md-9">
                                                         <div class="custom-control custom-radio custom-control-inline custom-control-success custom-control-lg">
-                                                            <input type="radio" class="custom-control-input" id="mypos-test-on" name="test" checked="" value="1">
+                                                            <input type="radio" class="custom-control-input" id="mypos-test-on" name="my-pos-test" checked="checked" value="1">
                                                             <label class="custom-control-label" for="mypos-test-on">On</label>
                                                         </div>
                                                         <div class="custom-control custom-radio custom-control-inline custom-control-danger custom-control-lg">
-                                                            <input type="radio" class="custom-control-input" id="mypos-test-off" name="test" value="0">
+                                                            <input type="radio" class="custom-control-input" id="mypos-test-off" name="my-pos-test" value="0">
                                                             <label class="custom-control-label" for="mypos-test-off">Off</label>
                                                         </div>
                                                     </div>
@@ -186,7 +186,7 @@
                     mypos_set_url_notify: $('#mypos_set_url_notify').val(),
                     type: $('#mypos-type').val(),
                     callback: $('#mypos-callback').val(),
-                    test: $("input[name='test']:checked").val(),
+                    test: $("input[name='my-pos-test']:checked").val(),
                 },
                 geo_zone: $('#mypos-geo-zone').val(),
                 status: $('#mypos-status')[0].checked,
@@ -210,11 +210,12 @@
             $('#mypos-min').val(item.min);
             $('#mypos-price').val(item.data.price);
 
-            $('#mypos-shop-id').val(item.data.shop_id);
-            $('#mypos-secret-key').val(item.data.secret_key);
-            $('#mypos-callback').val(item.data.callback);
+            $('#mypos_virtual_configuration_package').val(item.data.mypos_virtual_configuration_package);
+            $('#mypos_set_url_cancel').val(item.data.mypos_set_url_cancel);
+            $('#mypos_set_url_ok').val(item.data.mypos_set_url_ok);
+            $('#mypos_set_url_notify').val(item.data.mypos_set_url_notify);
 
-            $("input[name=test][value='" + item.data.test + "']").prop("checked",true);
+            $("input[name=my_pos_test][value='" + item.data.test + "']").prop("checked",true);
 
             $('#mypos-type').val(item.data.type);
             $('#mypos-type').trigger('change');
