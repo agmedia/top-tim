@@ -140,7 +140,9 @@ class CheckoutController extends FrontBaseController
 
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
     public function success(Request $request)
     {
@@ -150,69 +152,16 @@ class CheckoutController extends FrontBaseController
             return redirect()->route('index');
         }
 
-        $order = \App\Models\Back\Orders\Order::where('id', $data['order']['id'])->first();
+        $order_data = $this->resolveFinishedOrder($data['order']['id']);
 
-        if ($order) {
-            $cart = $this->shoppingCart();
-
-            $order->decreaseItems($order->products);
-
-            Loyalty::resolveOrder($cart->get(), $order);
-
-            dispatch(function () use ($order) {
-                Mail::to(config('mail.admin'))->send(new OrderReceived($order));
-                Mail::to($order->payment_email)->send(new OrderSent($order));
-            })->afterResponse();
-
-            $this->forgetCheckoutCache();
-
-            $cart->flush()->resolveDB();
-
-            $data['google_tag_manager'] = TagManager::getGoogleSuccessDataLayer($order);
+        if (isset($order_data['order'])) {
+            $data['order'] = $order_data['order'];
+            $data['google_tag_manager'] = $order_data['google_tag_manager'];
 
             return view('front.checkout.success', compact('data'));
         }
 
         return redirect()->route('front.checkout.checkout', ['step' => '']);
-    }
-
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function orderMypos(Request $request)
-    {
-        Log::info('orderMypos:: $request...');
-        Log::info($request->toArray());
-
-        $order = new Order();
-
-        if ($request->has('IPCmethod')) {
-            $toptim_orderid = str_replace('toptim','', $request->get('OrderID'));
-            $order->setData($toptim_orderid);
-
-            if ($order->isCreated() && $order->finish($request)) {
-                $this->resolveFinishedOrder($toptim_orderid);
-
-                return redirect()->route('checkout.success');
-            }
-
-            return redirect()->route('checkout.error');
-        }
-
-        return redirect()->route('front.checkout.checkout', ['step' => '']);
-    }
-
-
-
-    public function successMyposNotify(Request $request)
-    {
-        Log::info('successMyposNotify:: $request...');
-        Log::info($request->toArray());
-
-        echo 'OK';
     }
 
 
@@ -233,29 +182,38 @@ class CheckoutController extends FrontBaseController
     /**
      * @param $id
      *
-     * @return void
+     * @return array
      */
-    private function resolveFinishedOrder($id): void
+    private function resolveFinishedOrder($id): array
     {
         $order = \App\Models\Back\Orders\Order::where('id', $id)->first();
 
-        $cart = $this->shoppingCart();
+        if ($order) {
+            $data['order'] = $order;
 
-        $order->decreaseItems($order->products);
+            $cart = $this->shoppingCart();
 
-        Loyalty::resolveOrder($cart->get(), $order);
+            $order->decreaseItems($order->products);
 
-        dispatch(function () use ($order) {
-            Mail::to(config('mail.admin'))->send(new OrderReceived($order));
-            Mail::to($order->payment_email)->send(new OrderSent($order));
-        })->afterResponse();
+            Loyalty::resolveOrder($cart->get(), $order);
 
-        $this->forgetCheckoutCache();
+            dispatch(function () use ($order) {
+                Mail::to(config('mail.admin'))->send(new OrderReceived($order));
+                Mail::to($order->payment_email)->send(new OrderSent($order));
+            })->afterResponse();
 
-        $cart->flush()->resolveDB();
+            $this->forgetCheckoutCache();
 
-        TagManager::getGoogleSuccessDataLayer($order);
+            $cart->flush()->resolveDB();
+
+            $data['google_tag_manager'] = TagManager::getGoogleSuccessDataLayer($order);
+
+            return $data;
+        }
+
+        return [];
     }
+
 
     /**
      * @return array
@@ -333,7 +291,11 @@ class CheckoutController extends FrontBaseController
         return new AgCart(config('session.cart'));
     }
 
-    private function forgetCheckoutCache()
+
+    /**
+     * @return void
+     */
+    private function forgetCheckoutCache(): void
     {
         CheckoutSession::forgetOrder();
         CheckoutSession::forgetStep();

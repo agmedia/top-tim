@@ -447,14 +447,12 @@ Route::group(
     Route::get('/pregled', [CheckoutController::class, 'view'])->name('pregled');
     Route::get('/narudzba', [CheckoutController::class, 'order'])->name('checkout');
     Route::get('/uspjeh', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
     //
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
     Route::post('kekspay/provjera-narudzbe', [Keks::class, 'check'])->name('keks.provjera');
-    Route::post('/mypos/callback', [MyPos::class, 'callback'])->name('checkout.success.mypos');
     Route::post('/mypos/notify', [MyPos::class, 'notify'])->name('mypos.notify');
 
-
-    Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
 //
     Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('pretrazi');
 
