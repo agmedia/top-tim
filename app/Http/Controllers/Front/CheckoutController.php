@@ -10,6 +10,7 @@ use App\Mail\OrderSent;
 use App\Models\Back\Settings\Settings;
 use App\Models\Front\AgCart;
 use App\Models\Front\Checkout\Order;
+use App\Models\Front\Checkout\Payment\MyPos;
 use App\Models\Front\Checkout\Shipping\Gls;
 use App\Models\Front\Loyalty;
 use App\Models\TagManager;
@@ -113,6 +114,14 @@ class CheckoutController extends FrontBaseController
     public function order(Request $request)
     {
         $order = new Order();
+
+        if ($request->has('mypos_checkout')) {
+            $order->setData($request->input('mypos_checkout'));
+
+            $mypos = new MyPos($order->getData());
+
+            $mypos->process();
+        }
 
         if ($request->has('provjera')) {
             $order->setData($request->input('provjera'));

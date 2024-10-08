@@ -39,6 +39,7 @@ use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\CustomerController;
 use App\Http\Controllers\Front\HomeController;
 use App\Models\Front\Checkout\Payment\Keks;
+use App\Models\Front\Checkout\Payment\MyPos;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -395,8 +396,6 @@ Route::prefix('api/v2')->group(function () {
     return phpinfo();
 })->name('index');*/
 
-Route::post('/mypos/narudzba', [CheckoutController::class, 'orderMypos'])->name('checkout.success.mypos');
-Route::post('/mypos/notify', [CheckoutController::class, 'successMyposNotify'])->name('checkout.success.myposnotify');
 
 /**
  * FRONT ROUTES
@@ -448,7 +447,11 @@ Route::group(
     Route::get('/pregled', [CheckoutController::class, 'view'])->name('pregled');
     Route::get('/narudzba', [CheckoutController::class, 'order'])->name('checkout');
     Route::get('/uspjeh', [CheckoutController::class, 'success'])->name('checkout.success');
+    //
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
+    Route::post('kekspay/provjera-narudzbe', [Keks::class, 'check'])->name('keks.provjera');
+    Route::post('/mypos/callback', [MyPos::class, 'my'])->name('checkout.success.mypos');
+    Route::post('/mypos/notify', [MyPos::class, 'notify'])->name('mypos.notify');
 
 
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
@@ -493,10 +496,6 @@ Route::group(
     //Route::get(LaravelLocalization::transRoute('{group}/{cat?}/{subcat?}/{prod?}'), [CatalogRouteController::class, 'resolve'])->name('catalog.route');
 
     Route::get('{group}/{cat?}/{subcat?}/{prod?}', [CatalogRouteController::class, 'resolve'])->name('catalog.route');
-
-// SPECIAL ROUTES
-    Route::post('kekspay/provjera-narudzbe', [Keks::class, 'check'])->name('keks.provjera');
-
 
     Route::fallback(function () {
         return view('front.404');
