@@ -175,8 +175,13 @@
                 </div>
 
                 @if ( $prod->quantity > 0 )
-                    <add-to-cart-btn product="{{ json_encode($prod->toArray()) }}" available="{{ $prod->quantity }}" sizeguide="{{ isset($prod->sizeguide) ? $prod->sizeguide->image : null }}" options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
+                    <add-to-cart-btn product="{{ json_encode($prod->toArray()) }}" available="{{ $prod->quantity }}" sizeguide="" options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
                 @endif
+                    @if ( isset($prod->sizeguide) )
+                        <div class="mb-3">
+                    <a class="nav-link-style fs-sm gal " href="{{ isset($prod->sizeguide) ? $prod->sizeguide->image : null }}" ><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
+                        </div>
+                    @endif
 
                 <div class="accordion mb-4" id="productPanels">
                     <div class="accordion-item">

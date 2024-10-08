@@ -1,5 +1,5 @@
 <template>
-    <div class="cart pb-2 mb-3">
+    <div class="cart pb-2 mb-2">
         <div class="mb-1" v-if="context_product.main_price > context_product.main_special">
             <span class="h3 fw-bold font-title text-blue me-1">{{ context_product.main_special_text }}</span>
             <span class="text-muted fs-lg me-3">*{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price)  }}</span>
@@ -39,7 +39,7 @@
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}: <span class="text-muted">{{ size_name }}</span></label>
 
 
-                    <a v-if="sizeguide" class="nav-link-style fs-sm gal" :href="sizeguide" ><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>
+
                 </div>
                 <select class="form-select" required id="product-size" v-model="size">
                     <option value="0">{{ trans.velicina }} </option>
@@ -70,7 +70,7 @@ export default {
         product: String,
         available: String,
         options: String,
-        sizeguide: String
+
     },
 
     data() {

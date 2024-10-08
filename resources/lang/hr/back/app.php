@@ -164,6 +164,7 @@ return [
         'wspay' => 'WSPay',
         'payway' => 'T-Com Payway',
         'corvus' => 'Corvus Pay',
+        'mypos' => 'myPos',
         'min_order_amount' => 'Minimalan iznos narudžbe',
         'fee_amount' => 'Iznos naknade',
         'geo_zone' => 'Geo zona',

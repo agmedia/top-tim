@@ -57,22 +57,35 @@
                                             ])
 
 
+
+
+
                             <div class="block block-themed block-transparent mb-4">
                                 <div class="block-content bg-body pb-3">
                                     <div class="row justify-content-center">
                                         <div class="col-md-11">
+
+                                            @include('back.layouts.partials.language-inputs', [
+                                      'type' => 'textarea',
+                                      'title' => __('Configuration Package'),
+                                      'tab' => 'mypos_virtual_configuration_package',
+                                      'input' => 'mypos_virtual_configuration_package',
+                                      'id' => 'mypos_virtual_configuration_package'
+                                      ])
+
+
                                             <div class="form-group">
-                                                <label for="mypos-shop-id">ShopID:</label>
-                                                <input type="text" class="form-control" id="mypos-shop-id" name="data['shop_id']">
+                                                <label for="mypos-shop-id">Set Url Cancel:</label>
+                                                <input type="text" class="form-control" id="mypos_set_url_cancel" name="data[' mypos_set_url_cancel']">
                                             </div>
                                             <div class="form-group">
-                                                <label for="mypos-secret-key">SecretKey:</label>
-                                                <input type="text" class="form-control" id="mypos-secret-key" name="data['secret_key']">
+                                                <label for="mypos-secret-key">Set Url Ok:</label>
+                                                <input type="text" class="form-control" id="mypos_set_url_ok" name="data['mypos_set_url_ok']">
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="mypos-callback">CallbackURL: </label>
-                                                <input type="text" class="form-control" id="mypos-callback" name="data['callback']" value="{{ url('/') }}">
+                                                <label for="mypos-callback">Set Url Notify: </label>
+                                                <input type="text" class="form-control" id="mypos_set_url_notify" name="data['mypos_set_url_notify']">
                                             </div>
 
                                             <div class="form-group">
@@ -167,8 +180,10 @@
                     price: $('#mypos-price').val(),
                     short_description: short,
                     description: desc,
-                    shop_id: $('#mypos-shop-id').val(),
-                    secret_key: $('#mypos-secret-key').val(),
+                    mypos_virtual_configuration_package:$('#mypos_virtual_configuration_package').val(),
+                    mypos_set_url_cancel: $('#mypos_set_url_cancel').val(),
+                    mypos_set_url_ok: $('#mypos_set_url_ok').val(),
+                    mypos_set_url_notify: $('#mypos_set_url_notify').val(),
                     type: $('#mypos-type').val(),
                     callback: $('#mypos-callback').val(),
                     test: $("input[name='test']:checked").val(),
