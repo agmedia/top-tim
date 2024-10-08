@@ -157,8 +157,7 @@ export default {
         subcat: String,
         author: String,
         publisher: String,
-
-
+        brand_def: String,
     },
     //
     data() {
@@ -328,6 +327,10 @@ export default {
             this.page = params.query.page ? params.query.page : '';
             this.sorting = params.query.sort ? params.query.sort : '';
             this.search_query = params.query.pojam ? params.query.pojam : '';
+
+            if (this.brand == '') {
+                this.brand = this.brand_def;
+            }
 
             if (this.page != '') {
                 this.getProductsPage(this.page);

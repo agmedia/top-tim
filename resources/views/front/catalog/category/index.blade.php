@@ -208,7 +208,7 @@
                    group="{{ isset($group) ? $group : null }}"
                    cat="{{ isset($cat) ? $cat['id'] : null }}"
                    subcat="{{ isset($subcat) ? $subcat['id'] : null }}"
-                   brand="{{ isset($brand) ? $brand->translation->slug : null }}">
+                   brand_def="{{ isset($brand) ? $brand->id : null }}">
     </products-view>
 
     <filter-side-view ids="{{ isset($ids) ? $ids : null }}"
