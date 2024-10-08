@@ -65,13 +65,18 @@
                                     <div class="row justify-content-center">
                                         <div class="col-md-11">
 
-                                            @include('back.layouts.partials.language-inputs', [
-                                      'type' => 'textarea',
-                                      'title' => __('Configuration Package'),
-                                      'tab' => 'mypos_virtual_configuration_package',
-                                      'input' => 'mypos_virtual_configuration_package',
-                                      'id' => 'mypos_virtual_configuration_package'
-                                      ])
+
+                                            <div class="form-group">
+                                                <label for="mypos_virtual_configuration_package_test">Configuration Package Test:</label>
+                                                <textarea class="form-control" id="mypos_virtual_configuration_package_test" name="mypos_virtual_configuration_package_test"> </textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="mypos_virtual_configuration_package_live">Configuration Package Live:</label>
+                                                <textarea class="form-control" id="mypos_virtual_configuration_package_live" name="mypos_virtual_configuration_package_live"> </textarea>
+                                            </div>
+
+
 
 
                                             <div class="form-group">
@@ -180,7 +185,8 @@
                     price: $('#mypos-price').val(),
                     short_description: short,
                     description: desc,
-                    mypos_virtual_configuration_package:$('#mypos_virtual_configuration_package').val(),
+                    mypos_virtual_configuration_package_test:$('#mypos_virtual_configuration_package_test').val(),
+                    mypos_virtual_configuration_package_live:$('#mypos_virtual_configuration_package_live').val(),
                     mypos_set_url_cancel: $('#mypos_set_url_cancel').val(),
                     mypos_set_url_ok: $('#mypos_set_url_ok').val(),
                     mypos_set_url_notify: $('#mypos_set_url_notify').val(),
@@ -210,7 +216,8 @@
             $('#mypos-min').val(item.min);
             $('#mypos-price').val(item.data.price);
 
-            $('#mypos_virtual_configuration_package').val(item.data.mypos_virtual_configuration_package);
+            $('#mypos_virtual_configuration_package_test').val(item.data.mypos_virtual_configuration_package_test);
+            $('#mypos_virtual_configuration_packagelive').val(item.data.mypos_virtual_configuration_package_live);
             $('#mypos_set_url_cancel').val(item.data.mypos_set_url_cancel);
             $('#mypos_set_url_ok').val(item.data.mypos_set_url_ok);
             $('#mypos_set_url_notify').val(item.data.mypos_set_url_notify);
