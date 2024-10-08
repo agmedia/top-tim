@@ -104,6 +104,12 @@ body {
 
 }
 
+.thumb-size img{
+    object-fit: scale-down;
+    width: 270px;
+    height: 270px;
+}
+
 .live-search tr a{
     display: block;
     height: 100%;
