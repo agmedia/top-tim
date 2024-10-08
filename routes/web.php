@@ -450,7 +450,7 @@ Route::group(
     //
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
     Route::post('kekspay/provjera-narudzbe', [Keks::class, 'check'])->name('keks.provjera');
-    Route::post('/mypos/callback', [MyPos::class, 'my'])->name('checkout.success.mypos');
+    Route::post('/mypos/callback', [MyPos::class, 'callback'])->name('checkout.success.mypos');
     Route::post('/mypos/notify', [MyPos::class, 'notify'])->name('mypos.notify');
 
 

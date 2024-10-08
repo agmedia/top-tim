@@ -37,7 +37,7 @@ class MyPos
      *
      * @param $order
      */
-    public function __construct($order)
+    public function __construct($order = null)
     {
         $this->order = $order;
     }
