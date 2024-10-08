@@ -59,7 +59,7 @@ class MyPos
         $payment_method = $this->getPayment();
 
         Log::info('var_dump($payment_method)');
-        Log::info(var_dump($payment_method));
+        Log::info($payment_method->code);
 
         $countries = Storage::disk('assets')->get('country.json');
         $countries = collect(json_decode($countries, true))->where('name', $this->order->payment_state)->first();
@@ -93,9 +93,9 @@ class MyPos
         }
 
         $purchase = new \Mypos\IPC\Purchase($cnf);
-        $purchase->setUrlCancel($payment_method->data->mypos_set_url_cancel); //User comes here after purchase cancelation
-        $purchase->setUrlOk($payment_method->data->mypos_set_url_ok); //User comes here after purchase success
-        $purchase->setUrlNotify($payment_method->data->mypos_set_url_notify); //IPC sends POST reuquest to this address with purchase status
+        $purchase->setUrlCancel(url($payment_method->data->mypos_set_url_cancel)); //User comes here after purchase cancelation
+        $purchase->setUrlOk(url($payment_method->data->mypos_set_url_ok)); //User comes here after purchase success
+        $purchase->setUrlNotify(url($payment_method->data->mypos_set_url_notify)); //IPC sends POST reuquest to this address with purchase status
         $purchase->setOrderID(Str::random(4) . $this->order->id); //Some unique ID
         $purchase->setCurrency('EUR');
         // $purchase->setNote('Some note'); //Not required
@@ -238,8 +238,12 @@ class MyPos
 
     private function getPayment()
     {
+        Log::info('private function getPayment()');
+        Log::info($this->order->payment_code);
         $payment = new PaymentMethod($this->order->payment_code);
-        return $payment->getMethod()->first();
+        $payment = $payment->getMethod();
+        Log::info($payment->first()->code);
+        return $payment->first();
     }
 
 
