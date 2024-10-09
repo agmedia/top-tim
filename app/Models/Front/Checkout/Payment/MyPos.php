@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Front\Checkout;
+namespace App\Models\Front\Checkout\Payment;
 
 use App\Models\Back\Orders\Order;
 use App\Models\Back\Orders\Transaction;
