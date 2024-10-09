@@ -214,7 +214,7 @@ class MyPos
                         $order = Order::query()->find(substr($request->input('OrderID'), 4));
                         $this->finishOrder($order, $request);
 
-                        return redirect(route('checkout.success'));
+                        return redirect()->route('checkout.success');
                     }
                 }
             }
