@@ -4,6 +4,7 @@ namespace App\Models\Front\Checkout\Payment;
 
 use App\Models\Back\Orders\Order;
 use App\Models\Back\Orders\Transaction;
+use App\Models\Front\Checkout\PaymentMethod;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
