@@ -84,7 +84,7 @@ class MyPos
         $customer->setFirstName($this->order->payment_fname);
         $customer->setLastName($this->order->payment_lname);
         $customer->setEmail($this->order->payment_email);
-        $customer->setPhone($this->order->payment_phone);
+       // $customer->setPhone($this->order->payment_phone);
         $customer->setCountry($country);
         $customer->setAddress($this->order->payment_address);
         $customer->setCity($this->order->payment_city);
@@ -113,7 +113,7 @@ class MyPos
         $purchase->setCart($cart);
 
         $purchase->setCardTokenRequest(Purchase::CARD_TOKEN_REQUEST_PAY_AND_STORE);
-        $purchase->setPaymentParametersRequired(Purchase::PURCHASE_TYPE_FULL);
+        $purchase->setPaymentParametersRequired(Purchase::PURCHASE_TYPE_SIMPLIFIED_PAYMENT_PAGE);
         $purchase->setPaymentMethod(Purchase::PAYMENT_METHOD_BOTH);
 
         try {
