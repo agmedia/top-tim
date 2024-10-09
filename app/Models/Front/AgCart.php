@@ -346,7 +346,7 @@ class AgCart extends Model
         $payment_method     = PaymentMethod::condition($this->cart);
         $special_condition  = Helper::hasSpecialCartCondition($this->cart);
         $coupon_conditions  = Helper::hasCouponCartConditions($this->cart, $this->coupon);
-        $loyalty_conditions = Helper::hasLoyaltyCartConditions($this->cart, intval($this->loyalty));
+        $loyalty_conditions = false;//Helper::hasLoyaltyCartConditions($this->cart, intval($this->loyalty));
 
         if ($payment_method) {
             $str = str_replace('+', '', $payment_method->getValue());
