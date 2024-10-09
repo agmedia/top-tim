@@ -297,7 +297,7 @@ class Checkout extends Component
      */
     public function render()
     {
-        $geo = (new GeoZone())->findState($this->address['state'] ?: 'Croatia');
+        $geo = (new GeoZone())->findState($this->address['state'] ?: 'Hrvatska');
 
         if ( ! isset($geo->id)) {
             $geo->id = 1;
@@ -322,7 +322,7 @@ class Checkout extends Component
     private function setAddress(array $value = [], bool $only_state = false)
     {
         if ( ! empty($value)) {
-            $value['state'] = isset($value['state']) ? $value['state'] : 'Croatia';
+            $value['state'] = isset($value['state']) ? $value['state'] : 'Hrvatska';
 
             if ($only_state) {
                 $this->address['state'] = $value['state'];

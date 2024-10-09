@@ -52,7 +52,7 @@
                     <b>{{ __('WSPay') }}</b>
                     <p style="font-size:12px">{{ __('front/cart.sb1') }} {{ $order->id }} {{ __('front/cart.sb2') }}.</p>
                 @elseif ($order->payment_code == 'mypos')
-                    <b>{{ __('MyPOS') }}</b>
+                    <b>{{ __('Kartično') }}</b>
                     <p style="font-size:12px">{{ __('front/cart.sb1') }} {{ $order->id }} {{ __('front/cart.sb2') }}.</p>
                 @elseif ($order->payment_code == 'keks')
                     <b>{{ __('KeksPay') }}</b>

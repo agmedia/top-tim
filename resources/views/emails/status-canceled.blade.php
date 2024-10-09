@@ -34,7 +34,7 @@
                 @elseif ($order->payment_code == 'wspay')
                     <b>{{ __('WSPay') }}</b>
                 @elseif ($order->payment_code == 'mypos')
-                    <b>{{ __('MyPOS') }}</b>
+                    <b>{{ __('Kartično') }}</b>
                 @elseif ($order->payment_code == 'keks')
                     <b>{{ __('KeksPay') }}</b>
                 @else

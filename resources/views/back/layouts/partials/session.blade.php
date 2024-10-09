@@ -4,7 +4,7 @@
         <div class="alert-icon">
             <i class="ci-check-circle"></i>
         </div>
-        <div>{{ __('front/cart.uspjeh') }}..! {{ session('success') }}</div>
+        <div>{{ session('success') }}</div>
     </div>
 @endif
 @if(session('error'))

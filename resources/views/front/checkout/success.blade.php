@@ -31,7 +31,7 @@
                     <h2 class="h4 pb-3">{{ __('front/cart.vasa_narudzba_txt') }}</h2>
 
                     @if($data['order']['payment_code'] == 'bank')
-                        <p>{{ __('front/cart.sb1') }} {{ $data['order']['id'] }} {{ __('front/cart.sb2') }}</p><p>{{ __('front/cart.sb3') }}</p>
+                        <p>{{ __('front/cart.sb1') }}}</p>
                         <p> {{ __('front/cart.sb4') }}</p>
                         <p> {{ __('front/cart.sb5') }}</p>
                         <p>{{ __('front/cart.sb6') }}  {{number_format($data['order']['total'], 2)}} €<br>
