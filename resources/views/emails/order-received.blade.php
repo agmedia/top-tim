@@ -29,6 +29,8 @@
                     <b>{{ __('CorvusPay') }}</b>
                 @elseif ($order->payment_code == 'wspay')
                     <b>{{ __('WSPay') }}</b>
+                @elseif ($order->payment_code == 'mypos')
+                    <b>{{ __('MyPOS') }}</b>
                 @elseif ($order->payment_code == 'keks')
                     <b>{{ __('KeksPay') }}</b>
                 @else
