@@ -4705,14 +4705,14 @@ var render = function render() {
       staticClass: "widget-product-meta"
     }, [_c("span", {
       staticClass: "text-primary me-2"
-    }, [_vm._v("\n                            " + _vm._s(Object.keys(item.conditions).length ? item.associatedModel.main_special_text : item.associatedModel.main_price_text))]), _c("span", {
+    }, [_vm._v("\n                                " + _vm._s(Object.keys(item.conditions).length ? item.associatedModel.main_special_text : item.associatedModel.main_price_text))]), _c("span", {
       staticClass: "text-muted"
     }, [_vm._v("x " + _vm._s(item.quantity))]), _vm._v(" "), Object.keys(item.conditions).length && item.associatedModel.action && item.associatedModel.action.coupon == _vm.$store.state.cart.coupon ? _c("span", {
       staticClass: "text-primary fs-md fw-light",
       staticStyle: {
         "margin-left": "20px"
       }
-    }, [_vm._v("\n                                " + _vm._s(_vm.trans.kupon_kod) + ": " + _vm._s(item.associatedModel.action.title) + " (" + _vm._s(Math.round(item.associatedModel.action.discount).toFixed(0)) + "\n                                " + _vm._s(item.associatedModel.action.type == "F" ? "kn" : "%") + ")\n                            ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n                                    " + _vm._s(_vm.trans.kupon_kod) + ": " + _vm._s(item.associatedModel.action.title) + " (" + _vm._s(Math.round(item.associatedModel.action.discount).toFixed(0)) + "\n                                    " + _vm._s(item.associatedModel.action.type == "F" ? "kn" : "%") + ")\n                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "widget-product-meta"
     }, [item.associatedModel.secondary_price_text ? _c("span", {
       staticClass: "text-muted me-2"
@@ -4844,91 +4844,7 @@ var render = function render() {
     on: {
       click: _vm.setCoupon
     }
-  }, [_vm._v(_vm._s(_vm.trans.primjeni) + " ")])])])])])]) : _vm._e(), _vm._v(" "), _vm.has_loyalty && _vm.route == "kosarica" || _vm.has_loyalty && _vm.route == "naplata" ? _c("div", {
-    staticClass: "rounded-3 p-4 mt-3",
-    staticStyle: {
-      border: "1px solid #dae1e7",
-      "background-color": "#fff !important"
-    }
-  }, [_c("div", {
-    staticClass: "py-2 px-xl-2"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", {
-    staticClass: "form-label"
-  }, [_vm._v(_vm._s(_vm.trans.use_loyalty))]), _vm._v(" "), _vm.$store.state.cart.has_loyalty >= 100 ? _c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.selected_loyalty,
-      expression: "selected_loyalty"
-    }],
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      value: "100"
-    },
-    domProps: {
-      checked: _vm._q(_vm.selected_loyalty, "100")
-    },
-    on: {
-      change: function change($event) {
-        _vm.selected_loyalty = "100";
-      }
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label",
-    attrs: {
-      "for": "ex-radio-2"
-    }
-  }, [_vm._v(_vm._s(_vm.trans.loyalty_100))])]) : _vm._e(), _vm._v(" "), _vm.$store.state.cart.has_loyalty >= 200 ? _c("div", {
-    staticClass: "form-check"
-  }, [_c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.selected_loyalty,
-      expression: "selected_loyalty"
-    }],
-    staticClass: "form-check-input",
-    attrs: {
-      type: "radio",
-      value: "200"
-    },
-    domProps: {
-      checked: _vm._q(_vm.selected_loyalty, "200")
-    },
-    on: {
-      change: function change($event) {
-        _vm.selected_loyalty = "200";
-      }
-    }
-  }), _vm._v(" "), _c("label", {
-    staticClass: "form-check-label",
-    attrs: {
-      "for": "ex-radio-3"
-    }
-  }, [_vm._v(_vm._s(_vm.trans.loyalty_200))])]) : _vm._e()]), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-outline-primary btn-shadow",
-    attrs: {
-      type: "button"
-    },
-    on: {
-      click: function click($event) {
-        _vm.selected_loyalty = null;
-      }
-    }
-  }, [_vm._v(_vm._s(_vm.trans.loyalty_cancel))]), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-outline-primary btn-shadow",
-    attrs: {
-      type: "button"
-    },
-    on: {
-      click: _vm.setLoyalty
-    }
-  }, [_vm._v(_vm._s(_vm.trans.loyalty_use) + " ")])])]) : _vm._e()]);
+  }, [_vm._v(_vm._s(_vm.trans.primjeni) + " ")])])])])])]) : _vm._e()]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

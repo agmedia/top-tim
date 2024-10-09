@@ -104,7 +104,9 @@
             </div>
         </div>
 
-        <div class="rounded-3 p-4 mt-3" v-if="has_loyalty && route == 'kosarica' || has_loyalty && route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
+
+
+<!--        <div class="rounded-3 p-4 mt-3" v-if="has_loyalty && route == 'kosarica' || has_loyalty && route == 'naplata'" style="border: 1px solid #dae1e7;background-color: #fff !important;">
             <div class="py-2 px-xl-2" v-cloak>
                 <div class="form-group mb-3">
 
@@ -125,7 +127,7 @@
                 <button type="button" v-on:click="selected_loyalty = null" class="btn btn-outline-primary btn-shadow">{{ trans.loyalty_cancel }}</button>
                 <button type="button" v-on:click="setLoyalty" class="btn btn-outline-primary btn-shadow">{{ trans.loyalty_use }} </button>
             </div>
-        </div>
+        </div>-->
 
     </div>
 
