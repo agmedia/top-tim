@@ -126,8 +126,14 @@ class Checkout extends Component
     public function mount()
     {
         if (CheckoutSession::hasAddress()) {
-            $this->setAddress(CheckoutSession::getAddress());
+            $address = CheckoutSession::getAddress();
+
+            //$this->stateSelected($address['state']);
+
+            $this->setAddress($address);
         } else {
+
+
             $this->setAddress();
         }
 
@@ -328,43 +334,37 @@ class Checkout extends Component
                 $this->address['state'] = $value['state'];
 
             } else {
-                $this->address = [
-                    'fname' => $value['fname'],
-                    'lname' => $value['lname'],
-                    'email' => $value['email'],
-                    'phone' => $value['phone'],
-                    'address' => $value['address'],
-                    'city' => $value['city'],
-                    'company' => $value['company'],
-                    'oib' => $value['oib'],
-                    'zip' => $value['zip'],
-                    'state' => $value['state'],
-                ];
+                if ($value['fname'] == '' || $value['lname'] == '') {
+                    $this->fillUserAddress();
+
+                } else {
+                    $this->address = [
+                        'fname' => $value['fname'],
+                        'lname' => $value['lname'],
+                        'email' => $value['email'],
+                        'phone' => $value['phone'],
+                        'address' => $value['address'],
+                        'city' => $value['city'],
+                        'company' => $value['company'],
+                        'oib' => $value['oib'],
+                        'zip' => $value['zip'],
+                        'state' => $value['state'],
+                    ];
+                }
             }
         } else {
-            if (auth()->user()) {
-                $this->address = [
-                    'fname' => auth()->user()->details->fname,
-                    'lname' => auth()->user()->details->lname,
-                    'email' => auth()->user()->email,
-                    'phone' => auth()->user()->details->phone,
-                    'address' => auth()->user()->details->address,
-                    'city' => auth()->user()->details->city,
-                    'company' => auth()->user()->details->company,
-                    'oib' => auth()->user()->details->oib,
-                    'zip' => auth()->user()->details->zip,
-                    'state' => auth()->user()->details->state
-                ];
-            }
+            $this->fillUserAddress();
         }
 
         CheckoutSession::setAddress($this->address);
 
-        /*CheckoutSession::setGeoZone(
-            GeoZone::findState($this->address['state'])
-        );*/
+        if ($this->address['state'] == 'Croatia') {
+            $this->address['state'] = 'Hrvatska';
+        }
 
-        //dd($this->address);
+        if ($this->address['state'] == '') {
+            $this->stateSelected('Hrvatska');
+        }
 
         return $this->address;
     }
@@ -415,6 +415,28 @@ class Checkout extends Component
     {
         if (session()->has(config('session.cart'))) {
             $this->cart = new AgCart(session(config('session.cart')));
+        }
+    }
+
+
+    /**
+     * @return void
+     */
+    private function fillUserAddress(): void
+    {
+        if (auth()->user()) {
+            $this->address = [
+                'fname' => auth()->user()->details->fname,
+                'lname' => auth()->user()->details->lname,
+                'email' => auth()->user()->email,
+                'phone' => auth()->user()->details->phone,
+                'address' => auth()->user()->details->address,
+                'city' => auth()->user()->details->city,
+                'company' => auth()->user()->details->company,
+                'oib' => auth()->user()->details->oib,
+                'zip' => auth()->user()->details->zip,
+                'state' => auth()->user()->details->state
+            ];
         }
     }
 }
