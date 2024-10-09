@@ -226,7 +226,7 @@ class CheckoutController extends FrontBaseController
 
             $order->decreaseItems($order->products);
 
-            Loyalty::resolveOrder($cart->get(), $order);
+            //Loyalty::resolveOrder($cart->get(), $order);
 
             dispatch(function () use ($order) {
                 Mail::to(config('mail.admin'))->send(new OrderReceived($order));
