@@ -207,7 +207,7 @@ class MyPos
 
             } else {
                 if ($data['ipcmethod'] == 'IPCPurchaseCancel') {
-                    return redirect(route('checkout.error'));
+                    return redirect()->route('checkout.error');
 
                 } else {
                     if ($data['ipcmethod'] == 'IPCPurchaseOK') {

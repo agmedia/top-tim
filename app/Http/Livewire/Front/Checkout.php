@@ -140,7 +140,7 @@ class Checkout extends Component
         if (CheckoutSession::hasPayment()) {
             $this->payment = CheckoutSession::getPayment();
         } else {
-            $this->selectPayment('wspay');
+            $this->selectPayment('mypos'); // move to setting default
         }
 
         if (CheckoutSession::hasComment()) {
