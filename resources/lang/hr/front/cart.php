@@ -96,7 +96,7 @@ return [
     'odaberite_nacin_dostave' => 'Odaberite način dostave',
     'vrijeme_dostave' => 'Vrijeme dostave',
     'cijena' => 'Cijena',
-    'ne_vrsimo_dostavu' => 'Ne vršimo dostavu za odabranu Državu isporuke.',
+    'ne_vrsimo_dostavu' => 'Za cijenu dostave i isporuku za odabranu Državu molimo da nas kontaktirate na <a href="mailto:info@top-tim.com">info@top-tim.com</a>',
     'dostava_obavezna' => ' Način dostave je obvezan',
     'povratak_na_unos_podataka' => 'Povratak na unos podataka',
     'na_odabir_placanja' => 'Na odabir plaćanja',
