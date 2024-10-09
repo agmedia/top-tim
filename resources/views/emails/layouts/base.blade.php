@@ -281,7 +281,7 @@
     <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="margin: auto;" class="email-container">
         <tr>
             <td style="padding: 20px;  font-size: 12px; line-height: 15px; text-align: center; color: #373f50;">
-                Top Tim - Better way to stay in the gam © {{ now()->year }}. {{ __('front/ricekakis.sva_prava') }}. <br><a href="info/uvjeti-prodaje" style="color:#ffffff;">{{ __('front/cart.opci_uvjeti') }}</a>
+                Top Tim - Better way to stay in the game © {{ now()->year }}. {{ __('front/ricekakis.sva_prava') }}. <br><a href="info/uvjeti-prodaje" style="color:#ffffff;">{{ __('front/cart.opci_uvjeti') }}</a>
                 <br>
             </td>
         </tr>
