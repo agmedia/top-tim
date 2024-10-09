@@ -146,7 +146,13 @@ class CheckoutController extends FrontBaseController
      */
     public function success(Request $request)
     {
+        Log::info('success(Request $request)');
+        Log::info($request->toArray());
+
         $data['order'] = CheckoutSession::getOrder();
+
+        Log::info('CheckoutSession::getOrder()');
+        Log::info(CheckoutSession::getOrder());
 
         if ( ! $data['order']) {
             return redirect()->route('index');
@@ -159,6 +165,31 @@ class CheckoutController extends FrontBaseController
             $data['google_tag_manager'] = $order_data['google_tag_manager'];
 
             return view('front.checkout.success', compact('data'));
+        }
+
+        return redirect()->route('front.checkout.checkout', ['step' => '']);
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function myposSuccess(Request $request)
+    {
+        Log::info('myposSuccess(Request $request)');
+        Log::info($request->toArray());
+
+        if ($request->has('identifier')) {
+            $order_data = $this->resolveFinishedOrder(substr($request->input('identifier'), 4));
+
+            if (isset($order_data['order'])) {
+                $data['order'] = $order_data['order'];
+                $data['google_tag_manager'] = $order_data['google_tag_manager'];
+
+                return view('front.checkout.success', compact('data'));
+            }
         }
 
         return redirect()->route('front.checkout.checkout', ['step' => '']);

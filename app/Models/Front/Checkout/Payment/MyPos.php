@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Models\Front\Checkout\Payment;
+namespace App\Models\Front\Checkout;
 
 use App\Models\Back\Orders\Order;
 use App\Models\Back\Orders\Transaction;
-use App\Models\Front\Checkout\PaymentMethod;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -202,27 +201,28 @@ class MyPos
             $response = Response::getInstance($cnf, $request->toArray(), \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST);
             $data     = $response->getData(CASE_LOWER);
 
-            if ($data['ipcmethod'] == 'IPCPurchaseNotify') {
-                return response('OK', 200);
-
-            } else {
-                if ($data['ipcmethod'] == 'IPCPurchaseCancel') {
-                    return redirect()->route('checkout.error');
-
-                } else {
-                    if ($data['ipcmethod'] == 'IPCPurchaseOK') {
-                        $order = Order::query()->find(substr($request->input('OrderID'), 4));
-                        $this->finishOrder($order, $request);
-
-                        return redirect()->route('checkout.success');
-                    }
-                }
-            }
-
         } catch (IPC_Exception $e) {
             Log::info('Notify MyPos order exception');
             Log::info($e->getMessage());
-            //Display Some general error or redirect to merchant store home page
+        }
+
+        if ($data['ipcmethod'] == 'IPCPurchaseNotify') {
+            return response('OK', 200);
+
+        } else if ($data['ipcmethod'] == 'IPCPurchaseRollback') {
+            return response('OK', 200);
+
+        } else if ($data['ipcmethod'] == 'IPCPurchaseCancel') {
+            return redirect()->route('checkout.error');
+
+        } else if ($data['ipcmethod'] == 'IPCPurchaseOK') {
+            $order = Order::query()->find(substr($request->input('OrderID'), 4));
+            $this->finishOrder($order, $request);
+
+            return redirect()->route('checkout.mypos.success', ['identifier' => $request->input('OrderID')]);
+
+        } else {
+            return redirect()->route('front.checkout.checkout', ['step' => '']);
         }
     }
 
