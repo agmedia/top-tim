@@ -2,20 +2,21 @@
     <section class="col">
         <!-- Toolbar-->
         <div class="d-flex justify-content-between align-items-center pt-2 pb-4 pb-sm-2">
-            <div class="d-flex flex-wrap pb-2 w-100" >
+            <div class="d-flex flex-wrap pb-2 w-100">
                 <button class="btn btn-light btn-icon me-1 mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="ci-filter-alt me-1"></i> <span class="d-none d-sm-inline-block">Filteri</span></button>
 
 
-                        <span v-if="attributes.length && subcat" v-for="attribute in attributes"  >
-                            <div v-if="attribute.group === 'Dodatna kategorizacija' " >
-                                <label   class="btn btn-light btn-icon me-1 mb-2" :for="attribute.id">
-                                    <input  class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes" > {{ attribute.title }}
+                <span v-if="attributes.length && subcat" v-for="attribute in attributes">
+                            <div v-if="attribute.group === 'Dodatna kategorizacija' ">
+                                <label class="btn btn-light btn-icon me-1 mb-2" :for="attribute.id">
+                                    <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes"> {{ attribute.title }}
                                 </label>
                             </div>
                         </span>
 
 
-                <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" v-on:click="cleanQuery()" ><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span></button>
+                <button v-if=" this.attribute || this.brand ||  this.option" class="btn btn-outline-danger bg-white btn-icon me-1 mb-2" type="button" v-on:click="cleanQuery()"><i class="ci-loading me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Očisti</span>
+                </button>
 
                 <div class="d-flex ms-md-auto ms-0  mb-2">
                     <select class="form-select pe-2" style="max-width: 120px;" v-model="sorting">
@@ -34,7 +35,7 @@
 
                 <div class="d-flex mb-2 d-none"><span class="fs-sm text-dark btn btn-white btn-sm text-nowrap ms-0 d-block">{{ products.total ? Number(products.total).toLocaleString('hr-HR') : 0 }} {{ trans.artikala }}</span></div>
                 <div class="d-flex d-none pb-3">
-                    <button class="btn btn-outline-secondary bg-white btn-icon nav-link-style  me-1" v-on:click="tworow()" >2</button>
+                    <button class="btn btn-outline-secondary bg-white btn-icon nav-link-style  me-1" v-on:click="tworow()">2</button>
 
                     <button class="btn btn-outline-secondary bg-white  btn-icon btn-sm nav-link-style " v-on:click="onerow()">1</button>
                 </div>
@@ -46,20 +47,18 @@
         </div>
 
 
-
         <!-- Offcanvas -->
 
 
-
         <!-- Products grid-->
-        <div class="row row-cols-xxxl-5 row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 g-0 mx-n2 mb-5"  id="product-grid" v-if="products.total">
+        <div class="row row-cols-xxxl-5 row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 g-0 mx-n2 mb-5" id="product-grid" v-if="products.total">
             <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in products.data">
                 <div class="card product-card card-static pb-3">
 
+                    <a v-if="product.admin_url" :href="product.admin_url"><span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow">admin</span></a>
 
-
-                    <span class="badge bg-warning mt-1 ms-1 badge-end"  v-if="product.quantity <= 0">{{ trans.rasprodano }}</span>
-                    <span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow" v-if="Number(product.main_price) > Number(product.main_special)">-{{ ($store.state.service.getDiscountAmount(product.main_price,  product.main_special)) }}%</span>
+                    <span class="badge bg-warning mt-1 ms-1 badge-end" v-if="product.quantity <= 0">{{ trans.rasprodano }}</span>
+                    <span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow" v-if="Number(product.main_price) > Number(product.main_special)">-{{ ($store.state.service.getDiscountAmount(product.main_price, product.main_special)) }}%</span>
 
                     <a class="card-img-top d-block pb-2 overflow-hidden " :href="origin + product.url"><img load="lazy" :src="product.image.replace('.webp', '-thumb.webp')" width="400" height="400" :alt="product.name">
                     </a>
@@ -70,7 +69,7 @@
                             <div class="fs-sm me-2"><span v-html="product.category_string"></span></div>
                         </div>
                         <div class="product-price">
-                            <span class="fs-sm text-muted"  v-if="Number(product.main_price) > Number(product.main_special)"><small>NC 30 dana: {{ product.main_price_text }} </small> </span>
+                            <span class="fs-sm text-muted" v-if="Number(product.main_price) > Number(product.main_special)"><small>NC 30 dana: {{ product.main_price_text }} </small> </span>
                         </div>
                         <div class="product-price">
                             <span class="text-red fs-md" v-if="Number(product.main_price) > Number(product.main_special)">{{ product.main_special_text }} </span>
@@ -78,12 +77,12 @@
                         <div class="product-price">
                             <span class="text-dark fs-md" v-if="Number(product.main_price) < Number(product.main_special)">{{ product.main_price_text }} </span>
 
-                            <span class="text-dark fs-md" v-else >{{ product.main_price_text }} </span>
+                            <span class="text-dark fs-md" v-else>{{ product.main_price_text }} </span>
                         </div>
 
                         <div class="star-rating" v-if="product.stars">
                             <span v-for="item in 5 ">
-                                <i  v-if="Math.floor(product.stars) - item >= 0" class="star-rating-icon ci-star-filled active"></i>
+                                <i v-if="Math.floor(product.stars) - item >= 0" class="star-rating-icon ci-star-filled active"></i>
 
                                 <i v-else-if="product.stars - item > -1 " class="star-rating-icon ci-star-half active"></i>
 
@@ -120,7 +119,10 @@
         </div>
         <div class="col-md-12 px-2 mb-4" v-if="products_loaded && search_zero_result">
             <h2>{{ trans.nema_rezultata }}</h2>
-            <p> {{ trans.vasa_pretraga }} <mark>{{ search_query }}</mark> {{ trans.pronasla_nula }}.</p>
+            <p> {{ trans.vasa_pretraga }}
+                <mark>{{ search_query }}</mark>
+                {{ trans.pronasla_nula }}.
+            </p>
             <h4 class="h5">{{ trans.s1 }}</h4>
             <ul class="list-style">
                 <li>{{ trans.s2 }}</li>
@@ -140,47 +142,48 @@
 
 <script>
 
-Vue.directive('tooltip', function(el, binding){
+Vue.directive('tooltip', function (el, binding) {
     $(el).tooltip({
-        title: binding.value,
+        title:     binding.value,
         placement: binding.arg,
-        trigger: 'hover'
+        trigger:   'hover'
     })
 })
 
 export default {
-    name: 'ProductsList',
+    name:  'ProductsList',
     props: {
-        ids: String,
-        group: String,
-        cat: String,
-        subcat: String,
-        author: String,
+        ids:       String,
+        group:     String,
+        cat:       String,
+        subcat:    String,
+        author:    String,
         publisher: String,
         brand_def: String,
+        admin:     String,
     },
     //
     data() {
         return {
-            products: {},
-            autor: '',
-            brand: '',
-            option: '',
-            attribute: '',
-            selectedAttributes: [],
-            nakladnik: '',
-            start: '',
-            end: '',
-            sorting: '',
-            attributes: [],
-            search_query: '',
-            page: 1,
-            origin: location.origin + '/',
-            hr_total: 'rezultata',
-            products_loaded: false,
-            search_zero_result: false,
+            products:               {},
+            autor:                  '',
+            brand:                  '',
+            option:                 '',
+            attribute:              '',
+            selectedAttributes:     [],
+            nakladnik:              '',
+            start:                  '',
+            end:                    '',
+            sorting:                '',
+            attributes:             [],
+            search_query:           '',
+            page:                   1,
+            origin:                 location.origin + '/',
+            hr_total:               'rezultata',
+            products_loaded:        false,
+            search_zero_result:     false,
             navigation_zero_result: false,
-            trans: window.trans,
+            trans:                  window.trans,
         }
     },
     //
@@ -199,10 +202,12 @@ export default {
     //
     mounted() {
         this.checkQuery(this.$route);
-       // if (this.attribute === '') {
-            this.show_attributes = true;
-            this.getAttributes();
-      //  }
+        // if (this.attribute === '') {
+        this.show_attributes = true;
+        this.getAttributes();
+        //  }
+
+        console.log(this.admin);
     },
 
     methods: {
@@ -210,17 +215,17 @@ export default {
          *
          */
         getProducts() {
-            this.search_zero_result = false;
+            this.search_zero_result     = false;
             this.navigation_zero_result = false;
-            this.products_loaded = false;
-            let params = this.setParams();
+            this.products_loaded        = false;
+            let params                  = this.setParams();
 
             //console.log('tu sam...')
-          //  console.log(params)
+            //  console.log(params)
 
-            axios.post('filter/getProducts', { params }).then(response => {
+            axios.post('filter/getProducts', {params}).then(response => {
                 this.products_loaded = true;
-                this.products = response.data;
+                this.products        = response.data;
                 this.checkHrTotal();
                 this.checkSpecials();
 
@@ -228,8 +233,8 @@ export default {
                     this.checkAvailables();
                 }
 
-               // console.log('Response::data.data')
-               // console.log(response.data.data)
+                // console.log('Response::data.data')
+                // console.log(response.data.data)
 
                 if (params.pojam != '' && !this.products.total) {
                     this.search_zero_result = true;
@@ -247,15 +252,15 @@ export default {
          */
         getProductsPage(page = 1) {
             this.products_loaded = false;
-            this.page = page;
+            this.page            = page;
             this.setQueryParam('page', page);
 
             let params = this.setParams();
             window.scrollTo({top: 0, behavior: 'smooth'});
 
-            axios.post('filter/getProducts?page=' + page, { params }).then(response => {
+            axios.post('filter/getProducts?page=' + page, {params}).then(response => {
                 this.products_loaded = true;
-                this.products = response.data;
+                this.products        = response.data;
                 this.checkHrTotal();
                 this.checkSpecials();
                 this.checkAvailables();
@@ -269,10 +274,12 @@ export default {
          */
         setQueryParam(type, value) {
             this.closeFilter();
-            this.$router.push({query: this.resolveQuery()}).catch(()=>{});
+            this.$router.push({query: this.resolveQuery()}).catch(() => {
+            });
 
             if (value == '' || value == 1) {
-                this.$router.push({query: this.resolveQuery()}).catch(()=>{});
+                this.$router.push({query: this.resolveQuery()}).catch(() => {
+                });
             }
         },
 
@@ -281,10 +288,12 @@ export default {
          **/
         setQueryParamOther(type, value) {
 
-            this.$router.push({query: this.resolveQuery()}).catch(()=>{});
+            this.$router.push({query: this.resolveQuery()}).catch(() => {
+            });
 
             if (value === '') {
-                this.$router.push({query: this.resolveQuery()}).catch(()=>{});
+                this.$router.push({query: this.resolveQuery()}).catch(() => {
+                });
             }
         },
 
@@ -294,21 +303,21 @@ export default {
          */
         resolveQuery() {
             let params = {
-                start: this.start,
-                end: this.end,
-                autor: this.autor,
-                brand: this.brand,
-                option: this.option,
+                start:     this.start,
+                end:       this.end,
+                autor:     this.autor,
+                brand:     this.brand,
+                option:    this.option,
                 attribute: this.attribute,
                 nakladnik: this.nakladnik,
-                sort: this.sorting,
-                pojam: this.search_query,
-                page: this.page
+                sort:      this.sorting,
+                pojam:     this.search_query,
+                page:      this.page
             };
 
             return Object.entries(params).reduce((acc, [key, val]) => {
                 if (!val) return acc
-                return { ...acc, [key]: val }
+                return {...acc, [key]: val}
             }, {});
         },
 
@@ -317,15 +326,15 @@ export default {
          * @param params
          */
         checkQuery(params) {
-            this.start = params.query.start ? params.query.start : '';
-            this.end = params.query.end ? params.query.end : '';
-            this.autor = params.query.autor ? params.query.autor : '';
-            this.brand = params.query.brand ? params.query.brand : '';
-            this.option = params.query.option ? params.query.option : '';
-            this.attribute = params.query.attribute ? params.query.attribute : '';
-            this.nakladnik = params.query.nakladnik ? params.query.nakladnik : '';
-            this.page = params.query.page ? params.query.page : '';
-            this.sorting = params.query.sort ? params.query.sort : '';
+            this.start        = params.query.start ? params.query.start : '';
+            this.end          = params.query.end ? params.query.end : '';
+            this.autor        = params.query.autor ? params.query.autor : '';
+            this.brand        = params.query.brand ? params.query.brand : '';
+            this.option       = params.query.option ? params.query.option : '';
+            this.attribute    = params.query.attribute ? params.query.attribute : '';
+            this.nakladnik    = params.query.nakladnik ? params.query.nakladnik : '';
+            this.page         = params.query.page ? params.query.page : '';
+            this.sorting      = params.query.sort ? params.query.sort : '';
             this.search_query = params.query.pojam ? params.query.pojam : '';
 
             if (this.brand == '') {
@@ -345,19 +354,19 @@ export default {
          */
         setParams() {
             let params = {
-                ids: this.ids,
-                group: this.group,
-                cat: this.cat,
-                subcat: this.subcat,
-                autor: this.autor,
-                brand: this.brand ? this.brand : this.brand,
-                option: this.option ? this.option : this.option,
+                ids:       this.ids,
+                group:     this.group,
+                cat:       this.cat,
+                subcat:    this.subcat,
+                autor:     this.autor,
+                brand:     this.brand ? this.brand : this.brand,
+                option:    this.option ? this.option : this.option,
                 attribute: this.attribute ? this.attribute : this.attribute,
                 nakladnik: this.nakladnik,
-                start: this.start,
-                end: this.end,
-                sort: this.sorting,
-                pojam: this.search_query
+                start:     this.start,
+                end:       this.end,
+                sort:      this.sorting,
+                pojam:     this.search_query
             };
 
             if (this.author !== '') {
@@ -388,6 +397,12 @@ export default {
             let now = new Date();
 
             for (let i = 0; i < this.products.data.length; i++) {
+                this.products.data[i].admin_url = null;
+
+                if (this.admin == '1') {
+                    this.products.data[i].admin_url = window.location.origin + '/admin/catalog/product/' + this.products.data[i].id + '/edit';
+                }
+
                 if (Number(this.products.data[i].main_price) <= Number(this.products.data[i].main_special)) {
                     this.products.data[i].special = false;
                 }
@@ -398,13 +413,13 @@ export default {
 
             let params = this.setParams();
 
-            axios.post('filter/getAttributes', { params }).then(response => {
+            axios.post('filter/getAttributes', {params}).then(response => {
 
                 this.attributes = response.data;
                 this.preselect();
 
-             //   console.log('attributi')
-              //  console.log(response.data)
+                //   console.log('attributi')
+                //  console.log(response.data)
             });
         },
 
@@ -456,11 +471,10 @@ export default {
             }
 
             this.$store.dispatch('addToCart', {
-                id: id,
+                id:       id,
                 quantity: 1
             })
         },
-
 
 
         /**
@@ -484,13 +498,14 @@ export default {
          *
          */
         cleanQuery() {
-            this.$router.push({query: {}}).catch(()=>{});
+            this.$router.push({query: {}}).catch(() => {
+            });
 
             this.selectedAttributes = [];
 
             this.start = '';
-            this.end = '';
-           //window.location.replace(location.pathname);
+            this.end   = '';
+            //window.location.replace(location.pathname);
         },
 
 

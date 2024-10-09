@@ -208,7 +208,8 @@
                    group="{{ isset($group) ? $group : null }}"
                    cat="{{ isset($cat) ? $cat['id'] : null }}"
                    subcat="{{ isset($subcat) ? $subcat['id'] : null }}"
-                   brand_def="{{ isset($brand) ? $brand->id : null }}">
+                   brand_def="{{ isset($brand) ? $brand->id : null }}"
+                   admin="{{ isset(auth()->user()->details->role) && auth()->user()->details->role == 'admin' ? 1 : 0 }}">
     </products-view>
 
     <filter-side-view ids="{{ isset($ids) ? $ids : null }}"
