@@ -89,6 +89,7 @@ return [
     'tech_desc' => 'Tehnička specifikacija',
     'sifra' => 'Šifra artikla',
     'onstock' => 'Dostupno',
+    'preuzimanje' => 'Osobno preuzimanje na lokaciji',
 
 
 
