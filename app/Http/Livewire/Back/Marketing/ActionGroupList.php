@@ -83,7 +83,7 @@ class ActionGroupList extends Component
                     $this->search_results = Product::query()->whereNotIn('id', array_keys($this->list))
                                                    ->whereHas('translation', function ($query) use ($value) {
                                                        $query->where('name', 'like', '%' . $value . '%')->orwhere('sku', 'like', '%' . $value . '%');
-                                                   })->limit(5)->get();
+                                                   })->limit(10)->get();
 
                     break;
 
