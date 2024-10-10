@@ -340,7 +340,7 @@ class Helper
 
         $widgets = [];
 
-        if ($wg->template == 'product_carousel' || $wg->template == 'page_carousel') {
+        if ( isset($wg) and $wg->template == 'product_carousel' || $wg->template == 'page_carousel') {
             $widget = $wg->widgets()->first();
 
             if ( ! $widget || empty($widget->data)) {
@@ -395,7 +395,7 @@ class Helper
                 'items'      => $items
             ];
 
-        } else {
+        } else if(isset($wg)) {
             foreach ($wg->widgets()->orderBy('sort_order')->get() as $widget) {
                 $data = unserialize($widget->data);
 
@@ -412,11 +412,15 @@ class Helper
             }
         }
 
-        return str_replace(
-            '++' . $id . '++',
-            view('front.layouts.widget.widget_' . $wg->template, ['data' => $widgets]),
-            $description
-        );
+
+        if(isset($wg)){
+            return str_replace(
+                '++' . $id . '++',
+                view('front.layouts.widget.widget_' . $wg->template, ['data' => $widgets]),
+                $description
+            );
+         }
+         return $description;
     }
 
 
