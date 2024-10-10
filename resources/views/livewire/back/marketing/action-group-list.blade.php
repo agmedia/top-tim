@@ -11,7 +11,7 @@
                         <div class="autocomplete" >
                             <div id="myInputautocomplete-list" class="autocomplete-items">
                                 @foreach($search_results as $item)
-                                    <div wire:click="addItem({{ $item->id }})">{{ isset($item->translation->title) ? $item->translation->title : $item->title }} - {{ isset($item->sku) ? $item->sku : '' }}</div>
+                                    <div wire:click="addItem({{ $item->id }})">{{ isset($item->translation->name) ? $item->translation->name : $item->name }} - {{ isset($item->sku) ? $item->sku : '' }}</div>
                                 @endforeach
                             </div>
                         </div>
