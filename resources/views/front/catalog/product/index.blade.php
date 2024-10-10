@@ -140,6 +140,11 @@
                     <span class="badge bg-red">-{{ number_format(floatval(\App\Helpers\Helper::calculateDiscount($prod->main_price, $prod->main_special)), 0) }}%</span>
                 @endif
 
+                    @if (auth()->user() and auth()->user()->details->role == 'admin')
+
+                        <span class="badge badge-end rounded-pill  bg-red mt-1 ms-1 badge-shadow"> <a class="text-white" href="/admin/catalog/product/{{$prod->id}}/edit" target="_blank">admin</a></span>
+                    @endif
+
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <a id="openReview" href="#reviews" data-scroll>
                         <div class="star-rating">
