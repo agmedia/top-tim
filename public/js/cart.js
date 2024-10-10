@@ -5689,7 +5689,7 @@ var render = function render() {
         target: "_blank"
       }
     }, [_c("span", {
-      staticClass: "badge rounded-pill bg-red mt-1 ms-1 badge-shadow"
+      staticClass: "badge badge-end rounded-pill bg-red mt-1 ms-1 badge-shadow"
     }, [_vm._v("admin")])]) : _vm._e(), _vm._v(" "), product.quantity <= 0 ? _c("span", {
       staticClass: "badge bg-warning mt-1 ms-1 badge-end"
     }, [_vm._v(_vm._s(_vm.trans.rasprodano))]) : _vm._e(), _vm._v(" "), Number(product.main_price) > Number(product.main_special) ? _c("span", {

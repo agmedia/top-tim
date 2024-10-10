@@ -55,7 +55,7 @@
             <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in products.data">
                 <div class="card product-card card-static pb-3">
 
-                    <a v-if="product.admin_url" :href="product.admin_url" target="_blank"><span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow">admin</span></a>
+                    <a v-if="product.admin_url" :href="product.admin_url" target="_blank"><span class="badge badge-end rounded-pill bg-red mt-1 ms-1 badge-shadow">admin</span></a>
 
                     <span class="badge bg-warning mt-1 ms-1 badge-end" v-if="product.quantity <= 0">{{ trans.rasprodano }}</span>
                     <span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow" v-if="Number(product.main_price) > Number(product.main_special)">-{{ ($store.state.service.getDiscountAmount(product.main_price, product.main_special)) }}%</span>
