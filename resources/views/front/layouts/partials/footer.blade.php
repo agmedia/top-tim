@@ -118,9 +118,9 @@
                 <div class="row py-lg-2">
 
                     <p>
-                        <img src="{{ asset('media/cards/ESIF.jpg') }}" height="60" style="height:60px;margin-bottom: -8px; margin-left: -5px;" loading="lazy">
-                        <img src="{{ asset('media/cards/EUamblem.jpg') }}" height="60" loading="lazy" style="height:60px;">
-                        <img src="{{ asset('media/cards/HAMAG-Bicro-logo-RGB-mali.jpg') }}" height="30" style="height:30px;margin-top: -8px;" loading="lazy">
+                        <img src="{{ asset('media/cards/ESIF.jpg') }}" alt="ESIF" height="60" style="height:60px;margin-bottom: -8px; margin-left: -5px;" loading="lazy">
+                        <img src="{{ asset('media/cards/EUamblem.jpg') }}" alt="EU" height="60" loading="lazy" style="height:60px;">
+                        <img src="{{ asset('media/cards/HAMAG-Bicro-logo-RGB-mali.jpg') }}" height="30" style="height:30px;margin-top: -8px;" loading="lazy" alt="HAMAG">
                     </p>
                         <div class="col-lg-12 mb-lg-0 mb-4">
                        <small>Sve cijene iskazane su u eurima i uključuju PDV. Trudimo se dati što bolji i točniji opis i sliku. Unatoč tome, ne možemo garantirati da su svi navedeni podaci i slike u potpunosti točni. Ne odgovaramo za eventualne pogreške nastale u opisu proizvoda, greške prilikom štampanja te promjene cijena.</small>
