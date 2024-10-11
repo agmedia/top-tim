@@ -473,10 +473,14 @@ class Helper
     {
         $prods = (new Product())->newQuery();
 
-        $prods->active()->available()->last();
+       // $prods->active()->available()->last();
+
+        $prods->active()->available();
 
         if (isset($data['popular']) && $data['popular'] == 'on') {
             $prods->popular();
+        } else{
+            $prods->last();
         }
 
         if (isset($data['list']) && $data['list']) {
