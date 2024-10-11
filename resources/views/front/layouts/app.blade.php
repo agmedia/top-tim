@@ -24,6 +24,17 @@
     @stack('css_after')
     @if (config('app.env') == 'production')
         @yield('google_data_layer')
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-5TDCJ29CB9"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-5TDCJ29CB9');
+        </script>
+
     @endif
     @if (isset($js_lang))
         <script>
