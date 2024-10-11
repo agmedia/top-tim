@@ -74,10 +74,10 @@
                         <div class="product-price">
                             <span class="text-red fs-md" v-if="Number(product.main_price) > Number(product.main_special)">{{ product.main_special_text }} </span>
                         </div>
-                        <div class="product-price">
-                            <span class="text-dark fs-md" v-if="Number(product.main_price) < Number(product.main_special)">{{ product.main_price_text }} </span>
 
-                            <span class="text-dark fs-md" v-else>{{ product.main_price_text }} </span>
+
+                        <div class="product-price">
+                            <span class="text-dark fs-md" v-if="!product.special">{{ product.main_price_text }} <small v-if="product.secondary_price_text ">{{ product.secondary_price_text }} </small></span>
                         </div>
 
                         <div class="star-rating" v-if="product.stars">
