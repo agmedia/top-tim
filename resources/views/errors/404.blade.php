@@ -1,3 +1,4 @@
+<script>window.location.href = "https://www.top-tim.com";</script>
 @extends('front.layouts.app')
 
 @section('content')
