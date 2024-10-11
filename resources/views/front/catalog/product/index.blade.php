@@ -118,7 +118,7 @@
 
                         <ul class=" slider slider-nav mt-5">
                             @foreach ($prod->images as $key => $image)
-                                <li><img src="{{ url('cache/thumb?size=100x100&src=' . $image->thumb) }}" class="thumb" width="100" height="100" alt="{{ $image->alt }}"></li>
+                                <li><img src="{{ asset($image->thumb) }}" class="thumb" width="100" height="100" alt="{{ $image->alt }}"></li>
                             @endforeach
                         </ul>
                     </div>
