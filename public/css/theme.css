@@ -13624,7 +13624,7 @@ dd {
     src: url("../fonts/cartzilla-icons.ttf?ufvuz0") format("truetype"), url("../fonts/cartzilla-icons.woff?ufvuz0") format("woff"), url("../fonts/cartzilla-icons.svg?ufvuz0#cartzilla-icons") format("svg");
     font-weight: normal;
     font-style: normal;
-    font-display: block;
+    font-display: swap
 }
 [class^=ci-], [class*=" ci-"] {
     display: inline-block;
