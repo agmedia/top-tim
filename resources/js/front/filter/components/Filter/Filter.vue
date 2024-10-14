@@ -8,8 +8,8 @@
                 <div class="accordion-item border-bottom" v-for="cat in categories">
 
                     <h3 class="accordion-header px-grid-gutter bg-default" v-if="category && (category.id == cat.id)" >
-                        <button class="accordion-button collapsed py-3 fw-bolder text-uppercase " v-if="cat.subs" type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
-                            <span class="d-flex align-items-center"> {{ cat.title }} </span>
+                        <button class="accordion-button collapsed py-3  " v-if="cat.subs" type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
+                            <span class="d-flex align-items-center fw-bolder text-uppercase"> {{ cat.title }} </span>
                         </button>
                         <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-bolder text-uppercase py-3" :class="{'active': (category.id == cat.id)}" role="link">
                             <span class="d-flex align-items-center "><span v-html="cat.icon"></span> {{ cat.title }} </span>

@@ -4893,7 +4893,7 @@ var render = function render() {
     }, [_vm.category && _vm.category.id == cat.id ? _c("h3", {
       staticClass: "accordion-header px-grid-gutter bg-default"
     }, [cat.subs ? _c("button", {
-      staticClass: "accordion-button collapsed py-3 fw-bolder text-uppercase",
+      staticClass: "accordion-button collapsed py-3",
       attrs: {
         type: "button",
         "data-bs-toggle": "collapse",
@@ -4902,7 +4902,7 @@ var render = function render() {
         "aria-controls": "id" + cat.id
       }
     }, [_c("span", {
-      staticClass: "d-flex align-items-center"
+      staticClass: "d-flex align-items-center fw-bolder text-uppercase"
     }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
       staticClass: "nav-link-style d-block fs-md fw-bolder text-uppercase py-3",
       "class": {
