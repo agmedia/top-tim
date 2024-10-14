@@ -397,9 +397,16 @@
                         </div>
                         <div class="col-md-6 text-right">
                             @if (isset($product))
-                                <a href="{{ route('products.destroy', ['product' => $product]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-product-form{{ $product->id }}').submit();">
+                                {{--<a href="{{ route('products.destroy', ['product' => $product]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-product-form{{ $product->id }}').submit();">
                                     <i class="fa fa-trash-alt"></i> {{ __('back/products.obrisi') }}
-                                </a>
+                                </a>--}}
+                                <button class="btn btn-hero-danger my-2 js-tooltip-enabled"
+                                        data-toggle="tooltip"
+                                        title=""
+                                        data-original-title="Obriši"
+                                        onclick="event.preventDefault(); deleteSingleProduct({{ $product->id }}, '{{ route('products.destroy.api') }}');">
+                                    <i class="fa fa-fw fa-trash-alt"></i> {{ __('back/products.obrisi') }}
+                                </button>
                             @endif
                         </div>
                     </div>
@@ -551,6 +558,38 @@
         function SetSEOPreview() {
             let title = $('#name-input').val();
             $('#slug-input').val(slugify(title));
+        }
+
+        //
+        function deleteSingleProduct(id, url) {
+            Swal.fire({
+                title: 'Obriši..!',
+                text: "Jeste li sigurni da želite obrisati artikl?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Da, obriši!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.post(url, {id: id})
+                    .then(response => {
+                        if (response.data.success) {
+                            successToast.fire({
+                                timer: 2160
+                            });
+
+                            setTimeout(() => {
+                                window.history.back();
+                            }, 2000);
+                        } else {
+                            return errorToast.fire(response.data.message);
+                        }
+                    });
+
+
+                }
+            });
         }
     </script>
     @stack('product_scripts')
