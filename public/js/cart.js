@@ -4893,7 +4893,7 @@ var render = function render() {
     }, [_vm.category && _vm.category.id == cat.id ? _c("h3", {
       staticClass: "accordion-header px-grid-gutter bg-default"
     }, [cat.subs ? _c("button", {
-      staticClass: "accordion-button collapsed py-3 fw-bold",
+      staticClass: "accordion-button collapsed py-3 fw-bolder text-uppercase",
       attrs: {
         type: "button",
         "data-bs-toggle": "collapse",
