@@ -98,6 +98,8 @@ class Checkout extends Component
         'address.city' => 'required',
         'address.zip' => 'required',
         'address.state' => 'required',
+        /*'address.company' => '',
+        'address.oib' => '',*/
     ];
 
     /**
@@ -289,7 +291,6 @@ class Checkout extends Component
      */
     public function selectPayment(string $payment)
     {
-
         $this->payment = $payment;
 
         $this->checkPayment($payment);

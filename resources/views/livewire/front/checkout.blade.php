@@ -209,24 +209,24 @@
 
         <h2 class="h6 pt-3 pb-3 mb-2"><a data-bs-toggle="collapse" href="#collapseOib" role="button" aria-expanded="false" aria-controls="collapseLogin" class="alert-link">{{ __('front/cart.trebate_r1') }}</a></h2>
 
-        <div id="collapseOib" aria-expanded="false" class="collapse">
+        <div id="collapseOib" aria-expanded="false" class="collapse" wire:ignore>
 
-                    <div class="row ">
-                        <div class="col-sm-6">
-                            <div class="mb-3">
-                                <label class="form-label" for="checkout-company">{{ __('front/cart.tvrtka') }}</label>
-                                <input class="form-control" name="company" type="text" wire:model="address.company">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="mb-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="checkout-oib">{{ __('front/cart.oib') }}</label>
-                                    <input class="form-control" name="oib" type="text" wire:model="address.oib">
-                                </div>
-                            </div>
+            <div class="row ">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label" for="checkout-company">{{ __('front/cart.tvrtka') }}</label>
+                        <input class="form-control" name="company" type="text" wire:model="address.company">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="checkout-oib">{{ __('front/cart.oib') }}</label>
+                            <input class="form-control" name="oib" type="text" wire:model="address.oib">
                         </div>
                     </div>
+                </div>
+            </div>
 
         </div>
         </div>
