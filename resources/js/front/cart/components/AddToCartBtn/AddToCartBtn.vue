@@ -2,21 +2,21 @@
     <div class="cart pb-2 mb-2">
         <div class="mb-1" v-if="context_product.main_price > context_product.main_special">
             <span class="h3 fw-bold font-title text-blue me-1">{{ context_product.main_special_text }}</span>
-            <span class="text-muted fs-lg me-3">*{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price)  }}</span>
+            <span class="text-muted fs-lg me-3"><strike>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price)  }}</strike></span>
         </div>
         <div class="mb-1" v-else>
             <span class="h3 fw-bold font-title text-blue me-1">{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price) }}</span>
         </div>
 
         <div class="mb-1 mt-1 text-start" v-if="context_product.main_price > context_product.main_special">
-            <span class="fs-sm text-muted me-1">{{ trans.lowest_price }}</span>
+            <span class="fs-sm text-muted me-1">{{ trans.lowest_price }}: {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price)  }}</span>
         </div>
 
         <div class="mb-1 mt-1 text-start">
             <span class="fs-xs text-muted me-1">{{ trans.pdv }}</span>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3" >
             <span class=" fs-xs  text-blue me-1">{{ trans.nopdv }}: {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price / 1.25) }} </span>
         </div>
 

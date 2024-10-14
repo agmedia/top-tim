@@ -4102,10 +4102,10 @@ var render = function render() {
     staticClass: "h3 fw-bold font-title text-blue me-1"
   }, [_vm._v(_vm._s(_vm.context_product.main_special_text))]), _vm._v(" "), _c("span", {
     staticClass: "text-muted fs-lg me-3"
-  }, [_vm._v("*" + _vm._s(new Intl.NumberFormat("de-DE", {
+  }, [_c("strike", [_vm._v(_vm._s(new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR"
-  }).format(_vm.price)))])]) : _c("div", {
+  }).format(_vm.price)))])], 1)]) : _c("div", {
     staticClass: "mb-1"
   }, [_c("span", {
     staticClass: "h3 fw-bold font-title text-blue me-1"
@@ -4116,7 +4116,10 @@ var render = function render() {
     staticClass: "mb-1 mt-1 text-start"
   }, [_c("span", {
     staticClass: "fs-sm text-muted me-1"
-  }, [_vm._v(_vm._s(_vm.trans.lowest_price))])]) : _vm._e(), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.trans.lowest_price) + ": " + _vm._s(new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR"
+  }).format(_vm.price)))])]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "mb-1 mt-1 text-start"
   }, [_c("span", {
     staticClass: "fs-xs text-muted me-1"
@@ -5731,7 +5734,9 @@ var render = function render() {
       staticClass: "product-price"
     }, [Number(product.main_price) > Number(product.main_special) ? _c("span", {
       staticClass: "text-red fs-md"
-    }, [_vm._v(_vm._s(product.main_special_text) + " ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    }, [_vm._v(_vm._s(product.main_special_text) + "  "), _c("span", {
+      staticClass: "fs-sm text-muted"
+    }, [_c("strike", [_vm._v(_vm._s(product.main_price_text))])], 1)]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
     }, [!product.special ? _c("span", {
       staticClass: "text-dark fs-md"
