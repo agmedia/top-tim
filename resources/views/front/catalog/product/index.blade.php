@@ -107,11 +107,12 @@
 
                             @if ($prod->images->count())
                                 @foreach ($prod->images as $key => $image)
-                                    <div class="item single-product" data-target="{{ $image->option_id }}">
-                                        <a class="link" href="{{ asset($image->image) }}">
-                                            <img src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" style="max-height:600px">
-                                        </a>
-                                    </div>
+                                        <div class="item single-product" data-target="{{ $image->option_id }}">
+                                            <a class="link" href="{{ asset($image->image) }}">
+                                                <img src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" style="max-height:600px">
+                                            </a>
+                                        </div>
+
                                 @endforeach
                             @endif
                         </div>
@@ -133,7 +134,7 @@
             <div class="h-100 bg-light rounded-3 py-5 px-4 px-sm-5">
 
                 @if ( $prod->quantity < 1)
-                    <span class="badge bg-warning ">{{ __('front/ricekakis.rasprodano') }}</span>
+                    <span class="badge bg-warning ">{{ __('front/ricekakis.rasprodano') }} </span>
                 @endif
 
                 @if ($prod->main_price > $prod->main_special)
@@ -524,10 +525,21 @@
             var $gallery = new SimpleLightbox('.galerija a', {});
         })();
     </script>
+
+    @if ($prod->images->count())
+        @foreach ($prod->images as $key => $image)
+            @if($image->default == '1')
+                @php($i = $key)
+            @endif
+        @endforeach
+    @endif
+
+
     <script>
         var $carousel = $('.slider-for').slick({
             slidesToShow:   1,
             slidesToScroll: 1,
+            initialSlide: {{ $i + 1}},
             arrows:         false,
             fade:           true,
             asNavFor:       '.slider-nav'
