@@ -109,7 +109,7 @@
 
 
                     </div>
-                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" href="https://www.facebook.com/toptim1/" aria-label="Facebook"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/toptimofficial/"><i class="ci-instagram"></i></a><a class="btn-social btn-x bs-outline bs-twitter me-2 mb-2" style="margin-top:-5px" aria-label="Twitter" href="https://twitter.com/toptimsport"><img src="{{ asset('image/x-icom.svg') }}"  class="x-icon"   alt="Top Tim - Better way to stay in the game" ></a></div>
+                        <div><a class="btn-social bs-outline bs-facebook me-2 mb-2" href="https://www.facebook.com/toptim1/" aria-label="Facebook"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-instagram me-2 mb-2" aria-label="Instagram" href="https://www.instagram.com/toptim.official/"><i class="ci-instagram"></i></a><a class="btn-social btn-x bs-outline bs-twitter me-2 mb-2" style="margin-top:-5px" aria-label="Twitter" href="https://twitter.com/toptimsport"><img src="{{ asset('image/x-icom.svg') }}"  class="x-icon"   alt="Top Tim - Better way to stay in the game" ></a></div>
 
                         </div>
 
