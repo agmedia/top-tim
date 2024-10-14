@@ -539,7 +539,7 @@
         var $carousel = $('.slider-for').slick({
             slidesToShow:   1,
             slidesToScroll: 1,
-            initialSlide: {{ $i + 1}},
+            initialSlide: {{ $i }},
             arrows:         false,
             fade:           true,
             asNavFor:       '.slider-nav'
