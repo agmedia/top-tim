@@ -11,16 +11,16 @@
                         <button class="accordion-button collapsed py-3 fw-bold " v-if="cat.subs" type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
                             <span class="d-flex align-items-center"> {{ cat.title }} </span>
                         </button>
-                        <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-bold  py-3" :class="{'active': (category.id == cat.id)}" role="link">
+                        <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-bolder text-uppercase py-3" :class="{'active': (category.id == cat.id)}" role="link">
                             <span class="d-flex align-items-center"><span v-html="cat.icon"></span> {{ cat.title }} </span>
                         </a>
                     </h3>
 
                     <h3 class="accordion-header px-grid-gutter" v-else>
                         <button class="accordion-button collapsed py-3" v-if="cat.subs " type="button" data-bs-toggle="collapse" :data-bs-target="'#id' + cat.id" aria-expanded="false" :aria-controls="'id'+ cat.id">
-                            <span class="d-flex align-items-center fw-bold "> {{ cat.title }} </span>
+                            <span class="d-flex align-items-center fw-bolder text-uppercase"> {{ cat.title }} </span>
                         </button>
-                        <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-bold py-3 " role="link">
+                        <a :href="cat.url" v-if="!cat.subs" class="nav-link-style d-block fs-md fw-bolder text-uppercase py-3 " role="link">
                             <span class="d-flex align-items-center"><span v-html="cat.icon"></span> {{ cat.title }}</span>
                         </a>
                     </h3>
@@ -32,7 +32,7 @@
 
                                 <ul class="widget-list" v-for="sub in cat.subs" >
                                     <li class="widget-list-item pb-1 pt-1" :class="{'active': (subcategory && subcategory.id == sub.id)}">
-                                        <a class="widget-list-link fw-bold " :href="sub.url">{{ sub.title }} </a>
+                                        <a class="widget-list-link fw-bolder text-uppercase" :href="sub.url">{{ sub.title }} </a>
                                     </li>
                                 </ul>
 
@@ -53,7 +53,7 @@
 
 
                                 <ul class="widget-list" v-for="subcategory in cat.subs" >
-                                    <li class="widget-list-item pb-1 pt-1"><a class="widget-list-link fw-bold " :href="subcategory.url">{{ subcategory.title }} </a></li>
+                                    <li class="widget-list-item pb-1 pt-1"><a class="widget-list-link fw-bolder text-uppercase" :href="subcategory.url">{{ subcategory.title }} </a></li>
                                 </ul>
 
                                 <ul class="widget-list mb-2 mt-2" >

@@ -4904,7 +4904,7 @@ var render = function render() {
     }, [_c("span", {
       staticClass: "d-flex align-items-center"
     }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
-      staticClass: "nav-link-style d-block fs-md fw-bold py-3",
+      staticClass: "nav-link-style d-block fs-md fw-bolder text-uppercase py-3",
       "class": {
         active: _vm.category.id == cat.id
       },
@@ -4930,9 +4930,9 @@ var render = function render() {
         "aria-controls": "id" + cat.id
       }
     }, [_c("span", {
-      staticClass: "d-flex align-items-center fw-bold"
+      staticClass: "d-flex align-items-center fw-bolder text-uppercase"
     }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
-      staticClass: "nav-link-style d-block fs-md fw-bold py-3",
+      staticClass: "nav-link-style d-block fs-md fw-bolder text-uppercase py-3",
       attrs: {
         href: cat.url,
         role: "link"
@@ -4962,7 +4962,7 @@ var render = function render() {
           active: _vm.subcategory && _vm.subcategory.id == sub.id
         }
       }, [_c("a", {
-        staticClass: "widget-list-link fw-bold",
+        staticClass: "widget-list-link fw-bolder text-uppercase",
         attrs: {
           href: sub.url
         }
@@ -4992,7 +4992,7 @@ var render = function render() {
       }, [_c("li", {
         staticClass: "widget-list-item pb-1 pt-1"
       }, [_c("a", {
-        staticClass: "widget-list-link fw-bold",
+        staticClass: "widget-list-link fw-bolder text-uppercase",
         attrs: {
           href: subcategory.url
         }
