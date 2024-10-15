@@ -8,7 +8,7 @@
             <td class="ag-mail-tableset">
                 Broj narudžbe: <strong>{{ $order->id }}</strong><br>
                 Datum: <strong>{{ now()->format('d.m.Y') }}</strong><br>
-                Status: <strong>OTKAZANO</strong> (Narudžba je otkazana / nije uspjelo plaćanje)
+                Status: <strong>OTKAZANO</strong> (Narudžba je otkazana )
             </td>
         </tr>
 

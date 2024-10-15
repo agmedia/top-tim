@@ -2,13 +2,13 @@
 
 @section('content')
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-        <tr><td class="ag-mail-tableset"><h3>Narudžba je uspješno plaćena</h3></td></tr>
+        <tr><td class="ag-mail-tableset"><h3>Narudžba je ažurirana sa statusom: {{ $order->status }}</h3></td></tr>
 
         <tr>
             <td class="ag-mail-tableset">
                 Broj narudžbe: <strong>{{ $order->id }}</strong><br>
                 Datum: <strong>{{ now()->format('d.m.Y') }}</strong><br>
-                Status: <strong>PLAĆENO</strong> (Narudžba je uspješno plaćena)
+                Status: <strong>{{ $order->status }}</strong>
             </td>
         </tr>
 
