@@ -77,7 +77,7 @@
                                             <input type="text" class="form-control" id="zip-input" name="zip" placeholder="{{ __('back/orders.upisite_zip_kupca') }}" value="{{ isset($order) ? $order->shipping_zip : old('zip') }}">
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="city-input">{{ __('back/orders.grad') }}></label>
+                                            <label for="city-input">{{ __('back/orders.grad') }}</label>
                                             <input type="text" class="form-control" id="city-input" name="city" placeholder="{{ __('back/orders.upisite_grad_kupca') }}" value="{{ isset($order) ? $order->shipping_city : old('city') }}">
                                         </div>
                                         <div class="col-md-5">
