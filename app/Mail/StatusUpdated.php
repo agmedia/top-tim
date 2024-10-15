@@ -49,7 +49,7 @@ class StatusUpdated extends Mailable
 
        // $this->status = collect($this->status)->where('id', $this->order->order_status_id)->first();
 
-        Log::info($this->status);
+        Log::info($this->status->title->{current_locale()});
 
         Log::info($this->order->order_status_id);
 
