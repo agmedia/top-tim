@@ -163,7 +163,7 @@ class OrderController extends Controller
                     ProductHelper::makeAvailable($request->input('order_id'));
                 }
 
-                if ($request->input('status') == config('settings.order.status.paid')) {
+                /*if ($request->input('status') == config('settings.order.status.paid')) {
                     $order = Order::find($request->input('order_id'));
 
                     dispatch(function () use ($order) {
@@ -177,7 +177,13 @@ class OrderController extends Controller
                     dispatch(function () use ($order) {
                         Mail::to($order->payment_email)->send(new StatusCanceled($order));
                     });
-                }
+                }*/
+
+                $order = Order::find($request->input('order_id'));
+
+                dispatch(function () use ($order) {
+                    Mail::to($order->payment_email)->send(new StatusPaid($order));
+                });
             }
 
             OrderHistory::store($request->input('order_id'), $request);
