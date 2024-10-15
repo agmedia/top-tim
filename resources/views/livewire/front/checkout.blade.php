@@ -206,7 +206,17 @@
                 </div>
             </div>
         </div>
+                <div class="row">
+                    <div class="col-sm-12">
 
+                        <label for="textarea-input" class="form-label">{{ __('Komentar') }}</label>
+                        <textarea class="form-control" name="comment" wire:model.defer="comment" id="textarea-input" placeholder="" rows="6"></textarea>
+
+                        <div class="form-text">{{ __('Ukoliko trebate tisak ili gravuru na nekom od artikala onda to upišite ovdje') }}</div>
+                    </div>
+
+
+            </div>
         <h2 class="h6 pt-3 pb-3 mb-2"><a data-bs-toggle="collapse" href="#collapseOib" role="button" aria-expanded="false" aria-controls="collapseLogin" class="alert-link">{{ __('front/cart.trebate_r1') }}</a></h2>
 
         <div id="collapseOib" aria-expanded="false" class="collapse" wire:ignore>

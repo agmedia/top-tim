@@ -106,6 +106,16 @@
                                 </li>
                             </ul>
                         </div>
+
+                        <div class="col-sm-12">
+
+
+                            <h4 class="h6">{{ __('Komentar') }}:</h4>
+                           <p> {{ $data['comment'] }}</p>
+
+                        </div>
+
+
                     </div>
                 </div>
                 </div>
