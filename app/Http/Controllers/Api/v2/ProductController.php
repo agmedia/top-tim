@@ -89,6 +89,23 @@ class ProductController extends Controller
 
 
     /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function optionsList(Request $request)
+    {
+        $product = \App\Models\Front\Catalog\Product::query()->find($request->input('id'));
+
+        if ($product) {
+            return response()->json($product->optionsList());
+        }
+
+        return response()->json();
+    }
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param int $id

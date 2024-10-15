@@ -33,7 +33,8 @@
                     <ag-order-products
                             products="{{ isset($order) ? json_encode($order->products) : '' }}"
                             totals="{{ isset($order) ? json_encode($order->totals) : '' }}"
-                            products_autocomplete_url="{{ route('products.autocomplete') }}">
+                            products_autocomplete_url="{{ route('products.autocomplete') }}"
+                            products_options_url="{{ route('products.list.options') }}">
                     </ag-order-products>
                 </div>
             </div>
