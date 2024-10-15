@@ -43,9 +43,11 @@ class StatusUpdated extends Mailable
     {
        // $this->status = Settings::get('order', 'statuses')->where('id', $this->order->order_status_id)->first();
 
-        $this->status = Settings::get('order', 'statuses');
+        $this->status = Settings::get('order', 'statuses')->where('id', $this->order->order_status_id)->first();
 
-        $this->status = collect($this->status)->where('id', $this->order->order_status_id)->first();
+       // $this->status = Settings::get('order', 'statuses');
+
+       // $this->status = collect($this->status)->where('id', $this->order->order_status_id)->first();
 
         Log::info($this->status);
 
