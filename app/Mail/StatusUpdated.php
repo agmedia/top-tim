@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\Back\Orders\Order;
 use App\Models\Back\Orders\OrderStats;
+use App\Models\Back\Settings\Settings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -39,7 +40,7 @@ class StatusUpdated extends Mailable
      */
     public function build()
     {
-        $this->status = OrderStats::query()->where('id', $this->order->order_status_id)->first();
+        $this->status = Settings::get('order', 'statuses')->where('id', $this->order->order_status_id)->first();
 
         return $this->subject(__('front/cart.hvala_narudzba'))
             ->view('emails.status-updated');
