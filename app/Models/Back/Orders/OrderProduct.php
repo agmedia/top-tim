@@ -70,6 +70,8 @@ class OrderProduct extends Model
             $id = self::insertGetId([
                 'order_id'   => $order_id,
                 'product_id' => $product->id,
+                'sku' =>$product->sku,
+                'image' => $product->image,
                 'name'       => $product->name,
                 'quantity'   => $product->quantity,
                 'org_price'  => $product->org_price,

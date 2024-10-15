@@ -7,7 +7,7 @@
                 <div class="panel-footer" v-if="results.length">
                     <ul class="list-group agm">
                         <li class="list-group-item" v-for="result in results" @click="select(result)">
-                            {{ result.name }} -  {{ result.sku }}
+                            {{ result.translation.name }} - {{ result.sku }}
                         </li>
                     </ul>
                 </div>
@@ -41,16 +41,16 @@
                         <td>{{ product.name }}</td>
                         <td class="text-center">
                             <div class="form-material" style="padding-top: 0;">
-                                <input type="text" class="form-control py-0" style="height: 26px;" :value="product.quantity" @keyup="ChangeQty(product.id, $event)" @blur="Recalculate()">
+                                <input type="text" class="form-control py-0" style="height: 26px;" :value="product.quantity" @keyup="ChangeQty(product.sku, $event)" @blur="Recalculate()">
                             </div>
                         </td>
                         <td class="text-right">
-                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.org_price" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangePrice(product.id, $event); $emit('update')">
+                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.org_price" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangePrice(product.sku, $event); $emit('update')">
                             <span v-else @click="product.edit=true;">{{ Number(product.org_price).toLocaleString(localization, currency_style) }}</span>
                         </td>
                         <td class="text-right">{{ Number(product.org_price * product.quantity).toLocaleString(localization, currency_style) }}</td>
                         <td class="text-right">
-                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.rabat" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangeRabat(product.id, $event); $emit('update')">
+                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.rabat" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')">
                             <span v-else @click="product.edit=true;">-{{ Number((product.rabat) * product.quantity).toLocaleString(localization, currency_style) }}</span>
                         </td>
                         <td class="text-right font-w600">{{ Number(product.total).toLocaleString(localization, currency_style) }}</td>
@@ -118,6 +118,8 @@ export default {
             this.products_local = JSON.parse(this.products)
             this.totals_local = JSON.parse(this.totals)
             this.Sort()
+
+            console.log(this.products_local)
         }
     },
     //
@@ -131,7 +133,9 @@ export default {
             this.products_local.forEach((item) => {
                 this.items.push({
                     id: item.product_id,
+                    sku: item.sku,
                     name: item.name,
+                    image: item.image,
                     quantity: item.quantity,
                     price: item.price,
                     org_price: item.org_price,
@@ -164,7 +168,9 @@ export default {
 
             this.items.push({
                 id: selected.id,
+                sku: selected.sku,
                 name: selected.name,
+                image: selected.image,
                 quantity: 1,
                 price: price,
                 org_price: selected.price,
@@ -199,7 +205,7 @@ export default {
          */
         ChangeQty(id, event) {
             for (let i = 0; i < this.items.length; i++) {
-                if (this.items[i].id == id) {
+                if (this.items[i].sku == id) {
                     this.items[i].quantity = Number(event.target.value);
                     this.items[i].total = this.items[i].price * Number(event.target.value);
                 }
@@ -215,7 +221,7 @@ export default {
          */
         ChangePrice(id, event) {
             for (let i = 0; i < this.items.length; i++) {
-                if (this.items[i].id == id) {
+                if (this.items[i].sku == id) {
                     let inserted_price = Number(event.target.value);
 
                     if (inserted_price > this.items[i].rabat) {
@@ -236,7 +242,7 @@ export default {
          */
         ChangeRabat(id, event) {
             for (let i = 0; i < this.items.length; i++) {
-                if (this.items[i].id == id) {
+                if (this.items[i].sku == id) {
                     let inserted_rabat = Number(event.target.value);
 
                     if (inserted_rabat < this.items[i].org_price) {

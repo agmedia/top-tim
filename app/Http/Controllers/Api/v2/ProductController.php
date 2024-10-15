@@ -25,11 +25,12 @@ class ProductController extends Controller
         $query = (new Product())->newQuery();
 
         if ($request->has('query')) {
-            $query->where('name', 'like', '%' . $request->input('query') . '%')
-                  ->orWhere('sku', 'like', '%' . $request->input('query'));
+            $query->whereHas('translation', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('query') . '%');
+            })->orWhere('sku', 'like', '%' . $request->input('query') . '%');
         }
 
-        $products = $query->get();
+        $products = $query->with('translation')->get();
 
         return response()->json($products);
     }
