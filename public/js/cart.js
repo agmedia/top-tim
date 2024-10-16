@@ -5704,7 +5704,7 @@ var render = function render() {
       }
     }, [_c("img", {
       attrs: {
-        load: "lazy",
+        loading: "lazy",
         src: product.image.replace(".webp", "-thumb.webp"),
         width: "400",
         height: "400",
