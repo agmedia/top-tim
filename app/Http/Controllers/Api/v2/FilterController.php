@@ -171,10 +171,6 @@ class FilterController extends Controller
             $request_data['subcat'] = $params['subcat'];
         }
 
-
-
-
-
         if (isset($params['brand']) && $params['brand']) {
             $request_data['brand'] = $params['brand'];
         }

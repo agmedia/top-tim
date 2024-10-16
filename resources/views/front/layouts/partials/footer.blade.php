@@ -23,7 +23,7 @@
         <div class="px-lg-5 pt-2 pb-4">
             <div class="mx-auto px-3" >
                 <div class="row py-lg-3 ">
-                    <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="col-md-4 col-sm-4 mb-3">
                         <div class="d-flex"><i class="ci-gift link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">{{ __('front/ricekakis.icons_t1') }}</p>
@@ -31,15 +31,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-6 mb-3">
+                    <!--   <div class="col-md-4 col-sm-4 mb-3">
                         <div class="d-flex"><i class="ci-coins link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">{{ __('front/ricekakis.icons_t2') }}</p>
                                 <p class="mb-0 fs-ms text-dark opacity-80">{{ __('front/ricekakis.icons_d2') }}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6 mb-3">
+                    </div>-->
+                  <div class="col-md-4 col-sm-4 mb-3">
                         <div class="d-flex"><i class="ci-rocket link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">{{ __('front/ricekakis.icons_t3') }}</p>
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="col-md-4 col-sm-4 mb-3">
                         <div class="d-flex"><i class="ci-card link-primary" style="font-size: 2.25rem;"></i>
                             <div class="ps-3">
                                 <p class="fs-base fw-medium text-dark mb-1">{{ __('front/ricekakis.icons_t4') }}</p>

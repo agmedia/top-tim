@@ -22,7 +22,7 @@ return [
     'icons_d2' => 'Osvoji bodove s svakom narudžbom i recenzijom',
 
     'icons_t3' => 'Brza i pozdana dostava',
-    'icons_d3' => 'Dostavljamo za 1-3 radna dana u Hrvatskoj',
+    'icons_d3' => 'Dostavljamo za 3-7 radna dana u Hrvatskoj',
 
     'icons_t4' => 'Sigurna online kupnja',
     'icons_d4' => 'Stranica zaštićena SSL certifikatom',
