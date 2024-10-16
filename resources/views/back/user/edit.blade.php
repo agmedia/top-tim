@@ -176,7 +176,7 @@
                             <div class="form-group row">
                                 <label for="price-input">Korisnička grupa</label>
                                 <select class="form-control" id="user-group-select" name="user_group">
-                                    <option></option>
+                                    <option value="0">- Ne pripada grupama - </option>
                                     @foreach ($user_groups['items'] as $group)
                                         <option value="{{ $group['id'] }}" {{ (isset($user) and $group['id'] == $user->details->user_group_id) ? 'selected="selected"' : '' }}>{{ $group['title'] }}</option>
                                     @endforeach
