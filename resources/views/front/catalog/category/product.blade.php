@@ -3,7 +3,7 @@
     <div class="card product-card d-flex align-items-stretch  pb-1">
 
         @if ($product->main_price > $product->main_special)
-            <span class="badge bg-red badge-shadow">-{{ number_format(floatval(\App\Helpers\Helper::calculateDiscount($product->main_price, $product->main_special)), 0) }}%</span>
+            <span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow">-{{ number_format(floatval(\App\Helpers\Helper::calculateDiscount($product->main_price, $product->main_special)), 0) }}%</span>
         @endif
         <a class="card-img-top pb-2 d-block overflow-hidden thumb-height text-center" href="{{ url($product->url) }}">
             <img loading="lazy" src="{{ str_replace('.webp','-thumb.webp', $product->image) }}" width="400" height="400" alt="{{ $product->name }}">

@@ -138,7 +138,7 @@
                 @endif
 
                 @if ($prod->main_price > $prod->main_special)
-                    <span class="badge bg-red">-{{ number_format(floatval(\App\Helpers\Helper::calculateDiscount($prod->main_price, $prod->main_special)), 0) }}%</span>
+                    <span class="badge rounded-pill bg-red mt-1 ms-1 badge-shadow fw-bold" >-{{ number_format(floatval(\App\Helpers\Helper::calculateDiscount($prod->main_price, $prod->main_special)), 0) }}%</span>
                 @endif
 
                     @if (auth()->user() and auth()->user()->details->role == 'admin')
