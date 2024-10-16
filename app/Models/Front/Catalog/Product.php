@@ -453,9 +453,9 @@ class Product extends Model
         $_prod = $this;
         $user_group_id = 0;
 
-        if (Auth::check()) {
+        if (Auth::user()) {
             $user_group_id = Helper::resolveCache('group_id')->remember(\auth()->user()->id, config('cache.widget_life'), function () {
-                return \auth()->user()->details->group ? $this->user->details->group->id : 0;
+                return (\auth()->user() && \auth()->user()->details->group) ? $this->user->details->group->id : 0;
             });
         }
 
