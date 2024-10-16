@@ -109,8 +109,6 @@ class Special
 
         if ($this->active_actions->count()) {
             $this->action = $this->getBestAction();
-
-            return true;
         }
 
         return false;
@@ -292,7 +290,7 @@ class Special
      */
     private function setupAvailableActions(): Special
     {
-        $this->active_actions = ProductAction::query()->active()->get();
+        $this->active_actions = ProductAction::query()->where('user_group_id', null)->active()->get();
 
         if ($this->active_actions->count()) {
             $this->action = $this->getBestAction();
@@ -309,6 +307,16 @@ class Special
      */
     private function resolveRealAction(ProductAction|null $product_action = null)
     {
-        return $product_action ?: ($this->user_group ? $this->user_group_action : $this->action);
+        if ($product_action) {
+            return $product_action;
+        }
+
+        if ($this->user_group) {
+            if ($this->user_group_action) {
+                return $this->user_group_action;
+            }
+        }
+
+        return $this->action;
     }
 }
