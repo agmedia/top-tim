@@ -450,7 +450,7 @@ class Product extends Model
      */
     public function special()
     {
-        /*$_prod = $this;
+        $_prod = $this;
         $user = Auth::user();
         $user_group_id = 0;
 
@@ -474,7 +474,7 @@ class Product extends Model
             }
 
             return $_prod->price;
-        });*/
+        });
 
         $special = new Special($this);
 
