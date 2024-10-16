@@ -95,7 +95,7 @@
                                         <div class="position-relative me-n4 mb-3" id="select" >
                                             <div v-for="(option, index) in color_options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id">
                                                 <input class="form-check-input" type="radio" :value="option.id" :id="option.id" :disabled="!option.active" v-model="color"/>
-                                                <label v-bind:class="{ opacity: !option.active }" class="form-option-label rounded-circle opacity-80" :for="option.id"><span class="form-option-color rounded-circle" :style="option.style"></span> </label>
+                                                <label v-bind:class="{ opacity: !option.active }"  class="form-option-label rounded-circle opacity-80" :for="option.id"><span class="form-option-color rounded-circle"  :style="option.style"></span> </label>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +118,7 @@
                         </div>
                         <div class="block-content block-content-full text-right bg-light">
                             <button type="button" class="btn btn-sm btn-primary" @click="addOption()">
-                                Bla <i class="fa fa-arrow-right ml-2"></i>
+                                Dodaj artikl <i class="fa fa-arrow-right ml-2"></i>
                             </button>
                         </div>
                     </div>
@@ -594,19 +594,4 @@ export default {
 };
 </script>
 
-<style>
-.panel-footer {
-    width: 100%;
-    position: absolute;
-    z-index: 999;
-    padding-right: 30px;
-}
 
-ul li agm {
-    cursor: pointer;
-}
-
-ul li:hover agm {
-    background-color: #eeeeee;
-}
-</style>
