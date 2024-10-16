@@ -451,13 +451,17 @@ class Product extends Model
     public function special()
     {
         $_prod = $this;
-        /*$user_group_id = Helper::resolveCache('group_id')->remember(\auth()->user()->id, config('cache.widget_life'), function () {
-            return \auth()->user()->details->group ? $this->user->details->group->id : 0;
-        });
+        $user_group_id = 0;
 
-        $key = $_prod->id . '-' . $user_group_id;*/
+        if (Auth::check()) {
+            $user_group_id = Helper::resolveCache('group_id')->remember(\auth()->user()->id, config('cache.widget_life'), function () {
+                return \auth()->user()->details->group ? $this->user->details->group->id : 0;
+            });
+        }
 
-        return Helper::resolveCache('spec')->remember($_prod->id, config('cache.widget_lifetime'), function () use ($_prod) {
+        $key = $_prod->id . '-' . $user_group_id;
+
+        return Helper::resolveCache('spec')->remember($key, config('cache.widget_lifetime'), function () use ($_prod) {
             $special = new Special($_prod);
 
             $action    = $special->resolveAction();
@@ -470,17 +474,6 @@ class Product extends Model
 
             return $_prod->price;
         });
-        /*$special = new Special($this);
-
-        $action    = $special->resolveAction();
-        $coupon_ok = $special->checkCoupon($action);
-        $dates_ok  = $special->checkDates($action);
-
-        if ($coupon_ok && $dates_ok) {
-            return $special->getDiscountPrice($action);
-        }
-
-        return $this->price;*/
     }
 
 
