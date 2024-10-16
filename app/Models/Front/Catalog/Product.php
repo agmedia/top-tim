@@ -451,8 +451,13 @@ class Product extends Model
     public function special()
     {
         $_prod = $this;
+        $user_group_id = Helper::resolveCache('group_id')->remember(\auth()->user()->id, config('cache.widget_life'), function () {
+            return \auth()->user()->details->group ? $this->user->details->group->id : 0;
+        });
 
-        return Helper::resolveCache('spec')->remember($_prod->id, config('cache.widget_lifetime'), function () use ($_prod) {
+        $key = $_prod->id . '-' . $user_group_id;
+
+        return Helper::resolveCache('spec')->remember($key, config('cache.widget_lifetime'), function () use ($_prod) {
             $special = new Special($_prod);
 
             $action    = $special->resolveAction();
