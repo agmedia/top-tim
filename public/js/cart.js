@@ -4894,7 +4894,7 @@ var render = function render() {
     return _c("div", {
       staticClass: "accordion-item border-bottom"
     }, [_vm.category && _vm.category.id == cat.id ? _c("h3", {
-      staticClass: "accordion-header px-grid-gutter bg-default"
+      staticClass: "accordion-header px-grid-gutter bg-default fw-bolder"
     }, [cat.subs ? _c("button", {
       staticClass: "accordion-button collapsed py-3",
       attrs: {
@@ -4907,7 +4907,7 @@ var render = function render() {
     }, [_c("span", {
       staticClass: "d-flex align-items-center fw-bolder text-uppercase"
     }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
-      staticClass: "nav-link-style d-block fs-md fw-bolder text-uppercase py-3",
+      staticClass: "nav-link-style d-block fs-md text-uppercase py-3",
       "class": {
         active: _vm.category.id == cat.id
       },
@@ -4922,7 +4922,7 @@ var render = function render() {
         innerHTML: _vm._s(cat.icon)
       }
     }), _vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e()]) : _c("h3", {
-      staticClass: "accordion-header px-grid-gutter"
+      staticClass: "accordion-header px-grid-gutter fw-bolder"
     }, [cat.subs ? _c("button", {
       staticClass: "accordion-button collapsed py-3",
       attrs: {
@@ -4935,7 +4935,7 @@ var render = function render() {
     }, [_c("span", {
       staticClass: "d-flex align-items-center fw-bolder text-uppercase"
     }, [_vm._v(" " + _vm._s(cat.title) + " ")])]) : _vm._e(), _vm._v(" "), !cat.subs ? _c("a", {
-      staticClass: "nav-link-style d-block fs-md fw-bolder text-uppercase py-3",
+      staticClass: "nav-link-style d-block fs-md text-uppercase py-3",
       attrs: {
         href: cat.url,
         role: "link"
