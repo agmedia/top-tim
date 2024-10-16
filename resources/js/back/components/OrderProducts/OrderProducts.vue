@@ -239,7 +239,7 @@ export default {
             axios.get(this.products_options_url, {params: {id: selected.id}}).then(response => {
                 console.log('select(response)', response)
 
-                if (Object.keys(response.data.size).length || Object.keys(response.data.color).length) {
+                if ((response.data.size && Object.keys(response.data.size).length) || (response.data.color && Object.keys(response.data.color).length)) {
                     $('#options-modal').modal('show');
                     this.setOptionsSelection(response.data);
 
@@ -287,7 +287,7 @@ export default {
             this.items.push({
                 id: this.selected_product.id,
                 sku: this.selected_product.sku,
-                name: this.selected_product.name,
+                name: this.selected_product.translation.name,
                 image: this.selected_product.image,
                 quantity: 1,
                 price: price,
