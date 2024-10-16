@@ -90,7 +90,7 @@
 
                                     <div class="mw-500" v-if="Object.keys(this.color_options).length">
                                         <div class="fs-sm mb-4">
-                                            <span class="text-heading fw-medium me-1"><span class="text-danger">*</span> Boja:</span>
+                                            <span class="text-heading fw-medium me-1"><span class="text-danger">*</span> Boja: <span class="font-weight-bold">{{ color_name }}</span></span>
                                         </div>
                                         <div class="position-relative me-n4 mb-3" id="select" >
                                             <div v-for="(option, index) in color_options" class="form-check form-option form-check-inline mb-2" :data-target="option.option_id">
@@ -178,6 +178,8 @@ export default {
             size_disabled: false,
             size: 0,
             color: '',
+            size_name: '',
+            color_name: '',
             parent: '',
             product_has_option: false,
         }
@@ -551,16 +553,6 @@ export default {
                 if (id == this.color_options[item].id) {
                     this.selected_color = this.color_options[item];
                     this.color_name = this.selected_color.name;
-
-                    /*if (this.selected_color.price != '0.0000') {
-                        this.price = Math.round(Number(this.selected_product.main_price + this.selected_color.price)).toFixed(2)
-                        let price = Number(this.selected_color.price);
-
-                        this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
-                    } else {
-                        this.price = this.selected_product.main_price;
-                        this.extra_price = '';
-                    }*/
                 }
             }
 
@@ -576,16 +568,6 @@ export default {
                 if (id == this.size_options[item].id) {
                     this.selected_size = this.size_options[item];
                     this.size_name = this.selected_size.name;
-
-                    if (this.selected_size.price != '0.0000') {
-                        this.price = Number(this.selected_product.main_price) + Number(this.selected_size.price)
-                        let price = Number(this.selected_size.price);
-
-                        this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
-                    } else {
-                        this.price = this.selected_product.main_price
-                        this.extra_price = '';
-                    }
                 }
 
             }
