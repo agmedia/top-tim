@@ -450,7 +450,7 @@ class Product extends Model
      */
     public function special()
     {
-        $_prod = $this;
+        /*$_prod = $this;
         $user = Auth::user();
         $user_group_id = 0;
 
@@ -474,7 +474,21 @@ class Product extends Model
             }
 
             return $_prod->price;
-        });
+        });*/
+
+        $special = new Special($this);
+
+        $action    = $special->resolveAction();
+        $coupon_ok = $special->checkCoupon($action);
+        $dates_ok  = $special->checkDates($action);
+
+        if ($coupon_ok && $dates_ok) {
+            /*Log::info('ACTION::::::::::::::::::::::::');
+            Log::info($action->toArray());*/
+            return $special->getDiscountPrice($action);
+        }
+
+        return $this->price;
     }
 
 
