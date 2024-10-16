@@ -3,6 +3,7 @@
 namespace App\Models\Front\Catalog;
 
 use App\Helpers\Currency;
+use App\Helpers\Helper;
 use App\Helpers\ProductHelper;
 use App\Helpers\Special;
 use App\Models\Front\Catalog\ProductAction;
@@ -449,7 +450,22 @@ class Product extends Model
      */
     public function special()
     {
-        $special = new Special($this);
+        $_prod = $this;
+
+        return Helper::resolveCache('spec')->remember($_prod->id, config('cache.widget_lifetime'), function () use ($_prod) {
+            $special = new Special($_prod);
+
+            $action    = $special->resolveAction();
+            $coupon_ok = $special->checkCoupon($action);
+            $dates_ok  = $special->checkDates($action);
+
+            if ($coupon_ok && $dates_ok) {
+                return $special->getDiscountPrice($action);
+            }
+
+            return $_prod->price;
+        });
+        /*$special = new Special($this);
 
         $action    = $special->resolveAction();
         $coupon_ok = $special->checkCoupon($action);
@@ -459,7 +475,7 @@ class Product extends Model
             return $special->getDiscountPrice($action);
         }
 
-        return $this->price;
+        return $this->price;*/
     }
 
 
@@ -718,6 +734,9 @@ class Product extends Model
     {
         $query = $this->newQuery();
 
+        Log::info($request->toArray());
+        Log::info('IFOVI');
+
         //$query->active()->hasStock();
         $query->active();
 
@@ -730,26 +749,26 @@ class Product extends Model
             $query->whereIn('id', collect($_ids)->unique());
         }
 
-        if ($request->has('group')) {
+        if ($request->has('group') && ($request->input('group') != '' || $request->input('group') != 'kategorija-proizvoda')) {
             // Kategorije ili grupa kategorije...
             $query->whereHas('categories', function ($query) use ($request) {
                 $query->where('group', 'like', '%' . $request->input('group') . '%');
             });
         }
 
-        if ($request->has('cat')) {
+        if ($request->has('cat') && $request->input('cat') != '') {
             $query->whereHas('categories', function ($query) use ($request) {
                 $query->where('category_id', $request->input('cat'));
             });
         }
 
-        if ($request->has('subcat')) {
+        if ($request->has('subcat') && $request->input('subcat') != '') {
             $query->whereHas('categories', function ($query) use ($request) {
                 $query->where('category_id', $request->input('subcat'));
             });
         }
 
-        if ($request->has('brand')) {
+        if ($request->has('brand') && $request->input('brand') != '') {
             /*$auts = [];
 
             if (is_array($request->input('brand'))) {
