@@ -223,7 +223,7 @@ class Options extends Model
             $query->limit($limit);
         }
 
-        $query->withCount('products')
+        $query/*->withCount('products')*/
               ->orderBy('sort_order');
 
 
