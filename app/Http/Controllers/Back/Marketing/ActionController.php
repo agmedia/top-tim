@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Back\Marketing;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Marketing\Action;
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\UserGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class ActionController extends Controller
@@ -67,6 +69,8 @@ class ActionController extends Controller
         $stored = $action->validateRequest($request)->create();
 
         if ($stored) {
+            Cache::flush();
+
             return redirect()->route('actions.edit', ['action' => $stored])->with(['success' => 'Action was succesfully saved!']);
         }
 
@@ -104,6 +108,8 @@ class ActionController extends Controller
         $updated = $action->validateRequest($request)->edit();
 
         if ($updated) {
+            Cache::flush();
+
             return redirect()->route('actions.edit', ['action' => $updated])->with(['success' => 'Action was succesfully saved!']);
         }
 
@@ -123,6 +129,8 @@ class ActionController extends Controller
         $destroyed = $action->resolveDestruction($action->id);
 
         if ($destroyed) {
+            Cache::flush();
+
             return redirect()->route('actions')->with(['success' => 'Akcija je uspjšeno izbrisana!']);
         }
 
@@ -144,6 +152,8 @@ class ActionController extends Controller
             $destroyed = $action->resolveDestruction($request->input('id'));
 
             if ($destroyed) {
+                Cache::flush();
+
                 return response()->json(['success' => 200]);
             }
         }

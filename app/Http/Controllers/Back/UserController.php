@@ -8,6 +8,7 @@ use App\Models\Front\Loyalty;
 use App\Models\Roles\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -87,6 +88,8 @@ class UserController extends Controller
         $updated = $user->validateRequest($request)->edit();
 
         if ($updated) {
+            Cache::flush();
+            
             return redirect()->route('users.edit', ['user' => $updated])->with(['success' => 'Korisnik je uspješno snimljen!']);
         }
 
