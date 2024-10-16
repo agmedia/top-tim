@@ -451,11 +451,12 @@ class Product extends Model
     public function special()
     {
         $_prod = $this;
+        $user = Auth::user();
         $user_group_id = 0;
 
-        if (Auth::user()) {
-            $user_group_id = Helper::resolveCache('group_id')->remember(\auth()->user()->id, config('cache.widget_life'), function () {
-                return (\auth()->user() && \auth()->user()->details->group) ? \auth()->user()->details->group->id : 0;
+        if ($user) {
+            $user_group_id = Helper::resolveCache('group_id')->remember($user->id, config('cache.widget_life'), function () use ($user) {
+                return ($user && $user->details->group) ? $user->details->group->id : 0;
             });
         }
 

@@ -21,6 +21,8 @@ class Special
      */
     protected $user;
 
+    protected $user_group;
+
     /**
      * @var Product|null
      */
@@ -50,6 +52,10 @@ class Special
     {
         $this->user    = Auth::user();
         $this->product = $product;
+
+        if ($this->user) {
+            $this->user_group = $this->user->details->group ? $this->user->details->group->id : 0;
+        }
     }
 
 
@@ -89,10 +95,8 @@ class Special
      */
     public function userHasGroupDiscount(): bool
     {
-        $group_id = $this->user->details->group ? $this->user->details->group->id : null;
-
-        if ($group_id) {
-            $this->active_actions = ProductAction::query()->where('user_group_id', $group_id)->active()->get();
+        if ($this->user_group) {
+            $this->active_actions = ProductAction::query()->where('user_group_id', $this->user_group)->active()->get();
 
             if ($this->active_actions->count()) {
                 $this->user_group_action = $this->getBestAction();
@@ -101,7 +105,7 @@ class Special
             }
         }
 
-        $this->active_actions = ProductAction::query()->where('user_group_id', 0)->active()->get();
+        $this->active_actions = ProductAction::query()->where('user_group_id', null)->active()->get();
 
         if ($this->active_actions->count()) {
             $this->action = $this->getBestAction();
@@ -120,7 +124,7 @@ class Special
      */
     public function getDiscountPrice(ProductAction|null $product_action = null): float|int
     {
-        $action = $product_action ?: $this->action;
+        $action = $this->resolveRealAction($product_action);
 
         if ( ! $action) {
             return $this->product->price;
@@ -141,7 +145,7 @@ class Special
      */
     public function checkCoupon(ProductAction|null $product_action = null): bool
     {
-        $action             = $product_action ?: $this->action;
+        $action             = $this->resolveRealAction($product_action);
         $coupon_session_key = config('session.cart') . '_coupon';
         $coupon             = false;
 
@@ -166,7 +170,7 @@ class Special
      */
     public function checkDates(ProductAction|null $product_action = null): bool
     {
-        $action = $product_action ?: $this->action;
+        $action = $this->resolveRealAction($product_action);
 
         if ( ! $action) {
             return false;
@@ -197,7 +201,7 @@ class Special
      */
     public function isProductOnAction(ProductAction|null $product_action = null): bool
     {
-        $action = $product_action ?: $this->action;
+        $action = $this->resolveRealAction($product_action);
 
         if ($this->isActionOnAllProducts($action)) {
             return true;
@@ -233,7 +237,7 @@ class Special
      */
     public function getActionProductsList(ProductAction|null $product_action = null): array
     {
-        $action = $product_action ?: $this->action;
+        $action = $this->resolveRealAction($product_action);
 
         $ids = explode(',', substr(str_replace('"', '', $action->links), 1, -1));
 
@@ -295,5 +299,16 @@ class Special
         }
 
         return $this;
+    }
+
+
+    /**
+     * @param ProductAction|null $product_action
+     *
+     * @return ProductAction|null
+     */
+    private function resolveRealAction(ProductAction|null $product_action = null)
+    {
+        return $product_action ?: ($this->user_group ? $this->user_group_action : $this->action);
     }
 }
