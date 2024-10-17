@@ -24,7 +24,7 @@
                 @if ($order->payment_code == 'bank')
                     <b>{{ __('front/cart.bank') }}</b>
 
-                    <p style="font-size:12px">{{ __('front/cart.sb1') }} {{ $order->id }} {{ __('front/cart.sb2') }}</p>
+                    <p style="font-size:12px">{{ __('front/cart.sb1') }}</p>
                     <p style="font-size:12px">{{ __('front/cart.sb3') }}.</p>
 
                     <p style="font-size:12px"> {{ __('front/cart.sb4') }}</p>
