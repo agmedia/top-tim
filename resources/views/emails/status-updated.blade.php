@@ -9,7 +9,7 @@
                 Broj narudžbe: <strong>{{ $order->id }}</strong><br>
                 Datum: <strong>{{ now()->format('d.m.Y') }}</strong><br>
                 Status:<strong>{{ $status->title->{current_locale()} }} </strong><br>
-                @if ($order->history()->orderBy('id', 'desc')->first())
+                @if ($order->history()->sortByDesc('id')->first())
                 Komentar: <strong>{{ $order->history()->orderBy('id', 'asc')->first()->comment }}</strong>
                 @endif
             </td>
