@@ -57,7 +57,7 @@ class OrderHistory extends Model
             'order_id'   => $order_id,
             'user_id'    => auth()->user()->id,
             'status'     => $request ? $request->input('status') : config('settings.order.status.new'),
-            'comment'    => $request ? ($request->input('status') ? 'Status promijenjen... ' . $request->input('comment') : $request->input('comment')) : 'Narudžba napravljena.',
+            'comment'    => $request ? ($request->input('status') ? '' . $request->input('comment') : $request->input('comment')) : 'Narudžba napravljena.',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
