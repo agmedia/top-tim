@@ -4096,7 +4096,7 @@ var render = function render() {
     _c = _vm._self._c;
   return _c("div", {
     staticClass: "cart pb-2 mb-2"
-  }, [_vm._v("\n" + _vm._s(_vm.context_product.main_price) + "  > " + _vm._s(_vm.context_product.main_special) + "\n        "), _vm.context_product.main_price > _vm.context_product.main_special ? _c("div", {
+  }, [Number(_vm.context_product.main_price) > Number(_vm.context_product.main_special) ? _c("div", {
     staticClass: "mb-1"
   }, [_c("span", {
     staticClass: "h3 fw-bold font-title text-blue me-1"
@@ -4112,7 +4112,7 @@ var render = function render() {
   }, [_vm._v(_vm._s(new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR"
-  }).format(_vm.price)))])]), _vm._v(" "), _vm.context_product.main_price > _vm.context_product.main_special ? _c("div", {
+  }).format(_vm.price)))])]), _vm._v(" "), Number(_vm.context_product.main_price) > Number(_vm.context_product.main_special) ? _c("div", {
     staticClass: "mb-1 mt-1 text-start"
   }, [_c("span", {
     staticClass: "fs-sm text-muted me-1"
