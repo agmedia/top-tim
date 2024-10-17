@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'Ovi podaci ne odgovaraja našima u bazi.',
+    'failed' => 'Podaci za prijavu ne odgovaraja našima u bazi. Molimo pokušajte ponovo ili nas kontaktirajte!',
     'throttle' => 'Previše pokušaja logiranja. Molimo pokušajte ponovo za :seconds sekundi.',
     'prijava' => 'Prijava',
     'email' =>'Email',

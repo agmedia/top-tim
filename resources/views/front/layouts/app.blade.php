@@ -28,10 +28,10 @@
         <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                                                              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-TFJG7JCX');</script>
-        <!-- End Google Tag Manager -->
+    <!-- End Google Tag Manager -->
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -61,11 +61,14 @@
             <div class="spinner"></div>
         </div>
         <div class="v-cloak--hidden">
-        @include('front.layouts.partials.header')
+            @include('front.layouts.partials.header')
             <main class="offcanvas-enabled ">
                 <section class="ps-lg-4 pe-lg-3 pt-4 page-wrapper">
                     <div class="px-3 pt-2">
-                       @yield('content')
+                        @if ($errors->has('email'))
+                            @include('front.layouts.partials.session')
+                        @endif
+                        @yield('content')
                     </div>
                 </section>
                 @include('front.layouts.partials.footer')
@@ -74,13 +77,13 @@
         </div>
     </div>
 </div>
-<!-- Back To Top Button-->
+    <!-- Back To Top Button-->
 <a class="btn-scroll-top" aria-label="Scroll To Top" href="#top" data-scroll data-fixed-element><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon ci-arrow-up">   </i></a>
-<!-- Sign in / sign up modal-->
+    <!-- Sign in / sign up modal-->
 @include('front.layouts.modals.login')
 <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
 <link rel="stylesheet" media="screen" href="{{ asset(config('settings.images_domain') . 'css/tiny-slider.css?v=1.2') }}"/>
-<!-- Vendor scrits: js libraries and plugins-->
+    <!-- Vendor scrits: js libraries and plugins-->
 <script src="{{ asset('js/jquery/jquery-2.1.1.min.js') }}"></script>
 <script src="{{ asset('js/jquery.ihavecookies.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -89,7 +92,7 @@
 <script src="{{ asset('vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js') }}"></script>
 <script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
-<!-- Main theme script-->
+    <!-- Main theme script-->
 <script src="{{ asset('js/cart.js?v=2.2.2') }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
 <script type="text/javascript">
