@@ -4,7 +4,11 @@
 
     <div class="row no-gutters justify-content-center bg-white " >
 
-
+        @if (session('message'))
+            <div class="mb-4 font-medium text-sm text-green-600">
+                {{ dd(session()->all()) }}
+            </div>
+        @endif
 
         <div class="hero-static col-sm-10 col-md-8 col-xl-4 d-flex align-items-center p-2 px-sm-0">
             <!-- Sign In Block -->
@@ -17,11 +21,6 @@
                                 <a  href="{{ route('index') }}">
                                     <img src="{{ asset('image/logo-top-tim.svg') }}"  class="mb-4" width="200" alt="Top Tim - Better way to stay in the game">
                                 </a>
-                                @if (session('status'))
-                                    <div class="mb-4 font-medium text-sm text-green-600">
-                                        {{ session('status') }}
-                                    </div>
-                                @endif
                                 <h3>Prijavite se</h3>
                             </div>
                             <form method="POST" action="{{ route('login') }}">
@@ -31,6 +30,9 @@
                                 </div>
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-alt" id="password" name="password" placeholder="Lozinka">
+                                    @if ($errors->has('email'))
+                                        <span class="ml-2 font-size-sm text-danger">{{ $errors->first('email') }}</span>
+                                    @endif
                                 </div>
                                 <div class="form-group">
                                     <label for="remember_me" class="flex items-center">

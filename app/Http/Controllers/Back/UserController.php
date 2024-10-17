@@ -89,7 +89,7 @@ class UserController extends Controller
 
         if ($updated) {
             Cache::flush();
-            
+
             return redirect()->route('users.edit', ['user' => $updated])->with(['success' => 'Korisnik je uspješno snimljen!']);
         }
 
