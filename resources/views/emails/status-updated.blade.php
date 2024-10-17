@@ -10,7 +10,7 @@
                 Datum: <strong>{{ now()->format('d.m.Y') }}</strong><br>
                 Status:<strong>{{ $status->title->{current_locale()} }} </strong><br>
                 @if ($order->history()->orderBy('id', 'desc')->first())
-                Komentar: <strong>{{ $order->history()->orderBy('id', 'desc')->first()->comment }}</strong>
+                Komentar: <strong>{{ $order->history()->orderBy('id', 'asc')->first()->comment }}</strong>
                 @endif
             </td>
         </tr>
