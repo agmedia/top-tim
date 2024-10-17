@@ -9,8 +9,8 @@
                 Broj narudžbe: <strong>{{ $order->id }}</strong><br>
                 Datum: <strong>{{ now()->format('d.m.Y') }}</strong><br>
                 Status:<strong>{{ $status->title->{current_locale()} }} </strong><br>
-                @if ($order->history()->sortByDesc('id')->first())
-                Komentar: <strong>{{ $order->history()->orderBy('id', 'asc')->first()->comment }}</strong>
+                @if ($order->history()->count())
+                    Komentar: <strong>{{ $order->history()->get()->sortByDesc('created_at')->first()->comment }}</strong>
                 @endif
             </td>
         </tr>

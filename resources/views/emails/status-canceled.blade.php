@@ -9,8 +9,8 @@
                 Broj narudžbe: <strong>{{ $order->id }}</strong><br>
                 Datum: <strong>{{ now()->format('d.m.Y') }}</strong><br>
                 Status: <strong>OTKAZANO</strong> (Narudžba je otkazana )<br>
-                @if ($order->history()->sortByDesc('id')->first())
-                    Komentar: <strong>{{ $order->history()->orderBy('id', 'asc')->first()->comment }}</strong>
+                @if ($order->history()->count())
+                    Komentar: <strong>{{ $order->history()->get()->sortByDesc('created_at')->first()->comment }}</strong>
                 @endif
             </td>
         </tr>
