@@ -8,7 +8,7 @@
             <!-- Sign In Block -->
             <div class="block block-rounded block-transparent block-fx-pop w-100 mb-0 overflow-hidden bg-image" >
                 <div class="row no-gutters">
-                    <div class="col-md-6 order-md-1 bg-white">
+                    <div class="col-md-12 bg-white">
                         <div class="block-content block-content-full px-lg-5 py-md-5 py-lg-6">
                             <!-- Header -->
                             <div class="mb-2 text-center">
