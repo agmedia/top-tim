@@ -4,11 +4,7 @@
 
     <div class="row no-gutters justify-content-center bg-white " >
 
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
-        @endif
+
 
         <div class="hero-static col-sm-10 col-md-8 col-xl-4 d-flex align-items-center p-2 px-sm-0">
             <!-- Sign In Block -->
@@ -21,6 +17,11 @@
                                 <a  href="{{ route('index') }}">
                                     <img src="{{ asset('image/logo-top-tim.svg') }}"  class="mb-4" width="200" alt="Top Tim - Better way to stay in the game">
                                 </a>
+                                @if (session('status'))
+                                    <div class="mb-4 font-medium text-sm text-green-600">
+                                        {{ session('status') }}
+                                    </div>
+                                @endif
                                 <h3>Prijavite se</h3>
                             </div>
                             <form method="POST" action="{{ route('login') }}">
