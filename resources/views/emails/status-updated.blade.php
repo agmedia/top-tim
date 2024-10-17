@@ -8,7 +8,8 @@
             <td class="ag-mail-tableset">
                 Broj narudžbe: <strong>{{ $order->id }}</strong><br>
                 Datum: <strong>{{ now()->format('d.m.Y') }}</strong><br>
-                Status: {{ $status->title->{current_locale()} }} <strong></strong>
+                Status:<strong>{{ $status->title->{current_locale()} }} </strong><br>
+                Komentar: <strong>{{ $this->order->history()->last()->comment }}</strong>
             </td>
         </tr>
 
