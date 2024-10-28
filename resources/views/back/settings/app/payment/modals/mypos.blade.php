@@ -217,7 +217,7 @@
             $('#mypos-price').val(item.data.price);
 
             $('#mypos_virtual_configuration_package_test').val(item.data.mypos_virtual_configuration_package_test);
-            $('#mypos_virtual_configuration_packagelive').val(item.data.mypos_virtual_configuration_package_live);
+            $('#mypos_virtual_configuration_package_live').val(item.data.mypos_virtual_configuration_package_live);
             $('#mypos_set_url_cancel').val(item.data.mypos_set_url_cancel);
             $('#mypos_set_url_ok').val(item.data.mypos_set_url_ok);
             $('#mypos_set_url_notify').val(item.data.mypos_set_url_notify);
