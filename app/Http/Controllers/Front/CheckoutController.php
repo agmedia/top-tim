@@ -189,8 +189,8 @@ class CheckoutController extends FrontBaseController
         Log::info('myposSuccess(Request $request)');
         Log::info($request->toArray());
 
-        if ($request->has('identifier')) {
-            $order_data = $this->resolveFinishedOrder($request->input('identifier'));
+        if ($request->has('OrderID')) {
+            $order_data = $this->resolveFinishedOrder(substr($request->input('OrderID'), 4));
 
             if (isset($order_data['order'])) {
                 $data['order'] = $order_data['order'];

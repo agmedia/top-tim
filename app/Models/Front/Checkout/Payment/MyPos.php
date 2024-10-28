@@ -105,7 +105,7 @@ class MyPos
         $purchase = new Purchase($cnf);
         $purchase->setUrlCancel(route('checkout.mypos.cancel')); //User comes here after purchase cancelation
         //$purchase->setUrlCancel(url($payment_method->data->mypos_set_url_cancel)); //User comes here after purchase cancelation
-        $purchase->setUrlOk(route('checkout.mypos.success', ['identifier' => $this->order->id])); //User comes here after purchase success
+        $purchase->setUrlOk(route('checkout.mypos.success')); //User comes here after purchase success
         //$purchase->setUrlOk(url($payment_method->data->mypos_set_url_ok)); //User comes here after purchase success
         $purchase->setUrlNotify(url($payment_method->data->mypos_set_url_notify)); //IPC sends POST reuquest to this address with purchase status
         $purchase->setOrderID(Str::random(4) . $this->order->id); //Some unique ID
