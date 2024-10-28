@@ -103,7 +103,8 @@ class MyPos
         }
 
         $purchase = new Purchase($cnf);
-        $purchase->setUrlCancel(url($payment_method->data->mypos_set_url_cancel)); //User comes here after purchase cancelation
+        $purchase->setUrlCancel(route('checkout.mypos.cancel')); //User comes here after purchase cancelation
+        //$purchase->setUrlCancel(url($payment_method->data->mypos_set_url_cancel)); //User comes here after purchase cancelation
         $purchase->setUrlOk(url($payment_method->data->mypos_set_url_ok)); //User comes here after purchase success
         $purchase->setUrlNotify(url($payment_method->data->mypos_set_url_notify)); //IPC sends POST reuquest to this address with purchase status
         $purchase->setOrderID(Str::random(4) . $this->order->id); //Some unique ID
@@ -133,6 +134,9 @@ class MyPos
      */
     public function finishOrder(Order $order, Request $request): bool
     {
+        Log::info('public function finishOrder(Order $order, Request $request): bool');
+        Log::info($request->toArray());
+
         $pass   = false;
         $status = config('settings.order.status.declined');
 
@@ -198,6 +202,9 @@ class MyPos
     {
         $cnf = $this->setConfig();
 
+        Log::info('public function notify(Request $request)');
+        Log::info($request->toArray());
+
         try {
             $response = Response::getInstance($cnf, $request->toArray(), \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST);
             $data     = $response->getData(CASE_LOWER);
@@ -207,6 +214,8 @@ class MyPos
             Log::info($e->getMessage());
         }
 
+        Log::info($response->getData(CASE_LOWER));
+
         if ($data['ipcmethod'] == 'IPCPurchaseNotify') {
             return response('OK', 200);
 
@@ -214,7 +223,8 @@ class MyPos
             return response('OK', 200);
 
         } else if ($data['ipcmethod'] == 'IPCPurchaseCancel') {
-            return redirect()->route('checkout.error');
+            /*return response('OK', 200);
+            return redirect()->route('kosarica');*/
 
         } else if ($data['ipcmethod'] == 'IPCPurchaseOK') {
             $order = Order::query()->find(substr($request->input('OrderID'), 4));
@@ -223,8 +233,18 @@ class MyPos
             return redirect()->route('checkout.mypos.success', ['identifier' => $request->input('OrderID')]);
 
         } else {
-            return redirect()->route('front.checkout.checkout', ['step' => '']);
+            return redirect()->route('kosarica');
         }
+    }
+
+
+    public function cancel(Request $request)
+    {
+        Log::info('cancel');
+        Log::info($request->toArray());
+
+        redirect()->route('kosarica');
+        exit();
     }
 
     /*******************************************************************************

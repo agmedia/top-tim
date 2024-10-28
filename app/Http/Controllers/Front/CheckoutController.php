@@ -31,6 +31,9 @@ class CheckoutController extends FrontBaseController
      */
     public function cart(Request $request)
     {
+        Log::info('public function cart(Request $request)');
+        Log::info($request->toArray());
+
         $gdl = TagManager::getGoogleCartDataLayer($this->shoppingCart()->get());
 
        // Log::info($this->shoppingCart()->get());
@@ -131,7 +134,12 @@ class CheckoutController extends FrontBaseController
             $order->setData($request->input('order_number'));
         }
 
-        if ($order->finish($request)) {
+        $is_finished = $order->finish($request);
+
+        Log::info('$is_finished');
+        Log::info($is_finished);
+
+        if ($is_finished) {
             return redirect()->route('checkout.success');
         }
 

@@ -453,7 +453,7 @@ Route::group(
     Route::post('/keks/uspjeh', [CheckoutController::class, 'successKeks'])->name('checkout.success.keks');
     Route::post('kekspay/provjera-narudzbe', [Keks::class, 'check'])->name('keks.provjera');
     Route::post('/mypos/notify', [MyPos::class, 'notify'])->name('mypos.notify');
-    Route::get('/mypos/uspjeh', [CheckoutController::class, 'myposSuccess'])->name('checkout.mypos.success');
+    Route::post('/mypos/cancel', [MyPos::class, 'cancel'])->name('checkout.mypos.cancel');
 
 //
     Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('pretrazi');
