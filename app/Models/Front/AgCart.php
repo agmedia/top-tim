@@ -397,6 +397,12 @@ class AgCart extends Model
      */
     private function addToCart(Request $request): array
     {
+        $item = $this->structureCartItem($request);
+
+        if (isset($item['error'])) {
+            return $item;
+        }
+
         $this->cart->add($this->structureCartItem($request));
 
         return $this->get();
