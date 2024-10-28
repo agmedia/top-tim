@@ -175,7 +175,7 @@ class CheckoutController extends FrontBaseController
             return view('front.checkout.success', compact('data'));
         }
 
-        return redirect()->route('front.checkout.checkout', ['step' => '']);
+        return redirect()->route('kosarica');
     }
 
 
@@ -190,7 +190,7 @@ class CheckoutController extends FrontBaseController
         Log::info($request->toArray());
 
         if ($request->has('identifier')) {
-            $order_data = $this->resolveFinishedOrder(substr($request->input('identifier'), 4));
+            $order_data = $this->resolveFinishedOrder($request->input('identifier'));
 
             if (isset($order_data['order'])) {
                 $data['order'] = $order_data['order'];
@@ -200,7 +200,7 @@ class CheckoutController extends FrontBaseController
             }
         }
 
-        return redirect()->route('front.checkout.checkout', ['step' => '']);
+        return redirect()->route('kosarica');
     }
 
 

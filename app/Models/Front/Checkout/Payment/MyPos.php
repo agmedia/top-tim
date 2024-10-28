@@ -105,7 +105,8 @@ class MyPos
         $purchase = new Purchase($cnf);
         $purchase->setUrlCancel(route('checkout.mypos.cancel')); //User comes here after purchase cancelation
         //$purchase->setUrlCancel(url($payment_method->data->mypos_set_url_cancel)); //User comes here after purchase cancelation
-        $purchase->setUrlOk(url($payment_method->data->mypos_set_url_ok)); //User comes here after purchase success
+        $purchase->setUrlOk(route('checkout.mypos.success', ['identifier' => $this->order->id])); //User comes here after purchase success
+        //$purchase->setUrlOk(url($payment_method->data->mypos_set_url_ok)); //User comes here after purchase success
         $purchase->setUrlNotify(url($payment_method->data->mypos_set_url_notify)); //IPC sends POST reuquest to this address with purchase status
         $purchase->setOrderID(Str::random(4) . $this->order->id); //Some unique ID
         $purchase->setCurrency('EUR');
@@ -113,7 +114,7 @@ class MyPos
         $purchase->setCustomer($customer);
         $purchase->setCart($cart);
 
-        $purchase->setCardTokenRequest(Purchase::CARD_TOKEN_REQUEST_PAY_AND_STORE);
+        $purchase->setCardTokenRequest(Purchase::CARD_TOKEN_REQUEST_NONE);
         $purchase->setPaymentParametersRequired(Purchase::PURCHASE_TYPE_SIMPLIFIED_PAYMENT_PAGE);
         $purchase->setPaymentMethod(Purchase::PAYMENT_METHOD_BOTH);
 
@@ -230,7 +231,7 @@ class MyPos
             $order = Order::query()->find(substr($request->input('OrderID'), 4));
             $this->finishOrder($order, $request);
 
-            return redirect()->route('checkout.mypos.success', ['identifier' => $request->input('OrderID')]);
+            //return redirect()->route('checkout.mypos.success', ['identifier' => $request->input('OrderID')]);
 
         } else {
             return redirect()->route('kosarica');
@@ -243,8 +244,7 @@ class MyPos
         Log::info('cancel');
         Log::info($request->toArray());
 
-        redirect()->route('kosarica');
-        exit();
+        return redirect()->route('kosarica');
     }
 
     /*******************************************************************************

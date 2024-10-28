@@ -85,9 +85,6 @@ class Cart extends Model
                     foreach ($cart_data['items'] as $item) {
                         $has_item_in_cart = $cart_items->where('id', $item['id'])->first();
 
-                        Log::info('public static function checkLogged(AgCart $cart, $session_id = null)');
-                        Log::info($has_item_in_cart);
-
                         if ( ! $has_item_in_cart) {
                             $cart->add($cart->resolveItemRequest($item));
                         }

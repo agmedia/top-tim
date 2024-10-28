@@ -399,11 +399,7 @@ class AgCart extends Model
     {
         $item = $this->structureCartItem($request);
 
-        Log::info('private function addToCart(Request $request): array');
-        Log::info($item);
-
         if (isset($item['error'])) {
-
             return $item;
         }
 
