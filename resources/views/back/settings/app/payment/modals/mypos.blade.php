@@ -222,7 +222,7 @@
             $('#mypos_set_url_ok').val(item.data.mypos_set_url_ok);
             $('#mypos_set_url_notify').val(item.data.mypos_set_url_notify);
 
-            $("input[name=my_pos_test][value='" + item.data.test + "']").prop("checked",true);
+            $("input[name=my-pos-test][value='" + item.data.test + "']").prop("checked",true);
 
             $('#mypos-type').val(item.data.type);
             $('#mypos-type').trigger('change');
