@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Helpers\Breadcrumb;
 use App\Helpers\Helper;
+use App\Helpers\Metatags;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
 use App\Imports\ProductImport;
@@ -64,21 +65,19 @@ class CatalogRouteController extends FrontBaseController
                 abort(404);
             }
 
-            //dd($prod->optionsList());
-
             $prod->increment('viewed');
 
-            $seo = Seo::getProductData($prod);
-            $gdl = TagManager::getGoogleProductDataLayer($prod);
-            $reviews = $prod->reviews()->get();
-            $related = Helper::getRelated($cat, $subcat);
+            $seo        = Seo::getProductData($prod);
+            $gdl        = TagManager::getGoogleProductDataLayer($prod);
+            $reviews    = $prod->reviews()->get();
+            $related    = Helper::getRelated($cat, $subcat);
+            $bookscheme = Metatags::productSchema($prod, $reviews);
 
-            $bc = new Breadcrumb();
+            $bc     = new Breadcrumb();
             $crumbs = $bc->product($group, $cat, $subcat, $prod)->resolve();
-            $bookscheme = $bc->productSchema($prod, $reviews);
 
             $shipping_methods = Settings::getList('shipping', 'list.%', true);
-            $payment_methods = Settings::getList('payment', 'list.%', true);
+            $payment_methods  = Settings::getList('payment', 'list.%', true);
 
 
             return view('front.catalog.product.index', compact('prod', 'group', 'cat', 'subcat', 'related', 'seo', 'shipping_methods' , 'payment_methods', 'crumbs', 'bookscheme', 'gdl', 'reviews'));
