@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Product;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -93,34 +94,57 @@ class Breadcrumb
 
 
     /**
-     * @param Product|null $prod
+     * @param Product|null    $prod
+     * @param Collection|null $reviews
      *
-     * @return array
+     * @return array|void
      */
-    public function productBookSchema(Product $prod = null)
+    public function productSchema(Product $prod = null, Collection $reviews = null)
     {
         if ($prod) {
-            return [
+            $response = [
                 '@context' => 'https://schema.org/',
-                '@type' => 'Book',
-                'datePublished' => $prod->year ?: '...',
-                'description' => $prod->name . ' knjiga autora ' . (($prod->author) ? $prod->author->title : 'Autor') . ' godine izdanja ' . ($prod->year ?: '...') . '. izdavača ' . (($prod->publisher) ? $prod->publisher->title : 'Izdavačka kuća'),
-                'image' => asset($prod->image),
+                '@type' => 'Product',
+                'description' => $prod->translation->meta_description,
                 'name' => $prod->name,
-                'url' => url($prod->url),
-                'publisher' => [
-                    '@type' => 'Organization', 
-                    'name' => ($prod->publisher) ? $prod->publisher->title : 'Izdavačka kuća',
-                ],
-                'author' => ($prod->author) ? $prod->author->title : 'Autor',
+                'image' => asset($prod->image),
+                //'url' => url($prod->url),
                 'offers' => [
                     '@type' => 'Offer',
-                    'priceCurrency' => 'HRK',
-                    'price' => ($prod->special()) ? $prod->special() : number_format($prod->price, 2, '.', ''),
+                    'priceCurrency' => 'EUR',
+                    'price' => $prod->special() ? $this->formatPrice($prod->special()) : $this->formatPrice($prod->price),
                     'sku' => $prod->sku,
                     'availability' => ($prod->quantity) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
                 ],
             ];
+
+            if ($reviews->count()) {
+                $response['aggregateRating'] = [
+                    '@type' => 'AggregateRating',
+                    'ratingValue' => floor($reviews->avg('stars')),
+                    'reviewCount' => $reviews->count(),
+                ];
+
+                foreach ($reviews as $review) {
+                    $res_review = [
+                        '@type' => 'Review',
+                        'author' => $review->fname,
+                        'datePublished' => Carbon::make($review->created_at)->locale('hr')->format('Y-m-d'),
+                        'reviewBody' => strip_tags($review->message),
+                        'name' => $prod->name,
+                        'reviewRating' => [
+                            '@type' => 'Rating',
+                            'bestRating' => '5',
+                            'ratingValue' => floor($review->stars),
+                            'worstRating' => '1'
+                        ]
+                    ];
+                }
+
+                $response['review'] = $res_review;
+            }
+
+            return $response;
         }
     }
 
@@ -166,5 +190,11 @@ class Breadcrumb
             'name' => Str::ucfirst($group),
             'item' => route('catalog.route', ['group' => $group])
         ]);
+    }
+
+
+    private function formatPrice($price)
+    {
+        return number_format($price, 2, '.', '');
     }
 }
