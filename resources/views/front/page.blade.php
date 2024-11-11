@@ -1,11 +1,10 @@
 @extends('front.layouts.app')
+
 @if (request()->routeIs(['index']))
     @section ( 'title', ' Top Tim - Better way to stay in the game' )
     @section ( 'description', 'Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija.' )
 
-
     @push('meta_tags')
-
         <link rel="canonical" href="{{ env('APP_URL')}}{{ current_locale() }}" />
         <meta property="og:locale" content="hr_HR" />
         <meta property="og:site_name" content="Top Tim - Better way to stay in the game" />
@@ -23,7 +22,14 @@
         <meta name="twitter:title" content="Top Tim - Better way to stay in the game" />
         <meta name="twitter:description" content="Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija." />
         <meta name="twitter:image" content="{{ asset('image/bannerd3-1.jpg') }}" />
+    @endpush
 
+    @push('js_after')
+        @if (isset($og_schema) && ! empty($og_schema))
+            <script type="application/ld+json">
+                {!! collect($og_schema)->toJson() !!}
+            </script>
+        @endif
     @endpush
 
 @else

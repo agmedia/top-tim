@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Helpers\Helper;
+use App\Helpers\Metatags;
 use App\Helpers\Recaptcha;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
@@ -39,13 +40,9 @@ class HomeController extends FrontBaseController
             isset($page->id) ? $page->id : 0
         );
 
-        /*Log::info('HomeController::index()');
-        Log::info(LaravelLocalization::getCurrentLocale());
-        Log::info(current_locale());*/
+        $og_schema = Metatags::indexSchema();
 
-
-
-        return view('front.page', compact('page'));
+        return view('front.page', compact('page', 'og_schema'));
     }
 
 
