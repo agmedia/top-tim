@@ -132,11 +132,11 @@ class HomeController extends FrontBaseController
 
         $message = $request->toArray();
 
-        dispatch(function () use ($message) {
-            Mail::to(config('mail.admin'))->send(new ContactFormMessage($message));
-        });
+        dispatch(function () use ($request) {
+            Mail::to(config('mail.admin'))->send(new ContactFormMessage($request->toArray()));
+        })->afterResponse();
 
-        return view('front.contact')->with(['success' => 'Vaša poruka je uspješno poslana.! Odgovoriti ćemo vam uskoro.']);
+        return redirect()->route('kontakt')->with(['success' => 'Vaša poruka je uspješno poslana.! Odgovoriti ćemo vam uskoro.']);
     }
 
 
