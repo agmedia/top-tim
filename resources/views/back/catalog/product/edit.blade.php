@@ -159,7 +159,7 @@
                                             <div class="col-md-3">
                                                 <label for="special-input">{{ __('back/products.akcija') }}</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="special-input" name="special" placeholder="00.00" value="{{ isset($product) ? $product->special : old('special') }}">
+                                                    <input type="text" class="form-control" id="special-input" name="special" placeholder="00.00" value="{{ isset($product) ? $product->special : old('special') }}" readonly>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">€</span>
                                                     </div>
