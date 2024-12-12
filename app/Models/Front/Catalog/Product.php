@@ -782,7 +782,7 @@ class Product extends Model
         }
 
         if ($request->has('brand') && $request->input('brand') != '') {
-            /*$auts = [];
+            $auts = [];
 
             if (is_array($request->input('brand'))) {
                 foreach ($request->input('brand') as $key => $item) {
@@ -821,9 +821,9 @@ class Product extends Model
                 }
             }
 
-            $query->where('brand_id', $auts);*/
+            $query->where('brand_id', $auts);
 
-            $query->where('brand_id', $request->input('brand'));
+           // $query->where('brand_id', $request->input('brand'));
         }
 
         //

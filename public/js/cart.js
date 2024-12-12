@@ -5396,7 +5396,19 @@ var render = function render() {
         "for": option.id
       }
     })]) : _vm._e()];
-  })], 2)])])]) : _vm._e()])])])]);
+  })], 2)])])]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-lg-12"
+  }, [_c("button", {
+    staticClass: "btn btn-sm btn-primary mt-4",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: _vm.cleanQuery
+    }
+  }, [_c("i", {
+    staticClass: "ci-trash"
+  }), _vm._v(" Očisti sve")])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,

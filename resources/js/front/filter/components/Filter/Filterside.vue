@@ -103,9 +103,9 @@
                         </div>
                     </div>
                 </div>
-              <!--  <div class="col-lg-12">
+             <div class="col-lg-12">
                     <button type="button" class="btn btn-sm btn-primary mt-4" v-on:click="cleanQuery"><i class=" ci-trash"></i> Očisti sve</button>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>

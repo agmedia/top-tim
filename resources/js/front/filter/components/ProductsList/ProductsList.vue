@@ -502,7 +502,8 @@ export default {
             });
 
             this.selectedAttributes = [];
-
+            this.selectedBrands = [];
+            this.selectedOptions = [];
             this.start = '';
             this.end   = '';
             //window.location.replace(location.pathname);
