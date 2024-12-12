@@ -4055,10 +4055,13 @@ Vue.directive('tooltip', function (el, binding) {
       this.$router.push({
         query: {}
       })["catch"](function () {});
-      this.selectedAttributes = [];
-      this.start = '';
-      this.end = '';
-      //window.location.replace(location.pathname);
+
+      //  this.selectedAttributes = [];
+      //  this.selectedBrands = [];
+      //  this.selectedOptions = [];
+      //this.start = '';
+      //  this.end   = '';
+      location.reload();
     },
     /**
      *

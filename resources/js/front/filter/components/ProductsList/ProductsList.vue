@@ -501,12 +501,12 @@ export default {
             this.$router.push({query: {}}).catch(() => {
             });
 
-            this.selectedAttributes = [];
-            this.selectedBrands = [];
-            this.selectedOptions = [];
-            this.start = '';
-            this.end   = '';
-            //window.location.replace(location.pathname);
+          //  this.selectedAttributes = [];
+          //  this.selectedBrands = [];
+          //  this.selectedOptions = [];
+            //this.start = '';
+          //  this.end   = '';
+            location.reload();
         },
 
 
