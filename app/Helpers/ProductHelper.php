@@ -232,7 +232,7 @@ class ProductHelper
      *
      * @return array
      */
-    public static function hasOptionFromCartItem(array $item): array
+    public static function hasOptionFromCartItem(array|ItemCollection $item): array
     {
       //  Log::info('public static function hasOptionFromCartItem(array $item)');
        // Log::info('1');
