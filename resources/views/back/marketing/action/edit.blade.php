@@ -130,7 +130,7 @@
                                             <input type="text" class="form-control" name="coupon" placeholder="{{ __('back/action.upisite_kupon_kod') }}" value="{{ isset($action) ? $action->coupon : old('coupon') }}">
                                         </div>
                                     </div>
-                                    <div class="form-group row items-push mb-2">
+                                   <!-- <div class="form-group row items-push mb-2">
                                         <div class="col-md-4 pt-2"></div>
                                         <div class="col-md-8">
                                             <div class="custom-control custom-switch custom-control-success">
@@ -138,7 +138,7 @@
                                                 <label class="custom-control-label" for="coupon-quantity">{{ __('back/action.koristi_samo_jednom') }}</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="form-group row items-push mb-2 mt-3">
                                         <div class="col-md-6 pt-2"><label for="group-select">Akcija se odnosi samo na grupu korisnika:</label></div>

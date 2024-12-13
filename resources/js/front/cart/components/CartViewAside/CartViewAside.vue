@@ -34,15 +34,31 @@
                         </div>
                     </div>
                 </div>
+
+
                 <ul class="list-unstyled fs-sm pb-2 border-bottom">
-                    <li class="d-flex justify-content-between align-items-center"><span class="me-2">{{ trans.ukupno }}:</span><span class="text-end">{{ $store.state.service.formatMainPrice($store.state.cart.subtotal) }}</span></li>
+                    <li class="d-flex justify-content-between align-items-center" v-if="getCouponPrice() === $store.state.cart.subtotal"><span class="me-2">{{ trans.ukupno }}:</span><span class="text-end">{{ $store.state.service.formatMainPrice($store.state.cart.subtotal) }}</span></li>
+                    <li class="d-flex justify-content-between align-items-center" v-if="getCouponPrice() !== $store.state.cart.subtotal"><span class="me-2">{{ trans.ukupno }}:</span><span class="text-end">{{ $store.state.service.formatMainPrice( getCouponPrice() ) }}</span></li>
+
+
+
                     <li v-if="$store.state.cart.secondary_price" class="d-flex justify-content-between align-items-center">
                         <span class="me-2"></span><span class="text-end">{{ $store.state.service.formatSecondaryPrice($store.state.cart.subtotal) }}</span>
                     </li>
+
+
+                        <li class="d-flex justify-content-between align-items-center" v-if="getCouponPrice() !== $store.state.cart.subtotal"><span class="me-2">Popust: </span><span class="text-end">-{{ $store.state.service.formatMainPrice( getCouponPrice() - $store.state.cart.subtotal)  }}</span></li>
+
+
                     <div v-for="condition in $store.state.cart.detail_con">
                         <li class="d-flex justify-content-between align-items-center"><span class="me-2">{{ condition.name }}</span><span class="text-end">{{ $store.state.service.formatMainPrice(condition.value) }}</span></li>
                         <li v-if="$store.state.cart.secondary_price" class="d-flex justify-content-between align-items-center"><span class="me-2"></span><span class="text-end">{{ $store.state.service.formatSecondaryPrice(condition.value) }}</span></li>
                     </div>
+
+
+
+
+
                 </ul>
                 <h3 class="fw-bold text-primary text-center my-2">{{ $store.state.service.formatMainPrice($store.state.cart.total) }}</h3>
                 <h4 v-if="$store.state.cart.secondary_price" class="fs-sm text-center my-2">{{ $store.state.service.formatSecondaryPrice($store.state.cart.total) }}</h4>
@@ -65,10 +81,16 @@
                     <h2 class="widget-title text-center">{{ trans.sazetak }}</h2>
                 </div>
                 <ul class="list-unstyled fs-sm pb-2 border-bottom">
-                    <li class="d-flex justify-content-between align-items-center"><span class="me-2">Ukupno:</span><span class="text-end">{{ $store.state.service.formatMainPrice($store.state.cart.subtotal) }}</span></li>
+                    <li class="d-flex justify-content-between align-items-center" v-if="getCouponPrice() === $store.state.cart.subtotal"><span class="me-2">{{ trans.ukupno }}:</span><span class="text-end">{{ $store.state.service.formatMainPrice($store.state.cart.subtotal) }}</span></li>
+                    <li class="d-flex justify-content-between align-items-center" v-if="getCouponPrice() !== $store.state.cart.subtotal"><span class="me-2">{{ trans.ukupno }}:</span><span class="text-end">{{ $store.state.service.formatMainPrice( getCouponPrice() ) }}</span></li>
+
+
                     <li v-if="$store.state.cart.secondary_price" class="d-flex justify-content-between align-items-center">
                         <span class="me-2"></span><span class="text-end">{{ $store.state.service.formatSecondaryPrice($store.state.cart.subtotal) }}</span>
                     </li>
+
+                    <li class="d-flex justify-content-between align-items-center" v-if="getCouponPrice() !== $store.state.cart.subtotal"><span class="me-2">Popust: </span><span class="text-end">-{{ $store.state.service.formatMainPrice( getCouponPrice() - $store.state.cart.subtotal)  }}</span></li>
+
                     <div v-for="condition in $store.state.cart.detail_con">
                         <li class="d-flex justify-content-between align-items-center"><span class="me-2">{{ condition.name }}</span><span class="text-end">{{ $store.state.service.formatMainPrice(condition.value) }}</span></li>
                         <li v-if="$store.state.cart.secondary_price" class="d-flex justify-content-between align-items-center"><span class="me-2"></span><span class="text-end">{{ $store.state.service.formatSecondaryPrice(condition.value) }}</span></li>
@@ -244,9 +266,21 @@ export default {
          *
          */
         updateLoyalty() {
-            console.log('updateLoyalty')
-            console.log(this.selected_loyalty)
+           // console.log('updateLoyalty')
+            //console.log(this.selected_loyalty)
             this.$store.dispatch('updateLoyalty', this.selected_loyalty);
+        },
+
+        /**
+         *
+         */
+        getCouponPrice() {
+            let cart = this.$store.state.storage.getCart();
+                    let total = 0;
+                    for (const key in cart.items) {
+                       total = total + (cart.items[key].price * cart.items[key].quantity);
+                    }
+                    return total;
         },
 
         /**
@@ -255,8 +289,8 @@ export default {
         checkLoyalty() {
             let cart = this.$store.state.storage.getCart();
 
-            console.log('cart LOYALTY')
-            console.log(cart.has_loyalty)
+           // console.log('cart LOYALTY')
+         //   console.log(cart.has_loyalty)
 
             if (cart.has_loyalty > 100) {
                 this.has_loyalty = true;

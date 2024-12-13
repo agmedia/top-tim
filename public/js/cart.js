@@ -2710,17 +2710,30 @@ __webpack_require__.r(__webpack_exports__);
      *
      */
     updateLoyalty: function updateLoyalty() {
-      console.log('updateLoyalty');
-      console.log(this.selected_loyalty);
+      // console.log('updateLoyalty')
+      //console.log(this.selected_loyalty)
       this.$store.dispatch('updateLoyalty', this.selected_loyalty);
+    },
+    /**
+     *
+     */
+    getCouponPrice: function getCouponPrice() {
+      var cart = this.$store.state.storage.getCart();
+      var total = 0;
+      for (var key in cart.items) {
+        total = total + cart.items[key].price * cart.items[key].quantity;
+      }
+      return total;
     },
     /**
      *
      */
     checkLoyalty: function checkLoyalty() {
       var cart = this.$store.state.storage.getCart();
-      console.log('cart LOYALTY');
-      console.log(cart.has_loyalty);
+
+      // console.log('cart LOYALTY')
+      //   console.log(cart.has_loyalty)
+
       if (cart.has_loyalty > 100) {
         this.has_loyalty = true;
       }
@@ -4734,19 +4747,31 @@ var render = function render() {
     }, [_vm._v("x " + _vm._s(item.quantity))])])])]);
   })], 2), _vm._v(" "), _c("ul", {
     staticClass: "list-unstyled fs-sm pb-2 border-bottom"
-  }, [_c("li", {
+  }, [_vm.getCouponPrice() === _vm.$store.state.cart.subtotal ? _c("li", {
     staticClass: "d-flex justify-content-between align-items-center"
   }, [_c("span", {
     staticClass: "me-2"
   }, [_vm._v(_vm._s(_vm.trans.ukupno) + ":")]), _c("span", {
     staticClass: "text-end"
-  }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.$store.state.cart.subtotal)))])]), _vm._v(" "), _vm.$store.state.cart.secondary_price ? _c("li", {
+  }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm.getCouponPrice() !== _vm.$store.state.cart.subtotal ? _c("li", {
+    staticClass: "d-flex justify-content-between align-items-center"
+  }, [_c("span", {
+    staticClass: "me-2"
+  }, [_vm._v(_vm._s(_vm.trans.ukupno) + ":")]), _c("span", {
+    staticClass: "text-end"
+  }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.getCouponPrice())))])]) : _vm._e(), _vm._v(" "), _vm.$store.state.cart.secondary_price ? _c("li", {
     staticClass: "d-flex justify-content-between align-items-center"
   }, [_c("span", {
     staticClass: "me-2"
   }), _c("span", {
     staticClass: "text-end"
-  }, [_vm._v(_vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm._l(_vm.$store.state.cart.detail_con, function (condition) {
+  }, [_vm._v(_vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm.getCouponPrice() !== _vm.$store.state.cart.subtotal ? _c("li", {
+    staticClass: "d-flex justify-content-between align-items-center"
+  }, [_c("span", {
+    staticClass: "me-2"
+  }, [_vm._v("Popust: ")]), _c("span", {
+    staticClass: "text-end"
+  }, [_vm._v("-" + _vm._s(_vm.$store.state.service.formatMainPrice(_vm.getCouponPrice() - _vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm._l(_vm.$store.state.cart.detail_con, function (condition) {
     return _c("div", [_c("li", {
       staticClass: "d-flex justify-content-between align-items-center"
     }, [_c("span", {
@@ -4780,19 +4805,31 @@ var render = function render() {
     staticClass: "widget-title text-center"
   }, [_vm._v(_vm._s(_vm.trans.sazetak))])]), _vm._v(" "), _c("ul", {
     staticClass: "list-unstyled fs-sm pb-2 border-bottom"
-  }, [_c("li", {
+  }, [_vm.getCouponPrice() === _vm.$store.state.cart.subtotal ? _c("li", {
     staticClass: "d-flex justify-content-between align-items-center"
   }, [_c("span", {
     staticClass: "me-2"
-  }, [_vm._v("Ukupno:")]), _c("span", {
+  }, [_vm._v(_vm._s(_vm.trans.ukupno) + ":")]), _c("span", {
     staticClass: "text-end"
-  }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.$store.state.cart.subtotal)))])]), _vm._v(" "), _vm.$store.state.cart.secondary_price ? _c("li", {
+  }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm.getCouponPrice() !== _vm.$store.state.cart.subtotal ? _c("li", {
+    staticClass: "d-flex justify-content-between align-items-center"
+  }, [_c("span", {
+    staticClass: "me-2"
+  }, [_vm._v(_vm._s(_vm.trans.ukupno) + ":")]), _c("span", {
+    staticClass: "text-end"
+  }, [_vm._v(_vm._s(_vm.$store.state.service.formatMainPrice(_vm.getCouponPrice())))])]) : _vm._e(), _vm._v(" "), _vm.$store.state.cart.secondary_price ? _c("li", {
     staticClass: "d-flex justify-content-between align-items-center"
   }, [_c("span", {
     staticClass: "me-2"
   }), _c("span", {
     staticClass: "text-end"
-  }, [_vm._v(_vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm._l(_vm.$store.state.cart.detail_con, function (condition) {
+  }, [_vm._v(_vm._s(_vm.$store.state.service.formatSecondaryPrice(_vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm.getCouponPrice() !== _vm.$store.state.cart.subtotal ? _c("li", {
+    staticClass: "d-flex justify-content-between align-items-center"
+  }, [_c("span", {
+    staticClass: "me-2"
+  }, [_vm._v("Popust: ")]), _c("span", {
+    staticClass: "text-end"
+  }, [_vm._v("-" + _vm._s(_vm.$store.state.service.formatMainPrice(_vm.getCouponPrice() - _vm.$store.state.cart.subtotal)))])]) : _vm._e(), _vm._v(" "), _vm._l(_vm.$store.state.cart.detail_con, function (condition) {
     return _c("div", [_c("li", {
       staticClass: "d-flex justify-content-between align-items-center"
     }, [_c("span", {
