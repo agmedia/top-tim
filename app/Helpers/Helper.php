@@ -871,8 +871,16 @@ class Helper
         $items = $cart->getContent();
 
         foreach ($items as $item) {
-            if ($item->getConditions()->getType() == 'coupon') {
-                $coupon = $item->getConditions()->getTarget();
+            if (is_array($item->getConditions())) {
+                foreach ($item->getConditions() as $condition) {
+                    if ($condition->getType() == 'coupon') {
+                        $coupon = $condition->getType();
+                    }
+                }
+            } else {
+                if ($item->getConditions()->getType() == 'coupon') {
+                    $coupon = $item->getConditions()->getType();
+                }
             }
         }
 
