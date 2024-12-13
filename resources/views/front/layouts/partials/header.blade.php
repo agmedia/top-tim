@@ -6,13 +6,13 @@
         <div class="container-fluid">
             <a class="navbar-brand d-none d-md-block me-1 flex-shrink-0 py-0" href="{{ route('index') }}">
                 <div class="logo-bg" style="background-color:#fff;margin-left:-30px; padding: 0 0px 0 30px; ">
-                    <img src="{{ asset('image/logo-top-tim.svg') }}" width="210"  height="51" alt="Top Tim - Better way to stay in the game" >
+                    <img src="{{ asset('media/img/logo-bozicni.png') }}" width="210"  height="51" alt="Top Tim - Better way to stay in the game" >
                     <span class="arrow"></span>
                 </div>
             </a>
             <a class="navbar-brand p-0 d-md-none me-0" href="{{ route('index') }}">
                 <div class="logo-bg py-2" style="background-color:#fff;margin-left:-15px; padding: 6px 5px 6px 5px; ">
-                <img src="{{ asset('image/logo-top-tim.svg') }}"  width="150" height="36" alt="Top Tim - Better way to stay in the game">
+                <img src="{{ asset('media/img/logo-bozicni.png') }}"  width="150" height="36" alt="Top Tim - Better way to stay in the game">
 
                 </div>
             </a>
