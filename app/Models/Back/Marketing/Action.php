@@ -137,7 +137,7 @@ class Action extends Model
         $updated    = $this->update($this->getModelArray(false));
 
         if ($updated) {
-            ActionTranslation::edit($updated, $this->request);
+            ActionTranslation::edit($this->id, $this->request);
 
             if ($this->shouldUpdateProducts($data)) {
                 $this->updateProducts($this->resolveTarget($data['links']), $this->id, $data['start'], $data['end']);
