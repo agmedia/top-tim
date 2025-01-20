@@ -103,8 +103,11 @@ class MyPos
         }
 
         foreach ($this->order->totals as $add) {
+            $shipping = 0;
+
             if ($add->code == 'shipping') {
-                $cart->add($add->title, 1, number_format($add->value, 2, '.', ''));
+                $shipping = number_format($add->value, 2, '.', '');
+                $cart->add($add->title, 1, $shipping);
             }
 
             if ($add->code == 'total') {
@@ -113,7 +116,7 @@ class MyPos
         }
 
         if ($order_total < $products_total) {
-            $discount = $order_total - $products_total;
+            $discount = $order_total - $products_total - $shipping;
             $cart->add('Discount', 1, $discount);
         }
 
