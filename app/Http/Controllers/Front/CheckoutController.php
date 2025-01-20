@@ -240,7 +240,7 @@ class CheckoutController extends FrontBaseController
                 $status = config('settings.order.status.new');
             }
 
-            $order->update('status', $status);
+            $order->update('order_status_id', $status);
 
             //Loyalty::resolveOrder($cart->get(), $order);
 
