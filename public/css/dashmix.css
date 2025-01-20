@@ -27363,9 +27363,7 @@ ul li:hover agm {
     background-position: center;
     background-size: contain;
     border: 1px solid #c1cdd7;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+
     print-color-adjust: exact;
 }
 .form-check-input:checked ~ .form-option-label {
