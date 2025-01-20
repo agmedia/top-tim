@@ -117,7 +117,7 @@ class MyPos
 
         if ($order_total < $products_total) {
             $discount = $order_total - $products_total - $shipping;
-            $cart->add('Discount', 1, $discount);
+            $cart->add('Popust', 1, $discount);
         }
 
         $purchase = new Purchase($cnf);
