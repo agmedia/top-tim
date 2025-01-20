@@ -92,14 +92,29 @@ class MyPos
 
         // dd($this->order->products);
         $cart = new Cart;
+        $products_total = 0;
+        $order_total = 0;
         // dd($this->order->totals);
         foreach ($this->order->products as $product) {
-            $cart->add($product->name, $product->quantity, number_format($product->price, 2, '.', '')); //name, quantity, price
+            $price = number_format($product->price, 2, '.', '');
+            $products_total = $products_total + $price;
+
+            $cart->add($product->name, $product->quantity, $price); //name, quantity, price
         }
+
         foreach ($this->order->totals as $add) {
             if ($add->code == 'shipping') {
                 $cart->add($add->title, 1, number_format($add->value, 2, '.', ''));
             }
+
+            if ($add->code == 'total') {
+                $order_total = $add->value;
+            }
+        }
+
+        if ($order_total < $products_total) {
+            $discount = $order_total - $products_total;
+            $cart->add('Discount', 1, $discount);
         }
 
         $purchase = new Purchase($cnf);
