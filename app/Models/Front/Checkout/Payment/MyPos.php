@@ -108,7 +108,7 @@ class MyPos
             }
 
             if ($add->code == 'total') {
-                $order_total = $add->value;
+                $order_total = number_format($add->value, 2, '.', '');
             }
         }
 
