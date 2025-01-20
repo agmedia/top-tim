@@ -234,6 +234,14 @@ class CheckoutController extends FrontBaseController
 
             $order->decreaseItems($order->products);
 
+            $status = config('settings.order.status.paid');
+
+            if ($order->payment_code == 'bank') {
+                $status = config('settings.order.status.new');
+            }
+
+            $order->update('status', $status);
+
             //Loyalty::resolveOrder($cart->get(), $order);
 
             dispatch(function () use ($order) {
