@@ -77,13 +77,10 @@
                         <div class="product-price">
                             <span class="text-dark fs-md" v-if="!product.special">{{ product.main_price_text }} <small v-if="product.secondary_price_text ">{{ product.secondary_price_text }} </small></span>
                         </div>
-
                         <div class="star-rating" v-if="product.stars">
                             <span v-for="item in 5 ">
                                 <i v-if="Math.floor(product.stars) - item >= 0" class="star-rating-icon ci-star-filled active"></i>
-
                                 <i v-else-if="product.stars - item > -1 " class="star-rating-icon ci-star-half active"></i>
-
 
 
                                <i v-else class="star-rating-icon ci-star"></i>
