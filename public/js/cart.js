@@ -5790,7 +5790,7 @@ var render = function render() {
       staticClass: "fs-sm text-muted"
     }, [_c("strike", [_vm._v(_vm._s(product.main_price_text))])], 1)]) : _vm._e()]), _vm._v(" "), _c("div", {
       staticClass: "product-price"
-    }, [!product.special ? _c("span", {
+    }, [!product.main_special ? _c("span", {
       staticClass: "text-dark fs-md"
     }, [_vm._v(_vm._s(product.main_price_text) + " "), product.secondary_price_text ? _c("small", [_vm._v(_vm._s(product.secondary_price_text) + " ")]) : _vm._e()]) : _vm._e()]), _vm._v(" "), product.stars ? _c("div", {
       staticClass: "star-rating"
