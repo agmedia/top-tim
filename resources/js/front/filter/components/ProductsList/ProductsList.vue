@@ -74,7 +74,6 @@
                         <div class="product-price">
                             <span class="text-red fs-md" v-if="Number(product.main_price) > Number(product.main_special)">{{ product.main_special_text }}  <span class="fs-sm text-muted"><strike>{{ product.main_price_text }}</strike></span></span>
                         </div>
-
                         <div class="product-price">
                             <span class="text-dark fs-md" v-if="!product.special">{{ product.main_price_text }} <small v-if="product.secondary_price_text ">{{ product.secondary_price_text }} </small></span>
                         </div>
