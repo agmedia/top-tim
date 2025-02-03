@@ -29,6 +29,11 @@ class Special
     protected $product;
 
     /**
+     * @var float|int|null
+     */
+    protected $product_option_price;
+
+    /**
      * @var ProductAction|null
      */
     protected $action;
@@ -48,10 +53,13 @@ class Special
      * @param Product|null       $product
      * @param ProductAction|null $product_action
      */
-    public function __construct(Product $product = null)
+    public function __construct(Product $product = null, float|null $option_price = null)
     {
         $this->user    = Auth::user();
         $this->product = $product;
+        $this->product_option_price = $option_price ?: 0;
+
+        //Log::info('Special.php class construct::product_id : ' . $this->product->id);
 
         if ($this->user) {
             $this->user_group = $this->user->details->group ? $this->user->details->group->id : 0;
@@ -122,17 +130,39 @@ class Special
      */
     public function getDiscountPrice(ProductAction|null $product_action = null): float|int
     {
+        /*if ($this->product_option_price != 0) {
+            Log::info($product_action);
+        }*/
         $action = $this->resolveRealAction($product_action);
+        $product_price = $this->product->price + $this->product_option_price;
+
+        /*if ($this->product_option_price != 0) {
+            Log::info('public function getDiscountPrice(ProductAction|null $product_action = null): float|int');
+            Log::info($this->product->price);
+            Log::info($this->product_option_price);
+            Log::info($product_price);
+            Log::info($this->product->id);
+            Log::info($action);
+        }*/
 
         if ( ! $action) {
-            return $this->product->price;
+            if ($this->product_option_price != 0) {
+                //Log::info(1);
+            }
+            return $product_price;
         }
 
         if ($this->isProductOnAction($action)) {
-            return Helper::calculateDiscountPrice($this->product->price, $action->discount, $action->type);
+            /*if ($this->product_option_price != 0) {
+                Log::info(2);
+                Log::info(Helper::calculateDiscountPrice($product_price, $action->discount, $action->type));
+            }*/
+            return Helper::calculateDiscountPrice($product_price, $action->discount, $action->type);
         }
-
-        return $this->product->price;
+        if ($this->product_option_price != 0) {
+            //Log::info(3);
+        }
+        return $product_price;
     }
 
 
@@ -290,11 +320,13 @@ class Special
      */
     private function setupAvailableActions(): Special
     {
-        $this->active_actions = ProductAction::query()->where('user_group_id', null)->active()->get();
+        $this->active_actions = ProductAction::query()->where('user_group_id', null)->where('status', 0)->active()->get();
 
         if ($this->active_actions->count()) {
             $this->action = $this->getBestAction();
         }
+
+        //Log::info('setup Available Actions & get best action ::' . ($this->action ? $this->action->id : 0));
 
         return $this;
     }

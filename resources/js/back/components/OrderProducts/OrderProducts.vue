@@ -50,7 +50,7 @@
                         </td>
                         <td class="text-right">{{ Number(product.org_price * product.quantity).toLocaleString(localization, currency_style) }}</td>
                         <td class="text-right">
-                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.rabat" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')">
+                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.rabat" @keyup.enter="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')" @blur="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')">
                             <span v-else @click="product.edit=true;">-{{ Number((product.rabat) * product.quantity).toLocaleString(localization, currency_style) }}</span>
                         </td>
                         <td class="text-right font-w600">{{ Number(product.total).toLocaleString(localization, currency_style) }}</td>
@@ -202,6 +202,7 @@ export default {
             this.Sort()
 
             console.log(this.products_local)
+            console.log('Tu sam')
         }
     },
     //
@@ -427,9 +428,13 @@ export default {
          * @constructor
          */
         ChangeRabat(id, event) {
+            console.log(id, event)
+
             for (let i = 0; i < this.items.length; i++) {
                 if (this.items[i].sku == id) {
                     let inserted_rabat = Number(event.target.value);
+
+                    console.log(inserted_rabat, this.items[i])
 
                     if (inserted_rabat < this.items[i].org_price) {
                         this.items[i].rabat = inserted_rabat;
@@ -438,7 +443,7 @@ export default {
                     }
                 }
             }
-            this.Recalculate();
+            //this.Recalculate();
         },
 
         /**
