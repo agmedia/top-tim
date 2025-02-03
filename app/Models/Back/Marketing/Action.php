@@ -115,7 +115,7 @@ class Action extends Model
             ActionTranslation::create($id, $this->request);
 
             if ($this->shouldUpdateProducts($data)) {
-                $this->updateProducts($this->resolveTarget($data['links']), $id, $data['start'], $data['end']);
+                //$this->updateProducts($this->resolveTarget($data['links']), $id, $data['start'], $data['end']);
             }
 
             return $this->find($id);
@@ -140,7 +140,7 @@ class Action extends Model
             ActionTranslation::edit($this->id, $this->request);
 
             if ($this->shouldUpdateProducts($data)) {
-                $this->updateProducts($this->resolveTarget($data['links']), $this->id, $data['start'], $data['end']);
+               // $this->updateProducts($this->resolveTarget($data['links']), $this->id, $data['start'], $data['end']);
             }
 
             if ($deactivate) {
