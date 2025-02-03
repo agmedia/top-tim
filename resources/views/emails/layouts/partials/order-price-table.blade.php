@@ -49,14 +49,14 @@
             <td>{{ $product->name }} </td>
             <td style="text-align: center;">{{ $product->quantity }}</td>
 
-            {% if $product->discount != 0 %}
+            @if ($product->discount != 0)
 
             <td style="text-align: right;"><s>{{ number_format($product->org_price, 2, ',', '.') }} </s> <br>{{ number_format($product->price, 2, ',', '.') }}</td>
-            {% else %}
+            @else
 
             <td style="text-align: right;">{{ number_format($product->price, 2, ',', '.') }}</td>
 
-            {% endif %}
+           @endif
 
 
             <td style="text-align: right;">€ {{ number_format($product->total, 2, ',', '.') }}</td>
