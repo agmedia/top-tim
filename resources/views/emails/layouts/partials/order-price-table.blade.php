@@ -48,7 +48,17 @@
             <td><img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="60px"/> </td>
             <td>{{ $product->name }} </td>
             <td style="text-align: center;">{{ $product->quantity }}</td>
-            <td style="text-align: right;">€ {{ number_format($product->price, 2, ',', '.') }}</td>
+
+            {% if $product->discount != 0 %}
+
+            <td style="text-align: right;"><s>{{ number_format($product->org_price, 2, ',', '.') }} </s> <br>{{ number_format($product->price, 2, ',', '.') }}</td>
+            {% else %}
+
+            <td style="text-align: right;">{{ number_format($product->price, 2, ',', '.') }}</td>
+
+            {% endif %}
+
+
             <td style="text-align: right;">€ {{ number_format($product->total, 2, ',', '.') }}</td>
         </tr>
     @endforeach

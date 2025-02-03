@@ -52,7 +52,17 @@
                                 <td><strong>{{ $product->name }} -  {{ $product->product->sku }}</strong></td>
                                 <td>{{ $product->product->polica }}</td>
                                 <td class="text-center"><strong>{{ $product->quantity }}</strong></td>
+
+                                {% if $product->discount != 0 %}
+
+                                <td class="text-right"><s>{{ number_format($product->org_price, 2, ',', '.') }} </s> <br>{{ number_format($product->price, 2, ',', '.') }}</td>
+                                {% else %}
+
                                 <td class="text-right">{{ number_format($product->price, 2, ',', '.') }}</td>
+
+                                {% endif %}
+
+
                                 <td class="text-right">{{ number_format($product->total, 2, ',', '.') }}</td>
                             </tr>
                         @endforeach
