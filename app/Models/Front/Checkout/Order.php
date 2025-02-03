@@ -247,8 +247,10 @@ class Order extends Model
             $discount = 0;
             $price    = $item->price;
 
-            if ($this->checkSpecial($item->associatedModel)) {
-                $price    = $item->associatedModel->special;
+            $product = Product::query()->where('id', $item->associatedModel->id)->first();
+
+            if ($product->special()) {
+                $price    = $product->special();
                 $discount = Helper::calculateDiscount($item->price, $price);
             }
 
