@@ -53,7 +53,7 @@
                                 <td>{{ $product->product->polica }}</td>
                                 <td class="text-center"><strong>{{ $product->quantity }}</strong></td>
 
-                               @if $product->discount != 0
+                               @if ($product->discount != 0)
 
                                 <td class="text-right"><s>{{ number_format($product->org_price, 2, ',', '.') }} </s> <br>{{ number_format($product->price, 2, ',', '.') }}</td>
                                 @else
