@@ -181,7 +181,7 @@
                 </div>
 
                 @if ( $prod->quantity > 0 )
-                    <add-to-cart-btn product="{{ json_encode($prod->toArray()) }}" available="{{ $prod->quantity }}" sizeguide="" options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
+                    <add-to-cart-btn product="{{ json_encode($prod->toArray()) }}" action="{{ json_encode($prod->special(true)) }}" available="{{ $prod->quantity }}" sizeguide="" options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
                 @endif
                     @if ( isset($prod->sizeguide) )
                         <div class="mb-3">

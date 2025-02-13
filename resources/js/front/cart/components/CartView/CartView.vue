@@ -31,7 +31,7 @@
                     <h3 class="product-title fs-base mb-2"><a :href="base_path + item.attributes.path">{{ item.name }}</a></h3>
 
                     <div class="fs-lg text-primary pt-2">
-                        {{ Object.keys(item.conditions).length ? item.associatedModel.main_special_text : item.associatedModel.main_price_text }}
+                        {{ Object.keys(item.conditions).length ? item.associatedModel.main_price_text : item.associatedModel.main_price_text }}
                         <span class="text-primary fs-md fw-light" style="margin-left: 20px;"
                               v-if="Object.keys(item.conditions).length && item.associatedModel.action && item.associatedModel.action.coupon == $store.state.cart.coupon">
                             {{ item.associatedModel.action.title }} ({{ Math.round(item.associatedModel.action.discount).toFixed(0) }}
@@ -45,6 +45,12 @@
 
                     <div class="fs-sm text-dark pt-1" v-if="item.associatedModel.secondary_price">
                         {{ Object.keys(item.conditions).length ? item.associatedModel.secondary_special_text : item.associatedModel.secondary_price_text }}
+                    </div>
+
+                    <div class="fs-sm text-dark pt-1" v-if="Object.keys(item.conditions).length">
+                        <p v-for="condition in item.conditions">
+                            Akcija: - {{ Math.round(Number(condition.parsedRawValue)).toFixed(2) }} EUR
+                        </p>
                     </div>
                 </div>
             </div>
@@ -131,6 +137,8 @@ export default {
          */
         checkIfEmpty() {
             let cart = this.$store.state.storage.getCart();
+
+            console.log(cart)
 
             if (cart && ! cart.count && window.location.pathname != '/kosarica') {
                 window.location.href = '/kosarica';

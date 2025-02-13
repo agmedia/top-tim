@@ -575,8 +575,6 @@ class AgCart extends Model
      */
     private function structureCartItemConditions(Product $product, Request $request): array
     {
-        Log::info('private function structureCartItemConditions(Product $product, Request $request): array:::::::');
-
         $product_option_price = null;
         $conditions = [];
 
@@ -588,20 +586,16 @@ class AgCart extends Model
             }
         }
 
-        Log::info('Option price: ' . $product_option_price);
-
         // Ako artikl ima akciju.
-        if ($product->special($product_option_price)) {
-            $discount = $product->special($product_option_price);
+        $discount = Product::getSpecial($product->id, $product_option_price);
+
+        if ($discount) {
             $coupon = $product->coupon();
             $price = $product->price;
 
             if ($product_option_price) {
                 $price = $product->price + $product_option_price;
             }
-
-            Log::info('Product price + option price: ' . $price);
-            Log::info('Special resolved: ' . $discount);
 
             if ($coupon) {
                 $conditions[] = new CartCondition([
@@ -618,14 +612,6 @@ class AgCart extends Model
                     'value'  => -($price - $discount)
                 ]);
             }
-        }
-
-        if ($product_option_price) {
-            /*$conditions[] = new CartCondition([
-                'name'  => CartHelper::resolveItemOptionName($product_option),
-                'type'  => 'option',
-                'value' => $product_option_price
-            ]);*/
         }
 
         return $conditions;

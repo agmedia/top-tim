@@ -23,7 +23,7 @@
                         <div class="ps-2">
                             <h6 class="widget-product-title"><a :href="base_path + item.attributes.path">{{ item.name }}</a></h6>
                             <div class="widget-product-meta"><span class="text-primary me-2">
-                                {{ Object.keys(item.conditions).length ? item.associatedModel.main_special_text : item.associatedModel.main_price_text }}</span><span class="text-muted">x {{ item.quantity }}</span>
+                                {{ Object.keys(item.conditions).length ? Number(item.price).toFixed(2) : Number(item.price).toFixed(2) }} EUR</span><span class="text-muted">x {{ item.quantity }}</span>
                                 <span class="text-primary fs-md fw-light" style="margin-left: 20px;"
                                       v-if="Object.keys(item.conditions).length && item.associatedModel.action && item.associatedModel.action.coupon == $store.state.cart.coupon">
                                     {{ trans.kupon_kod}}: {{ item.associatedModel.action.title }} ({{ Math.round(item.associatedModel.action.discount).toFixed(0) }}

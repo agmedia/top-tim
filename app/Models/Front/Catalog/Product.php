@@ -448,53 +448,85 @@ class Product extends Model
     /**
      * @return false|float|int|mixed
      */
-    public function special(float|null $option_price = null)
+    public function special(bool $return_action = false)
     {
-        /*$_prod = $this;
+        $product = $this;
         $user = Auth::user();
         $user_group_id = 0;
 
         if ($user) {
-            $user_group_id = Helper::resolveCache('group_id')->remember($user->id, config('cache.widget_life'), function () use ($user) {
+            $user_group_id = Helper::resolveCache('group_id')->remember($user->id, config('cache.life'), function () use ($user) {
                 return ($user && $user->details->group) ? $user->details->group->id : 0;
             });
-        }*/
-
-        /*$key = $_prod->id . '-' . $user_group_id;
-
-        return Helper::resolveCache('spec')->remember($key, config('cache.widget_lifetime'), function () use ($_prod) {
-            $special = new Special($_prod);
-
-            $action    = $special->resolveAction();
-            $coupon_ok = $special->checkCoupon($action);
-            $dates_ok  = $special->checkDates($action);
-
-            if ($coupon_ok && $dates_ok) {
-                return $special->getDiscountPrice($action);
-            }
-
-            return $_prod->price;
-        });*/
-
-        $special = new Special($this, $option_price);
-
-        $action    = $special->resolveAction();
-
-        if ($action) {
-            //Log::info('ACTION ID from Product::special() :: ' . $action->id);
-
-            $coupon_ok = $special->checkCoupon($action);
-            $dates_ok  = $special->checkDates($action);
-
-            if ($coupon_ok && $dates_ok) {
-                //Log::info('Get discount price activated on action_id / product_id / option_price :: ' . $action->id . ' / ' . $this->id . ' / ' . $option_price);
-                $spec = $special->getDiscountPrice($action);
-                //Log::info($spec);
-                return $spec;
-            }
         }
 
-        return $this->price + $option_price;
+        $key = $product->id . '-' . $user_group_id . '-' . ($return_action ? 1 : 0);
+
+        return Helper::resolveCache('action')->remember($key, config('cache.cart_life'), function () use ($product, $return_action) {
+            $special = new Special($product);
+            $action  = $special->resolveAction();
+
+            if ($action) {
+                $coupon_ok = $special->checkCoupon($action);
+                $dates_ok  = $special->checkDates($action);
+
+                if ($coupon_ok && $dates_ok) {
+                    if ($return_action) {
+                        $response = $action->toArray();
+                        $response['trans'] = $action->translation()->first()->toArray();
+
+                        return $response;
+                    }
+
+                    return $special->getDiscountPrice($action);
+                }
+            }
+
+            return $this->price;
+        });
+    }
+
+
+
+
+    /**
+     * @param int            $product_id
+     * @param float|int|null $option_price
+     *
+     * @return float|int
+     */
+    public static function getSpecial(int $product_id, float|int|null $option_price = 0): float|int
+    {
+        $user = Auth::user();
+        $user_group_id = 0;
+
+        if ($user) {
+            $user_group_id = Helper::resolveCache('group_id')->remember($user->id, config('cache.life'), function () use ($user) {
+                return ($user && $user->details->group) ? $user->details->group->id : 0;
+            });
+        }
+
+        $product =  Helper::resolveCache('product')->remember($product_id, config('cache.life'), function () use ($product_id) {
+            return Product::query()->find($product_id);
+        });
+
+        $key = $product->id . '-' . $user_group_id . '-' . $option_price;
+
+        return Helper::resolveCache('action')->remember($key, config('cache.cart_life'), function () use ($product, $option_price) {
+            $special = new Special($product, $option_price);
+            $action  = $special->resolveAction();
+
+            if ($action) {
+                $coupon_ok = $special->checkCoupon($action);
+                $dates_ok  = $special->checkDates($action);
+
+                if ($coupon_ok && $dates_ok) {
+                    return $special->getDiscountPrice($action);
+                }
+            }
+
+            return 0;
+        });
     }
 
 

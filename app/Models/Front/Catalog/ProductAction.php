@@ -20,6 +20,22 @@ class ProductAction extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    /**
+     * @var string
+     */
+    protected $locale = 'en';
+
+
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->locale = session('locale');
+    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -27,6 +43,26 @@ class ProductAction extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+
+    /**
+     * @param      $lang
+     * @param bool $all
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne|object|null
+     */
+    public function translation($lang = null, bool $all = false)
+    {
+        if ($lang) {
+            return $this->hasOne(ProductActionTranslation::class, 'product_action_id')->where('lang', $lang)->first();
+        }
+
+        if ($all) {
+            return $this->hasMany(ProductActionTranslation::class, 'product_action_id');
+        }
+
+        return $this->hasOne(ProductActionTranslation::class, 'product_action_id')->where('lang', $this->locale);
     }
 
 
