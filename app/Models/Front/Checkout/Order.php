@@ -248,7 +248,7 @@ class Order extends Model
             $price    = $item->price;
 
             if ($this->checkSpecial($item->associatedModel)) {
-                $price    = $item->associatedModel->special;
+                $price    = $item->price - collect($item->conditions)->first()->parsedRawValue;
                 $discount = Helper::calculateDiscount($item->price, $price);
             }
 
@@ -355,20 +355,8 @@ class Order extends Model
      */
     public function checkSpecial(Product $model): bool
     {
-        if ($model->special) {
-            $from = now()->subDay();
-            $to = now()->addDay();
-
-            if ($model->special_from && $model->special_from != '0000-00-00 00:00:00') {
-                $from = Carbon::make($model->special_from);
-            }
-            if ($model->special_to && $model->special_to != '0000-00-00 00:00:00') {
-                $to = Carbon::make($model->special_to);
-            }
-
-            if ($from <= now() && now() <= $to) {
-                return true;
-            }
+        if ($model->price > $model->special()) {
+            return true;
         }
 
         return false;

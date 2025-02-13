@@ -151,7 +151,9 @@ export default {
         setCoupon() {
             let cart = this.$store.state.storage.getCart();
 
-            this.coupon = cart.coupon;
+            if (cart && cart.count) {
+                this.coupon = cart.coupon;
+            }
         },
 
         /**

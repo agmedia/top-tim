@@ -223,12 +223,12 @@ export default {
             let cart = this.$store.state.storage.getCart();
 
             // Check coupon
-            if (cart.coupon != '' && cart.coupon != 'null') {
+            if (cart && cart.coupon != '' && cart.coupon != 'null') {
                 this.coupon = cart.coupon;
             }
 
             // Check loyalty
-            if (cart.loyalty != '' && cart.loyalty != 'null') {
+            if (cart && cart.loyalty != '' && cart.loyalty != 'null') {
                 this.selected_loyalty = cart.loyalty;
             }
 
@@ -243,15 +243,19 @@ export default {
         setCoupon() {
             let cart = this.$store.state.storage.getCart();
 
-            cart.coupon = this.coupon;
-            this.checkCoupon();
+            if (cart) {
+                cart.coupon = this.coupon;
+                this.checkCoupon();
+            }
         },
 
         setLoyalty() {
             let cart = this.$store.state.storage.getCart();
 
-            cart.loyalty = this.selected_loyalty;
-            this.updateLoyalty();
+            if (cart) {
+                cart.loyalty = this.selected_loyalty;
+                this.updateLoyalty();
+            }
         },
 
         /**
@@ -276,11 +280,16 @@ export default {
          */
         getCouponPrice() {
             let cart = this.$store.state.storage.getCart();
-                    let total = 0;
-                    for (const key in cart.items) {
-                       total = total + (cart.items[key].price * cart.items[key].quantity);
-                    }
-                    return total;
+
+            if (cart) {
+                let total = 0;
+
+                for (const key in cart.items) {
+                    total = total + (cart.items[key].price * cart.items[key].quantity);
+                }
+
+                return total;
+            }
         },
 
         /**
@@ -289,10 +298,7 @@ export default {
         checkLoyalty() {
             let cart = this.$store.state.storage.getCart();
 
-           // console.log('cart LOYALTY')
-         //   console.log(cart.has_loyalty)
-
-            if (cart.has_loyalty > 100) {
+            if (cart && cart.has_loyalty > 100) {
                 this.has_loyalty = true;
             }
         }
