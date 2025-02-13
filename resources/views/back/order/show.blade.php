@@ -39,6 +39,7 @@
                             <th>{{ __('back/orders.polica') }}</th>
                             <th class="text-center">{{ __('back/orders.kol') }}</th>
                             <th class="text-right" style="width: 10%;">{{ __('back/orders.cijena') }}</th>
+                            <th class="text-right" style="width: 10%;">Rabat</th>
                             <th class="text-right" style="width: 10%;">{{ __('back/orders.ukupno') }}</th>
                         </tr>
                         </thead>
@@ -52,14 +53,15 @@
                                 <td><strong>{{ $product->name }} -  {{ $product->product->sku }}</strong></td>
                                 <td>{{ $product->product->polica }}</td>
                                 <td class="text-center"><strong>{{ $product->quantity }}</strong></td>
-                                <td class="text-right">{{ number_format($product->price, 2, ',', '.') }}</td>
+                                <td class="text-right">{{ number_format($product->org_price, 2, ',', '.') }}</td>
+                                <td class="text-right">{{ number_format(($product->org_price - $product->price), 2, ',', '.') }} ({{ number_format($product->discount, 0) }}%)</td>
                                 <td class="text-right">{{ number_format($product->total, 2, ',', '.') }}</td>
                             </tr>
                         @endforeach
 
                         @foreach ($order->totals as $total)
                             <tr>
-                                <td colspan="5" class="text-right"><strong>{{ $total->title }}:</strong></td>
+                                <td colspan="6" class="text-right"><strong>{{ $total->title }}:</strong></td>
                                 <td class="text-right">{{ number_format($total->value, 2, ',', '.') }}</td>
                             </tr>
                         @endforeach
