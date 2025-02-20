@@ -82,7 +82,54 @@ class OrderTotal extends Model
         
         return true;
     }
-    
+
+
+    public static function makeFromItems(array $request, $payment, $shipping)
+    {
+        $items = json_decode($request['items'], true);
+        $shipping_amount = $request['shipping_amount'] ? intval($request['shipping_amount']) : intval($shipping->data->price);
+        $payment_amount = $request['payment_amount'] ? intval($request['payment_amount']) : intval($payment->data->price);
+        $response = [];
+
+        $total = 0;
+        foreach ($items as $item) {
+            $total += intval($item['total']);
+        }
+
+        $response[] = [
+            'name' => 'Ukupno',
+            'value' => $total,
+            'code' => 'subtotal'
+        ];
+
+        $response[] = [
+            'name' => $shipping->title->{current_locale()},
+            'value' => $shipping_amount,
+            'code' => 'shipping'
+        ];
+
+        $total += $shipping_amount;
+
+        if ($payment->data->price != '0' || $request['payment_amount']) {
+            $response[] = [
+                'name' => $payment->title->{current_locale()},
+                'value' => $payment_amount,
+                'code' => 'payment'
+            ];
+
+            $total += $payment_amount;
+        }
+
+        $response[] = [
+            'name' => 'Ukupno',
+            'value' => $total,
+            'code' => 'total'
+        ];
+
+        return json_encode($response);
+    }
+
+
     
     /**
      * @param        $request

@@ -2267,8 +2267,6 @@ __webpack_require__.r(__webpack_exports__);
       this.products_local = JSON.parse(this.products);
       this.totals_local = JSON.parse(this.totals);
       this.Sort();
-      console.log(this.products_local);
-      console.log('Tu sam');
     }
   },
   //
@@ -2307,7 +2305,6 @@ __webpack_require__.r(__webpack_exports__);
           id: selected.id
         }
       }).then(function (response) {
-        console.log('select(response)', response);
         if (response.data.size && Object.keys(response.data.size).length || response.data.color && Object.keys(response.data.color).length) {
           $('#options-modal').modal('show');
           _this2.setOptionsSelection(response.data);
@@ -2319,14 +2316,11 @@ __webpack_require__.r(__webpack_exports__);
     setOptionsSelection: function setOptionsSelection(options) {
       var res = options;
       this.parent = res.parent ? res.parent : null;
-      console.log('this.parent', this.parent);
       if (!this.parent) {
         this.size_disabled = true;
       }
       this.size_options = res.size ? res.size.options : {};
       this.color_options = res.color ? res.color.options : {};
-      console.log('this.size_options', this.size_options);
-      console.log('this.color_options', this.color_options);
     },
     addProduct: function addProduct() {
       this.results = [];
@@ -2355,13 +2349,6 @@ __webpack_require__.r(__webpack_exports__);
       this.Recalculate();
     },
     addOption: function addOption() {
-      console.log(this.selected_product);
-      console.log(this.selected_color);
-      console.log(this.selected_size);
-      console.log(this.size, this.color, this.parent);
-
-      //return;
-
       $('#options-modal').modal('hide');
       this.results = [];
       this.query = '';
@@ -2375,15 +2362,11 @@ __webpack_require__.r(__webpack_exports__);
         if (this.selected_size.sku != '') {
           sku = this.selected_size.sku;
         }
-        console.log('price', price);
-        if (this.selected_size.price || this.selected_size.price != '0.0000') {
+        if (this.selected_size.price || this.selected_size.price != undefined) {
           price = Number(this.selected_product.price) + Number(this.selected_size.price);
-          console.log('price1', price);
-          console.log(this.selected_product.price, this.selected_size.price);
         }
-        if (this.selected_color.price || this.selected_color.price != '0.0000') {
+        if (this.selected_color.price || this.selected_color.price != undefined) {
           price = Number(this.selected_product.price) + Number(this.selected_color.price);
-          console.log('price2', price);
         }
         if (this.parent) {
           if (this.selected_color) {
@@ -2398,7 +2381,7 @@ __webpack_require__.r(__webpack_exports__);
         id: this.selected_product.id,
         sku: sku,
         name: name,
-        image: null,
+        image: this.selected_product.image,
         quantity: 1,
         price: price,
         org_price: this.selected_product.price,
@@ -2406,7 +2389,6 @@ __webpack_require__.r(__webpack_exports__);
         total: price,
         edit: false
       });
-      console.log(this.items);
       this.Recalculate();
     },
     /**
@@ -2462,11 +2444,9 @@ __webpack_require__.r(__webpack_exports__);
      * @constructor
      */
     ChangeRabat: function ChangeRabat(id, event) {
-      console.log(id, event);
       for (var i = 0; i < this.items.length; i++) {
         if (this.items[i].sku == id) {
           var inserted_rabat = Number(event.target.value);
-          console.log(inserted_rabat, this.items[i]);
           if (inserted_rabat < this.items[i].org_price) {
             this.items[i].rabat = inserted_rabat;
             this.items[i].price = Number(this.items[i].org_price) - inserted_rabat;
@@ -2535,7 +2515,6 @@ __webpack_require__.r(__webpack_exports__);
       if (option != 0) {
         if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
           axios.get(location.origin + '/api/v2/products/options/' + option + '?is_parent=' + is_parent).then(function (response) {
-            console.log('response', response);
             if (type == 'color') {
               _this5.size_options = response.data.size.options;
               _this5.setSelectedColor(option);
