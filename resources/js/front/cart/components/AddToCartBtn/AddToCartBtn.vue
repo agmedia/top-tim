@@ -319,10 +319,13 @@ export default {
                         this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2)
                         let price = Number(this.selected_color.price);
 
+                        this.shown_price = this.$store.state.service.setDiscount(this.context_action.discount, this.price);
+
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
 
                     } else {
                         this.price = this.context_product.main_price;
+                        this.shown_price = this.price;
                         this.extra_price = '';
                     }
                 }
@@ -341,18 +344,29 @@ export default {
                     this.selected_size = this.size_options[item];
                     this.size_name = this.selected_size.name;
 
+                    console.log(this.selected_size.price)
+
                     if (this.selected_size.price != '0.0000') {
                         this.price = Number(this.context_product.main_price) + Number(this.selected_size.price);
                         let price = Number(this.selected_size.price);
 
-                        this.shown_price = this.$store.state.service.setDiscount(this.context_action.discount, this.price);
+                        if (this.context_action.discount) {
+                            this.shown_price = this.$store.state.service.setDiscount(this.context_action.discount, this.price);
+                        } else {
+                            this.shown_price = this.price;
+                        }
+
 
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
+
+                        console.log(1111)
 
                     } else {
                         this.price = this.context_product.main_price;
                         this.shown_price = this.price;
                         this.extra_price = '';
+
+                        console.log(2222)
                     }
                 }
 
