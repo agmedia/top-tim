@@ -2349,17 +2349,12 @@ __webpack_require__.r(__webpack_exports__);
           if (this.selected_color.price != '0.0000') {
             this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2);
             var price = Number(this.selected_color.price);
-            if (this.context_action.discount) {
-              this.shown_price = this.$store.state.service.setDiscount(this.context_action.discount, this.price);
-            } else {
-              this.shown_price = this.price;
-            }
             this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
           } else {
             this.price = this.context_product.main_price;
-            this.shown_price = this.price;
             this.extra_price = '';
           }
+          this.shown_price = this.setShowPrice();
         }
       }
       this.size = 0;
@@ -2377,20 +2372,23 @@ __webpack_require__.r(__webpack_exports__);
           if (this.selected_size.price != '0.0000') {
             this.price = Number(this.context_product.main_price) + Number(this.selected_size.price);
             var price = Number(this.selected_size.price);
-            if (this.context_action.discount) {
-              this.shown_price = this.$store.state.service.setDiscount(this.context_action.discount, this.price);
-            } else {
-              this.shown_price = this.price;
-            }
             this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
             console.log(1111);
           } else {
             this.price = this.context_product.main_price;
-            this.shown_price = this.price;
             this.extra_price = '';
             console.log(2222);
           }
+          this.shown_price = this.setShowPrice();
         }
+      }
+    },
+    setShowPrice: function setShowPrice() {
+      if (this.context_action.discount) {
+        var price = Number(this.$store.state.service.setDiscount(this.context_action.discount, this.price)).toFixed(2);
+        return price;
+      } else {
+        return this.price;
       }
     }
   }
