@@ -460,7 +460,7 @@ class Product extends Model
             });
         }
 
-        $key = $product->id . '-' . $user_group_id . '-' . ($return_action ? 1 : 0);
+        $key = $product->id . '-' . $user_group_id . '-' . ($return_action ? '1' : '0');
 
         return Helper::resolveCache('action')->remember($key, config('cache.cart_life'), function () use ($product, $return_action) {
             $special = new Special($product);
@@ -471,14 +471,14 @@ class Product extends Model
                 $dates_ok  = $special->checkDates($action);
 
                 if ($coupon_ok && $dates_ok) {
-                    if ($return_action) {
+                    if ($return_action && $special->isProductOnAction($action)) {
                         $response = $action->toArray();
                         $response['trans'] = $action->translation()->first()->toArray();
 
                         return $response;
+                    } else {
+                        return $special->getDiscountPrice($action);
                     }
-
-                    return $special->getDiscountPrice($action);
                 }
             }
 
