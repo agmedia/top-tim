@@ -413,8 +413,6 @@ class Order extends Model
         $payment = Settings::get('payment', 'list.' . $this->request->payment)->first();
         $shipping = Settings::get('shipping', 'list.' . $this->request->shipping)->first();
 
-        dd($this->request->toArray(), $payment, $shipping);
-
         $updated = $this->where('id', $id)->update([
             'payment_fname'    => $this->request->fname,
             'payment_lname'    => $this->request->lname,
