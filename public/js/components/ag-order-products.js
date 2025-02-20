@@ -2196,6 +2196,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -2384,8 +2401,8 @@ __webpack_require__.r(__webpack_exports__);
         image: this.selected_product.image,
         quantity: 1,
         price: price,
-        org_price: this.selected_product.price,
-        rabat: this.selected_product.price - price,
+        org_price: price,
+        rabat: 0,
         total: price,
         edit: false
       });
@@ -2984,7 +3001,7 @@ var render = function() {
                               attrs: { type: "text" },
                               domProps: { value: product.org_price },
                               on: {
-                                keyup: function($event) {
+                                keydown: function($event) {
                                   if (
                                     !$event.type.indexOf("key") &&
                                     _vm._k(
@@ -2997,7 +3014,9 @@ var render = function() {
                                   ) {
                                     return null
                                   }
+                                  $event.preventDefault()
                                   product.edit = false
+                                  _vm.ChangePrice(product.sku, $event)
                                   _vm.$emit("update")
                                 },
                                 blur: function($event) {
@@ -3050,7 +3069,7 @@ var render = function() {
                               attrs: { type: "text" },
                               domProps: { value: product.rabat },
                               on: {
-                                keyup: function($event) {
+                                keydown: function($event) {
                                   if (
                                     !$event.type.indexOf("key") &&
                                     _vm._k(
@@ -3063,6 +3082,7 @@ var render = function() {
                                   ) {
                                     return null
                                   }
+                                  $event.preventDefault()
                                   product.edit = false
                                   _vm.ChangeRabat(product.sku, $event)
                                   _vm.$emit("update")

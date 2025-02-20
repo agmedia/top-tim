@@ -41,16 +41,33 @@
                         <td>{{ product.name }}</td>
                         <td class="text-center">
                             <div class="form-material" style="padding-top: 0;">
-                                <input type="text" class="form-control py-0" style="height: 26px;" :value="product.quantity" @keyup="ChangeQty(product.sku, $event)" @blur="Recalculate()">
+                                <input type="text"
+                                       class="form-control py-0"
+                                       style="height: 26px;"
+                                       :value="product.quantity"
+                                       @keyup="ChangeQty(product.sku, $event)"
+                                       @blur="Recalculate()">
                             </div>
                         </td>
                         <td class="text-right">
-                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.org_price" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangePrice(product.sku, $event); $emit('update')">
+                            <input v-if="product.edit"
+                                   type="text"
+                                   class="form-control py-0"
+                                   style="height: 26px;"
+                                   :value="product.org_price"
+                                   @keydown.enter="$event.preventDefault(); product.edit=false; ChangePrice(product.sku, $event); $emit('update')"
+                                   @blur="product.edit=false; ChangePrice(product.sku, $event); $emit('update')">
                             <span v-else @click="product.edit=true;">{{ Number(product.org_price).toLocaleString(localization, currency_style) }}</span>
                         </td>
                         <td class="text-right">{{ Number(product.org_price * product.quantity).toLocaleString(localization, currency_style) }}</td>
                         <td class="text-right">
-                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.rabat" @keyup.enter="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')" @blur="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')">
+                            <input v-if="product.edit"
+                                   type="text"
+                                   class="form-control py-0"
+                                   style="height: 26px;"
+                                   :value="product.rabat"
+                                   @keydown.enter="$event.preventDefault(); product.edit=false; ChangeRabat(product.sku, $event); $emit('update')"
+                                   @blur="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')">
                             <span v-else @click="product.edit=true;">-{{ Number((product.rabat) * product.quantity).toLocaleString(localization, currency_style) }}</span>
                         </td>
                         <td class="text-right font-w600">{{ Number(product.total).toLocaleString(localization, currency_style) }}</td>
@@ -334,8 +351,8 @@ export default {
                 image: this.selected_product.image,
                 quantity: 1,
                 price: price,
-                org_price: this.selected_product.price,
-                rabat: this.selected_product.price - price,
+                org_price: price,
+                rabat: 0,
                 total: price,
                 edit: false
             });
