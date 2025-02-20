@@ -319,7 +319,11 @@ export default {
                         this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2)
                         let price = Number(this.selected_color.price);
 
-                        this.shown_price = this.$store.state.service.setDiscount(this.context_action.discount, this.price);
+                        if (this.context_action.discount) {
+                            this.shown_price = this.$store.state.service.setDiscount(this.context_action.discount, this.price);
+                        } else {
+                            this.shown_price = this.price;
+                        }
 
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
 
@@ -355,8 +359,7 @@ export default {
                         } else {
                             this.shown_price = this.price;
                         }
-
-
+                        
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
 
                         console.log(1111)
