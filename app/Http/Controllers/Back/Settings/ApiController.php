@@ -6,6 +6,7 @@ use App\Helpers\Csv;
 use App\Http\Controllers\Controller;
 use App\Models\Back\Jobs;
 use App\Models\Back\Settings\Api\AkademskaKnjigaMk;
+use App\Models\Back\Settings\Api\Export;
 use App\Models\Back\Settings\Api\PlavaKrava;
 use App\Models\Back\Settings\Page;
 use Illuminate\Http\Request;
@@ -122,6 +123,16 @@ class ApiController extends Controller
         ]);
 
         return $request->input('data');
+    }
+
+
+    public function exportProducts(Request $request)
+    {
+        $export = new Export();
+
+        $export->toExcel();
+
+        return response()->json(['success' => $request->toArray()]);
     }
 
 
