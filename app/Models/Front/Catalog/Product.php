@@ -785,10 +785,6 @@ class Product extends Model
     {
         $query = $this->newQuery();
 
-        Log::info($request->toArray());
-        Log::info('IFOVI');
-
-        //$query->active()->hasStock();
         $query->active();
 
         if ($ids && $ids->count() && ! \request()->has('pojam')) {
@@ -844,9 +840,7 @@ class Product extends Model
                         })->get();
 
                     } else {
-                        $brandz = Brand::query()->whereHas('translation', function ($query) use ($value) {
-                            $query->where('slug', $value);
-                        })->first();
+                        $brandz = Brand::query()->where('id', $value)->first();
                     }
                 }
 
@@ -862,8 +856,6 @@ class Product extends Model
             }
 
             $query->where('brand_id', $auts);
-
-           // $query->where('brand_id', $request->input('brand'));
         }
 
         //
