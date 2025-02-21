@@ -79,7 +79,7 @@ class ProductAction extends Model
                       ->orWhere('date_start', '=', null);
             })
             ->where(function (Builder $query) {
-                $query->where('date_end', '<', Carbon::now())
+                $query->where('date_end', '>', Carbon::now())
                       ->orWhere('date_end', '=', null);
             });
     }
