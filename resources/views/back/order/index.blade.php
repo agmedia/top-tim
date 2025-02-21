@@ -12,6 +12,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/orders.orders') }}</h1>
+                <a class="btn btn-hero-success my-2" href="{{ route('orders.create') }}">
+                    <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Nova narudžba</span>
+                </a>
             </div>
         </div>
     </div>

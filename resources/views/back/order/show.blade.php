@@ -36,9 +36,9 @@
                         <tr>
                             <th class="text-center" style="width: 100px;">{{ __('back/orders.slika') }}</th>
                             <th>{{ __('back/orders.naziv') }}</th>
-                            <th>{{ __('back/orders.polica') }}</th>
                             <th class="text-center">{{ __('back/orders.kol') }}</th>
                             <th class="text-right" style="width: 10%;">{{ __('back/orders.cijena') }}</th>
+                            <th class="text-right" style="width: 10%;">Rabat</th>
                             <th class="text-right" style="width: 10%;">{{ __('back/orders.ukupno') }}</th>
                         </tr>
                         </thead>
@@ -50,18 +50,12 @@
                                     </a>
                                 </td>
                                 <td><strong>{{ $product->name }} -  {{ $product->product->sku }}</strong></td>
-                                <td>{{ $product->product->polica }}</td>
                                 <td class="text-center"><strong>{{ $product->quantity }}</strong></td>
 
-                               @if ($product->discount != 0)
 
-                                <td class="text-right"><s>{{ number_format($product->org_price, 2, ',', '.') }} </s> <br>{{ number_format($product->price, 2, ',', '.') }}</td>
-                                @else
+                                <td class="text-right">{{ number_format($product->org_price, 2, ',', '.') }}</td>
 
-                                <td class="text-right">{{ number_format($product->price, 2, ',', '.') }}</td>
-
-                                @endif
-
+                                <td class="text-right">({{ number_format($product->discount, 0) }}%)</td>
 
                                 <td class="text-right">{{ number_format($product->total, 2, ',', '.') }}</td>
                             </tr>

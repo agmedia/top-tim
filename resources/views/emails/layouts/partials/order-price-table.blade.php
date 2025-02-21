@@ -41,6 +41,7 @@
 
         <th style="text-align: center;" width="10%">{{ __('front/cart.kol') }}</th>
         <th style="text-align: right;" width="20%">{{ __('front/cart.cijena') }}</th>
+        <th style="text-align: right;" width="20%">Rabat</th>
         <th style="text-align: right;" width="20%">{{ __('front/cart.ukupno') }}</th>
     </tr>
     @foreach ($order->products as $product)
@@ -48,17 +49,8 @@
             <td><img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="60px"/> </td>
             <td>{{ $product->name }} </td>
             <td style="text-align: center;">{{ $product->quantity }}</td>
-
-            @if ($product->discount != 0)
-
-            <td style="text-align: right;"><s>{{ number_format($product->org_price, 2, ',', '.') }} </s> <br>{{ number_format($product->price, 2, ',', '.') }}</td>
-            @else
-
-            <td style="text-align: right;">{{ number_format($product->price, 2, ',', '.') }}</td>
-
-           @endif
-
-
+            <td style="text-align: right;">{{ number_format($product->org_price, 2, ',', '.') }}</td>
+            <td style="text-align: right;">{{ number_format($product->discount, 0) }} %</td>
             <td style="text-align: right;">€ {{ number_format($product->total, 2, ',', '.') }}</td>
         </tr>
     @endforeach
@@ -81,10 +73,10 @@
 <small style="text-align: right;"> {{ __('front/cart.pdv_ukljucen') }}
     @foreach ($order->totals as $total)
         @if($total->code == 'subtotal')
-        €<strong>{{ number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong>  {{ __('front/cart.pdv_artikli') }}
-    @elseif ($total->code == 'shipping')
-        €<strong>{{number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong> {{ __('front/cart.pdv_dostava') }}
-    @endif
+            €<strong>{{ number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong>  {{ __('front/cart.pdv_artikli') }}
+        @elseif ($total->code == 'shipping')
+            €<strong>{{number_format($total->value - ($total->value / 1.25 ), 2, ',', '.') }}</strong> {{ __('front/cart.pdv_dostava') }}
+        @endif
     @endforeach
 </small>
 

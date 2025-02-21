@@ -1,23 +1,23 @@
 <template>
     <div class="cart pb-2 mb-2">
         <div class="mb-1" v-if="Number(context_product.main_price) > Number(context_product.main_special)">
-            <span class="h3 fw-bold font-title text-blue me-1">{{ context_product.main_special_text }}</span>
-            <span class="text-muted fs-lg me-3"><strike>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price)  }}</strike></span>
+            <span class="h3 fw-bold font-title text-blue me-1">{{ shown_price }} €</span>
+            <span class="text-muted fs-lg me-3"><strike>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(price) }}</strike></span>
         </div>
         <div class="mb-1" v-else>
-            <span class="h3 fw-bold font-title text-blue me-1">{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price) }}</span>
+            <span class="h3 fw-bold font-title text-blue me-1">{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}</span>
         </div>
 
         <div class="mb-1 mt-1 text-start" v-if="Number(context_product.main_price) > Number(context_product.main_special)">
-            <span class="fs-sm text-muted me-1">{{ trans.lowest_price }}: {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price)  }}</span>
+            <span class="fs-sm text-muted me-1">{{ trans.lowest_price }}: {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}</span>
         </div>
 
         <div class="mb-1 mt-1 text-start">
             <span class="fs-xs text-muted me-1">{{ trans.pdv }}</span>
         </div>
 
-        <div class="mb-3" >
-            <span class=" fs-xs  text-blue me-1">{{ trans.nopdv }}: {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( price / 1.25) }} </span>
+        <div class="mb-3">
+            <span class="fs-xs text-blue me-1">{{ trans.nopdv }}: {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format( shown_price / 1.25) }} </span>
         </div>
 
 
@@ -37,13 +37,10 @@
             <div class="mb-3" >
                 <div class="d-flex justify-content-between align-items-center pb-1 opac">
                     <label class="form-label" for="product-size"><span class="text-danger">*</span>{{ trans.velicina }}: <span class="text-muted">{{ size_name }}</span></label>
-
-
-
                 </div>
                 <select class="form-select" required id="product-size" v-model="size">
                     <option value="0">{{ trans.velicina }} </option>
-                    <option v-for="option in size_options" :disabled="!option.active" v-bind:value="option.id">{{ option.name }} </option>
+                    <option v-for="option in size_options" :disabled="!option.active" v-bind:value="option.id">{{ option.name }}</option>
                 </select>
             </div>
         </div>
@@ -70,7 +67,7 @@ export default {
         product: String,
         available: String,
         options: String,
-
+        action: String,
     },
 
     data() {
@@ -93,7 +90,9 @@ export default {
             extra_price: '',
             context_product: {},
             price: 0,
-            size_disabled: false
+            size_disabled: false,
+            context_action: {},
+            shown_price: 0,
         }
     },
     //
@@ -110,21 +109,20 @@ export default {
     //
     beforeMount() {
         this.context_product = JSON.parse(this.product);
+        this.id              = this.context_product.id;
+        this.price           = this.context_product.main_price;
+        this.shown_price     = this.price;
 
-
-        this.id = this.context_product.id;
-        this.price = this.context_product.main_price;
+        this.context_action = JSON.parse(this.action);
     },
     //
     mounted() {
-
-
-
         let cart = this.$store.state.storage.getCart();
 
-        setTimeout(() => {
+        /*setTimeout(() => {
             this.price = this.context_product.main_price;
-        }, 200);
+            this.shown_price = this.price;
+        }, 200);*/
 
         if (cart) {
             for (const key in cart.items) {
@@ -134,10 +132,13 @@ export default {
             }
         }
 
+        console.log(this.price, this.shown_price)
+
         this.is_available = this.available;
 
         this.setOptionsSelection();
         this.checkAvailability();
+        this.setPrice();
     },
 
     methods: {
@@ -155,6 +156,15 @@ export default {
 
             this.size_options = res.size ? res.size.options : {};
             this.color_options = res.color ? res.color.options : {};
+        },
+
+        setPrice() {
+            if (Number(this.context_product.main_price) > Number(this.context_product.main_special)) {
+                this.price           = this.context_product.main_price;
+                this.shown_price     = this.context_product.main_special;
+
+                console.log(this.shown_price)
+            }
         },
 
         /**
@@ -308,12 +318,14 @@ export default {
                     if (this.selected_color.price != '0.0000') {
                         this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2)
                         let price = Number(this.selected_color.price);
-
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
+
                     } else {
                         this.price = this.context_product.main_price;
                         this.extra_price = '';
                     }
+
+                    this.shown_price = this.setShowPrice();
                 }
             }
 
@@ -330,17 +342,37 @@ export default {
                     this.selected_size = this.size_options[item];
                     this.size_name = this.selected_size.name;
 
-                    if (this.selected_size.price != '0.0000') {
-                        this.price = Number(this.context_product.main_price) + Number(this.selected_size.price)
-                        let price = Number(this.selected_size.price);
+                    console.log(this.selected_size.price)
 
+                    if (this.selected_size.price != '0.0000') {
+                        this.price = Number(this.context_product.main_price) + Number(this.selected_size.price);
+                        let price = Number(this.selected_size.price);
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
+
+                        console.log(1111)
+
                     } else {
-                        this.price = this.context_product.main_price
+                        this.price = this.context_product.main_price;
                         this.extra_price = '';
+
+                        console.log(2222)
                     }
+
+                    this.shown_price = this.setShowPrice();
                 }
 
+            }
+        },
+
+
+        setShowPrice() {
+            if (this.context_action.discount) {
+                let price = Number(this.$store.state.service.setDiscount(this.context_action.discount, this.price)).toFixed(2);
+
+                return price;
+
+            } else {
+                return this.price;
             }
         }
     }

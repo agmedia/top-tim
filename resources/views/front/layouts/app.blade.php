@@ -110,8 +110,8 @@
 <script src="{{ asset('vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js') }}"></script>
 <script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
-    <!-- Main theme script-->
-<script src="{{ asset('js/cart.js?v=2.2.8') }}"></script>
+    <!-- Main theme script ?v=2.2.9 -->
+<script src="{{ asset('js/cart.js?v=2.2.9') }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {

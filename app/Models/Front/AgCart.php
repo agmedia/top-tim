@@ -463,8 +463,8 @@ class AgCart extends Model
         $response = [
             'id'              => $item_data['id'],
             'name'            => $item_data['name'],
-            'price'           => $product->price,
-            'price_text'      => Currency::main($product->price, true),
+            'price'           => $item_data['price'],
+            'price_text'      => Currency::main($item_data['price'], true),
             'sec_price'       => $product->secondary_price,
             'quantity'        => $request['item']['quantity'],
             'associatedModel' => $product,
@@ -472,14 +472,13 @@ class AgCart extends Model
         ];
 
         $conditions = $this->structureCartItemConditions($product, $request);
-        $price = $product->price;
 
         foreach ($conditions as $condition) {
             $value = $condition->getValue();
 
             if ($value) {
                 //$response['price'] = $price + $condition->getValue();
-                $response['price_text'] = Currency::main($price + $condition->getValue(), true);
+                $response['price_text'] = Currency::main($item_data['price'] + $condition->getValue(), true);
             }
         }
 
@@ -505,7 +504,8 @@ class AgCart extends Model
     {
         $data = [
             'id'   => $product->sku,
-            'name' => $product->name
+            'name' => $product->name,
+            'price' => $product->price
         ];
 
         if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
@@ -515,6 +515,7 @@ class AgCart extends Model
                 $data = [
                     'id'   => $product_option->sku,
                     'name' => $product->name . ', ' . CartHelper::resolveItemOptionName($product_option),
+                    'price' => $product->price + $product_option->price,
                 ];
             }
         }
@@ -574,37 +575,41 @@ class AgCart extends Model
      */
     private function structureCartItemConditions(Product $product, Request $request): array
     {
+        $product_option_price = null;
         $conditions = [];
 
+        if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
+            $product_option = ProductOption::getFromCartData($request['item']['options']);
+
+            if ($product_option && $product_option->price != 0) {
+                $product_option_price = $product_option->price;
+            }
+        }
+
         // Ako artikl ima akciju.
-        if ($product->special()) {
+        $discount = Product::getSpecial($product->id, $product_option_price);
+
+        if ($discount) {
             $coupon = $product->coupon();
+            $price = $product->price;
+
+            if ($product_option_price) {
+                $price = $product->price + $product_option_price;
+            }
 
             if ($coupon) {
                 $conditions[] = new CartCondition([
                     'name'   => 'Kupon akcija',
                     'type'   => 'coupon',
                     'target' => $coupon,
-                    'value'  => -($product->price - $product->special())
+                    'value'  => -($price - $discount)
                 ]);
             } else {
                 $conditions[] = new CartCondition([
                     'name'   => 'Akcija',
                     'type'   => 'promo',
                     'target' => '',
-                    'value'  => -($product->price - $product->special())
-                ]);
-            }
-        }
-
-        if (isset($request['item']['options']) && isset($request['item']['options']['option_id'])) {
-            $product_option = ProductOption::getFromCartData($request['item']['options']);
-
-            if ($product_option && $product_option->price != 0) {
-                $conditions[] = new CartCondition([
-                    'name'  => CartHelper::resolveItemOptionName($product_option),
-                    'type'  => 'option',
-                    'value' => $product_option->price
+                    'value'  => -($price - $discount)
                 ]);
             }
         }

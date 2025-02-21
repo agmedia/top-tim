@@ -272,6 +272,18 @@ class AgService {
     }
 
     /**
+     * Set discount and get result on price.
+     *
+     * @param items
+     * @return {string}
+     */
+    setDiscount(discount, price) {
+        let amount = price - (price * (discount / 100));
+
+        return Math.round(amount).toFixed(0);
+    }
+
+    /**
      * Calculate tax on items.
      * Item can be number or object.
      *

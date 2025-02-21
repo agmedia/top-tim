@@ -332,6 +332,7 @@ Route::prefix('api/v2')->group(function () {
         Route::prefix('api')->group(function () {
             Route::post('import', [ApiController::class, 'import'])->name('api.api.import');
             Route::post('upload/excel', [ApiController::class, 'upload'])->name('api.api.upload');
+            Route::post('export/products', [ApiController::class, 'exportProducts'])->name('api.api.export.products');
         });
         // SYSTEM
         Route::prefix('system')->group(function () {

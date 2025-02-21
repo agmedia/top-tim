@@ -41,16 +41,33 @@
                         <td>{{ product.name }}</td>
                         <td class="text-center">
                             <div class="form-material" style="padding-top: 0;">
-                                <input type="text" class="form-control py-0" style="height: 26px;" :value="product.quantity" @keyup="ChangeQty(product.sku, $event)" @blur="Recalculate()">
+                                <input type="text"
+                                       class="form-control py-0"
+                                       style="height: 26px;"
+                                       :value="product.quantity"
+                                       @keyup="ChangeQty(product.sku, $event)"
+                                       @blur="Recalculate()">
                             </div>
                         </td>
                         <td class="text-right">
-                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.org_price" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangePrice(product.sku, $event); $emit('update')">
+                            <input v-if="product.edit"
+                                   type="text"
+                                   class="form-control py-0"
+                                   style="height: 26px;"
+                                   :value="product.org_price"
+                                   @keydown.enter="$event.preventDefault(); product.edit=false; ChangePrice(product.sku, $event); $emit('update')"
+                                   @blur="product.edit=false; ChangePrice(product.sku, $event); $emit('update')">
                             <span v-else @click="product.edit=true;">{{ Number(product.org_price).toLocaleString(localization, currency_style) }}</span>
                         </td>
                         <td class="text-right">{{ Number(product.org_price * product.quantity).toLocaleString(localization, currency_style) }}</td>
                         <td class="text-right">
-                            <input v-if="product.edit" type="text" class="form-control py-0" style="height: 26px;" :value="product.rabat" @keyup.enter="product.edit=false; $emit('update')" @blur="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')">
+                            <input v-if="product.edit"
+                                   type="text"
+                                   class="form-control py-0"
+                                   style="height: 26px;"
+                                   :value="product.rabat"
+                                   @keydown.enter="$event.preventDefault(); product.edit=false; ChangeRabat(product.sku, $event); $emit('update')"
+                                   @blur="product.edit=false; ChangeRabat(product.sku, $event); $emit('update')">
                             <span v-else @click="product.edit=true;">-{{ Number((product.rabat) * product.quantity).toLocaleString(localization, currency_style) }}</span>
                         </td>
                         <td class="text-right font-w600">{{ Number(product.total).toLocaleString(localization, currency_style) }}</td>
@@ -200,8 +217,6 @@ export default {
             this.products_local = JSON.parse(this.products)
             this.totals_local = JSON.parse(this.totals)
             this.Sort()
-
-            console.log(this.products_local)
         }
     },
     //
@@ -238,8 +253,6 @@ export default {
             this.selected_product = selected;
 
             axios.get(this.products_options_url, {params: {id: selected.id}}).then(response => {
-                console.log('select(response)', response)
-
                 if ((response.data.size && Object.keys(response.data.size).length) || (response.data.color && Object.keys(response.data.color).length)) {
                     $('#options-modal').modal('show');
                     this.setOptionsSelection(response.data);
@@ -256,17 +269,12 @@ export default {
 
             this.parent = res.parent ? res.parent : null;
 
-            console.log('this.parent', this.parent)
-
             if (!this.parent) {
                 this.size_disabled = true;
             }
 
             this.size_options = res.size ? res.size.options : {};
             this.color_options = res.color ? res.color.options : {};
-
-            console.log('this.size_options', this.size_options)
-            console.log('this.color_options', this.color_options)
         },
 
 
@@ -303,13 +311,6 @@ export default {
 
 
         addOption() {
-            console.log(this.selected_product)
-            console.log(this.selected_color)
-            console.log(this.selected_size)
-            console.log(this.size, this.color, this.parent)
-
-            //return;
-
             $('#options-modal').modal('hide');
             this.results = [];
             this.query = '';
@@ -326,18 +327,11 @@ export default {
                     sku = this.selected_size.sku;
                 }
 
-                console.log('price', price)
-
-                if (this.selected_size.price || this.selected_size.price != '0.0000') {
+                if (this.selected_size.price || this.selected_size.price != undefined) {
                     price = Number(this.selected_product.price) + Number(this.selected_size.price)
-
-                    console.log('price1', price)
-                    console.log(this.selected_product.price, this.selected_size.price)
                 }
-                if (this.selected_color.price || this.selected_color.price != '0.0000') {
+                if (this.selected_color.price || this.selected_color.price != undefined) {
                     price = Number(this.selected_product.price) + Number(this.selected_color.price)
-
-                    console.log('price2', price)
                 }
 
                 if (this.parent) {
@@ -354,16 +348,14 @@ export default {
                 id: this.selected_product.id,
                 sku: sku,
                 name: name,
-                image: null,
+                image: this.selected_product.image,
                 quantity: 1,
                 price: price,
-                org_price: this.selected_product.price,
-                rabat: this.selected_product.price - price,
+                org_price: price,
+                rabat: 0,
                 total: price,
                 edit: false
             });
-
-            console.log(this.items);
 
             this.Recalculate();
         },
@@ -438,7 +430,7 @@ export default {
                     }
                 }
             }
-            this.Recalculate();
+            //this.Recalculate();
         },
 
         /**
@@ -505,7 +497,6 @@ export default {
             if (option != 0) {
                 if (Object.keys(this.color_options).length && Object.keys(this.size_options).length) {
                     axios.get(location.origin + '/api/v2/products/options/' + option + '?is_parent=' + is_parent).then(response => {
-                        console.log('response', response);
                         if (type == 'color') {
                             this.size_options = response.data.size.options;
                             this.setSelectedColor(option);

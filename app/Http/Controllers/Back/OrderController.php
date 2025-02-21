@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +42,12 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('back.order.edit');
+        $countries = Country::list();
+        $statuses  = Settings::get('order', 'statuses');
+        $shippings = Settings::getList('shipping');
+        $payments  = Settings::getList('payment');
+
+        return view('back.order.edit', compact('countries', 'statuses', 'shippings', 'payments'));
     }
 
 
@@ -91,9 +97,9 @@ class OrderController extends Controller
     public function edit(Order $order)
     {
         $countries = Country::list();
-        $statuses = Settings::get('order', 'statuses');
+        $statuses  = Settings::get('order', 'statuses');
         $shippings = Settings::getList('shipping');
-        $payments = Settings::getList('payment');
+        $payments  = Settings::getList('payment');
 
         return view('back.order.edit', compact('order', 'countries', 'statuses', 'shippings', 'payments'));
     }
@@ -126,7 +132,9 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request) {}
+    public function destroy(Request $request)
+    {
+    }
 
 
     /**
@@ -170,18 +178,20 @@ class OrderController extends Controller
                     dispatch(function () use ($order) {
                         Mail::to($order->payment_email)->send(new StatusPaid($order));
                     });
-                } else if ($request->input('status') == config('settings.order.status.canceled')) {
-                    $order = Order::find($request->input('order_id'));
-
-                    dispatch(function () use ($order) {
-                        Mail::to($order->payment_email)->send(new StatusCanceled($order));
-                    });
                 } else {
-                    $order = Order::find($request->input('order_id'));
+                    if ($request->input('status') == config('settings.order.status.canceled')) {
+                        $order = Order::find($request->input('order_id'));
 
-                    dispatch(function () use ($order) {
-                        Mail::to($order->payment_email)->send(new StatusUpdated($order));
-                    });
+                        dispatch(function () use ($order) {
+                            Mail::to($order->payment_email)->send(new StatusCanceled($order));
+                        });
+                    } else {
+                        $order = Order::find($request->input('order_id'));
+
+                        dispatch(function () use ($order) {
+                            Mail::to($order->payment_email)->send(new StatusUpdated($order));
+                        });
+                    }
                 }
 
             }
@@ -206,7 +216,7 @@ class OrderController extends Controller
 
         $order = Order::where('id', $request->input('order_id'))->first();
 
-        $gls = new Gls($order);
+        $gls   = new Gls($order);
         $label = $gls->resolve();
 
         if (isset($label['ParcelIdList'])) {

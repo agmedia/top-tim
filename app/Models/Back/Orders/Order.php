@@ -4,7 +4,7 @@ namespace App\Models\Back\Orders;
 
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\Users\Client;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -155,7 +155,7 @@ class Order extends Model
             'lname'           => 'required',
             'address'         => 'required',
             'city'            => 'required',
-            'state'            => 'required',
+            'state'           => 'required',
             'zip'             => 'required',
             'email'           => 'required',
             'items'           => 'required',
@@ -358,7 +358,15 @@ class Order extends Model
         $payment = Settings::get('payment', 'list.' . $this->request->payment)->first();
         $shipping = Settings::get('shipping', 'list.' . $this->request->shipping)->first();
 
+        $has_user = User::query()->where('email', $this->request->email)->first();
+
+        $this->request->merge([
+            'sums' => OrderTotal::makeFromItems($this->request->toArray(), $payment, $shipping)
+        ]);
+
         $id = $this->insertGetId([
+            'user_id'          => $has_user ? $has_user->id : 0,
+            'order_status_id'  => config('settings.order.new_status'),
             'payment_fname'    => $this->request->fname,
             'payment_lname'    => $this->request->lname,
             'payment_address'  => $this->request->address,
@@ -367,16 +375,17 @@ class Order extends Model
             'payment_state'    => $this->request->state,
             'payment_phone'    => $this->request->phone ?: null,
             'payment_email'    => $this->request->email,
-            'payment_method'   => $payment->title,
+            'payment_method'   => $payment->title->{current_locale()},
             'payment_code'     => $payment->code,
             'shipping_fname'   => $this->request->fname,
             'shipping_lname'   => $this->request->lname,
             'shipping_address' => $this->request->address,
             'shipping_zip'     => $this->request->zip,
             'shipping_city'    => $this->request->city,
+            'shipping_state'   => $this->request->state,
             'shipping_phone'   => $this->request->phone ?: null,
             'shipping_email'   => $this->request->email,
-            'shipping_method'  => $shipping->title,
+            'shipping_method'  => $shipping->title->{current_locale()},
             'shipping_code'    => $shipping->code,
             'company'          => isset($this->request->company) ? $this->request->company : null,
             'oib'              => isset($this->request->oib) ? $this->request->oib : null,

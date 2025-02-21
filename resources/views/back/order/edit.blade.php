@@ -8,7 +8,7 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/orders.narudzba_edit') }} <small class="font-weight-light">#_</small><strong>{{ $order->id }}</strong></h1>
+                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/orders.narudzba_edit') }} <small class="font-weight-light">#_</small><strong>{{ isset($order) ? $order->id : '' }}</strong></h1>
             </div>
         </div>
     </div>
@@ -152,56 +152,58 @@
             </div>
             <!-- END Customer -->
 
-            <!-- Log Messages -->
-            <div class="block block-rounded">
-                <div class="block-header block-header-default">
-                    <h3 class="block-title">{{ __('back/orders.povijest_narudzbe') }}</h3>
-                    <div class="block-options">
-                        <div class="dropdown">
-                            <button type="button" class="btn btn-alt-secondary" id="btn-add-comment">
-                                {{ __('back/orders.dodaj_komentar') }}
-                            </button>
-                            <button type="button" class="btn btn-light" id="dropdown-ecom-filters" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ __('back/orders.promjeni_status') }}
-                                <i class="fa fa-angle-down ml-1"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-ecom-filters">
-                                @foreach ($statuses as $status)
-                                    <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:setStatus({{ $status->id }});">
-                                        <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title->{ current_locale() } }}</span>
-                                    </a>
-                                @endforeach
+            @if(isset($order))
+                <!-- Log Messages -->
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">{{ __('back/orders.povijest_narudzbe') }}</h3>
+                        <div class="block-options">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-alt-secondary" id="btn-add-comment">
+                                    {{ __('back/orders.dodaj_komentar') }}
+                                </button>
+                                <button type="button" class="btn btn-light" id="dropdown-ecom-filters" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ __('back/orders.promjeni_status') }}
+                                    <i class="fa fa-angle-down ml-1"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-ecom-filters">
+                                    @foreach ($statuses as $status)
+                                        <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:setStatus({{ $status->id }});">
+                                            <span class="badge badge-pill badge-{{ $status->color }}">{{ $status->title->{ current_locale() } }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="block-content">
-                    <table class="table table-borderless table-striped table-vcenter font-size-sm">
-                        <tbody>
-                        @foreach ($order->history as $record)
-                            <tr>
-                                <td class="font-size-base">
-                                    @if ($record->status)
-                                        <span class="badge badge-pill badge-{{ $record->status->color }}">{{ $record->status->title->{ current_locale() } }}</span>
-                                    @else
-                                        <small>{{ __('back/orders.komentar') }}</small>
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="font-w600">{{ \Illuminate\Support\Carbon::make($record->created_at)->locale('hr_HR')->diffForHumans() }}</span> /
-                                    <span class="font-weight-light">{{ \Illuminate\Support\Carbon::make($record->created_at)->format('d.m.Y - h:i') }}</span>
-                                </td>
-                                <td>
-                                    <a href="javascript:void(0)">{{ $record->user ? $record->user->name : $record->order->shipping_fname . ' ' . $record->order->shipping_lname }}</a>
-                                </td>
-                                <td>{{ $record->comment }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                    <div class="block-content">
+                        <table class="table table-borderless table-striped table-vcenter font-size-sm">
+                            <tbody>
+                            @foreach ($order->history as $record)
+                                <tr>
+                                    <td class="font-size-base">
+                                        @if ($record->status)
+                                            <span class="badge badge-pill badge-{{ $record->status->color }}">{{ $record->status->title->{ current_locale() } }}</span>
+                                        @else
+                                            <small>{{ __('back/orders.komentar') }}</small>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="font-w600">{{ \Illuminate\Support\Carbon::make($record->created_at)->locale('hr_HR')->diffForHumans() }}</span> /
+                                        <span class="font-weight-light">{{ \Illuminate\Support\Carbon::make($record->created_at)->format('d.m.Y - h:i') }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0)">{{ $record->user ? $record->user->name : $record->order->shipping_fname . ' ' . $record->order->shipping_lname }}</a>
+                                    </td>
+                                    <td>{{ $record->comment }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="block">
                 <div class="block-content">
@@ -222,52 +224,54 @@
 @endsection
 
 @push('modals')
-    <div class="modal fade" id="comment-modal" tabindex="-1" role="dialog" aria-labelledby="comment--modal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-popout" role="document">
-            <div class="modal-content rounded">
-                <div class="block block-themed block-transparent mb-0">
-                    <div class="block-header bg-primary">
-                        <h3 class="block-title">{{ __('back/orders.dodaj_komentar') }}</h3>
-                        <div class="block-options">
-                            <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="block-content">
-                        <div class="row justify-content-center mb-3">
-                            <div class="col-md-10">
-                                <div class="form-group mb-4">
-                                    <label for="status-select">{{ __('back/orders.promjeni_status') }}</label>
-                                    <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/orders.promjeni_status_narudzbe') }}">
-                                        <option value="0">{{ __('back/orders.bez_promjene_statusa') }}</option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}">{{ $status->title->{ current_locale() } }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="comment-input">{{ __('back/orders.komentar') }}</label>
-                                    <textarea class="form-control" name="comment" id="comment-input" rows="7"></textarea>
-                                </div>
-
-                                <input type="hidden" name="order_id" value="{{ $order->id }}">
+    @if(isset($order))
+        <div class="modal fade" id="comment-modal" tabindex="-1" role="dialog" aria-labelledby="comment--modal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-popout" role="document">
+                <div class="modal-content rounded">
+                    <div class="block block-themed block-transparent mb-0">
+                        <div class="block-header bg-primary">
+                            <h3 class="block-title">{{ __('back/orders.dodaj_komentar') }}</h3>
+                            <div class="block-options">
+                                <a class="text-muted font-size-h3" href="#" data-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-times"></i>
+                                </a>
                             </div>
                         </div>
-                    </div>
-                    <div class="block-content block-content-full text-right bg-light">
-                        <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
-                            {{ __('back/orders.odustani') }} <i class="fa fa-times ml-2"></i>
-                        </a>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); changeStatus();">
-                            {{ __('back/orders.snimi') }} <i class="fa fa-arrow-right ml-2"></i>
-                        </button>
+                        <div class="block-content">
+                            <div class="row justify-content-center mb-3">
+                                <div class="col-md-10">
+                                    <div class="form-group mb-4">
+                                        <label for="status-select">{{ __('back/orders.promjeni_status') }}</label>
+                                        <select class="js-select2 form-control" id="status-select" name="status" style="width: 100%;" data-placeholder="{{ __('back/orders.promjeni_status_narudzbe') }}">
+                                            <option value="0">{{ __('back/orders.bez_promjene_statusa') }}</option>
+                                            @foreach ($statuses as $status)
+                                                <option value="{{ $status->id }}">{{ $status->title->{ current_locale() } }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="comment-input">{{ __('back/orders.komentar') }}</label>
+                                        <textarea class="form-control" name="comment" id="comment-input" rows="7"></textarea>
+                                    </div>
+
+                                    <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full text-right bg-light">
+                            <a class="btn btn-sm btn-light" data-dismiss="modal" aria-label="Close">
+                                {{ __('back/orders.odustani') }} <i class="fa fa-times ml-2"></i>
+                            </a>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="event.preventDefault(); changeStatus();">
+                                {{ __('back/orders.snimi') }} <i class="fa fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 @endpush
 
 @push('js_after')
@@ -304,7 +308,7 @@
          */
         function changeStatus() {
             let item = {
-                order_id: {{ $order->id }},
+                order_id: {{ (isset($order) ? $order->id : 0) }},
                 comment: $('#comment-input').val(),
                 status: $('#status-select').val()
             };

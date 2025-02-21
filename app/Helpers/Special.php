@@ -29,6 +29,11 @@ class Special
     protected $product;
 
     /**
+     * @var float|int|null
+     */
+    protected $product_option_price;
+
+    /**
      * @var ProductAction|null
      */
     protected $action;
@@ -48,10 +53,11 @@ class Special
      * @param Product|null       $product
      * @param ProductAction|null $product_action
      */
-    public function __construct(Product $product = null)
+    public function __construct(Product $product = null, float|null $option_price = null)
     {
         $this->user    = Auth::user();
         $this->product = $product;
+        $this->product_option_price = $option_price ?: 0;
 
         if ($this->user) {
             $this->user_group = $this->user->details->group ? $this->user->details->group->id : 0;
@@ -123,16 +129,18 @@ class Special
     public function getDiscountPrice(ProductAction|null $product_action = null): float|int
     {
         $action = $this->resolveRealAction($product_action);
+        $product_price = $this->product->price + $this->product_option_price;
 
         if ( ! $action) {
-            return $this->product->price;
+            return $product_price;
         }
 
         if ($this->isProductOnAction($action)) {
-            return Helper::calculateDiscountPrice($this->product->price, $action->discount, $action->type);
-        }
+            return Helper::calculateDiscountPrice($product_price, $action->discount, $action->type);
 
-        return $this->product->price;
+        } else {
+            return $product_price;
+        }
     }
 
 
@@ -261,7 +269,7 @@ class Special
     public function getBestAction()
     {
         if ($this->active_actions->count() > 1) {
-            $price          = $this->product->price;
+            $price          = $this->product->price + $this->product_option_price;
             $best_action_id = 0;
 
             foreach ($this->active_actions as $action) {

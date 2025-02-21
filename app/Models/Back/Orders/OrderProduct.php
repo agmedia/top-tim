@@ -61,7 +61,7 @@ class OrderProduct extends Model
         self::where('order_id', $order_id)->delete();
 
         foreach ($products as $product) {
-            $discount = null;
+            $discount = 0;
 
             if ($product->price < $product->org_price) {
                 $discount = (intval($product->price) / intval($product->org_price) * 100) - 100;
@@ -105,7 +105,7 @@ class OrderProduct extends Model
         foreach ($products as $product) {
             $price    = $product->price;
             $model    = $product->associatedModel;
-            $discount = null;
+            $discount = 0;
 
             if ( ! empty($product->conditions)) {
                 $price = $product->price - $product->conditions->parsedRawValue;
