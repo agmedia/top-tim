@@ -840,7 +840,13 @@ class Product extends Model
                         })->get();
 
                     } else {
-                        $brandz = Brand::query()->where('id', $value)->first();
+                        $brandz = Brand::query()->whereHas('translations', function ($query) use ($value) {
+                            $query->where('slug', $value);
+                        })->first();
+
+                        if ( ! $brandz) {
+                            $brandz = Brand::query()->where('id', $value)->first();
+                        }
                     }
                 }
 
