@@ -218,7 +218,7 @@ export default {
         this.checkCategory();
         this.getCategories();
 
-        if (this.brand === '') {
+        if (this.brand === '' && ! window.location.pathname.includes('/brand/')) {
             this.show_brands = true;
             this.getBrands();
         }

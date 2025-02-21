@@ -3787,7 +3787,7 @@ Vue.directive('tooltip', function (el, binding) {
     this.checkQuery(this.$route);
     this.checkCategory();
     this.getCategories();
-    if (this.brand === '') {
+    if (this.brand === '' && !window.location.pathname.includes('/brand/')) {
       this.show_brands = true;
       this.getBrands();
     }
