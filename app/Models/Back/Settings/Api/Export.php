@@ -83,7 +83,6 @@ class Export
 
         $products = Product::query()
                            ->with('translation', 'images', 'categories', 'subcategories', 'options', 'attributes')
-                           ->take(200)
                            ->get();
 
         foreach ($products as $product) {
