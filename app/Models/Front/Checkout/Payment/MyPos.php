@@ -116,7 +116,8 @@ class MyPos
         }
 
         if ($order_total < $products_total) {
-            $discount = $order_total - $products_total;
+            $discount = number_format($order_total - $products_total, 2, '.', '');
+            
             $cart->add('Popust', 1, $discount);
         }
 
