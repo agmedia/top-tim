@@ -645,23 +645,4 @@ class DashboardController extends Controller
         return redirect()->route('dashboard')->with(['success' => 'PDV je obnovljen na kategoriji svezalice..! ' . $ids->count() . ' proizvoda obnovljeno.']);
     }
 
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function exportToExcel(Request $request)
-    {
-        $export = new Export();
-
-        $exported = $export->toExcel();
-
-        if ($exported) {
-            return redirect()->route('dashboard')->with(['success' => 'Proizvodi su exportani!']);
-        }
-
-        return redirect()->route('dashboard')->with(['error' => 'Greška prilikom Exporta, molimo pokušajte ponovo ili kontaktirajte administratora!']);
-    }
-
 }

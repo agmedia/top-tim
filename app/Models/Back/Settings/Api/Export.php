@@ -175,6 +175,83 @@ class Export
 
 
     /**
+     * @return int
+     */
+    public function toSimpleExcel()
+    {
+        $name = 'TopTim_Simple_Excel_Export';
+        $job = new Jobs();
+        $job->start('cron', 'Pošalji simple excel report', '', ApiHelper::response(0, 'Nije završen'));
+
+        //
+        $spreadsheet = new Spreadsheet();
+        $active_sheet = $spreadsheet->getActiveSheet();
+
+        $active_sheet->setTitle($name);
+
+        for ($i = 0; $i < count($this->excel_keys); $i++) {
+            $active_sheet->setCellValue($this->coordinate_letters[$i] . '1', $this->excel_keys[$i]);
+        }
+
+        $row = 2;
+
+        $products = Product::query()
+                           ->with('translation'/*, 'categories', 'subcategories', 'attributes'*/)
+                           ->get();
+
+        foreach ($products as $product) {
+            /*$images = $this->setImagesString($product);
+            $sizeguide_id = $this->getSizeGuideID($product);
+            $attributes = $this->getAttributes($product);*/
+
+            $active_sheet->setCellValue('A' . $row, $product->sku);
+            $active_sheet->setCellValue('B' . $row, '');
+            $active_sheet->setCellValue('C' . $row, $product->ean);
+            $active_sheet->setCellValue('D' . $row, $product->translation->name);
+            $active_sheet->setCellValue('E' . $row, $product->translation->description);
+            $active_sheet->setCellValue('F' . $row, $product->translation->slug);
+            $active_sheet->setCellValue('G' . $row, $product->translation->meta_title);
+            $active_sheet->setCellValue('H' . $row, $product->translation->meta_description);
+            $active_sheet->setCellValue('I' . $row, $product->price);
+            $active_sheet->setCellValue('J' . $row, $product->quantity);
+            $active_sheet->setCellValue('K' . $row, 25);
+            $active_sheet->setCellValue('L' . $row, $product->status ? 1 : 0);
+            $active_sheet->setCellValue('M' . $row, $product->image);
+            $active_sheet->setCellValue('N' . $row, $product->brand ? $product->brand->translation->title : '');
+            /*$active_sheet->setCellValue('O' . $row, $product->categories()->first() ? $product->categories()->first()->translation->title : '');
+            $active_sheet->setCellValue('P' . $row, $product->subcategories()->first() ? $product->subcategories()->first()->translation->title : '');
+            $active_sheet->setCellValue('Q' . $row, $sizeguide_id);
+            $active_sheet->setCellValue('R' . $row, $attributes['Materijal']);
+            $active_sheet->setCellValue('S' . $row, $attributes['Spol']);
+            $active_sheet->setCellValue('T' . $row, $attributes['Tip rukava']);
+            $active_sheet->setCellValue('U' . $row, $attributes['Kroj']);
+            $active_sheet->setCellValue('V' . $row, $attributes['Dimenzije']);
+            $active_sheet->setCellValue('W' . $row, $attributes['Dodatna kategorizacija']);*/
+
+            $row++;
+        }
+
+        try {
+            $writer = new Xlsx($spreadsheet);
+
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="'. urlencode($name).'"');
+
+            $writer->save('php://output');
+
+        } catch (\Exception $exception) {
+            $job->finish(0, 0, ApiHelper::response(0, $exception->getMessage()));
+
+            return 0;
+        }
+
+        $job->finish(1, 1, ApiHelper::response(1, 'Excel je poslan.'));
+
+        return 1;
+    }
+
+
+    /**
      * @param Product $product
      *
      * @return string

@@ -137,6 +137,48 @@ class ApiController extends Controller
 
 
     /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function exportToSimpleExcel(Request $request)
+    {
+        $export = new Export();
+
+        $exported = $export->toSimpleExcel();
+
+        if ($exported) {
+            return back()->with(['success' => 'Proizvodi su exportani!']);
+        }
+
+        return back()->with(['error' => 'Greška prilikom Exporta, molimo pokušajte ponovo ili kontaktirajte administratora!']);
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function exportToExcel(Request $request)
+    {
+        $export = new Export();
+
+        $exported = $export->toExcel();
+
+        if ($exported) {
+            return back()->with(['success' => 'Proizvodi su exportani!']);
+        }
+
+        return back()->with(['error' => 'Greška prilikom Exporta, molimo pokušajte ponovo ili kontaktirajte administratora!']);
+    }
+
+    /*******************************************************************************
+    *                                Copyright : AGmedia                           *
+    *                              email: filip@agmedia.hr                         *
+    *******************************************************************************/
+
+    /**
      * @param array $data
      *
      * @return mixed

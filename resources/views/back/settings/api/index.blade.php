@@ -19,8 +19,6 @@
     </div>
 
     <div class="content content-full">
-        @include('back.layouts.partials.session')
-
         <div class="row">
             <div class="col-12">
                 <div class="block block-rounded">
@@ -85,12 +83,20 @@
                                                 <div class="col-md-12">
                                                     <table class="table table-responsive table-borderless table-vcenter">
                                                         <tbody>
-                                                        <tr>
+                                                        <tr class="mb-2">
                                                             <td style="width: 30%;">
-                                                                <button class="btn btn-alt-info" onclick="">Export Excel</button>
+                                                                <a href="{{ route('export.simple.excel') }}" class="btn btn-alt-info">Export Simple Excel</a>
                                                             </td>
                                                             <td>
-                                                                <code>Export proizvoda u excel datoteku i download iste.</code>
+                                                                <code>Export proizvoda u excel datoteku i download iste. Samo osnovni podaci.</code>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 30%;">
+                                                                <a href="{{ route('export.excel') }}" class="btn btn-alt-info">Export Full Excel</a>
+                                                            </td>
+                                                            <td>
+                                                                <code>Export proizvoda u excel datoteku i download iste. Full export sa opcijama, kategorijama, atributima, dodatnim fotografijama...</code>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -106,7 +112,7 @@
                                             <h3 class="block-title">Rezultat</h3>
                                         </div>
                                         <div class="block-content">
-                                            <p class="font-w300 font-size-sm" id="api-result-export">Ovdje će se prikazati rezultati ili greške poziva...</p>
+                                            @include('back.layouts.partials.session')
                                         </div>
                                     </div>
                                 </div>
