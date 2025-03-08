@@ -353,18 +353,11 @@
 
 
 @push('js_after')
-    {{--    <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">--}}
-    {{--    <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>--}}
 
     <script>
-
         $(document).ready(function(){
             $(this).scrollTop(0);
         });
     </script>
-
-
-
-
 
 @endpush
