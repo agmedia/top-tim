@@ -619,6 +619,26 @@ class Product extends Model
 
 
     /**
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasOneThrough|\Illuminate\Database\Query\Builder|mixed|object|null
+     */
+    public function search_category()
+    {
+        return $this->hasOneThrough(Category::class, CategoryProducts::class, 'product_id', 'id', 'id', 'category_id')
+                    ->where('parent_id', 0);
+    }
+
+
+    /**
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasOneThrough|\Illuminate\Database\Query\Builder|mixed|object|null
+     */
+    public function search_subcategory()
+    {
+        return $this->hasOneThrough(Category::class, CategoryProducts::class, 'product_id', 'id', 'id', 'category_id')
+                    ->where('parent_id', '!=', 0);
+    }
+
+
+    /**
      * @return string
      */
     public function priceString(string $price = null)

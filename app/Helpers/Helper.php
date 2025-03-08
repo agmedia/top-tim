@@ -114,18 +114,33 @@ class Helper
     {
         if ($target != '') {
             $response = collect();
+            $products = Product::query();
 
-            // Search products.
-            $products = Product::query()/*->whereHas('translation', function (Builder $query) use ($target) {
-                $query->where('name', 'like', '%' . $target . '%');
-            })*//*->orWhere('sku', 'like', '%' . $target . '%')->orwhereHas('translation', function ($query) use ($target) {
-                $query->where('meta_description', 'like', '%' . $target . '%');
-            })->orWhere('sku', 'like', '%' . $target . '%')->orwhereHas('translation', function ($query) use ($target) {
-                    $query->where('description', 'like', '%' . $target . '%');
-                })*/;
+            // search by brand
+            $products->whereHas('brand', function (Builder $query) use ($target) {
+                $query->whereHas('translation', function (Builder $subquery) use ($target) {
+                    $subquery->where('title', 'like', '%' . $target . '%');
+                });
+            });
+
+            // search by category
+            $products->orWhereHas('search_category', function (Builder $query) use ($target) {
+                $query->whereHas('translation', function (Builder $subquery) use ($target) {
+                    $subquery->where('title', 'like', '%' . $target . '%');
+                });
+            });
+            // search by subcategory
+            $products->orWhereHas('search_subcategory', function (Builder $query) use ($target) {
+                $query->whereHas('translation', function (Builder $subquery) use ($target) {
+                    $subquery->where('title', 'like', '%' . $target . '%');
+                });
+            });
 
             $products = self::searchByName($products, $target);
-            $products = $products->pluck('id');
+
+            $products = $products->orderBy('push')
+                                 ->orderBy('sort_order')
+                                 ->pluck('id');
             // If API and count is too small
             // search additionaly.
 
@@ -160,7 +175,7 @@ class Helper
     {
         $preg = explode(' ', $search, 3);
         if (isset ($preg[1]) && in_array($preg[1], $preg) && ! isset($preg[2])) {
-            $query->whereHas('translation', function (Builder $query) use ($preg) {
+            $query->orWhereHas('translation', function (Builder $query) use ($preg) {
                 $query->where('name', 'like', '%' . $preg[0] . '%' . $preg[1] . '%');
                 $query->orWhere('name', 'like', '%' . $preg[1] . '%' . $preg[0] . '%');
 
@@ -179,7 +194,7 @@ class Helper
             })*/;
 
         } elseif (isset ($preg[2]) && in_array($preg[2], $preg)) {
-            $query->whereHas('translation', function ($query) use ($preg) {
+            $query->orWhereHas('translation', function ($query) use ($preg) {
                 $query->where('name', 'like', $preg[0] . '%' . $preg[1] . '%' . $preg[2] . '%');
             })->orwhereHas('translation', function ($query) use ($preg) {
                 $query->where('name', 'like', $preg[2] . '%' . $preg[1] . '% ' . $preg[0] . '%');
@@ -192,7 +207,7 @@ class Helper
             });
 
         } else {
-            $query->whereHas('translation', function ($query) use ($preg) {
+            $query->orWhereHas('translation', function ($query) use ($preg) {
                 $query->where('name', 'like', '%' . $preg[0] . '%')->orWhere('sku', 'like', '%' . $preg[0]. '%');
             });
         }
