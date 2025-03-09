@@ -280,8 +280,6 @@
         });
 
         function bulkAction(type) {
-            console.log(type)
-
             let products = getSelectedProducts();
 
             axios.get('{{ route('products.bulk.action') }}' + '?products=' + products + '&type=' + type)
