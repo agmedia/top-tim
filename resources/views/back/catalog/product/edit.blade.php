@@ -58,12 +58,6 @@
                             <i class="si si-link"></i> {{ __('back/products.seo') }}
                         </a>
                     </li>
-
-
-
-
-
-
                 </ul>
                 <div class="block-content tab-content">
                     <div class="tab-pane active" id="osnovno" role="tabpanel">
@@ -214,7 +208,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="tab-pane" id="atributi" role="tabpanel">
                         <div class="block">
                             <div class="block-content">
@@ -251,7 +244,7 @@
                                             </div>
                                         </div>
 
-                                        @if ( ! empty($data['attributes']))
+                                        {{--@if ( ! empty($data['attributes']))
                                             <div class="form-group row items-push mb-4">
                                                 @foreach ($data['attributes'] as $attribute)
                                                     <div class="col-md-4">
@@ -262,6 +255,25 @@
                                                                 <option value="{{ $item['id'] }}" {{ ((isset($product)) and (in_array($item['id'], $product->attributes()->pluck('id')->toArray()))) ? 'selected' : '' }}>{{ $item['title'] }}</option>
                                                             @endforeach
                                                         </select>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif--}}
+
+                                        @if ( ! empty($data['attributes']))
+                                            <div class="form-group row items-push mb-4">
+                                                @foreach ($data['attributes'] as $attribute)
+                                                    <div class="col-md-4">
+                                                        @php
+                                                            $attribute_id = 0;
+                                                            foreach ($attribute['items'] as $item) {
+                                                                if (isset($product) && in_array($item['id'], $product->attributes()->pluck('id')->toArray())) {
+                                                                    $attribute_id = $item['id'];
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        <label for="dm-post-edit-slug">{{ $attribute['group'] }}</label>
+                                                        @livewire('back.catalog.attribute-search-new-input', ['group' => $attribute['group'], 'attribute_id' => $attribute_id])
                                                     </div>
                                                 @endforeach
                                             </div>

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AttributesTranslation extends Model
 {
@@ -31,12 +32,12 @@ class AttributesTranslation extends Model
     {
         foreach (ag_lang() as $lang) {
             $saved = self::insertGetId([
-                'attribute_id'      => $id,
-                'lang'        => $lang->code,
-                'group_title' => $request->input('title')[$lang->code],
-                'title'       => $item['title'][$lang->code],
-                'created_at'  => Carbon::now(),
-                'updated_at'  => Carbon::now()
+                'attribute_id' => $id,
+                'lang'         => $lang->code,
+                'group_title'  => $request->input('title')[$lang->code],
+                'title'        => $item['title'][$lang->code],
+                'created_at'   => Carbon::now(),
+                'updated_at'   => Carbon::now()
             ]);
 
             if ( ! $saved) {
@@ -61,6 +62,33 @@ class AttributesTranslation extends Model
                 'group_title' => $request->input('title')[$lang->code],
                 'title'       => $item['title'][$lang->code],
                 'updated_at'  => Carbon::now()
+            ]);
+
+            if ( ! $saved) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * @param int    $id
+     * @param string $title
+     *
+     * @return bool
+     */
+    public static function createFast(int $id, string $title, string $group_title): bool
+    {
+        foreach (ag_lang() as $lang) {
+            $saved = self::insertGetId([
+                'attribute_id' => $id,
+                'lang'         => $lang->code,
+                'group_title'  => $group_title,
+                'title'        => $title,
+                'created_at'   => Carbon::now(),
+                'updated_at'   => Carbon::now()
             ]);
 
             if ( ! $saved) {
