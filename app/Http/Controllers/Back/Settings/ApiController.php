@@ -141,6 +141,26 @@ class ApiController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
+    public function exportToEracuni(Request $request)
+    {
+        $export = new Export();
+
+        $exported = $export->toExcel();
+
+        if ($exported) {
+            return redirect()->route('dashboard')->with(['success' => 'Proizvodi su exportani!']);
+        }
+
+        return redirect()->route('dashboard')->with(['error' => 'Greška prilikom Exporta, molimo pokušajte ponovo ili kontaktirajte administratora!']);
+    }
+
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function exportToSimpleExcel(Request $request)
     {
         $export = new Export();

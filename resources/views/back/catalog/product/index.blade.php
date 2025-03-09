@@ -174,7 +174,7 @@
                                 <td class="font-size-sm">{{ \Illuminate\Support\Carbon::make($product->created_at)->format('d.m.Y') }}</td>
                                 <td class="font-size-sm">{{ \Illuminate\Support\Carbon::make($product->updated_at)->format('d.m.Y') }}</td>
                                 <td class="text-center font-size-sm">
-                                    @include('back.layouts.partials.status', ['status' => $product->status])
+                                    {{--@include('back.layouts.partials.status', ['status' => $product->status])--}}
                                     <div class="custom-control custom-switch custom-control-success mb-1">
                                         <input type="checkbox" class="custom-control-input" id="status-{{ $product->id }}" onclick="setStatus({{ $product->id }})" name="status" @if ($product->status) checked="" @endif>
                                         <label class="custom-control-label" for="status-{{ $product->id }}"></label>

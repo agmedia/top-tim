@@ -11,10 +11,13 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/products.artikl_edit') }}</h1>
+                <button type="submit" class="btn btn-outline-success my-2 mr-3">
+                    <i class="fas fa-save mr-1"></i> {{ __('back/products.snimi') }} {{ __('Artikl') }}
+                </button>
                 @if (isset($product))
-                <a class="flex btn btn-outline-primary" target="_blank" href="{{ url($product->translation->url) }}">
-                    <i class="fa fa-fw fa-eye"></i>
-                </a>
+                    <a class="flex btn btn-outline-primary" target="_blank" href="{{ url($product->translation->url) }}">
+                        <i class="fa fa-fw fa-eye"></i>
+                    </a>
                 @endif
 
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
@@ -23,8 +26,6 @@
                         <li class="breadcrumb-item active" aria-current="page">{{ __('back/products.novi_artikl') }}</li>
                     </ol>
                 </nav>
-
-
             </div>
         </div>
     </div>
@@ -93,7 +94,7 @@
                                                     @foreach(ag_lang() as $lang)
                                                         <li @if ($lang->code == current_locale()) class="active" @endif>
                                                             <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#name-{{ $lang->code }}">
-                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
                                                             </a>
                                                         </li>
                                                     @endforeach
@@ -101,7 +102,8 @@
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="name-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <input type="text" class="form-control" id="name-input-{{ $lang->code }}" name="name[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ (isset($product) && isset($product->translation($lang->code)->name)) ? $product->translation($lang->code)->name : old('name.*') }}" onkeyup="SetSEOPreview()">
+                                                            <input type="text" class="form-control" id="name-input-{{ $lang->code }}" name="name[{{ $lang->code }}]" placeholder="{{ $lang->code }}"
+                                                                   value="{{ (isset($product) && isset($product->translation($lang->code)->name)) ? $product->translation($lang->code)->name : old('name.*') }}" onkeyup="SetSEOPreview()">
                                                             @error('name')
                                                             <span class="text-danger font-italic">{{ __('back/products.naziv_je_potreban') }}</span>
                                                             @enderror
@@ -111,7 +113,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="polica-input">EAN </label>
-                                                <input type="text" class="form-control" id="polica-input" name="isbn" placeholder="{{ __('back/products.upisite_ean') }}" value="{{ isset($product) ? $product->isbn : old('isbn') }}" >
+                                                <input type="text" class="form-control" id="polica-input" name="isbn" placeholder="{{ __('back/products.upisite_ean') }}" value="{{ isset($product) ? $product->isbn : old('isbn') }}">
                                             </div>
                                         </div>
                                         <div class="form-group row items-push mb-3">
@@ -129,7 +131,8 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="quantity-input">{{ __('back/products.kolicina') }} <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="quantity-input" name="quantity" placeholder="{{ __('back/products.upisite_kolicinu') }}" value="{{ isset($product) ? $product->quantity : ( ! isset($product) ? 1 : old('quantity')) }}">
+                                                <input type="text" class="form-control" id="quantity-input" name="quantity" placeholder="{{ __('back/products.upisite_kolicinu') }}"
+                                                       value="{{ isset($product) ? $product->quantity : ( ! isset($product) ? 1 : old('quantity')) }}">
                                                 @error('quantity ')
                                                 <span class="text-danger font-italic">{{ __('back/products.kolicina_je_potrebna') }}</span>
                                                 @enderror
@@ -146,7 +149,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="polica-input">{{ __('back/products.sifra_police') }}</label>
-                                                <input type="text" class="form-control" id="polica-input" name="polica" placeholder="{{ __('back/products.upisite_sifru_police') }}" value="{{ isset($product) ? $product->polica : old('polica') }}" >
+                                                <input type="text" class="form-control" id="polica-input" name="polica" placeholder="{{ __('back/products.upisite_sifru_police') }}" value="{{ isset($product) ? $product->polica : old('polica') }}">
                                             </div>
                                         </div>
                                         <div class="form-group row items-push mb-3">
@@ -162,11 +165,15 @@
                                             <div class="col-md-6">
                                                 <label for="special-from-input">{{ __('back/products.akcija_vrijedi') }}</label>
                                                 <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
-                                                    <input type="text" class="form-control" id="special-from-input" name="special_from" placeholder="{{ __('back/products.od') }}" value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_from)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                    <input type="text" class="form-control" id="special-from-input" name="special_from" placeholder="{{ __('back/products.od') }}"
+                                                           value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_from)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true"
+                                                           data-today-highlight="true">
                                                     <div class="input-group-prepend input-group-append">
                                                         <span class="input-group-text font-w600"><i class="fa fa-fw fa-arrow-right"></i></span>
                                                     </div>
-                                                    <input type="text" class="form-control" id="special-to-input" name="special_to" placeholder="{{ __('back/products.do') }}" value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_to)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                    <input type="text" class="form-control" id="special-to-input" name="special_to" placeholder="{{ __('back/products.do') }}"
+                                                           value="{{ (isset($product->special_from) && $product->special_from != '0000-00-00 00:00:00') ? \Carbon\Carbon::make($product->special_to)->format('d.m.Y') : '' }}" data-week-start="1" data-autoclose="true"
+                                                           data-today-highlight="true">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -188,7 +195,7 @@
                                                     @foreach(ag_lang() as $lang)
                                                         <li @if ($lang->code == current_locale()) class="active" @endif>
                                                             <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#description-{{ $lang->code }}">
-                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                                <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
                                                             </a>
                                                         </li>
                                                     @endforeach
@@ -197,7 +204,8 @@
                                                 <div class="tab-content">
                                                     @foreach(ag_lang() as $lang)
                                                         <div id="description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                            <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]" placeholder="{{ $lang->code }}">{!! (isset($product) && isset($product->translation($lang->code)->description)) ? $product->translation($lang->code)->description : old('description.*') !!}</textarea>
+                                                            <textarea id="description-editor-{{ $lang->code }}" name="description[{{ $lang->code }}]"
+                                                                      placeholder="{{ $lang->code }}">{!! (isset($product) && isset($product->translation($lang->code)->description)) ? $product->translation($lang->code)->description : old('description.*') !!}</textarea>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -223,7 +231,8 @@
                                                             <option value="{{ $id }}" class="font-weight-bold small" {{ ((isset($product)) and (in_array($id, $product->categories()->pluck('id')->toArray()))) ? 'selected' : '' }}>{{ $category['title'] }}</option>
                                                             @if ( ! empty($category['subs']))
                                                                 @foreach ($category['subs'] as $sub_id => $subcategory)
-                                                                    <option value="{{ $sub_id }}" class="pl-3 text-sm" {{ ((isset($product) && $product->subcategory()) and in_array($sub_id, $product->subcategories()->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $category['title'] . ' >> ' . $subcategory['title'] }}</option>
+                                                                    <option value="{{ $sub_id }}"
+                                                                            class="pl-3 text-sm" {{ ((isset($product) && $product->subcategory()) and in_array($sub_id, $product->subcategories()->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $category['title'] . ' >> ' . $subcategory['title'] }}</option>
                                                                 @endforeach
                                                             @endif
                                                         @endforeach
@@ -293,7 +302,7 @@
                                         <span class="text-danger small font-italic">{{ $message }}</span>
                                         @enderror
                                         <div id="addition">
-                                             @livewire('back.catalog.product-options-selection', ['product' => isset($product) ? $product : null])
+                                            @livewire('back.catalog.product-options-selection', ['product' => isset($product) ? $product : null])
                                         </div>
                                     </div>
                                 </div>
@@ -333,7 +342,7 @@
                                                 @foreach(ag_lang() as $lang)
                                                     <li @if ($lang->code == current_locale()) class="active" @endif>
                                                         <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta_title-{{ $lang->code }}">
-                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
                                                         </a>
                                                     </li>
                                                 @endforeach
@@ -341,7 +350,9 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="meta_title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ (isset($product) && isset($product->translation($lang->code)->meta_title)) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true" data-placement="top">
+                                                        <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"
+                                                               value="{{ (isset($product) && isset($product->translation($lang->code)->meta_title)) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true"
+                                                               data-placement="top">
                                                         <small class="form-text text-muted">
                                                             {{ __('back/products.70_znakova_max') }}
                                                         </small>
@@ -355,7 +366,7 @@
                                                 @foreach(ag_lang() as $lang)
                                                     <li @if ($lang->code == current_locale()) class="active" @endif>
                                                         <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta-description-{{ $lang->code }}">
-                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
                                                         </a>
                                                     </li>
                                                 @endforeach
@@ -363,7 +374,8 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="meta-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true" data-placement="top">{{ (isset($product) && isset($product->translation($lang->code)->meta_description)) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
+                                                        <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true"
+                                                                  data-placement="top">{{ (isset($product) && isset($product->translation($lang->code)->meta_description)) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
                                                         <small class="form-text text-muted">
                                                             {{ __('back/products.160_znakova_max') }}
                                                         </small>
@@ -377,7 +389,7 @@
                                                 @foreach(ag_lang() as $lang)
                                                     <li @if ($lang->code == current_locale()) class="active" @endif>
                                                         <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#slug-input-{{ $lang->code }}">
-                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}" />
+                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
                                                         </a>
                                                     </li>
                                                 @endforeach
@@ -385,7 +397,8 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="slug-input-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}" value="{{(isset($product) && isset($product->translation($lang->code)->slug)) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
+                                                        <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}"
+                                                               value="{{(isset($product) && isset($product->translation($lang->code)->slug)) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
                                                         <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ (isset($product) && isset($product->translation($lang->code)->slug)) ? $product->translation($lang->code)->slug : old('slug.*') }}">
                                                     </div>
                                                 @endforeach
@@ -470,7 +483,6 @@
         </div>
     </div>
 
-
 @endsection
 @push('js_after')
     <!-- Page JS Plugins -->
@@ -481,12 +493,14 @@
     <script src="{{ asset('js/plugins/jquery.maskedinput/jquery.maskedinput.min.js') }}"></script>
     <script src="{{ asset('js/plugins/slim/slim.kickstart.js') }}"></script>
     <!-- Page JS Helpers (CKEditor 5 plugins) -->
-    <script>jQuery(function(){Dashmix.helpers(['datepicker']);});</script>
+    <script>jQuery(function () {
+            Dashmix.helpers(['datepicker']);
+        });</script>
     <script>
         $(() => {
-            {!! ag_lang() !!}.forEach(function(item) {
+            {!! ag_lang() !!}.forEach(function (item) {
                 ClassicEditor
-                .create(document.querySelector('#description-editor-' + item.code ))
+                .create(document.querySelector('#description-editor-' + item.code))
                 .then(editor => {
                     console.log(editor);
                 })
@@ -497,47 +511,47 @@
 
             $('#category-select').select2({});
             $('#grupa-select').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
             $('#tax-select').select2({});
             $('#action-select').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
             $('#spol').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
             $('#kroj').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
             $('#tip-rukava').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
             $('#tekstil').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
             $('#color').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
             $('#color1').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
             $('#color2').select2({
-                placeholder: '{{ __('back/products.odaberite') }}',
+                placeholder:             '{{ __('back/products.odaberite') }}',
                 minimumResultsForSearch: Infinity
             });
 
@@ -575,13 +589,13 @@
         //
         function deleteSingleProduct(id, url) {
             Swal.fire({
-                title: 'Obriši..!',
-                text: "Jeste li sigurni da želite obrisati artikl?",
-                icon: 'warning',
-                showCancelButton: true,
+                title:              'Obriši..!',
+                text:               "Jeste li sigurni da želite obrisati artikl?",
+                icon:               'warning',
+                showCancelButton:   true,
                 confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Da, obriši!'
+                cancelButtonColor:  '#d33',
+                confirmButtonText:  'Da, obriši!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios.post(url, {id: id})

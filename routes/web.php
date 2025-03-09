@@ -176,7 +176,6 @@ Route::group(
             Route::patch('faq/{faq}', [FaqController::class, 'update'])->name('faqs.update');
             Route::delete('faq/{faq}', [FaqController::class, 'destroy'])->name('faqs.destroy');
 
-
             // SizeGuide
             Route::get('sizeguides', [SizeGuideController::class, 'index'])->name('sizeguides');
             Route::get('sizeguide/create', [SizeGuideController::class, 'create'])->name('sizeguides.create');
@@ -184,9 +183,6 @@ Route::group(
             Route::get('sizeguide/{sizeguide}/edit', [SizeGuideController::class, 'edit'])->name('sizeguides.edit');
             Route::patch('sizeguide/{sizeguide}', [SizeGuideController::class, 'update'])->name('sizeguides.update');
             Route::delete('sizeguide/{sizeguide}', [SizeGuideController::class, 'destroy'])->name('sizeguides.destroy');
-
-
-
 
         });
 
@@ -197,10 +193,8 @@ Route::group(
         Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::patch('user/{user}', [UserController::class, 'update'])->name('users.update');
 
-
         // POPUSTI
         Route::get('discounts', [DiscountController::class, 'index'])->name('discounts');
-
 
         // GRUPE KORISNIKA
         Route::get('user_groups', [UserGroupController::class, 'index'])->name('user_groups');
@@ -233,6 +227,7 @@ Route::group(
             Route::get('api/cron-reports', [ApiController::class, 'cronReports'])->name('api.cron.reports');
             Route::get('api/products/simple/excel', [ApiController::class, 'exportToSimpleExcel'])->name('export.simple.excel');
             Route::get('api/products/excel', [ApiController::class, 'exportToExcel'])->name('export.excel');
+            Route::get('api/eracuni/export', [ApiController::class, 'exportToEracuni'])->name('export.eracuni');
 
             //Route::get('application', [SettingsController::class, 'index'])->name('settings');
 

@@ -85,19 +85,25 @@
                                                         <tbody>
                                                         <tr class="mb-2">
                                                             <td style="width: 30%;">
-                                                                <a href="{{ route('export.simple.excel') }}" class="btn btn-alt-info">Export Simple Excel</a>
+                                                                <a href="{{ route('export.simple.excel') }}" class="btn btn-alt-info">Export Excel</a>
                                                             </td>
                                                             <td>
                                                                 <code>Export proizvoda u excel datoteku i download iste. Samo osnovni podaci.</code>
                                                             </td>
                                                         </tr>
-                                                        <tr>
+                                                        {{--<tr>
                                                             <td style="width: 30%;">
                                                                 <a href="{{ route('export.excel') }}" class="btn btn-alt-info">Export Full Excel</a>
                                                             </td>
                                                             <td>
                                                                 <code>Export proizvoda u excel datoteku i download iste. Full export sa opcijama, kategorijama, atributima, dodatnim fotografijama...</code>
                                                             </td>
+                                                        </tr>--}}
+                                                        <tr>
+                                                            <td style="width: 30%; padding-top: 40px;">
+                                                                <a href="{{ route('export.eracuni') }}" class="btn btn-alt-warning">Eračuni Export</a>
+                                                            </td>
+                                                            <td></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
