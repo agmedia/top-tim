@@ -148,6 +148,21 @@ class ProductOptionsSelection extends Component
      *
      * @return void
      */
+    public function copySubItemValues(string $key): void
+    {
+        $last = end($this->items[$key]['options']);
+
+        for ($i = 0; $i < count($this->items[$key]['options']); $i++) {
+            $this->items[$key]['options'][$i]['sub_options'] = $last['sub_options'];
+        }
+    }
+
+
+    /**
+     * @param string $key
+     *
+     * @return void
+     */
     public function addAllDefaultItems(string $key)
     {
         $values = Options::query()->where('group', $key)

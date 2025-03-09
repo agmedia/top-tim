@@ -73,7 +73,7 @@
                             <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.price" name="options[{{ $group }}][{{ $key }}][price]"></span>
                         </td>
                         <td class="text-right font-size-sm">
-                            <a href="javascript:void();" wire:click="deleteItem('{{ $group }}',{{ $key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
+                            <a href="javascript:void(0);" wire:click="deleteItem('{{ $group }}',{{ $key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -101,10 +101,8 @@
                 @if (isset($item['options']) && ! empty($item['options']))
                     @foreach ($item['options'] as $key => $option)
                         @php
-                            $selections = collect($item['selections'])->sortBy('title')
+                            $selections = collect($item['selections'])->sortBy('title');
                         @endphp
-
-
 
                         <tr>
                             <td class="font-size-sm">
@@ -116,8 +114,6 @@
                                     @endforeach
                                 </select>
                             </td>
-
-
                             <td class="text-right font-size-sm">
                                 <a class="btn btn-success btn-sm" href="javascript:void(0);" wire:click="addSubItem('{{ $group }}', '{{ $key }}' )">
                                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dodaj Vezanu Opciju</span>
@@ -125,12 +121,15 @@
                                 <a class="btn btn-info btn-sm ml-2" href="javascript:void(0);" wire:click="addAllDefaultSubItems('{{ $group }}', '{{ $key }}')">
                                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Dodaj sve predefinirane vrijednosti</span>
                                 </a>
+                                @if($loop->last)
+                                    <a class="btn btn-warning btn-sm ml-2" href="javascript:void(0);" wire:click="copySubItemValues('{{ $group }}')">
+                                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1">Kopiraj Vrijednosti</span>
+                                    </a>
+                                @endif
                             </td>
                             <td class="text-right font-size-sm">
-                                <a href="#" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
+                                <a href="javascript:void(0);" wire:click="deleteItem('{{ $group }}',{{ $key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
                             </td>
-
-
                         </tr>
                         <tr>
                             <td colspan="6">
@@ -143,13 +142,11 @@
                                         <th class="text-right font-size-sm"  class="text-center">{{ __('back/option.obrisi') }}</th>
                                     </tr>
                                     @foreach ($item['options'][$key]['sub_options'] as $sub_key => $sub_option)
-
                                         <tr>
                                             <td class="font-size-sm">
                                                 <select class="js-select2 form-control form-control-sm form-select-solid" id="select-{{ $group }}-{{ $key }}-{{ $sub_key }}" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.value" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][id]" style="width: 100%;" data-placeholder="Odaberite opciju">
                                                     <option></option>
                                                     @foreach ($item['sub_selections'] as $sub_selection)
-
                                                         <option value="{{ $sub_selection['id'] }}">{{ $sub_selection['title'] }}</option>
                                                     @endforeach
                                                 </select>
@@ -164,7 +161,7 @@
                                                 <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $group }}.options.{{ $key }}.sub_options.{{ $sub_key }}.price" name="options[{{ $group }}][{{ $key }}][sub_options][{{ $sub_key }}][price]"></span>
                                             </td>
                                             <td class="text-right font-size-sm">
-                                                <a href="javascript:void();" wire:click="deleteItem('{{ $group }}',{{ $key }},{{ $sub_key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
+                                                <a href="javascript:void(0);" wire:click="deleteItem('{{ $group }}',{{ $key }},{{ $sub_key }})" class="btn btn-sm btn-alt-danger"><i class="fa fa-fw fa-trash-alt"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
