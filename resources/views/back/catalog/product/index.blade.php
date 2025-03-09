@@ -13,6 +13,14 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/products.artikli') }}</h1>
+                <span id="bulk_actions" style="display: none; margin-right: 20px;">
+                    <a class="btn btn-alt-danger my-2 mx-2" href="javascript:bulkAction('delete');">
+                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Obriši selektirane</span>
+                    </a>
+                    {{--<a class="btn btn-alt-success my-2 mx-2" href="javascript:bulkAction('copy');">
+                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Kopiraj selektirane</span>
+                    </a>--}}
+                </span>
                 <a class="btn btn-hero-success my-2" href="{{ route('products.create') }}">
                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/products.novi_artikl') }}</span>
                 </a>
@@ -36,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="collapse " id="collapseExample">
+            <div class="collapse" id="collapseExample">
                 <div class="block-content bg-body-dark">
                     <form action="{{ route('products') }}" method="get">
 
@@ -73,7 +81,7 @@
                         <div class="form-group row items-push mb-0">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    @livewire('back.layout.search.author-search', ['author_id' => request()->input('author') ?: '', 'list' => true])
+                                    @livewire('back.layout.search.author-search', ['brand_id' => request()->input('brand') ?: '', 'list' => true])
                                 </div>
                             </div>
 
@@ -112,6 +120,13 @@
                     <table class="table table-borderless table-striped table-vcenter">
                         <thead>
                         <tr>
+                            <th class="text-center" style="width: 30px;">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="checkAll" name="selected">
+                                    </div>
+                                </div>
+                            </th>
                             <th class="text-center" style="width: 100px;">{{ __('back/products.slika') }}</th>
                             <th>{{ __('back/products.naziv') }}</th>
                             <th>{{ __('back/products.sifra') }}</th>
@@ -127,6 +142,13 @@
                         <tbody id="ag-table-with-input-fields" class="js-gallery" >
                         @forelse ($products as $product)
                             <tr>
+                                <td class="text-center">
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="{{ $product->id }}" id="selected[{{ $product->id }}]" name="selected">
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="text-center font-size-sm">
                                     <a class="img-link img-link-zoom-in img-lightbox" href="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}">
                                         <img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="80px"/>
@@ -240,7 +262,55 @@
                 setRegularURL('week', true);
             });*/
 
+            $('input[name=selected]').on('change', (e) => {
+                console.log(e.currentTarget.value)
+                let checkedBoxes = document.querySelectorAll('input[name=selected]:checked');
+
+                if (checkedBoxes.length) {
+                    document.getElementById('bulk_actions').style.display = 'block';
+                } else {
+                    document.getElementById('bulk_actions').style.display = 'none';
+                }
+            })
+
+            //
+            $("#checkAll").click(function () {
+                $('input:checkbox').not(this).prop('checked', this.checked);
+            });
         });
+
+        function bulkAction(type) {
+            console.log(type)
+
+            let products = getSelectedProducts();
+
+            axios.get('{{ route('products.bulk.action') }}' + '?products=' + products + '&type=' + type)
+            .then((response) => {
+                location.reload();
+            })
+            .catch((e) => {
+                return errorToast.fire();
+            })
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        function getSelectedProducts() {
+            let orders = '[';
+            let checkedBoxes = document.querySelectorAll('input[name=selected]:checked');
+
+            for (let i = 0; i < checkedBoxes.length; i++) {
+                if (checkedBoxes.length - 1 == i) {
+                    orders += checkedBoxes[i].value + ']';
+                } else {
+                    orders += checkedBoxes[i].value + ','
+                }
+            }
+
+            return orders;
+        }
 
         /**
          *

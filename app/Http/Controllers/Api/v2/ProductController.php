@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api\v2;
 use App\Helpers\Helper;
 use App\Helpers\ProductHelper;
 use App\Models\Back\Catalog\Product\Product;
+use App\Models\Back\Catalog\Product\ProductAttribute;
+use App\Models\Back\Catalog\Product\ProductCategory;
 use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Front\Catalog\ProductOption;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
@@ -194,6 +197,40 @@ class ProductController extends Controller
                     'value_1' => $product['new_value'],
                     'value_2' => isset($new_special) ? $new_special : null
                 ]);
+            }
+        }
+
+        return response()->json(['error' => 300]);
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulkAction(Request $request): JsonResponse
+    {
+        Log::info($request->toArray());
+
+        if ($request->has('type')) {
+            $product_ids = explode(',', substr($request->input('products'), 1, -1));
+
+            // Delete bulk products
+            if ($request->input('type') == 'delete') {
+                foreach ($product_ids as $product_id) {
+                    ProductImage::where('product_id', $product_id)->delete();
+                    ProductCategory::where('product_id', $product_id)->delete();
+                    ProductAttribute::where('product_id', $product_id)->delete();
+                    Storage::deleteDirectory(config('filesystems.disks.products.root') . $product_id);
+                    Product::destroy($product_id);
+                }
+
+                return response()->json(['success' => 200]);
+            }
+            // Copy bulk products
+            if ($request->input('type') == 'copy') {
+
             }
         }
 
