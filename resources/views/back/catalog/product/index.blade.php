@@ -275,7 +275,7 @@
 
             //
             $("#checkAll").click(function () {
-                $('input:checkbox').not(this).prop('checked', this.checked);
+                $('input[name=selected]:checkbox').not(this).prop('checked', this.checked);
             });
         });
 
