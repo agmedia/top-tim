@@ -5262,7 +5262,7 @@ var AgService = /*#__PURE__*/function () {
     key: "setDiscount",
     value: function setDiscount(discount, price) {
       var amount = price - price * (discount / 100);
-      return Math.round(amount).toFixed(0);
+      return amount;
     }
 
     /**

@@ -280,7 +280,7 @@ class AgService {
     setDiscount(discount, price) {
         let amount = price - (price * (discount / 100));
 
-        return Math.round(amount).toFixed(0);
+        return amount;
     }
 
     /**
