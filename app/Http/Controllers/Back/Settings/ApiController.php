@@ -8,6 +8,7 @@ use App\Models\Back\Jobs;
 use App\Models\Back\Settings\Api\AkademskaKnjigaMk;
 use App\Models\Back\Settings\Api\Export;
 use App\Models\Back\Settings\Api\PlavaKrava;
+use App\Models\Back\Settings\Api\SimpleExcel;
 use App\Models\Back\Settings\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -77,6 +78,8 @@ class ApiController extends Controller
             'method' => 'required',
             'file' => 'file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/excel'
         ]);
+
+        Log::info($request->all());
 
         $targetClass = $this->resolveTargetClass($request->toArray());
 
@@ -208,8 +211,8 @@ class ApiController extends Controller
         $class = null;
 
         if (isset($data['target'])) {
-            if ($data['target'] == 'akademska-knjiga-mk') {
-                $class = new AkademskaKnjigaMk();
+            if ($data['target'] == 'simple-excel') {
+                $class = new SimpleExcel();
             }
             if ($data['target'] == 'plava-krava') {
                 $class = new PlavaKrava();

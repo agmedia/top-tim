@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class PlavaKrava
+class SimpleExcel
 {
 
     /**
@@ -39,10 +39,10 @@ class PlavaKrava
      */
     public function upload(Request $request)
     {
-        $saved = Storage::disk('assets')->putFileAs('xls/', $request->file('file'), 'toptim-import.xlsx');
+        $saved = Storage::disk('assets')->putFileAs('xls/', $request->file('file'), 'simple-excel-update.xlsx');
 
         if ($saved) {
-            return public_path('assets/xls/toptim-import.xlsx');
+            return public_path('assets/xls/simple-excel-update.xlsx');
         }
 
         return false;
@@ -61,11 +61,38 @@ class PlavaKrava
 
             switch ($this->request['method']) {
                 case 'upload-excel':
-                    return $this->importNewProducts($data);
+                    return $this->updateProductsSimple($data);
             }
         }
 
         return false;
+    }
+
+
+    private function updateProductsSimple(array $data = null)
+    {
+        $count = 0;
+
+        foreach ($data as $key => $item) {
+            if ($key && $item[0]) {
+                $exist = Product::query()->where('sku', $item[0])->first();
+
+                if ($exist) {
+                    $updated = ProductTranslation::query()->where('product_id', $exist->id)->update([
+                        'name'             => $item[3],
+                        'description'      => $item[4],
+                        'meta_title'       => $item[6],
+                        'meta_description' => $item[7],
+                    ]);
+
+                    if ($updated) {
+                        $count++;
+                    }
+                }
+            }
+        }
+
+        return ApiHelper::response(1, 'Importano je ' . $count . ' novih artikala u bazu.');
     }
 
 
@@ -81,27 +108,27 @@ class PlavaKrava
                 $exist = Product::query()->where('sku', $item[2])->first();
 
                 if ( ! $exist && ! empty($item[2])) {
-                    $import       = new Import();
-                    $name = str_replace('/', '-', $item[0]);
+                    $import   = new Import();
+                    $name     = str_replace('/', '-', $item[0]);
                     $brand_id = 11;
 
                     $id = Product::query()->insertGetId([
-                        'action_id'            => 0,
-                        'brand_id'             => $brand_id,
-                        'sku'                  => $item[2],
-                        'price'                => $item[8],
-                        'quantity'             => $item[9] ?: 0,
-                        'decrease'             => 1,
-                        'tax_id'               => config('settings.default_tax_id'),
-                        'special'              => null,
-                        'special_from'         => null,
-                        'special_to'           => null,
-                        'sort_order'           => 0,
-                        'push'                 => 0,
-                        'status'               => 1,
-                        'created_at'           => Carbon::now(),
-                        'updated_at'           => Carbon::now(),
-                        'sizeguide_id'         => 18,
+                        'action_id'    => 0,
+                        'brand_id'     => $brand_id,
+                        'sku'          => $item[2],
+                        'price'        => $item[8],
+                        'quantity'     => $item[9] ?: 0,
+                        'decrease'     => 1,
+                        'tax_id'       => config('settings.default_tax_id'),
+                        'special'      => null,
+                        'special_from' => null,
+                        'special_to'   => null,
+                        'sort_order'   => 0,
+                        'push'         => 0,
+                        'status'       => 1,
+                        'created_at'   => Carbon::now(),
+                        'updated_at'   => Carbon::now(),
+                        'sizeguide_id' => 18,
                     ]);
 
                     if ($id) {
@@ -109,10 +136,10 @@ class PlavaKrava
                         foreach (ag_lang() as $lang) {
                             $slug = ProductTranslation::resolveSlug($id, new Request(['slug' => [$lang->code => Str::slug($name)]]), $lang->code);
 
-                            if($item[21] != ''){
-                                $description = '<p>'.$item[4] .'</p><p>'.$item[21].'</p>';
-                            }else{
-                                $description = '<p>'.$item[4] .'</p>';
+                            if ($item[21] != '') {
+                                $description = '<p>' . $item[4] . '</p><p>' . $item[21] . '</p>';
+                            } else {
+                                $description = '<p>' . $item[4] . '</p>';
                             }
 
                             ProductTranslation::query()->insertGetId([
@@ -129,25 +156,24 @@ class PlavaKrava
                             ]);
                         }
 
-
                         // Materijal
-                        if($item[14] != ''){
+                        if ($item[14] != '') {
 
-                        $exist = AttributesTranslation::query()->where('group_title', 'Materijal')->where('title', $item[14])->first();
+                            $exist = AttributesTranslation::query()->where('group_title', 'Materijal')->where('title', $item[14])->first();
 
                             if ($exist) {
                                 ProductAttribute::query()->insertGetId([
-                                    'product_id'       => $id,
-                                    'attribute_id'     => $exist->id,
+                                    'product_id'   => $id,
+                                    'attribute_id' => $exist->id,
                                 ]);
                             } else {
                                 $atr_id = Attributes::query()->insertGetId([
-                                    'group'       => Str::slug('Materijal'),
-                                    'type'        => 'text',
-                                    'sort_order'  => 0,
-                                    'status'      => 1,
-                                    'created_at'  => Carbon::now(),
-                                    'updated_at'  => Carbon::now()
+                                    'group'      => Str::slug('Materijal'),
+                                    'type'       => 'text',
+                                    'sort_order' => 0,
+                                    'status'     => 1,
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now()
                                 ]);
 
                                 if ($atr_id) {
@@ -161,8 +187,8 @@ class PlavaKrava
                                     ]);
 
                                     ProductAttribute::query()->insertGetId([
-                                        'product_id'       => $id,
-                                        'attribute_id'     => $atr_id,
+                                        'product_id'   => $id,
+                                        'attribute_id' => $atr_id,
                                     ]);
                                 }
                             }
@@ -170,26 +196,24 @@ class PlavaKrava
                         }
                         // End Materijal
 
-
-
                         // Kroj
-                        if($item[17] != ''){
+                        if ($item[17] != '') {
 
                             $exist = AttributesTranslation::query()->where('group_title', 'Kroj')->where('title', $item[17])->first();
 
                             if ($exist) {
                                 ProductAttribute::query()->insertGetId([
-                                    'product_id'       => $id,
-                                    'attribute_id'     => $exist->id,
+                                    'product_id'   => $id,
+                                    'attribute_id' => $exist->id,
                                 ]);
                             } else {
                                 $atr_id = Attributes::query()->insertGetId([
-                                    'group'       => Str::slug('Kroj'),
-                                    'type'        => 'text',
-                                    'sort_order'  => 0,
-                                    'status'      => 1,
-                                    'created_at'  => Carbon::now(),
-                                    'updated_at'  => Carbon::now()
+                                    'group'      => Str::slug('Kroj'),
+                                    'type'       => 'text',
+                                    'sort_order' => 0,
+                                    'status'     => 1,
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now()
                                 ]);
 
                                 if ($atr_id) {
@@ -203,8 +227,8 @@ class PlavaKrava
                                     ]);
 
                                     ProductAttribute::query()->insertGetId([
-                                        'product_id'       => $id,
-                                        'attribute_id'     => $atr_id,
+                                        'product_id'   => $id,
+                                        'attribute_id' => $atr_id,
                                     ]);
                                 }
                             }
@@ -212,25 +236,24 @@ class PlavaKrava
                         }
                         // End Kroj
 
-
                         // Dimenzije
-                        if($item[18] != ''){
+                        if ($item[18] != '') {
 
                             $exist = AttributesTranslation::query()->where('group_title', 'Dimenzije')->where('title', $item[18])->first();
 
                             if ($exist) {
                                 ProductAttribute::query()->insertGetId([
-                                    'product_id'       => $id,
-                                    'attribute_id'     => $exist->id,
+                                    'product_id'   => $id,
+                                    'attribute_id' => $exist->id,
                                 ]);
                             } else {
                                 $atr_id = Attributes::query()->insertGetId([
-                                    'group'       => Str::slug('Dimenzije'),
-                                    'type'        => 'text',
-                                    'sort_order'  => 0,
-                                    'status'      => 1,
-                                    'created_at'  => Carbon::now(),
-                                    'updated_at'  => Carbon::now()
+                                    'group'      => Str::slug('Dimenzije'),
+                                    'type'       => 'text',
+                                    'sort_order' => 0,
+                                    'status'     => 1,
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now()
                                 ]);
 
                                 if ($atr_id) {
@@ -244,8 +267,8 @@ class PlavaKrava
                                     ]);
 
                                     ProductAttribute::query()->insertGetId([
-                                        'product_id'       => $id,
-                                        'attribute_id'     => $atr_id,
+                                        'product_id'   => $id,
+                                        'attribute_id' => $atr_id,
                                     ]);
                                 }
                             }
@@ -253,9 +276,7 @@ class PlavaKrava
                         }
                         // End Kroj
 
-
-
-                        $images = explode(', ',$item[7]);
+                        $images = explode(', ', $item[7]);
 
                         $len = count($images);
 
@@ -263,25 +284,24 @@ class PlavaKrava
 
                         $item[6] = str_replace('\\', '/', $item[6]);
 
-                        foreach($images as $index => $img){
+                        foreach ($images as $index => $img) {
                             if ($index == 0) {
                                 try {
 
                                     $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $name . '/' . $img);
-                                    $image = $import->resolveImages($image_path, $item[2], $id);
+                                    $image      = $import->resolveImages($image_path, $item[2], $id);
                                     $import->saveImageToDB($id, $image, $img, 1);
                                 } catch (\ErrorException $e) {
                                     Log::info('Image not imported. Product SKU: (' . $item[2] . ') - ' . $img);
                                     Log::info($e->getMessage());
                                 }
-                            } else{
+                            } else {
 
 
                                 $image_path = public_path('/media/img/products/Zeus/' . $item[6] . '/' . $name . '/' . $img);
-                                $image = $import->resolveImages($image_path, $item[2], $id);
+                                $image      = $import->resolveImages($image_path, $item[2], $id);
 
-                                     $import->saveImageToDB($id, $image, $img);
-
+                                $import->saveImageToDB($id, $image, $img);
 
 
                             }
@@ -309,10 +329,9 @@ class PlavaKrava
                         ]);
                         // end categories
 
-
                         // attr
                         $attributes = explode('/', $item[6]);
-                        $group = 'Dodatna kategorizacija';
+                        $group      = 'Dodatna kategorizacija';
 
                         if (isset($attributes[2])) {
                             $title = $attributes[2];
@@ -326,17 +345,17 @@ class PlavaKrava
 
                             if ($exist) {
                                 ProductAttribute::query()->insertGetId([
-                                    'product_id'       => $id,
-                                    'attribute_id'     => $exist->id,
+                                    'product_id'   => $id,
+                                    'attribute_id' => $exist->id,
                                 ]);
                             } else {
                                 $atr_id = Attributes::query()->insertGetId([
-                                    'group'       => Str::slug($group),
-                                    'type'        => 'text',
-                                    'sort_order'  => 0,
-                                    'status'      => 1,
-                                    'created_at'  => Carbon::now(),
-                                    'updated_at'  => Carbon::now()
+                                    'group'      => Str::slug($group),
+                                    'type'       => 'text',
+                                    'sort_order' => 0,
+                                    'status'     => 1,
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now()
                                 ]);
 
                                 if ($atr_id) {
@@ -350,8 +369,8 @@ class PlavaKrava
                                     ]);
 
                                     ProductAttribute::query()->insertGetId([
-                                        'product_id'       => $id,
-                                        'attribute_id'     => $atr_id,
+                                        'product_id'   => $id,
+                                        'attribute_id' => $atr_id,
                                     ]);
                                 }
                             }

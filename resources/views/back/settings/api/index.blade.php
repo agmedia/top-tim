@@ -51,7 +51,7 @@
                                                                 <button class="btn btn-alt-info" onclick="document.getElementById('excel-file').click()">Upload Excel</button>
                                                             </td>
                                                             <td>
-                                                                <code>Import proizvoda iz excel datoteke prema strogo definiranim poljima. Ako nazivi polja nisu zadovoljeni, import neće proći.</code>
+                                                                <code>Update proizvoda iz excel datoteke prema strogo definiranim poljima. Ako nazivi polja nisu zadovoljeni, import neće proći.</code>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -173,7 +173,7 @@
 
             let fd = new FormData();
             fd.append("file", file);
-            fd.append("target", 'plava-krava');
+            fd.append("target", 'simple-excel');
             fd.append("method", 'upload-excel');
 
             block.addClass('block-mode-loading');
