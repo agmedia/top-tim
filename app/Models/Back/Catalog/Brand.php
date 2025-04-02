@@ -133,7 +133,7 @@ class Brand extends Model
         $id = $this->update($this->createModelArray('update'));
 
         if ($id) {
-            BrandTranslation::edit($id, $this->request);
+            BrandTranslation::edit($this->id, $this->request);
 
             return $this;
         }
