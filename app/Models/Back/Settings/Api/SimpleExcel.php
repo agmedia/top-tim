@@ -83,6 +83,8 @@ class SimpleExcel
                         'description'      => $item[4],
                         'meta_title'       => $item[6],
                         'meta_description' => $item[7],
+                        'price'            => $item[8],
+                        'quantity'         => $item[9],
                     ]);
 
                     if ($updated) {
