@@ -78,17 +78,22 @@ class SimpleExcel
                 $exist = Product::query()->where('sku', $item[0])->first();
 
                 if ($exist) {
-                    $updated = ProductTranslation::query()->where('product_id', $exist->id)->update([
-                        'name'             => $item[3],
-                        'description'      => $item[4],
-                        'meta_title'       => $item[6],
-                        'meta_description' => $item[7],
-                        'price'            => $item[8],
-                        'quantity'         => $item[9],
+                    $exist_updated = Product::query()->where('sku', $item[0])->update([
+                        'price'    => $item[8],
+                        'quantity' => $item[9]
                     ]);
 
-                    if ($updated) {
-                        $count++;
+                    if ($exist_updated) {
+                        $updated = ProductTranslation::query()->where('product_id', $exist->id)->update([
+                            'name'             => $item[3],
+                            'description'      => $item[4],
+                            'meta_title'       => $item[6],
+                            'meta_description' => $item[7]
+                        ]);
+
+                        if ($updated) {
+                            $count++;
+                        }
                     }
                 }
             }
