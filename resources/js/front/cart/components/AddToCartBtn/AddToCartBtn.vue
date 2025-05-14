@@ -179,7 +179,7 @@ export default {
                 this.addToCart();
 
                 window.fbq('track', 'AddToCart', {
-                    content_ids: this.id,     // dinamička vrijednost
+                    content_ids: [this.id],     // dinamička vrijednost
                     content_type: 'product',
                     value: this.shown_price,            // dinamička vrijednost
                     currency: 'EUR'
