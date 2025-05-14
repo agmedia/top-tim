@@ -169,6 +169,7 @@ class CheckoutController extends FrontBaseController
         $order_data = $this->resolveFinishedOrder($data['order']['id']);
 
         if (isset($order_data['order'])) {
+            $data['ids'] = $order_data['ids'];
             $data['order'] = $order_data['order'];
             $data['google_tag_manager'] = $order_data['google_tag_manager'];
 
@@ -193,6 +194,7 @@ class CheckoutController extends FrontBaseController
             $order_data = $this->resolveFinishedOrder(substr($request->input('OrderID'), 4));
 
             if (isset($order_data['order'])) {
+                $data['ids'] = $order_data['ids'];
                 $data['order'] = $order_data['order'];
                 $data['google_tag_manager'] = $order_data['google_tag_manager'];
 
@@ -243,6 +245,12 @@ class CheckoutController extends FrontBaseController
             $order->update(['order_status_id' => $status]);
 
             //Loyalty::resolveOrder($cart->get(), $order);
+            $ids = [];
+            foreach ($cart->get()['items'] as $item) {
+                array_push($ids, $item['id']);
+            }
+
+            $data['ids'] = $ids;
 
             dispatch(function () use ($order) {
                 Mail::to(config('mail.admin'))->send(new OrderReceived($order));

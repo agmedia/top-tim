@@ -50,6 +50,13 @@
         </div>
     </div>
 
-
+    <script>
+        fbq('track', 'Purchase', {
+            value: {{ number_format($data['order']['total'], 2) }},
+            currency: 'EUR',
+            content_ids: {{ $data['ids'] }},
+            content_type: 'product'
+        });
+    </script>
 
 @endsection
