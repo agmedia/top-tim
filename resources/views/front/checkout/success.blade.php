@@ -50,13 +50,15 @@
         </div>
     </div>
 
-    <script>
-        fbq('track', 'Purchase', {
-            value: {{ number_format($data['order']['total'], 2) }},
-            currency: 'EUR',
-            content_ids: [{{ implode(',', $data['ids']) }}],
-            content_type: 'product'
-        });
-    </script>
+    @push('js_after')
+        <script>
+            fbq('track', 'Purchase', {
+                value: {{ number_format($data['order']['total'], 2) }},
+                currency: 'EUR',
+                content_ids: [{{ implode($data['ids']) }}],
+                content_type: 'product'
+            });
+        </script>
+    @endpush
 
 @endsection
