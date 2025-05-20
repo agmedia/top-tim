@@ -98,8 +98,9 @@ class MyPos
         foreach ($this->order->products as $product) {
             $price = number_format($product->price, 2, '.', '');
             $products_total = $products_total + $price;
+            $quantity = $product->quantity ? intval($product->quantity) : 1;
 
-            $cart->add($product->name, $product->quantity, $price); //name, quantity, price
+            $cart->add($product->name, $quantity, $price); //name, quantity, price
         }
 
         foreach ($this->order->totals as $add) {
