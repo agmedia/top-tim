@@ -498,6 +498,7 @@ class Product extends Model
         $product_id = $product_id ?: $this->id;
 
         if ( ! empty($this->request->input('options')) && is_array($this->request->input('options'))) {
+            $quantity = 0;
             $inputs = $this->request->input('options');
             $groups = Options::query()->get()->unique('group')->pluck('group');
 
@@ -507,10 +508,16 @@ class Product extends Model
                 if ( ! empty($inputs[$group])) {
                     foreach ($inputs[$group] as $option) {
                         if (isset($option['main_id'])) {
-                            ProductOption::storeDouble($inputs[$group], $product_id);
+                            $options_qty = ProductOption::storeDouble($inputs[$group], $product_id);
                         } elseif (isset($option['value'])) {
-                            ProductOption::storeSingle($inputs[$group], $product_id);
+                            $options_qty = ProductOption::storeSingle($inputs[$group], $product_id);
                         }
+                    }
+
+                    $quantity += $options_qty;
+
+                    if (isset($this->id)) {
+                        $this->update(['quantity' => $quantity]);
                     }
                 }
             }

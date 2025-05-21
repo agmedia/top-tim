@@ -46,8 +46,8 @@
     </tr>
     @foreach ($order->products as $product)
         <tr>
-            <td><img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="60px"/> </td>
-            <td>{{ $product->name }} </td>
+            <td><img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="60px"/></td>
+            <td>{{ $product->name }} - <i>{{ $product->sku }}</i></td>
             <td style="text-align: center;">{{ $product->quantity }}</td>
             <td style="text-align: right;">{{ number_format($product->org_price, 2, ',', '.') }}</td>
             <td style="text-align: right;">{{ number_format($product->discount, 0) }} %</td>

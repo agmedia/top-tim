@@ -5,6 +5,7 @@ namespace App\Helpers;
 
 use App\Models\Front\Catalog\Product;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 class Metatags
 {

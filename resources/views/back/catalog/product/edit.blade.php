@@ -11,9 +11,7 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/products.artikl_edit') }}</h1>
-                <button type="submit" class="btn btn-outline-success my-2 mr-3">
-                    <i class="fas fa-save mr-1"></i> {{ __('back/products.snimi') }} {{ __('Artikl') }}
-                </button>
+                <input type="submit" class="btn btn-outline-success my-2 mr-3" form="product-form" value="{{ __('back/products.snimi') }} {{ __('Artikl') }}" />
                 @if (isset($product))
                     <a class="flex btn btn-outline-primary" target="_blank" href="{{ url($product->translation->url) }}">
                         <i class="fa fa-fw fa-eye"></i>
@@ -34,7 +32,7 @@
         @include('back.layouts.partials.session')
         <!--tabs start-->
         <!-- tabs end-->
-        <form action="{{ isset($product) ? route('products.update', ['product' => $product]) : route('products.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="product-form" action="{{ isset($product) ? route('products.update', ['product' => $product]) : route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if (isset($product))
                 {{ method_field('PATCH') }}

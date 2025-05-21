@@ -364,7 +364,7 @@ class Product extends Model
                         'quantity'   => $option->quantity,
                         'price'      => $option->price,
                         'sort_order' => $option->title->sort_order,
-                        'active'     => 1
+                        'active'     => $option->quantity ? 1 : 0
                     ];
                 }
 
@@ -392,11 +392,6 @@ class Product extends Model
                     ];
 
                     if ( ! isset($parents[$option->top->id])) {
-                        $active = 1;
-
-                        if ( ! $option->quantity) {
-                            $active = 0;
-                        }
                         $parents[$option->top->id] = [
                             'id'         => $option->id,
                             'option_id'  => $option->top->id,
@@ -408,7 +403,7 @@ class Product extends Model
                             'quantity'   => 0,
                             'price'      => 0,
                             'sort_order' => $option->top->sort_order,
-                            'active'     => $active
+                            'active'     => 1
                         ];
                     }
                 }

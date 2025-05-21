@@ -111,33 +111,39 @@ class ProductOption extends Model
      * @param array $options
      * @param int   $product_id
      *
-     * @return array
+     * @return int
      */
-    public static function storeSingle(array $options, int $product_id): array
+    public static function storeSingle(array $options, int $product_id): int
     {
-        $created = [];
         self::query()->where('product_id', $product_id)->delete();
         $product = Product::query()->find($product_id);
+        $quantity = 0;
 
         foreach ($options as $option) {
             $opt = Options::query()->find(intval($option['value']) ?? 0);
 
             if ($opt) {
-                $created[] = self::insert([
+                $qty = $option['qty'] ?? 0;
+
+                $created = self::insert([
                     'product_id'  => $product_id,
                     'option_id' => $opt->id,
                     'sku' => $product->sku . '-' . $opt->option_sku,
                     'parent' => 'single',
                     'parent_id' => 0,
-                    'quantity' => $option['qty'] ?? 0,
+                    'quantity' => $qty,
                     'price' => str_replace(',', '.', $option['price']) ?? 0,
                     'data' => '[]',
                     'status' => 1,
                 ]);
+
+                if ($created) {
+                    $quantity += $qty;
+                }
             }
         }
 
-        return $created;
+        return $quantity;
     }
 
 
@@ -145,11 +151,11 @@ class ProductOption extends Model
      * @param array $options
      * @param int   $product_id
      *
-     * @return array
+     * @return int
      */
-    public static function storeDouble(array $options, int $product_id): array
+    public static function storeDouble(array $options, int $product_id): int
     {
-        $created = [];
+        $quantity = 0;
         self::query()->where('product_id', $product_id)->delete();
         $product = Product::query()->find($product_id);
 
@@ -161,23 +167,29 @@ class ProductOption extends Model
                     $sub_opt = Options::query()->find(intval($sub_option['id']) ?? 0);
 
                     if ($sub_opt) {
-                        $created[] = self::insert([
+                        $qty = $sub_option['qty'] ?? 0;
+
+                        $created = self::insert([
                             'product_id'  => $product_id,
                             'option_id' => $sub_opt->id,
                             'sku' => $product->sku . '-' . $opt->option_sku . '-' . $sub_opt->option_sku,
                             'parent' => 'option',
                             'parent_id' => $opt->id,
-                            'quantity' => $sub_option['qty'] ?? 0,
+                            'quantity' => $qty,
                             'price' => $sub_option['price'] ?? 0,
                             'data' => '[]',
                             'status' => 1,
                         ]);
+
+                        if ($created) {
+                            $quantity += $qty;
+                        }
                     }
                 }
             }
         }
 
-        return $created;
+        return $quantity;
     }
 
 

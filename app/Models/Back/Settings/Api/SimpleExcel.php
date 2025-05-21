@@ -80,7 +80,8 @@ class SimpleExcel
                 if ($exist) {
                     $exist_updated = Product::query()->where('sku', $item[0])->update([
                         'price'    => $item[8],
-                        'quantity' => $item[9]
+                        'quantity' => $item[9],
+                        'status'   => $item[11],
                     ]);
 
                     if ($exist_updated) {

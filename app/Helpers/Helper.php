@@ -114,7 +114,7 @@ class Helper
     {
         if ($target != '') {
             $response = collect();
-            $products = Product::query();
+            $products = Product::query()->where('status', 1);
 
             // search by brand
             $products->whereHas('brand', function (Builder $query) use ($target) {
