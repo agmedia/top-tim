@@ -34,7 +34,7 @@
                     <p style="font-size:12px">{{ __('front/cart.sb6') }}  {{number_format($order->total, 2)}} €</p>
 
 
-                    <p style="font-size:12px"> {{ __('front/cart.sb7') }}:  HR5824070001100095118 <br>
+                    <p style="font-size:12px"> {{ __('front/cart.sb7') }}:  HR7023900011101520911 <br>
                         {{ __('front/cart.sb8') }}: {{ $order->id }}-{{date('ym')}}</p>
 
 

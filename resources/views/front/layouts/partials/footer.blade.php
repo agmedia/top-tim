@@ -65,8 +65,8 @@
 
                             <li  class="widget-list-item"><span class="widget-list-link">Put Gvozdenova 283, 22000 Šibenik </span></li>
                             <li  class="widget-list-item"><span class="widget-list-link">OIB: 20925110769</span></li>
-                            <li  class="widget-list-item"><span class="widget-list-link">{{ __('front/ricekakis.ziro_racun') }}: OTP banka d.d.</span></li>
-                                <li  class="widget-list-item"> <span class="widget-list-link">IBAN: HR5824070001100095118 </span></li>
+                            <li  class="widget-list-item"><span class="widget-list-link">{{ __('front/ricekakis.ziro_racun') }}: HPB banka d.d.</span></li>
+                                <li  class="widget-list-item"> <span class="widget-list-link">IBAN: HR7023900011101520911 </span></li>
 
 
                             </ul>
