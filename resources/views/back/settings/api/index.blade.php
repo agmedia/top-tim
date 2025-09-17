@@ -57,7 +57,7 @@
                                                         <tr>
                                                             <td style="width: 20%;">
                                                                 <input type="file" id="excel-full-file" name="file" accept=".xlsx,.xls" style="display: none;" onchange="uploadFile(event, 'export-excel', 'import-from-excel')">
-                                                                <button class="btn btn-alt-info" onclick="document.getElementById('excel-full-file').click()">Upload Full Excel</button>
+                                                                <button class="btn btn-alt-info" onclick="document.getElementById('excel-full-file').click()">Import Full Excel</button>
                                                             </td>
                                                             <td>
                                                                 <code>Update proizvoda sa opcijama, atributima i kategorijama iz excel datoteke prema strogo definiranim poljima. Ako nazivi polja nisu zadovoljeni, import neće proći.</code>
