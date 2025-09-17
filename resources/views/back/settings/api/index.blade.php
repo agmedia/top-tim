@@ -47,11 +47,20 @@
                                                         <tbody>
                                                         <tr>
                                                             <td style="width: 20%;">
-                                                                <input type="file" id="excel-file" name="file" accept=".xlsx,.xls" style="display: none;" onchange="uploadFile(event)">
+                                                                <input type="file" id="excel-file" name="file" accept=".xlsx,.xls" style="display: none;" onchange="uploadFile(event, 'simple-excel', 'upload-excel')">
                                                                 <button class="btn btn-alt-info" onclick="document.getElementById('excel-file').click()">Upload Excel</button>
                                                             </td>
                                                             <td>
                                                                 <code>Update proizvoda iz excel datoteke prema strogo definiranim poljima. Ako nazivi polja nisu zadovoljeni, import neće proći.</code>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 20%;">
+                                                                <input type="file" id="excel-full-file" name="file" accept=".xlsx,.xls" style="display: none;" onchange="uploadFile(event, 'export-excel', 'import-from-excel')">
+                                                                <button class="btn btn-alt-info" onclick="document.getElementById('excel-full-file').click()">Upload Full Excel</button>
+                                                            </td>
+                                                            <td>
+                                                                <code>Update proizvoda sa opcijama, atributima i kategorijama iz excel datoteke prema strogo definiranim poljima. Ako nazivi polja nisu zadovoljeni, import neće proći.</code>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -91,14 +100,14 @@
                                                                 <code>Export proizvoda u excel datoteku i download iste. Samo osnovni podaci.</code>
                                                             </td>
                                                         </tr>
-                                                        {{--<tr>
+                                                        <tr>
                                                             <td style="width: 30%;">
                                                                 <a href="{{ route('export.excel') }}" class="btn btn-alt-info">Export Full Excel</a>
                                                             </td>
                                                             <td>
                                                                 <code>Export proizvoda u excel datoteku i download iste. Full export sa opcijama, kategorijama, atributima, dodatnim fotografijama...</code>
                                                             </td>
-                                                        </tr>--}}
+                                                        </tr>
                                                         <tr>
                                                             <td style="width: 30%; padding-top: 40px;">
                                                                 <a href="{{ route('export.eracuni') }}" class="btn btn-alt-warning">Eračuni Export</a>
@@ -163,7 +172,7 @@
         }
 
 
-        function uploadFile(event) {
+        function uploadFile(event, target, method) {
             let block = $('#my-block-import');
             let file = event.target.files[0];
 
@@ -173,8 +182,8 @@
 
             let fd = new FormData();
             fd.append("file", file);
-            fd.append("target", 'simple-excel');
-            fd.append("method", 'upload-excel');
+            fd.append("target", target);
+            fd.append("method", method);
 
             block.addClass('block-mode-loading');
 

@@ -217,6 +217,9 @@ class ApiController extends Controller
             if ($data['target'] == 'plava-krava') {
                 $class = new PlavaKrava();
             }
+            if ($data['target'] == 'export-excel') {
+                $class = new Export();
+            }
         }
 
         return $class;
