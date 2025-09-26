@@ -95,7 +95,7 @@
                         @endforeach--}}
                         @if (isset($pages) && $pages)
                             @foreach($pages as $page)
-                                @if($page->translation->title !='Naslovnica' and $page->group =='page' )
+                                @if($page->translation && $page->translation->title !='Naslovnica' and $page->group =='page' )
                                     <div class="accordion-item border-bottom">
                                         <h3 class="accordion-header px-grid-gutter"><a class="nav-link-style d-block fs-md fw-normal py-3" href="{{ current_locale() }}/info/{{ $page->translation->slug }}"><span class="d-flex align-items-center">{{ $page->translation->title }}</span></a></h3>
                                     </div>
