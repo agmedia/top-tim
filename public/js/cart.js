@@ -2065,6 +2065,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     product: String,
@@ -2283,7 +2284,13 @@ __webpack_require__.r(__webpack_exports__);
             this.price = this.context_product.main_price;
             this.extra_price = '';
           }
-          this.shown_price = this.setShowPrice();
+          if (this.isFixedDiscount()) {
+            // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+            this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
+          } else {
+            // postojeća logika popusta (percent/amount itd.)
+            this.shown_price = this.setShowPrice();
+          }
         }
       }
       // ponovo izračunaj “već u košarici” za ovu varijantu
@@ -2306,18 +2313,52 @@ __webpack_require__.r(__webpack_exports__);
             this.price = this.context_product.main_price;
             this.extra_price = '';
           }
-          this.shown_price = this.setShowPrice();
+          if (this.isFixedDiscount()) {
+            // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+            this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
+          } else {
+            // postojeća logika popusta (percent/amount itd.)
+            this.shown_price = this.setShowPrice();
+          }
         }
       }
       // ponovo izračunaj “već u košarici” za ovu varijantu
       this.computeExistingInCartForSelection();
     },
     setShowPrice: function setShowPrice() {
-      if (this.context_action.discount) {
-        var price = Number(this.$store.state.service.setDiscount(this.context_action.discount, this.price)).toFixed(2);
-        return price;
+      var _this$context_action, _this$context_action2, _this$selected_color2, _this$selected_size3, _this$context_action3;
+      var d = (_this$context_action = this.context_action) === null || _this$context_action === void 0 ? void 0 : _this$context_action.discount;
+      var t = (_typeof(d) === 'object' ? d.type : ((_this$context_action2 = this.context_action) === null || _this$context_action2 === void 0 ? void 0 : _this$context_action2.type) || '').toString().toUpperCase();
+      var discountVal = _typeof(d) === 'object' && d.value !== undefined ? Number(d.value) : Number(d);
+      var base = Number(this.context_product.main_price); // 86.90
+      var opt = Number(((_this$selected_color2 = this.selected_color) === null || _this$selected_color2 === void 0 ? void 0 : _this$selected_color2.price) || ((_this$selected_size3 = this.selected_size) === null || _this$selected_size3 === void 0 ? void 0 : _this$selected_size3.price) || 0); // opcija +6
+      var _final = base + opt;
+      if (t === 'F') {
+        // fixed iznos popusta: (base - discount) + opcijska cijena
+        _final = base - discountVal + opt;
+      } else if (t === 'P' || t === 'PERCENT') {
+        // postotni: (base + opcijska) * (1 - discount%)
+        _final = (base + opt) * (1 - discountVal / 100);
+      } else if ((_this$context_action3 = this.context_action) !== null && _this$context_action3 !== void 0 && _this$context_action3.discount) {
+        // fallback na service funkciju ako ima
+        _final = Number(this.$store.state.service.setDiscount(this.context_action.discount, base + opt));
       }
-      return this.price;
+      return _final.toFixed(2);
+    },
+    isFixedDiscount: function isFixedDiscount() {
+      var _this$context_action4, _ref3;
+      // discount iz props.action; F = fixed (u tvojoj tablici)
+      var d = (_this$context_action4 = this.context_action) === null || _this$context_action4 === void 0 ? void 0 : _this$context_action4.discount;
+      if (!d) return false;
+      // podrži više formata: {type:'F'} ili 'F' ili slično
+      var t = (_ref3 = _typeof(d) === 'object' ? d.type : d) === null || _ref3 === void 0 ? void 0 : _ref3.toString().toUpperCase();
+      return t === 'F' || t === 'FIXED';
+    },
+    toNum: function toNum(v) {
+      if (v === null || v === undefined || v === '') return 0;
+      if (typeof v === 'number') return isNaN(v) ? 0 : v;
+      var n = parseFloat(String(v).replace(/\s/g, '').replace(',', '.'));
+      return isNaN(n) ? 0 : n;
     }
   }
 });

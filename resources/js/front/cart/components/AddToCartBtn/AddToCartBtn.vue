@@ -332,7 +332,13 @@ export default {
                         this.price = this.context_product.main_price;
                         this.extra_price = '';
                     }
-                    this.shown_price = this.setShowPrice();
+                    if (this.isFixedDiscount()) {
+                        // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+                        this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
+                    } else {
+                        // postojeća logika popusta (percent/amount itd.)
+                        this.shown_price = this.setShowPrice();
+                    }
                 }
             }
             // ponovo izračunaj “već u košarici” za ovu varijantu
@@ -356,18 +362,53 @@ export default {
                         this.price = this.context_product.main_price;
                         this.extra_price = '';
                     }
-                    this.shown_price = this.setShowPrice();
+                    if (this.isFixedDiscount()) {
+                        // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+                        this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
+                    } else {
+                        // postojeća logika popusta (percent/amount itd.)
+                        this.shown_price = this.setShowPrice();
+                    }
                 }
             }
             // ponovo izračunaj “već u košarici” za ovu varijantu
             this.computeExistingInCartForSelection();
         },
         setShowPrice() {
-            if (this.context_action.discount) {
-                const price = Number(this.$store.state.service.setDiscount(this.context_action.discount, this.price)).toFixed(2);
-                return price;
+            const d = this.context_action?.discount;
+            const t = (typeof d === 'object' ? d.type : this.context_action?.type || '').toString().toUpperCase();
+            const discountVal = typeof d === 'object' && d.value !== undefined ? Number(d.value) : Number(d);
+
+            const base = Number(this.context_product.main_price);        // 86.90
+            const opt = Number(this.selected_color?.price || this.selected_size?.price || 0); // opcija +6
+            let final = base + opt;
+
+            if (t === 'F') {
+                // fixed iznos popusta: (base - discount) + opcijska cijena
+                final = (base - discountVal) + opt;
+            } else if (t === 'P' || t === 'PERCENT') {
+                // postotni: (base + opcijska) * (1 - discount%)
+                final = (base + opt) * (1 - (discountVal / 100));
+            } else if (this.context_action?.discount) {
+                // fallback na service funkciju ako ima
+                final = Number(this.$store.state.service.setDiscount(this.context_action.discount, base + opt));
             }
-            return this.price;
+
+            return final.toFixed(2);
+        },
+        isFixedDiscount() {
+            // discount iz props.action; F = fixed (u tvojoj tablici)
+            const d = this.context_action?.discount;
+            if (!d) return false;
+            // podrži više formata: {type:'F'} ili 'F' ili slično
+            const t = (typeof d === 'object' ? d.type : d)?.toString().toUpperCase();
+            return t === 'F' || t === 'FIXED';
+        },
+        toNum(v) {
+            if (v === null || v === undefined || v === '') return 0;
+            if (typeof v === 'number') return isNaN(v) ? 0 : v;
+            const n = parseFloat(String(v).replace(/\s/g, '').replace(',', '.'));
+            return isNaN(n) ? 0 : n;
         },
     },
 };
