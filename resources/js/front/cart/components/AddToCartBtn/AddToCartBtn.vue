@@ -1,24 +1,19 @@
 <template>
     <div class="cart pb-2 mb-2">
-        <!-- Akcija: prikaz s strike-through -->
-        <div class="mb-1" v-if="Number(context_product.main_price) > Number(context_product.main_special) || hasActiveDiscount">
-      <span class="h3 fw-bold font-title text-blue me-1">
-        {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}
-      </span>
+        <div class="mb-1" v-if="Number(context_product.main_price) > Number(context_product.main_special)">
+            <span class="h3 fw-bold font-title text-blue me-1">{{ shown_price }} €</span>
             <span class="text-muted fs-lg me-3">
         <strike>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(price) }}</strike>
       </span>
         </div>
 
-        <!-- Bez akcije -->
         <div class="mb-1" v-else>
       <span class="h3 fw-bold font-title text-blue me-1">
         {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}
       </span>
         </div>
 
-        <!-- Lowest price (prikazujemo trenutačni shown) -->
-        <div class="mb-1 mt-1 text-start" v-if="Number(context_product.main_price) > Number(context_product.main_special) || hasActiveDiscount">
+        <div class="mb-1 mt-1 text-start" v-if="Number(context_product.main_price) > Number(context_product.main_special)">
       <span class="fs-sm text-muted me-1">
         {{ trans.lowest_price }}:
         {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}
@@ -36,7 +31,6 @@
       </span>
         </div>
 
-        <!-- Boje -->
         <div class="mw-500" v-if="Object.keys(color_options).length">
             <div class="fs-sm mb-4">
         <span class="text-heading fw-medium me-1">
@@ -70,7 +64,6 @@
             </div>
         </div>
 
-        <!-- Veličine -->
         <div class="mw-500" v-if="Object.keys(size_options).length && size_disabled">
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center pb-1 opac">
@@ -88,7 +81,6 @@
             </div>
         </div>
 
-        <!-- Qty + Add -->
         <div class="d-flex align-items-center pt-2 mw-500">
             <input
                 class="form-control me-3 mb-1"
@@ -138,25 +130,19 @@ export default {
             size_name: '',
             extra_price: '',
             context_product: {},
-            context_action: {},
-            // Cijene
-            price: 0,          // ALWAYS: regular (base + option_delta) -> koristi se za strike-through
-            option_delta: 0,   // cijena dodatka/umanjenja od opcije
-            shown_price: 0,    // što prikazujemo kao final (s popustima)
+            price: 0,
             size_disabled: false,
+            context_action: {},
+            shown_price: 0,
         };
     },
     computed: {
-        // Max dozvoljena trenutna količina = stock opcije - već u košarici
+        // koliko maksimalno smije unijeti SADA (stock opcije – već u košarici)
         maxQty() {
             const avail = Number(this.is_available) || 0;
             const inCart = Number(this.has_in_cart) || 0;
             const remaining = avail - inCart;
             return remaining > 0 ? remaining : 1;
-        },
-        hasActiveDiscount() {
-            // “akcija” aktivna ako postoji context_action.discount
-            return !!(this.context_action && this.context_action.discount);
         },
     },
     watch: {
@@ -174,24 +160,15 @@ export default {
     },
     beforeMount() {
         this.context_product = JSON.parse(this.product);
-        this.context_action = JSON.parse(this.action);
-
         this.id = this.context_product.id;
-
-        // Osnovna cijena iz proizvoda (baza)
-        const base = Number(this.context_product.main_price) || 0;
-        this.option_delta = 0;
-
-        // Regular za prikaz strike-through je baza + delta (za sada bez opcije)
-        this.price = base + this.option_delta;
-
-        // Inicijalni shown (uzmi u obzir discount/akciju)
-        this.shown_price = this.computeShownPrice();
+        this.price = this.context_product.main_price;
+        this.shown_price = this.price;
+        this.context_action = JSON.parse(this.action);
     },
     mounted() {
         const cart = this.$store.state.storage.getCart();
         if (cart) {
-            // fallback za “već u košarici” po product id-u
+            // ako se vraćaš na artikl, ovo postavlja KOLIKO JE VEĆ u košarici za isti product id (fallback)
             for (const key in cart.items) {
                 if (this.id == cart.items[key].id) {
                     this.has_in_cart = cart.items[key].quantity;
@@ -203,6 +180,7 @@ export default {
         this.is_available = Number(this.available) || 0;
 
         this.setOptionsSelection();
+        this.setPrice();
 
         // ponovno izračunaj točno po varijanti ako je već nešto odabrano
         this.computeExistingInCartForSelection();
@@ -216,7 +194,12 @@ export default {
             this.size_options = res.size ? res.size.options : {};
             this.color_options = res.color ? res.color.options : {};
         },
-
+        setPrice() {
+            if (Number(this.context_product.main_price) > Number(this.context_product.main_special)) {
+                this.price = this.context_product.main_price;
+                this.shown_price = this.context_product.main_special;
+            }
+        },
         add() {
             this.checkAvailability(true);
             if (this.has_in_cart) {
@@ -233,7 +216,6 @@ export default {
                 }
             }
         },
-
         addToCart() {
             const item = {
                 id: this.id,
@@ -242,7 +224,6 @@ export default {
             };
             this.$store.dispatch('addToCart', item);
         },
-
         updateCart() {
             const item = {
                 id: this.id,
@@ -252,7 +233,6 @@ export default {
             };
             this.$store.dispatch('updateCart', item);
         },
-
         checkAvailability(add = false) {
             this.disabled = false;
             if (this.available === undefined) this.is_available = 0;
@@ -266,7 +246,6 @@ export default {
             if (Object.keys(this.color_options).length && !Object.keys(this.selected_color).length) this.disabled = true;
             if (Object.keys(this.size_options).length && !Object.keys(this.selected_size).length) this.disabled = true;
         },
-
         checkAvailableOptions(option, type) {
             const is_parent = type === this.parent ? 1 : 0;
             if (option !== 0) {
@@ -295,7 +274,6 @@ export default {
                 }
             }
         },
-
         setRequestOptions() {
             const response = {};
             response.id = this.id;
@@ -313,7 +291,6 @@ export default {
                         : this.selected_size.option_id;
             return response;
         },
-
         // koliko već imam u košarici za trenutno odabranu varijantu (po option.id)
         computeExistingInCartForSelection() {
             const cart = this.$store.state.storage.getCart();
@@ -337,7 +314,6 @@ export default {
             }
             this.has_in_cart = sum;
         },
-
         setSelectedColor(id) {
             for (const item in this.color_options) {
                 if (id == this.color_options[item].id) {
@@ -348,26 +324,21 @@ export default {
                     const optQty = Number(this.selected_color.quantity ?? this.selected_color.qty ?? 0);
                     this.is_available = optQty || Number(this.available) || 0;
 
-                    const optPrice = Number(this.selected_color.price || 0);
-                    this.option_delta = optPrice; // SAMO delta od opcije
-
-                    this.extra_price = optPrice
-                        ? (optPrice < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(optPrice)
-                        : '';
-
-                    // regular (strike-through) = base + delta
-                    const base = Number(this.context_product.main_price) || 0;
-                    this.price = Number(base + this.option_delta);
-
-                    // final (shown)
-                    this.shown_price = this.computeShownPrice();
+                    if (this.selected_color.price != '0.0000') {
+                        this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2);
+                        const price = Number(this.selected_color.price);
+                        this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
+                    } else {
+                        this.price = this.context_product.main_price;
+                        this.extra_price = '';
+                    }
+                    this.shown_price = this.setShowPrice();
                 }
             }
             // ponovo izračunaj “već u košarici” za ovu varijantu
             this.computeExistingInCartForSelection();
             this.size = 0;
         },
-
         setSelectedSize(id) {
             for (const item in this.size_options) {
                 if (id == this.size_options[item].id) {
@@ -377,62 +348,26 @@ export default {
                     const optQty = Number(this.selected_size.quantity ?? this.selected_size.qty ?? 0);
                     this.is_available = optQty || Number(this.available) || 0;
 
-                    const optPrice = Number(this.selected_size.price || 0);
-                    this.option_delta = optPrice; // SAMO delta od opcije
-
-                    this.extra_price = optPrice
-                        ? (optPrice < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(optPrice)
-                        : '';
-
-                    // regular (strike-through) = base + delta
-                    const base = Number(this.context_product.main_price) || 0;
-                    this.price = Number(base + this.option_delta);
-
-                    // final (shown)
-                    this.shown_price = this.computeShownPrice();
+                    if (this.selected_size.price != '0.0000') {
+                        this.price = Number(this.context_product.main_price) + Number(this.selected_size.price);
+                        const price = Number(this.selected_size.price);
+                        this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
+                    } else {
+                        this.price = this.context_product.main_price;
+                        this.extra_price = '';
+                    }
+                    this.shown_price = this.setShowPrice();
                 }
             }
             // ponovo izračunaj “već u košarici” za ovu varijantu
             this.computeExistingInCartForSelection();
         },
-
-        /**
-         * Računanje finalne cijene (zrcali backend logiku):
-         * regular = base + option_delta
-         * - fixed: final = fixed + option_delta
-         * - percent: final = regular * (1 - pct)
-         * - amount: final = regular - amount
-         */
-        computeShownPrice() {
-            const base = Number(this.context_product.main_price) || 0;
-            const regular = base + (Number(this.option_delta) || 0);
-
-            // Ako postoji "main_special" bez context_action.discount, poštuj ga kao već izračunat special na bazi,
-            // ali dodaj delta opcije: final = main_special + option_delta
-            if (!this.hasActiveDiscount && Number(this.context_product.main_price) > Number(this.context_product.main_special)) {
-                const ms = Number(this.context_product.main_special) || 0;
-                return Number(ms + (Number(this.option_delta) || 0)).toFixed(2);
+        setShowPrice() {
+            if (this.context_action.discount) {
+                const price = Number(this.$store.state.service.setDiscount(this.context_action.discount, this.price)).toFixed(2);
+                return price;
             }
-
-            const d = this.context_action?.discount;
-            if (!d) return Number(regular).toFixed(2);
-
-            // Očekivana struktura: { type: 'fixed'|'percent'|'amount', value: number }
-            const type = String(d.type || '').toLowerCase();
-            const val = Number(d.value || 0);
-
-            let final = regular;
-
-            if (type === 'fixed') {
-                // fixed = konačna cijena za BAZU (kao u backu) -> + opcijska delta
-                final = val + (Number(this.option_delta) || 0);
-            } else if (type === 'percent') {
-                final = regular * (1 - (val / 100));
-            } else if (type === 'amount') {
-                final = regular - val;
-            }
-
-            return Number(final).toFixed(2);
+            return this.price;
         },
     },
 };
