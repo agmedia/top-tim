@@ -133,9 +133,10 @@ class AgCart extends Model
             return ['error' => 'Došlo je do greške.!! Molimo pokušajte ponovo ili kontaktirajte administratora.'];
         }
 
-        if (isset($request['item']['options'])) {
+        if (!empty($request['item']['options']['option_id'])) {
             $product_option = ProductOption::getFromCartData($request['item']['options']);
         }
+
 
         // 2) Dostupnost po opciji (ako postoji) ili po proizvodu
         $available = $product_option ? (int) $product_option->quantity : (int) $product->quantity;
