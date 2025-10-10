@@ -42,7 +42,7 @@ return [
     'items' => 'Stavke',
     'search' => 'Traži...',
     'repeat_action' => 'Ponovi akciju svake godine?',
-
+    'new_action_for_product' => 'Dodaj akciju',
 
     'kupon_kod' => 'Kupon kod',
     'naziv_akcije' => 'Naziv akcije',

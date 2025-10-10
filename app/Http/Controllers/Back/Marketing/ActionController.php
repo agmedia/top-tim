@@ -44,13 +44,18 @@ class ActionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $groups = Settings::get('action', 'group_list');
         $types = Settings::get('action', 'type_list');
         $user_groups = (new UserGroup())->getList();
 
-        return view('back.marketing.action.edit', compact('groups', 'types', 'user_groups'));
+        // Capture pre-fill query params (if any)
+        $prefillGroup = $request->query('group');              // e.g. "product"
+        $prefillList  = $request->query('action_list', []);    // e.g. [123, ...], default empty array
+        $prefillTitle = $request->query('title', ''); // nova linija
+
+        return view('back.marketing.action.edit', compact('groups', 'types', 'user_groups', 'prefillGroup', 'prefillList', 'prefillTitle'));
     }
 
 

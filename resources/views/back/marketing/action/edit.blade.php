@@ -67,7 +67,9 @@
                                             <div class="tab-content">
                                                 @foreach(ag_lang() as $lang)
                                                     <div id="title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($action) ? $action->translation($lang->code)->title : old('title.*') }}" >
+                                                        <input type="text" class="form-control" id="title-input-{{ $lang->code }}" name="title[{{ $lang->code }}]" placeholder="{{ $lang->code }}" value="{{ isset($action)
+    ? $action->translation($lang->code)->title
+    : (old('title.' . $lang->code, $prefillTitle ?? '')) }}" >
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -75,13 +77,22 @@
 
                                         </div>
                                         <div class="col-md-4">
+
+                                            @php
+                                                // Determine which group should be selected by default (prefill overrides)
+                                                $selectedGroup = old('group', isset($action) ? $action->group : ($prefillGroup ?? null));
+                                            @endphp
+
+
                                             <label for="group-select">{{ __('back/action.action_group') }}  <span class="text-danger">*</span></label>
                                             <select class="form-control" id="group-select" name="group">
-                                                <option></option>
+                                                <option value=""></option>
                                                 @foreach ($groups as $group)
-                                                    <option value="{{ $group->id }}" {{ (isset($action) and $group->id == $action->group) ? 'selected="selected"' : '' }}>{{ $group->title }}</option>
+                                                    <option value="{{ $group->id }}"
+                                                        {{ $selectedGroup === $group->id ? 'selected' : '' }}>
+                                                        {{ $group->title }}
+                                                    </option>
                                                 @endforeach
-{{--                                                <option value="all" {{ (isset($action) and 'all' == $action->group) ? 'selected="selected"' : '' }}>Svi Artikli</option>--}}
                                             </select>
                                         </div>
                                     </div>
@@ -175,10 +186,18 @@
                 </div>
 
                 <div class="col-md-5" id="action-list-view">
-                    @if (isset($action))
-                        @livewire('back.marketing.action-group-list', ['group' => $action->group, 'list' => json_decode($action->links)])
+                    @if(isset($action))
+                        @livewire('back.marketing.action-group-list', [
+                        'group' => $action->group,
+                        'list'  => json_decode($action->links)
+                        ])
+                    @elseif(isset($prefillGroup))
+                        @livewire('back.marketing.action-group-list', [
+                        'group' => $prefillGroup,
+                        'list'  => $prefillList
+                        ])
                     @else
-                        @livewire('back.marketing.action-group-list', ['group' => 'products'])
+                        @livewire('back.marketing.action-group-list', ['group' => 'product'])
                     @endif
                 </div>
             </div>

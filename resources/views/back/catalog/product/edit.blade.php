@@ -157,9 +157,27 @@
                                                     <input type="text" class="form-control" id="special-input" name="special" placeholder="00.00" value="{{ isset($product) ? $product->special : old('special') }}" readonly>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">€</span>
+                                                        @php
+                                                            // Probaj current locale, pa fallback na 'hr', pa na SKU
+                                                            $prodName = optional($product->translation(current_locale()))->name
+                                                                ?? optional($product->translation('hr'))->name
+                                                                ?? $product->sku;
+
+                                                            $titleParam = rawurlencode('Akcija za: ' . $prodName);
+                                                        @endphp
+
+                                                        <a href="{{ route('actions.create') }}?group=product&action_list[]={{ $product->id }}&title={{ $titleParam }}"
+                                                           target="_blank"
+                                                           class="btn btn-outline-success js-tooltip-enabled"
+                                                           data-toggle="tooltip"
+                                                           title="{{ __('back/action.new_action_for_product') }}">
+                                                            <i class="fa fa-bolt"></i>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
+
+
                                             <div class="col-md-6">
                                                 <label for="special-from-input">{{ __('back/products.akcija_vrijedi') }}</label>
                                                 <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
