@@ -88,7 +88,7 @@ class Bank
                             'reference' => $pozivnabroj,
                         ),
                     'purpose'     => 'CMDT',
-                    'description' => 'Order Top Tim',
+                    'description' => 'Narudžba' . $pozivnabroj,
                 ),
         );
 
