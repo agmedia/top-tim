@@ -159,17 +159,21 @@
                                                         <span class="input-group-text">€</span>
 
                                                         @php
-                                                            $prodName   = optional($product->translation(current_locale()))->name
+                                                            use App\Models\Back\Marketing\Action;
+
+                                                            // Naziv za title param
+                                                            $prodName = optional($product->translation(current_locale()))->name
                                                                 ?? optional($product->translation('hr'))->name
                                                                 ?? $product->sku;
                                                             $titleParam = rawurlencode('Akcija za: ' . $prodName);
 
-                                                            // Pokušaj prvo preko products.action_id (ako se koristi),
-                                                            // a ako nije postavljen, pronađi aktivnu akciju direktno u product_actions:
+                                                            // Ako koristiš products.action_id, prvo probaj njega:
                                                             $actionIdFromProduct = (int) ($product->action_id ?? 0);
                                                             $activeAction = $actionIdFromProduct > 0
-                                                                ? \App\Models\Back\Marketing\Action::find($actionIdFromProduct)
-                                                                : \App\Models\Back\Marketing\Action::findActiveForProduct($product);
+                                                                ? Action::find($actionIdFromProduct)
+                                                                : Action::findActiveForProduct($product); // helper iz ranijeg primjera
+
+                                                            $isUserGroupLimited = $activeAction && (int) ($activeAction->user_group_id ?? 0) > 0;
                                                         @endphp
 
                                                         @if ($activeAction)
@@ -181,8 +185,19 @@
                                                                title="{{ __('back/action.edit_action_for_product') }}">
                                                                 <i class="fa fa-edit"></i>
                                                             </a>
+
+                                                            @if ($isUserGroupLimited)
+                                                                {{-- Ako je akcija ograničena na grupu korisnika, ponudi i kreiranje nove (globalne ili druge) --}}
+                                                                <a href="{{ route('actions.create') }}?group=product&action_list[]={{ $product->id }}&title={{ $titleParam }}"
+                                                                   target="_blank"
+                                                                   class="btn  btn-outline-success js-tooltip-enabled ml-1"
+                                                                   data-toggle="tooltip"
+                                                                   title="{{ __('back/action.new_action_for_product') }}">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </a>
+                                                            @endif
                                                         @else
-                                                            {{-- Kreiraj novu akciju za ovaj artikl --}}
+                                                            {{-- Nema aktivne akcije -> Kreiraj novu --}}
                                                             <a href="{{ route('actions.create') }}?group=product&action_list[]={{ $product->id }}&title={{ $titleParam }}"
                                                                target="_blank"
                                                                class="btn  btn-outline-success js-tooltip-enabled"
@@ -192,6 +207,7 @@
                                                             </a>
                                                         @endif
                                                     </div>
+
 
                                                 </div>
                                             </div>
