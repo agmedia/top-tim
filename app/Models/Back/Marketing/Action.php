@@ -479,4 +479,56 @@ class Action extends Model
             'special_to'   => null,
         ]);
     }
+
+    public static function findActiveForProduct(\App\Models\Back\Catalog\Product\Product $product)
+    {
+        $now = Carbon::now();
+
+        return self::query()
+            ->where('status', 1)
+            ->where(function ($q) use ($now) {
+                $q->whereNull('date_start')->orWhere('date_start', '<=', $now);
+            })
+            ->where(function ($q) use ($now) {
+                $q->whereNull('date_end')->orWhere('date_end', '>=', $now);
+            })
+            ->where(function ($q) use ($product) {
+                $q->where(function ($qq) use ($product) {
+                    // akcije za pojedinačne proizvode
+                    $qq->where('group', 'product')
+                        ->whereJsonContains('links', (string) $product->id)
+                        ->orWhere(function ($qqq) use ($product) {
+                            // links se zna spremati kao broj, pa pokrij i int varijantu
+                            $qqq->where('group', 'product')
+                                ->whereJsonContains('links', (int) $product->id);
+                        });
+                })
+                    ->orWhere(function ($qq) use ($product) {
+                        // akcije za brend
+                        $qq->where('group', 'brand')
+                            ->whereJsonContains('links', (string) $product->brand_id)
+                            ->orWhere(function ($qqq) use ($product) {
+                                $qqq->where('group', 'brand')
+                                    ->whereJsonContains('links', (int) $product->brand_id);
+                            });
+                    })
+                    ->orWhere(function ($qq) use ($product) {
+                        // akcije za kategorije (bilo koja kategorija proizvoda)
+                        $catIds = ProductCategory::where('product_id', $product->id)->pluck('category_id')->values();
+                        $qq->where('group', 'category')
+                            ->where(function ($qqq) use ($catIds) {
+                                foreach ($catIds as $cid) {
+                                    $qqq->orWhereJsonContains('links', (string) $cid)
+                                        ->orWhereJsonContains('links', (int) $cid);
+                                }
+                            });
+                    })
+                    ->orWhere(function ($qq) {
+                        // akcije za sve artikle
+                        $qq->where('group', 'all');
+                    });
+            })
+            ->orderByDesc('id')
+            ->first();
+    }
 }

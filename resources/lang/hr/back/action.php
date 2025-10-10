@@ -43,7 +43,7 @@ return [
     'search' => 'Traži...',
     'repeat_action' => 'Ponovi akciju svake godine?',
     'new_action_for_product' => 'Dodaj akciju',
-
+    'edit_action_for_product' => 'Uredi akciju',
     'kupon_kod' => 'Kupon kod',
     'naziv_akcije' => 'Naziv akcije',
     'akcija_vrijedi' => 'Akcija vrijedi',

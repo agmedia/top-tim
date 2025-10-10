@@ -157,23 +157,42 @@
                                                     <input type="text" class="form-control" id="special-input" name="special" placeholder="00.00" value="{{ isset($product) ? $product->special : old('special') }}" readonly>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">€</span>
+
                                                         @php
-                                                            // Probaj current locale, pa fallback na 'hr', pa na SKU
-                                                            $prodName = optional($product->translation(current_locale()))->name
+                                                            $prodName   = optional($product->translation(current_locale()))->name
                                                                 ?? optional($product->translation('hr'))->name
                                                                 ?? $product->sku;
-
                                                             $titleParam = rawurlencode('Akcija za: ' . $prodName);
+
+                                                            // Pokušaj prvo preko products.action_id (ako se koristi),
+                                                            // a ako nije postavljen, pronađi aktivnu akciju direktno u product_actions:
+                                                            $actionIdFromProduct = (int) ($product->action_id ?? 0);
+                                                            $activeAction = $actionIdFromProduct > 0
+                                                                ? \App\Models\Back\Marketing\Action::find($actionIdFromProduct)
+                                                                : \App\Models\Back\Marketing\Action::findActiveForProduct($product);
                                                         @endphp
 
-                                                        <a href="{{ route('actions.create') }}?group=product&action_list[]={{ $product->id }}&title={{ $titleParam }}"
-                                                           target="_blank"
-                                                           class="btn btn-outline-success js-tooltip-enabled"
-                                                           data-toggle="tooltip"
-                                                           title="{{ __('back/action.new_action_for_product') }}">
-                                                            <i class="fa fa-bolt"></i>
-                                                        </a>
+                                                        @if ($activeAction)
+                                                            {{-- Uredi postojeću akciju --}}
+                                                            <a href="{{ route('actions.edit', ['action' => $activeAction->id]) }}"
+                                                               target="_blank"
+                                                               class="btn  btn-outline-warning js-tooltip-enabled"
+                                                               data-toggle="tooltip"
+                                                               title="{{ __('back/action.edit_action_for_product') }}">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        @else
+                                                            {{-- Kreiraj novu akciju za ovaj artikl --}}
+                                                            <a href="{{ route('actions.create') }}?group=product&action_list[]={{ $product->id }}&title={{ $titleParam }}"
+                                                               target="_blank"
+                                                               class="btn  btn-outline-success js-tooltip-enabled"
+                                                               data-toggle="tooltip"
+                                                               title="{{ __('back/action.new_action_for_product') }}">
+                                                                <i class="fa fa-bolt"></i>
+                                                            </a>
+                                                        @endif
                                                     </div>
+
                                                 </div>
                                             </div>
 
