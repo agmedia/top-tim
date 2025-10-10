@@ -23,11 +23,11 @@
                    <span id="search_result"></span>
                </div>--}}
                 <div class="dropdown w-100">
-            <div class="input-group "><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
-                   <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="{{ __('front/ricekakis.search_products') }}" id="search_box" data-toggle="dropdown" aria-haspopup="true" autocomplete="off" aria-expanded="false" onkeyup="javascript:load_data(this.value)">
-               </div>
+                     <div class="input-group "><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                         <input class="form-control rounded-start w-100" type="text" name="{{ config('settings.search_keyword') }}" value="{{ request()->query('pojam') ?: '' }}" placeholder="{{ __('front/ricekakis.search_products') }}" id="search_box" data-toggle="dropdown" aria-haspopup="true" autocomplete="off" aria-expanded="false" onkeyup="javascript:load_data(this.value)">
+                   </div>
 
-                <div id="search_result" class="live-search"></div>
+                    <div id="search_result" class="live-search"></div>
                 </div>
             </form>
             <!-- Toolbar-->

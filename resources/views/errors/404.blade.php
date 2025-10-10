@@ -1,6 +1,5 @@
-<script>window.location.href = "https://www.top-tim.com";</script>
-@extends('front.layouts.app')
 
+@extends('front.layouts.app')
 @section('content')
 
     <div class="container py-5 mb-lg-3">
