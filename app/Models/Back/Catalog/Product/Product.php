@@ -351,6 +351,15 @@ class Product extends Model
             }
         }
 
+        if ($request->has('quantity')) {
+            if ($request->input('quantity') == 'active') {
+                $query->where('quantity', '>', 0);
+            }
+            if ($request->input('quantity') == 'inactive') {
+                $query->where('quantity', 0);
+            }
+        }
+
         if ($request->has('sort')) {
             if ($request->input('sort') == 'new') {
                 $query->orderBy('created_at', 'desc');

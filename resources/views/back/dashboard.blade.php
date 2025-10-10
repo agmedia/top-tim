@@ -282,7 +282,7 @@
                             </div>
                         </div>
                         <div class="block-content block-content-full block-content-sm bg-body-light fs-sm text-center">
-                            <a class="font-size-sm" href="{{ route('products') }}">
+                            <a class="font-size-sm" href="{{ route('products') }}?quantity=inactive">
                                 {{ __('back/dashboard.pogledaj_artikle') }}
                                 <i class="fa fa-arrow-right ms-1 opacity-25"></i>
                             </a>
