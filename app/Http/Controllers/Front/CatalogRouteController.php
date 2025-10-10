@@ -29,7 +29,6 @@ use Illuminate\Support\Str;
 
 class CatalogRouteController extends FrontBaseController
 {
-
     /**
      * Resolver for the Groups, categories and products routes.
      * Route::get('{group}/{cat?}/{subcat?}/{prod?}', 'Front\GCP_RouteController::resolve()')->name('gcp_route');
@@ -50,7 +49,7 @@ class CatalogRouteController extends FrontBaseController
                 $query->where('slug', $subcat);
             })->where('parent_id', $cat->id)->first();
 
-            if ( ! $sub_category) {
+            if (!$sub_category) {
                 $prod = Product::query()->whereHas('translation', function ($query) use ($subcat) {
                     $query->where('slug', $subcat);
                 })->first();
@@ -61,7 +60,7 @@ class CatalogRouteController extends FrontBaseController
 
         // Check if there is Product set.
         if ($prod) {
-            if ( ! $prod->status) {
+            if (!$prod->status) {
                 abort(404);
             }
 
@@ -79,14 +78,13 @@ class CatalogRouteController extends FrontBaseController
             $shipping_methods = Settings::getList('shipping', 'list.%', true);
             $payment_methods  = Settings::getList('payment', 'list.%', true);
 
-
-            return view('front.catalog.product.index', compact('prod', 'group', 'cat', 'subcat', 'related', 'seo', 'shipping_methods' , 'payment_methods', 'crumbs', 'bookscheme', 'gdl', 'reviews'));
+            return view('front.catalog.product.index', compact('prod', 'group', 'cat', 'subcat', 'related', 'seo', 'shipping_methods', 'payment_methods', 'crumbs', 'bookscheme', 'gdl', 'reviews'));
         }
 
         $list = [];
         // If only group and has any category... continue...
-        if ($group && ! $cat && ! $subcat) {
-            if ( ! Category::where('group', $group)->first('id')) {
+        if ($group && !$cat && !$subcat) {
+            if (!Category::where('group', $group)->first('id')) {
                 abort(404);
             }
 
@@ -111,7 +109,6 @@ class CatalogRouteController extends FrontBaseController
         return view('front.catalog.category.index', compact('group', 'list', 'cat', 'subcat', 'prod', 'crumbs', 'meta_tags'));
     }
 
-
     /**
      * @param null $prod
      *
@@ -131,7 +128,6 @@ class CatalogRouteController extends FrontBaseController
         abort(404);
     }
 
-
     /**
      * @param null $prod
      *
@@ -146,7 +142,6 @@ class CatalogRouteController extends FrontBaseController
         abort(404);
     }
 
-
     /**
      *
      *
@@ -156,7 +151,7 @@ class CatalogRouteController extends FrontBaseController
      */
     public function author(Request $request, Author $author = null, Category $cat = null, Category $subcat = null)
     {
-        if ( ! $author) {
+        if (!$author) {
             $letters = Helper::resolveCache('authors')->remember('aut_' . 'letters', config('cache.life'), function () {
                 return Author::letters();
             });
@@ -169,7 +164,7 @@ class CatalogRouteController extends FrontBaseController
             $currentPage = request()->get('page', 1);
 
             $authors = Helper::resolveCache('authors')->remember('aut_' . $letter . '.' . $currentPage, config('cache.life'), function () use ($letter) {
-                $auts = Author::query()->select('id', 'title', 'url')->where('status',  1);
+                $auts = Author::query()->select('id', 'title', 'url')->where('status', 1);
 
                 if ($letter) {
                     $auts->where('letter', $letter);
@@ -188,8 +183,12 @@ class CatalogRouteController extends FrontBaseController
 
         $letter = null;
 
-        if ($cat) { $cat->count = $cat->products()->count(); }
-        if ($subcat) { $subcat->count = $subcat->products()->count(); }
+        if ($cat) {
+            $cat->count = $cat->products()->count();
+        }
+        if ($subcat) {
+            $subcat->count = $subcat->products()->count();
+        }
 
         $seo = Seo::getAuthorData($author, $cat, $subcat);
 
@@ -197,7 +196,6 @@ class CatalogRouteController extends FrontBaseController
 
         return view('front.catalog.category.index', compact('author', 'letter', 'cat', 'subcat', 'seo', 'crumbs'));
     }
-
 
     /**
      *
@@ -208,7 +206,7 @@ class CatalogRouteController extends FrontBaseController
      */
     public function brand(Request $request, Brand $brand = null, Category $cat = null, Category $subcat = null)
     {
-        if ( ! $brand) {
+        if (!$brand) {
             $letters = Helper::resolveCache('brands')->remember('aut_' . 'letters', config('cache.life'), function () {
                 return Brand::letters();
             });
@@ -221,7 +219,7 @@ class CatalogRouteController extends FrontBaseController
             $currentPage = request()->get('page', 1);
 
             $brands = Helper::resolveCache('brands')->remember('aut_' . $letter . '.' . $currentPage, config('cache.life'), function () use ($letter) {
-                $auts = Brand::query()->where('status',  1);
+                $auts = Brand::query()->where('status', 1);
 
                 if ($letter) {
                     $auts->where('letter', $letter);
@@ -240,8 +238,12 @@ class CatalogRouteController extends FrontBaseController
 
         $letter = null;
 
-        if ($cat) { $cat->count = $cat->products()->count(); }
-        if ($subcat) { $subcat->count = $subcat->products()->count(); }
+        if ($cat) {
+            $cat->count = $cat->products()->count();
+        }
+        if ($subcat) {
+            $subcat->count = $subcat->products()->count();
+        }
 
         $seo = Seo::getBrandData($brand, $cat, $subcat);
 
@@ -249,8 +251,6 @@ class CatalogRouteController extends FrontBaseController
 
         return view('front.catalog.category.index', compact('brand', 'letter', 'cat', 'subcat', 'seo', 'crumbs'));
     }
-
-
 
     /**
      *
@@ -261,7 +261,7 @@ class CatalogRouteController extends FrontBaseController
      */
     public function publisher(Request $request, Publisher $publisher = null, Category $cat = null, Category $subcat = null)
     {
-        if ( ! $publisher) {
+        if (!$publisher) {
             $letters = Helper::resolveCache('publishers')->remember('pub_' . 'letters', config('cache.life'), function () {
                 return Publisher::letters();
             });
@@ -274,7 +274,7 @@ class CatalogRouteController extends FrontBaseController
             $currentPage = request()->get('page', 1);
 
             $publishers = Helper::resolveCache('publishers')->remember('pub_' . $letter . '.' . $currentPage, config('cache.life'), function () use ($letter) {
-                $pubs = Publisher::query()->select('id', 'title', 'url')->where('status',  1);
+                $pubs = Publisher::query()->select('id', 'title', 'url')->where('status', 1);
 
                 if ($letter) {
                     $pubs->where('letter', $letter);
@@ -293,8 +293,12 @@ class CatalogRouteController extends FrontBaseController
 
         $letter = null;
 
-        if ($cat) { $cat->count = $cat->products()->count(); }
-        if ($subcat) { $subcat->count = $subcat->products()->count(); }
+        if ($cat) {
+            $cat->count = $cat->products()->count();
+        }
+        if ($subcat) {
+            $subcat->count = $subcat->products()->count();
+        }
 
         $seo = Seo::getPublisherData($publisher, $cat, $subcat);
 
@@ -302,7 +306,6 @@ class CatalogRouteController extends FrontBaseController
 
         return view('front.catalog.category.index', compact('publisher', 'letter', 'cat', 'subcat', 'seo', 'crumbs'));
     }
-
 
     /**
      *
@@ -313,53 +316,70 @@ class CatalogRouteController extends FrontBaseController
      */
     public function search(Request $request)
     {
+        // HTML grana (rendera view s rezultatima)
         if ($request->has(config('settings.search_keyword'))) {
-            if ( ! $request->input(config('settings.search_keyword'))) {
+            if (!$request->input(config('settings.search_keyword'))) {
                 return redirect()->back()->with(['error' => 'Oops..! Zaboravili ste upisati pojam za pretraživanje..!']);
             }
 
             $group = null; $cat = null; $subcat = null;
 
-            $ids = Helper::search(
+            $rawIds = Helper::search(
                 $request->input(config('settings.search_keyword'))
             );
+
+            // Normalizacija u array<int> da whereIn dobije ispravan tip
+            $idsArray = $this->normalizeIds($rawIds);
+
+            // zadrži samo aktivne proizvode
+            $ids = Product::query()
+                ->where('status', 1)
+                ->whereIn('id', $idsArray)
+                ->pluck('id');
 
             $crumbs = null;
 
             return view('front.catalog.category.index', compact('group', 'cat', 'subcat', 'ids', 'crumbs'));
         }
 
+        // API grana (JSON autocomplete / frontend)
         if ($request->has(config('settings.search_keyword') . '_api')) {
             $search = Helper::search(
                 $request->input(config('settings.search_keyword') . '_api'), true, true
             );
 
-            $response = [];
+            // Normalizacija u array<int> da whereIn dobije ispravan tip
+            $idsArray = $this->normalizeIds($search['products'] ?? []);
 
-            foreach ($search['products'] as $id) {
-                $item = Product::query()->where('id', $id)->first();
+            // Učitaj samo AKTIVNE proizvode i to u jednoj košarici (bez N+1)
+            $items = Product::query()
+                ->where('status', 1)
+                ->whereIn('id', $idsArray)
+                ->get()
+                // zadrži izvorni poredak ako je bitan (opcionalno)
+                ->sortBy(function ($p) use ($idsArray) {
+                    return array_search($p->id, $idsArray);
+                });
 
-                //Log::info('id = '.$id);
-
-                $response[] = [
-                    'id' => $id,
-                    'sku' => $item->sku,
-                    'name' => $item->name,
-                    'url' => url($item->url),
-                    'main_price' => $item->main_price,
-                    'main_price_text' => $item->main_price_text,
-                    'main_special' => $item->main_special,
+            $response = $items->map(function ($item) {
+                return [
+                    'id'                => $item->id,
+                    'sku'               => $item->sku,
+                    'name'              => $item->name,
+                    'url'               => url($item->url),
+                    'main_price'        => $item->main_price,
+                    'main_price_text'   => $item->main_price_text,
+                    'main_special'      => $item->main_special,
                     'main_special_text' => $item->main_special_text,
-                    'image' => $item->thumb,
+                    'image'             => $item->thumb,
                 ];
-            }
+            })->values();
 
             return response()->json($response);
         }
 
         return response()->json(['error' => 'Greška kod pretrage..! Molimo pokušajte ponovo ili nas kotaktirajte! HVALA...']);
     }
-
 
     /**
      * @param Request $request
@@ -376,7 +396,6 @@ class CatalogRouteController extends FrontBaseController
         return view('front.catalog.category.index', compact('group', 'cat', 'subcat', 'ids', 'crumbs'));
     }
 
-
     /**
      * @param Page $page
      *
@@ -387,7 +406,6 @@ class CatalogRouteController extends FrontBaseController
         return view('front.page', compact('page'));
     }
 
-
     /**
      * @param Blog $blog
      *
@@ -395,7 +413,7 @@ class CatalogRouteController extends FrontBaseController
      */
     public function blog(Blog $blog)
     {
-        if (! $blog->exists) {
+        if (!$blog->exists) {
             $blogs = Blog::active()->get();
 
             return view('front.blog', compact('blogs'));
@@ -406,7 +424,6 @@ class CatalogRouteController extends FrontBaseController
         return view('front.blog', compact('blog'));
     }
 
-
     /**
      * @param Recepti $recepti
      *
@@ -414,7 +431,7 @@ class CatalogRouteController extends FrontBaseController
      */
     public function recepti(Recepti $recepti)
     {
-        if (! $recepti->exists) {
+        if (!$recepti->exists) {
             $receptis = Recepti::active()->get();
 
             return view('front.recepti', compact('receptis'));
@@ -424,7 +441,6 @@ class CatalogRouteController extends FrontBaseController
 
         return view('front.recepti', compact('recepti'));
     }
-
 
     /**
      * @param Faq $faq
@@ -436,7 +452,6 @@ class CatalogRouteController extends FrontBaseController
         $faq = Faq::where('status', 1)->get();
         return view('front.faq', compact('faq'));
     }
-
 
     /**
      * @param array $letters
@@ -454,4 +469,30 @@ class CatalogRouteController extends FrontBaseController
         return 'A';
     }
 
+    /**
+     * Normalizira razne formate ID-eva u array<int> (radi whereIn sigurnim).
+     *
+     * @param mixed $value
+     * @return array<int,int>
+     */
+    private function normalizeIds($value): array
+    {
+        // Ako je npr. "1,2 3" -> razdvoji po zarezima/prazninama; ako je array/Collection, uzmi ga
+        if (is_string($value)) {
+            $ids = preg_split('/[,\s]+/', $value, -1, PREG_SPLIT_NO_EMPTY);
+        } elseif ($value instanceof \Illuminate\Support\Collection) {
+            $ids = $value->all();
+        } else {
+            $ids = is_array($value) ? $value : (array) $value;
+        }
+
+        return collect($ids)
+            ->flatten()
+            ->filter(fn ($v) => $v !== null && $v !== '' && $v !== false)
+            ->map(fn ($v) => (int) $v)
+            ->filter(fn ($v) => $v > 0)
+            ->unique()
+            ->values()
+            ->all();
+    }
 }
