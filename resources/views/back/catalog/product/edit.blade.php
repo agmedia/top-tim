@@ -158,9 +158,7 @@
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">€</span>
                                                         @isset($product)
-                                                        @php
-                                                            use App\Models\Back\Marketing\Action;
-
+                                                        @php                                                        
                                                             // Naziv za title param
                                                             $prodName = optional($product->translation(current_locale()))->name
                                                                 ?? optional($product->translation('hr'))->name
@@ -170,8 +168,8 @@
                                                             // Ako koristiš products.action_id, prvo probaj njega:
                                                             $actionIdFromProduct = (int) ($product->action_id ?? 0);
                                                             $activeAction = $actionIdFromProduct > 0
-                                                                ? Action::find($actionIdFromProduct)
-                                                                : Action::findActiveForProduct($product); // helper iz ranijeg primjera
+                                                                ? \App\Models\Back\Marketing\Action::find($actionIdFromProduct)
+                                                                : \App\Models\Back\Marketing\Action::findActiveForProduct($product); // helper iz ranijeg primjera
 
                                                             $isUserGroupLimited = $activeAction && (int) ($activeAction->user_group_id ?? 0) > 0;
                                                         @endphp
