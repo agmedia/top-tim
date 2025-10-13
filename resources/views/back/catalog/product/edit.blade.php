@@ -131,7 +131,7 @@
                                                 <label for="quantity-input">{{ __('back/products.kolicina') }} <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="quantity-input" name="quantity" placeholder="{{ __('back/products.upisite_kolicinu') }}"
                                                        value="{{ isset($product) ? $product->quantity : ( ! isset($product) ? 1 : old('quantity')) }}">
-                                                @error('quantity ')
+                                                @error('quantity')
                                                 <span class="text-danger font-italic">{{ __('back/products.kolicina_je_potrebna') }}</span>
                                                 @enderror
                                             </div>
@@ -157,7 +157,7 @@
                                                     <input type="text" class="form-control" id="special-input" name="special" placeholder="00.00" value="{{ isset($product) ? $product->special : old('special') }}" readonly>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">€</span>
-
+                                                        @isset($product)
                                                         @php
                                                             use App\Models\Back\Marketing\Action;
 
@@ -206,6 +206,7 @@
                                                                 <i class="fa fa-bolt"></i>
                                                             </a>
                                                         @endif
+                                                        @endisset
                                                     </div>
 
 
