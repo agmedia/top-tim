@@ -39,55 +39,42 @@
             opacity: 1;
         }
 
-        /* === GLAVNA SLIKA === */
-        #gallery .slider-for {
-            height: 600px;
-        }
+        /* Okvir galerije */
+        #gallery { max-height: 750px; }
 
-        #gallery .slider-for .slick-list,
-        #gallery .slider-for .slick-track,
-        #gallery .slider-for .slick-slide {
-            height: 100%;
-        }
-
-        #gallery .slider-for .slick-slide {
-            display: flex !important;
+        /* GLAVNA SLIKA – centriranje sadržaja unutar slajda */
+        #gallery .slider-for .slick-slide .link {
+            display: flex;                 /* centriraj unutar linka, ne na .slick-slide */
             justify-content: center;
             align-items: center;
-            float: none !important;
-            text-align: center;
+            height: 600px;                 /* željena visina okvira */
         }
 
         #gallery .slider-for img {
             max-height: 100%;
             max-width: 100%;
+            width: auto;                   /* zadrži proporcije */
+            height: auto;
             object-fit: contain;
-            display: inline-block;
+            display: block;
         }
 
-        /* === THUMBOVI (slider-nav) === */
-        #gallery .slider-nav {
-            margin-top: 20px;
-        }
-
+        /* THUMBOVI – samo dimenzije i izgled, bez mijenjanja track/list/slide display/float */
         #gallery .slider-nav .slick-slide {
-            text-align: center;            /* poravnaj sadržaj unutar svakog thumb slajda */
+            text-align: center;
+            margin: 0 6px;                 /* razmak između thumbova */
         }
 
         #gallery .slider-nav img,
         #gallery .slider-nav .thumb {
-            width: 100px !important;       /* fiksna širina thumbova */
-            height: 100px !important;      /* fiksna visina */
-            object-fit: cover;             /* ispuni kvadrat */
+            width: 100px !important;
+            height: 100px !important;
+            object-fit: cover;
             display: block;
-            margin: 0 auto;                /* centriraj sliku u thumbu */
+            margin: 0 auto;
             border-radius: 4px;
         }
 
-        /* Opcionalno — malo razmaka između thumbova */
-        #gallery .slider-nav .slick-slide {
-            margin: 0 5px;
-        }
 
 
     </style>
