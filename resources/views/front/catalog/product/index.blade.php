@@ -62,23 +62,25 @@
             display: inline-block;
         }
 
-        /* === THUMB NAV (slider-nav) === */
-        #gallery .slider-nav .slick-slide {
-            display: block !important;        /* ukloni flex nasljeđivanje */
-            float: none !important;
-            text-align: left;                  /* ne centriraj thumbove */
-            height: auto;
+        /* === THUMB STRIP (slider-nav) === */
+        #gallery .slider-nav {
+            display: flex !important;            /* poravnaj ih u red */
+            flex-wrap: nowrap;                   /* sve u jednom redu */
+            justify-content: center;             /* centriraj po širini */
+            gap: 8px;                            /* razmak između thumbova */
         }
+
         #gallery .slider-nav li {
             display: inline-block;
+            flex: 0 0 auto;                      /* spriječi rastezanje */
         }
+
         #gallery .slider-nav img,
         #gallery .slider-nav .thumb {
             width: 100px;
             height: 100px;
-            object-fit: cover;                 /* popuni kvadratni thumb */
-            display: block;                    /* ukloni inline centriranje */
-            margin: 0;                         /* nema auto-centra */
+            object-fit: cover;
+            display: block;
         }
 
     </style>
