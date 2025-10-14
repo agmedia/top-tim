@@ -118,7 +118,7 @@ class MyPos
 
         if ($order_total < $products_total) {
             $discount = number_format($order_total - $products_total, 2, '.', '');
-            
+
             $cart->add('Popust', 1, $discount);
         }
 
@@ -223,40 +223,74 @@ class MyPos
     {
         $cnf = $this->setConfig();
 
-        Log::info('public function notify(Request $request)');
-        Log::info($request->toArray());
+        Log::info('MyPOS notify() – payload:', $request->toArray());
+
+        $data = null;       // inicijaliziraj
+        $ipcmethod = null;  // inicijaliziraj
 
         try {
-            $response = Response::getInstance($cnf, $request->toArray(), \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST);
-            $data     = $response->getData(CASE_LOWER);
+            $response = Response::getInstance(
+                $cnf,
+                $request->toArray(),
+                \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST
+            );
 
+            $data = $response->getData(CASE_LOWER);
+            Log::info('MyPOS notify() – parsed data:', $data);
+
+            $ipcmethod = $data['ipcmethod'] ?? null;
         } catch (IPC_Exception $e) {
-            Log::info('Notify MyPos order exception');
-            Log::info($e->getMessage());
+            // Ne dopuštamo da padne na neinicijaliziranim varijablama
+            Log::warning('MyPOS notify() – IPC_Exception: '.$e->getMessage());
+            // Važno: webhook endpoint treba vratiti 200 kako bi se izbjegao 500 i “zaglavljene” narudžbe
+            return response('OK', 200);
+        } catch (\Throwable $e) {
+            Log::error('MyPOS notify() – Unexpected error: '.$e->getMessage());
+            return response('OK', 200);
         }
 
-        Log::info($response->getData(CASE_LOWER));
-
-        if ($data['ipcmethod'] == 'IPCPurchaseNotify') {
+        // Ako iz bilo kojeg razloga nema ipcmethod, potvrdi primitak i izađi
+        if (!$ipcmethod) {
             return response('OK', 200);
+        }
 
-        } else if ($data['ipcmethod'] == 'IPCPurchaseRollback') {
-            return response('OK', 200);
+        // Grananje po metodi (sve vraća 200 – nema redirecta u webhooku)
+        switch (strtoupper($ipcmethod)) {
+            case 'IPCPURCHASENOTIFY':
+                return response('OK', 200);
 
-        } else if ($data['ipcmethod'] == 'IPCPurchaseCancel') {
-            /*return response('OK', 200);
-            return redirect()->route('kosarica');*/
+            case 'IPCPURCHASEROLLBACK':
+                // Ovdje eventualno zabilježi rollback u Order/Transaction
+                return response('OK', 200);
 
-        } else if ($data['ipcmethod'] == 'IPCPurchaseOK') {
-            $order = Order::query()->find(substr($request->input('OrderID'), 4));
-            $this->finishOrder($order, $request);
+            case 'IPCPURCHASECANCEL':
+                // Ovdje eventualno postavi order na canceled/declined
+                return response('OK', 200);
 
-            //return redirect()->route('checkout.mypos.success', ['identifier' => $request->input('OrderID')]);
+            case 'IPCPURCHASEOK':
+                // Sigurno dohvaćanje OrderID-a (iz parsiranih podataka ili iz originalnog requesta)
+                $orderIdRaw = $data['orderid'] ?? $request->input('OrderID');
+                if ($orderIdRaw) {
+                    $orderId = substr($orderIdRaw, 4);
+                    $order = Order::query()->find($orderId);
+                    if ($order) {
+                        $this->finishOrder($order, $request);
+                    } else {
+                        Log::error("MyPOS notify() – Order not found: {$orderId}");
+                    }
+                } else {
+                    Log::error('MyPOS notify() – Missing OrderID');
+                }
 
-        } else {
-            return redirect()->route('kosarica');
+                return response('OK', 200);
+
+            default:
+                // Nepoznato – potvrdi primitak da gateway ne retry-a u beskonačnost
+                Log::warning('MyPOS notify() – Unknown IPC method: '.$ipcmethod);
+                return response('OK', 200);
         }
     }
+
 
 
     public function cancel(Request $request)

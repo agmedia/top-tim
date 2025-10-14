@@ -6,100 +6,277 @@ use App\Helpers\Helper;
 use App\Models\Back\Orders\Order;
 use App\Models\Front\Catalog\Product;
 use Darryldecode\Cart\CartCollection;
-use function Livewire\str;
 
 /**
- * Class Sitemap
- * @package App\Models
+ * Centralizirani GA4 TagManager
  */
 class TagManager
 {
+    // Ako su cijene u bazi spremljene u DECIMALAMA (5.5000 => 5.50), stavi false.
+    private const PRICES_ARE_IN_CENTS = false;
 
-    /**
-     * @param Order $order
-     *
-     * @return array
-     */
+    /* =========================================================
+     |  JAVNE METODE — VIEW / LIST / CLICK / CART / CHECKOUT
+     |========================================================= */
+
+    public static function viewItem(Product $product): array
+    {
+        return [
+            'event'     => 'view_item',
+            'ecommerce' => [
+                'items' => [ static::getGoogleProductDataLayer($product) ],
+            ],
+        ];
+    }
+
+    public static function viewItemList(iterable $products, string $listName = ''): array
+    {
+        $items    = [];
+        $position = 1;
+
+        foreach ($products as $p) {
+            $item = static::getGoogleProductDataLayer($p);
+            if ($listName !== '') {
+                $item['item_list_name'] = $listName;
+            }
+            $item['index']   = $position++;
+            $items[]         = $item;
+        }
+
+        return [
+            'event'     => 'view_item_list',
+            'ecommerce' => [
+                'item_list_name' => $listName,
+                'items'          => $items,
+            ],
+        ];
+    }
+
+    public static function selectItem(Product $product, string $listName = '', int $position = 1): array
+    {
+        $item = static::getGoogleProductDataLayer($product);
+        if ($listName !== '') {
+            $item['item_list_name'] = $listName;
+        }
+        $item['index'] = $position;
+
+        return [
+            'event'     => 'select_item',
+            'ecommerce' => [
+                'item_list_name' => $listName,
+                'items'          => [ $item ],
+            ],
+        ];
+    }
+
+    public static function addToCart(Product $product, int $qty = 1): array
+    {
+        $item = static::getGoogleProductDataLayer($product, $qty);
+
+        $unit  = static::normalizeMoney($item['price']);
+        $value = $unit * $qty;
+
+        return [
+            'event'     => 'add_to_cart',
+            'ecommerce' => [
+                'currency' => 'EUR',
+                'value'    => static::fmt($value),
+                'items'    => [ $item ],
+            ],
+        ];
+    }
+
+    public static function removeFromCart(Product $product, int $qty = 1): array
+    {
+        $item = static::getGoogleProductDataLayer($product, $qty);
+
+        $unit  = static::normalizeMoney($item['price']);
+        $value = $unit * $qty;
+
+        return [
+            'event'     => 'remove_from_cart',
+            'ecommerce' => [
+                'currency' => 'EUR',
+                'value'    => static::fmt($value),
+                'items'    => [ $item ],
+            ],
+        ];
+    }
+
+    public static function beginCheckout(array $cart_collection, float $cart_total): array
+    {
+        $items = static::getGoogleCartDataLayer($cart_collection);
+
+        return [
+            'event'     => 'begin_checkout',
+            'ecommerce' => [
+                'currency' => 'EUR',
+                'value'    => static::fmt(static::normalizeMoney($cart_total)),
+                'items'    => $items,
+            ],
+        ];
+    }
+
     public static function getGoogleSuccessDataLayer(Order $order)
     {
         $products = [];
-        $shipping = 0;
-        $tax      = 0;
+        $shipping = 0.0;
+        $tax      = 0.0;
 
         foreach ($order->products as $product) {
-            $products[] = static::getGoogleProductDataLayer($product->real);
+            $qty = (int) ($product->quantity ?? 1);
+            $products[] = static::getGoogleProductDataLayer($product->real, $qty);
         }
 
         foreach ($order->totals()->get() as $total) {
             if ($total->code == 'subtotal') {
-                $tax += $total->value - ($total->value / 1.05);
+                $v = static::normalizeMoney($total->value);
+                $tax += $v - ($v / 1.05);
             }
             if ($total->code == 'shipping') {
-                $tax      += $total->value - ($total->value / 1.25);
-                $shipping = $total->value;
+                $v = static::normalizeMoney($total->value);
+                $tax      += $v - ($v / 1.25);
+                $shipping = $v;
             }
         }
 
-        $data = [
+        return [
             'event'     => 'purchase',
             'ecommerce' => [
                 'transaction_id' => (string) $order->id,
-                'affiliation'    => 'Rise Kakis webshop',
-                'value'          =>  (float) number_format($order->total,2),
-                'tax'            =>  (float) number_format($tax, 2),
-                'shipping'       =>  (float) number_format($shipping, 2),
+                'affiliation'    => 'Top Tim webshop',
+                'value'          => static::fmt(static::normalizeMoney($order->total)),
+                'tax'            => static::fmt($tax),
+                'shipping'       => static::fmt($shipping),
                 'currency'       => 'EUR',
-                'items'          => $products
+                'items'          => $products,
             ],
         ];
-
-        return $data;
     }
 
+    /* =========================================================
+     |  MAPIRANJE ARTIKLA (koristi se svugdje)
+     |========================================================= */
 
-    /**
-     * @param Product $product
-     *
-     * @return array
-     */
-    public static function getGoogleProductDataLayer(Product $product): array
+    public static function getGoogleProductDataLayer(Product $product, int $qty = 1): array
     {
-        $discount = 0;
+        $base    = static::normalizeMoney($product->main_price);
+        $special = static::normalizeMoney($product->main_special ?? 0);
 
-        if ($product->main_price > $product->main_special) {
-            $discount = Helper::calculateDiscount($product->main_price, $product->main_special);
+        $unitPrice     = $base;
+        $discountValue = 0.0;
+
+        if ($special > 0 && $base > $special) {
+            $unitPrice     = $special;
+            $discountValue = max(0.0, $base - $special);
         }
 
-        $item = [
-            'item_id'        => $product->sku,
+        return [
+            'item_id'        => $product->sku ?: (string) $product->id,
             'item_name'      => $product->name,
-            'price'          =>  (float) number_format((float) str_replace(',', '.', $product->main_price), 2),
+            'price'          => static::fmt($unitPrice),
             'currency'       => 'EUR',
-            'discount'       =>  (float) number_format($discount, 2),
+            'discount'       => static::fmt($discountValue),
             'item_category'  => $product->category() ? $product->category()->title : '',
             'item_category2' => $product->subcategory() ? $product->subcategory()->title : '',
-            'quantity'       => 1,
+            'quantity'       => max(1, (int)$qty),
         ];
-
-        return $item;
     }
 
-
-
-    /**
-     * @param CartCollection $cart_collection
-     *
-     * @return array
-     */
-    public static function getGoogleCartDataLayer(array $cart_collection): array
+    public static function getGoogleCartDataLayer($cart_collection): array
     {
         $items = [];
 
-        foreach ($cart_collection['items'] as $item) {
-            $items[] = $item->associatedModel->dataLayer;
+        // Odredi što iterirati
+        if (is_array($cart_collection) && isset($cart_collection['items'])) {
+            $iterable = $cart_collection['items'];
+        } else {
+            // Darryldecode Cart::get() vraća kolekciju koja je iterabilna
+            $iterable = $cart_collection;
+        }
+
+        if (!is_iterable($iterable)) {
+            return $items;
+        }
+
+        foreach ($iterable as $item) {
+            // Ako postoji već pripremljen GA4 item na modelu — uzmi ga, ali popravi qty/price
+            if (isset($item->associatedModel->dataLayer) && is_array($item->associatedModel->dataLayer)) {
+                $dl = $item->associatedModel->dataLayer;
+
+                $dl['quantity'] = (int) ($item->quantity ?? ($dl['quantity'] ?? 1));
+
+                // price/discount normalizacija
+                if (isset($dl['price'])) {
+                    $dl['price'] = static::fmt(static::normalizeMoney($dl['price']));
+                } else {
+                    $dl['price'] = static::fmt(
+                        static::normalizeMoney($item->associatedModel->main_special ?? $item->associatedModel->main_price)
+                    );
+                }
+                if (isset($dl['discount'])) {
+                    $dl['discount'] = static::fmt(static::normalizeMoney($dl['discount']));
+                }
+
+                $items[] = $dl;
+                continue;
+            }
+
+            // Inače izgradi item iz Product modela
+            /** @var Product|null $product */
+            $product = $item->associatedModel ?? null;
+            $qty     = (int) ($item->quantity ?? 1);
+
+            if ($product instanceof Product) {
+                $items[] = static::getGoogleProductDataLayer($product, $qty);
+            }
         }
 
         return $items;
     }
 
+
+
+    /* =========================================================
+     |  POMOĆNE — sigurno rukovanje brojevima
+     |========================================================= */
+
+    private static function normalizeMoney($value): float
+    {
+        // Normalizacija stringova i brojeva:
+        //  - "1.234,56"  -> 1234.56
+        //  - "1234,56"   -> 1234.56
+        //  - "4.2000"    -> 4.2  (NE brišemo decimalnu točku!)
+        if (is_string($value)) {
+            $v = preg_replace('/\s+/', '', $value);
+            $hasDot   = strpos($v, '.') !== false;
+            $hasComma = strpos($v, ',') !== false;
+
+            if ($hasDot && $hasComma) {
+                // EU format: . = tisućice, , = decimale
+                $v = str_replace('.', '', $v);
+                $v = str_replace(',', '.', $v);
+            } elseif ($hasComma && !$hasDot) {
+                // Samo zarez -> pretvori u točku
+                $v = str_replace(',', '.', $v);
+            } else {
+                // Samo točka ili samo brojke -> točka je decimalni separator, ne diramo
+            }
+
+            $num = (float) $v;
+        } else {
+            $num = (float) $value;
+        }
+
+        if (self::PRICES_ARE_IN_CENTS) {
+            $num = $num / 100.0;
+        }
+        return $num;
+    }
+
+
+    private static function fmt(float $n): float
+    {
+        return round($n, 2);
+    }
 }
