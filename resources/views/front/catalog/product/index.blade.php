@@ -38,6 +38,49 @@
             visibility: visible;
             opacity: 1;
         }
+
+        /* === GLAVNA SLIKA (slider-for) === */
+        #gallery .slider-for {
+            height: 600px;
+        }
+        #gallery .slider-for .slick-list,
+        #gallery .slider-for .slick-track,
+        #gallery .slider-for .slick-slide {
+            height: 100%;
+        }
+        #gallery .slider-for .slick-slide {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            float: none !important;
+            text-align: center;
+        }
+        #gallery .slider-for img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        /* === THUMB NAV (slider-nav) === */
+        #gallery .slider-nav .slick-slide {
+            display: block !important;        /* ukloni flex nasljeđivanje */
+            float: none !important;
+            text-align: left;                  /* ne centriraj thumbove */
+            height: auto;
+        }
+        #gallery .slider-nav li {
+            display: inline-block;
+        }
+        #gallery .slider-nav img,
+        #gallery .slider-nav .thumb {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;                 /* popuni kvadratni thumb */
+            display: block;                    /* ukloni inline centriranje */
+            margin: 0;                         /* nema auto-centra */
+        }
+
     </style>
 @endpush
 
@@ -109,7 +152,9 @@
                                 @foreach ($prod->images as $key => $image)
                                         <div class="item single-product" data-target="{{ $image->option_id }}">
                                             <a class="link" href="{{ asset($image->image) }}">
-                                                <img src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" style="max-height:600px">
+                                               {{--  <img src="{{ asset($image->image) }}" alt="{{ $image->alt }}" height="600" style="max-height:600px">--}}
+
+                                                <img src="{{ env('APP_IMAGE_DOMAIN') . $image->image }}" alt="" height="600" style="max-height:600px">
                                             </a>
                                         </div>
 
@@ -119,7 +164,9 @@
 
                         <ul class=" slider slider-nav mt-5">
                             @foreach ($prod->images as $key => $image)
-                                <li><img src="{{ asset($image->thumb) }}" class="thumb" width="100" height="100" alt="{{ $image->alt }}"></li>
+                                {{-- <li><img src="{{ asset($image->thumb) }}" class="thumb" width="100" height="100" alt="{{ $image->alt }}"></li>--}}
+
+                                <li><img src="{{ env('APP_IMAGE_DOMAIN') .$image->thumb }}" class="thumb" width="100" height="100" alt="{{ $image->alt }}"></li>
                             @endforeach
                         </ul>
                     </div>
