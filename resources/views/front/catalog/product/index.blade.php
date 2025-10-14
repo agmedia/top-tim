@@ -39,15 +39,17 @@
             opacity: 1;
         }
 
-        /* === GLAVNA SLIKA (slider-for) === */
+        /* === GLAVNA SLIKA === */
         #gallery .slider-for {
             height: 600px;
         }
+
         #gallery .slider-for .slick-list,
         #gallery .slider-for .slick-track,
         #gallery .slider-for .slick-slide {
             height: 100%;
         }
+
         #gallery .slider-for .slick-slide {
             display: flex !important;
             justify-content: center;
@@ -55,6 +57,7 @@
             float: none !important;
             text-align: center;
         }
+
         #gallery .slider-for img {
             max-height: 100%;
             max-width: 100%;
@@ -62,26 +65,30 @@
             display: inline-block;
         }
 
-        /* === THUMB STRIP (slider-nav) === */
+        /* === THUMBOVI (slider-nav) === */
         #gallery .slider-nav {
-            display: flex !important;            /* poravnaj ih u red */
-            flex-wrap: nowrap;                   /* sve u jednom redu */
-            justify-content: center;             /* centriraj po širini */
-            gap: 8px;                            /* razmak između thumbova */
+            margin-top: 20px;
         }
 
-        #gallery .slider-nav li {
-            display: inline-block;
-            flex: 0 0 auto;                      /* spriječi rastezanje */
+        #gallery .slider-nav .slick-slide {
+            text-align: center;            /* poravnaj sadržaj unutar svakog thumb slajda */
         }
 
         #gallery .slider-nav img,
         #gallery .slider-nav .thumb {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
+            width: 100px !important;       /* fiksna širina thumbova */
+            height: 100px !important;      /* fiksna visina */
+            object-fit: cover;             /* ispuni kvadrat */
             display: block;
+            margin: 0 auto;                /* centriraj sliku u thumbu */
+            border-radius: 4px;
         }
+
+        /* Opcionalno — malo razmaka između thumbova */
+        #gallery .slider-nav .slick-slide {
+            margin: 0 5px;
+        }
+
 
     </style>
 @endpush
