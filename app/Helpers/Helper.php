@@ -35,14 +35,39 @@ class Helper
      *
      * @return float|int
      */
-    public static function calculateDiscountPrice(float $price, int $discount, string $type)
+    public static function calculateDiscountPrice($price, $discount, string $type)
     {
-        if ($type == 'F') {
+        // Pretvori moguće objekte u brojke
+        if (is_object($price)) {
+            $price = (array) $price;
+            $price = $price['value'] ?? $price['amount'] ?? 0;
+        }
+        if (is_object($discount)) {
+            $discount = (array) $discount;
+            $discount = $discount['value'] ?? $discount['amount'] ?? 0;
+        }
+
+        // Pretvori sve u float i osiguraj da nisu negativni
+        $price = max(0.0, (float) $price);
+        $discount = max(0.0, (float) $discount);
+
+        if ($type === 'F') {
+            // Ako je fiksni popust veći od cijene, ograniči ga na cijenu
+            if ($discount > $price) {
+                $discount = $price;
+            }
+
             return $price - $discount;
         }
 
-        return $price - ($price * ($discount / 100));
+        // Postotni popust — ograniči između 0 i 100
+        $pct = min(100.0, max(0.0, $discount));
+        $new = $price - ($price * ($pct / 100.0));
+
+        // Sigurnosno: ne ispod 0
+        return max(0.0, $new);
     }
+
 
 
     /**

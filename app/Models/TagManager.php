@@ -243,11 +243,12 @@ class TagManager
 
     private static function normalizeMoney($value): float
     {
-        // Normalizacija stringova i brojeva:
-        //  - "1.234,56"  -> 1234.56
-        //  - "1234,56"   -> 1234.56
-        //  - "4.2000"    -> 4.2  (NE brišemo decimalnu točku!)
-        if (is_string($value)) {
+        // 1) Broj već je broj
+        if (is_int($value) || is_float($value)) {
+            $num = (float) $value;
+        }
+        // 2) Stringovi (podržava i "1.234,56")
+        elseif (is_string($value)) {
             $v = preg_replace('/\s+/', '', $value);
             $hasDot   = strpos($v, '.') !== false;
             $hasComma = strpos($v, ',') !== false;
@@ -259,13 +260,50 @@ class TagManager
             } elseif ($hasComma && !$hasDot) {
                 // Samo zarez -> pretvori u točku
                 $v = str_replace(',', '.', $v);
-            } else {
-                // Samo točka ili samo brojke -> točka je decimalni separator, ne diramo
+            }
+            $num = is_numeric($v) ? (float) $v : 0.0;
+        }
+        // 3) stdClass / objekt — pokušaj tipična polja
+        elseif (is_object($value)) {
+            // Ako se objekt može pretvoriti u string
+            if (method_exists($value, '__toString')) {
+                return self::normalizeMoney((string) $value);
             }
 
-            $num = (float) $v;
-        } else {
-            $num = (float) $value;
+            foreach (['amount','value','price','gross','net','total'] as $prop) {
+                if (isset($value->$prop)) {
+                    return self::normalizeMoney($value->$prop);
+                }
+            }
+            // često zna biti u ugniježđenom polju
+            if (isset($value->data)) {
+                return self::normalizeMoney($value->data);
+            }
+
+            // Nepoznata struktura — ne ruši app, logiraj i vrati 0
+
+            $num = 0.0;
+        }
+        // 4) Array — potraži tipična polja
+        elseif (is_array($value)) {
+            foreach (['amount','value','price','gross','net','total'] as $key) {
+                if (array_key_exists($key, $value)) {
+                    return self::normalizeMoney($value[$key]);
+                }
+            }
+            // uzmi prvo brojčano
+            foreach ($value as $v) {
+                $n = self::normalizeMoney($v);
+                if ($n !== 0.0) {
+                    $num = $n;
+                    break;
+                }
+            }
+            $num = $num ?? 0.0;
+        }
+        // 5) Drugo — fallback
+        else {
+            $num = 0.0;
         }
 
         if (self::PRICES_ARE_IN_CENTS) {
@@ -273,6 +311,7 @@ class TagManager
         }
         return $num;
     }
+
 
 
     private static function fmt(float $n): float
