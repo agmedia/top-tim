@@ -181,6 +181,12 @@ class ProductHelper
 
         foreach ($ops as $op) {
             Product::query()->where('id', $op->product_id)->increment('quantity', $op->quantity);
+
+            $has_option = ProductOption::query()->where('sku', $op->sku)->first();
+
+            if ($has_option) {
+                $has_option->decrement('quantity', $op->quantity);
+            }
         }
 
         return true;
