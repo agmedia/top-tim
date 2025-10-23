@@ -185,7 +185,7 @@ class ProductHelper
             $has_option = ProductOption::query()->where('sku', $op->sku)->first();
 
             if ($has_option) {
-                $has_option->decrement('quantity', $op->quantity);
+                $has_option->increment('quantity', $op->quantity);
             }
         }
 
