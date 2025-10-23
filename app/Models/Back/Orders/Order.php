@@ -4,6 +4,7 @@ namespace App\Models\Back\Orders;
 
 use App\Models\Back\Settings\Settings;
 use App\Models\Back\Users\Client;
+use App\Models\Front\Catalog\ProductOption;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -333,6 +334,12 @@ class Order extends Model
 
             if ($real->decrease) {
                 $real->decrement('quantity', $product->quantity);
+
+                $has_option = ProductOption::query()->where('sku', $product->sku)->first();
+
+                if ($has_option) {
+                    $has_option->decrement('quantity', $product->quantity);
+                }
 
                 if ( ! $real->quantity) {
                     /*$real->update([
