@@ -54,12 +54,15 @@ class AttributeSearchNewInput extends Component
     /**
      *
      */
-    public function mount()
+    public function mount($group = null, $attribute_id = null)
     {
-        if ($this->attribute_id) {
-            $attribute = Attributes::find($this->attribute_id);
+        $this->group = $group;
+        $this->attribute_id = $attribute_id;
 
-            if ($attribute) {
+        if ($this->attribute_id) {
+            $attribute = \App\Models\Back\Catalog\Attributes\Attributes::find($this->attribute_id);
+
+            if ($attribute && $attribute->translation) {
                 $this->search = $attribute->translation->title;
             }
         }
@@ -83,18 +86,24 @@ class AttributeSearchNewInput extends Component
         $this->search         = $value;
         $this->search_results = [];
 
-        if ($this->search != '') {
-            $search = $this->search;
+        if ($this->search !== '') {
+            $search   = $this->search;
+            $grpMatch = Str::slug($this->group);
 
-            $this->search_results = (new Attributes())->newQuery()
-                                                      ->where('group', $this->group)
-                                                      ->whereHas('translation', function ($query) use ($search) {
-                                                          $query->where('title', 'LIKE', '%' . $search . '%');
-                                                      })
-                                                      ->limit(5)
-                                                      ->get();
+            $this->search_results = Attributes::query()
+                ->where(function ($q) use ($grpMatch) {
+                    // Ako u starim zapisima postoji nesažvakani group, možeš proširiti na orWhere('group', $this->group)
+                    $q->where('group', $grpMatch);
+                })
+                ->whereHas('translation', function ($q) use ($search) {
+                    $q->where('title', 'LIKE', '%'.$search.'%');
+                })
+                ->limit(5)
+                ->get();
         }
     }
+
+
 
 
     /**

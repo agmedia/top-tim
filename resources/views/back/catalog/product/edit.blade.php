@@ -158,7 +158,7 @@
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">€</span>
                                                         @isset($product)
-                                                        @php                                                        
+                                                        @php
                                                             // Naziv za title param
                                                             $prodName = optional($product->translation(current_locale()))->name
                                                                 ?? optional($product->translation('hr'))->name
@@ -303,178 +303,188 @@
                                             </div>
                                         </div>
 
-                                        {{--@if ( ! empty($data['attributes']))
-                                            <div class="form-group row items-push mb-4">
-                                                @foreach ($data['attributes'] as $attribute)
-                                                    <div class="col-md-4">
-                                                        <label for="spol">{{ $attribute['group'] }}</label>
-                                                        <select class="js-select2 form-control" id="spol" name="attributes[{{ \Illuminate\Support\Str::slug($attribute['group']) }}]" style="width: 100%;" data-placeholder="Odaberite opciju">
-                                                            <option></option>
-                                                            @foreach ($attribute['items'] as $item)
-                                                                <option value="{{ $item['id'] }}" {{ ((isset($product)) and (in_array($item['id'], $product->attributes()->pluck('id')->toArray()))) ? 'selected' : '' }}>{{ $item['title'] }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @endif--}}
+                                        {{--   @if ( ! empty($data['attributes']))
+                                              <div class="form-group row items-push mb-4">
+                                                  @foreach ($data['attributes'] as $attribute)
+                                                      <div class="col-md-4">
+                                                          <label for="spol">{{ $attribute['group'] }}</label>
+                                                          <select class="js-select2 form-control" id="spol" name="attributes[{{ \Illuminate\Support\Str::slug($attribute['group']) }}]" style="width: 100%;" data-placeholder="Odaberite opciju">
+                                                              <option></option>
+                                                              @foreach ($attribute['items'] as $item)
+                                                                  <option value="{{ $item['id'] }}" {{ ((isset($product)) and (in_array($item['id'], $product->attributes()->pluck('id')->toArray()))) ? 'selected' : '' }}>{{ $item['title'] }}</option>
+                                                              @endforeach
+                                                          </select>
+                                                      </div>
+                                                  @endforeach
+                                              </div>
+                                          @endif
+    --}}
+                                        @php use Illuminate\Support\Str; @endphp
 
-                                        @if ( ! empty($data['attributes']))
+                                        @if (!empty($data['attributes']))
                                             <div class="form-group row items-push mb-4">
                                                 @foreach ($data['attributes'] as $attribute)
                                                     <div class="col-md-4">
                                                         @php
                                                             $attribute_id = 0;
+                                                            $selectedIds = isset($product) ? $product->attributes()->pluck('id')->toArray() : [];
                                                             foreach ($attribute['items'] as $item) {
-                                                                if (isset($product) && in_array($item['id'], $product->attributes()->pluck('id')->toArray())) {
-                                                                    $attribute_id = $item['id'];
-                                                                }
+                                                              if (in_array($item['id'], $selectedIds)) { $attribute_id = $item['id']; }
                                                             }
                                                         @endphp
-                                                        <label for="dm-post-edit-slug">{{ $attribute['group'] }}</label>
-                                                        @livewire('back.catalog.attribute-search-new-input', ['group' => $attribute['group'], 'attribute_id' => $attribute_id])
+
+                                                        <label>{{ $attribute['group'] }}</label>
+
+                                                        @livewire(
+                                                        'back.catalog.attribute-search-new-input',
+                                                        ['group' => $attribute['group'], 'attribute_id' => $attribute_id],
+                                                        key('attr-'.Str::slug($attribute['group']))
+                                                        )
                                                     </div>
                                                 @endforeach
                                             </div>
                                         @endif
 
+
+
+
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="opcije" role="tabpanel">
-                        <div class="block">
-                            <div class="block-content">
-                                <div class="row justify-content-center push">
-                                    <div class="col-md-12">
-                                        @error('sku_opt')
-                                        <span class="text-danger small font-italic">{{ $message }}</span>
-                                        @enderror
-                                        <div id="addition">
-                                            @livewire('back.catalog.product-options-selection', ['product' => isset($product) ? $product : null])
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="slike" role="tabpanel">
-                        <div class="block">
-                            <div class="block-header block-header-default">
-                                <h3 class="block-title">{{ __('back/products.slike') }}</h3>
-                            </div>
-                            <div class="block-content block-content-full">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-12">
-                                        <!-- Dropzone (functionality is auto initialized by the plugin itself in js/plugins/dropzone/dropzone.min.js) -->
-                                        <!-- For more info and examples you can check out http://www.dropzonejs.com/#usage -->
-                                        <!--                            <div class="dropzone">
-                                                                        <div class="dz-message" data-dz-message><span>Klikni ovdje ili dovuci slike za uplad</span></div>
-                                                                    </div>-->
-                                        @include('back.catalog.product.edit-photos', ['resource' => isset($product) ? $product : null, 'existing' => $data['images'], 'delete_url' => route('products.destroy.image')])
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="seo" role="tabpanel">
-                        <div class="block">
-                            <div class="block-header block-header-default">
-                                <h3 class="block-title">{{ __('back/products.meta_data_seo') }}</h3>
-                            </div>
-                            <div class="block-content">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="meta-title-input">{{ __('back/products.meta_naslov') }}</label>
-                                            <ul class="nav nav-pills float-right">
-                                                @foreach(ag_lang() as $lang)
-                                                    <li @if ($lang->code == current_locale()) class="active" @endif>
-                                                        <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta_title-{{ $lang->code }}">
-                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                            <div class="tab-content">
-                                                @foreach(ag_lang() as $lang)
-                                                    <div id="meta_title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"
-                                                               value="{{ (isset($product) && isset($product->translation($lang->code)->meta_title)) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true"
-                                                               data-placement="top">
-                                                        <small class="form-text text-muted">
-                                                            {{ __('back/products.70_znakova_max') }}
-                                                        </small>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="meta-description-input">{{ __('back/products.meta_opis') }}</label>
-                                            <ul class="nav nav-pills float-right">
-                                                @foreach(ag_lang() as $lang)
-                                                    <li @if ($lang->code == current_locale()) class="active" @endif>
-                                                        <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta-description-{{ $lang->code }}">
-                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                            <div class="tab-content">
-                                                @foreach(ag_lang() as $lang)
-                                                    <div id="meta-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true"
-                                                                  data-placement="top">{{ (isset($product) && isset($product->translation($lang->code)->meta_description)) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
-                                                        <small class="form-text text-muted">
-                                                            {{ __('back/products.160_znakova_max') }}
-                                                        </small>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="slug-input"> {{ __('back/products.seo_url') }}</label>
-                                            <ul class="nav nav-pills float-right">
-                                                @foreach(ag_lang() as $lang)
-                                                    <li @if ($lang->code == current_locale()) class="active" @endif>
-                                                        <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#slug-input-{{ $lang->code }}">
-                                                            <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                            <div class="tab-content">
-                                                @foreach(ag_lang() as $lang)
-                                                    <div id="slug-input-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
-                                                        <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}"
-                                                               value="{{(isset($product) && isset($product->translation($lang->code)->slug)) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
-                                                        <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ (isset($product) && isset($product->translation($lang->code)->slug)) ? $product->translation($lang->code)->slug : old('slug.*') }}">
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END Block Tabs Default Style -->
-            <div class="block">
-                <div class="block-content bg-body-light">
-                    <div class="row justify-content-center push">
-                        <div class="col-md-6">
-                            <button type="submit" class="btn btn-hero-success my-2">
-                                <i class="fas fa-save mr-1"></i> {{ __('back/products.snimi') }}
-                            </button>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            @if (isset($product))
-                                {{--<a href="{{ route('products.destroy', ['product' => $product]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-product-form{{ $product->id }}').submit();">
-                                    <i class="fa fa-trash-alt"></i> {{ __('back/products.obrisi') }}
-                                </a>--}}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="tab-pane" id="opcije" role="tabpanel">
+                          <div class="block">
+                              <div class="block-content">
+                                  <div class="row justify-content-center push">
+                                      <div class="col-md-12">
+                                          @error('sku_opt')
+                                          <span class="text-danger small font-italic">{{ $message }}</span>
+                                          @enderror
+                                          <div id="addition">
+                                              @livewire('back.catalog.product-options-selection', ['product' => isset($product) ? $product : null])
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="tab-pane" id="slike" role="tabpanel">
+                          <div class="block">
+                              <div class="block-header block-header-default">
+                                  <h3 class="block-title">{{ __('back/products.slike') }}</h3>
+                              </div>
+                              <div class="block-content block-content-full">
+                                  <div class="row justify-content-center">
+                                      <div class="col-md-12">
+                                          <!-- Dropzone (functionality is auto initialized by the plugin itself in js/plugins/dropzone/dropzone.min.js) -->
+                                          <!-- For more info and examples you can check out http://www.dropzonejs.com/#usage -->
+                                          <!--                            <div class="dropzone">
+                                                                          <div class="dz-message" data-dz-message><span>Klikni ovdje ili dovuci slike za uplad</span></div>
+                                                                      </div>-->
+                                          @include('back.catalog.product.edit-photos', ['resource' => isset($product) ? $product : null, 'existing' => $data['images'], 'delete_url' => route('products.destroy.image')])
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="tab-pane" id="seo" role="tabpanel">
+                          <div class="block">
+                              <div class="block-header block-header-default">
+                                  <h3 class="block-title">{{ __('back/products.meta_data_seo') }}</h3>
+                              </div>
+                              <div class="block-content">
+                                  <div class="row justify-content-center">
+                                      <div class="col-md-12">
+                                          <div class="form-group">
+                                              <label for="meta-title-input">{{ __('back/products.meta_naslov') }}</label>
+                                              <ul class="nav nav-pills float-right">
+                                                  @foreach(ag_lang() as $lang)
+                                                      <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                          <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta_title-{{ $lang->code }}">
+                                                              <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
+                                                          </a>
+                                                      </li>
+                                                  @endforeach
+                                              </ul>
+                                              <div class="tab-content">
+                                                  @foreach(ag_lang() as $lang)
+                                                      <div id="meta_title-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                          <input type="text" class="js-maxlength form-control" id="meta-title-input-{{ $lang->code }}" name="meta_title[{{ $lang->code }}]" placeholder="{{ $lang->code }}"
+                                                                 value="{{ (isset($product) && isset($product->translation($lang->code)->meta_title)) ? $product->translation($lang->code)->meta_title : old('meta_title.*') }}" maxlength="70" data-always-show="true"
+                                                                 data-placement="top">
+                                                          <small class="form-text text-muted">
+                                                              {{ __('back/products.70_znakova_max') }}
+                                                          </small>
+                                                      </div>
+                                                  @endforeach
+                                              </div>
+                                          </div>
+                                          <div class="form-group">
+                                              <label for="meta-description-input">{{ __('back/products.meta_opis') }}</label>
+                                              <ul class="nav nav-pills float-right">
+                                                  @foreach(ag_lang() as $lang)
+                                                      <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                          <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#meta-description-{{ $lang->code }}">
+                                                              <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
+                                                          </a>
+                                                      </li>
+                                                  @endforeach
+                                              </ul>
+                                              <div class="tab-content">
+                                                  @foreach(ag_lang() as $lang)
+                                                      <div id="meta-description-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                          <textarea class="js-maxlength form-control" id="meta-description-input-{{ $lang->code }}" name="meta_description[{{ $lang->code }}]" placeholder="{{ $lang->code }}" rows="4" maxlength="160" data-always-show="true"
+                                                                    data-placement="top">{{ (isset($product) && isset($product->translation($lang->code)->meta_description)) ? $product->translation($lang->code)->meta_description : old('meta_description.*') }}</textarea>
+                                                          <small class="form-text text-muted">
+                                                              {{ __('back/products.160_znakova_max') }}
+                                                          </small>
+                                                      </div>
+                                                  @endforeach
+                                              </div>
+                                          </div>
+                                          <div class="form-group">
+                                              <label for="slug-input"> {{ __('back/products.seo_url') }}</label>
+                                              <ul class="nav nav-pills float-right">
+                                                  @foreach(ag_lang() as $lang)
+                                                      <li @if ($lang->code == current_locale()) class="active" @endif>
+                                                          <a class="btn btn-sm btn-outline-secondary ml-2 @if ($lang->code == current_locale()) active @endif " data-toggle="pill" href="#slug-input-{{ $lang->code }}">
+                                                              <img src="{{ asset('media/flags/' . $lang->code . '.png') }}"/>
+                                                          </a>
+                                                      </li>
+                                                  @endforeach
+                                              </ul>
+                                              <div class="tab-content">
+                                                  @foreach(ag_lang() as $lang)
+                                                      <div id="slug-input-{{ $lang->code }}" class="tab-pane @if ($lang->code == current_locale()) active @endif">
+                                                          <input type="text" class="form-control" id="slug-input-{{ $lang->code }}" placeholder="{{ $lang->code }}"
+                                                                 value="{{(isset($product) && isset($product->translation($lang->code)->slug)) ? $product->translation($lang->code)->slug : old('slug.*') }}" disabled>
+                                                          <input type="hidden" name="slug[{{ $lang->code }}]" value="{{ (isset($product) && isset($product->translation($lang->code)->slug)) ? $product->translation($lang->code)->slug : old('slug.*') }}">
+                                                      </div>
+                                                  @endforeach
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- END Block Tabs Default Style -->
+              <div class="block">
+                  <div class="block-content bg-body-light">
+                      <div class="row justify-content-center push">
+                          <div class="col-md-6">
+                              <button type="submit" class="btn btn-hero-success my-2">
+                                  <i class="fas fa-save mr-1"></i> {{ __('back/products.snimi') }}
+                              </button>
+                          </div>
+                          <div class="col-md-6 text-right">
+                              @if (isset($product))
+                                  {{--<a href="{{ route('products.destroy', ['product' => $product]) }}" type="submit" class="btn btn-hero-danger my-2 js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Obriši" onclick="event.preventDefault(); document.getElementById('delete-product-form{{ $product->id }}').submit();">
+                                      <i class="fa fa-trash-alt"></i> {{ __('back/products.obrisi') }}
+                                  </a>--}}
                                 <button class="btn btn-hero-danger my-2 js-tooltip-enabled"
                                         data-toggle="tooltip"
                                         title=""
