@@ -4383,8 +4383,8 @@ var render = function render() {
         return _vm.add();
       }
     }
-  }, [_vm._v("+"), _c("i", {
-    staticClass: "ci-cart fs-base ms-1"
+  }, [_c("i", {
+    staticClass: "ci-cart fs-sm 0"
   })]);
 };
 var staticRenderFns = [];
@@ -5826,7 +5826,7 @@ var render = function render() {
         alt: product.name
       }
     })]), _vm._v(" "), _c("div", {
-      staticClass: "card-body py-2 pt-0"
+      staticClass: "card-body py-0 px-2 pt-0"
     }, [_c("h3", {
       staticClass: "product-title fs-sm text-truncate"
     }, [_c("a", {
@@ -5850,7 +5850,7 @@ var render = function render() {
     }, [_c("span", {
       staticClass: "text-red fs-md"
     }, [_vm._v(_vm._s(product.main_special_text) + "  "), _c("span", {
-      staticClass: "fs-sm text-muted"
+      staticClass: "fs-md text-redd"
     }, [_c("strike", [_vm._v(_vm._s(product.main_price_text))])], 1)])])]) : _c("div", {
       staticClass: "product-price"
     }, [!product.special ? _c("span", {
@@ -5878,7 +5878,7 @@ var render = function render() {
           return _vm.add(product.id, product.quantity);
         }
       }
-    }, [_vm._v("+"), _c("i", {
+    }, [_c("i", {
       staticClass: "ci-cart fs-base ms-1"
     })])]) : _vm._e(), _vm._v(" "), product.quantity > 0 && product.has_option ? _c("div", {
       staticClass: "product-floating-btn"
@@ -5887,8 +5887,8 @@ var render = function render() {
       attrs: {
         href: _vm.origin + product.url
       }
-    }, [_vm._v("+"), _c("i", {
-      staticClass: "ci-cart fs-base ms-1"
+    }, [_c("i", {
+      staticClass: "ci-cart fs-base ms-0"
     })])]) : _vm._e()])]);
   }), 0) : _vm._e(), _vm._v(" "), _c("pagination", {
     attrs: {

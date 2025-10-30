@@ -12,7 +12,7 @@
     <base href="{{ config('settings.images_domain') }}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" media="screen" href="{{ asset('vendor/simplebar/dist/simplebar.min.css') }}"/>
-    <link rel="stylesheet" media="screen" href="{{ asset('css/theme.css?v=2.95') }}">
+    <link rel="stylesheet" media="screen" href="{{ asset('css/theme.css?v=2.96') }}">
     <meta name="google-site-verification" content="A0oaGXU9FEbnLYZbkOpc0PXFLrFsN19VdLO_6em9r14" />
     <!-- Favicon and Touch Icons-->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ config('settings.images_domain') . 'favicon-32x32.png' }}">
@@ -112,7 +112,7 @@
 <script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
     <!-- Main theme script ?v=2.2.9 -->
-<script src="{{ asset('js/cart.js?v=2.2.110') }}"></script>
+<script src="{{ asset('js/cart.js?v=2.2.120') }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {

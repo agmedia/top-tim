@@ -92,6 +92,9 @@ body {
 #agapp[aria-hidden=true] {
     display:none;
 }
+.text-redd{
+    color:#dc3545!important;
+}
 
 .dropresults{
 

@@ -62,7 +62,7 @@
 
                     <a class="card-img-top d-block pb-2 overflow-hidden " :href="origin + product.url"><img loading="lazy" :src="product.image.replace('.webp', '-thumb.webp')" width="400" height="400" :alt="product.name">
                     </a>
-                    <div class="card-body py-2 pt-0">
+                    <div class="card-body py-0 px-2 pt-0">
 
                         <h3 class="product-title fs-sm text-truncate"><a :href="origin + product.url">{{ product.name }}</a></h3>
                         <div class="d-flex flex-wrap justify-content-between align-items-center" v-if="product.category_string">
@@ -73,7 +73,7 @@
                             <span class="fs-sm text-muted" ><small>NC 30 dana: {{ product.main_price_text }} </small> </span>
                         </div>
                         <div class="product-price">
-                            <span class="text-red fs-md">{{ product.main_special_text }}  <span class="fs-sm text-muted"><strike>{{ product.main_price_text }}</strike></span></span>
+                            <span class="text-red fs-md">{{ product.main_special_text }}  <span class="fs-md text-redd"><strike>{{ product.main_price_text }}</strike></span></span>
                         </div>
                         </div>
                         <div class="product-price" v-else>
@@ -92,10 +92,10 @@
 
                     </div>
                     <div class="product-floating-btn" v-if="product.quantity > 0 && !product.has_option">
-                        <button class="btn btn-primary btn-shadow btn-sm" :disabled="product.disabled" v-on:click="add(product.id, product.quantity)" type="button">+<i class="ci-cart fs-base ms-1"></i></button>
+                        <button class="btn btn-primary btn-shadow btn-sm" :disabled="product.disabled" v-on:click="add(product.id, product.quantity)" type="button"><i class="ci-cart fs-base ms-1"></i></button>
                     </div>
                     <div class="product-floating-btn" v-if="product.quantity > 0 && product.has_option">
-                        <a class="btn btn-primary btn-shadow btn-sm" :href="origin + product.url">+<i class="ci-cart fs-base ms-1"></i></a>
+                        <a class="btn btn-primary btn-shadow btn-sm" :href="origin + product.url"><i class="ci-cart fs-base ms-0"></i></a>
                     </div>
                 </div>
             </div>

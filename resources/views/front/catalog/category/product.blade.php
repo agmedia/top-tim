@@ -8,15 +8,15 @@
         <a class="card-img-top pb-2 d-block overflow-hidden thumb-height text-center" href="{{ url($product->url) }}">
             <img loading="lazy" src="{{ str_replace('.webp','-thumb.webp', $product->image) }}" width="400" height="400" alt="{{ $product->name }}">
         </a>
-        <div class="card-body pt-2" style="min-height: 120px;">
+        <div class="card-body py-0 px-2 pt-0" style="min-height: 120px;">
 
             <h3 class="product-title fs-sm text-truncate"><a href="{{ url($product->url) }}">{{ $product->name }}</a></h3>
             {!! $product->category_string !!}
             @if ($product->main_price > $product->main_special)
                 <div class="product-price"><small><span class="text-muted">{{ __('front/ricekakis.nc_30') }}: {{ $product->main_price_text }}  </span></small></div>
-                <div class="product-price text-red"><span class="text-red fs-md">{{ $product->main_special_text }} <span class="text-muted"><strike>{{ $product->main_price_text }}</strike></span></span></div>
+                <div class="product-price text-red"><span class="text-red fs-md">{{ $product->main_special_text }} <span class="text-redd"><strike>{{ $product->main_price_text }}</strike></span></span></div>
             @else
-                <div class="product-price"><span class="text-dark fs-md">{{ $product->main_price_text }}  @if($product->secondary_price_text) <small class="fs-sm text-muted">{{ $product->secondary_price_text }} </small>@endif</span></div>
+                <div class="product-price"><span class="text-dark fs-md">{{ $product->main_price_text }}  @if($product->secondary_price_text) <small class="fs-md text-muted">{{ $product->secondary_price_text }} </small>@endif</span></div>
             @endif
 
 
@@ -47,7 +47,7 @@
 
             @if($product->quantity > 0 && $product->has_option)
                 <div class="product-floating-btn">
-                    <a class="btn btn-primary btn-shadow btn-sm" href="{{ url($product->url) }}">+<i class="ci-cart fs-base ms-1"></i></a>
+                    <a class="btn btn-primary btn-shadow btn-sm" href="{{ url($product->url) }}"><i class="ci-cart fs-base ms-0"></i></a>
                 </div>
             @endif
     </div>
