@@ -193,6 +193,8 @@ Route::group(
         Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::patch('user/{user}', [UserController::class, 'update'])->name('users.update');
 
+        Route::get('users/export', [UserController::class, 'export'])->name('users.export');
+
         // POPUSTI
         Route::get('discounts', [DiscountController::class, 'index'])->name('discounts');
 

@@ -10,6 +10,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
+
 class UserController extends Controller
 {
     /**
@@ -55,6 +58,14 @@ class UserController extends Controller
         $user = new User();
 
 
+    }
+
+    public function export(\Illuminate\Http\Request $request)
+    {
+        $search = $request->query('search');
+        $filename = 'users_' . now()->format('Y-m-d_H-i') . '.xlsx';
+
+        return Excel::download(new UsersExport($search), $filename);
     }
 
 

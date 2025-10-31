@@ -12,7 +12,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/user.users') }}</h1>
-
+                <a href="{{ route('users.export', request()->query()) }}" class="btn btn-hero-sm btn-success">
+                    <i class="fa fa-file-excel"></i> Export Excel
+                </a>
             </div>
         </div>
     </div>
@@ -28,6 +30,8 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">{{ __('back/user.all_users') }} ({{ $users->total() }})</h3>
                 <div class="block-options">
+
+
                     <!-- Search Form -->
                     <form action="{{ route('users') }}" method="GET">
                         <div class="block-options-item">
