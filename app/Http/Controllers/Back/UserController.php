@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Cache;
 
 use App\Exports\UsersExport;
 
-use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelWriter; // ⬅︎ servis, ne fasada
 
 class UserController extends Controller
 {
@@ -62,12 +62,12 @@ class UserController extends Controller
 
     }
 
-    public function export(\Illuminate\Http\Request $request)
+    public function export(Request $request, ExcelWriter $excel) // ⬅︎ DI
     {
         $search = $request->query('search');
         $filename = 'users_' . now()->format('Y-m-d_H-i') . '.xlsx';
 
-        return Excel::download(new UsersExport($search), $filename);
+        return $excel->download(new UsersExport($search), $filename, ExcelWriter::XLSX);
     }
 
 
