@@ -10,8 +10,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-use Maatwebsite\Excel\Facades\Excel;
+
 use App\Exports\UsersExport;
+
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
