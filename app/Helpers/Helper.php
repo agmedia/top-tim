@@ -446,6 +446,7 @@ class Helper
                     'color'    => $widget->badge,
                     'url'      => $widget->url,
                     'image'    => str_replace('.jpg', '.webp', $widget->image),
+                    'image_2'    => str_replace('.jpg', '.webp', $widget->image_2),
                     'width'    => $widget->width,
                     'right'    => (isset($data['right']) && $data['right'] == 'on') ? 1 : null,
                 ];

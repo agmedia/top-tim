@@ -61,12 +61,25 @@ class WidgetController extends Controller
      */
     public function store(Request $request)
     {
+        // Ako se uploada klasičan file za image_2, validiraj ga kao sliku.
+        if ($request->hasFile('image_2')) {
+            $request->validate([
+                'image_2' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            ]);
+        }
+
         $widget = new Widget();
         $stored = $widget->validateRequest($request)->setUrl()->store();
 
         if ($stored) {
+            // Postojeća logika za prvu sliku (Slim JSON / image_long)
             if (Widget::hasImage($request)) {
                 $stored->resolveImage($request);
+            }
+
+            // NOVO: druga slika (podržava i Slim JSON i klasičan file)
+            if (Widget::hasImage2($request)) {
+                $stored->resolveImage2($request);
             }
 
             $this->flush($stored);
@@ -126,12 +139,25 @@ class WidgetController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Ako se uploada klasičan file za image_2, validiraj ga kao sliku.
+        if ($request->hasFile('image_2')) {
+            $request->validate([
+                'image_2' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            ]);
+        }
+
         $widget = new Widget();
         $updated = $widget->validateRequest($request)->setUrl()->edit($id);
 
         if ($updated) {
+            // Postojeća logika za prvu sliku
             if (Widget::hasImage($request)) {
                 $updated->resolveImage($request);
+            }
+
+            // NOVO: druga slika
+            if (Widget::hasImage2($request)) {
+                $updated->resolveImage2($request);
             }
 
             $this->flush($updated);
@@ -161,7 +187,7 @@ class WidgetController extends Controller
 
 
     /**
-     * @param Page $page
+     * @param Widget $widget
      */
     private function flush(Widget $widget): void
     {
@@ -173,9 +199,9 @@ class WidgetController extends Controller
 
 
     /*******************************************************************************
-    *                                Copyright : AGmedia                           *
-    *                              email: filip@agmedia.hr                         *
-    *******************************************************************************/
+     *                                Copyright : AGmedia                           *
+     *                              email: filip@agmedia.hr                         *
+     *******************************************************************************/
     // API ROUTES
 
     public function getLinks(Request $request)

@@ -37,9 +37,10 @@
                             <h5 class="text-black mb-0 mt-3">Generalne Informacije</h5>
                             <hr class="mb-3">
 
+                            {{-- FOTOGRAFIJA 1 --}}
                             <div class="block {{ isset($widget) && isset($widget->image) ? '' : 'block-mode-hidden' }} mb-3">
                                 <div class="block-header block-header-default" style="border: 1px solid #e9e9e9;">
-                                    <h3 class="block-title">Fotografija</h3>
+                                    <h3 class="block-title">Banner screen</h3>
                                     <div class="block-options">
                                         <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"><i class="si si-arrow-up"></i></button>
                                     </div>
@@ -58,10 +59,46 @@
                                         <div class="col-md-10 offset-md-1 ag-hide" id="size-all">
                                             <div class="slim"
                                                  data-ratio="16:9"
-                                                 data-force-size="400,400"
+                                                 data-force-size="2659,984"
                                                  data-max-file-size="2">
                                                 <img src="{{ isset($widget) && isset($widget->image) ? asset(str_replace('.webp', '.jpg', $widget->image)) : '' }}" alt=""/>
                                                 <input type="file" name="image_long"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOTOGRAFIJA 2 (N O V O) --}}
+                            <div class="block {{ isset($widget) && isset($widget->image_2) ? '' : 'block-mode-hidden' }} mb-3">
+                                <div class="block-header block-header-default" style="border: 1px solid #e9e9e9;">
+                                    <h3 class="block-title">Banner mobile</h3>
+                                    <div class="block-options">
+                                        <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"><i class="si si-arrow-up"></i></button>
+                                    </div>
+                                </div>
+                                <div class="block-content" style="padding: 10px 0 20px 0;">
+                                    <div class="row">
+                                        {{-- Varijanta za pola širine (half) --}}
+                                        <div class="col-md-10 offset-md-1" id="size2-half">
+                                            <div class="slim"
+                                                 data-ratio="16:9"
+                                                 data-force-size="500,500"
+                                                 data-max-file-size="2">
+                                                <img src="{{ isset($widget) && !empty($widget->image_2) ? asset(str_replace('.webp', '.jpg', $widget->image_2)) : '' }}" alt=""/>
+                                                {{-- Slim payload ide u name="image_2" --}}
+                                                <input type="file" name="image_2"/>
+                                            </div>
+                                        </div>
+
+                                        {{-- Varijanta za punu širinu (all) --}}
+                                        <div class="col-md-10 offset-md-1 ag-hide" id="size2-all">
+                                            <div class="slim"
+                                                 data-ratio="16:9"
+                                                 data-force-size="500,500"
+                                                 data-max-file-size="2">
+                                                <img src="{{ isset($widget) && !empty($widget->image_2) ? asset(str_replace('.webp', '.jpg', $widget->image_2)) : '' }}" alt=""/>
+                                                <input type="file" name="image_2"/>
                                             </div>
                                         </div>
                                     </div>
@@ -82,22 +119,6 @@
 
                             <div class="block">
                                 <div class="block-content" style="background-color: #f8f9f9; border: 1px solid #e9e9e9; padding: 30px;">
-<!--                                    <div class="form-group row mb-3">
-                                        <div class="col-4">
-                                            <label for="subtitle-input">Tip linka</label>
-                                            <select class="js-select2 form-control" id="link-select" name="link" style="width: 100%;">
-                                                <option></option>
-                                                <option value="category">Kategorija</option>
-                                                <option value="page">Stranica</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-8">
-                                            <label for="subtitle-input">Link</label>
-                                            <select class="js-select2 form-control" id="link-id-select" name="link_id" style="width: 100%;">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                    </div>-->
                                     <div class="form-group mb-3">
                                         <label for="url-input">URL Link @include('back.layouts.partials.popover', ['title' => 'Link Widgeta', 'content' => 'Može se proizvoljno upisati bilo koji link. Odete na front gdje želite > Copy/Paste i to je to.'])</label>
                                         <input type="text" class="form-control" name="url" id="url-input" value="{{ isset($widget->url) ? $widget->url : '' }}" placeholder="">
@@ -207,29 +228,29 @@
                 let selected = e.currentTarget.value;
 
                 axios.get("{{ route('widget.api.get-links') }}?type=" + selected)
-                .then(response => {
-                    let data = [];
+                    .then(response => {
+                        let data = [];
 
-                    for (let item in response.data) {
-                        if (selected == 'manufacturer' || selected == 'page') {
+                        for (let item in response.data) {
+                            if (selected == 'manufacturer' || selected == 'page') {
+                                data.push({
+                                    id:   item,
+                                    text: response.data[item]
+                                });
+                            }
                             data.push({
-                                id:   item,
-                                text: response.data[item]
+                                id:   response.data[item].id,
+                                text: response.data[item].name
                             });
                         }
-                        data.push({
-                            id:   response.data[item].id,
-                            text: response.data[item].name
-                        });
-                    }
-                    $('#link-id-select').select2({data: data});
-                    setType(data)
-                })
-                .catch(e => {
-                    errorToast.fire({
-                        text: e,
+                        $('#link-id-select').select2({data: data});
+                        setType(data)
                     })
-                })
+                    .catch(e => {
+                        errorToast.fire({
+                            text: e,
+                        })
+                    })
             });
             $('#link-id-select').select2({
                 placeholder: 'Odaberite prvo tip linka..',
@@ -239,12 +260,22 @@
 
 
         function setSize(size) {
+            // postojeće
             if (size == 12) {
                 $('#size-half').addClass('ag-hide');
                 $('#size-all').removeClass('ag-hide');
             } else {
                 $('#size-half').removeClass('ag-hide');
                 $('#size-all').addClass('ag-hide');
+            }
+
+            // NOVO: drugo polje za sliku
+            if (size == 12) {
+                $('#size2-half').addClass('ag-hide');
+                $('#size2-all').removeClass('ag-hide');
+            } else {
+                $('#size2-half').removeClass('ag-hide');
+                $('#size2-all').addClass('ag-hide');
             }
         }
 

@@ -1,0 +1,2 @@
+ALTER TABLE widgets
+    ADD COLUMN image_2 VARCHAR(255) NULL AFTER image;

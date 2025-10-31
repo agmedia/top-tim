@@ -41,7 +41,7 @@
 
     @if (request()->routeIs(['index']))
 
-    @include('front.layouts.partials.hometemp')
+
 
       <h1 style="visibility: hidden;height:1px "> Top Tim - Better way to stay in the game</h1>
 
