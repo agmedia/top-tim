@@ -89,7 +89,7 @@ class Export
 
         $products = Product::query()
                            ->with('translation', 'images', 'categories', 'subcategories', 'options', 'attributes')
-                           ->whereIn('id', [2674,2682,2691,2694])
+                           //->whereIn('id', [2674,2682,2691,2694])
                            /*->inRandomOrder()
                            ->limit(500)*/
                            ->get();
