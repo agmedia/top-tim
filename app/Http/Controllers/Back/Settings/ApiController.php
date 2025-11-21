@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ApiController extends Controller
 {
@@ -195,6 +196,57 @@ class ApiController extends Controller
 
         return back()->with(['error' => 'Greška prilikom Exporta, molimo pokušajte ponovo ili kontaktirajte administratora!']);
     }
+
+
+    /**
+     * Prima ili ZIP s fotkama ili više pojedinačnih slika.
+     * Sve raspakira / spremi u storage/app/imports/images/{token}/
+     * i token (apsolutnu baznu putanju) spremi u session 'import_images_dir'.
+     */
+    public function uploadImages(Request $request)
+    {
+        if (!$request->hasFile('images') && !$request->hasFile('zip')) {
+            return response()->json(['status' => 0, 'msg' => 'Nije poslana datoteka (images[] ili zip).'], 422);
+        }
+
+        $token = 'img_' . now()->format('Ymd_His') . '_' . Str::random(6);
+        $base  = "imports/images/{$token}";
+        Storage::makeDirectory($base);
+
+        // Varijanta A: ZIP (jedan fajl)
+        if ($request->hasFile('zip')) {
+            $zipFile = $request->file('zip');
+            $zipPath = $zipFile->storeAs($base, 'upload.zip');
+
+            $zip = new \ZipArchive();
+            $abs = storage_path('app/' . $zipPath);
+            if ($zip->open($abs) === true) {
+                $zip->extractTo(storage_path('app/' . $base));
+                $zip->close();
+                Storage::delete($zipPath);
+            }
+        }
+
+        // Varijanta B: više pojedinačnih slika
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $img) {
+                $img->storeAs($base, $img->getClientOriginalName());
+            }
+        }
+
+        // Spremi apsolutnu putanju u session da ju import/validacija koristi
+        $absBase = storage_path('app/' . $base);
+        session(['import_images_dir' => $absBase]);
+
+        Log::info('Upload images: ' . $absBase);
+
+        return response()->json([
+            'status' => 1,
+            'msg'    => 'Slike učitane.',
+            'images_dir' => $absBase
+        ]);
+    }
+
 
     /*******************************************************************************
     *                                Copyright : AGmedia                           *

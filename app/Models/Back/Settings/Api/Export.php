@@ -5,6 +5,7 @@ namespace App\Models\Back\Settings\Api;
 use App\Helpers\ApiHelper;
 use App\Helpers\Csv;
 use App\Mail\akmkSendReport;
+use App\Models\Back\Catalog\BrandTranslation;
 use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductOption;
@@ -22,7 +23,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Export
 {
-
     /**
      * @var array|null
      */
@@ -65,6 +65,8 @@ class Export
     protected $coordinate_letters = [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W'
     ];
+
+    protected $imagesBaseDir = '';
 
 
     /**
@@ -372,188 +374,599 @@ class Export
     }
 
 
+    // =======================================================
+// Export.php  —  METHODS (paste odavde naniže)
+// =======================================================
+
     /**
-     * Router koji prima $data (payload) i $rows (redovi iz Xlsx-a),
-     * pa poziva metodu za IMPORT (kreiranje novih artikala).
+     * Router payloada iz upload endpointa.
+     * - 'validate-excel' => samo provjera (bez upisa u bazu).
+     * - 'import-from-excel' => pravi import (create-only).
+     * Napomena: images_base_dir se puni iz sessiona ili payload-a.
      */
     public function process(array $data = null, array $rows = null)
     {
-        if ( ! $data || ! $rows) {
-            return ApiHelper::response(0, 'Nedostaje payload ili redovi za import.');
+        if (!$data || !$rows) {
+            return ApiHelper::response(0, 'Nedostaje payload ili redovi za obradu.');
         }
 
+        $this->imagesBaseDir = $data['images_dir'] ?? session('import_images_dir') ?? '';
         $this->request = $data;
 
-        Log::info('Import data: ' . json_encode($data));
+        Log::info('Upload payload: ' . $this->imagesBaseDir);
 
         switch ($data['method'] ?? '') {
             case 'import-from-excel':
+                if ($this->imagesBaseDir === '' || !is_dir($this->imagesBaseDir)) {
+                    return ApiHelper::response(0,
+                        "Import slika: 'images_dir' nije postavljen ili direktorij ne postoji. " .
+                        "Pošalji absolute path vraćen iz upload endpointa kao parametar 'images_dir'."
+                    );
+                }
                 return $this->importFromExcel($rows);
+
+            case 'validate-excel':
+                return $this->validateExcel($rows);
         }
 
-        return ApiHelper::response(0, 'Nepoznata metoda za import.');
+        return ApiHelper::response(0, 'Nepoznata metoda.');
     }
 
-
-
-    /**
-     * IMPORT iz Excel tablice koju generira toExcel().
-     *
-     * Pravila:
-     * - Ako PROIZVOD (SKU u stupcu A) već postoji -> PRESKOČI (nema ažuriranja).
-     * - Kreiramo SAMO nove proizvode i njihove prijevode.
-     * - Vežemo na postojeće kategorije/attribute/opcije (ako postoje).
-     * - Ne kreiramo NOVE kategorije/attribute/opcije; ako ih ne nađemo -> preskočimo vezu.
-     *
-     * Očekivani raspored stupaca:
-     * A Šifra (sku) | B Šifra opcije | C Barkod | D Naziv | E Opis | F Slug
-     * G Meta naziv | H Meta opis | I Cijena | J Količina | K PDV | L Aktivan
-     * M Slike (zarezom) | N Proizvođač (ne diramo) | O Primarna skupina | P Sekundarna skupina
-     * Q Tablica veličina (ne diramo) | R Materijal | S Spol | T Tip rukava | U Kroj | V Dimenzije
-     * W Dodatna kategorizacija (zarezom)
-     */
 
     /**
      * IMPORT iz Excel tablice (create-only).
      * - Ako SKU već postoji -> preskoči (bez update-a).
-     * - Vežemo samo na postojeće kategorije/atribute/opcije (bez kreiranja novih).
+     * - Kategorije/atributi/opcije: samo VEZANJE postojećih (bez kreiranja novih).
+     * - Slike: MORAJU POSTOJATI u upload folderu; u suprotnom artikl se preskače.
      */
     private function importFromExcel(array $rows)
     {
-        [$valid, $errors] = $this->validateExcelStructure($rows);
-        if (!$valid) {
-            return ApiHelper::response(0, "Excel tablica nije ispravna:\n" . implode("\n", $errors));
-        }
-
-
         $createdProducts = 0;
         $skippedProducts = 0;
         $linkedCats      = 0;
         $linkedAttrs     = 0;
         $createdImgs     = 0;
+        $createdOpts     = 0;
+        $skippedOpts     = 0;
+        $errors          = [];
 
         $locale = config('app.locale', 'hr');
+
+        // 1) PROLAZ: kreiraj nove artikle + slike + kategorije + atributi
         $createdProductIdsBySku = [];
 
-        foreach ($rows as $i => $row) {
-            if ($i === 0) continue;
+        // Excel header je u $rows[0]
+        $IDX = [
+            'A'=>0,'B'=>1,'C'=>2,'D'=>3,'E'=>4,'F'=>5,'G'=>6,'H'=>7,'I'=>8,'J'=>9,'K'=>10,'L'=>11,
+            'M'=>12,'N'=>13,'O'=>14,'P'=>15,'Q'=>16,'R'=>17,'S'=>18,'T'=>19,'U'=>20,'V'=>21,'W'=>22
+        ];
 
-            $sku       = trim((string)($row[0] ?? '')); // A
-            $optionSku = trim((string)($row[1] ?? '')); // B
-            if ($sku === '' || $optionSku !== '') continue; // samo glavni artikli
+        for ($i = 1; $i < count($rows); $i++) {
+            $row = $rows[$i];
 
-            $ean         = trim((string)($row[2] ?? ''));
-            $name        = (string)($row[3] ?? '');
-            $description = (string)($row[4] ?? '');
-            $slugIn      = (string)($row[5] ?? '');
-            $metaTitle   = (string)($row[6] ?? '');
-            $metaDesc    = (string)($row[7] ?? '');
-            $priceCell   = (float)($row[8] ?? 0);
-            $qtyCell     = (int)($row[9] ?? 0);
-            $activeCell  = (string)($row[11] ?? '');
-            $imagesCsv   = (string)($row[12] ?? '');
-            $catPrimary  = (string)($row[14] ?? '');
-            $catSecondary = (string)($row[15] ?? '');
-            $attrMaterial = (string)($row[17] ?? '');
-            $attrGender   = (string)($row[18] ?? '');
-            $attrSleeve   = (string)($row[19] ?? '');
-            $attrFit      = (string)($row[20] ?? '');
-            $attrDims     = (string)($row[21] ?? '');
-            $catsExtraCsv = (string)($row[22] ?? '');
+            $sku         = trim((string)($row[$IDX['A']] ?? ''));
+            $optionSku   = trim((string)($row[$IDX['B']] ?? ''));
+            if ($sku === '' || $optionSku !== '') continue; // samo PROIZVODSKI redovi
 
-            if (Product::query()->where('sku', $sku)->exists()) {
+            $ean         = trim((string)($row[$IDX['C']] ?? ''));
+            $name        = (string)($row[$IDX['D']] ?? '');
+            $description = (string)($row[$IDX['E']] ?? '');
+            $slugIn      = (string)($row[$IDX['F']] ?? '');
+            $metaTitle   = (string)($row[$IDX['G']] ?? '');
+            $metaDesc    = (string)($row[$IDX['H']] ?? '');
+            $priceCell   = (float)($row[$IDX['I']] ?? 0);
+            $qtyCell     = (int)($row[$IDX['J']] ?? 0);
+            $activeCell  = (string)($row[$IDX['L']] ?? '');
+            $imagesCsv   = (string)($row[$IDX['M']] ?? '');
+            $brand       = (string)($row[$IDX['N']] ?? '');
+            $catPrimary  = (string)($row[$IDX['O']] ?? '');
+            $catSecondary= (string)($row[$IDX['P']] ?? '');
+            $attrMaterial= (string)($row[$IDX['R']] ?? '');
+            $attrGender  = (string)($row[$IDX['S']] ?? '');
+            $attrSleeve  = (string)($row[$IDX['T']] ?? '');
+            $attrFit     = (string)($row[$IDX['U']] ?? '');
+            $attrDims    = (string)($row[$IDX['V']] ?? '');
+            $catsExtraCsv= (string)($row[$IDX['W']] ?? '');
+
+            // create-only
+            if (\App\Models\Back\Catalog\Product\Product::query()->where('sku', $sku)->exists()) {
                 $skippedProducts++;
                 continue;
             }
 
-            DB::transaction(function () use (
-                $sku,
-                $ean,
-                $name,
-                $description,
-                $slugIn,
-                $metaTitle,
-                $metaDesc,
-                $priceCell,
-                $qtyCell,
-                $activeCell,
-                $imagesCsv,
-                $catPrimary,
-                $catSecondary,
-                $catsExtraCsv,
-                $attrMaterial,
-                $attrGender,
-                $attrSleeve,
-                $attrFit,
-                $attrDims,
-                $locale,
-                &$createdProducts,
-                &$createdImgs,
-                &$linkedCats,
-                &$linkedAttrs,
-                &$createdProductIdsBySku
-            ) {
-                $product = Product::query()->create([
-                    'brand_id' => 0,
-                    'action_id' => 0,
-                    'sku' => $sku,
-                    'ean' => $ean ?: null,
-                    'price' => $priceCell ?: 0,
-                    'quantity' => $qtyCell,
-                    'tax_id' => 0,
-                    'status' => ($activeCell === '' ? 0 : (int)$activeCell),
-                ]);
+            try {
+                DB::transaction(function () use (
+                    $sku, $ean, $name, $description, $slugIn, $metaTitle, $metaDesc,
+                    $priceCell, $qtyCell, $activeCell, $imagesCsv, $brand, $catPrimary, $catSecondary,
+                    $catsExtraCsv, $attrMaterial, $attrGender, $attrSleeve, $attrFit, $attrDims,
+                    $locale, &$createdProducts, &$createdImgs, &$linkedCats, &$linkedAttrs, &$createdProductIdsBySku
+                ) {
 
-                $slug = $slugIn ? Str::slug($slugIn) : Str::slug($name ?: $sku);
+                    $brand_id = BrandTranslation::query()->where('title', $brand)->value('brand_id') ?: 0;
 
-                ProductTranslation::query()->create([
-                    'product_id' => $product->id,
-                    'lang' => $locale,
-                    'name' => $name ?: $sku,
-                    'description' => $description ?: null,
-                    'meta_title' => $metaTitle ?: null,
-                    'meta_description' => $metaDesc ?: null,
-                    'slug' => $slug,
-                    'url' => $slug,
-                ]);
+                    // 1a) Kreiraj proizvod
+                    /** @var \App\Models\Back\Catalog\Product\Product $product */
+                    $product = \App\Models\Back\Catalog\Product\Product::query()->create([
+                        'brand_id'   => $brand_id,
+                        'action_id'  => 0,
+                        'sku'        => $sku,
+                        'ean'        => $ean ?: null,
+                        'image'      => null,
+                        'price'      => $priceCell ?: 0,
+                        'quantity'   => $qtyCell,
+                        'decrease'   => 0,
+                        'tax_id'     => 0,
+                        'special'    => null,
+                        'special_from' => null,
+                        'special_to' => null,
+                        'related_products' => null,
+                        'vegan'      => 0,
+                        'vegetarian' => 0,
+                        'glutenfree' => 0,
+                        'viewed'     => 0,
+                        'sort_order' => 0,
+                        'push'       => 0,
+                        'status'     => ($activeCell === '' ? 0 : (int)$activeCell),
+                    ]);
 
-                $createdImgs += $this->initImages($product->id, $imagesCsv);
-                $linkedCats += $this->attachExistingCategories($product->id, $catPrimary, $catSecondary, $catsExtraCsv, $locale);
-                $linkedAttrs += $this->attachExistingAttributes($product->id, [
-                    'Materijal'  => $attrMaterial,
-                    'Spol'       => $attrGender,
-                    'Tip rukava' => $attrSleeve,
-                    'Kroj'       => $attrFit,
-                    'Dimenzije'  => $attrDims,
-                ], $locale);
+                    // 1b) Prijevod
+                    $slug = $slugIn ? Str::slug($slugIn) : Str::slug($name ?: $sku);
+                    $url  = $slug;
 
-                $createdProducts++;
-                $createdProductIdsBySku[$sku] = $product->id;
-            });
+                    \App\Models\Back\Catalog\Product\ProductTranslation::query()->create([
+                        'product_id'       => $product->id,
+                        'lang'             => $locale,
+                        'name'             => $name ?: $sku,
+                        'description'      => $description ?: null,
+                        'podaci'           => null,
+                        'sastojci'         => null,
+                        'meta_title'       => $metaTitle ?: null,
+                        'meta_description' => $metaDesc ?: null,
+                        'slug'             => $slug,
+                        'url'              => $url,
+                        'tags'             => null,
+                    ]);
+
+                    // 1c) SLIKE — obavezno: povlačimo iz upload foldera i spremamo trajno (JPG/WEBP/THUMB) preko ProductImage::saveNew (Image::save)
+                    $added = $this->initImages($product->id, $imagesCsv, $sku, $slugIn, $name);
+                    if ($added === 0) {
+                        // OČISTI slike ako su kojim slučajem djelomično nastale prije brisanja proizvoda
+                        $imgIds = \DB::table('product_images')->where('product_id', $product->id)->pluck('id')->all();
+                        if (!empty($imgIds)) {
+                            \DB::table('product_images_translations')->whereIn('product_image_id', $imgIds)->delete();
+                            \DB::table('product_images')->whereIn('id', $imgIds)->delete();
+                        }
+
+                        \DB::table('product_translations')->where('product_id', $product->id)->delete();
+                        \DB::table('products')->where('id', $product->id)->delete();
+
+                        throw new \RuntimeException("SKU {$sku}: nema nijedne slike u upload folderu (M-stupac ili fallback).");
+                    }
+
+                    $createdImgs += $added;
+
+                    // 1d) Kategorije — samo postojeće (case-insensitive title, pa slug)
+                    $linkedCats  += $this->attachExistingCategories($product->id, $catPrimary, $catSecondary, $catsExtraCsv, $locale);
+
+                    // 1e) Atributi — samo postojeći (group_title + title)
+                    $linkedAttrs += $this->attachExistingAttributes($product->id, [
+                        'Materijal'  => $attrMaterial,
+                        'Spol'       => $attrGender,
+                        'Tip rukava' => $attrSleeve,
+                        'Kroj'       => $attrFit,
+                        'Dimenzije'  => $attrDims,
+                    ], $locale);
+
+                    $createdProducts++;
+                    $createdProductIdsBySku[$sku] = $product->id;
+                });
+            } catch (\Throwable $e) {
+                $errors[] = "Red " . ($i+1) . " — {$sku}: " . $e->getMessage();
+                $skippedProducts++;
+                continue;
+            }
         }
 
-        [$createdOpts, $skippedOpts, $optErrors] = array_values(
-            $this->attachOptionsFromExcel($rows, $createdProductIdsBySku)
-        );
+        // 2) PROLAZ: veži OPCIJE (samo za novokreirane artikle)
+        for ($i = 1; $i < count($rows); $i++) {
+            $row = $rows[$i];
+
+            $sku       = trim((string)($row[$IDX['A']] ?? ''));
+            $optCode   = trim((string)($row[$IDX['B']] ?? ''));
+            if ($sku === '' || $optCode === '') continue;
+
+            $productId = $createdProductIdsBySku[$sku] ?? null;
+            if (!$productId) { $skippedOpts++; continue; }
+
+            $priceCell = (float)($row[$IDX['I']] ?? 0);
+            $qtyCell   = (int)($row[$IDX['J']] ?? 0);
+
+            // mapiraj boju/veličinu i upiši pivot (parent = "option" ako ima boja; "single" ako nema)
+            try {
+                [$parent, $parentId, $optionId] = $this->resolveOptionLinkage($optCode);
+
+                if (!$optionId && !$parentId) {
+                    $skippedOpts++;
+                    continue;
+                }
+
+                $basePrice  = (float) \DB::table('products')->where('id', $productId)->value('price');
+                $priceDelta = max(0, $priceCell - $basePrice);
+
+                $exists = \DB::table('product_option')
+                             ->where('product_id', $productId)
+                             ->where('option_id', $optionId ?: 0)
+                             ->where('sku', $optCode)
+                             ->exists();
+                if ($exists) { $skippedOpts++; continue; }
+
+                \DB::table('product_option')->insert([
+                    'product_id' => $productId,
+                    'option_id'  => $optionId ?: 0,
+                    'image_id'   => 0,
+                    'sku'        => $optCode,
+                    'parent'     => $parent,            // "option" ili "single"
+                    'parent_id'  => $parentId ?: 0,     // ID boje ili 0
+                    'quantity'   => $qtyCell,
+                    'price'      => $priceDelta,
+                    'data'       => null,
+                    'status'     => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                // pokušaj naći i spremiti sliku za varijantu (…_ŠIFRAOPCIJE.*)
+                $this->initImagesForOption($productId, (int)($parentId ?: 0), $optCode);
+
+                $createdOpts++;
+            } catch (\Throwable $e) {
+                $errors[] = "Opcija — red " . ($i+1) . " — {$sku}/{$optCode}: " . $e->getMessage();
+                $skippedOpts++;
+            }
+        }
 
         $msg = "Kreirano artikala: {$createdProducts}, preskočeno: {$skippedProducts}. "
-               . "Slike: {$createdImgs}, Kategorije: {$linkedCats}, Atributi: {$linkedAttrs}, "
-               . "Opcije dodane: {$createdOpts}, preskočene: {$skippedOpts}.";
+               . "Dodano slika: {$createdImgs}, povezano kategorija: {$linkedCats}, atributa: {$linkedAttrs}. "
+               . "Povezano opcija: {$createdOpts}, preskočeno opcija: {$skippedOpts}.";
 
-        if (!empty($optErrors)) {
-            $msg .= " Napomene: " . implode(' | ', array_slice($optErrors, 0, 5));
+        if (!empty($errors)) {
+            $msg .= " Napomene: " . implode(' | ', array_slice($errors, 0, 10));
         }
 
         return ApiHelper::response(1, $msg);
     }
 
+    /**
+     * Spremi početni set slika za NOVI proizvod iz temp upload foldera.
+     * - Kandidati su imena iz M; ako je M prazan: {slug}_{SKU}.jpg
+     * - Učitamo file, pretvorimo u data-URI, i predamo ProductImage::saveNew koji poziva Image::save (radi JPG/WEBP/thumb).
+     * - Vraća broj uspješno kreiranih slika.
+     */
+    private function initImages(int $productId, string $imagesCsv, string $sku = '', string $slugIn = '', string $name = ''): int
+    {
+        \Log::info('initImages:start', [
+            'productId' => $productId, 'imagesCsv' => $imagesCsv, 'sku' => $sku,
+            'slugIn' => $slugIn, 'name' => $name, 'imagesDir' => $this->imagesBaseDir ?? null,
+        ]);
+
+        $baseDir = $this->imagesBaseDir ?? '';
+        if (!$baseDir || !is_dir($baseDir)) {
+            \Log::info('initImages:baseDir-missing', ['baseDir' => $baseDir]);
+            return 0;
+        }
+
+        $product = \App\Models\Back\Catalog\Product\Product::query()->find($productId);
+        if (!$product) {
+            \Log::info('initImages:product-not-found', ['productId' => $productId]);
+            return 0;
+        }
+
+        // FALLBACK PROMJENA: samo SKU.jpg (bez naziva)
+        $cands = array_values(array_filter(array_map('trim', explode(',', (string)$imagesCsv)), fn($v) => $v !== ''));
+        if (empty($cands)) {
+            $cands = ["{$sku}.jpg"];
+        }
+        \Log::info('initImages:candidates', ['cands' => $cands]);
+
+        $files = [];
+        foreach ($cands as $fname) {
+            $abs = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fname;
+            \Log::info('initImages:probe-file', ['fname' => $fname, 'abs' => $abs, 'exists' => is_file($abs)]);
+            if (is_file($abs)) $files[] = $abs;
+        }
+        if (empty($files)) {
+            \Log::info('initImages:no-files-found');
+            return 0;
+        }
+
+        $locale  = config('app.locale', 'hr');
+        $sort    = 1;
+        $created = 0;
+
+        foreach ($files as $idx => $abs) {
+            try {
+                $ext  = strtolower(pathinfo($abs, PATHINFO_EXTENSION));
+                $mime = $ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'image/jpeg');
+                $bin  = @file_get_contents($abs);
+                \Log::info('initImages:file-read', [
+                    'idx' => $idx, 'abs' => $abs, 'ext' => $ext, 'mime' => $mime,
+                    'size' => $bin === false ? 'READ_FAIL' : strlen($bin).'B',
+                ]);
+                if ($bin === false) continue;
+
+                // spremi fizički (Image helper očekuje cropper JSON)
+                $imageJson  = json_encode(['output' => ['image' => "data:{$mime};base64," . base64_encode($bin)]]);
+                $imgPayload = ['image' => $imageJson, 'default' => $sort === 1 ? 1 : 0, 'sort_order' => $sort];
+
+                $paths   = \App\Helpers\Image::save('products', $imgPayload, $product);
+                $relPath = is_array($paths)
+                    ? ($paths['jpg'] ?? $paths['webp'] ?? $paths['image'] ?? $paths['path'] ?? (reset($paths) ?: null))
+                    : $paths;
+
+                if (!is_string($relPath) || $relPath === '') {
+                    \Log::info('initImages:invalid-relPath', ['relPath' => $relPath, 'type' => gettype($paths)]);
+                    continue;
+                }
+
+                $publicUrl = rtrim(config('filesystems.disks.products.url'), '/') . '/' . ltrim($relPath, '/');
+
+                // RAW insert (čisti scalari)
+                $sql = 'INSERT INTO `product_images`
+                    (`product_id`,`option_id`,`image`,`default`,`published`,`sort_order`,`created_at`,`updated_at`)
+                    VALUES (?,?,?,?,?,?,?,?)';
+                $bindings = [
+                    (int)$product->id,
+                    null,
+                    (string)$publicUrl,
+                    (int)($sort === 1 ? 1 : 0),
+                    1,
+                    (int)$sort,
+                    now()->toDateTimeString(),
+                    now()->toDateTimeString(),
+                ];
+                \DB::insert($sql, $bindings);
+                $imageId = (int)\DB::getPdo()->lastInsertId();
+
+                // RUČNI insert prijevoda
+                \DB::table('product_images_translations')->insert([
+                    'product_image_id' => $imageId,
+                    'lang'             => (string)$locale,
+                    'title'            => (string)(optional($product->translation)->name ?: ($name ?: $sku)),
+                    'alt'              => (string)(optional($product->translation)->name ?: ($name ?: $sku)),
+                    'created_at'       => now()->toDateTimeString(),
+                    'updated_at'       => now()->toDateTimeString(),
+                ]);
+
+                if ($sort === 1) {
+                    \DB::table('products')->where('id', $product->id)->update([
+                        'image'      => (string)$publicUrl,
+                        'updated_at' => now()->toDateTimeString(),
+                    ]);
+                }
+
+                $created++;
+                $sort++;
+            } catch (\Throwable $e) {
+                \Log::info('initImages:exception', [
+                    'file' => $abs, 'error' => $e->getMessage(),
+                    'trace' => substr($e->getTraceAsString(), 0, 2000),
+                ]);
+            }
+        }
+
+        \Log::info('initImages:done', ['created' => $created]);
+        return $created;
+    }
+
 
     /**
-     * Provjerava ispravnost Excel tablice prije importa.
-     *
-     * Vraća [bool $valid, array $errors]
-     * - Ako je $valid = false → import se ne smije pokrenuti.
-     * - $errors sadrži opis svih problema (ograničeno na 50 redova).
+     * Ako postoji slika specifična za opciju, uploada je kao dodatnu sliku proizvoda,
+     * i (ako postoji stupac) povezuje s product_option.image_id.
+     * Traži datoteku koja završava na "_{ŠIFRAOPCIJE}.(jpg|jpeg|png|webp)" u upload folderu.
+     */
+    private function initImagesForOption(int $productId, int $optionIdOrParentId, string $optionCode): int
+    {
+        \Log::info('initImagesForOption:start', [
+            'productId'  => $productId,
+            'parentId'   => $optionIdOrParentId,
+            'optionCode' => $optionCode,
+            'imagesDir'  => $this->imagesBaseDir ?? null,
+        ]);
+
+        $baseDir = $this->imagesBaseDir ?? '';
+        if (!$baseDir || !is_dir($baseDir)) {
+            \Log::info('initImagesForOption:baseDir-missing', ['baseDir' => $baseDir]);
+            return 0;
+        }
+
+        /** @var \App\Models\Back\Catalog\Product\Product|null $product */
+        $product = \App\Models\Back\Catalog\Product\Product::query()->find($productId);
+        if (!$product) {
+            \Log::info('initImagesForOption:product-not-found', ['productId' => $productId]);
+            return 0;
+        }
+
+        // --- 1) Pripremi "jako normalizirane" igle (needles) iz optionCode-a ---
+        $normalizeStrong = function (string $s): string {
+            // ukloni ekstenziju ako je zadana
+            $s = preg_replace('/\.[^.]+$/', '', $s);
+            // sve separatore u ništa, sve u lower
+            $s = mb_strtolower($s, 'UTF-8');
+            $s = preg_replace('/[^A-Za-z0-9]+/u', '', $s);
+            return $s ?? '';
+        };
+
+        // varijante igle
+        $needlesRaw = [
+            $optionCode,                                  // "LEG00009-2-S/M"
+            str_replace('/', '-', $optionCode),           // "LEG00009-2-S-M"
+            str_replace('/', '',  $optionCode),           // "LEG00009-2-SM"
+        ];
+
+        // dodaj i varijantu s basename-om opcije (zadnji segment nakon '/')
+        $lastSeg = str_contains($optionCode, '/')
+            ? substr($optionCode, strrpos($optionCode, '/') + 1)
+            : $optionCode;
+        $needlesRaw[] = $lastSeg;                         // "S/M"
+        $needlesRaw[] = str_replace('/', '-', $lastSeg);  // "S-M"
+        $needlesRaw[] = str_replace('/', '',  $lastSeg);  // "SM"
+        $needlesRaw = array_values(array_unique($needlesRaw));
+
+        $needles = array_map($normalizeStrong, $needlesRaw);
+        $needles = array_values(array_unique(array_filter($needles, fn($v) => $v !== '')));
+
+        \Log::info('initImagesForOption:needles', ['raw' => $needlesRaw, 'normalized' => $needles]);
+
+        // --- 2) Brzi exact pokušaji (nested i flat) prije rekurzije ---
+        $exts = ['jpg','jpeg','png','webp'];
+        $tryPaths = [];
+        foreach ($exts as $e) {
+            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $optionCode) . '.' . $e;   // nested
+            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', '-', $optionCode) . '.' . $e;                   // flat s '-'
+            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', '',  $optionCode) . '.' . $e;                   // flat bez '/'
+        }
+
+        $matchedAbs = null;
+        foreach ($tryPaths as $p) {
+            if (is_file($p)) { $matchedAbs = $p; break; }
+        }
+        \Log::info('initImagesForOption:fast-exact', ['matched' => (bool)$matchedAbs, 'path' => $matchedAbs]);
+
+        // --- 3) Rekurzivno pretraživanje: uspoređuj RELATIVNI STEM s needle-ovima (strong norm) ---
+        $scanned = 0;
+        $hits = 0;
+        if (!$matchedAbs) {
+            try {
+                $it = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator($baseDir, \FilesystemIterator::SKIP_DOTS),
+                    \RecursiveIteratorIterator::SELF_FIRST
+                );
+                foreach ($it as $file) {
+                    /** @var \SplFileInfo $file */
+                    if (!$file->isFile()) continue;
+                    $ext = strtolower($file->getExtension());
+                    if (!in_array($ext, $exts, true)) continue;
+
+                    $full = $file->getRealPath();
+                    // relativni path unutar baseDir-a
+                    $rel  = ltrim(str_replace(rtrim($baseDir, DIRECTORY_SEPARATOR), '', $full), DIRECTORY_SEPARATOR);
+                    // bez ekstenzije, sa separatorima normaliziranim u '/'
+                    $relStem = preg_replace('/\.[^.]+$/', '', $rel);
+                    $relStem = str_replace(DIRECTORY_SEPARATOR, '/', $relStem);
+
+                    $normRel = $normalizeStrong($relStem);
+                    $scanned++;
+
+                    if (in_array($normRel, $needles, true)) {
+                        $matchedAbs = $full;
+                        $hits++;
+                        break;
+                    }
+                }
+            } catch (\Throwable $e) {
+                \Log::info('initImagesForOption:recursive-ex', ['err' => $e->getMessage()]);
+            }
+        }
+
+        \Log::info('initImagesForOption:scan-stats', ['scanned' => $scanned, 'hits' => $hits, 'matched' => (bool)$matchedAbs, 'path' => $matchedAbs]);
+        if (!$matchedAbs) {
+            // za debug – ispiši prvih ~30 file-ova (relativno) da vidimo što je unutra
+            try {
+                $list = [];
+                $it2 = new \DirectoryIterator($baseDir);
+                foreach ($it2 as $fi) {
+                    if ($fi->isDot()) continue;
+                    $list[] = $fi->getFilename();
+                    if (count($list) >= 30) break;
+                }
+                \Log::info('initImagesForOption:dir-sample', ['baseDir' => $baseDir, 'sample' => $list]);
+            } catch (\Throwable $e) {
+                // noop
+            }
+            return 0;
+        }
+
+        // --- 4) Resolvaj option_id ---
+        $optionId = $optionIdOrParentId ?: null;
+        if (!$optionId) {
+            $opt = \DB::table('options')->where('option_sku', $optionCode)->first();
+            $optionId = $opt ? (int)$opt->id : null;
+        }
+        \Log::info('initImagesForOption:resolved-optionId', ['optionId' => $optionId]);
+
+        // --- 5) Spremi sliku i upiši u DB ---
+        try {
+            $ext  = strtolower(pathinfo($matchedAbs, PATHINFO_EXTENSION));
+            $mime = $ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'image/jpeg');
+            $bin  = @file_get_contents($matchedAbs);
+            if ($bin === false) {
+                \Log::info('initImagesForOption:file-read-failed', ['abs' => $matchedAbs]);
+                return 0;
+            }
+
+            $imageJson  = json_encode(['output' => ['image' => "data:{$mime};base64," . base64_encode($bin)]]);
+            $imgPayload = ['image' => $imageJson, 'default' => 0, 'sort_order' => 999, 'option_id' => $optionId];
+
+            $paths   = \App\Helpers\Image::save('products', $imgPayload, $product);
+            $relPath = is_array($paths)
+                ? ($paths['jpg'] ?? $paths['webp'] ?? $paths['image'] ?? $paths['path'] ?? (reset($paths) ?: null))
+                : $paths;
+
+            if (!is_string($relPath) || $relPath === '') {
+                \Log::info('initImagesForOption:invalid-relPath', ['relPath' => $relPath, 'type' => gettype($paths)]);
+                return 0;
+            }
+            $publicUrl = rtrim(config('filesystems.disks.products.url'), '/') . '/' . ltrim($relPath, '/');
+
+            // RAW insert u product_images
+            $sql = 'INSERT INTO `product_images`
+                (`product_id`,`option_id`,`image`,`default`,`published`,`sort_order`,`created_at`,`updated_at`)
+                VALUES (?,?,?,?,?,?,?,?)';
+            $bindings = [
+                (int)$product->id,
+                $optionId ? (int)$optionId : null,
+                (string)$publicUrl,
+                0,
+                1,
+                999,
+                now()->toDateTimeString(),
+                now()->toDateTimeString(),
+            ];
+            \DB::insert($sql, $bindings);
+            $imageId = (int)\DB::getPdo()->lastInsertId();
+
+            // RUČNI insert prijevoda
+            $locale = config('app.locale', 'hr');
+            \DB::table('product_images_translations')->insert([
+                'product_image_id' => $imageId,
+                'lang'             => (string)$locale,
+                'title'            => (string)(optional($product->translation)->name ?: $product->sku),
+                'alt'              => (string)(optional($product->translation)->name ?: $product->sku),
+                'created_at'       => now()->toDateTimeString(),
+                'updated_at'       => now()->toDateTimeString(),
+            ]);
+
+            // LINK: po product_id + sku (i option_id ako postoji)
+            $q = \DB::table('product_option')->where('product_id', $productId)->where('sku', $optionCode);
+            if ($optionId) $q->where('option_id', $optionId);
+            $updated = $q->update(['image_id' => $imageId, 'updated_at' => now()->toDateTimeString()]);
+            \Log::info('initImagesForOption:link-product_option', ['updated_rows' => $updated, 'image_id' => $imageId, 'publicUrl' => $publicUrl]);
+
+            return 1;
+        } catch (\Throwable $e) {
+            \Log::info('initImagesForOption:exception', [
+                'file' => $matchedAbs, 'error' => $e->getMessage(),
+                'trace' => substr($e->getTraceAsString(), 0, 2000),
+            ]);
+            return 0;
+        }
+    }
+
+
+
+    /**
+     * Minimalna validacija headera + obaveznih slika za svaki PROIZVOD (B prazno).
+     * Vrati [bool $ok, array $messages] — poruke su greške ili upozorenja.
      */
     private function validateExcelStructure(array $rows): array
     {
@@ -566,317 +979,117 @@ class Export
             'Dimenzije', 'Dodatna kategorizacija',
         ];
 
-        // 1) Provjeri header
         $header = array_map('trim', $rows[0] ?? []);
-        $missingHeaders = array_diff($headerExpected, $header);
-        if (!empty($missingHeaders)) {
-            $errors[] = 'Nedostaju stupci: ' . implode(', ', $missingHeaders);
+        $missing = array_diff($headerExpected, $header);
+        if (!empty($missing)) {
+            $errors[] = 'Nedostaju stupci: ' . implode(', ', $missing);
             return [false, $errors];
         }
 
-        // 2) Mapiraj indekse stupaca (da ne ovisimo o redoslijedu)
-        $col = array_flip($header);
+        $IDX = [
+            'A'=>0,'B'=>1,'C'=>2,'D'=>3,'E'=>4,'F'=>5,'G'=>6,'H'=>7,'I'=>8,'J'=>9,'K'=>10,'L'=>11,
+            'M'=>12,'N'=>13,'O'=>14,'P'=>15,'Q'=>16,'R'=>17,'S'=>18,'T'=>19,'U'=>20,'V'=>21,'W'=>22
+        ];
 
-        $seenSkus = [];
-        $valid = true;
+        $baseDir = $this->imagesBaseDir ?? '';
+        if (!$baseDir || !is_dir($baseDir)) {
+            $errors[] = "Upload folder slika nije postavljen — prvo učitaj ZIP/slike.";
+            return [false, $errors];
+        }
 
-        foreach ($rows as $i => $row) {
-            if ($i === 0) continue;
+        for ($i = 1; $i < count($rows); $i++) {
+            $row = $rows[$i];
+            $sku = trim((string)($row[$IDX['A']] ?? ''));
+            $opt = trim((string)($row[$IDX['B']] ?? ''));
 
-            $sku       = trim((string)($row[$col['Šifra']] ?? ''));
-            $optionSku = trim((string)($row[$col['Šifra opcije']] ?? ''));
-            $price     = (string)($row[$col['Cijena']] ?? '');
-            $qty       = (string)($row[$col['Količina']] ?? '');
-            $images    = trim((string)($row[$col['Slike']] ?? ''));
-
-            // Red broj u Excelu (1-based)
-            $rowNum = $i + 1;
-
-            // === Osnovne provjere ===
             if ($sku === '') {
-                $errors[] = "Red {$rowNum}: nedostaje Šifra (SKU).";
-                $valid = false;
+                $errors[] = "Red " . ($i+1) . ": A(SKU) je prazan.";
                 continue;
             }
-
-            if (isset($seenSkus[$sku]) && $optionSku === '') {
-                $errors[] = "Red {$rowNum}: ponovljen glavni SKU '{$sku}'.";
-                $valid = false;
-            }
-            $seenSkus[$sku] = true;
-
-            // Ako je opcijski red (ima Šifra opcije)
-            if ($optionSku !== '') {
-                if (!Str::startsWith($optionSku, $sku . '-')) {
-                    $errors[] = "Red {$rowNum}: Šifra opcije '{$optionSku}' ne pripada SKU '{$sku}'.";
-                    $valid = false;
-                }
-
-                if ($price === '' || !is_numeric($price)) {
-                    $errors[] = "Red {$rowNum}: neispravna cijena '{$price}'.";
-                    $valid = false;
-                }
-                if ($qty === '' || !is_numeric($qty)) {
-                    $errors[] = "Red {$rowNum}: neispravna količina '{$qty}'.";
-                    $valid = false;
-                }
+            if (strlen($sku) > 14) {
+                $errors[] = "Red " . ($i+1) . ": A(SKU) > 14 znakova.";
             }
 
-            // Ako je glavni red (nema Šifra opcije)
-            if ($optionSku === '') {
-                if ($price === '' || !is_numeric($price)) {
-                    $errors[] = "Red {$rowNum}: neispravna cijena glavnog artikla '{$price}'.";
-                    $valid = false;
-                }
-                /*if ($images === '') {
-                    $errors[] = "Red {$rowNum}: glavni proizvod '{$sku}' nema sliku.";
-                    $valid = false;
-                }*/
-            }
+            // Samo proizvodski redovi moraju imati dostupnu sliku u upload folderu
+            if ($opt === '') {
+                $imagesCsv = (string)($row[$IDX['M']] ?? '');
+                $name      = (string)($row[$IDX['D']] ?? '');
+                $slugIn    = (string)($row[$IDX['F']] ?? '');
 
-            // === Dodatne logičke provjere ===
-            /*if ($optionSku && $images && !Str::contains($images, $optionSku)) {
-                $errors[] = "Red {$rowNum}: slika '{$images}' ne sadrži kod opcije '{$optionSku}'.";
-                $valid = false;
-            }*/
+                $cands = array_filter(array_map('trim', explode(',', $imagesCsv)));
+                if (empty($cands)) {
+                    $slug = $slugIn ? \Illuminate\Support\Str::slug($slugIn) : \Illuminate\Support\Str::slug($name ?: $sku);
+                    $cands = ["{$slug}_{$sku}.jpg"];
+                }
+
+                $found = false;
+                foreach ($cands as $f) {
+                    $abs = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $f;
+                    if (is_file($abs)) { $found = true; break; }
+                }
+                if (!$found) {
+                    $errors[] = "Red " . ($i+1) . ": nijedna slika iz M-stupca ne postoji u upload folderu (traženo: " . implode(', ', $cands) . ").";
+                }
+            }
         }
 
-        if (count($errors) > 50) {
-            $errors = array_slice($errors, 0, 50);
-            $errors[] = '...';
-        }
-
-        return [$valid, $errors];
+        return [count($errors) === 0, $errors];
     }
 
-
     /**
-     * Drugi prolaz: veže OPCIJE iz Excela uz tek kreirane artikle.
-     * - očekuje mapu $createdProductIdsBySku koju puniš u prvom prolazu
-     * - NE kreira nove opcije; veže samo postojeće
+     * Pomoćna: mapira excel opcijski kod u parent/option id-eve iz tablice options.
+     * Vraća [string $parent, ?int $parentId, ?int $optionId]
+     * - parent = "option" ako ima boja (group='boja'), inače "single"
      */
-    private function attachOptionsFromExcel(array $rows, array $createdProductIdsBySku): array
+    private function resolveOptionLinkage(string $excelCode): array
     {
-        $createdOpts = 0;
-        $skippedOpts = 0;
-        $errors = [];
-
-        foreach ($rows as $i => $row) {
-            if ($i === 0) continue;
-
-            $sku = trim((string)($row[0] ?? ''));
-            $optCode = trim((string)($row[1] ?? ''));
-            if ($sku === '' || $optCode === '') continue;
-
-            $productId = $createdProductIdsBySku[$sku] ?? null;
-            if (!$productId) { $skippedOpts++; continue; }
-
-            $priceCell = (float)($row[8] ?? 0);
-            $qtyCell = (int)($row[9] ?? 0);
-            $imagesCsv = (string)($row[12] ?? '');
-
-            try {
-                [$colorTok, $sizeTok] = $this->parseExcelOptionCode($optCode, $sku);
-
-                $colorId = $colorTok ? $this->findOptionId('boja', $colorTok) : null;
-                $sizeId  = $sizeTok  ? $this->findOptionId('velicina', $sizeTok) : null;
-
-                if (!$colorId && !$sizeId) { $skippedOpts++; continue; }
-
-                $parentId = $colorId ?: 0;
-                $optionIdForPivot = $sizeId ?: $colorId;
-                $parentType = $colorId ? 'option' : 'single';
-
-                $basePrice = (float) DB::table('products')->where('id', $productId)->value('price');
-                $priceDelta = max(0, $priceCell - $basePrice);
-
-                $exists = DB::table('product_option')
-                            ->where('product_id', $productId)
-                            ->where('option_id', $optionIdForPivot)
-                            ->where('sku', $optCode)
-                            ->exists();
-
-                if ($exists) { $skippedOpts++; continue; }
-
-                DB::table('product_option')->insert([
-                    'product_id' => $productId,
-                    'option_id'  => $optionIdForPivot,
-                    'image_id'   => 0,
-                    'sku'        => $optCode,
-                    'parent'     => $parentType,
-                    'parent_id'  => $parentId,
-                    'quantity'   => $qtyCell,
-                    'price'      => $priceDelta,
-                    'data'       => json_encode([]),
-                    'status'     => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
-                $createdOpts++;
-
-                // Dodaj sliku za opciju (ako postoji)
-                if ($imagesCsv && $parentId) {
-                    $this->initImagesForOption($productId, $parentId, $imagesCsv, $optCode);
-                }
-
-            } catch (\Throwable $e) {
-                $errors[] = "Red #{$i} ({$sku}/{$optCode}): " . $e->getMessage();
-                $skippedOpts++;
-            }
-        }
-
-        return compact('createdOpts', 'skippedOpts', 'errors');
-    }
-
-
-    /**
-     * Parsira kod iz Excela (stupac B) u [colorToken|null, sizeToken|null].
-     *
-     * Primjeri koje podržavamo:
-     *  - "33-L"           → ['33', 'L']
-     *  - "ZS00000-33-l"   → ['33', 'l']  (ignoriramo leading SKU)
-     *  - "XL"             → [null, 'XL'] (nema boje → single)
-     *  - "106-3XS"        → ['106', '3XS']
-     */
-    private function parseExcelOptionCode(string $code, string $productSku): array
-    {
-        $code = trim($code);
-        if ($code === '') return [null, null];
+        // Primjeri: "33-L", "ZS00000-33-l", "XL", "106-3XS"
+        $code = trim($excelCode);
+        $parent   = 'single';
+        $parentId = null;
+        $optionId = null;
 
         $parts = array_values(array_filter(explode('-', $code), fn($p) => $p !== ''));
 
+        // Ukloni leading SKU proizvoda ako je prisutan (npr. SKU-boja-veličina)
+        // Ovo je tolerantno — boja je prvi, veličina zadnji dio.
+        if (count($parts) >= 3) {
+            array_shift($parts);
+        }
+
+        $colorTok = null;
+        $sizeTok  = null;
+
         if (count($parts) === 1) {
-            // samo veličina
-            return [null, strtoupper($parts[0])];
+            $sizeTok = strtoupper(trim($parts[0]));
+        } elseif (count($parts) >= 2) {
+            $colorTok = trim($parts[0]);
+            $sizeTok  = strtoupper(trim(end($parts)));
         }
 
-        if (count($parts) >= 2) {
-            // Ako je prvi dio jednak SKU-u proizvoda, preskoči ga (čest slučaj "SKU-boja-velicina")
-            if (Str::startsWith($code, $productSku . '-')) {
-                $parts = array_slice($parts, 1);
+        // Boja (group='boja') -> parent
+        if ($colorTok) {
+            $color = \DB::table('options')->where('group', 'boja')->where('option_sku', $colorTok)->first();
+            if ($color) {
+                $parent   = 'option';
+                $parentId = (int)$color->id;
             }
-            // Pretpostavka: prvi preostali dio je boja (brojčani ili string kod), zadnji je veličina
-            $colorToken = trim($parts[0]);
-            $sizeToken  = strtoupper(trim(end($parts))); // veličina normalizirana
-            return [$colorToken, $sizeToken];
         }
 
-        return [null, null];
-    }
-
-    /**
-     * Pronalazi ID opcije u tablici `options` za zadanu grupu i token.
-     * - Za grupu 'boja' token je obično broj (npr. "33") i točno se mapira na options.option_sku = '33'
-     * - Za grupu 'velicina' token je npr. "L", "XL", "3XS"… (pokušavamo option_sku i title prijevoda)
-     *
-     * Vraća: int|null (options.id)
-     */
-    private function findOptionId(string $group, string $token): ?int
-    {
-        $tokenNorm = trim($token);
-        if ($tokenNorm === '') return null;
-
-        // 1) exact match na options.option_sku unutar grupe
-        $opt = DB::table('options')
-                 ->where('group', $group)
-                 ->where('option_sku', $tokenNorm)
-                 ->first();
-
-        if ($opt) return (int)$opt->id;
-
-        // 2) pokušaj preko prijevoda (options_translations.title), case-insensitive
-        $opt = DB::table('options')
-                 ->join('options_translations as ot', 'ot.option_id', '=', 'options.id')
-                 ->where('options.group', $group)
-                 ->whereRaw('LOWER(ot.title) = ?', [mb_strtolower($tokenNorm)])
-                 ->select('options.id')
-                 ->first();
-
-        if ($opt) return (int)$opt->id;
-
-        // 3) fallback za veličine: ponekad su u option_sku bez/sa kosom crtom; pokušaj grublje
-        if ($group === 'velicina') {
-            $opt = DB::table('options')
-                     ->where('group', $group)
-                     ->where(function($q) use ($tokenNorm) {
-                         $q->where('option_sku', 'LIKE', $tokenNorm)
-                           ->orWhere('option_sku', 'LIKE', '%' . $tokenNorm . '%');
-                     })
-                     ->orderBy('sort_order')
-                     ->first();
-            if ($opt) return (int)$opt->id;
+        // Veličina (group='velicina') -> option_id
+        if ($sizeTok) {
+            $size = \DB::table('options')->where('group', 'velicina')->where('option_sku', $sizeTok)->first();
+            if ($size) {
+                $optionId = (int)$size->id;
+            }
         }
 
-        return null;
-    }
-
-
-
-    /**
-     * Inicijalni set slika za novi proizvod.
-     * Prva slika postaje default i upiše se u products.image.
-     */
-    private function initImages(int $productId, string $imagesCsv): int
-    {
-        $images = collect(array_filter(array_map('trim', explode(',', $imagesCsv))))
-            ->reject(fn($img) => Str::contains($img, '-')); // samo default slike
-
-        if ($images->isEmpty()) return 0;
-
-        $sort = 1;
-        $first = null;
-
-        foreach ($images as $img) {
-            DB::table('product_images')->insert([
-                'product_id' => $productId,
-                'image'      => $img,
-                'default'    => $sort === 1 ? 1 : 0,
-                'published'  => 1,
-                'sort_order' => $sort++,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            $first = $first ?: $img;
+        // Fallback: ako nema veličine, koristi boju kao option_id (da postoji veza)
+        if (!$optionId && $parentId) {
+            $optionId = $parentId;
         }
 
-        if ($first) {
-            DB::table('products')->where('id', $productId)->update(['image' => $first]);
-        }
-
-        return $images->count();
-    }
-
-
-    private function initImagesForOption(int $productId, int $parentId, string $imagesCsv, string $optCode): int
-    {
-        $images = collect(array_filter(array_map('trim', explode(',', $imagesCsv))));
-        if ($images->isEmpty()) return 0;
-
-        $matched = $images->first(fn($img) => Str::contains($img, $optCode . '.jpg'));
-        if (!$matched) return 0;
-
-        $exists = DB::table('product_images')
-                    ->where('product_id', $productId)
-                    ->where('option_id', $parentId)
-                    ->where('image', $matched)
-                    ->exists();
-
-        if (!$exists) {
-            DB::table('product_images')->insert([
-                'product_id' => $productId,
-                'option_id'  => $parentId, // ključ: koristi parent_id iz product_option
-                'image'      => $matched,
-                'default'    => 1,
-                'published'  => 1,
-                'sort_order' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        return 1;
+        return [$parent, $parentId, $optionId];
     }
 
 
@@ -885,21 +1098,21 @@ class Export
      *  - prvo traži po category_translations.title (case-insensitive),
      *  - ako ne nađe, pokuša po slug-u.
      */
+    /**
+     * Povezuje proizvod na postojeće kategorije (po naslovu ili slugu) i,
+     * ako nađena kategorija ima parent_id != 0, veže i roditelja.
+     *
+     * @return int Broj novoupisanih redaka u product_category
+     */
     private function attachExistingCategories(int $productId, string $primary, string $secondary, string $extraCsv, string $locale): int
     {
         $titles = collect();
 
-        if (trim($primary) !== '') {
-            $titles->push(trim($primary));
-        }
-        if (trim($secondary) !== '') {
-            $titles->push(trim($secondary));
-        }
+        if (trim($primary) !== '')   { $titles->push(trim($primary)); }
+        if (trim($secondary) !== '') { $titles->push(trim($secondary)); }
 
-        $extras = collect(array_filter(array_map(fn($s) => trim($s), explode(',', (string) $extraCsv))));
-        foreach ($extras as $ex) {
-            $titles->push($ex);
-        }
+        $extras = collect(array_filter(array_map(static fn($s) => trim($s), explode(',', (string)$extraCsv))));
+        foreach ($extras as $ex) { $titles->push($ex); }
 
         $titles = $titles->unique()->values();
         if ($titles->isEmpty()) {
@@ -911,38 +1124,76 @@ class Export
         foreach ($titles as $title) {
             $lower = mb_strtolower($title);
 
+            // 1) Prvo probaj precizno po naslovu u odabranom locale-u
             $cat = DB::table('category_translations')
+                     ->where('lang', $locale)
                      ->whereRaw('LOWER(title) = ?', [$lower])
                      ->select('category_id')
                      ->first();
 
-            if ( ! $cat) {
+            // 2) Ako nije našao, probaj po slugu (isto u locale-u)
+            if (!$cat) {
                 $slug = Str::slug($title);
-                $cat  = DB::table('category_translations')
-                          ->where('slug', $slug)
-                          ->select('category_id')
-                          ->first();
+                $cat = DB::table('category_translations')
+                         ->where('lang', $locale)
+                         ->where('slug', $slug)
+                         ->select('category_id')
+                         ->first();
             }
 
-            if ( ! $cat) {
+            // 3) Ako i dalje nije našao, fallback bez filtera na lang
+            if (!$cat) {
+                $cat = DB::table('category_translations')
+                         ->whereRaw('LOWER(title) = ?', [$lower])
+                         ->select('category_id')
+                         ->first();
+            }
+            if (!$cat) {
+                $slug = isset($slug) ? $slug : Str::slug($title);
+                $cat = DB::table('category_translations')
+                         ->where('slug', $slug)
+                         ->select('category_id')
+                         ->first();
+            }
+
+            if (!$cat) {
+                // Nema odgovarajuće kategorije — preskoči
                 continue;
             }
 
-            $exists = DB::table('product_category')
-                        ->where('product_id', $productId)
-                        ->where('category_id', $cat->category_id)
-                        ->exists();
+            // Dohvati parent_id
+            $categoryId = (int)$cat->category_id;
+            $parentId   = (int) (DB::table('categories')->where('id', $categoryId)->value('parent_id') ?? 0);
 
-            if ($exists) {
-                continue;
+            // Upis 1: osnovna kategorija
+            $existsMain = DB::table('product_category')
+                            ->where('product_id', $productId)
+                            ->where('category_id', $categoryId)
+                            ->exists();
+
+            if (!$existsMain) {
+                DB::table('product_category')->insert([
+                    'product_id'  => $productId,
+                    'category_id' => $categoryId,
+                ]);
+                $linked++;
             }
 
-            DB::table('product_category')->insert([
-                'product_id'  => $productId,
-                'category_id' => $cat->category_id,
-            ]);
+            // Upis 2: roditelj (ako postoji i nije 0)
+            if ($parentId > 0) {
+                $existsParent = DB::table('product_category')
+                                  ->where('product_id', $productId)
+                                  ->where('category_id', $parentId)
+                                  ->exists();
 
-            $linked++;
+                if (!$existsParent) {
+                    DB::table('product_category')->insert([
+                        'product_id'  => $productId,
+                        'category_id' => $parentId,
+                    ]);
+                    $linked++;
+                }
+            }
         }
 
         return $linked;
@@ -950,60 +1201,190 @@ class Export
 
 
     /**
-     * Veže nov proizvod na postojeće atribute.
-     * Traži attribute_id preko attributes_translations (group_title + title), case-insensitive.
+     * Povezuje postojeće atribute na proizvod.
+     * Map primjer:
+     *   ['Materijal' => '94% Poliester, 6% Elastin', 'Veličina' => 'S|M|L']
+     *
+     * Pravila:
+     * - NE reže po zarezu ako string sadrži postotke (tretira cijeli kao jednu vrijednost).
+     * - Inače dijeli po | ili ;  (zarez samo ako nema postotaka).
+     * - Match radi robustno (lowercase, bez dijakritike, kolaps non-alnum).
+     * - Logira cijeli tok (parsiranje, matchane ID-ove, inserte).
      */
     private function attachExistingAttributes(int $productId, array $map, string $locale): int
     {
-        $ids = [];
+        Log::info('attr:START', ['productId' => $productId, 'locale' => $locale, 'groups' => array_keys($map)]);
+
+        // Normalizacije
+        $collapseSpace = static function (string $s): string {
+            return trim(preg_replace('/\s+/u', ' ', $s) ?? '');
+        };
+        $stripDiacritics = static function (string $s): string {
+            // Str::ascii će skinuti dijakritiku
+            return Str::ascii($s);
+        };
+        $normSoft = static function (string $s) use ($collapseSpace, $stripDiacritics): string {
+            $s = $collapseSpace($s);
+            $s = mb_strtolower($s, 'UTF-8');
+            $s = $stripDiacritics($s);
+            return $s;
+        };
+        $normStrong = static function (string $s) use ($normSoft): string {
+            $s = $normSoft($s);
+            // makni sve što nije slovo ili broj
+            $s = preg_replace('/[^a-z0-9]+/i', '', $s) ?? '';
+            return $s;
+        };
+
+        $collectIds = [];
 
         foreach ($map as $groupTitle => $csvValues) {
-            $values = collect(array_filter(array_map(fn($s) => trim($s), explode(',', (string) $csvValues))))
+            $groupTitle = (string)$groupTitle;
+            $raw = $collapseSpace((string)$csvValues);
+
+            if ($raw === '') {
+                Log::info('attr:skip-empty-values', ['group' => $groupTitle]);
+                continue;
+            }
+
+            // heuristika za parsiranje vrijednosti
+            $hasPercent = (bool) preg_match('/\d+\s*%/u', $raw);
+            if (strpos($raw, '|') !== false || strpos($raw, ';') !== false) {
+                $parts = preg_split('/[|;]+/u', $raw);
+            } elseif (!$hasPercent && strpos($raw, ',') !== false) {
+                $parts = preg_split('/,+/u', $raw);
+            } else {
+                $parts = [$raw];
+            }
+
+            $values = collect($parts)
+                ->map(fn($v) => $collapseSpace((string)$v))
+                ->filter(fn($v) => $v !== '')
                 ->unique()
                 ->values();
 
+            Log::info('attr:parsed', [
+                'groupRaw' => $groupTitle,
+                'values'   => $values->all(),
+                'raw'      => $raw,
+                'hasPercent' => $hasPercent
+            ]);
+
+            // Dohvati sve prijevode za danu grupu (prvo po traženom lang-u, fallback bez langa)
+            $gSoft = $normSoft($groupTitle);
+            $groupRows = DB::table('attributes_translations')
+                           ->select('attribute_id', 'group_title', 'title', 'lang')
+                           ->whereRaw('LOWER(group_title) = ?', [$gSoft])
+                           ->where('lang', $locale)
+                           ->get();
+
+            if ($groupRows->isEmpty()) {
+                $groupRows = DB::table('attributes_translations')
+                               ->select('attribute_id', 'group_title', 'title', 'lang')
+                               ->whereRaw('LOWER(group_title) = ?', [$gSoft])
+                               ->get();
+            }
+
+            Log::info('attr:group-candidates', [
+                'group'   => $groupTitle,
+                'locale'  => $locale,
+                'rows'    => $groupRows->count()
+            ]);
+
+            if ($groupRows->isEmpty()) {
+                Log::info('attr:group-not-found', ['group' => $groupTitle]);
+                continue;
+            }
+
+            // Izgradi lookup mapu titleNorm => attribute_id
+            $byNormTitle = [];
+            foreach ($groupRows as $r) {
+                $key = $normStrong((string)$r->title);
+                if ($key !== '') {
+                    // preferiraj prvi (ako ima duplikata naslova u istoj grupi)
+                    $byNormTitle[$key] = (int)$r->attribute_id;
+                }
+            }
+
+            // Matchaj svaku vrijednost
             foreach ($values as $valueTitle) {
-                $g = mb_strtolower($groupTitle);
-                $t = mb_strtolower($valueTitle);
+                $needleStrong = $normStrong($valueTitle);
+                $needleSoft   = $normSoft($valueTitle);
 
-                $attrTr = DB::table('attributes_translations')
-                            ->whereRaw('LOWER(group_title) = ?', [$g])
-                            ->whereRaw('LOWER(title) = ?', [$t])
-                            ->select('attribute_id')
-                            ->first();
+                $aid = $byNormTitle[$needleStrong] ?? null;
 
-                if ($attrTr) {
-                    $ids[] = (int) $attrTr->attribute_id;
+                // Ako nema strong match, probaj soft "contains" (edge slučajevi s postocima/spojnicima)
+                if (!$aid) {
+                    foreach ($byNormTitle as $normKey => $attrId) {
+                        // ako su skoro isti po soft normi (npr. razlika samo u razmacima)
+                        if ($normKey === $needleSoft || str_contains($normKey, $needleStrong) || str_contains($needleStrong, $normKey)) {
+                            $aid = $attrId;
+                            break;
+                        }
+                    }
+                }
+
+                Log::info('attr:match-attempt', [
+                    'group'        => $groupTitle,
+                    'value'        => $valueTitle,
+                    'needleStrong' => $needleStrong,
+                    'needleSoft'   => $needleSoft,
+                    'found'        => (bool)$aid,
+                    'attribute_id' => $aid
+                ]);
+
+                if ($aid) {
+                    $collectIds[] = (int)$aid;
+                } else {
+                    // Za lakši debug — pokaži top 5 kandidata iz baze za ovu grupu
+                    $sample = [];
+                    $i = 0;
+                    foreach ($byNormTitle as $k => $v) {
+                        $sample[] = ['normTitle' => $k, 'attribute_id' => $v];
+                        if (++$i >= 5) break;
+                    }
+                    Log::info('attr:no-match-debug', [
+                        'group'  => $groupTitle,
+                        'value'  => $valueTitle,
+                        'sample' => $sample
+                    ]);
                 }
             }
         }
 
-        $ids = array_values(array_unique($ids));
+        $ids = array_values(array_unique($collectIds));
         if (empty($ids)) {
+            Log::info('attr:END', ['productId' => $productId, 'inserted' => 0, 'reason' => 'no-ids-collected']);
             return 0;
         }
 
+        // Insert u pivot (preskoči postojeće)
         $rows = [];
         foreach ($ids as $aid) {
             $exists = DB::table('product_attribute')
                         ->where('product_id', $productId)
                         ->where('attribute_id', $aid)
                         ->exists();
-            if ($exists) {
-                continue;
-            }
 
-            $rows[] = [
-                'product_id'   => $productId,
-                'attribute_id' => $aid,
-            ];
+            if (!$exists) {
+                $rows[] = ['product_id' => $productId, 'attribute_id' => $aid];
+            }
         }
 
-        if ( ! empty($rows)) {
+        if (!empty($rows)) {
             DB::table('product_attribute')->insert($rows);
         }
 
+        Log::info('attr:END', [
+            'productId'    => $productId,
+            'totalFound'   => count($ids),
+            'insertedRows' => count($rows),
+            'skippedDupes' => count($ids) - count($rows),
+            'ids'          => $ids,
+        ]);
+
         return count($rows);
     }
+
 
 }

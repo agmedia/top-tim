@@ -66,6 +66,44 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+
+                                                <div class="col-md-12 mt-4">
+                                                    <form id="images-upload" action="{{ route('import.images.upload') }}" method="post" enctype="multipart/form-data" class="mb-4">
+                                                        @csrf
+
+                                                        <table class="table table-responsive table-borderless table-vcenter">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td style="width: 30%;">
+                                                                    <button class="btn btn-primary" type="submit">Učitaj slike</button>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="mb-2">
+                                                                        <code>Upload ZIP sa slikama:</code>
+                                                                        <input type="file" name="zip" accept=".zip">
+                                                                    </div>
+                                                                    <div class="mb-2">
+                                                                        <code>Ili odaberi više slika:</code>
+                                                                        <input type="file" name="images[]" multiple accept="image/*">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </form>
+
+                                                    <script>
+                                                        document.getElementById('images-upload').addEventListener('submit', async (e) => {
+                                                            e.preventDefault();
+                                                            const form = e.target;
+                                                            const data = new FormData(form);
+                                                            const res = await fetch(form.action, { method: 'POST', body: data });
+                                                            const json = await res.json();
+                                                            alert(json.msg || 'Gotovo');
+                                                        });
+                                                    </script>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -230,6 +230,7 @@ Route::group(
             Route::get('api/products/simple/excel', [ApiController::class, 'exportToSimpleExcel'])->name('export.simple.excel');
             Route::get('api/products/excel', [ApiController::class, 'exportToExcel'])->name('export.excel');
             Route::get('api/eracuni/export', [ApiController::class, 'exportToEracuni'])->name('export.eracuni');
+            Route::post('api/images/upload', [ApiController::class, 'uploadImages'])->name('import.images.upload');
 
             //Route::get('application', [SettingsController::class, 'index'])->name('settings');
 
