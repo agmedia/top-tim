@@ -390,6 +390,9 @@ class Export
             return ApiHelper::response(0, 'Nedostaje payload ili redovi za obradu.');
         }
 
+        Log::info('Payload: ' . json_encode($data));
+        Log::info('Session dir: ' . session('import_images_dir'));
+
         $this->imagesBaseDir = $data['images_dir'] ?? session('import_images_dir') ?? '';
         $this->request = $data;
 
@@ -509,9 +512,9 @@ class Export
                         'status'     => ($activeCell === '' ? 0 : (int)$activeCell),
                     ]);
 
-                    // 1b) Prijevod
-                    $slug = $slugIn ? Str::slug($slugIn) : Str::slug($name ?: $sku);
-                    $url  = $slug;
+                    // 1b) Prijevod – za početak samo produkt slug (zadnji dio URL-a),
+                    // full path ćemo složiti nakon što povežemo kategorije
+                    $productSlug = $slugIn ? Str::slug($slugIn) : Str::slug($name ?: $sku);
 
                     \App\Models\Back\Catalog\Product\ProductTranslation::query()->create([
                         'product_id'       => $product->id,
@@ -522,8 +525,8 @@ class Export
                         'sastojci'         => null,
                         'meta_title'       => $metaTitle ?: null,
                         'meta_description' => $metaDesc ?: null,
-                        'slug'             => $slug,
-                        'url'              => $url,
+                        'slug'             => $productSlug,
+                        'url'              => $productSlug,
                         'tags'             => null,
                     ]);
 
@@ -556,6 +559,46 @@ class Export
                         'Kroj'       => $attrFit,
                         'Dimenzije'  => $attrDims,
                     ], $locale);
+
+                    // 1f) Nakon što smo povezali kategorije, složi FULL SLUG:
+                    // hr/kategorija-proizvoda/{cat}/{subcat}/{product-slug}
+                    $basePrefix = $locale . '/kategorija-proizvoda';
+
+                    // pokupi slugove svih kategorija vezanih na proizvod (sortirano po hijerarhiji)
+                    // prilagodi imena tablica / kolona po potrebi:
+                    $catSlugs = \DB::table('product_category as pc')
+                                   ->join('categories as c', 'c.id', '=', 'pc.category_id')
+                                   ->join('category_translations as ct', 'ct.category_id', '=', 'c.id')
+                                   ->where('pc.product_id', $product->id)
+                                   ->where('ct.lang', $locale)
+                                   ->orderBy('c.id') // ako imaš nested set; ako ne, promijeni u id ili nešto drugo
+                                   ->pluck('ct.slug')
+                                   ->all();
+
+                    // ako iz Excela želiš baš primary/secondary redoslijed,
+                    // možeš ovdje filtrirati/posložiti prema $catPrimary/$catSecondary,
+                    // ali u praksi je dovoljno da su po lft.
+
+                    $segments = [];
+                    $segments[] = trim($basePrefix, '/');
+
+                    foreach ($catSlugs as $cs) {
+                        if ($cs) {
+                            $segments[] = trim($cs, '/');
+                        }
+                    }
+
+                    $segments[] = trim($productSlug, '/');
+
+                    $fullPath = implode('/', $segments);
+
+                    \DB::table('product_translations')
+                       ->where('product_id', $product->id)
+                       ->where('lang', $locale)
+                       ->update([
+                           'slug' => $productSlug,
+                           'url'  => $fullPath,
+                       ]);
 
                     $createdProducts++;
                     $createdProductIdsBySku[$sku] = $product->id;
@@ -661,23 +704,72 @@ class Export
             return 0;
         }
 
-        // FALLBACK PROMJENA: samo SKU.jpg (bez naziva)
-        $cands = array_values(array_filter(array_map('trim', explode(',', (string)$imagesCsv)), fn($v) => $v !== ''));
-        if (empty($cands)) {
+        // FALLBACK PROMJENA:
+        // 1) ako imagesCsv ima vrijednosti → koristi njih
+        // 2) ako je prazno → probaj sku.jpg
+        // 3) ako sku.jpg ne postoji → probaj prvi *.jpg koji u nazivu sadrži "sku-"
+        $cands = array_values(array_filter(
+            array_map('trim', explode(',', (string) $imagesCsv)),
+            fn ($v) => $v !== ''
+        ));
+
+        if (empty($cands) && $sku !== '') {
             $cands = ["{$sku}.jpg"];
         }
-        \Log::info('initImages:candidates', ['cands' => $cands]);
+
+        \Log::info('initImages:candidates-initial', ['cands' => $cands]);
 
         $files = [];
         foreach ($cands as $fname) {
             $abs = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fname;
-            \Log::info('initImages:probe-file', ['fname' => $fname, 'abs' => $abs, 'exists' => is_file($abs)]);
-            if (is_file($abs)) $files[] = $abs;
+            $exists = is_file($abs);
+            \Log::info('initImages:probe-file', ['fname' => $fname, 'abs' => $abs, 'exists' => $exists]);
+            if ($exists) {
+                $files[] = $abs;
+            }
         }
+
+        // DODATNI FALLBACK: ako ni jedan kandidat ne postoji, a imamo SKU,
+        // nađi prvi .jpg u direktoriju koji u nazivu ima "sku-"
+        if (empty($files) && $sku !== '') {
+            $pattern = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '*.jpg';
+            $allJpg  = glob($pattern) ?: [];
+
+            $skuNeedle = strtolower($sku . '-');
+            $fallbackAbs = null;
+
+            foreach ($allJpg as $path) {
+                $base = strtolower(basename($path));
+                if (strpos($base, $skuNeedle) !== false) {
+                    $fallbackAbs = $path;
+                    break;
+                }
+            }
+
+            if ($fallbackAbs) {
+                $files = [$fallbackAbs];
+                $cands = [basename($fallbackAbs)];
+                \Log::info('initImages:fallback-sku-dash-match', [
+                    'sku' => $sku,
+                    'file' => $fallbackAbs,
+                ]);
+            } else {
+                \Log::info('initImages:fallback-sku-dash-none', [
+                    'sku' => $sku,
+                    'searchedPattern' => $pattern,
+                ]);
+            }
+        }
+
         if (empty($files)) {
             \Log::info('initImages:no-files-found');
             return 0;
         }
+
+        \Log::info('initImages:final-files', [
+            'files' => $files,
+            'cands' => $cands,
+        ]);
 
         $locale  = config('app.locale', 'hr');
         $sort    = 1;
@@ -686,17 +778,32 @@ class Export
         foreach ($files as $idx => $abs) {
             try {
                 $ext  = strtolower(pathinfo($abs, PATHINFO_EXTENSION));
-                $mime = $ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'image/jpeg');
-                $bin  = @file_get_contents($abs);
+                $mime = $ext === 'png'
+                    ? 'image/png'
+                    : ($ext === 'webp'
+                        ? 'image/webp'
+                        : 'image/jpeg');
+
+                $bin = @file_get_contents($abs);
                 \Log::info('initImages:file-read', [
                     'idx' => $idx, 'abs' => $abs, 'ext' => $ext, 'mime' => $mime,
-                    'size' => $bin === false ? 'READ_FAIL' : strlen($bin).'B',
+                    'size' => $bin === false ? 'READ_FAIL' : strlen($bin) . 'B',
                 ]);
-                if ($bin === false) continue;
+                if ($bin === false) {
+                    continue;
+                }
 
                 // spremi fizički (Image helper očekuje cropper JSON)
-                $imageJson  = json_encode(['output' => ['image' => "data:{$mime};base64," . base64_encode($bin)]]);
-                $imgPayload = ['image' => $imageJson, 'default' => $sort === 1 ? 1 : 0, 'sort_order' => $sort];
+                $imageJson  = json_encode([
+                    'output' => [
+                        'image' => "data:{$mime};base64," . base64_encode($bin),
+                    ],
+                ]);
+                $imgPayload = [
+                    'image'      => $imageJson,
+                    'default'    => $sort === 1 ? 1 : 0,
+                    'sort_order' => $sort,
+                ];
 
                 $paths   = \App\Helpers\Image::save('products', $imgPayload, $product);
                 $relPath = is_array($paths)
@@ -704,7 +811,10 @@ class Export
                     : $paths;
 
                 if (!is_string($relPath) || $relPath === '') {
-                    \Log::info('initImages:invalid-relPath', ['relPath' => $relPath, 'type' => gettype($paths)]);
+                    \Log::info('initImages:invalid-relPath', [
+                        'relPath' => $relPath,
+                        'type'    => gettype($paths),
+                    ]);
                     continue;
                 }
 
@@ -712,43 +822,48 @@ class Export
 
                 // RAW insert (čisti scalari)
                 $sql = 'INSERT INTO `product_images`
-                    (`product_id`,`option_id`,`image`,`default`,`published`,`sort_order`,`created_at`,`updated_at`)
-                    VALUES (?,?,?,?,?,?,?,?)';
+                (`product_id`,`option_id`,`image`,`default`,`published`,`sort_order`,`created_at`,`updated_at`)
+                VALUES (?,?,?,?,?,?,?,?)';
+
                 $bindings = [
-                    (int)$product->id,
+                    (int) $product->id,
                     null,
-                    (string)$publicUrl,
-                    (int)($sort === 1 ? 1 : 0),
+                    (string) $publicUrl,
+                    (int) ($sort === 1 ? 1 : 0),
                     1,
-                    (int)$sort,
+                    (int) $sort,
                     now()->toDateTimeString(),
                     now()->toDateTimeString(),
                 ];
+
                 \DB::insert($sql, $bindings);
-                $imageId = (int)\DB::getPdo()->lastInsertId();
+                $imageId = (int) \DB::getPdo()->lastInsertId();
 
                 // RUČNI insert prijevoda
                 \DB::table('product_images_translations')->insert([
                     'product_image_id' => $imageId,
-                    'lang'             => (string)$locale,
-                    'title'            => (string)(optional($product->translation)->name ?: ($name ?: $sku)),
-                    'alt'              => (string)(optional($product->translation)->name ?: ($name ?: $sku)),
+                    'lang'             => (string) $locale,
+                    'title'            => (string) (optional($product->translation)->name ?: ($name ?: $sku)),
+                    'alt'              => (string) (optional($product->translation)->name ?: ($name ?: $sku)),
                     'created_at'       => now()->toDateTimeString(),
                     'updated_at'       => now()->toDateTimeString(),
                 ]);
 
                 if ($sort === 1) {
-                    \DB::table('products')->where('id', $product->id)->update([
-                        'image'      => (string)$publicUrl,
-                        'updated_at' => now()->toDateTimeString(),
-                    ]);
+                    \DB::table('products')
+                       ->where('id', $product->id)
+                       ->update([
+                           'image'      => (string) $publicUrl,
+                           'updated_at' => now()->toDateTimeString(),
+                       ]);
                 }
 
                 $created++;
                 $sort++;
             } catch (\Throwable $e) {
                 \Log::info('initImages:exception', [
-                    'file' => $abs, 'error' => $e->getMessage(),
+                    'file'  => $abs,
+                    'error' => $e->getMessage(),
                     'trace' => substr($e->getTraceAsString(), 0, 2000),
                 ]);
             }

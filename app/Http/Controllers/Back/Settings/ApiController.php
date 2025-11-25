@@ -205,6 +205,8 @@ class ApiController extends Controller
      */
     public function uploadImages(Request $request)
     {
+        Log::info('uploadImages(Request $request):::');
+
         if (!$request->hasFile('images') && !$request->hasFile('zip')) {
             return response()->json(['status' => 0, 'msg' => 'Nije poslana datoteka (images[] ili zip).'], 422);
         }
