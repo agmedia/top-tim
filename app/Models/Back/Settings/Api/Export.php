@@ -874,208 +874,304 @@ class Export
     }
 
 
-    /**
-     * Ako postoji slika specifična za opciju, uploada je kao dodatnu sliku proizvoda,
-     * i (ako postoji stupac) povezuje s product_option.image_id.
-     * Traži datoteku koja završava na "_{ŠIFRAOPCIJE}.(jpg|jpeg|png|webp)" u upload folderu.
-     */
-    private function initImagesForOption(int $productId, int $optionIdOrParentId, string $optionCode): int
+    private function initImagesForOption(int $productId, int $parentId, string $optCode): void
     {
         \Log::info('initImagesForOption:start', [
-            'productId'  => $productId,
-            'parentId'   => $optionIdOrParentId,
-            'optionCode' => $optionCode,
-            'imagesDir'  => $this->imagesBaseDir ?? null,
+            'productId' => $productId,
+            'parentId'  => $parentId,
+            'optCode'   => $optCode,
         ]);
 
-        $baseDir = $this->imagesBaseDir ?? '';
-        if (!$baseDir || !is_dir($baseDir)) {
-            \Log::info('initImagesForOption:baseDir-missing', ['baseDir' => $baseDir]);
-            return 0;
+        if ($optCode === '') {
+            \Log::info('initImagesForOption:empty-optCode');
+            return;
         }
 
         /** @var \App\Models\Back\Catalog\Product\Product|null $product */
         $product = \App\Models\Back\Catalog\Product\Product::query()->find($productId);
         if (!$product) {
             \Log::info('initImagesForOption:product-not-found', ['productId' => $productId]);
-            return 0;
+            return;
         }
 
-        // --- 1) Pripremi "jako normalizirane" igle (needles) iz optionCode-a ---
-        $normalizeStrong = function (string $s): string {
-            // ukloni ekstenziju ako je zadana
-            $s = preg_replace('/\.[^.]+$/', '', $s);
-            // sve separatore u ništa, sve u lower
-            $s = mb_strtolower($s, 'UTF-8');
-            $s = preg_replace('/[^A-Za-z0-9]+/u', '', $s);
-            return $s ?? '';
-        };
+        $sku = (string) $product->sku;
 
-        // varijante igle
-        $needlesRaw = [
-            $optionCode,                                  // "LEG00009-2-S/M"
-            str_replace('/', '-', $optionCode),           // "LEG00009-2-S-M"
-            str_replace('/', '',  $optionCode),           // "LEG00009-2-SM"
-        ];
+        // 1) Pokušaj NAĆI već postojeću sliku za ovaj proizvod koja po nazivu odgovara opciji
+        // Pretpostavka: naziv fajla sadrži kombinaciju SKU i/ili optCode, npr:
+        // sku-RED.jpg, sku_RED.jpg, skuRED.jpg ili barem -RED.jpg / _RED.jpg
+        $imgQuery = \DB::table('product_images')
+                       ->where('product_id', $productId);
 
-        // dodaj i varijantu s basename-om opcije (zadnji segment nakon '/')
-        $lastSeg = str_contains($optionCode, '/')
-            ? substr($optionCode, strrpos($optionCode, '/') + 1)
-            : $optionCode;
-        $needlesRaw[] = $lastSeg;                         // "S/M"
-        $needlesRaw[] = str_replace('/', '-', $lastSeg);  // "S-M"
-        $needlesRaw[] = str_replace('/', '',  $lastSeg);  // "SM"
-        $needlesRaw = array_values(array_unique($needlesRaw));
+        $patterns = [];
 
-        $needles = array_map($normalizeStrong, $needlesRaw);
-        $needles = array_values(array_unique(array_filter($needles, fn($v) => $v !== '')));
-
-        \Log::info('initImagesForOption:needles', ['raw' => $needlesRaw, 'normalized' => $needles]);
-
-        // --- 2) Brzi exact pokušaji (nested i flat) prije rekurzije ---
-        $exts = ['jpg','jpeg','png','webp'];
-        $tryPaths = [];
-        foreach ($exts as $e) {
-            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $optionCode) . '.' . $e;   // nested
-            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', '-', $optionCode) . '.' . $e;                   // flat s '-'
-            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', '',  $optionCode) . '.' . $e;                   // flat bez '/'
+        if ($sku !== '') {
+            $patterns[] = "%/{$sku}_{$optCode}.%";
+            $patterns[] = "%/{$sku}-{$optCode}.%";
+            $patterns[] = "%/{$sku}{$optCode}.%";
         }
 
-        $matchedAbs = null;
-        foreach ($tryPaths as $p) {
-            if (is_file($p)) { $matchedAbs = $p; break; }
-        }
-        \Log::info('initImagesForOption:fast-exact', ['matched' => (bool)$matchedAbs, 'path' => $matchedAbs]);
+        // fallback samo na optCode
+        $patterns[] = "%-{$optCode}.%";
+        $patterns[] = "%_{$optCode}.%";
 
-        // --- 3) Rekurzivno pretraživanje: uspoređuj RELATIVNI STEM s needle-ovima (strong norm) ---
-        $scanned = 0;
-        $hits = 0;
-        if (!$matchedAbs) {
-            try {
-                $it = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($baseDir, \FilesystemIterator::SKIP_DOTS),
-                    \RecursiveIteratorIterator::SELF_FIRST
-                );
-                foreach ($it as $file) {
-                    /** @var \SplFileInfo $file */
-                    if (!$file->isFile()) continue;
-                    $ext = strtolower($file->getExtension());
-                    if (!in_array($ext, $exts, true)) continue;
-
-                    $full = $file->getRealPath();
-                    // relativni path unutar baseDir-a
-                    $rel  = ltrim(str_replace(rtrim($baseDir, DIRECTORY_SEPARATOR), '', $full), DIRECTORY_SEPARATOR);
-                    // bez ekstenzije, sa separatorima normaliziranim u '/'
-                    $relStem = preg_replace('/\.[^.]+$/', '', $rel);
-                    $relStem = str_replace(DIRECTORY_SEPARATOR, '/', $relStem);
-
-                    $normRel = $normalizeStrong($relStem);
-                    $scanned++;
-
-                    if (in_array($normRel, $needles, true)) {
-                        $matchedAbs = $full;
-                        $hits++;
-                        break;
-                    }
-                }
-            } catch (\Throwable $e) {
-                \Log::info('initImagesForOption:recursive-ex', ['err' => $e->getMessage()]);
+        $imgQuery->where(function ($q) use ($patterns) {
+            foreach ($patterns as $p) {
+                $q->orWhere('image', 'like', $p);
             }
-        }
+        });
 
-        \Log::info('initImagesForOption:scan-stats', ['scanned' => $scanned, 'hits' => $hits, 'matched' => (bool)$matchedAbs, 'path' => $matchedAbs]);
-        if (!$matchedAbs) {
-            // za debug – ispiši prvih ~30 file-ova (relativno) da vidimo što je unutra
-            try {
-                $list = [];
-                $it2 = new \DirectoryIterator($baseDir);
-                foreach ($it2 as $fi) {
-                    if ($fi->isDot()) continue;
-                    $list[] = $fi->getFilename();
-                    if (count($list) >= 30) break;
-                }
-                \Log::info('initImagesForOption:dir-sample', ['baseDir' => $baseDir, 'sample' => $list]);
-            } catch (\Throwable $e) {
-                // noop
-            }
-            return 0;
-        }
+        $image = $imgQuery->orderBy('id')->first();
 
-        // --- 4) Resolvaj option_id ---
-        $optionId = $optionIdOrParentId ?: null;
-        if (!$optionId) {
-            $opt = \DB::table('options')->where('option_sku', $optionCode)->first();
-            $optionId = $opt ? (int)$opt->id : null;
-        }
-        \Log::info('initImagesForOption:resolved-optionId', ['optionId' => $optionId]);
-
-        // --- 5) Spremi sliku i upiši u DB ---
-        try {
-            $ext  = strtolower(pathinfo($matchedAbs, PATHINFO_EXTENSION));
-            $mime = $ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'image/jpeg');
-            $bin  = @file_get_contents($matchedAbs);
-            if ($bin === false) {
-                \Log::info('initImagesForOption:file-read-failed', ['abs' => $matchedAbs]);
-                return 0;
-            }
-
-            $imageJson  = json_encode(['output' => ['image' => "data:{$mime};base64," . base64_encode($bin)]]);
-            $imgPayload = ['image' => $imageJson, 'default' => 0, 'sort_order' => 999, 'option_id' => $optionId];
-
-            $paths   = \App\Helpers\Image::save('products', $imgPayload, $product);
-            $relPath = is_array($paths)
-                ? ($paths['jpg'] ?? $paths['webp'] ?? $paths['image'] ?? $paths['path'] ?? (reset($paths) ?: null))
-                : $paths;
-
-            if (!is_string($relPath) || $relPath === '') {
-                \Log::info('initImagesForOption:invalid-relPath', ['relPath' => $relPath, 'type' => gettype($paths)]);
-                return 0;
-            }
-            $publicUrl = rtrim(config('filesystems.disks.products.url'), '/') . '/' . ltrim($relPath, '/');
-
-            // RAW insert u product_images
-            $sql = 'INSERT INTO `product_images`
-                (`product_id`,`option_id`,`image`,`default`,`published`,`sort_order`,`created_at`,`updated_at`)
-                VALUES (?,?,?,?,?,?,?,?)';
-            $bindings = [
-                (int)$product->id,
-                $optionId ? (int)$optionId : null,
-                (string)$publicUrl,
-                0,
-                1,
-                999,
-                now()->toDateTimeString(),
-                now()->toDateTimeString(),
-            ];
-            \DB::insert($sql, $bindings);
-            $imageId = (int)\DB::getPdo()->lastInsertId();
-
-            // RUČNI insert prijevoda
-            $locale = config('app.locale', 'hr');
-            \DB::table('product_images_translations')->insert([
-                'product_image_id' => $imageId,
-                'lang'             => (string)$locale,
-                'title'            => (string)(optional($product->translation)->name ?: $product->sku),
-                'alt'              => (string)(optional($product->translation)->name ?: $product->sku),
-                'created_at'       => now()->toDateTimeString(),
-                'updated_at'       => now()->toDateTimeString(),
+        if ($image) {
+            \Log::info('initImagesForOption:found-existing-image', [
+                'productId' => $productId,
+                'optCode'   => $optCode,
+                'image_id'  => $image->id,
+                'image'     => $image->image ?? null,
             ]);
 
-            // LINK: po product_id + sku (i option_id ako postoji)
-            $q = \DB::table('product_option')->where('product_id', $productId)->where('sku', $optionCode);
-            if ($optionId) $q->where('option_id', $optionId);
-            $updated = $q->update(['image_id' => $imageId, 'updated_at' => now()->toDateTimeString()]);
-            \Log::info('initImagesForOption:link-product_option', ['updated_rows' => $updated, 'image_id' => $imageId, 'publicUrl' => $publicUrl]);
+            // 2) Samo poveži product_option → image_id (NEMA kreiranja nove slike)
+            \DB::table('product_option')
+               ->where('product_id', $productId)
+               ->where('sku', $optCode)
+               ->update([
+                   'image_id'   => (int) $image->id,
+                   'updated_at' => now(),
+               ]);
 
-            return 1;
-        } catch (\Throwable $e) {
-            \Log::info('initImagesForOption:exception', [
-                'file' => $matchedAbs, 'error' => $e->getMessage(),
-                'trace' => substr($e->getTraceAsString(), 0, 2000),
-            ]);
-            return 0;
+            // Po želji: ako želiš da ova slika postane *glavna* za proizvod,
+            // možeš ovdje prebaciti default flag, ali BEZ dupliranja:
+            //
+            // \DB::table('product_images')
+            //     ->where('product_id', $productId)
+            //     ->update(['default' => 0]);
+            //
+            // \DB::table('product_images')
+            //     ->where('id', $image->id)
+            //     ->update(['default' => 1, 'updated_at' => now()]);
+            //
+            // \DB::table('products')
+            //     ->where('id', $productId)
+            //     ->update(['image' => $image->image, 'updated_at' => now()]);
+
+            return;
         }
+
+        // 3) Ako NEMA postojeće slike koja odgovara opciji → ne radimo ništa
+        // (ostavi image_id = 0). Po želji ovdje možeš dodati log:
+        \Log::info('initImagesForOption:no-matching-image', [
+            'productId' => $productId,
+            'optCode'   => $optCode,
+            'sku'       => $sku,
+        ]);
+
+        // Ako baš želiš fallback na kreiranje nove slike iz upload foldera,
+        // to napravi OVDJE (ali tada to nije duplikat, nego nova slika).
     }
+    
+
+    /**
+     * Ako postoji slika specifična za opciju, uploada je kao dodatnu sliku proizvoda,
+     * i (ako postoji stupac) povezuje s product_option.image_id.
+     * Traži datoteku koja završava na "_{ŠIFRAOPCIJE}.(jpg|jpeg|png|webp)" u upload folderu.
+     */
+//    private function initImagesForOption(int $productId, int $optionIdOrParentId, string $optionCode): int
+//    {
+//        \Log::info('initImagesForOption:start', [
+//            'productId'  => $productId,
+//            'parentId'   => $optionIdOrParentId,
+//            'optionCode' => $optionCode,
+//            'imagesDir'  => $this->imagesBaseDir ?? null,
+//        ]);
+//
+//        $baseDir = $this->imagesBaseDir ?? '';
+//        if (!$baseDir || !is_dir($baseDir)) {
+//            \Log::info('initImagesForOption:baseDir-missing', ['baseDir' => $baseDir]);
+//            return 0;
+//        }
+//
+//        /** @var \App\Models\Back\Catalog\Product\Product|null $product */
+//        $product = \App\Models\Back\Catalog\Product\Product::query()->find($productId);
+//        if (!$product) {
+//            \Log::info('initImagesForOption:product-not-found', ['productId' => $productId]);
+//            return 0;
+//        }
+//
+//        // --- 1) Pripremi "jako normalizirane" igle (needles) iz optionCode-a ---
+//        $normalizeStrong = function (string $s): string {
+//            // ukloni ekstenziju ako je zadana
+//            $s = preg_replace('/\.[^.]+$/', '', $s);
+//            // sve separatore u ništa, sve u lower
+//            $s = mb_strtolower($s, 'UTF-8');
+//            $s = preg_replace('/[^A-Za-z0-9]+/u', '', $s);
+//            return $s ?? '';
+//        };
+//
+//        // varijante igle
+//        $needlesRaw = [
+//            $optionCode,                                  // "LEG00009-2-S/M"
+//            str_replace('/', '-', $optionCode),           // "LEG00009-2-S-M"
+//            str_replace('/', '',  $optionCode),           // "LEG00009-2-SM"
+//        ];
+//
+//        // dodaj i varijantu s basename-om opcije (zadnji segment nakon '/')
+//        $lastSeg = str_contains($optionCode, '/')
+//            ? substr($optionCode, strrpos($optionCode, '/') + 1)
+//            : $optionCode;
+//        $needlesRaw[] = $lastSeg;                         // "S/M"
+//        $needlesRaw[] = str_replace('/', '-', $lastSeg);  // "S-M"
+//        $needlesRaw[] = str_replace('/', '',  $lastSeg);  // "SM"
+//        $needlesRaw = array_values(array_unique($needlesRaw));
+//
+//        $needles = array_map($normalizeStrong, $needlesRaw);
+//        $needles = array_values(array_unique(array_filter($needles, fn($v) => $v !== '')));
+//
+//        \Log::info('initImagesForOption:needles', ['raw' => $needlesRaw, 'normalized' => $needles]);
+//
+//        // --- 2) Brzi exact pokušaji (nested i flat) prije rekurzije ---
+//        $exts = ['jpg','jpeg','png','webp'];
+//        $tryPaths = [];
+//        foreach ($exts as $e) {
+//            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $optionCode) . '.' . $e;   // nested
+//            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', '-', $optionCode) . '.' . $e;                   // flat s '-'
+//            $tryPaths[] = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace('/', '',  $optionCode) . '.' . $e;                   // flat bez '/'
+//        }
+//
+//        $matchedAbs = null;
+//        foreach ($tryPaths as $p) {
+//            if (is_file($p)) { $matchedAbs = $p; break; }
+//        }
+//        \Log::info('initImagesForOption:fast-exact', ['matched' => (bool)$matchedAbs, 'path' => $matchedAbs]);
+//
+//        // --- 3) Rekurzivno pretraživanje: uspoređuj RELATIVNI STEM s needle-ovima (strong norm) ---
+//        $scanned = 0;
+//        $hits = 0;
+//        if (!$matchedAbs) {
+//            try {
+//                $it = new \RecursiveIteratorIterator(
+//                    new \RecursiveDirectoryIterator($baseDir, \FilesystemIterator::SKIP_DOTS),
+//                    \RecursiveIteratorIterator::SELF_FIRST
+//                );
+//                foreach ($it as $file) {
+//                    /** @var \SplFileInfo $file */
+//                    if (!$file->isFile()) continue;
+//                    $ext = strtolower($file->getExtension());
+//                    if (!in_array($ext, $exts, true)) continue;
+//
+//                    $full = $file->getRealPath();
+//                    // relativni path unutar baseDir-a
+//                    $rel  = ltrim(str_replace(rtrim($baseDir, DIRECTORY_SEPARATOR), '', $full), DIRECTORY_SEPARATOR);
+//                    // bez ekstenzije, sa separatorima normaliziranim u '/'
+//                    $relStem = preg_replace('/\.[^.]+$/', '', $rel);
+//                    $relStem = str_replace(DIRECTORY_SEPARATOR, '/', $relStem);
+//
+//                    $normRel = $normalizeStrong($relStem);
+//                    $scanned++;
+//
+//                    if (in_array($normRel, $needles, true)) {
+//                        $matchedAbs = $full;
+//                        $hits++;
+//                        break;
+//                    }
+//                }
+//            } catch (\Throwable $e) {
+//                \Log::info('initImagesForOption:recursive-ex', ['err' => $e->getMessage()]);
+//            }
+//        }
+//
+//        \Log::info('initImagesForOption:scan-stats', ['scanned' => $scanned, 'hits' => $hits, 'matched' => (bool)$matchedAbs, 'path' => $matchedAbs]);
+//        if (!$matchedAbs) {
+//            // za debug – ispiši prvih ~30 file-ova (relativno) da vidimo što je unutra
+//            try {
+//                $list = [];
+//                $it2 = new \DirectoryIterator($baseDir);
+//                foreach ($it2 as $fi) {
+//                    if ($fi->isDot()) continue;
+//                    $list[] = $fi->getFilename();
+//                    if (count($list) >= 30) break;
+//                }
+//                \Log::info('initImagesForOption:dir-sample', ['baseDir' => $baseDir, 'sample' => $list]);
+//            } catch (\Throwable $e) {
+//                // noop
+//            }
+//            return 0;
+//        }
+//
+//        // --- 4) Resolvaj option_id ---
+//        $optionId = $optionIdOrParentId ?: null;
+//        if (!$optionId) {
+//            $opt = \DB::table('options')->where('option_sku', $optionCode)->first();
+//            $optionId = $opt ? (int)$opt->id : null;
+//        }
+//        \Log::info('initImagesForOption:resolved-optionId', ['optionId' => $optionId]);
+//
+//        // --- 5) Spremi sliku i upiši u DB ---
+//        try {
+//            $ext  = strtolower(pathinfo($matchedAbs, PATHINFO_EXTENSION));
+//            $mime = $ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'image/jpeg');
+//            $bin  = @file_get_contents($matchedAbs);
+//            if ($bin === false) {
+//                \Log::info('initImagesForOption:file-read-failed', ['abs' => $matchedAbs]);
+//                return 0;
+//            }
+//
+//            $imageJson  = json_encode(['output' => ['image' => "data:{$mime};base64," . base64_encode($bin)]]);
+//            $imgPayload = ['image' => $imageJson, 'default' => 0, 'sort_order' => 999, 'option_id' => $optionId];
+//
+//            $paths   = \App\Helpers\Image::save('products', $imgPayload, $product);
+//            $relPath = is_array($paths)
+//                ? ($paths['jpg'] ?? $paths['webp'] ?? $paths['image'] ?? $paths['path'] ?? (reset($paths) ?: null))
+//                : $paths;
+//
+//            if (!is_string($relPath) || $relPath === '') {
+//                \Log::info('initImagesForOption:invalid-relPath', ['relPath' => $relPath, 'type' => gettype($paths)]);
+//                return 0;
+//            }
+//            $publicUrl = rtrim(config('filesystems.disks.products.url'), '/') . '/' . ltrim($relPath, '/');
+//
+//            // RAW insert u product_images
+//            $sql = 'INSERT INTO `product_images`
+//                (`product_id`,`option_id`,`image`,`default`,`published`,`sort_order`,`created_at`,`updated_at`)
+//                VALUES (?,?,?,?,?,?,?,?)';
+//            $bindings = [
+//                (int)$product->id,
+//                $optionId ? (int)$optionId : null,
+//                (string)$publicUrl,
+//                0,
+//                1,
+//                999,
+//                now()->toDateTimeString(),
+//                now()->toDateTimeString(),
+//            ];
+//            \DB::insert($sql, $bindings);
+//            $imageId = (int)\DB::getPdo()->lastInsertId();
+//
+//            // RUČNI insert prijevoda
+//            $locale = config('app.locale', 'hr');
+//            \DB::table('product_images_translations')->insert([
+//                'product_image_id' => $imageId,
+//                'lang'             => (string)$locale,
+//                'title'            => (string)(optional($product->translation)->name ?: $product->sku),
+//                'alt'              => (string)(optional($product->translation)->name ?: $product->sku),
+//                'created_at'       => now()->toDateTimeString(),
+//                'updated_at'       => now()->toDateTimeString(),
+//            ]);
+//
+//            // LINK: po product_id + sku (i option_id ako postoji)
+//            $q = \DB::table('product_option')->where('product_id', $productId)->where('sku', $optionCode);
+//            if ($optionId) $q->where('option_id', $optionId);
+//            $updated = $q->update(['image_id' => $imageId, 'updated_at' => now()->toDateTimeString()]);
+//            \Log::info('initImagesForOption:link-product_option', ['updated_rows' => $updated, 'image_id' => $imageId, 'publicUrl' => $publicUrl]);
+//
+//            return 1;
+//        } catch (\Throwable $e) {
+//            \Log::info('initImagesForOption:exception', [
+//                'file' => $matchedAbs, 'error' => $e->getMessage(),
+//                'trace' => substr($e->getTraceAsString(), 0, 2000),
+//            ]);
+//            return 0;
+//        }
+//    }
 
 
 
