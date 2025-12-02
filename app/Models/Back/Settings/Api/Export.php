@@ -532,6 +532,16 @@ class Export
 
                     // 1c) SLIKE — obavezno: povlačimo iz upload foldera i spremamo trajno (JPG/WEBP/THUMB) preko ProductImage::saveNew (Image::save)
                     $added = $this->initImages($product->id, $imagesCsv, $sku, $slugIn, $name);
+                    $createdImgs += $added;
+
+                    if ($added === 0) {
+                        \Log::info("importFromExcel:no-base-images", [
+                            'sku'       => $sku,
+                            'productId' => $product->id,
+                        ]);
+                        // OK je – možda će opcije kasnije donijeti slike
+                    }
+                    /*$added = $this->initImages($product->id, $imagesCsv, $sku, $slugIn, $name);
                     if ($added === 0) {
                         // OČISTI slike ako su kojim slučajem djelomično nastale prije brisanja proizvoda
                         $imgIds = \DB::table('product_images')->where('product_id', $product->id)->pluck('id')->all();
@@ -546,7 +556,7 @@ class Export
                         throw new \RuntimeException("SKU {$sku}: nema nijedne slike u upload folderu (M-stupac ili fallback).");
                     }
 
-                    $createdImgs += $added;
+                    $createdImgs += $added;*/
 
                     // 1d) Kategorije — samo postojeće (case-insensitive title, pa slug)
                     $linkedCats  += $this->attachExistingCategories($product->id, $catPrimary, $catSecondary, $catsExtraCsv, $locale);
@@ -704,17 +714,20 @@ class Export
             return 0;
         }
 
-        // FALLBACK PROMJENA:
         // 1) ako imagesCsv ima vrijednosti → koristi njih
-        // 2) ako je prazno → probaj sku.jpg
-        // 3) ako sku.jpg ne postoji → probaj prvi *.jpg koji u nazivu sadrži "sku-"
         $cands = array_values(array_filter(
             array_map('trim', explode(',', (string) $imagesCsv)),
-            fn ($v) => $v !== ''
+            fn($v) => $v !== ''
         ));
 
+        // 2) ako je prazno → probaj samo sku.jpg (NEMA više sku-* fallbacka)
         if (empty($cands) && $sku !== '') {
-            $cands = ["{$sku}.jpg"];
+            $skuFile = "{$sku}.jpg";
+            $absSku  = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $skuFile;
+
+            if (is_file($absSku)) {
+                $cands = [$skuFile];
+            }
         }
 
         \Log::info('initImages:candidates-initial', ['cands' => $cands]);
@@ -729,40 +742,12 @@ class Export
             }
         }
 
-        // DODATNI FALLBACK: ako ni jedan kandidat ne postoji, a imamo SKU,
-        // nađi prvi .jpg u direktoriju koji u nazivu ima "sku-"
-        if (empty($files) && $sku !== '') {
-            $pattern = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '*.jpg';
-            $allJpg  = glob($pattern) ?: [];
-
-            $skuNeedle = strtolower($sku . '-');
-            $fallbackAbs = null;
-
-            foreach ($allJpg as $path) {
-                $base = strtolower(basename($path));
-                if (strpos($base, $skuNeedle) !== false) {
-                    $fallbackAbs = $path;
-                    break;
-                }
-            }
-
-            if ($fallbackAbs) {
-                $files = [$fallbackAbs];
-                $cands = [basename($fallbackAbs)];
-                \Log::info('initImages:fallback-sku-dash-match', [
-                    'sku' => $sku,
-                    'file' => $fallbackAbs,
-                ]);
-            } else {
-                \Log::info('initImages:fallback-sku-dash-none', [
-                    'sku' => $sku,
-                    'searchedPattern' => $pattern,
-                ]);
-            }
-        }
-
         if (empty($files)) {
-            \Log::info('initImages:no-files-found');
+            \Log::info('initImages:no-files-found-main', [
+                'productId' => $productId,
+                'sku'       => $sku,
+                'imagesCsv' => $imagesCsv,
+            ]);
             return 0;
         }
 
@@ -793,7 +778,6 @@ class Export
                     continue;
                 }
 
-                // spremi fizički (Image helper očekuje cropper JSON)
                 $imageJson  = json_encode([
                     'output' => [
                         'image' => "data:{$mime};base64," . base64_encode($bin),
@@ -820,7 +804,6 @@ class Export
 
                 $publicUrl = rtrim(config('filesystems.disks.products.url'), '/') . '/' . ltrim($relPath, '/');
 
-                // RAW insert (čisti scalari)
                 $sql = 'INSERT INTO `product_images`
                 (`product_id`,`option_id`,`image`,`default`,`published`,`sort_order`,`created_at`,`updated_at`)
                 VALUES (?,?,?,?,?,?,?,?)';
@@ -839,7 +822,6 @@ class Export
                 \DB::insert($sql, $bindings);
                 $imageId = (int) \DB::getPdo()->lastInsertId();
 
-                // RUČNI insert prijevoda
                 \DB::table('product_images_translations')->insert([
                     'product_image_id' => $imageId,
                     'lang'             => (string) $locale,
@@ -874,6 +856,7 @@ class Export
     }
 
 
+
     private function initImagesForOption(int $productId, int $parentId, string $optCode): void
     {
         \Log::info('initImagesForOption:start', [
@@ -882,6 +865,7 @@ class Export
             'optCode'   => $optCode,
         ]);
 
+        $optCode = trim($optCode);
         if ($optCode === '') {
             \Log::info('initImagesForOption:empty-optCode');
             return;
@@ -894,81 +878,209 @@ class Export
             return;
         }
 
-        $sku = (string) $product->sku;
+        // 0) Provjeri da product_option red uopće postoji
+        $optionRow = \DB::table('product_option')
+                        ->where('product_id', $productId)
+                        ->where('sku', $optCode)
+                        ->first();
 
-        // 1) Pokušaj NAĆI već postojeću sliku za ovaj proizvod koja po nazivu odgovara opciji
-        // Pretpostavka: naziv fajla sadrži kombinaciju SKU i/ili optCode, npr:
-        // sku-RED.jpg, sku_RED.jpg, skuRED.jpg ili barem -RED.jpg / _RED.jpg
-        $imgQuery = \DB::table('product_images')
-                       ->where('product_id', $productId);
-
-        $patterns = [];
-
-        if ($sku !== '') {
-            $patterns[] = "%/{$sku}_{$optCode}.%";
-            $patterns[] = "%/{$sku}-{$optCode}.%";
-            $patterns[] = "%/{$sku}{$optCode}.%";
+        if (!$optionRow) {
+            \Log::info('initImagesForOption:product_option-not-found', [
+                'productId' => $productId,
+                'optCode'   => $optCode,
+            ]);
+            return;
         }
 
-        // fallback samo na optCode
-        $patterns[] = "%-{$optCode}.%";
-        $patterns[] = "%_{$optCode}.%";
+        // Ako je već povezan image_id, ne diraj
+        if (!empty($optionRow->image_id)) {
+            \Log::info('initImagesForOption:already-has-image', [
+                'productId' => $productId,
+                'optCode'   => $optCode,
+                'image_id'  => $optionRow->image_id,
+            ]);
+            return;
+        }
 
-        $imgQuery->where(function ($q) use ($patterns) {
-            foreach ($patterns as $p) {
-                $q->orWhere('image', 'like', $p);
+        // 1) Pokušaj naći POSTOJEĆU sliku za ovaj proizvod koja sadrži optCode u URL-u
+        $image = \DB::table('product_images')
+                    ->where('product_id', $productId)
+                    ->where('image', 'like', '%' . $optCode . '%')
+                    ->orderBy('id')
+                    ->first();
+
+        // 2) Ako takve nema, probaj još malo pametnije (SKU + optCode kombinacije)
+        $sku = (string) $product->sku;
+
+        if (!$image && $sku !== '') {
+            $image = \DB::table('product_images')
+                        ->where('product_id', $productId)
+                        ->where(function ($q) use ($sku, $optCode) {
+                            $q->where('image', 'like', '%' . $sku . '_' . $optCode . '%')
+                              ->orWhere('image', 'like', '%' . $sku . '-' . $optCode . '%')
+                              ->orWhere('image', 'like', '%' . $sku . $optCode . '%');
+                        })
+                        ->orderBy('id')
+                        ->first();
+        }
+
+        // 3) Ako još uvijek nema slike → pokušaj napraviti JE iz upload foldera (optCode.jpg)
+        if (!$image) {
+            $baseDir = $this->imagesBaseDir ?? '';
+            if ($baseDir && is_dir($baseDir)) {
+                $abs = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $optCode . '.jpg';
+
+                \Log::info('initImagesForOption:probe-upload-file', [
+                    'abs' => $abs,
+                    'exists' => is_file($abs),
+                ]);
+
+                if (is_file($abs)) {
+                    try {
+                        $ext  = strtolower(pathinfo($abs, PATHINFO_EXTENSION));
+                        $mime = $ext === 'png'
+                            ? 'image/png'
+                            : ($ext === 'webp'
+                                ? 'image/webp'
+                                : 'image/jpeg');
+
+                        $bin = @file_get_contents($abs);
+                        \Log::info('initImagesForOption:file-read', [
+                            'abs'  => $abs,
+                            'ext'  => $ext,
+                            'mime' => $mime,
+                            'size' => $bin === false ? 'READ_FAIL' : strlen($bin) . 'B',
+                        ]);
+
+                        if ($bin !== false) {
+                            $imageJson = json_encode([
+                                'output' => [
+                                    'image' => "data:{$mime};base64," . base64_encode($bin),
+                                ],
+                            ]);
+
+                            // odredi sort_order (nakon postojećih slika)
+                            $maxSort = (int) \DB::table('product_images')
+                                                ->where('product_id', $productId)
+                                                ->max('sort_order');
+                            $sort = $maxSort > 0 ? $maxSort + 1 : 1;
+
+                            $imgPayload = [
+                                'image'      => $imageJson,
+                                'default'    => 0,
+                                'sort_order' => $sort,
+                            ];
+
+                            $paths   = \App\Helpers\Image::save('products', $imgPayload, $product);
+                            $relPath = is_array($paths)
+                                ? ($paths['jpg'] ?? $paths['webp'] ?? $paths['image'] ?? $paths['path'] ?? (reset($paths) ?: null))
+                                : $paths;
+
+                            if (is_string($relPath) && $relPath !== '') {
+                                $publicUrl = rtrim(config('filesystems.disks.products.url'), '/') . '/' . ltrim($relPath, '/');
+
+                                \DB::table('product_images')->insert([
+                                    'product_id' => (int) $productId,
+                                    'option_id'  => $parentId ?: null,
+                                    'image'      => (string) $publicUrl,
+                                    'default'    => 0,
+                                    'published'  => 1,
+                                    'sort_order' => $sort,
+                                    'created_at' => now()->toDateTimeString(),
+                                    'updated_at' => now()->toDateTimeString(),
+                                ]);
+
+                                $imageId = (int) \DB::getPdo()->lastInsertId();
+
+                                $locale = config('app.locale', 'hr');
+                                \DB::table('product_images_translations')->insert([
+                                    'product_image_id' => $imageId,
+                                    'lang'             => (string) $locale,
+                                    'title'            => (string) (optional($product->translation)->name ?: ($sku ?: $optCode)),
+                                    'alt'              => (string) (optional($product->translation)->name ?: ($sku ?: $optCode)),
+                                    'created_at'       => now()->toDateTimeString(),
+                                    'updated_at'       => now()->toDateTimeString(),
+                                ]);
+
+                                $image = (object) [
+                                    'id'    => $imageId,
+                                    'image' => $publicUrl,
+                                ];
+
+                                \Log::info('initImagesForOption:created-image-from-upload', [
+                                    'productId' => $productId,
+                                    'optCode'   => $optCode,
+                                    'image_id'  => $imageId,
+                                    'image'     => $publicUrl,
+                                ]);
+                            }
+                        }
+                    } catch (\Throwable $e) {
+                        \Log::info('initImagesForOption:exception-on-upload', [
+                            'file'  => $abs,
+                            'error' => $e->getMessage(),
+                            'trace' => substr($e->getTraceAsString(), 0, 2000),
+                        ]);
+                    }
+                }
             }
-        });
+        }
 
-        $image = $imgQuery->orderBy('id')->first();
+        // 4) Ako ni nakon svega nemamo sliku → odustani
+        if (!$image) {
+            \Log::info('initImagesForOption:no-matching-image', [
+                'productId' => $productId,
+                'optCode'   => $optCode,
+                'sku'       => $sku ?? null,
+            ]);
+            return;
+        }
 
-        if ($image) {
-            \Log::info('initImagesForOption:found-existing-image', [
+        // 5) Veži sliku na opciju
+        \DB::table('product_option')
+           ->where('product_id', $productId)
+           ->where('sku', $optCode)
+           ->update([
+               'image_id'   => (int) $image->id,
+               'updated_at' => now(),
+           ]);
+
+        // 6) Ako proizvod NEMA glavnu sliku, postavi ovu kao glavnu (default),
+        // ali bez ikakvog dupiranja fajlova – samo prebacimo flag i products.image
+        $prodRow = \DB::table('products')
+                      ->select('image')
+                      ->where('id', $productId)
+                      ->first();
+
+        if ($prodRow && (empty($prodRow->image) || $prodRow->image === null)) {
+            \Log::info('initImagesForOption:set-product-main-image-from-option', [
                 'productId' => $productId,
                 'optCode'   => $optCode,
                 'image_id'  => $image->id,
                 'image'     => $image->image ?? null,
             ]);
 
-            // 2) Samo poveži product_option → image_id (NEMA kreiranja nove slike)
-            \DB::table('product_option')
+            // makni postojeće defaulte
+            \DB::table('product_images')
                ->where('product_id', $productId)
-               ->where('sku', $optCode)
+               ->update(['default' => 0]);
+
+            \DB::table('product_images')
+               ->where('id', $image->id)
                ->update([
-                   'image_id'   => (int) $image->id,
-                   'updated_at' => now(),
+                   'default'    => 1,
+                   'updated_at' => now()->toDateTimeString(),
                ]);
 
-            // Po želji: ako želiš da ova slika postane *glavna* za proizvod,
-            // možeš ovdje prebaciti default flag, ali BEZ dupliranja:
-            //
-            // \DB::table('product_images')
-            //     ->where('product_id', $productId)
-            //     ->update(['default' => 0]);
-            //
-            // \DB::table('product_images')
-            //     ->where('id', $image->id)
-            //     ->update(['default' => 1, 'updated_at' => now()]);
-            //
-            // \DB::table('products')
-            //     ->where('id', $productId)
-            //     ->update(['image' => $image->image, 'updated_at' => now()]);
-
-            return;
+            \DB::table('products')
+               ->where('id', $productId)
+               ->update([
+                   'image'      => $image->image,
+                   'updated_at' => now()->toDateTimeString(),
+               ]);
         }
-
-        // 3) Ako NEMA postojeće slike koja odgovara opciji → ne radimo ništa
-        // (ostavi image_id = 0). Po želji ovdje možeš dodati log:
-        \Log::info('initImagesForOption:no-matching-image', [
-            'productId' => $productId,
-            'optCode'   => $optCode,
-            'sku'       => $sku,
-        ]);
-
-        // Ako baš želiš fallback na kreiranje nove slike iz upload foldera,
-        // to napravi OVDJE (ali tada to nije duplikat, nego nova slika).
     }
-    
+
 
     /**
      * Ako postoji slika specifična za opciju, uploada je kao dodatnu sliku proizvoda,
