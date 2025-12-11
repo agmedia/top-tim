@@ -1427,100 +1427,160 @@ class Export
      *
      * @return int Broj novoupisanih redaka u product_category
      */
-    private function attachExistingCategories(int $productId, string $primary, string $secondary, string $extraCsv, string $locale): int
-    {
-        $titles = collect();
-
-        if (trim($primary) !== '')   { $titles->push(trim($primary)); }
-        if (trim($secondary) !== '') { $titles->push(trim($secondary)); }
-
-        $extras = collect(array_filter(array_map(static fn($s) => trim($s), explode(',', (string)$extraCsv))));
-        foreach ($extras as $ex) { $titles->push($ex); }
-
-        $titles = $titles->unique()->values();
-        if ($titles->isEmpty()) {
-            return 0;
-        }
-
+    private function attachExistingCategories(
+        int $productId,
+        string $primary,
+        string $secondary,
+        string $extraCsv,
+        string $locale
+    ): int {
         $linked = 0;
 
-        foreach ($titles as $title) {
-            $lower = mb_strtolower($title);
+        // 1) PRIMARY
+        $primaryId = null;
+        if (trim($primary) !== '') {
+            $cat = $this->findCategoryByTitle(trim($primary), $locale, null);
+            if ($cat) {
+                $primaryId = (int)$cat->category_id;
+                $linked   += $this->attachCategoryWithParent($productId, $primaryId);
+            }
+        }
 
-            // 1) Prvo probaj precizno po naslovu u odabranom locale-u
-            $cat = DB::table('category_translations')
-                     ->where('lang', $locale)
-                     ->whereRaw('LOWER(title) = ?', [$lower])
-                     ->select('category_id')
-                     ->first();
+        // 2) SECONDARY - prvo pokušaj kao dijete PRIMARY-ja
+        if (trim($secondary) !== '') {
+            $secondaryTitle = trim($secondary);
+            $secondaryCat   = null;
 
-            // 2) Ako nije našao, probaj po slugu (isto u locale-u)
-            if (!$cat) {
-                $slug = Str::slug($title);
-                $cat = DB::table('category_translations')
-                         ->where('lang', $locale)
-                         ->where('slug', $slug)
-                         ->select('category_id')
-                         ->first();
+            if ($primaryId) {
+                // traži Čarape ispod Trening (ili Nogomet, ovisno što je primary)
+                $secondaryCat = $this->findCategoryByTitle($secondaryTitle, $locale, $primaryId);
             }
 
-            // 3) Ako i dalje nije našao, fallback bez filtera na lang
-            if (!$cat) {
-                $cat = DB::table('category_translations')
-                         ->whereRaw('LOWER(title) = ?', [$lower])
-                         ->select('category_id')
-                         ->first();
-            }
-            if (!$cat) {
-                $slug = isset($slug) ? $slug : Str::slug($title);
-                $cat = DB::table('category_translations')
-                         ->where('slug', $slug)
-                         ->select('category_id')
-                         ->first();
+            // fallback: ako nema pod tim parentom, traži globalno
+            if (!$secondaryCat) {
+                $secondaryCat = $this->findCategoryByTitle($secondaryTitle, $locale, null);
             }
 
-            if (!$cat) {
-                // Nema odgovarajuće kategorije — preskoči
+            if ($secondaryCat) {
+                $secondaryId = (int)$secondaryCat->category_id;
+                $linked     += $this->attachCategoryWithParent($productId, $secondaryId);
+            }
+        }
+
+        // 3) EXTRAS – generički, kao što si već imao (bez parent logike)
+        $extras = collect(array_filter(array_map(
+            static fn($s) => trim($s),
+            explode(',', (string)$extraCsv)
+        )));
+
+        foreach ($extras as $ex) {
+            if ($ex === '') {
                 continue;
             }
-
-            // Dohvati parent_id
-            $categoryId = (int)$cat->category_id;
-            $parentId   = (int) (DB::table('categories')->where('id', $categoryId)->value('parent_id') ?? 0);
-
-            // Upis 1: osnovna kategorija
-            $existsMain = DB::table('product_category')
-                            ->where('product_id', $productId)
-                            ->where('category_id', $categoryId)
-                            ->exists();
-
-            if (!$existsMain) {
-                DB::table('product_category')->insert([
-                    'product_id'  => $productId,
-                    'category_id' => $categoryId,
-                ]);
-                $linked++;
-            }
-
-            // Upis 2: roditelj (ako postoji i nije 0)
-            if ($parentId > 0) {
-                $existsParent = DB::table('product_category')
-                                  ->where('product_id', $productId)
-                                  ->where('category_id', $parentId)
-                                  ->exists();
-
-                if (!$existsParent) {
-                    DB::table('product_category')->insert([
-                        'product_id'  => $productId,
-                        'category_id' => $parentId,
-                    ]);
-                    $linked++;
-                }
+            $cat = $this->findCategoryByTitle($ex, $locale, null);
+            if ($cat) {
+                $linked += $this->attachCategoryWithParent($productId, (int)$cat->category_id);
             }
         }
 
         return $linked;
     }
+
+
+    private function findCategoryByTitle(string $title, string $locale, ?int $expectedParentId = null): ?stdClass
+    {
+        $lower = mb_strtolower($title);
+        $slug  = Str::slug($title);
+
+        $query = DB::table('category_translations as ct')
+                   ->join('categories as c', 'c.id', '=', 'ct.category_id')
+                   ->where('ct.lang', $locale);
+
+        if ($expectedParentId !== null) {
+            $query->where('c.parent_id', $expectedParentId);
+        }
+
+        // 1) točan title (case-insensitive)
+        $cat = (clone $query)
+            ->whereRaw('LOWER(ct.title) = ?', [$lower])
+            ->select('ct.category_id', 'c.parent_id')
+            ->first();
+
+        // 2) slug
+        if (!$cat) {
+            $cat = (clone $query)
+                ->where('ct.slug', $slug)
+                ->select('ct.category_id', 'c.parent_id')
+                ->first();
+        }
+
+        // 3) fallback bez lang (ali i dalje po parentu, ako je zadano)
+        if (!$cat) {
+            $query2 = DB::table('category_translations as ct')
+                        ->join('categories as c', 'c.id', '=', 'ct.category_id');
+
+            if ($expectedParentId !== null) {
+                $query2->where('c.parent_id', $expectedParentId);
+            }
+
+            $cat = (clone $query2)
+                ->whereRaw('LOWER(ct.title) = ?', [$lower])
+                ->select('ct.category_id', 'c.parent_id')
+                ->first();
+
+            if (!$cat) {
+                $cat = (clone $query2)
+                    ->where('ct.slug', $slug)
+                    ->select('ct.category_id', 'c.parent_id')
+                    ->first();
+            }
+        }
+
+        return $cat ?: null;
+    }
+
+
+    private function attachCategoryWithParent(int $productId, int $categoryId): int
+    {
+        $linked = 0;
+
+        $parentId = (int) (DB::table('categories')
+                             ->where('id', $categoryId)
+                             ->value('parent_id') ?? 0);
+
+        // osnovna kat.
+        $existsMain = DB::table('product_category')
+                        ->where('product_id', $productId)
+                        ->where('category_id', $categoryId)
+                        ->exists();
+
+        if (!$existsMain) {
+            DB::table('product_category')->insert([
+                'product_id'  => $productId,
+                'category_id' => $categoryId,
+            ]);
+            $linked++;
+        }
+
+        // parent
+        if ($parentId > 0) {
+            $existsParent = DB::table('product_category')
+                              ->where('product_id', $productId)
+                              ->where('category_id', $parentId)
+                              ->exists();
+
+            if (!$existsParent) {
+                DB::table('product_category')->insert([
+                    'product_id'  => $productId,
+                    'category_id' => $parentId,
+                ]);
+                $linked++;
+            }
+        }
+
+        return $linked;
+    }
+
 
 
     /**
