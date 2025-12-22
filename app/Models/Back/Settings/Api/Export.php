@@ -63,10 +63,12 @@ class Export
         'Kroj', // Atribut. Vrijednosti odvojene zarezom.
         'Dimenzije', // Atribut. Vrijednosti odvojene zarezom.
         'Dodatna kategorizacija', // Atribut. Vrijednosti odvojene zarezom.
+        'Naziv opcije',      // NEW (group_title)
+        'Vrijednost opcije', // NEW (title)
     ];
 
     protected $coordinate_letters = [
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W'
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W','X','Y'
     ];
 
     protected $imagesBaseDir = '';
@@ -290,6 +292,31 @@ class Export
                 ->orderBy('id');
 
             $query->chunkById(200, function ($products) use ($out) {
+
+                // 1) Skupi sve option_id iz ovog chunka
+                $optIds = [];
+                foreach ($products as $p) {
+                    foreach (($p->options ?? []) as $o) {
+                        // ti koristiš $option->option_id / parent_id logiku, ali translation tablica je vezana na OPTION_ID (options.id)
+                        $oid = (int)($o->option_id ?? 0);
+                        if ($oid) $optIds[] = $oid;
+                    }
+                }
+                $optIds = array_values(array_unique($optIds));
+
+                // 2) Povuci translations za taj chunk (1 upit)
+                $lang = 'hr'; // ili config('app.locale')
+                $optTrMap = [];
+                if (!empty($optIds)) {
+                    $optTrMap = DB::table('options_translations')
+                        ->select('option_id', 'group_title', 'title')
+                        ->whereIn('option_id', $optIds)
+                        ->where('lang', $lang)
+                        ->get()
+                        ->keyBy('option_id')
+                        ->toArray();
+                }
+
                 foreach ($products as $product) {
                     $tr = $product->translation;
 
@@ -309,64 +336,72 @@ class Export
                         ? (string) optional($product->subcategories->first()->translation)->title
                         : '';
 
-                    // PROIZVODSKI RED (B = prazno)
+                    // PROIZVODSKI RED
                     $row = [
-                        (string) $product->sku,                 // A Šifra
-                        '',                                     // B Šifra opcije
-                        (string) $product->ean,                 // C Barkod
-                        (string) optional($tr)->name,           // D Naziv
-                        $this->stripNewlines((string) optional($tr)->description), // E Opis
-                        (string) optional($tr)->slug,           // F Slug
-                        (string) optional($tr)->meta_title,     // G Meta naziv
-                        $this->stripNewlines((string) optional($tr)->meta_description), // H Meta opis
-                        (float) $product->price,                // I Cijena
-                        (int) $product->quantity,               // J Količina
-                        25,                                     // K PDV
-                        $product->status ? 1 : 0,               // L Aktivan
-                        (string) $images,                       // M Slike
-                        (string) $brandTitle,                   // N Proizvođač
-                        (string) $primaryCat,                   // O Primarna skupina
-                        (string) $secondaryCat,                 // P Sekundarna skupina
-                        (string) $sizeguide_id,                 // Q Tablica veličina
-                        (string) ($attributes['Materijal'] ?? ''),              // R
-                        (string) ($attributes['Spol'] ?? ''),                   // S
-                        (string) ($attributes['Tip rukava'] ?? ''),             // T
-                        (string) ($attributes['Kroj'] ?? ''),                   // U
-                        (string) ($attributes['Dimenzije'] ?? ''),              // V
-                        (string) ($attributes['Dodatna kategorizacija'] ?? ''), // W
+                        (string) $product->sku,
+                        '',
+                        (string) $product->ean,
+                        (string) optional($tr)->name,
+                        $this->stripNewlines((string) optional($tr)->description),
+                        (string) optional($tr)->slug,
+                        (string) optional($tr)->meta_title,
+                        $this->stripNewlines((string) optional($tr)->meta_description),
+                        (float) $product->price,
+                        (int) $product->quantity,
+                        25,
+                        $product->status ? 1 : 0,
+                        (string) $images,
+                        (string) $brandTitle,
+                        (string) $primaryCat,
+                        (string) $secondaryCat,
+                        (string) $sizeguide_id,
+                        (string) ($attributes['Materijal'] ?? ''),
+                        (string) ($attributes['Spol'] ?? ''),
+                        (string) ($attributes['Tip rukava'] ?? ''),
+                        (string) ($attributes['Kroj'] ?? ''),
+                        (string) ($attributes['Dimenzije'] ?? ''),
+                        (string) ($attributes['Dodatna kategorizacija'] ?? ''),
+                        '', // Naziv opcije (prazno za proizvod)
+                        '', // Vrijednost opcije (prazno za proizvod)
                     ];
 
+                    $row = array_pad($row, count($this->excel_keys), '');
                     fputcsv($out, $row, ';');
 
-                    // OPCIJE (varijante) – redovi s popunjenim B
+                    // OPCIJE
                     if ($product->options && $product->options->count() > 0) {
                         foreach ($product->options as $option) {
                             $option_id = ((int) $option->parent_id !== 0) ? (int) $option->parent_id : (int) $option->option_id;
 
+                            // translation iz mape
+                            $t = $optTrMap[(int)($option->option_id ?? 0)] ?? null;
+                            $optionGroup = $t ? (string)$t->group_title : '';
+                            $optionValue = $t ? (string)$t->title : '';
+
                             $optRow = [
-                                (string) $product->sku,                         // A
-                                (string) $option->sku,                          // B
-                                '',                                             // C
-                                '', '', '', '', '',                             // D-H
-                                (float) $product->price + (float) $option->price, // I
-                                (int) $option->quantity,                        // J
-                                '',                                             // K
-                                $option->status ? 1 : 0,                        // L
-                                (string) $this->setImagesString($product, $option_id), // M
-                                '', '', '', '', '', '', '', '', '', '', ''      // N-W prazno
+                                (string) $product->sku,
+                                (string) $option->sku,
+                                '',
+                                '', '', '', '', '',
+                                (float) $product->price + (float) $option->price,
+                                (int) $option->quantity,
+                                '',
+                                $option->status ? 1 : 0,
+                                (string) $this->setImagesString($product, $option_id),
+                                '', '', '', '', '', '', '', '', '', '',
+                                $optionGroup,
+                                $optionValue,
                             ];
 
-                            // osiguraj da ima 23 stupca
-                            $optRow = array_pad($optRow, 23, '');
-
+                            $optRow = array_pad($optRow, count($this->excel_keys), '');
                             fputcsv($out, $optRow, ';');
                         }
                     }
                 }
 
-                // pomaže da proxy vidi output “u hodu”
                 if (function_exists('flush')) { @flush(); }
             });
+
 
             fclose($out);
         }, $filename, [
