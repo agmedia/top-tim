@@ -133,7 +133,12 @@ class ActionGroupList extends Component
                 break;
 
             case 'brand':
-                $this->list[$id] = Brand::where('id', $id)->with('translation')->first()->toArray();
+                $brand = Brand::where('id', $id)->with('translation')->first();
+
+                if ($brand) {
+                    $this->list[$id] = $brand->toArray();
+                }
+
                 break;
 
             case 'blog':
