@@ -63,6 +63,8 @@ class Export
         'Kroj', // Atribut. Vrijednosti odvojene zarezom.
         'Dimenzije', // Atribut. Vrijednosti odvojene zarezom.
         'Dodatna kategorizacija', // Atribut. Vrijednosti odvojene zarezom.
+        'Naziv opcije',        // 👈 NOVO
+        'Vrijednost opcije',   // 👈 NOVO
     ];
 
     protected $coordinate_letters = [
@@ -284,7 +286,7 @@ class Export
                     'brand.translation',
                     'categories.translation',
                     'subcategories.translation',
-                    'options',
+                    'options.translation', // 👈 OVO
                     'attributes.translation',
                 ])
                 ->orderBy('id');
@@ -343,6 +345,11 @@ class Export
                         foreach ($product->options as $option) {
                             $option_id = ((int) $option->parent_id !== 0) ? (int) $option->parent_id : (int) $option->option_id;
 
+                            // 👇 OVDJE: uzmi prijevod opcije (options_translations)
+                            $optTr = $option->translation ?? null;
+                            $optionGroup = $optTr ? (string) $optTr->group_title : '';
+                            $optionValue = $optTr ? (string) $optTr->title : '';
+
                             $optRow = [
                                 (string) $product->sku,                         // A
                                 (string) $option->sku,                          // B
@@ -353,11 +360,15 @@ class Export
                                 '',                                             // K
                                 $option->status ? 1 : 0,                        // L
                                 (string) $this->setImagesString($product, $option_id), // M
-                                '', '', '', '', '', '', '', '', '', '', ''      // N-W prazno
+                                '', '', '', '', '', '', '', '', '', '', ''      // N-W prazno (11 komada)
                             ];
 
-                            // osiguraj da ima 23 stupca
-                            $optRow = array_pad($optRow, 23, '');
+                            // 👇 OVDJE: dodaj 2 nova stupca na kraj reda
+                            $optRow[] = $optionGroup;   // Naziv opcije (group_title)
+                            $optRow[] = $optionValue;   // Vrijednost opcije (title)
+
+                            // 👇 bitno: sada nije 23 nego count($this->excel_keys)
+                            $optRow = array_pad($optRow, count($this->excel_keys), '');
 
                             fputcsv($out, $optRow, ';');
                         }
