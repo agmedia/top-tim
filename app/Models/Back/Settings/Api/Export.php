@@ -63,8 +63,8 @@ class Export
         'Kroj', // Atribut. Vrijednosti odvojene zarezom.
         'Dimenzije', // Atribut. Vrijednosti odvojene zarezom.
         'Dodatna kategorizacija', // Atribut. Vrijednosti odvojene zarezom.
-        'Naziv opcije',        // 👈 NOVO
-        'Vrijednost opcije',   // 👈 NOVO
+        'Naziv opcije',
+        'Vrijednost opcije',
     ];
 
     protected $coordinate_letters = [
