@@ -277,16 +277,15 @@ class Export
             fwrite($out, "\xEF\xBB\xBF");
 
             // Header
-            fputcsv($out, $this->excel_keys, ';'); // koristi ; radi Excel HR locale (često bolje od ,)
+            fputcsv($out, $this->excel_keys, ';');
 
             $query = Product::query()
                 ->with([
                     'translation',
-                    'images',
                     'brand.translation',
                     'categories.translation',
                     'subcategories.translation',
-                    'options.translation', // 👈 OVO
+                    'options.translation',
                     'attributes.translation',
                 ])
                 ->orderBy('id');
@@ -295,7 +294,7 @@ class Export
                 foreach ($products as $product) {
                     $tr = $product->translation;
 
-                    $images       = $this->setImagesString($product);
+                    // ✅ maknuto: $images = $this->setImagesString($product);
                     $sizeguide_id = $this->getSizeGuideID($product);
                     $attributes   = $this->getAttributes($product);
 
@@ -311,7 +310,7 @@ class Export
                         ? (string) optional($product->subcategories->first()->translation)->title
                         : '';
 
-                    // PROIZVODSKI RED (B = prazno)
+                    // PROIZVODSKI RED
                     $row = [
                         (string) $product->sku,                 // A Šifra
                         '',                                     // B Šifra opcije
@@ -325,7 +324,8 @@ class Export
                         (int) $product->quantity,               // J Količina
                         25,                                     // K PDV
                         $product->status ? 1 : 0,               // L Aktivan
-                        (string) $images,                       // M Slike
+
+                        '',                                     // M Slike  ✅ uvijek prazno
                         (string) $brandTitle,                   // N Proizvođač
                         (string) $primaryCat,                   // O Primarna skupina
                         (string) $secondaryCat,                 // P Sekundarna skupina
@@ -338,36 +338,38 @@ class Export
                         (string) ($attributes['Dodatna kategorizacija'] ?? ''), // W
                     ];
 
+                    // osiguraj broj stupaca
+                    $row = array_pad($row, count($this->excel_keys), '');
+
                     fputcsv($out, $row, ';');
 
-                    // OPCIJE (varijante) – redovi s popunjenim B
+                    // OPCIJE (varijante)
                     if ($product->options && $product->options->count() > 0) {
                         foreach ($product->options as $option) {
-                            $option_id = ((int) $option->parent_id !== 0) ? (int) $option->parent_id : (int) $option->option_id;
-
-                            // 👇 OVDJE: uzmi prijevod opcije (options_translations)
+                            // prijevod opcije (options_translations)
                             $optTr = $option->translation ?? null;
                             $optionGroup = $optTr ? (string) $optTr->group_title : '';
                             $optionValue = $optTr ? (string) $optTr->title : '';
 
                             $optRow = [
-                                (string) $product->sku,                         // A
-                                (string) $option->sku,                          // B
-                                '',                                             // C
-                                '', '', '', '', '',                             // D-H
+                                (string) $product->sku,        // A
+                                (string) $option->sku,         // B
+                                '',                            // C
+                                '', '', '', '', '',            // D-H
                                 (float) $product->price + (float) $option->price, // I
-                                (int) $option->quantity,                        // J
-                                '',                                             // K
-                                $option->status ? 1 : 0,                        // L
-                                (string) $this->setImagesString($product, $option_id), // M
-                                '', '', '', '', '', '', '', '', '', '', ''      // N-W prazno (11 komada)
+                                (int) $option->quantity,       // J
+                                '',                            // K
+                                $option->status ? 1 : 0,       // L
+
+                                '',                            // M Slike ✅ uvijek prazno
+                                '', '', '', '', '', '', '', '', '', '', '' // N-W prazno
                             ];
 
-                            // 👇 OVDJE: dodaj 2 nova stupca na kraj reda
-                            $optRow[] = $optionGroup;   // Naziv opcije (group_title)
-                            $optRow[] = $optionValue;   // Vrijednost opcije (title)
+                            // Ako si dodao 2 nova stupca u excel_keys:
+                            // 'Naziv opcije', 'Vrijednost opcije'
+                            $optRow[] = $optionGroup;
+                            $optRow[] = $optionValue;
 
-                            // 👇 bitno: sada nije 23 nego count($this->excel_keys)
                             $optRow = array_pad($optRow, count($this->excel_keys), '');
 
                             fputcsv($out, $optRow, ';');
@@ -375,7 +377,6 @@ class Export
                     }
                 }
 
-                // pomaže da proxy vidi output “u hodu”
                 if (function_exists('flush')) { @flush(); }
             });
 
@@ -384,6 +385,7 @@ class Export
             'Content-Type' => 'text/csv; charset=UTF-8',
         ]);
     }
+
 
     /**
      * CSV-friendly: makni nove redove (da ti ne lomi redove u CSV-u).
