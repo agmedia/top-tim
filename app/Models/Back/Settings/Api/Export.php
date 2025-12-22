@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use stdClass;
 
 class Export
@@ -257,6 +259,130 @@ class Export
 
         return 1;
     }
+
+
+
+    public function toCsvResponse(): StreamedResponse
+    {
+        @set_time_limit(0);
+
+        $filename = 'TopTim_Export_' . date('Y-m-d_H-i-s') . '.csv';
+
+        return response()->streamDownload(function () {
+            $out = fopen('php://output', 'w');
+
+            // Excel-friendly UTF-8 BOM (da HR znakovi ne budu "čudni" u Excelu)
+            fwrite($out, "\xEF\xBB\xBF");
+
+            // Header
+            fputcsv($out, $this->excel_keys, ';'); // koristi ; radi Excel HR locale (često bolje od ,)
+
+            $query = Product::query()
+                ->with([
+                    'translation',
+                    'images',
+                    'brand.translation',
+                    'categories.translation',
+                    'subcategories.translation',
+                    'options',
+                    'attributes.translation',
+                ])
+                ->orderBy('id');
+
+            $query->chunkById(200, function ($products) use ($out) {
+                foreach ($products as $product) {
+                    $tr = $product->translation;
+
+                    $images       = $this->setImagesString($product);
+                    $sizeguide_id = $this->getSizeGuideID($product);
+                    $attributes   = $this->getAttributes($product);
+
+                    $brandTitle = $product->brand && $product->brand->translation
+                        ? (string) $product->brand->translation->title
+                        : '';
+
+                    $primaryCat = $product->categories && $product->categories->count()
+                        ? (string) optional($product->categories->first()->translation)->title
+                        : '';
+
+                    $secondaryCat = $product->subcategories && $product->subcategories->count()
+                        ? (string) optional($product->subcategories->first()->translation)->title
+                        : '';
+
+                    // PROIZVODSKI RED (B = prazno)
+                    $row = [
+                        (string) $product->sku,                 // A Šifra
+                        '',                                     // B Šifra opcije
+                        (string) $product->ean,                 // C Barkod
+                        (string) optional($tr)->name,           // D Naziv
+                        $this->stripNewlines((string) optional($tr)->description), // E Opis
+                        (string) optional($tr)->slug,           // F Slug
+                        (string) optional($tr)->meta_title,     // G Meta naziv
+                        $this->stripNewlines((string) optional($tr)->meta_description), // H Meta opis
+                        (float) $product->price,                // I Cijena
+                        (int) $product->quantity,               // J Količina
+                        25,                                     // K PDV
+                        $product->status ? 1 : 0,               // L Aktivan
+                        (string) $images,                       // M Slike
+                        (string) $brandTitle,                   // N Proizvođač
+                        (string) $primaryCat,                   // O Primarna skupina
+                        (string) $secondaryCat,                 // P Sekundarna skupina
+                        (string) $sizeguide_id,                 // Q Tablica veličina
+                        (string) ($attributes['Materijal'] ?? ''),              // R
+                        (string) ($attributes['Spol'] ?? ''),                   // S
+                        (string) ($attributes['Tip rukava'] ?? ''),             // T
+                        (string) ($attributes['Kroj'] ?? ''),                   // U
+                        (string) ($attributes['Dimenzije'] ?? ''),              // V
+                        (string) ($attributes['Dodatna kategorizacija'] ?? ''), // W
+                    ];
+
+                    fputcsv($out, $row, ';');
+
+                    // OPCIJE (varijante) – redovi s popunjenim B
+                    if ($product->options && $product->options->count() > 0) {
+                        foreach ($product->options as $option) {
+                            $option_id = ((int) $option->parent_id !== 0) ? (int) $option->parent_id : (int) $option->option_id;
+
+                            $optRow = [
+                                (string) $product->sku,                         // A
+                                (string) $option->sku,                          // B
+                                '',                                             // C
+                                '', '', '', '', '',                             // D-H
+                                (float) $product->price + (float) $option->price, // I
+                                (int) $option->quantity,                        // J
+                                '',                                             // K
+                                $option->status ? 1 : 0,                        // L
+                                (string) $this->setImagesString($product, $option_id), // M
+                                '', '', '', '', '', '', '', '', '', '', ''      // N-W prazno
+                            ];
+
+                            // osiguraj da ima 23 stupca
+                            $optRow = array_pad($optRow, 23, '');
+
+                            fputcsv($out, $optRow, ';');
+                        }
+                    }
+                }
+
+                // pomaže da proxy vidi output “u hodu”
+                if (function_exists('flush')) { @flush(); }
+            });
+
+            fclose($out);
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    /**
+     * CSV-friendly: makni nove redove (da ti ne lomi redove u CSV-u).
+     */
+    private function stripNewlines(string $s): string
+    {
+        $s = str_replace(["\r\n", "\r", "\n"], ' ', $s);
+        return trim(preg_replace('/\s+/', ' ', $s) ?? '');
+    }
+
 
 
     /**

@@ -145,7 +145,7 @@ class ApiController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function exportToEracuni(Request $request)
+  /*  public function exportToEracuni(Request $request)
     {
         $export = new Export();
 
@@ -156,7 +156,13 @@ class ApiController extends Controller
         }
 
         return redirect()->route('dashboard')->with(['error' => 'Greška prilikom Exporta, molimo pokušajte ponovo ili kontaktirajte administratora!']);
+    }*/
+    public function exportToEracuni(Request $request)
+    {
+        $export = new \App\Models\Back\Settings\Api\Export();
+        return $export->toCsvResponse();
     }
+
 
 
 
