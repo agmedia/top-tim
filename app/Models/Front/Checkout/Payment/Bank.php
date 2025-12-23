@@ -129,15 +129,19 @@ class Bank
      */
     public function finishOrder(Order $order, $request = null): bool
     {
-        $updated = $order->update([
-            'order_status_id' => config('settings.order.status.new')
-        ]);
+        // HARD GUARD: ne završavaj narudžbu bez proizvoda
+        if ($order->products()->count() < 1) {
+            Log::warning('Bank finish blocked: order has no products', [
+                'order_id' => $order->id,
+                'payment_code' => 'bank',
+            ]);
 
-        if ($updated) {
-            return true;
+            return false;
         }
 
-        return false;
+        return (bool) $order->update([
+            'order_status_id' => config('settings.order.status.new')
+        ]);
     }
 
 }

@@ -71,11 +71,15 @@ class CheckoutController extends FrontBaseController
     {
         $data = $this->checkSession();
 
-        if (empty($data)) {
-            if ( ! session()->has(config('session.cart'))) {
-                return redirect()->route('kosarica');
-            }
 
+        $cart = $this->shoppingCart()->get();
+
+        // HARD GUARD: košarica mora imati bar 1 stavku
+        if ($this->cartIsEmpty($cart)) {
+            return redirect()->route('kosarica');
+        }
+
+        if (empty($data)) {
             return redirect()->route('naplata', ['step' => 'podaci']);
         }
 
@@ -116,6 +120,17 @@ class CheckoutController extends FrontBaseController
      */
     public function order(Request $request)
     {
+
+        $cart = $this->shoppingCart()->get();
+
+        if ((int)($cart['count'] ?? 0) < 1) {
+            Log::warning('Order finish attempted with empty cart', [
+                'session_id' => session()->getId(),
+                'request' => $request->all(),
+            ]);
+
+            return redirect()->route('kosarica');
+        }
         $order = new Order();
 
         if ($request->has('mypos_checkout')) {
@@ -229,45 +244,53 @@ class CheckoutController extends FrontBaseController
     {
         $order = \App\Models\Back\Orders\Order::where('id', $id)->first();
 
-        if ($order) {
-            $data['order'] = $order;
-
-            $cart = $this->shoppingCart();
-
-            $order->decreaseItems($order->products);
-
-            $status = config('settings.order.status.paid');
-
-            if ($order->payment_code == 'bank') {
-                $status = config('settings.order.status.new');
-            }
-
-            $order->update(['order_status_id' => $status]);
-
-            //Loyalty::resolveOrder($cart->get(), $order);
-            $ids = [];
-            foreach ($cart->get()['items'] as $item) {
-                array_push($ids, $item['id']);
-            }
-
-            $data['ids'] = $ids;
-
-            dispatch(function () use ($order) {
-                Mail::to(config('mail.admin'))->send(new OrderReceived($order));
-                Mail::to($order->payment_email)->send(new OrderSent($order));
-            })->afterResponse();
-
-            $this->forgetCheckoutCache();
-
-            $cart->flush()->resolveDB();
-
-            $data['google_tag_manager'] = TagManager::getGoogleSuccessDataLayer($order);
-
-            return $data;
+        if (! $order) {
+            return [];
         }
 
-        return [];
+        // HARD GUARD: narudžba bez stavki je nevažeća
+        if ($order->products()->count() === 0) {
+            Log::warning('Attempt to finish order with no products', [
+                'order_id' => $order->id,
+                'payment_code' => $order->payment_code,
+                'session_cart' => session()->get(config('session.cart')),
+            ]);
+
+            return [];
+        }
+
+        $data['order'] = $order;
+
+        // (opcionalno) session cart ti više nije “source of truth”
+        // $cart = $this->shoppingCart();  // može ostati za flush, ali ne za logiku
+
+        $order->decreaseItems($order->products);
+
+        $status = config('settings.order.status.paid');
+        if ($order->payment_code == 'bank') {
+            $status = config('settings.order.status.new');
+        }
+
+        $order->update(['order_status_id' => $status]);
+
+        // IDs radije iz DB order products, ne iz sessiona
+        $ids = $order->products->pluck('id')->values()->all();
+        $data['ids'] = $ids;
+
+        dispatch(function () use ($order) {
+            Mail::to(config('mail.admin'))->send(new OrderReceived($order));
+            Mail::to($order->payment_email)->send(new OrderSent($order));
+        })->afterResponse();
+
+        $this->forgetCheckoutCache();
+
+        $this->shoppingCart()->flush()->resolveDB();
+
+        $data['google_tag_manager'] = TagManager::getGoogleSuccessDataLayer($order);
+
+        return $data;
     }
+
 
 
     /**
@@ -357,6 +380,11 @@ class CheckoutController extends FrontBaseController
         CheckoutSession::forgetPayment();
         CheckoutSession::forgetShipping();
         CheckoutSession::forgetComment();
+    }
+
+    private function cartIsEmpty(array $cart): bool
+    {
+        return (int)($cart['count'] ?? 0) < 1;
     }
 
 }
