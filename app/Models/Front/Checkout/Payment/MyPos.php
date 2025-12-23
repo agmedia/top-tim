@@ -158,6 +158,20 @@ class MyPos
         Log::info('public function finishOrder(Order $order, Request $request): bool');
         Log::info($request->toArray());
 
+        // HARD GUARD: ne procesiraj payment za order bez proizvoda
+        if ($order->products()->count() < 1) {
+            Log::warning('MyPos finish blocked: order has no products', [
+                'order_id' => $order->id,
+                'ipcmethod' => $request->input('IPCmethod'),
+                'OrderID' => $request->input('OrderID'),
+            ]);
+
+            // opcionalno: možeš ga označiti declined ili ostaviti unfinished
+            // $order->update(['order_status_id' => config('settings.order.status.declined')]);
+
+            return false;
+        }
+
         $pass   = false;
         $status = config('settings.order.status.declined');
 
