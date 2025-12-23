@@ -175,10 +175,29 @@ class MyPos
         $pass   = false;
         $status = config('settings.order.status.declined');
 
-        if ($request->has('IPCmethod') && $request->input('IPCmethod') == 'IPCPurchaseOK') {
+        $ipc = strtoupper((string) ($request->input('IPCmethod') ?? $request->input('ipcmethod')));
+
+        if ($ipc === 'IPCPURCHASEOK') {
             $pass   = true;
             $status = config('settings.order.status.paid');
         }
+
+        $orderIdRaw = $request->input('OrderID') ?? $request->input('orderid');
+        $sid = $request->input('SID') ?? $request->input('sid');
+
+        if ($sid && Transaction::where('approval_code', $sid)
+                ->where('order_id', $order->id)
+                ->exists()
+        ) {
+            Log::info('MyPos finishOrder skipped – duplicate SID', [
+                'order_id' => $order->id,
+                'sid' => $sid,
+                'order_id_raw' => $orderIdRaw,
+            ]);
+
+            return $pass; // već obrađeno, ne diraj order ni transakcije
+        }
+
 
         $order->update([
             'order_status_id' => $status
@@ -194,8 +213,8 @@ class MyPos
                 'payment_plan'    => $request->input('PAN'),
                 'payment_partner' => $request->input('CustomerEmail'),
                 'datetime'        => $request->input('RequestDateTime'),
-                'approval_code'   => $request->input('SID'),
-                'pg_order_id'     => substr($request->input('OrderID'), 4),
+                'approval_code'   => $sid,
+                'pg_order_id'     => $orderIdRaw ? substr($orderIdRaw, 4) : null,
                 'lang'            => $request->input('Currency'),
                 'stan'            => $request->input('RequestSTAN'),
                 'error'           => $request->input('CardToken'),
@@ -215,8 +234,8 @@ class MyPos
             'payment_plan'    => $request->input('PAN'),
             'payment_partner' => $request->input('CustomerEmail'),
             'datetime'        => $request->input('RequestDateTime'),
-            'approval_code'   => $request->input('SID'),
-            'pg_order_id'     => substr($request->input('OrderID'), 4),
+            'approval_code'   => $sid,
+            'pg_order_id'     => $orderIdRaw ? substr($orderIdRaw, 4) : null,
             'lang'            => $request->input('Currency'),
             'stan'            => $request->input('RequestSTAN'),
             'error'           => $request->input('CardToken'),
@@ -283,12 +302,32 @@ class MyPos
 
             case 'IPCPURCHASEOK':
                 // Sigurno dohvaćanje OrderID-a (iz parsiranih podataka ili iz originalnog requesta)
-                $orderIdRaw = $data['orderid'] ?? $request->input('OrderID');
+                $orderIdRaw = $data['orderid']
+                    ?? $request->input('OrderID')
+                    ?? $request->input('orderid');
+
                 if ($orderIdRaw) {
                     $orderId = substr($orderIdRaw, 4);
                     $order = Order::query()->find($orderId);
+
                     if ($order) {
-                        $this->finishOrder($order, $request);
+                        // napravi request s očekivanim keyevima
+                        $finishRequest = new \Illuminate\Http\Request([
+                            'IPCmethod'        => $data['ipcmethod'] ?? null,
+                            'Amount'           => $data['amount'] ?? null,
+                            'Signature'        => $data['signature'] ?? null,
+                            'CardType'         => $data['cardtype'] ?? null,
+                            'PAN'              => $data['pan'] ?? null,
+                            'CustomerEmail'    => $data['customeremail'] ?? null,
+                            'RequestDateTime'  => $data['requestdatetime'] ?? null,
+                            'SID'              => $data['sid'] ?? null,
+                            'OrderID'          => $data['orderid'] ?? null,
+                            'Currency'         => $data['currency'] ?? null,
+                            'RequestSTAN'      => $data['requeststan'] ?? null,
+                            'CardToken'        => $data['cardtoken'] ?? null,
+                        ]);
+
+                        $this->finishOrder($order, $finishRequest);
                     } else {
                         Log::error("MyPOS notify() – Order not found: {$orderId}");
                     }
