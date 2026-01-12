@@ -477,9 +477,23 @@ class CatalogRouteController extends FrontBaseController
      */
     private function normalizeIds($value): array
     {
-        // Ako je npr. "1,2 3" -> razdvoji po zarezima/prazninama; ako je array/Collection, uzmi ga
         if (is_string($value)) {
-            $ids = preg_split('/[,\s]+/', $value, -1, PREG_SPLIT_NO_EMPTY);
+            $value = trim($value);
+
+            // ✅ ako je JSON array npr. "[2035,2036]"
+            if ($value !== '' && ($value[0] === '[' || $value[0] === '{')) {
+                $decoded = json_decode($value, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $value = $decoded;
+                }
+            }
+
+            // ako je i dalje string (npr. "1,2 3") -> split
+            if (is_string($value)) {
+                $ids = preg_split('/[,\s]+/', $value, -1, PREG_SPLIT_NO_EMPTY);
+            } else {
+                $ids = $value;
+            }
         } elseif ($value instanceof \Illuminate\Support\Collection) {
             $ids = $value->all();
         } else {
@@ -495,4 +509,5 @@ class CatalogRouteController extends FrontBaseController
             ->values()
             ->all();
     }
+
 }
