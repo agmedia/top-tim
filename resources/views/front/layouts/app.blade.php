@@ -69,7 +69,7 @@
 <!-- Body-->
 <body class="bg-secondary">
 
-<div id="snow"></div>
+
 @if (config('app.env') == 'production')
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TFJG7JCX"
@@ -168,52 +168,7 @@
         }, 500);
     })
 </script>
-<style>
-    #snow{
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        overflow: hidden;
-        z-index: 9999;
-    }
-    .snowflake{
-        position: absolute;
-        top: -10px;
-        color: rgba(255,255,255,.9);
-        user-select: none;
-        will-change: transform;
-        filter: drop-shadow(0 1px 1px rgba(0,0,0,.2));
-    }
-    @keyframes fall {
-        to { transform: translate3d(var(--xEnd), 110vh, 0) rotate(360deg); }
-    }
-</style>
-<script>
-    (() => {
-        const root = document.getElementById('snow');
-        const COUNT = 80;
 
-        function rand(min, max){ return Math.random() * (max - min) + min; }
-
-        for (let i=0;i<COUNT;i++){
-            const el = document.createElement('div');
-            el.className = 'snowflake';
-            el.textContent = '❄';
-            const size = rand(8, 22);
-            const left = rand(0, 100);
-            const dur  = rand(6, 16);
-            const delay= rand(0, 8);
-            const xEnd = `${rand(-20, 20)}vw`;
-
-            el.style.left = left + 'vw';
-            el.style.fontSize = size + 'px';
-            el.style.opacity = rand(0.3, 1);
-            el.style.setProperty('--xEnd', xEnd);
-            el.style.animation = `fall ${dur}s linear ${delay}s infinite`;
-            root.appendChild(el);
-        }
-    })();
-</script>
 @stack('js_after')
 </body>
 </html>
