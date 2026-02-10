@@ -4,6 +4,7 @@ create table product_option
         primary key,
     product_id bigint unsigned not null,
     option_id  bigint unsigned not null,
+    image_id  BIGINT UNSIGNED NOT NULL DEFAULT 0,
     sku        varchar(191)   not null,
     parent     varchar(191)   not null,
     parent_id  bigint unsigned not null,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Back\Settings;
 
+use App\Helpers\ApiHelper;
 use App\Helpers\Csv;
 use App\Http\Controllers\Controller;
 use App\Models\Back\Jobs;
@@ -26,7 +27,36 @@ class ApiController extends Controller
      */
     public function index(Request $request)
     {
-        return view('back.settings.api.index');
+        $importJobs = Jobs::query()
+            ->where('target', 'Import Full Excel')
+            ->orderByDesc('id')
+            ->limit(30)
+            ->get();
+
+        $queuePendingCount = Jobs::query()
+            ->where('type', 'cron_queue')
+            ->where('target', 'Import Full Excel')
+            ->where('send_report', 1)
+            ->count();
+
+        $queueProcessingCount = Jobs::query()
+            ->where('type', 'cron_queue')
+            ->where('target', 'Import Full Excel')
+            ->where('send_report', 2)
+            ->count();
+
+        $lastRun = Jobs::query()
+            ->where('type', 'cron')
+            ->where('target', 'Import Full Excel')
+            ->orderByDesc('id')
+            ->first();
+
+        return view('back.settings.api.index', compact(
+            'importJobs',
+            'queuePendingCount',
+            'queueProcessingCount',
+            'lastRun'
+        ));
     }
 
 
@@ -88,6 +118,37 @@ class ApiController extends Controller
             $path = $targetClass->upload($request);
 
             if ($path) {
+                if ($this->shouldQueueFullExcelImport($request)) {
+                    $imagesDir = $this->resolveImportImagesDir($request);
+
+                    if ($imagesDir === '') {
+                        Log::warning('Full excel import queue rejected - images dir missing', [
+                            'session_images_dir' => session('import_images_dir'),
+                            'request_images_dir' => $request->input('images_dir'),
+                        ]);
+
+                        return response()->json([
+                            'error' => "Import slika: direktorij nije postavljen ili ne postoji. Prvo učitaj slike pa pokreni import.",
+                            'message' => "Import slika: direktorij nije postavljen ili ne postoji. Prvo učitaj slike pa pokreni import."
+                        ], 422);
+                    }
+
+                    $jobId = $this->queueFullExcelImport($path, $imagesDir);
+
+                    if (!$jobId) {
+                        $this->deleteTempExcel($path);
+
+                        return response()->json([
+                            'error' => 'Import job nije upisan u red za obradu.',
+                            'message' => 'Import job nije upisan u red za obradu.'
+                        ], 500);
+                    }
+
+                    return response()->json([
+                        'success' => ApiHelper::response(1, "Import je stavljen u red (#{$jobId}). Cron ga obrađuje svake minute.")
+                    ]);
+                }
+
                 $excel = new Csv($path, 'Xlsx');
 
                 $ok = $targetClass->process($request->toArray(), $excel->csv->toArray());
@@ -242,6 +303,20 @@ class ApiController extends Controller
             }
         }
 
+        $maxMb = 200;
+        $maxKb = $maxMb * 1024;
+
+        $request->validate([
+            'zip'        => "nullable|file|mimes:zip|max:{$maxKb}",
+            'images'     => 'nullable|array',
+            'images.*'   => "file|mimes:jpg,jpeg,png,webp|max:{$maxKb}",
+        ], [
+            'zip.max'       => "ZIP je veći od {$maxMb}MB. Podijeli na više manjih ili kontaktiraj podršku.",
+            'images.*.max'  => "Pojedinačna slika je veća od {$maxMb}MB.",
+            'zip.mimes'     => 'Dozvoljen je samo ZIP.',
+            'images.*.mimes'=> 'Dozvoljeni formati: jpg, jpeg, png, webp.',
+        ]);
+
         // Spremi apsolutnu putanju u session da ju import/validacija koristi
         $absBase = storage_path('app/' . $base);
         session(['import_images_dir' => $absBase]);
@@ -283,6 +358,80 @@ class ApiController extends Controller
         }
 
         return $class;
+    }
+
+
+    /**
+     * Full excel import (export-excel/import-from-excel) treba ići u pozadinski job.
+     */
+    private function shouldQueueFullExcelImport(Request $request): bool
+    {
+        return $request->input('target') === 'export-excel'
+            && $request->input('method') === 'import-from-excel';
+    }
+
+
+    /**
+     * Upisuje full-excel import u internu cron queue tablicu (jobs).
+     */
+    private function queueFullExcelImport(string $filePath, string $imagesDir): int
+    {
+        $payload = json_encode([
+            'file' => $filePath,
+            'images_dir' => $imagesDir,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        if (!is_string($payload) || $payload === '') {
+            return 0;
+        }
+
+        return Jobs::query()->insertGetId([
+            'type' => 'cron_queue',
+            'target' => 'Import Full Excel',
+            'time' => '00:00',
+            'success' => 0,
+            'payload' => $payload,
+            'response' => 'Na čekanju cron obrade.',
+            'send_report' => 1,
+            'created_at' => now(),
+        ]);
+    }
+
+
+    private function deleteTempExcel(?string $path): void
+    {
+        if (!$path) {
+            return;
+        }
+
+        if (is_file($path)) {
+            @unlink($path);
+        }
+    }
+
+
+    /**
+     * Prefer request payload (for routes without shared session context),
+     * fallback to session value set by uploadImages().
+     */
+    private function resolveImportImagesDir(Request $request): string
+    {
+        $fromRequest = trim((string) $request->input('images_dir'));
+        $fromSession = trim((string) session('import_images_dir'));
+        $imagesDir   = $fromRequest !== '' ? $fromRequest : $fromSession;
+
+        if ($imagesDir === '' || !is_dir($imagesDir)) {
+            return '';
+        }
+
+        $allowedRoot = realpath(storage_path('app/imports/images'));
+        $realDir     = realpath($imagesDir);
+
+        if ($allowedRoot && $realDir && strpos($realDir, $allowedRoot) === 0) {
+            return $realDir;
+        }
+
+        return '';
     }
 
 }

@@ -58,6 +58,10 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 | contains the "web" middleware group. Now create something great!
 |
 */
+/*Route::get('/phpinfo', function () {
+    abort_unless(app()->environment('local'), 404); // sigurnost: samo local
+    phpinfo();
+});*/
 /**
  * BACK ROUTES
  */
