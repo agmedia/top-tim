@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('update:api_products_akmk')->everyFifteenMinutes();
 //        $schedule->command('report:api_products_akmk')->dailyAt('00:30');
         $schedule->command('process:queued-full-excel-imports')
-            ->everyThreeMinutes()
+            ->everyThirtyMinutes()
             ->withoutOverlapping();
     }
 
