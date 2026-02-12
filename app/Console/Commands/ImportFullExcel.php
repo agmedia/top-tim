@@ -58,15 +58,18 @@ class ImportFullExcel extends Command
                 'method' => 'import-from-excel',
                 'images_dir' => $imagesDir
             ], $excel->csv->toArray());
+            $report = $export->getLastImportReport();
 
             if (!$result) {
-                $job->finish(0, 0, ApiHelper::response(0, 'Import nije izvršen.'));
+                $response = ApiHelper::response(0, 'Import nije izvršen.');
+                $job->finish(0, $this->buildJobPayload(false, $filePath, $report, 'Import nije izvršen.'), $response);
                 $this->sendImportFinishedEmail(false, 'Import nije izvršen.', $filePath);
                 return Command::FAILURE;
             }
 
-            $job->finish(1, 1, is_string($result) ? $result : ApiHelper::response(1, 'Import je završen.'));
-            $this->sendImportFinishedEmail(true, is_string($result) ? $result : 'Import je završen.', $filePath);
+            $response = is_string($result) ? $result : ApiHelper::response(1, 'Import je završen.');
+            $job->finish(1, $this->buildJobPayload(true, $filePath, $report), $response);
+            $this->sendImportFinishedEmail(true, $response, $filePath);
 
             return Command::SUCCESS;
         } catch (\Throwable $e) {
@@ -76,7 +79,8 @@ class ImportFullExcel extends Command
                 'error' => $e->getMessage(),
             ]);
 
-            $job->finish(0, 0, ApiHelper::response(0, $e->getMessage()));
+            $response = ApiHelper::response(0, $e->getMessage());
+            $job->finish(0, $this->buildJobPayload(false, $filePath, [], $e->getMessage()), $response);
             $this->sendImportFinishedEmail(false, $e->getMessage(), $filePath);
 
             return Command::FAILURE;
@@ -104,5 +108,24 @@ class ImportFullExcel extends Command
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+
+    private function buildJobPayload(bool $success, string $filePath, array $report = [], string $error = ''): string
+    {
+        $payload = [
+            'kind' => 'import_full_excel_report',
+            'success' => $success,
+            'file_path' => $filePath,
+            'error' => $error,
+            'summary' => (string) ($report['summary'] ?? ''),
+            'counts' => $report['counts'] ?? [],
+            'detail_counts' => $report['detail_counts'] ?? [],
+            'details' => $report['details'] ?? [],
+        ];
+
+        $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        return is_string($json) ? $json : '';
     }
 }

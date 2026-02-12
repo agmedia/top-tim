@@ -12,6 +12,19 @@
             width: 1rem; height: 1rem; border-width: .15em; display: none; margin-left: .5rem;
         }
         .btn.loading .spinner-border { display: inline-block; }
+        .import-log-detail-wrap { font-size: .78rem; }
+        .import-log-summary-table thead th,
+        .import-log-detail-table thead th {
+            background: #eaedf1 !important;
+            /*color: #fff !important;*/
+            padding: .55rem .7rem !important;
+            border-bottom: 1px solid #d7e4f3;
+        }
+        .import-log-summary-table tbody td,
+        .import-log-detail-table tbody td {
+            padding: .45rem .7rem !important;
+            font-size: .76rem;
+        }
     </style>
 @endpush
 
@@ -255,6 +268,11 @@
                                             @forelse(($importJobs ?? collect()) as $item)
                                                 @php
                                                     $msg = trim(preg_replace('/\s+/', ' ', strip_tags((string)($item->response ?? ''))));
+                                                    $payload = json_decode((string)($item->payload ?? ''), true);
+                                                    $detailCounts = is_array($payload) ? ($payload['detail_counts'] ?? []) : [];
+                                                    $details = is_array($payload) ? ($payload['details'] ?? []) : [];
+                                                    $hasDetails = is_array($details) && !empty(array_filter($details, fn($list) => is_array($list) && !empty($list)));
+                                                    $collapseId = 'import-log-details-' . $item->id;
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $item->id }}</td>
@@ -262,8 +280,153 @@
                                                     <td>@include('back.layouts.partials.status', ['simple' => true, 'status' => (int)$item->success])</td>
                                                     <td>{{ $item->time }}</td>
                                                     <td>{{ \Illuminate\Support\Carbon::make($item->created_at)->format('d.m.Y H:i:s') }}</td>
-                                                    <td>{{ \Illuminate\Support\Str::limit($msg, 200) }}</td>
+                                                    <td>
+                                                        <div>{{ \Illuminate\Support\Str::limit($msg, 200) }}</div>
+                                                        @if($hasDetails)
+                                                            <button class="btn btn-sm btn-alt-secondary mt-2" type="button" data-toggle="collapse" data-target="#{{ $collapseId }}" aria-expanded="false" aria-controls="{{ $collapseId }}">
+                                                                Detalji importa
+                                                            </button>
+                                                        @endif
+                                                    </td>
                                                 </tr>
+                                                @if($hasDetails)
+                                                    <tr class="bg-body-light">
+                                                        <td colspan="6" class="py-2">
+                                                            <div id="{{ $collapseId }}" class="collapse">
+                                                                <div class="px-2 py-1 import-log-detail-wrap">
+                                                                    {{--<div class="table-responsive mb-2">
+                                                                        <table class="table table-sm table-bordered table-vcenter mb-0 import-log-summary-table">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th class="py-2">Slike artikla</th>
+                                                                                <th class="py-2">Slike opcija</th>
+                                                                                <th class="py-2">Preskočene opcije</th>
+                                                                                <th class="py-2">Neprepoznati atributi</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td>{{ (int)($detailCounts['missing_product_images'] ?? 0) }}</td>
+                                                                                <td>{{ (int)($detailCounts['missing_option_images'] ?? 0) }}</td>
+                                                                                <td>{{ (int)($detailCounts['skipped_options'] ?? 0) }}</td>
+                                                                                <td>{{ (int)($detailCounts['unmatched_attributes'] ?? 0) }}</td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>--}}
+
+                                                                    @if(!empty($details['missing_product_images']))
+                                                                        <div class="mb-2">
+                                                                            <p class="h6 d-block mb-3">Nedostaju slike artikla</p>
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-sm table-striped table-vcenter mb-0 import-log-detail-table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th class="py-2" style="width:80px">Red</th>
+                                                                                        <th class="py-2" style="width:180px">SKU</th>
+                                                                                        <th class="py-2">Razlog</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($details['missing_product_images'] as $d)
+                                                                                        <tr>
+                                                                                            <td>{{ $d['row'] ?? '?' }}</td>
+                                                                                            <td>{{ $d['sku'] ?? '-' }}</td>
+                                                                                            <td>{{ $d['reason'] ?? 'no_main_image_found' }}</td>
+                                                                                        </tr>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+
+                                                                    @if(!empty($details['missing_option_images']))
+                                                                        <div class="mb-2">
+                                                                            <p class="h6 d-block mb-3">Nedostaju slike opcija</p>
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-sm table-striped table-vcenter mb-0 import-log-detail-table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th class="py-2" style="width:80px">Red</th>
+                                                                                        <th class="py-2" style="width:180px">SKU</th>
+                                                                                        <th class="py-2">Opcija</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($details['missing_option_images'] as $d)
+                                                                                        <tr>
+                                                                                            <td>{{ $d['row'] ?? '?' }}</td>
+                                                                                            <td>{{ $d['sku'] ?? '-' }}</td>
+                                                                                            <td>{{ $d['option'] ?? '-' }}</td>
+                                                                                        </tr>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+
+                                                                    @if(!empty($details['skipped_options']))
+                                                                        <div class="mb-2">
+                                                                            <p class="h6 d-block mb-3">Preskočene opcije</p>
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-sm table-striped table-vcenter mb-0 import-log-detail-table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th class="py-2" style="width:80px">Red</th>
+                                                                                        <th class="py-2" style="width:180px">SKU</th>
+                                                                                        <th class="py-2">Opcija</th>
+                                                                                        <th class="py-2">Razlog</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($details['skipped_options'] as $d)
+                                                                                        <tr>
+                                                                                            <td>{{ $d['row'] ?? '?' }}</td>
+                                                                                            <td>{{ $d['sku'] ?? '-' }}</td>
+                                                                                            <td>{{ $d['option'] ?? '-' }}</td>
+                                                                                            <td>{{ $d['reason'] ?? '-' }}</td>
+                                                                                        </tr>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+
+                                                                    @if(!empty($details['unmatched_attributes']))
+                                                                        <div class="mb-1">
+                                                                            <p class="h6 d-block mb-3">Neprepoznati atributi</p>
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-sm table-striped table-vcenter mb-0 import-log-detail-table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th class="py-2" style="width:80px">Red</th>
+                                                                                        <th class="py-2" style="width:180px">SKU</th>
+                                                                                        <th class="py-2" style="width:180px">Grupa</th>
+                                                                                        <th class="py-2">Vrijednost</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($details['unmatched_attributes'] as $d)
+                                                                                        <tr>
+                                                                                            <td>{{ $d['row'] ?? '?' }}</td>
+                                                                                            <td>{{ $d['sku'] ?? '-' }}</td>
+                                                                                            <td>{{ $d['group'] ?? '-' }}</td>
+                                                                                            <td>{{ $d['value'] ?? '-' }}</td>
+                                                                                        </tr>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                             @empty
                                                 <tr>
                                                     <td colspan="6" class="text-center text-muted">Nema logova.</td>

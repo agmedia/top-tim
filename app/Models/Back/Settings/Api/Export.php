@@ -67,6 +67,19 @@ class Export
 
     protected $imagesBaseDir = '';
 
+    /**
+     * Structured report from last full excel import run.
+     *
+     * @var array
+     */
+    protected $lastImportReport = [];
+
+
+    public function getLastImportReport(): array
+    {
+        return $this->lastImportReport;
+    }
+
 
     /**
      * @return int
@@ -595,6 +608,12 @@ class Export
         $createdOpts     = 0;
         $skippedOpts     = 0;
         $errors          = [];
+        $skippedExistingProducts = [];
+        $missingProductImages    = [];
+        $missingOptionImages     = [];
+        $skippedOptionsDetails   = [];
+        $unmatchedAttributes     = [];
+        $this->lastImportReport  = [];
 
         $locale = config('app.locale', 'hr');
 
@@ -637,15 +656,21 @@ class Export
             // create-only
             if (\App\Models\Back\Catalog\Product\Product::query()->where('sku', $sku)->exists()) {
                 $skippedProducts++;
+                $skippedExistingProducts[] = [
+                    'row' => $i + 1,
+                    'sku' => $sku,
+                    'reason' => 'sku_already_exists',
+                ];
                 continue;
             }
 
             try {
                 DB::transaction(function () use (
-                    $sku, $ean, $name, $description, $slugIn, $metaTitle, $metaDesc,
+                    $i, $sku, $ean, $name, $description, $slugIn, $metaTitle, $metaDesc,
                     $priceCell, $qtyCell, $activeCell, $imagesCsv, $brand, $catPrimary, $catSecondary,
                     $catsExtraCsv, $attrMaterial, $attrGender, $attrSleeve, $attrFit, $attrDims,
-                    $locale, &$createdProducts, &$createdImgs, &$linkedCats, &$linkedAttrs, &$createdProductIdsBySku
+                    $locale, &$createdProducts, &$createdImgs, &$linkedCats, &$linkedAttrs, &$createdProductIdsBySku,
+                    &$missingProductImages, &$unmatchedAttributes
                 ) {
 
                     $brand_id = BrandTranslation::query()->where('title', $brand)->value('brand_id') ?: 0;
@@ -702,6 +727,13 @@ class Export
                             'sku'       => $sku,
                             'productId' => $product->id,
                         ]);
+                        $missingProductImages[] = [
+                            'row' => $i + 1,
+                            'sku' => $sku,
+                            'product_id' => $product->id,
+                            'images_csv' => $imagesCsv,
+                            'reason' => 'no_main_image_found',
+                        ];
                         // OK je – možda će opcije kasnije donijeti slike
                     }
                     /*$added = $this->initImages($product->id, $imagesCsv, $sku, $slugIn, $name);
@@ -725,13 +757,23 @@ class Export
                     $linkedCats  += $this->attachExistingCategories($product->id, $catPrimary, $catSecondary, $catsExtraCsv, $locale);
 
                     // 1e) Atributi — samo postojeći (group_title + title)
+                    $attrMissesForProduct = [];
                     $linkedAttrs += $this->attachExistingAttributes($product->id, [
                         'Materijal'  => $attrMaterial,
                         'Spol'       => $attrGender,
                         'Tip rukava' => $attrSleeve,
                         'Kroj'       => $attrFit,
                         'Dimenzije'  => $attrDims,
-                    ], $locale);
+                    ], $locale, $attrMissesForProduct);
+
+                    if (!empty($attrMissesForProduct)) {
+                        foreach ($attrMissesForProduct as $miss) {
+                            $unmatchedAttributes[] = array_merge($miss, [
+                                'row' => $i + 1,
+                                'sku' => $sku,
+                            ]);
+                        }
+                    }
 
                     // 1f) Nakon što smo povezali kategorije, složi FULL SLUG:
                     // hr/kategorija-proizvoda/{cat}/{subcat}/{product-slug}
@@ -792,7 +834,16 @@ class Export
             if ($sku === '' || $optCode === '') continue;
 
             $productId = $createdProductIdsBySku[$sku] ?? null;
-            if (!$productId) { $skippedOpts++; continue; }
+            if (!$productId) {
+                $skippedOpts++;
+                $skippedOptionsDetails[] = [
+                    'row' => $i + 1,
+                    'sku' => $sku,
+                    'option' => $optCode,
+                    'reason' => 'product_not_created_or_existing',
+                ];
+                continue;
+            }
 
             $priceCell = (float)($row[$IDX['I']] ?? 0);
             $qtyCell   = (int)($row[$IDX['J']] ?? 0);
@@ -803,6 +854,12 @@ class Export
 
                 if (!$optionId && !$parentId) {
                     $skippedOpts++;
+                    $skippedOptionsDetails[] = [
+                        'row' => $i + 1,
+                        'sku' => $sku,
+                        'option' => $optCode,
+                        'reason' => 'option_linkage_not_resolved',
+                    ];
                     continue;
                 }
 
@@ -814,7 +871,16 @@ class Export
                              ->where('option_id', $optionId ?: 0)
                              ->where('sku', $optCode)
                              ->exists();
-                if ($exists) { $skippedOpts++; continue; }
+                if ($exists) {
+                    $skippedOpts++;
+                    $skippedOptionsDetails[] = [
+                        'row' => $i + 1,
+                        'sku' => $sku,
+                        'option' => $optCode,
+                        'reason' => 'option_already_exists',
+                    ];
+                    continue;
+                }
 
                 DB::table('product_option')->insert([
                     'product_id' => $productId,
@@ -832,12 +898,28 @@ class Export
                 ]);
 
                 // pokušaj naći i spremiti sliku za varijantu (…_ŠIFRAOPCIJE.*)
-                $this->initImagesForOption($productId, (int)($parentId ?: 0), $optCode);
+                $optionImageLinked = $this->initImagesForOption($productId, (int)($parentId ?: 0), $optCode);
+                if (!$optionImageLinked) {
+                    $missingOptionImages[] = [
+                        'row' => $i + 1,
+                        'sku' => $sku,
+                        'option' => $optCode,
+                        'product_id' => $productId,
+                        'reason' => 'no_option_image_found',
+                    ];
+                }
 
                 $createdOpts++;
             } catch (\Throwable $e) {
                 $errors[] = "Opcija — red " . ($i+1) . " — {$sku}/{$optCode}: " . $e->getMessage();
                 $skippedOpts++;
+                $skippedOptionsDetails[] = [
+                    'row' => $i + 1,
+                    'sku' => $sku,
+                    'option' => $optCode,
+                    'reason' => 'exception',
+                    'error' => $e->getMessage(),
+                ];
             }
         }
 
@@ -848,6 +930,37 @@ class Export
         if (!empty($errors)) {
             $msg .= " Napomene: " . implode(' | ', array_slice($errors, 0, 10));
         }
+
+        $details = [
+            'missing_product_images' => array_slice($missingProductImages, 0, 200),
+            'missing_option_images' => array_slice($missingOptionImages, 0, 200),
+            'skipped_options' => array_slice($skippedOptionsDetails, 0, 200),
+            'unmatched_attributes' => array_slice($unmatchedAttributes, 0, 200),
+            'skipped_existing_products' => array_slice($skippedExistingProducts, 0, 200),
+            'errors' => array_slice($errors, 0, 200),
+        ];
+
+        $this->lastImportReport = [
+            'summary' => $msg,
+            'counts' => [
+                'created_products' => $createdProducts,
+                'skipped_products' => $skippedProducts,
+                'linked_categories' => $linkedCats,
+                'linked_attributes' => $linkedAttrs,
+                'created_images' => $createdImgs,
+                'created_options' => $createdOpts,
+                'skipped_options' => $skippedOpts,
+            ],
+            'detail_counts' => [
+                'missing_product_images' => count($missingProductImages),
+                'missing_option_images' => count($missingOptionImages),
+                'skipped_options' => count($skippedOptionsDetails),
+                'unmatched_attributes' => count($unmatchedAttributes),
+                'skipped_existing_products' => count($skippedExistingProducts),
+                'errors' => count($errors),
+            ],
+            'details' => $details,
+        ];
 
         return ApiHelper::response(1, $msg);
     }
@@ -1029,7 +1142,7 @@ class Export
     }
 
 
-    private function initImagesForOption(int $productId, int $parentId, string $optCode): void
+    private function initImagesForOption(int $productId, int $parentId, string $optCode): bool
     {
         Log::info('initImagesForOption:start', [
             'productId' => $productId,
@@ -1040,14 +1153,14 @@ class Export
         $optCode = trim($optCode);
         if ($optCode === '') {
             Log::info('initImagesForOption:empty-optCode');
-            return;
+            return false;
         }
 
         /** @var \App\Models\Back\Catalog\Product\Product|null $product */
         $product = \App\Models\Back\Catalog\Product\Product::query()->find($productId);
         if (!$product) {
             Log::info('initImagesForOption:product-not-found', ['productId' => $productId]);
-            return;
+            return false;
         }
 
         // helperi
@@ -1075,11 +1188,11 @@ class Export
                         ->first();
         if (!$optionRow) {
             Log::info('initImagesForOption:product_option-not-found', ['productId' => $productId, 'optCode' => $optCode]);
-            return;
+            return false;
         }
         if (!empty($optionRow->image_id)) {
             Log::info('initImagesForOption:already-linked', ['optCode' => $optCode, 'image_id' => $optionRow->image_id]);
-            return;
+            return true;
         }
 
         // 1) probaj točan file: {ŠifraOpcije}.jpg|jpeg|png|webp
@@ -1136,7 +1249,7 @@ class Export
 
         if (!$matchedAbs) {
             // ništa — ostavi opciju bez slike
-            return;
+            return false;
         }
 
         // Ako je netko od "srodnih" već dobio image_id, iskoristi isti (bez duplog spremanja fajla)
@@ -1161,7 +1274,7 @@ class Export
                ->where('sku', $optCode)
                ->update(['image_id' => (int)$existingImageId, 'updated_at' => now()]);
             Log::info('initImagesForOption:reuse-existing-image', ['image_id' => $existingImageId, 'sku' => $optCode]);
-            return;
+            return true;
         }
 
         // Spremi sliku i upiši u product_images (bez dupliciranja za svaku veličinu)
@@ -1171,7 +1284,7 @@ class Export
             $bin  = @file_get_contents($matchedAbs);
             if ($bin === false) {
                 Log::info('initImagesForOption:file-read-failed', ['abs' => $matchedAbs]);
-                return;
+                return false;
             }
 
             $imageJson  = json_encode(['output' => ['image' => "data:{$mime};base64," . base64_encode($bin)]]);
@@ -1192,7 +1305,7 @@ class Export
 
             if (!is_string($relPath) || $relPath === '') {
                 Log::info('initImagesForOption:invalid-relPath', ['relPath' => $relPath, 'type' => gettype($paths)]);
-                return;
+                return false;
             }
             $publicUrl = rtrim(config('filesystems.disks.products.url'), '/') . '/' . ltrim($relPath, '/');
 
@@ -1251,12 +1364,15 @@ class Export
                 DB::table('products')->where('id', $productId)->update(['image' => $publicUrl, 'updated_at' => now()->toDateTimeString()]);
             }
 
+            return true;
+
         } catch (\Throwable $e) {
             Log::info('initImagesForOption:exception', [
                 'file'  => $matchedAbs,
                 'error' => $e->getMessage(),
                 'trace' => substr($e->getTraceAsString(), 0, 2000),
             ]);
+            return false;
         }
     }
     
@@ -1888,7 +2004,7 @@ class Export
      * - Match radi robustno (lowercase, bez dijakritike, kolaps non-alnum).
      * - Logira cijeli tok (parsiranje, matchane ID-ove, inserte).
      */
-    private function attachExistingAttributes(int $productId, array $map, string $locale): int
+    private function attachExistingAttributes(int $productId, array $map, string $locale, array &$unmatched = []): int
     {
         Log::info('attr:START', ['productId' => $productId, 'locale' => $locale, 'groups' => array_keys($map)]);
 
@@ -2013,6 +2129,12 @@ class Export
                 if ($aid) {
                     $collectIds[] = (int)$aid;
                 } else {
+                    $unmatched[] = [
+                        'product_id' => $productId,
+                        'group' => $groupTitle,
+                        'value' => $valueTitle,
+                    ];
+
                     // Za lakši debug — pokaži top 5 kandidata iz baze za ovu grupu
                     $sample = [];
                     $i = 0;
