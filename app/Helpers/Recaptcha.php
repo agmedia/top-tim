@@ -23,13 +23,18 @@ class Recaptcha
      */
     private $result;
 
+    /**
+     * @var string|null
+     */
+    private $expected_action;
+
 
     /**
      * Recaptcha constructor.
      */
     public function __construct()
     {
-        $this->remote_ip  = $_SERVER['REMOTE_ADDR'];
+        $this->remote_ip  = $_SERVER['REMOTE_ADDR'] ?? request()->ip() ?? '127.0.0.1';
         $this->verify_url = config('services.recaptcha.verify_url');
     }
 
@@ -39,21 +44,56 @@ class Recaptcha
      *
      * @return bool|mixed
      */
-    public function check(array $data)
+    public function check(array $data, ?string $expectedAction = null)
     {
-        if (isset($data['recaptcha'])) {
-            $_data   = $this->setContentData($data['recaptcha']);
-            $options = $this->setOptions($_data);
+        $this->expected_action = $expectedAction;
 
-            $context = stream_context_create($options);
-            $result  = file_get_contents($this->verify_url, false, $context);
-
-            $this->result = json_decode($result);
+        if (app()->environment(['local', 'testing']) && config('services.recaptcha.bypass_local', true)) {
+            $this->result = (object) [
+                'success' => true,
+                'score' => 0.9,
+                'action' => $expectedAction,
+                'bypassed' => true,
+            ];
 
             return $this;
         }
 
-        return false;
+        if (! config('services.recaptcha.sitekey') || ! config('services.recaptcha.secret')) {
+            Log::error('reCAPTCHA is not configured.');
+            $this->result = (object) ['success' => false, 'score' => 0.0, 'error-codes' => ['not-configured']];
+
+            return $this;
+        }
+
+        if (empty($data['recaptcha'])) {
+            $this->result = (object) ['success' => false, 'score' => 0.0, 'error-codes' => ['missing-token']];
+
+            return $this;
+        }
+
+        $_data   = $this->setContentData($data['recaptcha']);
+        $options = $this->setOptions($_data);
+
+        $context = stream_context_create($options);
+        $result  = @file_get_contents($this->verify_url, false, $context);
+
+        if ($result === false) {
+            Log::error('reCAPTCHA verification request failed.', [
+                'error' => error_get_last(),
+            ]);
+            $this->result = (object) ['success' => false, 'score' => 0.0, 'error-codes' => ['request-failed']];
+
+            return $this;
+        }
+
+        $this->result = json_decode($result) ?: (object) [
+            'success' => false,
+            'score' => 0.0,
+            'error-codes' => ['invalid-response'],
+        ];
+
+        return $this;
     }
 
 
@@ -62,7 +102,10 @@ class Recaptcha
      */
     public function ok()
     {
-        if ($this->result->success != true || $this->result->score < 0.3) {
+        if (! isset($this->result)
+            || ($this->result->success ?? false) !== true
+            || (float) ($this->result->score ?? 0) < 0.3
+            || ($this->expected_action !== null && ($this->result->action ?? null) !== $this->expected_action)) {
             return false;
         }
 

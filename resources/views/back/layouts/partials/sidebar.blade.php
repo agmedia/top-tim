@@ -125,6 +125,13 @@
                     </a>
                 </li>
 
+                <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->routeIs('contract-terminations.*') ? ' active' : '' }}" href="{{ route('contract-terminations.index') }}">
+                        <i class="nav-main-link-icon si si-note"></i>
+                        <span class="nav-main-link-name">Jednostrani raskidi</span>
+                    </a>
+                </li>
+
                     @if (current_locale() != 'hr')
                         <li class="nav-main-item{{ request()->is([current_locale() . '/admin/marketing/*']) ? ' open' : '' }}">
                     @else

@@ -39,6 +39,7 @@ return [
         'sitekey'    => env('GOOGLE_RECAPTCHA_SITE_KEY'),
         'secret'     => env('GOOGLE_RECAPTCHA_SECRET_KEY'),
         'verify_url' => 'https://www.google.com/recaptcha/api/siteverify',
+        'bypass_local' => env('RECAPTCHA_BYPASS_LOCAL', true),
     ],
 
     'mailchimp' => [

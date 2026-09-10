@@ -91,5 +91,12 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60);
         });
+
+        RateLimiter::for('contract-termination', function (Request $request) {
+            $secret = (string) config('app.key');
+
+            return Limit::perMinute(10)
+                ->by('contract-termination:ip:' . hash_hmac('sha256', (string) $request->ip(), $secret));
+        });
     }
 }

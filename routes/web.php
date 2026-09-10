@@ -9,6 +9,7 @@ use App\Http\Controllers\Back\Catalog\ProductController;
 use App\Http\Controllers\Back\Catalog\AttributesController;
 use App\Http\Controllers\Back\Catalog\OptionsController;
 use App\Http\Controllers\Back\Catalog\PublisherController;
+use App\Http\Controllers\Back\ContractTerminationController as AdminContractTerminationController;
 use App\Http\Controllers\Back\DashboardController;
 use App\Http\Controllers\Back\Marketing\ReviewController;
 use App\Http\Controllers\Back\OrderController;
@@ -153,6 +154,15 @@ Route::group(
         Route::get('order/{order}', [OrderController::class, 'show'])->name('orders.show');
         Route::get('order/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
         Route::patch('order/{order}', [OrderController::class, 'update'])->name('orders.update');
+
+        Route::get('contract-terminations', [AdminContractTerminationController::class, 'index'])
+            ->name('contract-terminations.index');
+        Route::get('contract-terminations/{termination}', [AdminContractTerminationController::class, 'show'])
+            ->name('contract-terminations.show');
+        Route::patch('contract-terminations/{termination}', [AdminContractTerminationController::class, 'update'])
+            ->name('contract-terminations.update');
+        Route::post('contract-terminations/{termination}/resend', [AdminContractTerminationController::class, 'resend'])
+            ->name('contract-terminations.resend');
 
         // MARKETING
         Route::prefix('marketing')->group(function () {
@@ -445,6 +455,11 @@ Route::group(
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/kontakt', [HomeController::class, 'contact'])->name('kontakt');
     Route::post('/kontakt/posalji', [HomeController::class, 'sendContactMessage'])->name('poruka');
+    Route::get('/jednostrani-raskid-ugovora', [HomeController::class, 'contractTermination'])
+        ->name('contract-termination');
+    Route::post('/jednostrani-raskid-ugovora', [HomeController::class, 'sendContractTermination'])
+        ->middleware('throttle:contract-termination')
+        ->name('contract-termination.send');
     Route::get('/faq', [CatalogRouteController::class, 'faq'])->name('faq');
     Route::post('/komentar/proizvoda/posalji', [HomeController::class, 'sendProductComment'])->name('komentar.proizvoda');
 //

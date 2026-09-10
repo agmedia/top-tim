@@ -107,6 +107,8 @@ return [
         ],
     ],
 
-    'admin' => 'tomislav@agmedia.hr'
+    'admin' => 'tomislav@agmedia.hr',
+
+    'contract_termination_to' => env('CONTRACT_TERMINATION_MAIL_TO', 'prodaja@top-tim.com'),
 
 ];

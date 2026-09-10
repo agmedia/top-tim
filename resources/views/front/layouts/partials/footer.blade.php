@@ -89,6 +89,7 @@
                                         @endforeach
                                     @endif
 
+                                        <li class="widget-list-item"><a class="widget-list-link" href="{{ route('contract-termination') }}">Jednostrani raskid ugovora</a></li>
                                         <li class="widget-list-item">  <a class="widget-list-link" href="{{ current_locale() }}/faq">{{ __('front/cart.faq') }}</a>   </li>
                                         <li class="widget-list-item"><a class="widget-list-link" href="{{ current_locale() }}/kontakt">{{ __('front/ricekakis.kontaktirajte_nas') }}</a>
                                         </li>
@@ -142,7 +143,6 @@
             </div>
         </div>
     </footer>
-
 
 
 
