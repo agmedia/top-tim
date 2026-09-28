@@ -2277,7 +2277,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           var optQty = Number((_ref = (_this$selected_color$ = this.selected_color.quantity) !== null && _this$selected_color$ !== void 0 ? _this$selected_color$ : this.selected_color.qty) !== null && _ref !== void 0 ? _ref : 0);
           this.is_available = optQty || Number(this.available) || 0;
           if (this.selected_color.price != '0.0000') {
-            this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2);
+            this.price = (Number(this.context_product.main_price) + Number(this.selected_color.price)).toFixed(2);
             var price = Number(this.selected_color.price);
             this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
           } else {
@@ -2285,7 +2285,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
             this.extra_price = '';
           }
           if (this.isFixedDiscount()) {
-            // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+            // F predstavlja konačnu akcijsku cijenu i uključuje odabranu opciju.
+            this.extra_price = '';
             this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
           } else {
             // postojeća logika popusta (percent/amount itd.)
@@ -2314,7 +2315,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
             this.extra_price = '';
           }
           if (this.isFixedDiscount()) {
-            // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+            // F predstavlja konačnu akcijsku cijenu i uključuje odabranu opciju.
+            this.extra_price = '';
             this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
           } else {
             // postojeća logika popusta (percent/amount itd.)
@@ -2334,8 +2336,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       var opt = Number(((_this$selected_color2 = this.selected_color) === null || _this$selected_color2 === void 0 ? void 0 : _this$selected_color2.price) || ((_this$selected_size3 = this.selected_size) === null || _this$selected_size3 === void 0 ? void 0 : _this$selected_size3.price) || 0); // opcija +6
       var _final = base + opt;
       if (t === 'F') {
-        // fixed iznos popusta: (base - discount) + opcijska cijena
-        _final = base - discountVal + opt;
+        // Fiksna akcija je konačna cijena, ograničena redovnom cijenom.
+        _final = Math.min(base + opt, discountVal);
       } else if (t === 'P' || t === 'PERCENT') {
         // postotni: (base + opcijska) * (1 - discount%)
         _final = (base + opt) * (1 - discountVal / 100);
@@ -2346,12 +2348,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       return _final.toFixed(2);
     },
     isFixedDiscount: function isFixedDiscount() {
-      var _this$context_action4, _ref3;
-      // discount iz props.action; F = fixed (u tvojoj tablici)
-      var d = (_this$context_action4 = this.context_action) === null || _this$context_action4 === void 0 ? void 0 : _this$context_action4.discount;
-      if (!d) return false;
-      // podrži više formata: {type:'F'} ili 'F' ili slično
-      var t = (_ref3 = _typeof(d) === 'object' ? d.type : d) === null || _ref3 === void 0 ? void 0 : _ref3.toString().toUpperCase();
+      var _this$context_action4, _this$context_action4$;
+      var t = (_this$context_action4 = this.context_action) === null || _this$context_action4 === void 0 ? void 0 : (_this$context_action4$ = _this$context_action4.type) === null || _this$context_action4$ === void 0 ? void 0 : _this$context_action4$.toString().toUpperCase();
       return t === 'F' || t === 'FIXED';
     },
     toNum: function toNum(v) {

@@ -325,7 +325,7 @@ export default {
                     this.is_available = optQty || Number(this.available) || 0;
 
                     if (this.selected_color.price != '0.0000') {
-                        this.price = Math.round(Number(this.context_product.main_price + this.selected_color.price)).toFixed(2);
+                        this.price = (Number(this.context_product.main_price) + Number(this.selected_color.price)).toFixed(2);
                         const price = Number(this.selected_color.price);
                         this.extra_price = (price < 0 ? '' : '+') + this.$store.state.service.formatMainPrice(price);
                     } else {
@@ -333,7 +333,8 @@ export default {
                         this.extra_price = '';
                     }
                     if (this.isFixedDiscount()) {
-                        // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+                        // F predstavlja konačnu akcijsku cijenu i uključuje odabranu opciju.
+                        this.extra_price = '';
                         this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
                     } else {
                         // postojeća logika popusta (percent/amount itd.)
@@ -363,7 +364,8 @@ export default {
                         this.extra_price = '';
                     }
                     if (this.isFixedDiscount()) {
-                        // za F: NA PDP-u zadrži main_special s proizvoda (bez opcije)
+                        // F predstavlja konačnu akcijsku cijenu i uključuje odabranu opciju.
+                        this.extra_price = '';
                         this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
                     } else {
                         // postojeća logika popusta (percent/amount itd.)
@@ -384,8 +386,8 @@ export default {
             let final = base + opt;
 
             if (t === 'F') {
-                // fixed iznos popusta: (base - discount) + opcijska cijena
-                final = (base - discountVal) + opt;
+                // Fiksna akcija je konačna cijena, ograničena redovnom cijenom.
+                final = Math.min(base + opt, discountVal);
             } else if (t === 'P' || t === 'PERCENT') {
                 // postotni: (base + opcijska) * (1 - discount%)
                 final = (base + opt) * (1 - (discountVal / 100));
@@ -397,11 +399,7 @@ export default {
             return final.toFixed(2);
         },
         isFixedDiscount() {
-            // discount iz props.action; F = fixed (u tvojoj tablici)
-            const d = this.context_action?.discount;
-            if (!d) return false;
-            // podrži više formata: {type:'F'} ili 'F' ili slično
-            const t = (typeof d === 'object' ? d.type : d)?.toString().toUpperCase();
+            const t = this.context_action?.type?.toString().toUpperCase();
             return t === 'F' || t === 'FIXED';
         },
         toNum(v) {

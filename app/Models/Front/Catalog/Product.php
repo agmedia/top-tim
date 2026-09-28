@@ -455,7 +455,15 @@ class Product extends Model
             });
         }
 
-        $key = $product->id . '-' . $user_group_id . '-' . ($return_action ? '1' : '0');
+        $coupon_key = config('session.cart') . '_coupon';
+        $coupon_hash = sha1((string) session($coupon_key, ''));
+        $key = implode(':', [
+            'v' . Helper::actionCacheVersion(),
+            $return_action ? 'action-data' : 'display-price',
+            'product-' . $product->id,
+            'group-' . $user_group_id,
+            'coupon-' . $coupon_hash,
+        ]);
 
         return Helper::resolveCache('action')->remember($key, config('cache.cart_life'), function () use ($product, $return_action) {
             $special = new Special($product);
@@ -505,7 +513,16 @@ class Product extends Model
             return Product::query()->find($product_id);
         });
 
-        $key = $product->id . '-' . $user_group_id . '-' . $option_price;
+        $coupon_key = config('session.cart') . '_coupon';
+        $coupon_hash = sha1((string) session($coupon_key, ''));
+        $key = implode(':', [
+            'v' . Helper::actionCacheVersion(),
+            'cart-price',
+            'product-' . $product->id,
+            'group-' . $user_group_id,
+            'option-' . number_format((float) $option_price, 4, '.', ''),
+            'coupon-' . $coupon_hash,
+        ]);
 
         return Helper::resolveCache('action')->remember($key, config('cache.cart_life'), function () use ($product, $option_price) {
             $special = new Special($product, $option_price);

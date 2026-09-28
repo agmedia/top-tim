@@ -8,7 +8,6 @@ use App\Models\Front\Catalog\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 /**
  *
@@ -53,13 +52,13 @@ class Special
      * @param Product|null       $product
      * @param ProductAction|null $product_action
      */
-    public function __construct(Product $product = null, float|null $option_price = null)
+    public function __construct(?Product $product = null, ?float $option_price = null)
     {
         $this->user    = Auth::user();
         $this->product = $product;
         $this->product_option_price = $option_price ?: 0;
 
-        if ($this->user) {
+        if ($this->user && $this->user->details) {
             $this->user_group = $this->user->details->group ? $this->user->details->group->id : 0;
         }
     }
@@ -88,11 +87,29 @@ class Special
      */
     public function resolveAction(): ?ProductAction
     {
-        if (Auth::check() && $this->userHasGroupDiscount()) {
-            return $this->getUserGroupAction();
+        $this->active_actions = $this->eligibleActions();
+
+        $locked_action = $this->bestActionFrom($this->active_actions->where('lock', 1));
+
+        if ($locked_action) {
+            $this->action = $locked_action;
+
+            return $locked_action;
         }
 
-        return $this->setupAvailableActions()->getAction();
+        if ($this->user_group) {
+            $this->user_group_action = $this->bestActionFrom(
+                $this->active_actions->where('user_group_id', $this->user_group)
+            );
+
+            if ($this->user_group_action) {
+                return $this->user_group_action;
+            }
+        }
+
+        $this->action = $this->bestActionFrom($this->active_actions->whereNull('user_group_id'));
+
+        return $this->action;
     }
 
 
@@ -101,23 +118,14 @@ class Special
      */
     public function userHasGroupDiscount(): bool
     {
-        if ($this->user_group) {
-            $this->active_actions = ProductAction::query()->where('user_group_id', $this->user_group)->active()->get();
-
-            if ($this->active_actions->count()) {
-                $this->user_group_action = $this->getBestAction();
-
-                return true;
-            }
+        if ( ! $this->user_group) {
+            return false;
         }
 
-        $this->active_actions = ProductAction::query()->where('user_group_id', null)->active()->get();
+        $actions = $this->eligibleActions()->where('user_group_id', $this->user_group);
+        $this->user_group_action = $this->bestActionFrom($actions);
 
-        if ($this->active_actions->count()) {
-            $this->action = $this->getBestAction();
-        }
-
-        return false;
+        return (bool) $this->user_group_action;
     }
 
 
@@ -209,14 +217,29 @@ class Special
     {
         $action = $this->resolveRealAction($product_action);
 
+        if ( ! $action || ! $this->product || $action->group === 'total') {
+            return false;
+        }
+
         if ($this->isActionOnAllProducts($action)) {
             return true;
         }
 
-        $ids = $this->getActionProductsList($action);
+        $ids = array_map('strval', json_decode($action->links, true) ?: []);
 
-        if (in_array($this->product->id, $ids)) {
-            return true;
+        if ($action->group === 'product') {
+            return in_array((string) $this->product->id, $ids, true);
+        }
+
+        if ($action->group === 'brand') {
+            return in_array((string) $this->product->brand_id, $ids, true);
+        }
+
+        if ($action->group === 'category') {
+            return ProductCategory::query()
+                ->where('product_id', $this->product->id)
+                ->whereIn('category_id', $ids)
+                ->exists();
         }
 
         return false;
@@ -228,11 +251,7 @@ class Special
      */
     public function isActionOnAllProducts(ProductAction|null $product_action = null): bool
     {
-        if (in_array($product_action->group, ['all', 'total'])) {
-            return true;
-        }
-
-        return false;
+        return $product_action && $product_action->group === 'all';
     }
 
 
@@ -245,7 +264,11 @@ class Special
     {
         $action = $this->resolveRealAction($product_action);
 
-        $ids = explode(',', substr(str_replace('"', '', $action->links), 1, -1));
+        if ( ! $action || $action->group === 'total') {
+            return [];
+        }
+
+        $ids = json_decode($action->links, true) ?: [];
 
         if ($action->group == 'product') {
             return $ids;
@@ -268,28 +291,7 @@ class Special
      */
     public function getBestAction()
     {
-        if ($this->active_actions->count() > 1) {
-            $price          = $this->product->price + $this->product_option_price;
-            $best_action_id = 0;
-
-            foreach ($this->active_actions as $action) {
-                $coupon_ok = $this->checkCoupon($action);
-                $dates_ok  = $this->checkDates($action);
-
-                if ($coupon_ok && $dates_ok) {
-                    $temp_price = $this->getDiscountPrice($action);
-
-                    if ($price > $temp_price) {
-                        $price          = $temp_price;
-                        $best_action_id = $action->id;
-                    }
-                }
-            }
-
-            return $this->active_actions->where('id', $best_action_id)->first();
-        }
-
-        return $this->active_actions->first();
+        return $this->bestActionFrom($this->active_actions ?: collect());
     }
 
 
@@ -298,13 +300,56 @@ class Special
      */
     private function setupAvailableActions(): Special
     {
-        $this->active_actions = ProductAction::query()->where('user_group_id', null)->active()->get();
-
-        if ($this->active_actions->count()) {
-            $this->action = $this->getBestAction();
-        }
+        $this->active_actions = $this->eligibleActions()->whereNull('user_group_id');
+        $this->action = $this->getBestAction();
 
         return $this;
+    }
+
+
+    /**
+     * Active actions that apply to the current product and customer.
+     */
+    private function eligibleActions(): Collection
+    {
+        $query = ProductAction::query()
+            ->active()
+            ->where('group', '!=', 'total');
+
+        $query->where(function ($query) {
+            $query->whereNull('user_group_id');
+
+            if ($this->user_group) {
+                $query->orWhere('user_group_id', $this->user_group);
+            }
+        });
+
+        return $query->get()->filter(function (ProductAction $action) {
+            return $this->checkDates($action)
+                && $this->checkCoupon($action)
+                && $this->isProductOnAction($action);
+        })->values();
+    }
+
+
+    /**
+     * Select the action that produces the lowest final price.
+     */
+    private function bestActionFrom(Collection $actions): ?ProductAction
+    {
+        $best_action = null;
+        $best_price = null;
+
+        foreach ($actions as $action) {
+            $price = $this->getDiscountPrice($action);
+
+            if ($best_action === null || $price < $best_price) {
+                $best_action = $action;
+                $best_price = $price;
+            }
+        }
+
+        return $best_action;
     }
 
 

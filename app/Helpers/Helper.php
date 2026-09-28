@@ -52,12 +52,8 @@ class Helper
         $discount = max(0.0, (float) $discount);
 
         if ($type === 'F') {
-            // Ako je fiksni popust veći od cijene, ograniči ga na cijenu
-            if ($discount > $price) {
-                $discount = $price;
-            }
-
-            return $price - $discount;
+            // Fiksna akcija predstavlja konačnu prodajnu cijenu.
+            return min($price, $discount);
         }
 
         // Postotni popust — ograniči između 0 i 100
@@ -714,6 +710,24 @@ class Helper
         }
 
         return Cache::tags([$tag]);
+    }
+
+
+    /**
+     * Verzija ključeva za cache izračuna akcija.
+     */
+    public static function actionCacheVersion(): int
+    {
+        return (int) Cache::get('action_cache_version', 1);
+    }
+
+
+    /**
+     * Invalidate only cached action calculations by moving them to a new namespace.
+     */
+    public static function bumpActionCacheVersion(): void
+    {
+        Cache::forever('action_cache_version', self::actionCacheVersion() + 1);
     }
 
 
