@@ -22,6 +22,8 @@
         <meta name="twitter:title" content="Top Tim - Better way to stay in the game" />
         <meta name="twitter:description" content="Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija." />
         <meta name="twitter:image" content="{{ asset('image/bannerd3-1.jpg') }}" />
+
+        <meta name="google-site-verification" content="VYVvp9Tn-8oSamAGIfBHz2IP2gSuhMDzPOcpG3i8uwU" />
     @endpush
 
     @push('js_after')
