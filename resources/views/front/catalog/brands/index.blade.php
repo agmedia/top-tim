@@ -1,9 +1,13 @@
 @extends('front.layouts.app')
 
+@push('meta_tags')
+    @include('front.layouts.partials.canonical', ['canonicalUrl' => route('catalog.route.brand')])
+@endpush
+
 @if (isset($meta_tags))
     @push('meta_tags')
         @foreach ($meta_tags as $tag)
-            <meta name={{ $tag['name'] }} content={{ $tag['content'] }}>
+            <meta name="{{ $tag['name'] }}" content="{{ $tag['content'] }}">
         @endforeach
     @endpush
 @endif
@@ -52,7 +56,7 @@
                 <div class="col-sm-6 col-md-4  mb-3">
                     <div class="card border-bottom-primary">
                         <div class="card-body">
-                            <h6 class="card-title mb-0"><a href="{{ url($brand->url) }}" class="text-dark">{{ $brand->translation->title }} <span class="badge rounded-pill bg-secondary float-end">{{ $brand->products_count }}</span></a></h6>
+                            <h6 class="card-title mb-0"><a href="{{ route('catalog.route.brand', ['brand' => $brand->translation->slug]) }}" class="text-dark">{{ $brand->translation->title }} <span class="badge rounded-pill bg-secondary float-end">{{ $brand->products_count }}</span></a></h6>
                         </div>
                     </div>
                 </div>

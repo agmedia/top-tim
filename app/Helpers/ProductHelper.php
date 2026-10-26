@@ -58,16 +58,18 @@ class ProductHelper
         $category    = $data['category'];
         $subcategory = $data['subcategory'];
         $locale = session('locale') ?: current_locale();
+        $localePrefix = $locale === config('app.locale') && config('laravellocalization.hideDefaultLocaleInURL')
+            ? '' : $locale . '/';
 
         if ($subcategory) {
-            return $locale . '/' . Str::slug($category->group) . '/' . $category->translation($locale)->slug . '/' . $subcategory->translation($locale)->slug . '/' . $product->translation($locale)->slug;
+            return $localePrefix . Str::slug($category->group) . '/' . $category->translation($locale)->slug . '/' . $subcategory->translation($locale)->slug . '/' . $product->translation($locale)->slug;
         }
 
         if ($category) {
-            return $locale . '/' . Str::slug($category->group) . '/' . $category->translation($locale)->slug . '/' . $product->translation($locale)->slug;
+            return $localePrefix . Str::slug($category->group) . '/' . $category->translation($locale)->slug . '/' . $product->translation($locale)->slug;
         }
 
-        return $locale . '/';
+        return $localePrefix ?: '/';
     }
 
 

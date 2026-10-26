@@ -409,6 +409,14 @@ class HomeController extends FrontBaseController
 
         $sm = new Sitemap($sitemap);
 
+        abort_if($sm->getSitemap() === null, 404);
+
+        if (in_array($sitemap, ['images', 'img'], true)) {
+            return response()->view('front.layouts.partials.sitemap-image', [
+                'items' => $sm->getResponse()
+            ])->header('Content-Type', 'text/xml');
+        }
+
         return response()->view('front.layouts.partials.sitemap', [
             'items' => $sm->getSitemap()
         ])->header('Content-Type', 'text/xml');

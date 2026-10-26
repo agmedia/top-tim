@@ -180,10 +180,10 @@ class Category extends Model implements \Mcamara\LaravelLocalization\Interfaces\
     public function scopeTopList(Builder $query, string $group = ''): Builder
     {
         if ( ! empty($group)) {
-            return $query->where('group', $group)->where('parent_id', '==', 0);
+            return $query->where('group', $group)->where('parent_id', 0);
         }
 
-        return $query->where('parent_id', '==', 0);
+        return $query->where('parent_id', 0);
     }
 
 

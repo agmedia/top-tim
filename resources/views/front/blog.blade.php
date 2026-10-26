@@ -6,12 +6,12 @@
     @section ( 'title', $blog->title. ' - Top Tim - Better way to stay in the gam' )
 @section ( 'description', $blog->meta_description )
     @push('meta_tags')
-        <link rel="canonical" href="{{ route('catalog.route.blog', ['blog' => $blog]) }}" />
+        <link rel="canonical" href="{{ route('catalog.route.blog', ['blog' => $blog->translation->slug]) }}" />
         <meta property="og:locale" content="hr_HR" />
         <meta property="og:type" content="product" />
         <meta property="og:title" content="{{ $blog->title }}" />
         <meta property="og:description" content="{{ $blog->translation->meta_description  }}" />
-        <meta property="og:url" content="{{ route('catalog.route.blog', ['blog' => $blog]) }}/{{ $blog->translation->slug }}"  />
+        <meta property="og:url" content="{{ route('catalog.route.blog', ['blog' => $blog->translation->slug]) }}"  />
         <meta property="og:site_name" content="Top Tim - Better way to stay in the gam" />
         <meta property="og:updated_time" content="{{ $blog->updated_at  }}" />
         <meta property="og:image" content="{{ asset($blog->image) }}" />

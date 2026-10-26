@@ -10,20 +10,11 @@
         @section ( 'title',  $cat->translation->title . ' - Top Tim - Better way to stay in the gam' )
         @section ( 'description', $cat->translation->meta_description )
 
-        @push('meta_tags')
-            <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $cat->translation['slug'] }}" />
-        @endpush
-
-
     @elseif ($cat && $subcat)
 
 
         @section ( 'title', $subcat->translation->meta_title . ' - Top Tim - Better way to stay in the gam' )
         @section ( 'description',  $subcat->translation->meta_description )
-
-        @push('meta_tags')
-            <link rel="canonical" href="{{ env('APP_URL')}}kategorija-proizvoda/{{ $subcat->translation['slug'] }}" />
-        @endpush
 
     @endif
 @endif
@@ -33,18 +24,11 @@
     @section ('description', $seo->translation['description'])
 
 
-    @push('meta_tags')
-        <link rel="canonical" href="{{ env('APP_URL')}}{{ $author->translation['url'] }}" />
-    @endpush
-
 @endif
 
 @if (isset($publisher) && $publisher)
     @section ('title',  $seo->translation['title'])
     @section ('description', $seo->translation['description'])
-    @push('meta_tags')
-        <link rel="canonical" href="{{ env('APP_URL')}}{{ $publisher->translation['url'] }}" />
-    @endpush
 @endif
 
 
@@ -52,17 +36,18 @@
 
 
     @section ('title',  $brand->translation->title)
-    @section ('description', $brand->translation->descriptiom)
-    @push('meta_tags')
-        <link rel="canonical" href="{{ env('APP_URL')}}{{ $brand->translation->slug }}" />
-    @endpush
+    @section ('description', $brand->translation->meta_description ?: strip_tags($brand->translation->description))
 @endif
+
+@push('meta_tags')
+    @include('front.catalog.category.canonical')
+@endpush
 
 @if (isset($meta_tags))
     @push('meta_tags')
 
         @foreach ($meta_tags as $tag)
-            <meta name={{ $tag->translation['name'] }} content={{ $tag->translation['content'] }}>
+            <meta name="{{ $tag['name'] }}" content="{{ $tag['content'] }}">
         @endforeach
     @endpush
 @endif
@@ -88,11 +73,11 @@
                     <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $brand->title }}</li>
                 @endif
                 @if ($cat && ! $subcat)
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.abrand', ['brand' => $brand]) }}">{{ $brand->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand', ['brand' => $brand->translation->slug]) }}">{{ $brand->title }}</a></li>
                     <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $cat->title }}</li>
                 @elseif ($cat && $subcat)
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand', ['brand' => $brand]) }}">{{ $brand->title }}</a></li>
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand', ['brand' => $brand, 'cat' => $cat]) }}">{{ $cat->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand', ['brand' => $brand->translation->slug]) }}">{{ $brand->title }}</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap" href="{{ route('catalog.route.brand', ['brand' => $brand->translation->slug, 'cat' => $cat->translation->slug]) }}">{{ $cat->title }}</a></li>
                     <li class="breadcrumb-item text-nowrap active" aria-current="page">{{ $subcat->title }}</li>
                 @endif
             </ol>

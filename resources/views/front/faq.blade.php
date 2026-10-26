@@ -1,5 +1,9 @@
 @extends('front.layouts.app')
 
+@push('meta_tags')
+    <link rel="canonical" href="{{ route('faq') }}" />
+@endpush
+
 @section('content')
 
 

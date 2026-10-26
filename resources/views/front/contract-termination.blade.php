@@ -3,6 +3,10 @@
 @section('title', 'Obrazac za jednostrani raskid ugovora | Top Tim')
 @section('description', 'Pošaljite izjavu o jednostranom raskidu ugovora sklopljenog na daljinu s Top Timom.')
 
+@push('meta_tags')
+    <link rel="canonical" href="{{ route('contract-termination') }}" />
+@endpush
+
 @php($terminationFormSubmitted = old('contract_termination_form') === '1')
 
 @push('css_after')

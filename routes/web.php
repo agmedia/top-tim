@@ -39,6 +39,7 @@ use App\Http\Controllers\Front\CatalogRouteController;
 use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\CustomerController;
 use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\LegacyCatalogRedirectController;
 use App\Models\Front\Checkout\Payment\Keks;
 use App\Models\Front\Checkout\Payment\MyPos;
 use Illuminate\Support\Facades\Route;
@@ -416,6 +417,12 @@ Route::prefix('api/v2')->group(function () {
 /**
  * FRONT ROUTES
  */
+// Resolve only verified legacy URLs, before locale redirects and model binding.
+foreach (config('seo_redirects', []) as $legacyPath => $destination) {
+    Route::get($legacyPath, LegacyCatalogRedirectController::class)
+        ->defaults('destination', $destination);
+}
+
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
@@ -513,12 +520,13 @@ Route::group(
     Route::get(config('settings.brand_path') . '/{brand?}/{cat?}/{subcat?}', [CatalogRouteController::class, 'brand'])->name('catalog.route.brand');
 //
     Route::get('akcijska-ponuda/{cat?}/{subcat?}', [CatalogRouteController::class, 'actions'])->name('catalog.route.actions');
+
 //
     //Route::get(LaravelLocalization::transRoute('{group}/{cat?}/{subcat?}/{prod?}'), [CatalogRouteController::class, 'resolve'])->name('catalog.route');
 
     Route::get('{group}/{cat?}/{subcat?}/{prod?}', [CatalogRouteController::class, 'resolve'])->name('catalog.route');
 
     Route::fallback(function () {
-        return view('front.404');
+        return response()->view('front.404', [], 404);
     });
 });

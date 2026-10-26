@@ -13,7 +13,7 @@
 
                     <!-- Product-->
                     <div class="article mb-grid-gutter">
-                        <a class="card border-0 shadow" href="{{ current_locale() }}/{{ $item['group'] }}/{{ $item->translation->slug }}">
+                        <a class="card border-0 shadow" href="{{ route('catalog.route', ['group' => \Illuminate\Support\Str::slug($item['group']), 'cat' => $item->translation->slug]) }}">
                             <img class="card-img-top p-3" loading="lazy" width="400" height="400" src="{{ $item['image'] }}" alt="Kategorija {{ $item->translation->title }}">
                             <div class="card-body py-2 text-center px-0">
                                 <h3 class="h4 mt-1 font-title text-primary">{{ $item->translation->meta_title }}</h3>
@@ -30,7 +30,7 @@
                 @foreach ($data['items'] as $item)
 
 
-                    <div class="col-md-3 col-sm-4 col-6"><a class="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter" aria-label="Pogledajte artikle brenda {{ $item->translation->title }}" href="{{ current_locale() }}/{{ $data['tablename'] }}/{{ $item->translation->slug }}"><img loading="lazy" class="d-block mx-auto" src="{{ $item['image'] }}" style="width: 200px;" alt="{{ $item->translation->title }}"></a></div>
+                    <div class="col-md-3 col-sm-4 col-6"><a class="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter" aria-label="Pogledajte artikle brenda {{ $item->translation->title }}" href="{{ route('catalog.route.brand', ['brand' => $item->translation->slug]) }}"><img loading="lazy" class="d-block mx-auto" src="{{ $item['image'] }}" style="width: 200px;" alt="{{ $item->translation->title }}"></a></div>
                 @endforeach
             </div>
         </div>

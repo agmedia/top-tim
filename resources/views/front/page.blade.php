@@ -5,7 +5,7 @@
     @section ( 'description', 'Sportska oprema (Zeus, Joma, Givova, Adidas, Macron, Select...), tisak, marketing, promocija.' )
 
     @push('meta_tags')
-        <link rel="canonical" href="{{ env('APP_URL')}}{{ current_locale() }}" />
+        <link rel="canonical" href="{{ route('index') }}" />
         <meta property="og:locale" content="hr_HR" />
         <meta property="og:site_name" content="Top Tim - Better way to stay in the game" />
         <meta property="og:type" content="website" />
@@ -37,6 +37,9 @@
 @else
     @section ( 'title', $page->title. ' | Top Tim - Better way to stay in the game' )
     @section ( 'description', $page->meta_description )
+    @push('meta_tags')
+        <link rel="canonical" href="{{ route('catalog.route.page', ['page' => $page->translation->slug]) }}" />
+    @endpush
 @endif
 
 @section('content')

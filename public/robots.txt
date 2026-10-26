@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://www.plavakrava.hr/sitemap
+Sitemap: https://www.top-tim.com/sitemap

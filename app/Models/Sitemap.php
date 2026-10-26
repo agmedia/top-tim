@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Front\Catalog\Author;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Product;
 use App\Models\Front\Catalog\Brand;
@@ -10,6 +9,7 @@ use App\Models\Front\Page;
 use App\Models\Front\Blog;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class Sitemap
@@ -63,7 +63,7 @@ class Sitemap
      *
      * @return array
      */
-    private function setSitemap(string $sitemap)
+    private function setSitemap(?string $sitemap)
     {
         if ( ! $sitemap) {
             return $sitemap;
@@ -97,11 +97,17 @@ class Sitemap
      */
     private function getImages(): array
     {
-        $products = Product::query()->active()->hasStock()->with('images');
+        $products = $this->products()->with('images');
 
         foreach ($products->get() as $product) {
+            $url = $this->productUrl($product);
+
+            if (!$url) {
+                continue;
+            }
+
             $this->response[$product->id] = [
-                'loc' => url($product->translation->url)
+                'loc' => $url
             ];
 
             $this->response[$product->id]['images'][] = [
@@ -124,8 +130,8 @@ class Sitemap
      */
     private function getPages()
     {
-        $pages = Page::query()->where('group', 'page')->where('status', '=', 1)->get();
-        $blogs = Blog::query()->where('status', '=', 1)->get();
+        $pages = $this->translated(Page::query()->where('group', 'page')->where('status', 1))->get();
+        $blogs = $this->translated(Blog::query()->active())->get();
 
         $this->response[] = [
             'url' => route('index'),
@@ -173,7 +179,13 @@ class Sitemap
 
     private function getCategories()
     {
-        $categories = Category::query()->active()->topList()->with('subcategories')->get();
+        $categories = $this->translated(Category::query()->active()->topList())
+            ->where('group', '!=', '')
+            ->with(['subcategories' => function ($query) {
+                $query->whereHas('translation', function ($query) {
+                    $query->whereNotNull('slug')->where('slug', '!=', '');
+                });
+            }])->get();
 
         foreach ($categories as $category) {
             $this->response[] = [
@@ -181,7 +193,7 @@ class Sitemap
                 'lastmod' => $category->updated_at->tz('UTC')->toAtomString()
             ];
 
-            foreach ($category->subcategories()->get() as $subcategory) {
+            foreach ($category->subcategories as $subcategory) {
                 $this->response[] = [
                     'url' => route('catalog.route', ['group' => Str::slug($category->group), 'cat' => $category->slug, 'subcat' => $subcategory->slug]),
                     'lastmod' => $subcategory->updated_at->tz('UTC')->toAtomString()
@@ -198,11 +210,17 @@ class Sitemap
      */
     private function getProducts()
     {
-        $products = Product::query()->active()->hasStock()->get();
+        $products = $this->products()->get();
 
         foreach ($products as $product) {
+            $url = $this->productUrl($product);
+
+            if (!$url) {
+                continue;
+            }
+
             $this->response[] = [
-                'url' => url($product->translation->url),
+                'url' => $url,
                 'lastmod' => $product->updated_at->tz('UTC')->toAtomString()
             ];
         }
@@ -218,7 +236,11 @@ class Sitemap
      */
     private function getBrands()
     {
-        $brands = Brand::query()->active()->get();
+        $brands = $this->translated(Brand::query()->active())
+            ->orderByDesc('updated_at')->orderBy('id')->get()
+            ->unique(function ($brand) {
+                return $brand->translation->slug;
+            });
 
         $this->response[] = [
             'url' => route('catalog.route.brand'),
@@ -227,7 +249,7 @@ class Sitemap
 
         foreach ($brands as $brand) {
             $this->response[] = [
-                'url' => url($brand->translation->url),
+                'url' => route('catalog.route.brand', ['brand' => $brand->translation->slug]),
                 'lastmod' => $brand->updated_at->tz('UTC')->toAtomString()
             ];
 
@@ -236,5 +258,48 @@ class Sitemap
         return $this->response;
     }
 
+    private function translated(Builder $query): Builder
+    {
+        return $query->whereHas('translation', function ($query) {
+            $query->whereNotNull('slug')->where('slug', '!=', '');
+        })->with('translation');
+    }
+
+    private function products(): Builder
+    {
+        return $this->translated(Product::query()->active()->hasStock())
+            ->with('categories.translation');
+    }
+
+    private function productUrl(Product $product): ?string
+    {
+        // Match the category selection used by ProductHelper::url, rather than
+        // advertising an old URL saved before a category or product was renamed.
+        $category = $product->categories->firstWhere('parent_id', 0);
+
+        if (!$category || !$category->status || !$category->translation ||
+            !$category->translation->slug || !Str::slug($category->group)) {
+            return null;
+        }
+
+        $subcategory = $product->categories->first(function ($category) {
+            return $category->parent_id != 0;
+        });
+
+        if ($subcategory && $subcategory->parent_id != $category->id) {
+            $subcategory = null;
+        }
+
+        if ($subcategory && (!$subcategory->status || !$subcategory->translation || !$subcategory->translation->slug)) {
+            return null;
+        }
+
+        return route('catalog.route', [
+            'group' => Str::slug($category->group),
+            'cat' => $category->translation->slug,
+            'subcat' => $subcategory ? $subcategory->translation->slug : $product->translation->slug,
+            'prod' => $subcategory ? $product->translation->slug : null,
+        ]);
+    }
 
 }
