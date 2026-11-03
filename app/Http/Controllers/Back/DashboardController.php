@@ -49,11 +49,15 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $data['today']            = Order::whereDate('created_at', Carbon::today())->count();
+        $now = Carbon::now();
+
+        $data['today']            = Order::whereDate('created_at', $now->toDateString())->count();
         $data['proccess']         = Order::whereIn('order_status_id', [1, 2, 3])->count();
         $data['finished']         = Order::whereIn('order_status_id', [4, 5, 6, 7])->count();
-        $data['this_month']       = Order::whereMonth('created_at', '=', Carbon::now()->month)->count();
-        $data['this_month_total'] = Order::whereMonth('created_at', '=', Carbon::now()->month)->whereIn('order_status_id', [4, 1, 2, 3])->sum('total');
+        $monthOrders = Order::whereYear('created_at', $now->year)
+                            ->whereMonth('created_at', $now->month);
+        $data['this_month']       = (clone $monthOrders)->count();
+        $data['this_month_total'] = (clone $monthOrders)->whereIn('order_status_id', [4, 1, 2, 3])->sum('total');
 
         $data['this_month_total'] = number_format($data['this_month_total'], 2, '.', '');
 

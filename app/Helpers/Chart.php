@@ -79,11 +79,11 @@ class Chart
 
 
     /**
-     * @param Collection $ovjere
+     * @param Collection $items
      *
-     * @return int
+     * @return float
      */
-    public function sumOvjere(Collection $items): int
+    public function sumOvjere(Collection $items): float
     {
         $sum = 0;
 
@@ -91,7 +91,7 @@ class Chart
             $sum += $item->total;
         }
 
-        return $sum;
+        return round($sum, 2);
     }
 
 
