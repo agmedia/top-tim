@@ -25,18 +25,17 @@ class SettingsController extends Controller
      */
     public function get()
     {
-        $response = Helper::resolveCache('set')->remember('cart', config('cache.life'), function () {
-            $codes = ['currency', 'geo_zone', 'payment', 'shipping', 'tax'];
-            $response = [];
-            $settings =  Settings::whereIn('code', $codes)->get();
+        // The cart only needs currency formatting. Payment/shipping settings contain credentials.
+        $response = Helper::resolveCache('set')->remember('cart.public-currency.v2', config('cache.life'), function () {
+            $setting = Settings::where('code', 'currency')->where('key', 'list')->where('json', true)->first();
+            $currencies = $setting ? json_decode($setting->value, true) : [];
+            $fields = ['id', 'title', 'code', 'symbol_left', 'symbol_right', 'value', 'decimal_places', 'status', 'main', 'sort_order'];
 
-            foreach ($settings as $setting) {
-                if ($setting->json) {
-                    $response[$setting->code . '.' . $setting->key] = json_decode($setting->value, true);
-                }
-            }
-
-            return $response;
+            return ['currency.list' => collect(is_array($currencies) ? $currencies : [])
+                ->filter(function ($currency) { return is_array($currency); })
+                ->map(function (array $currency) use ($fields) {
+                    return \Illuminate\Support\Arr::only($currency, $fields);
+                })->values()->all()];
         });
 
         return $response;

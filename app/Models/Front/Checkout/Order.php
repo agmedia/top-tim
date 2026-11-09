@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -189,49 +190,57 @@ class Order extends Model
      */
     public function updateData(array $data)
     {
-        if ( ! empty($data)) {
-            $this->order = $data;
-        }
+        return DB::transaction(function () use ($data) {
+            $existing = \App\Models\Back\Orders\Order::query()->lockForUpdate()->find($data['id']);
+            if (! $existing || ! in_array((int) $existing->order_status_id, [
+                config('settings.order.status.unfinished'), config('settings.order.status.declined'),
+            ], true)) {
+                return null;
+            }
 
-        $updated = \App\Models\Back\Orders\Order::where('id', $data['id'])->update([
-            'payment_fname'    => $this->order['address']['fname'],
-            'payment_lname'    => $this->order['address']['lname'],
-            'payment_address'  => $this->order['address']['address'],
-            'payment_zip'      => $this->order['address']['zip'],
-            'payment_city'     => $this->order['address']['city'],
-            'payment_state'    => $this->order['address']['state'],
-            'payment_phone'    => $this->order['address']['phone'] ?: null,
-            'payment_email'    => $this->order['address']['email'],
-            'payment_method'   => $this->order['payment']->title->{current_locale()},
-            'payment_code'     => $this->order['payment']->code,
-            'payment_card'     => '',
-            'payment_installment' => '',
-            'shipping_fname'   => $this->order['address']['fname'],
-            'shipping_lname'   => $this->order['address']['lname'],
-            'shipping_address' => $this->order['address']['address'],
-            'shipping_zip'     => $this->order['address']['zip'],
-            'shipping_city'    => $this->order['address']['city'],
-            'shipping_state'   => $this->order['address']['state'],
-            'shipping_phone'   => $this->order['address']['phone'] ?: null,
-            'shipping_email'   => $this->order['address']['email'],
-            'shipping_method'  => $this->order['shipping']->title->{current_locale()},
-            'shipping_code'    => $this->order['shipping']->code,
-            'company'          => $this->order['address']['company'],
-            'oib'              => $this->order['address']['oib'],
-            'comment'          => $this->order['comment'],
-            'updated_at'       => Carbon::now()
-        ]);
+            if ( ! empty($data)) {
+                $this->order = $data;
+            }
 
-        if ($updated) {
-            $this->updateProducts($data['id']);
-            $this->updateTotal($data['id']);
+            $updated = \App\Models\Back\Orders\Order::where('id', $data['id'])->update([
+                'payment_fname'    => $this->order['address']['fname'],
+                'payment_lname'    => $this->order['address']['lname'],
+                'payment_address'  => $this->order['address']['address'],
+                'payment_zip'      => $this->order['address']['zip'],
+                'payment_city'     => $this->order['address']['city'],
+                'payment_state'    => $this->order['address']['state'],
+                'payment_phone'    => $this->order['address']['phone'] ?: null,
+                'payment_email'    => $this->order['address']['email'],
+                'payment_method'   => $this->order['payment']->title->{current_locale()},
+                'payment_code'     => $this->order['payment']->code,
+                'payment_card'     => '',
+                'payment_installment' => '',
+                'shipping_fname'   => $this->order['address']['fname'],
+                'shipping_lname'   => $this->order['address']['lname'],
+                'shipping_address' => $this->order['address']['address'],
+                'shipping_zip'     => $this->order['address']['zip'],
+                'shipping_city'    => $this->order['address']['city'],
+                'shipping_state'   => $this->order['address']['state'],
+                'shipping_phone'   => $this->order['address']['phone'] ?: null,
+                'shipping_email'   => $this->order['address']['email'],
+                'shipping_method'  => $this->order['shipping']->title->{current_locale()},
+                'shipping_code'    => $this->order['shipping']->code,
+                'company'          => $this->order['address']['company'],
+                'oib'              => $this->order['address']['oib'],
+                'comment'          => $this->order['comment'],
+                'updated_at'       => Carbon::now()
+            ]);
 
-            return $this->setData($data['id']);
-        }
+            if ($updated) {
+                $this->updateProducts($data['id']);
+                $this->updateTotal($data['id']);
 
-        return null;
+                return $this->setData($data['id']);
+            }
+
+            return null;
+        });
     }
-
 
     /**
      * @param int $order_id

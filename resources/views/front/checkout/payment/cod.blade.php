@@ -1,4 +1,5 @@
-<form name="pay" class="needs-validation w-100" action="{{ route('checkout') }}" novalidate method="GET">
+<form name="pay" class="needs-validation w-100" action="{{ route('checkout') }}" novalidate method="POST">
+    @csrf
     <input type="hidden" name="provjera" value="{{ $data['order_id'] }}">
     <div class="d-block pt-0 pb-2  text-start" >
         <div class="alert alert-info  d-flex"  role="alert">

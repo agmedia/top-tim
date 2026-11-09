@@ -1,4 +1,5 @@
 <form name="pay" class="needs-validation w-100" action="{{ $data['action'] }}" method="POST">
+    <input type="hidden" name="Version" value="2.0">
     <input type="hidden" name="ShopID" value="{{ $data['shop_id'] }}">
     <input type="hidden" name="ShoppingCartID" value="{{ $data['order_id'] }}">
     <input type="hidden" name="TotalAmount" value="{{ $data['total'] }}">

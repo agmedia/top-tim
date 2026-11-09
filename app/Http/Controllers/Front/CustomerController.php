@@ -80,10 +80,25 @@ class CustomerController extends FrontBaseController
      */
     public function save(Request $request, User $user)
     {
-        $updated = $user->validateFrontRequest($request)->edit();
+        abort_unless((int) $request->user()->getAuthIdentifier() === (int) $user->getKey(), 403);
+
+        // Customer profile updates must never enter the administrative user editor.
+        $profile = $request->validate([
+            'fname'   => ['required', 'string', 'max:255'],
+            'lname'   => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'city'    => ['required', 'string', 'max:255'],
+            'zip'     => ['required', 'string', 'max:255'],
+            'state'   => ['required', 'string', 'max:255'],
+            'phone'   => ['nullable', 'string', 'max:255'],
+            'company' => ['nullable', 'string', 'max:255'],
+            'oib'     => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $updated = $user->details()->update($profile);
 
         if ($updated) {
-            return redirect()->route('moj-racun', ['user' => $updated])->with(['success' => (__('front/cart.korisnik_snimljen'))]);
+            return redirect()->route('moj-racun')->with(['success' => (__('front/cart.korisnik_snimljen'))]);
         }
 
         return redirect()->back()->with(['error' => (__('front/cart.greska_prilikom_snimanja'))]);

@@ -9,6 +9,7 @@ use App\Models\Roles\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
 
 
 use App\Exports\UsersExport;
@@ -17,6 +18,16 @@ use Maatwebsite\Excel\Excel as ExcelWriter;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function (Request $request, $next) {
+            abort_unless($request->user()
+                && $request->user()->roles()->whereIn('name', ['admin', 'superadmin'])->exists(), 403);
+
+            return $next($request);
+        });
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -80,6 +91,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorizeManagedUser($user);
+
         $roles = Role::selectList();
         $points = Loyalty::hasLoyaltyTotal($user->id);
         $user_groups = (new UserGroup())->getList();
@@ -98,6 +111,14 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorizeManagedUser($user);
+
+        $roles = ['customer', 'editor', 'admin'];
+        if ($request->user()->roles()->where('name', 'superadmin')->exists()) {
+            $roles[] = 'superadmin';
+        }
+        $request->validate(['role' => ['required', 'string', Rule::in($roles)]]);
+
         $updated = $user->validateRequest($request)->edit();
 
         if ($updated) {
@@ -118,4 +139,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request) {}
+
+    private function authorizeManagedUser(User $user): void
+    {
+        if ($user->roles()->where('name', 'superadmin')->exists()) {
+            abort_unless(auth()->user()->roles()->where('name', 'superadmin')->exists(), 403);
+        }
+    }
 }

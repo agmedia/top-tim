@@ -1,4 +1,4 @@
-<form name="pay" class="needs-validation w-100" action="{{ route('checkout') }}" novalidate  method="GET">
+<form name="pay" class="needs-validation w-100" action="{{ route('checkout') }}" novalidate  method="POST">
     @csrf
     <input type="hidden" name="provjera" value="{{ $data['order_id'] }}">
 

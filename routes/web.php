@@ -303,8 +303,13 @@ Route::prefix('api/v2')->group(function () {
         //Route::get('/options/{option}', [CartController::class, 'options']);
     });
 
-    Route::get('/products/autocomplete', [\App\Http\Controllers\Api\v2\ProductController::class, 'autocomplete'])->name('products.autocomplete');
+    // The storefront needs product choices and checkout settings without a staff account.
     Route::get('/products/options/{option}', [\App\Http\Controllers\Api\v2\ProductController::class, 'options'])->name('products.check.options');
+    Route::get('/settings/get', [SettingsController::class, 'get']);
+});
+
+Route::middleware(['auth:sanctum', 'verified', 'no.customers'])->prefix('api/v2')->group(function () {
+    Route::get('/products/autocomplete', [\App\Http\Controllers\Api\v2\ProductController::class, 'autocomplete'])->name('products.autocomplete');
     Route::get('/products/list/options', [\App\Http\Controllers\Api\v2\ProductController::class, 'optionsList'])->name('products.list.options');
     Route::post('/products/image/delete', [\App\Http\Controllers\Api\v2\ProductController::class, 'destroyImage'])->name('products.destroy.image');
     Route::post('/products/change/status', [\App\Http\Controllers\Api\v2\ProductController::class, 'changeStatus'])->name('products.change.status');
@@ -335,8 +340,6 @@ Route::prefix('api/v2')->group(function () {
 
     // SETTINGS
     Route::prefix('settings')->group(function () {
-        // FRONT SETTINGS LIST
-        Route::get('/get', [SettingsController::class, 'get']);
         // WIDGET
         Route::prefix('widget')->group(function () {
             Route::post('group/destroy', [WidgetGroupController::class, 'destroy'])->name('widget.group.destroy.api');
@@ -473,7 +476,7 @@ Route::group(
     Route::get('/kosarica', [CheckoutController::class, 'cart'])->name('kosarica');
     Route::get('/naplata', [CheckoutController::class, 'checkout'])->name('naplata');
     Route::get('/pregled', [CheckoutController::class, 'view'])->name('pregled');
-    Route::get('/narudzba', [CheckoutController::class, 'order'])->name('checkout');
+    Route::match(['get', 'post'], '/narudzba', [CheckoutController::class, 'order'])->name('checkout');
     Route::get('/uspjeh', [CheckoutController::class, 'success'])->name('checkout.success');
     Route::get('/greska', [CheckoutController::class, 'error'])->name('checkout.error');
     //

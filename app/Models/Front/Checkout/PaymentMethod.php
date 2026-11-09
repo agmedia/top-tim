@@ -221,6 +221,10 @@ class PaymentMethod
      */
     public function finish(\App\Models\Back\Orders\Order $order, Request $request)
     {
+        if (in_array($order->payment_code, ['bank', 'cod', 'pickup'], true)) {
+            return app(\App\Services\CheckoutCompletion::class)->offline($order->id);
+        }
+
         if ($this->method->count()) {
             $provider = $this->providers($this->method->first()->code);
             $payment = new $provider($order);

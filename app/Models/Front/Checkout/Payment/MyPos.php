@@ -3,9 +3,8 @@
 namespace App\Models\Front\Checkout\Payment;
 
 use App\Models\Back\Orders\Order;
-use App\Models\Back\Orders\Transaction;
 use App\Models\Front\Checkout\PaymentMethod;
-use Carbon\Carbon;
+use App\Services\CheckoutCompletion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -57,7 +56,7 @@ class MyPos
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function resolveFormView(Collection $payment_method = null, array $options = null, Request $request = null)
+    public function resolveFormView(?Collection $payment_method = null, ?array $options = null, ?Request $request = null)
     {
         $data                 = [];
         $data['action']       = route('checkout');
@@ -97,8 +96,8 @@ class MyPos
         // dd($this->order->totals);
         foreach ($this->order->products as $product) {
             $price = number_format($product->price, 2, '.', '');
-            $products_total = $products_total + $price;
             $quantity = $product->quantity ? intval($product->quantity) : 1;
+            $products_total += $quantity * $price;
 
             $cart->add($product->name, $quantity, $price); //name, quantity, price
         }
@@ -116,10 +115,9 @@ class MyPos
             }
         }
 
-        if ($order_total < $products_total) {
-            $discount = number_format($order_total - $products_total, 2, '.', '');
-
-            $cart->add('Popust', 1, $discount);
+        $adjustment = round((float) $this->order->total - $cart->getTotal(), 2);
+        if ($adjustment != 0) {
+            $cart->add($adjustment < 0 ? 'Popust' : 'Naknada', 1, number_format($adjustment, 2, '.', ''));
         }
 
         $purchase = new Purchase($cnf);
@@ -155,195 +153,120 @@ class MyPos
      */
     public function finishOrder(Order $order, Request $request): bool
     {
-        Log::info('public function finishOrder(Order $order, Request $request): bool');
-        Log::info($request->toArray());
+        $data = $this->verifiedData($request);
 
-        // HARD GUARD: ne procesiraj payment za order bez proizvoda
-        if ($order->products()->count() < 1) {
-            Log::warning('MyPos finish blocked: order has no products', [
-                'order_id' => $order->id,
-                'ipcmethod' => $request->input('IPCmethod'),
-                'OrderID' => $request->input('OrderID'),
-            ]);
-
-            // opcionalno: možeš ga označiti declined ili ostaviti unfinished
-            // $order->update(['order_status_id' => config('settings.order.status.declined')]);
-
+        // Only the server notification settles payments; browser returns only display them.
+        if (! $data || strtoupper((string) ($data['ipcmethod'] ?? '')) !== 'IPCPURCHASENOTIFY'
+            || ! $this->matchesOrder($data, $order)) {
             return false;
         }
 
-        $pass   = false;
-        $status = config('settings.order.status.declined');
-
-        $ipc = strtoupper((string) ($request->input('IPCmethod') ?? $request->input('ipcmethod')));
-
-        if ($ipc === 'IPCPURCHASEOK') {
-            $pass   = true;
-            $status = config('settings.order.status.paid');
-        }
-
-        $orderIdRaw = $request->input('OrderID') ?? $request->input('orderid');
-        $sid = $request->input('SID') ?? $request->input('sid');
-
-        if ($sid && Transaction::where('approval_code', $sid)
-                ->where('order_id', $order->id)
-                ->exists()
-        ) {
-            Log::info('MyPos finishOrder skipped – duplicate SID', [
-                'order_id' => $order->id,
-                'sid' => $sid,
-                'order_id_raw' => $orderIdRaw,
-            ]);
-
-            return $pass; // već obrađeno, ne diraj order ni transakcije
-        }
-
-
-        $order->update([
-            'order_status_id' => $status
+        return app(CheckoutCompletion::class)->paid($order->id, 'mypos', [
+            'amount' => $data['amount'],
+            // Keep an audit fingerprint within the existing VARCHAR(255) column.
+            'signature' => hash('sha256', (string) $request->input('Signature', $request->input('signature', ''))),
+            'payment_type' => $data['cardtype'] ?? null,
+            'payment_plan' => null,
+            'payment_partner' => $data['customeremail'] ?? null,
+            'datetime' => $data['requestdatetime'] ?? now(),
+            'approval_code' => $data['ipc_trnref'],
+            'pg_order_id' => $data['orderid'],
+            'lang' => $data['currency'],
+            'stan' => $data['requeststan'] ?? null,
+            'error' => null,
         ]);
-
-        if ($pass) {
-            Transaction::insert([
-                'order_id'        => $order->id,
-                'success'         => 1,
-                'amount'          => $request->input('Amount'),
-                'signature'       => $request->input('Signature'),
-                'payment_type'    => $request->input('CardType'),
-                'payment_plan'    => $request->input('PAN'),
-                'payment_partner' => $request->input('CustomerEmail'),
-                'datetime'        => $request->input('RequestDateTime'),
-                'approval_code'   => $sid,
-                'pg_order_id'     => $orderIdRaw ? substr($orderIdRaw, 4) : null,
-                'lang'            => $request->input('Currency'),
-                'stan'            => $request->input('RequestSTAN'),
-                'error'           => $request->input('CardToken'),
-                'created_at'      => Carbon::now(),
-                'updated_at'      => Carbon::now()
-            ]);
-
-            return true;
-        }
-
-        Transaction::insert([
-            'order_id'        => $order->id,
-            'success'         => 0,
-            'amount'          => $request->input('Amount'),
-            'signature'       => $request->input('Signature'),
-            'payment_type'    => $request->input('CardType'),
-            'payment_plan'    => $request->input('PAN'),
-            'payment_partner' => $request->input('CustomerEmail'),
-            'datetime'        => $request->input('RequestDateTime'),
-            'approval_code'   => $sid,
-            'pg_order_id'     => $orderIdRaw ? substr($orderIdRaw, 4) : null,
-            'lang'            => $request->input('Currency'),
-            'stan'            => $request->input('RequestSTAN'),
-            'error'           => $request->input('CardToken'),
-            'created_at'      => Carbon::now(),
-            'updated_at'      => Carbon::now()
-        ]);
-
-        return false;
     }
 
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|void
-     */
     public function notify(Request $request)
     {
-        $cnf = $this->setConfig();
+        $data = $this->verifiedData($request);
 
-        Log::info('MyPOS notify() – payload:', $request->toArray());
+        if (! $data) {
+            return response('Invalid payment notification', 400);
+        }
 
-        $data = null;       // inicijaliziraj
-        $ipcmethod = null;  // inicijaliziraj
+        $method = strtoupper((string) ($data['ipcmethod'] ?? ''));
+        if ($method === 'IPCPURCHASEROLLBACK') {
+            $id = $this->orderId($data['orderid'] ?? null);
+            $order = $id ? Order::find($id) : null;
+            if (! $order || ! $this->matchesOrder($data, $order, false)) {
+                return response('Payment does not match order', 400);
+            }
+            return app(CheckoutCompletion::class)->rollback($id, $data['orderid'], $data['amount'])
+                ? response('OK', 200) : response('Payment could not be reversed', 409);
+        }
+        if ($method !== 'IPCPURCHASENOTIFY') {
+            // A browser success, cancellation or pending response cannot authorize payment.
+            return response('OK', 200);
+        }
 
+        $id = $this->orderId($data['orderid'] ?? null);
+        $order = $id ? Order::find($id) : null;
+
+        if (! $order || ! $this->matchesOrder($data, $order)) {
+            return response('Payment does not match order', 400);
+        }
+
+        // Recheck the signature at the shared settlement entry point as well.
+        return $this->finishOrder($order, $request)
+            ? response('OK', 200)
+            : response('Payment could not be completed', 409);
+    }
+
+    /** Authenticate a browser return without mutating the order. */
+    public function returnedOrder(Request $request): ?Order
+    {
+        $data = $this->verifiedData($request);
+
+        if (! $data || strtoupper((string) ($data['ipcmethod'] ?? '')) !== 'IPCPURCHASEOK') {
+            return null;
+        }
+
+        $id = $this->orderId($data['orderid'] ?? null);
+        $order = $id ? Order::find($id) : null;
+
+        return $order && $this->matchesOrder($data, $order) ? $order : null;
+    }
+
+    private function verifiedData(Request $request): ?array
+    {
         try {
-            $response = Response::getInstance(
-                $cnf,
-                $request->toArray(),
-                \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST
-            );
-
+            $config = $this->setConfig();
+            $response = Response::getInstance($config, $request->all(), \Mypos\IPC\Defines::COMMUNICATION_FORMAT_POST);
             $data = $response->getData(CASE_LOWER);
-            Log::info('MyPOS notify() – parsed data:', $data);
 
-            $ipcmethod = $data['ipcmethod'] ?? null;
-        } catch (IPC_Exception $e) {
-            // Ne dopuštamo da padne na neinicijaliziranim varijablama
-            Log::warning('MyPOS notify() – IPC_Exception: '.$e->getMessage());
-            // Važno: webhook endpoint treba vratiti 200 kako bi se izbjegao 500 i “zaglavljene” narudžbe
-            return response('OK', 200);
-        } catch (\Throwable $e) {
-            Log::error('MyPOS notify() – Unexpected error: '.$e->getMessage());
-            return response('OK', 200);
-        }
+            $rollback = strtoupper((string) ($data['ipcmethod'] ?? '')) === 'IPCPURCHASEROLLBACK';
+            if ((! isset($data['sid']) && ! $rollback) || (isset($data['sid'])
+                && (! is_scalar($data['sid']) || ! hash_equals((string) $config->getSid(), (string) $data['sid'])))) {
+                return null;
+            }
 
-        // Ako iz bilo kojeg razloga nema ipcmethod, potvrdi primitak i izađi
-        if (!$ipcmethod) {
-            return response('OK', 200);
-        }
+            // Some responses contain a status; an explicit failure is never a payment.
+            if (isset($data['status']) && (string) $data['status'] !== '0') {
+                return null;
+            }
 
-        // Grananje po metodi (sve vraća 200 – nema redirecta u webhooku)
-        switch (strtoupper($ipcmethod)) {
-            case 'IPCPURCHASENOTIFY':
-                return response('OK', 200);
-
-            case 'IPCPURCHASEROLLBACK':
-                // Ovdje eventualno zabilježi rollback u Order/Transaction
-                return response('OK', 200);
-
-            case 'IPCPURCHASECANCEL':
-                // Ovdje eventualno postavi order na canceled/declined
-                return response('OK', 200);
-
-            case 'IPCPURCHASEOK':
-                // Sigurno dohvaćanje OrderID-a (iz parsiranih podataka ili iz originalnog requesta)
-                $orderIdRaw = $data['orderid']
-                    ?? $request->input('OrderID')
-                    ?? $request->input('orderid');
-
-                if ($orderIdRaw) {
-                    $orderId = substr($orderIdRaw, 4);
-                    $order = Order::query()->find($orderId);
-
-                    if ($order) {
-                        // napravi request s očekivanim keyevima
-                        $finishRequest = new \Illuminate\Http\Request([
-                            'IPCmethod'        => $data['ipcmethod'] ?? null,
-                            'Amount'           => $data['amount'] ?? null,
-                            'Signature'        => $data['signature'] ?? null,
-                            'CardType'         => $data['cardtype'] ?? null,
-                            'PAN'              => $data['pan'] ?? null,
-                            'CustomerEmail'    => $data['customeremail'] ?? null,
-                            'RequestDateTime'  => $data['requestdatetime'] ?? null,
-                            'SID'              => $data['sid'] ?? null,
-                            'OrderID'          => $data['orderid'] ?? null,
-                            'Currency'         => $data['currency'] ?? null,
-                            'RequestSTAN'      => $data['requeststan'] ?? null,
-                            'CardToken'        => $data['cardtoken'] ?? null,
-                        ]);
-
-                        $this->finishOrder($order, $finishRequest);
-                    } else {
-                        Log::error("MyPOS notify() – Order not found: {$orderId}");
-                    }
-                } else {
-                    Log::error('MyPOS notify() – Missing OrderID');
-                }
-
-                return response('OK', 200);
-
-            default:
-                // Nepoznato – potvrdi primitak da gateway ne retry-a u beskonačnost
-                Log::warning('MyPOS notify() – Unknown IPC method: '.$ipcmethod);
-                return response('OK', 200);
+            return $data;
+        } catch (\Throwable $exception) {
+            Log::warning('Rejected unauthenticated myPOS response', ['reason' => $exception->getMessage()]);
+            return null;
         }
     }
 
+    private function matchesOrder(array $data, Order $order, bool $requireTransaction = true): bool
+    {
+        return $order->payment_code === 'mypos'
+            && $this->orderId($data['orderid'] ?? null) === (int) $order->id
+            && (! $requireTransaction || (isset($data['ipc_trnref']) && is_scalar($data['ipc_trnref']) && (string) $data['ipc_trnref'] !== ''))
+            && ($data['currency'] ?? null) === 'EUR'
+            && app(CheckoutCompletion::class)->sameAmount($data['amount'] ?? null, $order->total);
+    }
+
+    private function orderId($reference): ?int
+    {
+        return is_string($reference) && preg_match('/^[A-Za-z0-9]{4}([1-9][0-9]*)$/D', $reference, $matches)
+            ? (int) $matches[1] : null;
+    }
 
 
     public function cancel(Request $request)

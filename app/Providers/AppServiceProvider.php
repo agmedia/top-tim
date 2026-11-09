@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Helpers\Helper;
+use App\Http\Middleware\RedirectCustomer;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Page;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Livewire::addPersistentMiddleware(RedirectCustomer::class);
+
         if ( ! session()->has('locale')) {
             session(['locale' => config('app.locale')]);
         }

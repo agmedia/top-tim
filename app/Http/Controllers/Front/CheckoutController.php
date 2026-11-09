@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Front;
 use App\Helpers\Session\CheckoutSession;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
-use App\Mail\OrderReceived;
-use App\Mail\OrderSent;
 use App\Models\Back\Settings\Settings;
 use App\Models\Front\AgCart;
 use App\Models\Front\Checkout\Order;
@@ -17,7 +15,6 @@ use App\Models\TagManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use SoapClient;
 use \stdClass;
 
@@ -90,8 +87,11 @@ class CheckoutController extends FrontBaseController
         if (CheckoutSession::hasOrder()) {
             $data['id'] = CheckoutSession::getOrder()['id'];
 
-            $order->updateData($data);
-            $order->setData($data['id']);
+            if (! $order->updateData($data)) {
+                // A completed order is immutable; a new checkout gets a fresh order.
+                unset($data['id']);
+                $order->createFrom($data);
+            }
 
         } else {
             $order->createFrom($data);
@@ -120,45 +120,58 @@ class CheckoutController extends FrontBaseController
      */
     public function order(Request $request)
     {
-
-        $cart = $this->shoppingCart()->get();
-
-        if ((int)($cart['count'] ?? 0) < 1) {
-            Log::warning('Order finish attempted with empty cart', [
-                'session_id' => session()->getId(),
-                'request' => $request->all(),
-            ]);
-
-            return redirect()->route('kosarica');
-        }
-        $order = new Order();
-
-        if ($request->has('mypos_checkout')) {
-            $order->setData($request->input('mypos_checkout'));
-
-            $mypos = new MyPos($order->getData());
-
-            $mypos->process();
-        }
-
-        if ($request->has('provjera')) {
-            $order->setData($request->input('provjera'));
-        }
-
-        if ($request->has('order_number')) {
-            $order->setData($request->input('order_number'));
-        }
-
-        $is_finished = $order->finish($request);
-
-        Log::info('$is_finished');
-        Log::info($is_finished);
-
-        if ($is_finished) {
+        // A signed WSPay callback may arrive without the customer's browser session.
+        if ($request->has('ShoppingCartID')) {
+            $reference = $request->input('ShoppingCartID');
+            if (! is_string($reference) || ! preg_match('/^([1-9][0-9]*)-[0-9]{4}-[A-Za-z0-9]{8}$/D', $reference, $matches)) {
+                abort(403);
+            }
+            $order = (new Order())->setData($matches[1]);
+            $stored = $order->getData();
+            if (! $stored || $stored->payment_code !== 'wspay' || ! $order->finish($request)) {
+                return redirect()->route('checkout.error');
+            }
+            CheckoutSession::setOrder($stored);
             return redirect()->route('checkout.success');
         }
 
-        return redirect()->route('checkout.error');
+        abort_unless($request->isMethod('post'), 405);
+
+        $sessionOrder = CheckoutSession::getOrder();
+        if (! $sessionOrder || empty($sessionOrder['id'])) {
+            abort(403);
+        }
+
+        foreach (['mypos_checkout', 'provjera', 'order_number'] as $field) {
+            if ($request->has($field) && (string) $request->input($field) !== (string) $sessionOrder['id']) {
+                abort(403);
+            }
+        }
+
+        $order = (new Order())->setData($sessionOrder['id']);
+        $stored = $order->getData();
+        if (! $stored) {
+            abort(404);
+        }
+
+        if ($request->has('mypos_checkout')) {
+            if ($stored->payment_code !== 'mypos' || ! in_array((int) $stored->order_status_id, [
+                config('settings.order.status.unfinished'), config('settings.order.status.declined'),
+            ], true)) {
+                abort(403);
+            }
+            (new MyPos($stored))->process();
+            return redirect()->route('checkout.error');
+        }
+
+        // Online receipts are processed by their authenticated gateway handlers only.
+        if (! in_array($stored->payment_code, ['bank', 'cod', 'pickup'], true)) {
+            abort(403);
+        }
+
+        return $order->finish($request)
+            ? redirect()->route('checkout.success')
+            : redirect()->route('checkout.error');
     }
 
 
@@ -202,22 +215,13 @@ class CheckoutController extends FrontBaseController
      */
     public function myposSuccess(Request $request)
     {
-        Log::info('myposSuccess(Request $request)');
-        Log::info($request->toArray());
-
-        if ($request->has('OrderID')) {
-            $order_data = $this->resolveFinishedOrder(substr($request->input('OrderID'), 4));
-
-            if (isset($order_data['order'])) {
-                $data['ids'] = $order_data['ids'];
-                $data['order'] = $order_data['order'];
-                $data['google_tag_manager'] = $order_data['google_tag_manager'];
-
-                return view('front.checkout.success', compact('data'));
-            }
+        $order = (new MyPos())->returnedOrder($request);
+        if (! $order) {
+            abort(403);
         }
 
-        return redirect()->route('kosarica');
+        CheckoutSession::setOrder($order);
+        return redirect()->route('checkout.success');
     }
 
 
@@ -259,31 +263,19 @@ class CheckoutController extends FrontBaseController
             return [];
         }
 
-        $data['order'] = $order;
+        $offline = in_array($order->payment_code, ['bank', 'cod', 'pickup'], true);
+        $allowedStatuses = $offline
+            ? [config('settings.order.status.new'), config('settings.order.status.paid'), config('settings.order.status.send')]
+            : [config('settings.order.status.paid'), config('settings.order.status.send')];
 
-        // (opcionalno) session cart ti više nije “source of truth”
-        // $cart = $this->shoppingCart();  // može ostati za flush, ali ne za logiku
-
-        $order->decreaseItems($order->products);
-
-        $status = config('settings.order.status.paid');
-        if ($order->payment_code == 'bank') {
-            $status = config('settings.order.status.new');
+        if (! in_array((int) $order->order_status_id, $allowedStatuses, true)) {
+            return [];
         }
 
-        $order->update(['order_status_id' => $status]);
-
-        // IDs radije iz DB order products, ne iz sessiona
-        $ids = $order->products->pluck('id')->values()->all();
-        $data['ids'] = $ids;
-
-        dispatch(function () use ($order) {
-            Mail::to(config('mail.admin'))->send(new OrderReceived($order));
-            Mail::to($order->payment_email)->send(new OrderSent($order));
-        })->afterResponse();
-
+        // Rendering a return page never changes payment status, inventory or sends mail.
+        $data['order'] = $order;
+        $data['ids'] = $order->products->pluck('id')->values()->all();
         $this->forgetCheckoutCache();
-
         $this->shoppingCart()->flush()->resolveDB();
 
         $data['google_tag_manager'] = TagManager::getGoogleSuccessDataLayer($order);
