@@ -47,6 +47,8 @@ Zabilježeni lokalni rezultat: **42 sigurnosna testa, 241 provjera, sve uspješn
 
 Ovo je predviđeni postupak, a ne potvrda da je produkcija ažurirana. Izmjene najprije moraju biti pregledane, testirane, commitane i pushane. Aktivacija smije koristiti samo utvrđeni projektni postupak koji se oslanja na Git i točan odobreni commit.
 
+GitHub repozitorij provjeren je kao privatan. Produkcija je povezana preko `git@github.com:agmedia/top-tim.git` i zasebnog deploy ključa `Top Tim production read-only deploy`, koji nema pravo pusha. Privatni ključ ostaje u serverskom `~/.ssh/top-tim-github-readonly`, izvan repozitorija. Lokalni `core.sshCommand` odabire taj ključ i zahtijeva strogu provjeru GitHubova host ključa; provjereni javni host ključ preuzet je iz GitHubova službenog `/meta` API-ja. Serverski `git ls-remote` uspješno čita privatni repozitorij. Vjerodajnice za naplatu i korisničke lozinke time nisu izmijenjene.
+
 Sigurnosni commit pripremiti i provjeriti u čistom izvornom checkoutu, ne uključujući korisnikove staged slike. Nakon pregleda i pusha na `origin/master`, u produkcijskom checkoutu `/home/toptimco/public_html` dohvatiti granu i provesti isključivo fast-forward na puni identifikator točno tog provjerenog commita:
 
 ```sh
