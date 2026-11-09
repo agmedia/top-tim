@@ -42,9 +42,10 @@ checkout=$(pwd -P)
 [[ $(git config --get core.sshCommand) == *top-tim-github-readonly* ]] || fail 'The separate production read-only Git key is not selected.'
 [[ $(git config --get core.sshCommand) == *StrictHostKeyChecking=yes* ]] || fail 'Strict GitHub host verification is required.'
 git diff --cached --quiet || fail 'Production has staged changes.'
+changed_paths=$(git diff --name-only)
 while IFS= read -r path; do
     case "$path" in config/mail.php|public/.htaccess|'') ;; *) fail "Unexpected production change: $path" ;; esac
-done < <(git diff --name-only)
+done <<< "$changed_paths"
 [[ -r .env && -r config/mail.php && -r public/.htaccess ]] || fail 'Protected production configuration is missing.'
 protected_hash() { sha256sum .env config/mail.php public/.htaccess | sha256sum | cut -d' ' -f1; }
 protected_now=$(protected_hash)
@@ -66,9 +67,10 @@ git fetch origin master
 [[ $(git rev-parse origin/master) == "$release" ]] || fail 'origin/master differs from the reviewed release.'
 git merge-base --is-ancestor "$expected_base" "$release" || fail 'The release does not descend from the audited production base.'
 [[ -z $(git diff --name-only "$expected_base" "$release" -- .env config/mail.php public/.htaccess) ]] || fail 'The release would change protected production configuration.'
+media_paths=$(git diff --name-only "$expected_base" "$release" -- public/media)
 while IFS= read -r path; do
     case "$path" in public/media/.htaccess|'') ;; *) fail "The release would change user media: $path" ;; esac
-done < <(git diff --name-only "$expected_base" "$release" -- public/media)
+done <<< "$media_paths"
 
 if [[ "$phase" == stage ]]; then
     [[ $(git rev-parse HEAD) == "$expected_base" ]] || fail 'The live release changed since the audit.'
@@ -140,9 +142,10 @@ git merge --ff-only "$release"
 [[ $(protected_hash) == "$protected_now" ]] || fail 'Protected production configuration changed.'
 [[ $(git rev-parse HEAD) == "$release" ]] || fail 'The activated commit does not match the reviewed release.'
 git diff --cached --quiet
+changed_paths=$(git diff --name-only)
 while IFS= read -r path; do
     case "$path" in config/mail.php|public/.htaccess|'') ;; *) fail "A deployment step rewrote tracked code: $path" ;; esac
-done < <(git diff --name-only)
+done <<< "$changed_paths"
 "$php_bin" "$composer" check-platform-reqs --no-dev
 "$php_bin" artisan up
 maintenance_started=0
