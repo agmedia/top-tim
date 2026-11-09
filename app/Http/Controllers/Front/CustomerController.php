@@ -49,7 +49,7 @@ class CustomerController extends FrontBaseController
     public function orders(Request $request)
     {
         $user = auth()->user();
-        $orders = Order::where('user_id', $user->id)->orWhere('payment_email', $user->email)->paginate(config('settings.pagination.front'));
+        $orders = Order::where('user_id', $user->id)->paginate(config('settings.pagination.front'));
 
         return view('front.customer.moje-narudzbe', compact('user', 'orders'));
     }

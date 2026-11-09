@@ -73,8 +73,9 @@
         @livewireScripts
 
         <!-- END Page Container -->
-        <script src="{{ asset('js/dashmix.app.js') }}"></script>
-        <script src="{{ asset('/js/laravel.app.js') }}"></script>
+        <script src="{{ asset('js/vendor/jquery.min.js?v=3.7.1') }}"></script>
+        <script src="{{ asset('js/dashmix.app.js?v=20261109-security') }}"></script>
+        <script src="{{ asset('/js/laravel.app.js?v=20261109-security') }}"></script>
 
         <script>
             const confirmPopUp = Swal.mixin({

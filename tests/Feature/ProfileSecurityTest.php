@@ -27,6 +27,9 @@ class ProfileSecurityTest extends TestCase
         require_once database_path('migrations/2014_10_12_000000_create_users_table.php');
         require_once database_path('migrations/2020_01_02_223800_create_bouncer_tables.php');
         (new \CreateUsersTable())->up();
+        Schema::table('users', function (Blueprint $table) {
+            $table->softDeletes();
+        });
         (new \CreateBouncerTables())->up();
         Schema::table('user_details', function (Blueprint $table) {
             $table->unsignedInteger('user_group_id')->nullable();

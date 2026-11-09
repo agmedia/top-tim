@@ -275,8 +275,7 @@
 @endpush
 
 @push('js_after')
-    <script src="{{ asset('js/vue.js') }}"></script>
-    <script src="{{ asset('js/components/ag-order-products.js') }}"></script>
+    <script src="{{ asset('js/components/ag-order-products.js?v=20261109-security') }}"></script>
 
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
     <script>

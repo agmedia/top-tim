@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class Review extends Model
 {
@@ -40,6 +41,25 @@ class Review extends Model
      * @var Request
      */
     protected $request;
+
+    protected $frontSubmission = false;
+
+    public function validateFrontRequest(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'lastname' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'stars' => ['required', 'integer', 'between:1,5'],
+            'product_id' => ['required', 'integer', Rule::exists('products', 'id')->where('status', 1)],
+            'lang' => ['required', 'string', Rule::in(array_keys(config('laravellocalization.supportedLocales', ['hr' => []])))],
+            'message' => ['required', 'string', 'max:1000'],
+        ]);
+        $this->request = new Request($validated);
+        $this->frontSubmission = true;
+
+        return $this;
+    }
 
 
     /**
@@ -110,7 +130,7 @@ class Review extends Model
         $response = [
             'product_id'   => $this->request->product_id,
             'order_id'     => 0,
-            'user_id'      => 0,
+            'user_id'      => $this->frontSubmission ? (auth()->id() ?? 0) : 0,
             'lang'         => $this->request->lang,
             'fname'        => $this->request->name,
             'lname'        => isset($this->request->lastname) ? $this->request->lastname : '',

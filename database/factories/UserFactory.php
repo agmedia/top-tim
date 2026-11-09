@@ -17,6 +17,17 @@ class UserFactory extends Factory
      */
     protected $model = User::class;
 
+    public function configure(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->details()->firstOrCreate([], [
+                'fname' => $user->name,
+                'role' => 'customer',
+                'status' => 1,
+            ]);
+        });
+    }
+
     /**
      * Define the model's default state.
      *

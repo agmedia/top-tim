@@ -3,17 +3,77 @@
 namespace Tests\Feature;
 
 use App\Models\Back\Settings\Api\Export;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ImportExcelImagesTest extends TestCase
 {
-    use RefreshDatabase;
+    private $imagesDirectory;
+    private $productsDirectory;
 
-    /** @test */
-    public function it_imports_product_and_binds_option_images_and_ids()
+    protected function setUp(): void
+    {
+        parent::setUp();
+        config([
+            'database.default' => 'sqlite',
+            'database.connections.sqlite.url' => null,
+            'database.connections.sqlite.database' => ':memory:',
+            'app.locale' => 'hr',
+        ]);
+        DB::purge('sqlite');
+        DB::reconnect('sqlite');
+        app()->setLocale('hr');
+        app('laravellocalization')->setLocale('hr');
+
+        // The import must never write through the configured real public/media disk.
+        Storage::fake('products');
+        $this->productsDirectory = Storage::disk('products')->path('');
+        $this->imagesDirectory = sys_get_temp_dir() . '/top-tim-import-images-' . bin2hex(random_bytes(8));
+        mkdir($this->imagesDirectory, 0700, true);
+
+        require_once database_path('migrations/2020_01_02_223851_create_authors_table.php');
+        require_once database_path('migrations/2020_01_02_223911_create_categories_table.php');
+        require_once database_path('migrations/2020_01_02_223921_create_products_table.php');
+        (new \CreateAuthorsTable())->up();
+        (new \CreateCategoriesTable())->up();
+        $attributes = require database_path('migrations/2020_01_02_223900_create_attributtes_table.php');
+        $attributes->up();
+        Schema::create('options', function (Blueprint $table) {
+            $table->id();
+            foreach (['group', 'type', 'value', 'value_opt', 'option_sku', 'data'] as $field) {
+                $table->string($field)->nullable();
+            }
+            $table->integer('sort_order')->default(0);
+            $table->boolean('status')->default(true);
+            $table->timestamps();
+        });
+        Schema::create('options_translations', function (Blueprint $table) {
+            $table->id();
+            $table->integer('option_id');
+            $table->string('lang');
+            $table->string('group_title');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+        (new \CreateProductsTable())->up();
+        Schema::table('product_images', function (Blueprint $table) { $table->integer('option_id')->nullable(); });
+        Schema::table('product_option', function (Blueprint $table) { $table->integer('image_id')->default(0); });
+    }
+
+    protected function tearDown(): void
+    {
+        foreach ([$this->imagesDirectory, $this->productsDirectory] as $directory) {
+            if ($directory) { (new Filesystem())->deleteDirectory($directory); }
+        }
+        parent::tearDown();
+    }
+
+    public function test_it_imports_product_and_binds_option_images_and_ids(): void
     {
         // 1) Seed minimalne dependent tablice
         // Options: boja(parent), velicina(child)
@@ -62,17 +122,18 @@ class ImportExcelImagesTest extends TestCase
         ]);
 
         // 2) Priprema upload foldera i slika
-        $baseDir = storage_path('app/imports/images/test_' . Str::random(6));
-        @mkdir($baseDir, 0777, true);
+        $baseDir = $this->imagesDirectory;
 
         // Glavna slika -> striktno SKU.jpg
         $sku = 'LEG00009';
-        file_put_contents($baseDir . '/' . $sku . '.jpg', random_bytes(128)); // dummy bin
+        $fixture = imagecreatetruecolor(32, 32);
+        imagejpeg($fixture, $baseDir . '/' . $sku . '.jpg');
 
         // Opcijska slika s '/', ugniježđeno: "LEG00009-2-S/M.jpg"
         // File sistem ne voli '/', pa napravimo folder "LEG00009-2-S" i datoteku "M.jpg"
-        @mkdir($baseDir . '/LEG00009-2-S', 0777, true);
-        file_put_contents($baseDir . '/LEG00009-2-S/M.jpg', random_bytes(128));
+        mkdir($baseDir . '/LEG00009-2-S', 0700, true);
+        imagejpeg($fixture, $baseDir . '/LEG00009-2-S/M.jpg');
+        imagedestroy($fixture);
 
         // 3) Excel rows (minimalni skup -> header + 1 product + 1 option red)
         $rows = [
@@ -106,5 +167,11 @@ class ImportExcelImagesTest extends TestCase
         // postoji product_images red s option_id = parentId (boja)
         $imgWithParent = DB::table('product_images')->where('product_id', $prodId)->where('option_id', $colorId)->first();
         $this->assertNotNull($imgWithParent, 'Opcijska slika nije spremljena s option_id = parent (boja)');
+
+        $stored = Storage::disk('products')->allFiles();
+        $this->assertNotEmpty($stored, 'Import nije spremio stvarne slike na izolirani disk.');
+        foreach ($stored as $path) {
+            $this->assertNotFalse(getimagesizefromstring(Storage::disk('products')->get($path)));
+        }
     }
 }

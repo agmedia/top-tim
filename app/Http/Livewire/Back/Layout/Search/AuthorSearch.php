@@ -101,7 +101,7 @@ class AuthorSearch extends Component
         $this->brand_id       = $brand->id;
 
         if ($this->list) {
-            return $this->emit('brandSelect', ['brand' => $brand->toArray()]);
+            return $this->dispatch('brandSelect', ...['brand' => $brand->toArray()]);
         }
     }
 
@@ -112,7 +112,7 @@ class AuthorSearch extends Component
     public function makeNewAuthor()
     {
         if ($this->new['title'] == '') {
-            return $this->emit('error_alert', ['message' => 'Molimo vas da popunite sve podatke!']);
+            return $this->dispatch('error_alert', ...['message' => 'Molimo vas da popunite sve podatke!']);
         }
 
         $id = Brand::insertGetId([
@@ -133,10 +133,10 @@ class AuthorSearch extends Component
             $this->brand_id = $brand->id;
             $this->search   = $brand->translation->title;
 
-            return $this->emit('success_alert', ['message' => 'Brand je uspješno dodan..!']);
+            return $this->dispatch('success_alert', ...['message' => 'Brand je uspješno dodan..!']);
         }
 
-        return $this->emit('error_alert');
+        return $this->dispatch('error_alert');
     }
 
 
@@ -149,7 +149,7 @@ class AuthorSearch extends Component
             $this->brand_id = 0;
 
             if ($this->list) {
-                $this->emit('brandSelect', ['brand' => ['id' => '']]);
+                $this->dispatch('brandSelect', ...['brand' => ['id' => '']]);
             }
         }
 

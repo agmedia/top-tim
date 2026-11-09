@@ -145,22 +145,6 @@ class ReceptiController extends Controller
      */
     public function uploadReceptiImage(Request $request)
     {
-        if ( ! $request->hasFile('upload')) {
-            return response()->json(['uploaded' => false]);
-        }
-
-        $recepti_id = $request->input('recepti_id');
-        $img = $request->file('upload');
-        $name = Str::random(9) . '_' . $img->getClientOriginalName();
-
-        $path = '';
-
-        if ($recepti_id) {
-            $path = $recepti_id . '/';
-        }
-
-        Storage::disk('recepti')->putFileAs($path, $img, $name);
-
-        return response()->json(['fileName' => $name, 'uploaded' => true, 'url' => url(config('filesystems.disks.recepti.url') . $path . $name)]);
+        return response()->json(app(\App\Services\SafeMediaImage::class)->upload($request, 'recepti', 'recepti_id'));
     }
 }

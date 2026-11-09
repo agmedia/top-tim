@@ -27,32 +27,32 @@
 
         @foreach ($items as $key => $item)
             <tr>
-                <input type="hidden" name="item[{{ $key }}][id]" wire:model="items.{{ $key }}.id">
+                <input type="hidden" name="item[{{ $key }}][id]" wire:model.live="items.{{ $key }}.id">
                 @foreach (ag_lang() as $lang)
                     <td>
-                        <span class="font-size-sm"><input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.title.{{ $lang->code }}" name="item[{{ $key }}][title][{{ $lang->code }}]" required></span>
+                        <span class="font-size-sm"><input type="text" class="form-control form-control-sm" wire:model.live="items.{{ $key }}.title.{{ $lang->code }}" name="item[{{ $key }}][title][{{ $lang->code }}]" required></span>
                     </td>
                 @endforeach
                 @if ($type == 'color')
                     <td>
-                        <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color" name="item[{{ $key }}][color]"></span>
+                        <span class="font-size-sm"> <input type="color" class="form-control form-control-sm" wire:model.live="items.{{ $key }}.color" name="item[{{ $key }}][color]"></span>
                     </td>
                     <td>
-                        <span class="font-size-sm"> <input type="checkbox"  class="form-check"  wire:model="items.{{ $key }}.color_opt_show"></span>
+                        <span class="font-size-sm"> <input type="checkbox"  class="form-check"  wire:model.live="items.{{ $key }}.color_opt_show"></span>
                     </td>
                     <td>
                         @if($items[$key]['color_opt_show'])
-                            <span class="font-size-sm"  > <input type="color" class="form-control form-control-sm" wire:model="items.{{ $key }}.color_opt"   name="item[{{ $key }}][color_opt]" ></span>
+                            <span class="font-size-sm"  > <input type="color" class="form-control form-control-sm" wire:model.live="items.{{ $key }}.color_opt"   name="item[{{ $key }}][color_opt]" ></span>
                         @endif
                     </td>
 
 
                 <td>
-                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model="items.{{ $key }}.option_sku" name="item[{{ $key }}][option_sku]" required></span>
+                    <span class="font-size-sm"> <input type="text" class="form-control form-control-sm" wire:model.live="items.{{ $key }}.option_sku" name="item[{{ $key }}][option_sku]" required></span>
                 </td>
                 @endif
                 <td>
-                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>
+                    <span class="font-size-sm"> <input type="number" class="form-control form-control-sm" wire:model.live="items.{{ $key }}.sort_order" name="item[{{ $key }}][sort_order]"></span>
                 </td>
                 <td class="text-right font-size-sm">
                     <button type="button" class="btn btn-sm btn-alt-success d-none"><i class="fa fa-save"></i></button>

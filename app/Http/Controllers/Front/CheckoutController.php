@@ -12,10 +12,11 @@ use App\Models\Front\Checkout\Payment\MyPos;
 use App\Models\Front\Checkout\Shipping\Gls;
 use App\Models\Front\Loyalty;
 use App\Models\TagManager;
+use App\Services\CheckoutMethodResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use SoapClient;
+use Illuminate\Validation\ValidationException;
 use \stdClass;
 
 class CheckoutController extends FrontBaseController
@@ -80,7 +81,11 @@ class CheckoutController extends FrontBaseController
             return redirect()->route('naplata', ['step' => 'podaci']);
         }
 
-        $data = $this->collectData($data, config('settings.order.status.unfinished'));
+        try {
+            $data = $this->collectData($data, config('settings.order.status.unfinished'));
+        } catch (ValidationException $exception) {
+            return redirect()->route('naplata', ['step' => 'dostava'])->withErrors($exception->errors());
+        }
 
         $order = new Order();
 
@@ -160,6 +165,7 @@ class CheckoutController extends FrontBaseController
             ], true)) {
                 abort(403);
             }
+            $this->validateSelectedMethods($stored);
             (new MyPos($stored))->process();
             return redirect()->route('checkout.error');
         }
@@ -168,6 +174,8 @@ class CheckoutController extends FrontBaseController
         if (! in_array($stored->payment_code, ['bank', 'cod', 'pickup'], true)) {
             abort(403);
         }
+
+        $this->validateSelectedMethods($stored);
 
         return $order->finish($request)
             ? redirect()->route('checkout.success')
@@ -311,18 +319,33 @@ class CheckoutController extends FrontBaseController
      */
     private function collectData(array $data, int $order_status_id): array
     {
-        $shipping = Settings::getList('shipping')->where('code', $data['shipping'])->first();
-        $payment  = Settings::getList('payment')->where('code', $data['payment'])->first();
+        $cart = $this->shoppingCart()->get();
+        [$shipping, $payment] = app(CheckoutMethodResolver::class)->resolve(
+            (string) ($data['address']['state'] ?? ''),
+            (string) $data['shipping'],
+            (string) $data['payment'],
+            $cart
+        );
 
         $response                    = [];
         $response['address']         = $data['address'];
         $response['shipping']        = $shipping;
         $response['payment']         = $payment;
         $response['comment']         = isset($data['comment']) ? $data['comment'] : '';
-        $response['cart']            = $this->shoppingCart()->get();
+        $response['cart']            = $cart;
         $response['order_status_id'] = $order_status_id;
 
         return $response;
+    }
+
+    private function validateSelectedMethods($order): void
+    {
+        app(CheckoutMethodResolver::class)->resolve(
+            (string) $order->shipping_state,
+            (string) $order->shipping_code,
+            (string) $order->payment_code,
+            $this->shoppingCart()->get()
+        );
     }
 
 

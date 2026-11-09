@@ -29,13 +29,13 @@
                     <div class="d-flex pb-1">
                         <div class="w-50 pe-2 me-2">
                             <div class="input-group input-group-sm">
-                                <input class="form-control range-slider-value-min" placeholder="Od" type="text" wire:model="start">
+                                <input class="form-control range-slider-value-min" placeholder="Od" type="text" wire:model.live="start">
                                 <span class="input-group-text">g</span>
                             </div>
                         </div>
                         <div class="w-50 ps-2">
                             <div class="input-group input-group-sm">
-                                <input class="form-control range-slider-value-max" placeholder="Do" type="text" wire:model="end">
+                                <input class="form-control range-slider-value-max" placeholder="Do" type="text" wire:model.live="end">
                                 <span class="input-group-text">g</span>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                 <div class="widget widget-filter mb-4 pb-4 border-bottom d-none d-sm-block">
                     <h3 class="widget-title">Autor</h3>
                     <div class="input-group input-group-sm mb-2 autocomplete">
-                        <input type="search" wire:model.debounce.300ms="searcha" class=" form-control rounded-end pe-5" placeholder="Pretraži autora"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                        <input type="search" wire:model.live.debounce.300ms="searcha" class=" form-control rounded-end pe-5" placeholder="Pretraži autora"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                         @if ( ! empty($authors))
                             <div id="myInputautocomplete-list" class="autocomplete-items">
                                 @forelse($authors as $author)
@@ -70,7 +70,7 @@
                 <div class="widget widget-filter mb-4 pb-4 border-bottom d-none d-sm-block">
                     <h3 class="widget-title">Nakladnici</h3>
                     <div class="input-group input-group-sm mb-2 autocomplete">
-                        <input type="search" wire:model.debounce.300ms="searchp" class=" form-control rounded-end pe-5" placeholder="Pretraži nakladnika"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
+                        <input type="search" wire:model.live.debounce.300ms="searchp" class=" form-control rounded-end pe-5" placeholder="Pretraži nakladnika"><i class="ci-search position-absolute top-50 end-0 translate-middle-y fs-sm me-3"></i>
                         @if ( ! empty($publishers))
                             <div id="myInputautocomplete-list" class="autocomplete-items">
                                 @forelse($publishers as $publisher)

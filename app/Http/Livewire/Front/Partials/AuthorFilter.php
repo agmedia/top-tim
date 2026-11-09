@@ -171,7 +171,7 @@ class AuthorFilter extends Component
      */
     public function render()
     {
-        $this->emit('idChanged', [
+        $this->dispatch('idChanged', data: [
             'ids' => $this->ids,
             /*'author' => $this->authors,
             'publisher' => $this->publishers,*/

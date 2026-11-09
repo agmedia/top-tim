@@ -39,7 +39,7 @@
 
 @push('js_after')
     <script>
-        document.addEventListener('livewire:load', function () {
+        document.addEventListener('livewire:init', function () {
             $('#countries-select').select2({
                 placeholder: "{{ __('back/app.geozone.select_country') }}"
             });

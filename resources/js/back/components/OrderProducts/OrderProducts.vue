@@ -79,11 +79,11 @@
                         <td colspan="2" class="text-right font-w600">{{ Number(total.value).toLocaleString(localization, currency_style) }}</td>
                     </tr>
 
-                    <input type="hidden" :value="JSON.stringify(items)" name="items">
-                    <input type="hidden" :value="JSON.stringify(sums)" name="sums">
-
                     </tbody>
                 </table>
+
+                <input type="hidden" :value="JSON.stringify(items)" name="items">
+                <input type="hidden" :value="JSON.stringify(sums)" name="sums">
 
             </div>
         </div>

@@ -29,6 +29,9 @@ class LivewireAdminAccessTest extends TestCase
         require_once database_path('migrations/2014_10_12_000000_create_users_table.php');
         require_once database_path('migrations/2020_01_02_223800_create_bouncer_tables.php');
         (new \CreateUsersTable())->up();
+        Schema::table('users', function (Blueprint $table) {
+            $table->softDeletes();
+        });
         (new \CreateBouncerTables())->up();
         Schema::create('security_probe_writes', function (Blueprint $table) {
             $table->id();
@@ -39,7 +42,7 @@ class LivewireAdminAccessTest extends TestCase
         // Mount through an actual protected route so its signed snapshot carries
         // the original admin URL used by Livewire's persistent middleware.
         $route = new Route(['GET', 'HEAD'], '/admin/livewire-security-test', function () {
-            return response()->json(Livewire::mount('security-admin-probe')->toArrayWithoutHtml());
+            return response(Livewire::mount('security-admin-probe'));
         });
         $route->middleware(['web', 'auth:sanctum', 'no.customers']);
 
@@ -58,7 +61,7 @@ class LivewireAdminAccessTest extends TestCase
         $user->assign('admin');
         $this->actingAs($user);
 
-        $payload = $this->get('/admin/livewire-security-test')->assertOk()->json();
+        $payload = $this->snapshot($this->get('/admin/livewire-security-test')->assertOk()->getContent());
 
         $user->retract('admin');
         $user->assign('customer');
@@ -81,20 +84,26 @@ class LivewireAdminAccessTest extends TestCase
         $user->assign('admin');
         $this->actingAs($user);
 
-        $payload = $this->get('/admin/livewire-security-test')->assertOk()->json();
+        $payload = $this->snapshot($this->get('/admin/livewire-security-test')->assertOk()->getContent());
 
         $this->updateProbe($payload, 'application/json')->assertOk();
         $this->assertDatabaseCount('security_probe_writes', 1);
     }
 
-    private function updateProbe(array $payload, string $accept)
+    private function snapshot(string $html): string
     {
-        return $this->post('/livewire/message/security-admin-probe', [
-            'fingerprint' => $payload['fingerprint'],
-            'serverMemo' => $payload['serverMemo'],
-            'updates' => [[
-                'type' => 'callMethod',
-                'payload' => ['id' => 'security-write', 'method' => 'write', 'params' => []],
+        preg_match('/wire:snapshot="([^"]+)"/', $html, $matches);
+
+        return html_entity_decode($matches[1], ENT_QUOTES);
+    }
+
+    private function updateProbe(string $payload, string $accept)
+    {
+        return $this->post('/livewire/update', [
+            'components' => [[
+                'snapshot' => $payload,
+                'updates' => [],
+                'calls' => [['path' => '', 'method' => 'write', 'params' => []]],
             ]],
         ], ['X-Livewire' => 'true', 'Accept' => $accept]);
     }

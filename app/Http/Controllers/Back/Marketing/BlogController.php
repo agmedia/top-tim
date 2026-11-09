@@ -145,22 +145,6 @@ class BlogController extends Controller
      */
     public function uploadBlogImage(Request $request)
     {
-        if ( ! $request->hasFile('upload')) {
-            return response()->json(['uploaded' => false]);
-        }
-
-        $blog_id = $request->input('blog_id');
-        $img = $request->file('upload');
-        $name = Str::random(9) . '_' . $img->getClientOriginalName();
-
-        $path = '';
-
-        if ($blog_id) {
-            $path = $blog_id . '/';
-        }
-
-        Storage::disk('blog')->putFileAs($path, $img, $name);
-
-        return response()->json(['fileName' => $name, 'uploaded' => true, 'url' => url(config('filesystems.disks.blog.url') . $path . $name)]);
+        return response()->json(app(\App\Services\SafeMediaImage::class)->upload($request, 'blog', 'blog_id'));
     }
 }

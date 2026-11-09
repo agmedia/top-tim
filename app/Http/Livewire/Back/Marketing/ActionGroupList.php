@@ -179,9 +179,9 @@ class ActionGroupList extends Component
     public function render()
     {
         if ( ! empty($this->list)) {
-            $this->emit('list_full');
+            $this->dispatch('list_full');
         } else {
-            $this->emit('list_empty');
+            $this->dispatch('list_empty');
         }
 
         $this->checkGroup();

@@ -2,20 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
+    public function test_guest_login_form_renders_with_the_current_jetstream_components(): void
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        $this->get('/login')->assertOk()
+            ->assertSee('name="email"', false)
+            ->assertSee('name="password"', false);
     }
 }

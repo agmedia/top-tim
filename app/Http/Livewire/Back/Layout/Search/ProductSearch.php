@@ -96,7 +96,7 @@ class ProductSearch extends Component
         $this->product_id     = $product->id;
 
         if ($this->list) {
-            return $this->emit('productSelect', ['product' => $product->toArray()]);
+            return $this->dispatch('productSelect', ...['product' => $product->toArray()]);
         }
     }
 
@@ -110,7 +110,7 @@ class ProductSearch extends Component
             $this->product_id = 0;
 
             if ($this->list) {
-                $this->emit('productSelect', ['product' => ['id' => '']]);
+                $this->dispatch('productSelect', ...['product' => ['id' => '']]);
             }
         }
 

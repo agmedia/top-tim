@@ -96,7 +96,7 @@ class PublisherSearch extends Component
         $this->publisher_id     = $publisher->id;
 
         if ($this->list) {
-            return $this->emit('publisherSelect', ['publisher' => $publisher->toArray()]);
+            return $this->dispatch('publisherSelect', ...['publisher' => $publisher->toArray()]);
         }
     }
 
@@ -107,7 +107,7 @@ class PublisherSearch extends Component
     public function makeNewPublisher()
     {
         if ($this->new['title'] == '') {
-            return $this->emit('error_alert', ['message' => 'Molimo vas da popunite sve podatke!']);
+            return $this->dispatch('error_alert', ...['message' => 'Molimo vas da popunite sve podatke!']);
         }
 
         $slug = Str::slug($this->new['title']);
@@ -135,10 +135,10 @@ class PublisherSearch extends Component
             $this->publisher_id = $publisher->id;
             $this->search     = $publisher->title;
 
-            return $this->emit('success_alert', ['message' => 'Autor je uspješno dodan..!']);
+            return $this->dispatch('success_alert', ...['message' => 'Autor je uspješno dodan..!']);
         }
 
-        return $this->emit('error_alert');
+        return $this->dispatch('error_alert');
     }
 
 
@@ -151,7 +151,7 @@ class PublisherSearch extends Component
             $this->publisher_id = 0;
 
             if ($this->list) {
-                $this->emit('publisherSelect', ['publisher' => ['id' => '']]);
+                $this->dispatch('publisherSelect', ...['publisher' => ['id' => '']]);
             }
         }
 

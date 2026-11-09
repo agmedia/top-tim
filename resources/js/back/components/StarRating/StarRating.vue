@@ -1,6 +1,6 @@
 <template>
     <div>
-        <star-rating v-model="rating"
+        <star-rating v-model:rating="rating"
                      :increment="Number(increment)"
                      :fixed-points="Number(decimals)"
                      :star-size="Number(size)"
@@ -13,6 +13,7 @@
 
 <script>
     export default {
+        name: 'AdminStarRatingField',
         props: {
             value: {
                 type: String,

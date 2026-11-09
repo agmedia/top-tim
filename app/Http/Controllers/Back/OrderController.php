@@ -13,6 +13,7 @@ use App\Models\Back\Orders\Order;
 use App\Models\Back\Orders\OrderHistory;
 use App\Models\Back\Settings\Settings;
 use App\Models\Front\Checkout\Shipping\Gls;
+use App\Services\GlsAvailability;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -212,6 +213,8 @@ class OrderController extends Controller
      */
     public function api_send_gls(Request $request)
     {
+        app(GlsAvailability::class)->ensureAvailable();
+
         $request->validate(['order_id' => 'required']);
 
         $order = Order::where('id', $request->input('order_id'))->first();

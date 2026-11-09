@@ -1,9 +1,9 @@
 <div class="mb-0 input-group">
-    <input type="search" wire:model.debounce.300ms="search" class="form-control  @error('sizeguide_id') is-invalid @enderror" id="sizeguide-input" placeholder="{{ !$list ? 'Upište naziv...' : 'Ipišite naziv...' }}" autocomplete="off">
+    <input type="search" wire:model.live.debounce.300ms="search" class="form-control  @error('sizeguide_id') is-invalid @enderror" id="sizeguide-input" placeholder="{{ !$list ? 'Upište naziv...' : 'Ipišite naziv...' }}" autocomplete="off">
 
 
     @if ( ! $list)
-        <input type="hidden" wire:model="sizeguide_id" name="sizeguide_id">
+        <input type="hidden" wire:model.live="sizeguide_id" name="sizeguide_id">
 
 
     @endif
@@ -23,7 +23,7 @@
 
     @push('scripts')
         <script>
-            document.addEventListener('livewire:load', function () {
+            document.addEventListener('livewire:init', function () {
 
             });
 

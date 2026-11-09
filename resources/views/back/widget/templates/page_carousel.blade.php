@@ -153,7 +153,7 @@
                 minimumResultsForSearch: Infinity
             });
             $('#target-select').on('change', function (e) {
-                Livewire.emit('groupUpdated', e.currentTarget.value);
+                Livewire.dispatch('groupUpdated', { group: e.currentTarget.value });
             });
 
             Livewire.on('list_full', () => {

@@ -35,6 +35,11 @@ return [
      *                              email: filip@agmedia.hr                         *
      *******************************************************************************/
 
+    // Legacy labels are optional and require a separate review before explicit activation.
+    'gls' => [
+        'labels_enabled' => env('GLS_LABELS_ENABLED', false),
+    ],
+
     'recaptcha' => [
         'sitekey'    => env('GOOGLE_RECAPTCHA_SITE_KEY'),
         'secret'     => env('GOOGLE_RECAPTCHA_SECRET_KEY'),

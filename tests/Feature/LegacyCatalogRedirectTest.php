@@ -17,7 +17,7 @@ class LegacyCatalogRedirectTest extends TestCase
             ->assertRedirect(url($destination));
     }
 
-    public function legacyRequests(): array
+    public static function legacyRequests(): array
     {
         $requests = [];
 

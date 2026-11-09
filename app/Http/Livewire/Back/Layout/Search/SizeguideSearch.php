@@ -101,7 +101,7 @@ class SizeguideSearch extends Component
         $this->sizeguide_id       = $sizeguide->id;
 
         if ($this->list) {
-            return $this->emit('sizeguideSelect', ['sizeguide' => $sizeguide->toArray()]);
+            return $this->dispatch('sizeguideSelect', ...['sizeguide' => $sizeguide->toArray()]);
         }
     }
 

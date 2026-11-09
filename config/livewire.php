@@ -17,6 +17,12 @@ return [
 
     'class_namespace' => 'App\\Http\\Livewire',
 
+    'legacy_model_binding' => false,
+
+    'inject_assets' => true,
+
+    'inject_morph_markers' => true,
+
     /*
     |--------------------------------------------------------------------------
     | View Path

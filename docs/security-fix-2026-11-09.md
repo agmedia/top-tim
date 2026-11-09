@@ -78,6 +78,10 @@ Ta naredba čisti i aplikacijsku predmemoriju. Ponovno graditi konfiguracijsku p
 
 Povrat na staro izdanje nije automatski korak jer bi ponovno otvorio zatvorene propuste. Eventualni povrat mora imati izričitu korisnikovu uputu za točan povrat i provesti se istim Git postupkom.
 
+## Neobavezna izrada GLS naljepnica
+
+PHP SOAP nije potreban za MyPOS, virman ni odabir dostave u trgovini. Koristi ga samo stara zasebna integracija za izradu GLS naljepnica. SOAP je zato naveden kao opcionalna Composer ovisnost (`suggest`), a izdavanje naljepnica zadano je isključeno. Endpoint i servis vraćaju generički odgovor 503 prije izmjena narudžbe ili vanjskih poziva ako nema SOAP-a ili ako `GLS_LABELS_ENABLED` nije izričito uključen. Postojeći podaci integracije nisu promijenjeni. Prije budućeg uključivanja treba provjeriti postojeće demonstracijske podatke, pošiljatelja i ispravnost integracije; zatim uključiti SOAP u odgovarajućem PHP okruženju i postaviti `GLS_LABELS_ENABLED=true`. Obične postavke GLS dostave ostaju dostupne. Instalacija glavne aplikacije i dalje provjerava sve obvezne platform zahtjeve; ne koristi se `--ignore-platform-reqs`.
+
 ## Protokol pružatelja plaćanja
 
 - [myPOS Purchase Notify](https://developers.mypos.com/apis/checkout-api/purchase-notify): potvrda plaćanja dolazi preko potpisane serverske obavijesti.

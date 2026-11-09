@@ -118,7 +118,7 @@ class AttributeSearchNewInput extends Component
         $this->attribute_id   = $attribute->id;
 
         if ($this->list) {
-            return $this->emit('attributeSelect', ['attribute' => $attribute->toArray()]);
+            return $this->dispatch('attributeSelect', ...['attribute' => $attribute->toArray()]);
         }
     }
 
@@ -129,7 +129,7 @@ class AttributeSearchNewInput extends Component
     public function makeNewAttribute()
     {
         if ($this->new['title'] == '') {
-            return $this->emit('error_alert', ['message' => 'Molimo vas da popunite sve podatke!']);
+            return $this->dispatch('error_alert', ...['message' => 'Molimo vas da popunite sve podatke!']);
         }
 
         $id = Attributes::insertGetId([
@@ -150,10 +150,10 @@ class AttributeSearchNewInput extends Component
             $this->attribute_id = $attribute->id;
             $this->search       = $attribute->translation->title;
 
-            return $this->emit('success_alert', ['message' => 'Atribut je uspješno dodan..!']);
+            return $this->dispatch('success_alert', ...['message' => 'Atribut je uspješno dodan..!']);
         }
 
-        return $this->emit('error_alert');
+        return $this->dispatch('error_alert');
     }
 
 
@@ -166,7 +166,7 @@ class AttributeSearchNewInput extends Component
             $this->attribute_id = 0;
 
             if ($this->list) {
-                $this->emit('attributeSelect', ['attribute' => ['id' => '']]);
+                $this->dispatch('attributeSelect', ...['attribute' => ['id' => '']]);
             }
         }
 

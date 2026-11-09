@@ -105,7 +105,7 @@
 <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
 <link rel="stylesheet" media="screen" href="{{ asset(config('settings.images_domain') . 'css/tiny-slider.css?v=1.2') }}"/>
     <!-- Vendor scrits: js libraries and plugins-->
-<script src="{{ asset('js/jquery/jquery-2.1.1.min.js') }}"></script>
+<script src="{{ asset('js/vendor/jquery.min.js?v=3.7.1') }}"></script>
 <script src="{{ asset('js/jquery.ihavecookies.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('vendor/simplebar/dist/simplebar.min.js') }}"></script>
@@ -114,7 +114,7 @@
 <script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
     <!-- Main theme script ?v=2.2.9 -->
-<script src="{{ asset('js/cart.js?v=2.2.121') }}"></script>
+<script src="{{ asset('js/cart.js?v=20261109-security') }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {

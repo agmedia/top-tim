@@ -208,7 +208,7 @@
 @endsection
 
 @push('js_after')
-    <script src="{{ asset('js/ag-input-field.js') }}"></script>
+    <script src="{{ asset('js/ag-input-field.js?v=20261109-security') }}"></script>
 
     <!-- Page JS Plugins -->
     <script src="{{ asset('js/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>

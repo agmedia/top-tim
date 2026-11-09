@@ -19,7 +19,7 @@ class RedirectCustomer
         $user = $request->user();
 
         if (! $user || ! $user->roles()->whereIn('name', ['superadmin', 'admin', 'editor'])->exists()) {
-            abort_if($request->expectsJson() || app('livewire')->isDefinitelyLivewireRequest(), 403);
+            abort_if($request->expectsJson() || app('livewire')->isLivewireRequest(), 403);
 
             return redirect()->route('moj-racun');
         }

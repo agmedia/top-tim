@@ -3,6 +3,7 @@
 namespace App\Models\Front\Checkout\Shipping;
 
 use App\Models\Back\Orders\Order;
+use App\Services\GlsAvailability;
 use SoapClient;
 use \stdClass;
 
@@ -32,6 +33,8 @@ class Gls
 
     public function resolve()
     {
+        app(GlsAvailability::class)->ensureAvailable();
+
         try {
             //These parameters are needed to be optimalise depending on the environment:
             ini_set('memory_limit', '1024M');

@@ -1,7 +1,7 @@
 <div class="mb-0 input-group">
-    <input type="search" wire:model.debounce.300ms="search" class="form-control  @error('brand_id') is-invalid @enderror" id="author-input" placeholder="{{ !$list ? 'Brand...' : 'Brand...' }}" autocomplete="off">
+    <input type="search" wire:model.live.debounce.300ms="search" class="form-control  @error('brand_id') is-invalid @enderror" id="author-input" placeholder="{{ !$list ? 'Brand...' : 'Brand...' }}" autocomplete="off">
     @if ( ! $list)
-        <input type="hidden" wire:model="brand_id" name="brand_id">
+        <input type="hidden" wire:model.live="brand_id" name="brand_id">
         <span class="input-group-append" data-toggle="modal" data-target="#new-author-modal">
             <a href="javascript:void(0)" wire:click="viewAddWindow" class="btn btn-secondary btn-search py-0"><i class="fa fa-plus pt-2"></i></a>
         </span>
@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="mb-4 col-sm-12 col-md-12">
                     <label class="form-label required" for="input-title">Ime brenda</label>
-                    <input type="text" class="form-control  @if (session()->has('title')) is-invalid @endif" id="input-title" wire:model.defer="new.title" placeholder="">
+                    <input type="text" class="form-control  @if (session()->has('title')) is-invalid @endif" id="input-title" wire:model.live="new.title" placeholder="">
                     @if (session()->has('title')) <label class="small text-danger">Ime brenda je obvezno...</label> @endif
                 </div>
 
@@ -36,7 +36,7 @@
 
     @push('scripts')
         <script>
-            document.addEventListener('livewire:load', function () {
+            document.addEventListener('livewire:init', function () {
 
             });
 

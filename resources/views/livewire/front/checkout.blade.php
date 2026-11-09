@@ -77,61 +77,9 @@
         @endif
 
         @if (auth()->guest())
-            <div class="alert alert-secondary d-flex mb-3" role="alert">
-                <div class="alert-icon">
-                    <i class="ci-user"></i>
-                </div>
-                <div><a data-bs-toggle="collapse" href="#collapseLogin" role="button" aria-expanded="false" aria-controls="collapseLogin" class="alert-link">{{ __('front/cart.prijava') }} </a> {{ __('front/cart.za_registrirane_korisnike') }}</div>
-            </div>
-
-            @if (session()->has('error'))
-                <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                    <small>  {{ session('error') }}</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            <div id="collapseLogin" aria-expanded="false" class="collapse">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="si-email">{{ __('front/cart.email') }} </label>
-                                    <input class="form-control" type="email" wire:model.defer="login.email" placeholder="" required>
-                                    <div class="invalid-feedback">{{ __('front/cart.email_warning') }} {{ __('front/cart.email_warning') }}</div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="si-password">{{ __('front/cart.lozinka') }}</label>
-                                    <div class="password-toggle">
-                                        <input class="form-control" type="password" wire:model.defer="login.pass" required>
-                                        <label class="password-toggle-btn" aria-label="Show/hide password">
-                                            <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="mb-3 d-flex flex-wrap justify-content-between">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" wire:model.defer="login.remember" id="si-remember">
-                                        <label class="form-check-label" for="si-remember">{{ __('front/cart.zapamti_me') }}</label>
-                                    </div>
-
-
-                                    <button id="signup-button" data-tab-id="pills-signup-tab" type="button" href="signup-tab" class="btn btn-outline-primary  btn-sm float-end" data-bs-toggle="modal" data-bs-target="#signin-modal">
-                                        {{ __('front/cart.registriraj_se') }}
-                                    </button>
-
-
-                                </div>
-                                <button class="btn btn-primary btn-shadow d-block w-100" wire:click="authUser()" type="button">{{ __('front/cart.prijava') }}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="alert alert-secondary d-flex align-items-center justify-content-between mb-3" role="alert">
+                <span><i class="ci-user me-2"></i>{{ __('front/cart.za_registrirane_korisnike') }}</span>
+                <button class="btn btn-primary btn-sm" wire:click="authUser" type="button">{{ __('front/cart.prijava') }}</button>
             </div>
         @endif
 
@@ -148,7 +96,7 @@
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label" for="checkout-ln">{{ __('front/cart.surname') }}<span class="text-danger">*</span></label>
-                    <input name="lname" class="form-control @error('address.lname') is-invalid @enderror" type="text" wire:model.deferl="address.lname">
+                    <input name="lname" class="form-control @error('address.lname') is-invalid @enderror" type="text" wire:model.defer="address.lname">
                     @error('address.lname') <div class="invalid-feedback animated fadeIn">{{ __('front/cart.surname_warning') }}</div> @enderror
                 </div>
             </div>

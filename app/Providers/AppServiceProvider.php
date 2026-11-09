@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Front\Catalog\Product;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -35,6 +36,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Livewire::addPersistentMiddleware(RedirectCustomer::class);
+
+        // Retain the published profile components when upgrading Jetstream.
+        View::addNamespace('jetstream', resource_path('views/vendor/jetstream'));
+        foreach (glob(resource_path('views/vendor/jetstream/components/*.blade.php')) as $path) {
+            $component = basename($path, '.blade.php');
+            Blade::component('jetstream::components.' . $component, 'jet-' . $component);
+        }
 
         if ( ! session()->has('locale')) {
             session(['locale' => config('app.locale')]);

@@ -12,9 +12,11 @@ use App\Models\Front\Checkout\GeoZone;
 use App\Models\Front\Checkout\PaymentMethod;
 use App\Models\Front\Checkout\ShippingMethod;
 use App\Models\TagManager;
+use App\Services\CheckoutMethodResolver;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class Checkout extends Component
@@ -142,13 +144,21 @@ class Checkout extends Component
         if (CheckoutSession::hasShipping()) {
             $this->shipping = CheckoutSession::getShipping();
         } else {
-            $this->selectShipping('flat');
+            $available = app(CheckoutMethodResolver::class)->shipping((string) $this->address['state']);
+            $default = $available->firstWhere('code', 'flat') ?: $available->first();
+            if ($default) {
+                $this->selectShipping($default->code);
+            }
         }
 
         if (CheckoutSession::hasPayment()) {
             $this->payment = CheckoutSession::getPayment();
         } else {
-            $this->selectPayment('mypos'); // move to setting default
+            $available = app(CheckoutMethodResolver::class)->payments((string) $this->address['state'], (string) $this->shipping);
+            $default = $available->firstWhere('code', 'mypos') ?: $available->first();
+            if ($default) {
+                $this->selectPayment($default->code);
+            }
         }
 
         if (CheckoutSession::hasComment()) {
@@ -177,24 +187,11 @@ class Checkout extends Component
      */
     public function authUser()
     {
-        $validated = Validator::make([
-            'email' => $this->login['email'],
-            'password' => $this->login['pass'],
-        ],[
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ])->validate();
+        // Authentication always uses Fortify's throttling and two-factor pipeline.
+        $this->login['pass'] = '';
+        session(['url.intended' => route('naplata')]);
 
-        if (Auth::attempt($validated, $this->login['remember'])) {
-            session()->regenerate();
-            $this->setAddress();
-
-            session()->flash('login_success', 'Uspješno ste se prijavili na vaš račun...');
-
-            return redirect(request()->header('Referer'));
-        }
-
-        session()->flash('error', 'Upisani podaci ne odgovaraju našim korisnicima...');
+        return redirect()->route('login');
     }
 
 
@@ -276,6 +273,9 @@ class Checkout extends Component
      */
     public function selectShipping(string $shipping)
     {
+        if (! app(CheckoutMethodResolver::class)->shipping((string) $this->address['state'])->contains('code', $shipping)) {
+            throw ValidationException::withMessages(['shipping' => 'Odaberite dostupnu dostavu za navedenu državu.']);
+        }
         $this->shipping = $shipping;
 
         $this->checkShipping($shipping);
@@ -291,6 +291,9 @@ class Checkout extends Component
      */
     public function selectPayment(string $payment)
     {
+        if (! app(CheckoutMethodResolver::class)->payments((string) $this->address['state'], (string) $this->shipping)->contains('code', $payment)) {
+            throw ValidationException::withMessages(['payment' => 'Odaberite dostupan način plaćanja.']);
+        }
         $this->payment = $payment;
 
         $this->checkPayment($payment);
@@ -304,18 +307,12 @@ class Checkout extends Component
      */
     public function render()
     {
-        $geo = (new GeoZone())->findState($this->address['state'] ?: 'Hrvatska');
-
-        if ( ! isset($geo->id)) {
-            $geo->id = 1;
-        }
-
         $this->checkCart();
         $cart = $this->cart ? $this->cart->get() : [];
 
         return view('livewire.front.checkout', [
-            'shippingMethods' => (new ShippingMethod())->findGeo($geo->id)->checkCart($cart)->resolve(),
-            'paymentMethods' => (new PaymentMethod())->findGeo($geo->id)->checkShipping($this->shipping)->checkCart($cart)->resolve()->sortBy('sort_order'),
+            'shippingMethods' => app(CheckoutMethodResolver::class)->shipping((string) $this->address['state'], $cart),
+            'paymentMethods' => app(CheckoutMethodResolver::class)->payments((string) $this->address['state'], (string) $this->shipping, $cart)->sortBy('sort_order'),
             'countries' => Country::list()
         ]);
     }

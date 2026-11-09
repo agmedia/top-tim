@@ -29,10 +29,6 @@ export default {
             }
         }
 
-        if (this.available == undefined) {
-            this.available = 0;
-        }
-
         this.checkAvailability();
     },
 
@@ -73,9 +69,10 @@ export default {
         },
 
         checkAvailability() {
-            if (this.available < this.quantity) {
+            const available = Number(this.available) || 0;
+            if (available < this.quantity) {
                 this.disabled = true;
-                this.quantity = this.available;
+                this.quantity = available;
             }
         }
     }

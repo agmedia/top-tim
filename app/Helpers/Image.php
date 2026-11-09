@@ -124,13 +124,7 @@ class Image
      */
     public static function checkIsValidImage(string $src): string|bool
     {
-        $is_file = @file_get_contents($src);
-
-        if ($is_file) {
-            return $src;
-        }
-
-        return config('settings.image_default');
+        return app(\App\Services\SafeMediaImage::class)->localPath($src) ?: false;
     }
 
 }

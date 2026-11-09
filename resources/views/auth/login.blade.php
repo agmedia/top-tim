@@ -6,7 +6,7 @@
 
         @if (session('message'))
             <div class="mb-4 font-medium text-sm text-green-600">
-                {{ dd(session()->all()) }}
+                {{ session('message') }}
             </div>
         @endif
 

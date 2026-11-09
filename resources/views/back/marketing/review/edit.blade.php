@@ -99,7 +99,7 @@
                             <div class="form-group row items-push">
                                 <div class="col-md-12">
                                     <label for="email-input">{{ __('back/review.message') }} @include('back.layouts.partials.required-star')</label>
-                                    <textarea id="message-editor" name="message" placeholder="{{ __('back/review.message') }}">{!! isset($review) ? $review->message : old('message') !!}</textarea>
+                                    <textarea id="message-editor" class="form-control" rows="8" name="message" placeholder="{{ __('back/review.message') }}">{{ isset($review) ? $review->message : old('message') }}</textarea>
                                 </div>
                             </div>
 
@@ -139,15 +139,10 @@
 
 @push('js_after')
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
-    <script src="{{ asset('js/ag-star-rating.js') }}"></script>
+    <script src="{{ asset('js/ag-star-rating.js?v=20261109-security') }}"></script>
 
     <script>
         $(() => {
-
-            ClassicEditor.create(document.querySelector('#message-editor'))
-            .then(editor => {})
-            .catch(error => { console.error(error); });
 
             /**
              *

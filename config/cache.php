@@ -18,8 +18,12 @@ return [
     |
     */
 
-    //'default' => env('CACHE_DRIVER', 'file'),
-    'default' => env((env('APP_ENV') == 'production' ? 'CACHE_DRIVER' : 'file'), 'file'),
+    'default' => env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
+
+    // Limits must survive separate production PHP requests even with array caching.
+    'limiter' => env('APP_ENV', 'production') === 'production'
+        ? 'file'
+        : env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
 
     /*
     |--------------------------------------------------------------------------

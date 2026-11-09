@@ -207,6 +207,7 @@ Route::group(
         Route::post('user', [UserController::class, 'store'])->name('users.store');
         Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::patch('user/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('user/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('users/export', [UserController::class, 'export'])->name('users.export');
 
@@ -471,7 +472,7 @@ Route::group(
         ->middleware('throttle:contract-termination')
         ->name('contract-termination.send');
     Route::get('/faq', [CatalogRouteController::class, 'faq'])->name('faq');
-    Route::post('/komentar/proizvoda/posalji', [HomeController::class, 'sendProductComment'])->name('komentar.proizvoda');
+    Route::post('/komentar/proizvoda/posalji', [HomeController::class, 'sendProductComment'])->middleware('throttle:5,1,review-submit:')->name('komentar.proizvoda');
 //
     Route::get('/kosarica', [CheckoutController::class, 'cart'])->name('kosarica');
     Route::get('/naplata', [CheckoutController::class, 'checkout'])->name('naplata');
@@ -495,8 +496,8 @@ Route::group(
     Route::get('blog/{blog?}', [CatalogRouteController::class, 'blog'])->name('catalog.route.blog');
     Route::get('recepti/{recepti?}', [CatalogRouteController::class, 'recepti'])->name('catalog.route.recepti');
 //
-    Route::get('cache/image', [HomeController::class, 'imageCache']);
-    Route::get('cache/thumb', [HomeController::class, 'thumbCache']);
+    Route::get('cache/image', [HomeController::class, 'imageCache'])->middleware('throttle:30,1,image-cache:');
+    Route::get('cache/thumb', [HomeController::class, 'thumbCache'])->middleware('throttle:30,1,image-cache:');
     /**
      * Sitemap routes
      */
@@ -507,9 +508,9 @@ Route::group(
      * Forgot password & login routes.
      */
     Route::get('forgot-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
-    Route::post('forgot-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->middleware('throttle:password-email')->name('forget.password.post');
     Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
-    Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+    Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->middleware('throttle:password-reset')->name('reset.password.post');
     /*
      * Groups, Categories and Products routes resolver.
      * https://www.antikvarijat-biblos.hr/kategorija-proizvoda/knjige/

@@ -3,7 +3,7 @@
 <div class="mb-0 input-group">
     <input
         type="search"
-        wire:model.debounce.300ms="search"
+        wire:model.live.debounce.300ms="search"
         class="form-control @error('attribute_id') is-invalid @enderror"
         id="attribute-input-{{ $groupSlug }}"
         placeholder="{{ $group }}"
@@ -13,7 +13,7 @@
     @if (!$list)
         <input
             type="hidden"
-            wire:model="attribute_id"
+            wire:model.live="attribute_id"
             name="attributes[{{ $groupSlug }}]"
         >
 
@@ -32,7 +32,7 @@
                     <input type="text"
                            id="input-title-{{ $groupSlug }}"
                            class="form-control @if (session()->has('title')) is-invalid @endif"
-                           wire:model.defer="new.title">
+                           wire:model.live="new.title">
                     @if (session()->has('title'))
                         <label class="small text-danger">Ime brenda je obvezno...</label>
                     @endif

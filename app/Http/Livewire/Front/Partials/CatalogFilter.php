@@ -192,7 +192,7 @@ class CatalogFilter extends Component
      */
     public function render()
     {
-        $this->emit('idChanged', [
+        $this->dispatch('idChanged', data: [
             'ids' => $this->ids,
             /*'author' => $this->author,
             'publisher' => $this->publisher,*/

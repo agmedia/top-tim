@@ -44,10 +44,11 @@
 </div>
 
 <!-- Dashmix Core JS -->
-<script src="{{ asset('/js/dashmix.app.js') }}"></script>
+<script src="{{ asset('js/vendor/jquery.min.js?v=3.7.1') }}"></script>
+<script src="{{ asset('/js/dashmix.app.js?v=20261109-security') }}"></script>
 
 <!-- Laravel Original JS -->
-<script src="{{ asset('/js/laravel.app.js') }}"></script>
+<script src="{{ asset('/js/laravel.app.js?v=20261109-security') }}"></script>
 
 @stack('js_after')
 </body>

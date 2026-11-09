@@ -18,6 +18,7 @@ use App\Models\Sitemap;
 use App\Services\ContractTerminationNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -221,10 +222,18 @@ class HomeController extends FrontBaseController
     {
         $review = new Review();
 
-        $created_review = $review->validateRequest($request)->create();
+        $created_review = $review->validateFrontRequest($request)->create();
 
         if ($created_review) {
-            Loyalty::addPoints(config('settings.loyalty.product_review'), $request->input('product_id'), 'product_review');
+            if ($request->user()) {
+                DB::transaction(function () use ($request, $created_review) {
+                    $user = $request->user()->newQuery()->whereKey($request->user()->id)->lockForUpdate()->first();
+                    if ($user && ! Loyalty::query()->where('user_id', $user->id)
+                        ->where('reference_id', $created_review->product_id)->where('target', 'product_review')->exists()) {
+                        Loyalty::addPoints(config('settings.loyalty.product_review'), $created_review->product_id, 'product_review');
+                    }
+                });
+            }
 
             return back()->with(['success' => 'Komentar je uspješno poslan']);
         }
@@ -338,21 +347,7 @@ class HomeController extends FrontBaseController
      */
     public function imageCache(Request $request)
     {
-        if ( ! $request->has('src')) {
-            return asset('media/img/knjiga-detalj.jpg');
-        }
-
-        if ( ! \App\Helpers\Image::checkIsValidImage($request->input('src'))) {
-            return asset(config('settings.image_default'));
-        }
-
-        $src = $request->input('src');
-
-        $cacheimage = Image::cache(function($image) use ($src) {
-            $image->make($src);
-        }, config('imagecache.lifetime'));
-
-        return Image::make($cacheimage)->response();
+        return app(\App\Services\SafeMediaImage::class)->response($request);
     }
 
 
@@ -363,31 +358,7 @@ class HomeController extends FrontBaseController
      */
     public function thumbCache(Request $request)
     {
-        if ( ! $request->has('src')) {
-            return asset(config('settings.image_default'));
-        }
-
-        $cacheimage = Image::cache(function($image) use ($request) {
-            $width = 400;
-            $height = 400;
-
-            if ($request->has('size')) {
-                if (strpos($request->input('size'), 'x') !== false) {
-                    $size = explode('x', $request->input('size'));
-                    $width = $size[0];
-                    $height = $size[1];
-                }
-            } else {
-                $width = $request->input('size');
-            }
-
-            $src = \App\Helpers\Image::checkIsValidImage($request->input('src'));
-
-            $image->make($src)->resize($width, $height);
-
-        }, config('imagecache.lifetime'));
-
-        return Image::make($cacheimage)->response();
+        return app(\App\Services\SafeMediaImage::class)->response($request, true);
     }
 
 
