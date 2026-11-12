@@ -52,7 +52,8 @@ test('built catalog uses one request per change, restores filters and ignores st
             data = {current_page: page, per_page: 1, total: 3, last_page: 3, from: page, to: page,
                 next_page_url: page < 3 ? '/?page=' + (page + 1) : null,
                 prev_page_url: page > 1 ? '/?page=' + (page - 1) : null,
-                data: [{id: 1, name, image: '/product.webp', url: 'product', quantity: 5, main_price: 10, main_special: 10, main_price_text: '10 €', has_option: true, stars: 0}]};
+                data: [{id: 1, name, image: '/product.webp', url: 'product', quantity: 5, main_price: 10, main_special: 10, main_price_text: '10 €', has_option: true, stars: 0,
+                    anchor_price: params.option?.includes('color-white') ? null : {price: 12, formatted: '12,00 €', date: '10.09.2026.'}}]};
         } else {
             throw new Error('Unexpected request ' + config.url);
         }
@@ -65,6 +66,8 @@ test('built catalog uses one request per change, restores filters and ignores st
         assert.equal(productRequests()[0].page, '2');
         assert.equal(requests.length, 3, 'Only products, brands and options are requested.');
         assert.equal(window.document.querySelectorAll('.form-option-color').length, 2);
+        assert.match(window.document.querySelector('.anchor-price').textContent, /Cijena na 10\.09\.2026\.: 12,00 €/);
+        assert.ok(window.document.querySelector('.anchor-price').classList.contains('fs-xs'));
 
         const search = window.document.querySelector('input[type=search]');
         search.value = 'mac';
@@ -83,11 +86,13 @@ test('built catalog uses one request per change, restores filters and ignores st
         await pause(100);
         assert.match(window.document.querySelector('.product-title').textContent, /color-blue\+color-white/);
         assert.equal(productRequests().length, 3);
+        assert.equal(window.document.querySelector('.anchor-price'), null, 'Missing or disabled anchor prices are not displayed.');
 
         window.history.back();
         await until(() => !window.document.querySelector('#filter-color-white').checked);
         await until(() => window.document.querySelector('.product-title').textContent.trim() === 'color-blue');
         assert.equal(productRequests().length, 4);
+        assert.match(window.document.querySelector('.anchor-price').textContent, /12,00 €/);
         window.document.querySelectorAll('.pagination-page-nav a')[1].click();
         await until(() => new URL(window.location.href).searchParams.get('page') === '2');
         await pause(100);

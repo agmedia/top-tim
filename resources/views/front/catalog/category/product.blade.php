@@ -22,7 +22,7 @@
             @endif
 
 
-            @include('front.catalog.anchor-price', ['product' => $product])
+            @include('front.catalog.anchor-price', ['product' => $product, 'anchorPriceClass' => 'fs-xs'])
             @if($product->quantity_discounts)
                 <small class="d-block text-primary mt-1">Vaš količinski popust od {{ $product->quantity_discounts[0]['min_quantity'] }} kom. brenda</small>
             @endif
