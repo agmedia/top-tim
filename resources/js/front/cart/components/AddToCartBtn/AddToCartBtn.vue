@@ -13,6 +13,10 @@
       </span>
         </div>
 
+        <div v-if="context_product.anchor_price" class="fs-sm text-muted mt-1 mb-2 anchor-price">
+            Cijena na {{ context_product.anchor_price.date }}: {{ context_product.anchor_price.formatted }}
+        </div>
+
         <div class="mb-1 mt-1 text-start" v-if="Number(context_product.main_price) > Number(context_product.campaign_price ?? context_product.main_special)">
       <span class="fs-sm text-muted me-1">
         {{ trans.lowest_price }}:

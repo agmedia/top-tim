@@ -225,7 +225,11 @@
 
                 @if ( $prod->quantity > 0 )
                     <add-to-cart-btn product="{{ json_encode($prod->toArray()) }}" action="{{ json_encode($prod->special(true)) }}" available="{{ $prod->quantity }}" sizeguide="" options="{{ json_encode($prod->optionsList()) }}"></add-to-cart-btn>
+                @else
+                    <div class="h3 text-blue mb-1">{{ $prod->main_special_text }}</div>
+                    @include('front.catalog.anchor-price', ['product' => $prod])
                 @endif
+                <div class="fs-sm my-3"><a href="{{ route('legal-guarantee') }}">Zakonsko jamstvo – najmanje 2 godine</a><br><a href="{{ route('product-return') }}">Povrat proizvoda</a></div>
                     @if ( isset($prod->sizeguide) )
                         <div class="mb-3">
                     <a class="nav-link-style fs-sm gal " href="{{ isset($prod->sizeguide) ? $prod->sizeguide->image : null }}" ><i class="ci-ruler lead align-middle me-1 mt-n1"></i>Tablica veličina</a>

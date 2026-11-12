@@ -52,9 +52,9 @@ class Special
      * @param Product|null       $product
      * @param ProductAction|null $product_action
      */
-    public function __construct(?Product $product = null, ?float $option_price = null)
+    public function __construct(?Product $product = null, ?float $option_price = null, bool $publicPricing = false)
     {
-        $this->user    = Auth::user();
+        $this->user    = $publicPricing ? null : Auth::user();
         $this->product = $product;
         $this->product_option_price = $option_price ?: 0;
 

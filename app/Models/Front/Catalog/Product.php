@@ -59,6 +59,7 @@ class Product extends Model
         'has_option',
         'quantity_discounts',
         'campaign_price',
+        'anchor_price',
     ];
 
     /**
@@ -465,6 +466,11 @@ class Product extends Model
     public function getQuantityDiscountsAttribute(): array
     {
         return app(\App\Services\QuantityDiscounts::class)->tiers((int) $this->brand_id);
+    }
+
+    public function getAnchorPriceAttribute(): ?array
+    {
+        return app(\App\Services\AnchorPrices::class)->forProduct((int) $this->id);
     }
 
     public function getCampaignPriceAttribute()

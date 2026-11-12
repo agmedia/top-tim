@@ -43,5 +43,10 @@
         </tr>
 
 
+        <tr><td class="ag-mail-tableset" style="font-size: 13px;">
+            <strong>Zakonsko jamstvo – najmanje 2 godine</strong><br>
+            <a href="{{ route('legal-guarantee') }}">Obavijest o zakonskom jamstvu</a> · <a href="https://europa.eu/youreurope/jamstva_hr">Više informacija – Your Europe</a><br>
+            <a href="{{ route('product-return') }}">Obrazac za povrat proizvoda</a>
+        </td></tr>
     </table>
 @endsection

@@ -36,6 +36,7 @@ test('built product view recalculates personal price for quantities, brand total
     const {window} = dom;
     const component = window.document.querySelector('add-to-cart-btn');
     component.setAttribute('product', JSON.stringify({id: 1, brand_id: 1, main_price: 100, main_special: 95, campaign_price: 95,
+        anchor_price: {price: 125, formatted: '125,00 €', date: '10.09.2026.'},
         quantity_discounts: [{min_quantity: 10, percentage: 10}, {min_quantity: 20, percentage: 15}]}));
     component.setAttribute('action', JSON.stringify({type: 'P', discount: 5}));
     component.setAttribute('available', '100');
@@ -58,6 +59,7 @@ test('built product view recalculates personal price for quantities, brand total
         }};
         const price = () => window.document.querySelector('.cart .h3').textContent.trim();
         await until(() => price().includes('95,00'));
+        assert.match(window.document.querySelector('.cart .anchor-price').textContent, /Cijena na 10\.09\.2026\.: 125,00 €/);
         assert.equal(window.document.querySelectorAll('.cart tbody tr').length, 2);
         const quantity = window.document.querySelector('.cart input[type=number]');
         quantity.value = '2';
@@ -75,6 +77,7 @@ test('built product view recalculates personal price for quantities, brand total
         await until(() => price().includes('96,21'));
         store.state.cart = {items: {b: {quantity: 100, associatedModel: {brand_id: 2}}}};
         await until(() => price().includes('101,56'));
+        assert.match(window.document.querySelector('.cart .anchor-price').textContent, /125,00 €/);
         assert.deepEqual(errors, []);
     } finally {
         window.close();

@@ -91,6 +91,9 @@
                                     @endif
 
                                         <li class="widget-list-item"><a class="widget-list-link" href="{{ route('contract-termination') }}">Jednostrani raskid ugovora</a></li>
+                                        <li class="widget-list-item"><a class="widget-list-link" href="{{ route('product-return') }}">Povrat proizvoda</a></li>
+                                        <li class="widget-list-item"><a class="widget-list-link" href="{{ route('price-lists.index') }}">Cjenici</a></li>
+                                        <li class="widget-list-item"><a class="widget-list-link" href="{{ route('legal-guarantee') }}" data-bs-toggle="modal" data-bs-target="#legal-guarantee-modal" aria-haspopup="dialog">Zakonsko jamstvo – najmanje 2 godine</a></li>
                                         <li class="widget-list-item">  <a class="widget-list-link" href="{{ route('faq') }}">{{ __('front/cart.faq') }}</a>   </li>
                                         <li class="widget-list-item"><a class="widget-list-link" href="{{ route('kontakt') }}">{{ __('front/ricekakis.kontaktirajte_nas') }}</a>
                                         </li>

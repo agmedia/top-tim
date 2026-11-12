@@ -100,6 +100,13 @@ Route::group(
             Route::delete('category/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
             // ARTIKLI
+            Route::get('anchor-prices', [\App\Http\Controllers\Back\AnchorPriceController::class, 'index'])->name('anchor-prices.index');
+            Route::patch('anchor-prices/settings', [\App\Http\Controllers\Back\AnchorPriceController::class, 'settings'])->name('anchor-prices.settings');
+            Route::get('anchor-prices/export', [\App\Http\Controllers\Back\AnchorPriceController::class, 'export'])->name('anchor-prices.export');
+            Route::post('anchor-prices/import', [\App\Http\Controllers\Back\AnchorPriceController::class, 'import'])->name('anchor-prices.import');
+            Route::post('anchor-prices/publish', [\App\Http\Controllers\Back\AnchorPriceController::class, 'publish'])->name('anchor-prices.publish');
+            Route::get('anchor-prices/{product}/edit', [\App\Http\Controllers\Back\AnchorPriceController::class, 'edit'])->whereNumber('product')->name('anchor-prices.edit');
+            Route::patch('anchor-prices/{product}', [\App\Http\Controllers\Back\AnchorPriceController::class, 'update'])->whereNumber('product')->name('anchor-prices.update');
             Route::get('products', [ProductController::class, 'index'])->name('products');
             Route::get('product/create', [ProductController::class, 'create'])->name('products.create');
             Route::post('product', [ProductController::class, 'store'])->name('products.store');
@@ -300,6 +307,9 @@ Route::group(
  */
 Route::get('feeds/google-merchant.xml', [\App\Http\Controllers\Front\ProductFeedController::class, 'google'])->withoutMiddleware("web")->name('feeds.google');
 Route::get('feeds/meta-catalog.csv', [\App\Http\Controllers\Front\ProductFeedController::class, 'meta'])->withoutMiddleware("web")->name('feeds.meta');
+// Stable, public machine-readable URL, independent of cookies and locale redirects.
+Route::get('cjenici/najnoviji.xml', [\App\Http\Controllers\Front\PriceListController::class, 'latest'])->withoutMiddleware('web')->name('price-lists.latest');
+Route::get('cjenici/{publication}.xml', [\App\Http\Controllers\Front\PriceListController::class, 'download'])->whereNumber('publication')->name('price-lists.download');
 
 Route::prefix('api/v2')->group(function () {
     // SEARCH
@@ -477,6 +487,11 @@ Route::group(
 
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/kontakt', [HomeController::class, 'contact'])->name('kontakt');
+    Route::get('/cjenici', [\App\Http\Controllers\Front\PriceListController::class, 'index'])->name('price-lists.index');
+    Route::view('/zakonsko-jamstvo', 'front.legal-guarantee')->name('legal-guarantee');
+    Route::view('/povrat-proizvoda', 'front.product-return')->name('product-return');
+    Route::post('/povrat-proizvoda', [HomeController::class, 'sendContractTermination'])
+        ->middleware('throttle:contract-termination')->name('product-return.send');
     Route::post('/kontakt/posalji', [HomeController::class, 'sendContactMessage'])->name('poruka');
     Route::get('/jednostrani-raskid-ugovora', [HomeController::class, 'contractTermination'])
         ->name('contract-termination');

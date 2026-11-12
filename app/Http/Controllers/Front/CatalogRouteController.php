@@ -369,6 +369,7 @@ class CatalogRouteController extends FrontBaseController
                     'url'               => url($item->url),
                     'main_price'        => $item->main_price,
                     'main_price_text'   => $item->main_price_text,
+                    'anchor_price'      => $item->anchor_price,
                     'main_special'      => $item->main_special,
                     'main_special_text' => $item->main_special_text,
                     'image'             => $item->thumb,

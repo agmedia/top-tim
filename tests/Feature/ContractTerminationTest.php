@@ -71,6 +71,29 @@ class ContractTerminationTest extends TestCase
         Mail::assertSent(ContractTerminationConfirmation::class, 1);
     }
 
+    public function test_simple_return_form_uses_existing_admin_records_and_notifications(): void
+    {
+        Mail::fake();
+        $this->get(route('product-return'))->assertOk()->assertSee('Pošalji zahtjev za povrat')
+            ->assertSee('Dodatni podaci (neobavezno)');
+        $data = $this->validPayload();
+        unset($data['phone'], $data['order_date'], $data['received_date'], $data['iban']);
+        $this->post(route('product-return.send'), $data)->assertRedirect(route('product-return'))->assertSessionHas('success');
+        $this->assertDatabaseHas('contract_terminations', ['email' => $data['email'], 'status' => 'received']);
+        Mail::assertSent(ContractTerminationMessage::class, 1);
+        Mail::assertSent(ContractTerminationConfirmation::class, 1);
+    }
+
+    public function test_simple_return_rejects_missing_statement_and_bot_submission(): void
+    {
+        Mail::fake();
+        $data = $this->validPayload();
+        $this->postJson(route('product-return.send'), array_replace($data, ['statement' => 0]))->assertUnprocessable();
+        $this->postJson(route('product-return.send'), array_replace($data, ['website' => 'spam']))->assertUnprocessable();
+        $this->assertDatabaseCount('contract_terminations', 0);
+        Mail::assertNothingSent();
+    }
+
     public function test_required_fields_have_croatian_validation_messages(): void
     {
         Mail::fake();

@@ -179,6 +179,12 @@
 
                 @if(auth()->user()->isAn('admin', 'superadmin'))
                     <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->routeIs('anchor-prices.*') ? ' active' : '' }}" href="{{ route('anchor-prices.index') }}">
+                            <i class="nav-main-link-icon si si-tag"></i>
+                            <span class="nav-main-link-name">Sidrene cijene / Cjenici</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs(['discounts', 'discounts.*']) ? ' active' : '' }}" href="{{ route('discounts') }}">
                             <i class="nav-main-link-icon si si-percent"></i>
                             <span class="nav-main-link-name">Količinski popusti</span>

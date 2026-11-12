@@ -200,7 +200,7 @@ class HomeController extends FrontBaseController
         $notifications->send($termination);
         $termination->refresh();
 
-        $redirect = redirect()->route('contract-termination')->with(
+        $redirect = redirect()->route($request->routeIs('product-return.send') ? 'product-return' : 'contract-termination')->with(
             'success',
             'Izjava o jednostranom raskidu zaprimljena je pod oznakom ' . $reference . '.'
         );

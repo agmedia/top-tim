@@ -24,6 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('prices:publish')
+            ->dailyAt(config('price_lists.publication_time'))
+            ->timezone(config('price_lists.timezone'))
+            ->when(fn () => (bool) config('price_lists.enabled'))
+            ->withoutOverlapping(30);
 //        $schedule->command('clean:authors')->dailyAt('00:03');
 //        $schedule->command('clean:publishers')->dailyAt('00:04');
         // API
