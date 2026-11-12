@@ -56,7 +56,9 @@ class Product extends Model
         'secondary_special',
         'secondary_special_text',
         'stars',
-        'has_option'
+        'has_option',
+        'quantity_discounts',
+        'campaign_price',
     ];
 
     /**
@@ -450,14 +452,34 @@ class Product extends Model
      */
     public function special(bool $return_action = false)
     {
+        $campaign = $this->campaignSpecial($return_action);
+        if ($return_action || !Auth::check()) {
+            return $campaign;
+        }
+
+        $discounts = app(\App\Services\QuantityDiscounts::class);
+        return $discounts->price((float) $this->price, (float) $campaign, (int) $this->brand_id,
+            max(1, $discounts->cartQuantity((int) $this->brand_id)));
+    }
+
+    public function getQuantityDiscountsAttribute(): array
+    {
+        return app(\App\Services\QuantityDiscounts::class)->tiers((int) $this->brand_id);
+    }
+
+    public function getCampaignPriceAttribute()
+    {
+        return Currency::main($this->campaignSpecial());
+    }
+
+    public function campaignSpecial(bool $return_action = false)
+    {
         $product = $this;
         $user = Auth::user();
         $user_group_id = 0;
 
         if ($user) {
-            $user_group_id = Helper::resolveCache('group_id')->remember($user->id, config('cache.life'), function () use ($user) {
-                return ($user && $user->details->group) ? $user->details->group->id : 0;
-            });
+            $user_group_id = $user->details?->user_group_id ?? 0;
         }
 
         $coupon_key = config('session.cart') . '_coupon';
@@ -509,9 +531,7 @@ class Product extends Model
         $user_group_id = 0;
 
         if ($user) {
-            $user_group_id = Helper::resolveCache('group_id')->remember($user->id, config('cache.life'), function () use ($user) {
-                return ($user && $user->details->group) ? $user->details->group->id : 0;
-            });
+            $user_group_id = $user->details?->user_group_id ?? 0;
         }
 
         $product =  Helper::resolveCache('product')->remember($product_id, config('cache.life'), function () use ($product_id) {

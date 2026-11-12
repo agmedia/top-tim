@@ -30,7 +30,7 @@
             <h2 class="h6 text-primary mb-0">{{ trans.artikli }}</h2>
         </div>
 
-        <div class="d-flex pt-3 pb-2 mt-1" v-if="$store.state.cart.total < 1">
+        <div class="d-flex pt-3 pb-2 mt-1" v-if="!$store.state.cart.count">
             <p class="text-dark mb-0">{{ trans.empty_cart_text }}</p>
         </div>
 
@@ -50,32 +50,13 @@
                     </h3>
 
                     <div class="fs-lg text-primary pt-2">
-                        {{ item.associatedModel.main_price_text }}
-                        <span
-                            class="text-primary fs-md fw-light"
-                            style="margin-left: 20px;"
-                            v-if="Object.keys(item.conditions).length && item.associatedModel.action && item.associatedModel.action.coupon == $store.state.cart.coupon"
-                        >
-              {{ item.associatedModel.action.title }} ({{ Math.round(item.associatedModel.action.discount).toFixed(0) }}
-              {{ item.associatedModel.action.type == 'F' ? 'kn' : '%' }})
-            </span>
-                        <span
-                            class="text-primary fs-md fw-light"
-                            style="margin-left: 20px;"
-                            v-if="item.attributes.options.option && item.attributes.options.option.price != '0.0000'"
-                        >
-              Opcija: {{ Math.round(Number(item.attributes.options.option.price)).toFixed(2) }} EUR
-            </span>
+                        {{ (item.price_text ?? $store.state.service.formatMainPrice(item.attributes.unit_price ?? item.price)) }}
+                        <s v-if="Number(item.attributes.unit_price) < Number(item.price)" class="text-muted fs-sm ms-2">
+                            {{ (item.attributes.original_price_text ?? $store.state.service.formatMainPrice(item.price)) }}
+                        </s>
                     </div>
-
-                    <div class="fs-sm text-dark pt-1" v-if="item.associatedModel.secondary_price">
-                        {{ item.associatedModel.secondary_price_text }}
-                    </div>
-
-                    <div class="fs-sm text-dark pt-1" v-if="Object.keys(item.conditions).length">
-                        <p v-for="condition in item.conditions" :key="condition.name">
-                            Akcija: - {{ Math.round(Number(condition.parsedRawValue)).toFixed(2) }} EUR
-                        </p>
+                    <div v-if="item.attributes.quantity_discount" class="fs-sm text-success">
+                        Vaš količinski popust: {{ item.attributes.quantity_discount }} %
                     </div>
                 </div>
             </div>

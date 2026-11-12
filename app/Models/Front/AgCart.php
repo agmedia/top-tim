@@ -52,7 +52,9 @@ class AgCart extends Model
     /** @return array */
     public function get()
     {
+        app(\App\Services\CartPricing::class)->refresh($this->cart);
         $eur = $this->getEur();
+        $conditions = $this->setCartConditions();
 
         return [
             'id'              => $this->cart_id,
@@ -63,7 +65,7 @@ class AgCart extends Model
             'count'           => $this->cart->getTotalQuantity(),
             'subtotal'        => $this->cart->getSubTotal(),
             'conditions'      => $this->cart->getConditions(),
-            'detail_con'      => $this->setCartConditions(),
+            'detail_con'      => $conditions,
             'total'           => $this->cart->getTotal(),
             'eur'             => $eur,
             'secondary_price' => $eur,

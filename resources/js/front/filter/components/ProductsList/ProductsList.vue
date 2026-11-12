@@ -52,7 +52,7 @@
 
         <!-- Products grid-->
         <div class="row row-cols-xxxl-5 row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 g-0 mx-n2 mb-5" id="product-grid" v-if="products.total">
-            <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in products.data">
+            <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in pricedProducts">
                 <div class="card product-card card-static pb-3">
 
                     <a v-if="product.admin_url" :href="product.admin_url" target="_blank"><span class="badge badge-end rounded-pill bg-red mt-1 ms-1 badge-shadow">admin</span></a>
@@ -69,7 +69,7 @@
                             <div class="fs-sm me-2"><span v-html="product.category_string"></span></div>
                         </div>
                         <div v-if="Number(product.main_price) > Number(product.main_special)">
-                        <div class="product-price">
+                        <div class="product-price" v-if="Number(product.main_special) >= Number(product.campaign_price ?? product.main_special)">
                             <span class="fs-sm text-muted" ><small>NC 30 dana: {{ product.main_price_text }} </small> </span>
                         </div>
                         <div class="product-price">
@@ -79,6 +79,9 @@
                         <div class="product-price" v-else>
                             <span class="text-dark fs-md" v-if="!product.special">{{ product.main_price_text }} <small v-if="product.secondary_price_text ">{{ product.secondary_price_text }} </small></span>
                         </div>
+                        <small v-if="product.quantity_discounts?.length" class="d-block text-primary mt-1">
+                            Vaš količinski popust od {{ product.quantity_discounts[0].min_quantity }} kom. brenda
+                        </small>
                         <div class="star-rating" v-if="product.stars">
                             <span v-for="item in 5 ">
                                 <i v-if="Math.floor(product.stars) - item >= 0" class="star-rating-icon ci-star-filled active"></i>
@@ -142,6 +145,7 @@
 </template>
 
 <script>
+    import { quantityPrice } from '../../../cart/quantity-pricing';
 
 export default {
     name:  'ProductsList',
@@ -187,6 +191,20 @@ export default {
         },
     },
     computed: {
+        pricedProducts() {
+            const quantities = {};
+            Object.values(this.$store.state.cart.items || {}).forEach(item => {
+                const brand = item.associatedModel?.brand_id;
+                quantities[brand] = (quantities[brand] || 0) + Number(item.quantity);
+            });
+            return (this.products.data || []).map(product => {
+                if (!product.quantity_discounts?.length) return product;
+                const price = quantityPrice(Number(product.main_price), Number(product.campaign_price ?? product.main_special),
+                    product.quantity_discounts, Math.max(1, quantities[product.brand_id] || 0));
+                return {...product, main_special: price,
+                    main_special_text: new Intl.NumberFormat('hr-HR', {style: 'currency', currency: 'EUR'}).format(price)};
+            });
+        },
         selectedAttributes: {
             get() { return String(this.$route.query.attribute || '').split('+').filter(Boolean); },
             set(value) { this.setQueryParamOther('attribute', value.join('+')); },

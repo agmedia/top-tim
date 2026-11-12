@@ -76,11 +76,12 @@ class CartController extends Controller
      */
     public function check(Request $request)
     {
-        $response = $this->cart->check($request);
+        $message = $this->cart->check($request);
+        $response = $this->cart->get();
 
         $this->resolveDB($response);
 
-        return response()->json($response);
+        return response()->json(['cart' => $response, 'message' => $message]);
     }
 
 

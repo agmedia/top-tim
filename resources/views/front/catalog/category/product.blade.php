@@ -13,13 +13,18 @@
             <h3 class="product-title fs-sm text-truncate"><a href="{{ url($product->url) }}">{{ $product->name }}</a></h3>
             {!! $product->category_string !!}
             @if ($product->main_price > $product->main_special)
-                <div class="product-price"><small><span class="text-muted">{{ __('front/ricekakis.nc_30') }}: {{ $product->main_price_text }}  </span></small></div>
+                @if($product->main_special >= $product->campaign_price)
+                    <div class="product-price"><small><span class="text-muted">{{ __('front/ricekakis.nc_30') }}: {{ $product->main_price_text }}  </span></small></div>
+                @endif
                 <div class="product-price text-red"><span class="text-red fs-md">{{ $product->main_special_text }} <span class="text-redd"><strike>{{ $product->main_price_text }}</strike></span></span></div>
             @else
                 <div class="product-price"><span class="text-dark fs-md">{{ $product->main_price_text }}  @if($product->secondary_price_text) <small class="fs-md text-muted">{{ $product->secondary_price_text }} </small>@endif</span></div>
             @endif
 
 
+            @if($product->quantity_discounts)
+                <small class="d-block text-primary mt-1">Vaš količinski popust od {{ $product->quantity_discounts[0]['min_quantity'] }} kom. brenda</small>
+            @endif
             @if($product->reviews->count() > 1)
                 <div class="star-rating">
                     @for ($i = 0; $i < 5; $i++)

@@ -1,101 +1,43 @@
 @extends('back.layouts.backend')
-@push('css_before')
-
-    <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
-
-
-@endpush
-
 @section('content')
-
     <div class="bg-body-light">
-        <div class="content content-full">
-            <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/user.users') }}</h1>
-
-            </div>
+        <div class="content content-full d-flex flex-wrap align-items-center justify-content-between">
+            <h1 class="font-size-h2 font-w400 mb-2">Količinski popusti</h1>
+            <a class="btn btn-hero-success mb-2" href="{{ route('discounts.create') }}"><i class="fa fa-plus mr-1"></i> Novi popust</a>
         </div>
     </div>
-
-
-    <!-- Page Content -->
     <div class="content">
-    @include('back.layouts.partials.session')
-
-
-        <!-- All Orders -->
+        @include('back.layouts.partials.session')
+        <p>Prag se računa po ukupnom broju komada istog brenda u košarici. Za više pragova dodajte više pravila. Primjenjuje se najpovoljnija cijena, bez zbrajanja popusta na artikl.</p>
         <div class="block block-rounded">
-            <div class="block-header block-header-default">
-                <h3 class="block-title">{{ __('back/discount.all_users') }} (4)</h3>
-                <div class="block-options">
-                    <!-- Search Form -->
-                    <form action="{{ route('discounts') }}" method="GET">
-                        <div class="block-options-item">
-                            <input type="text" class="form-control" id="search-input" name="search" placeholder="{{ __('back/discount.search') }}" value="{{ request()->query('search') }}">
-                        </div>
-                        <div class="block-options-item">
-                            <a href="{{ route('discounts') }}" class="btn btn-hero-sm btn-secondary"><i class="fa fa-search-minus"></i> {{ __('back/discount.clear') }}</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
             <div class="block-content">
-                <!-- All Orders Table -->
                 <div class="table-responsive">
-                    <table class="table table-borderless table-striped table-vcenter font-size-sm">
-                        <thead>
-                        <tr>
-                            <th class="text-left">{{ __('back/discount.role') }}</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right">{{ __('back/discount.edit') }}</th>
-                        </tr>
-                        </thead>
+                    <table class="table table-striped table-vcenter">
+                        <thead><tr><th>Korisnik / grupa</th><th>Brend</th><th>Od komada</th><th>Popust</th><th>Status</th><th class="text-right">Uredi</th></tr></thead>
                         <tbody>
-
+                        @forelse($discounts as $discount)
                             <tr>
-
-                                <td class="text-left font-size-sm">
-                                    Veleprodaja 20
+                                <td>
+                                    @if($discount->user_id)
+                                        {{ $discount->user?->name ?? 'Obrisani korisnik' }}<br><small>{{ $discount->user?->email }}</small>
+                                    @else
+                                        Grupa: {{ $discount->group?->translation?->title ?? 'Obrisana grupa' }}
+                                    @endif
                                 </td>
-
-                                <td class="text-center font-size-sm">
-                                    <i class="fa fa-fw fa-check text-success"></i>
-                                </td>
-
-                                <td class="text-right font-size-base">
-                                    <a class="btn btn-sm btn-alt-secondary" href="#">
-                                        <i class="fa fa-fw fa-pencil-alt"></i>
-                                    </a>
-                                </td>
+                                <td>{{ $discount->brand?->translation?->title ?? 'Obrisani brend' }}</td>
+                                <td>{{ $discount->min_quantity }}</td>
+                                <td>{{ number_format($discount->percentage, 2, ',', '.') }} %</td>
+                                <td>{{ $discount->active ? 'Aktivno' : 'Neaktivno' }}</td>
+                                <td class="text-right"><a class="btn btn-sm btn-alt-secondary" href="{{ route('discounts.edit', $discount) }}" aria-label="Uredi popust"><i class="fa fa-pencil-alt"></i></a></td>
                             </tr>
-
+                        @empty
+                            <tr><td colspan="6">Još nema pravila količinskog popusta.</td></tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>
-
-                {{-- $discounts->links() --}}
-
+                {{ $discounts->links() }}
             </div>
         </div>
-        <!-- END All Orders -->
     </div>
-
 @endsection
-
-@push('js_after')
-    <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
-    <script>
-        $(() => {
-            $('#status-select').select2({
-                placeholder: 'Promjenite status'
-            });
-
-        })
-    </script>
-    <script>
-        $("#checkAll").click(function () {
-            $('input:checkbox').not(this).prop('checked', this.checked);
-        });
-    </script>
-
-@endpush

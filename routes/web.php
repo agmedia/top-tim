@@ -33,6 +33,7 @@ use App\Http\Controllers\Back\Settings\SettingsController;
 use App\Http\Controllers\Back\Settings\System\ApplicationController;
 use App\Http\Controllers\Back\UserController;
 use App\Http\Controllers\Back\UserGroupController;
+use App\Http\Controllers\Back\DiscountController;
 use App\Http\Controllers\Back\Widget\WidgetController;
 use App\Http\Controllers\Back\Widget\WidgetGroupController;
 use App\Http\Controllers\Front\CatalogRouteController;
@@ -213,6 +214,12 @@ Route::group(
 
         // POPUSTI
         Route::get('discounts', [DiscountController::class, 'index'])->name('discounts');
+        Route::get('discounts/create', [DiscountController::class, 'create'])->name('discounts.create');
+        Route::get('discounts/users', [DiscountController::class, 'users'])->name('discounts.users');
+        Route::post('discounts', [DiscountController::class, 'store'])->name('discounts.store');
+        Route::get('discounts/{discount}/edit', [DiscountController::class, 'edit'])->name('discounts.edit');
+        Route::patch('discounts/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
+        Route::delete('discounts/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
 
         // GRUPE KORISNIKA
         Route::get('user_groups', [UserGroupController::class, 'index'])->name('user_groups');

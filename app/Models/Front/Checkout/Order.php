@@ -253,13 +253,8 @@ class Order extends Model
 
         // PRODUCTS
         foreach ($this->order['cart']['items'] as $item) {
-            $discount = 0;
-            $price    = $item->price;
-
-            if ($this->checkSpecial($item->associatedModel)) {
-                $price    = $item->price - collect($item->conditions)->first()->parsedRawValue;
-                $discount = Helper::calculateDiscount($item->price, $price);
-            }
+            $price = round((float) $item->getPriceWithConditions(false), 2);
+            $discount = $item->price > 0 ? Helper::calculateDiscount($item->price, $price) : 0;
 
             $image = $item->attributes->slika;
 

@@ -1,7 +1,7 @@
 <template>
     <div class="cart pb-2 mb-2">
-        <div class="mb-1" v-if="Number(context_product.main_price) > Number(context_product.main_special)">
-            <span class="h3 fw-bold font-title text-blue me-1">{{ shown_price }} €</span>
+        <div class="mb-1" v-if="Number(price) > finalPrice">
+            <span class="h3 fw-bold font-title text-blue me-1">{{ formatPrice(finalPrice) }}</span>
             <span class="text-muted fs-lg me-3">
         <strike>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(price) }}</strike>
       </span>
@@ -9,11 +9,11 @@
 
         <div class="mb-1" v-else>
       <span class="h3 fw-bold font-title text-blue me-1">
-        {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}
+        {{ formatPrice(finalPrice) }}
       </span>
         </div>
 
-        <div class="mb-1 mt-1 text-start" v-if="Number(context_product.main_price) > Number(context_product.main_special)">
+        <div class="mb-1 mt-1 text-start" v-if="Number(context_product.main_price) > Number(context_product.campaign_price ?? context_product.main_special)">
       <span class="fs-sm text-muted me-1">
         {{ trans.lowest_price }}:
         {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}
@@ -27,8 +27,21 @@
         <div class="mb-3">
       <span class="fs-xs text-blue me-1">
         {{ trans.nopdv }}:
-        {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price / 1.25) }}
+        {{ formatPrice(finalPrice / 1.25) }}
       </span>
+        </div>
+
+        <div v-if="tiers.length" class="border rounded p-3 mb-3 mw-500">
+            <div class="fw-bold mb-2">Vaši količinski popusti</div>
+            <p class="fs-sm mb-2">Zbrajaju se svi komadi ovog brenda u košarici. Cijene su po komadu.</p>
+            <table class="table table-sm mb-2">
+                <thead><tr><th>Od komada</th><th>Popust</th><th>Vaša cijena</th></tr></thead>
+                <tbody><tr v-for="tier in tiers" :key="tier.min_quantity">
+                    <td>{{ tier.min_quantity }}</td><td>{{ tier.percentage }} %</td>
+                    <td><s class="text-muted me-2">{{ formatPrice(price) }}</s><strong>{{ formatPrice(tierPrice(tier)) }}</strong></td>
+                </tr></tbody>
+            </table>
+            <small>U košarici imate {{ brandQuantity }} kom. ovog brenda. Prikazana cijena uključuje količinu koju dodajete.</small>
         </div>
 
         <div class="mw-500" v-if="Object.keys(color_options).length">
@@ -104,6 +117,8 @@
 </template>
 
 <script>
+import { quantityPrice } from '../../quantity-pricing';
+
 export default {
     props: {
         product: String,
@@ -137,6 +152,16 @@ export default {
         };
     },
     computed: {
+        tiers() { return this.context_product.quantity_discounts || []; },
+        brandQuantity() {
+            return Object.values(this.$store.state.cart.items || {}).reduce((sum, item) =>
+                Number(item.associatedModel?.brand_id) === Number(this.context_product.brand_id)
+                    ? sum + Number(item.quantity) : sum, 0);
+        },
+        finalPrice() {
+            return quantityPrice(Number(this.price), Number(this.shown_price), this.tiers,
+                this.brandQuantity + Math.max(0, Number(this.quantity) || 0));
+        },
         // koliko maksimalno smije unijeti SADA (stock opcije – već u košarici)
         maxQty() {
             const avail = Number(this.is_available) || 0;
@@ -195,10 +220,16 @@ export default {
             this.color_options = res.color ? res.color.options : {};
         },
         setPrice() {
-            if (Number(this.context_product.main_price) > Number(this.context_product.main_special)) {
+            if (Number(this.context_product.main_price) > Number(this.context_product.campaign_price ?? this.context_product.main_special)) {
                 this.price = this.context_product.main_price;
-                this.shown_price = this.context_product.main_special;
+                this.shown_price = this.context_product.campaign_price ?? this.context_product.main_special;
             }
+        },
+        formatPrice(value) {
+            return new Intl.NumberFormat('hr-HR', { style: 'currency', currency: 'EUR' }).format(value);
+        },
+        tierPrice(tier) {
+            return quantityPrice(Number(this.price), Number(this.shown_price), this.tiers, Number(tier.min_quantity));
         },
         add() {
             this.checkAvailability(true);
@@ -327,7 +358,7 @@ export default {
                     if (this.isFixedDiscount()) {
                         // F predstavlja konačnu akcijsku cijenu i uključuje odabranu opciju.
                         this.extra_price = '';
-                        this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
+                        this.shown_price = this.toNum(this.context_product.campaign_price ?? this.context_product.main_special).toFixed(2);
                     } else {
                         // postojeća logika popusta (percent/amount itd.)
                         this.shown_price = this.setShowPrice();
@@ -358,7 +389,7 @@ export default {
                     if (this.isFixedDiscount()) {
                         // F predstavlja konačnu akcijsku cijenu i uključuje odabranu opciju.
                         this.extra_price = '';
-                        this.shown_price = this.toNum(this.context_product.main_special).toFixed(2);
+                        this.shown_price = this.toNum(this.context_product.campaign_price ?? this.context_product.main_special).toFixed(2);
                     } else {
                         // postojeća logika popusta (percent/amount itd.)
                         this.shown_price = this.setShowPrice();
@@ -374,7 +405,7 @@ export default {
             const discountVal = typeof d === 'object' && d.value !== undefined ? Number(d.value) : Number(d);
 
             const base = Number(this.context_product.main_price);        // 86.90
-            const opt = Number(this.selected_color?.price || this.selected_size?.price || 0); // opcija +6
+            const opt = Number(this.price) - base;
             let final = base + opt;
 
             if (t === 'F') {
@@ -382,7 +413,7 @@ export default {
                 final = Math.min(base + opt, discountVal);
             } else if (t === 'P' || t === 'PERCENT') {
                 // postotni: (base + opcijska) * (1 - discount%)
-                final = (base + opt) * (1 - (discountVal / 100));
+                final = quantityPrice(base + opt, base + opt, [{min_quantity: 1, percentage: discountVal}], 1);
             } else if (this.context_action?.discount) {
                 // fallback na service funkciju ako ima
                 final = Number(this.$store.state.service.setDiscount(this.context_action.discount, base + opt));

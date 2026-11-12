@@ -429,6 +429,8 @@ let store = {
             let state = context.state;
 
             state.service.checkCart(ids).then(response => {
+                if (!response?.cart) return;
+                state.cart = response.cart;
                 state.storage.setCart(response.cart);
 
                 if (response.message && window.location.pathname != '/uspjeh') {

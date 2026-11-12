@@ -10,7 +10,7 @@
                             <a class="d-block flex-shrink-0 pt-2" :href="base_path + item.attributes.path"><img :src="item.attributes.slika" :alt="item.name" :title="item.name" style="width: 5rem;"></a>
                             <div class="ps-2 py-2">
                                 <h6 class="widget-product-title"><a :href="base_path + item.attributes.path">{{ item.name }}</a></h6>
-                                <div class="widget-product-meta"><span class="text-primary me-2">{{ Object.keys(item.conditions).length ? item.associatedModel.main_special_text : item.associatedModel.main_price_text }}</span><span class="text-muted">x {{ item.quantity }}</span></div>
+                                <div class="widget-product-meta"><span class="text-primary me-2">{{ (item.price_text ?? $store.state.service.formatMainPrice(item.attributes.unit_price ?? item.price)) }}</span><span class="text-muted">x {{ item.quantity }}</span></div>
                                 <div class="widget-product-meta"><span class="text-dark fs-sm me-2" v-if="item.associatedModel.secondary_price">{{ Object.keys(item.conditions).length ? item.associatedModel.secondary_special_text : item.associatedModel.secondary_price_text }}</span><span class="text-muted">x {{ item.quantity }}</span></div>
                             </div>
                         </div>
