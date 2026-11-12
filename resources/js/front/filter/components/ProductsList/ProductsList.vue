@@ -53,7 +53,7 @@
         <!-- Products grid-->
         <div class="row row-cols-xxxl-5 row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 g-0 mx-n2 mb-5" id="product-grid" v-if="products.total">
             <div class="px-2 mb-4 d-flex align-items-stretch" v-for="product in pricedProducts">
-                <div class="card product-card card-static pb-3">
+                <div class="card product-card card-static pb-5">
 
                     <a v-if="product.admin_url" :href="product.admin_url" target="_blank"><span class="badge badge-end rounded-pill bg-red mt-1 ms-1 badge-shadow">admin</span></a>
 
