@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\FrontBaseController;
 use App\Models\PriceListPublication;
 use App\Services\PriceListPublisher;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
-class PriceListController extends Controller
+class PriceListController extends FrontBaseController
 {
     public function index()
     {

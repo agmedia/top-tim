@@ -41,7 +41,8 @@ class AnchorPriceTest extends TestCase
         DB::statement('create table brand_translations (id integer primary key, brand_id integer, lang text, title text)');
         DB::statement('create table product_actions (id integer primary key, status integer, "group" text, user_group_id integer, "lock" integer, links text, type text, discount real, coupon text, date_start text, date_end text, logged integer)');
         DB::statement('create table product_actions_translations (id integer primary key, product_action_id integer, lang text, title text)');
-        DB::statement('create table pages (id integer primary key)');
+        DB::statement('create table pages (id integer primary key, status integer, "group" text)');
+        DB::statement('create table page_translations (id integer primary key, page_id integer, lang text, title text, slug text)');
         DB::statement('create table settings (id integer primary key, code text, "key" text, value text, json integer, created_at text, updated_at text)');
         DB::table('products')->insert([
             ['id' => 1, 'brand_id' => 1, 'sku' => 'TT-001', 'ean' => '4006381333931', 'price' => 100, 'status' => 1, 'quantity' => 3],
@@ -111,6 +112,24 @@ class AnchorPriceTest extends TestCase
         $this->get(route('price-lists.index'))->assertOk()->assertSee('Cjenici su u pripremi.');
         $this->get(route('price-lists.latest'))->assertNotFound();
         $this->get(route('price-lists.download', 1))->assertNotFound();
+    }
+
+    public function test_information_pages_load_navigation_translations_and_existing_footer_links(): void
+    {
+        DB::table('pages')->insert(['id' => 1, 'status' => 1, 'group' => 'page']);
+        DB::table('page_translations')->insert([
+            'page_id' => 1, 'lang' => 'hr', 'title' => 'Opći uvjeti poslovanja', 'slug' => 'opci-uvjeti-poslovanja',
+        ]);
+
+        foreach (['price-lists.index', 'product-return', 'legal-guarantee'] as $route) {
+            // Each request must supply its own shared data, as on the live site.
+            \Illuminate\Support\Facades\View::share(['pages' => null, 'js_lang' => null]);
+            $this->get(route($route))->assertOk()
+                ->assertSee('window.trans =', false)
+                ->assertSee('window.locale = "hr"', false)
+                ->assertSee('Opći uvjeti poslovanja')
+                ->assertSee(route('catalog.route.page', ['page' => 'opci-uvjeti-poslovanja']), false);
+        }
     }
 
     public function test_admin_can_switch_frontend_display_off_and_on_without_losing_prices_or_xml(): void

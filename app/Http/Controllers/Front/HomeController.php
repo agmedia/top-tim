@@ -81,6 +81,16 @@ class HomeController extends FrontBaseController
         return view('front.contract-termination');
     }
 
+    public function productReturn()
+    {
+        return view('front.product-return');
+    }
+
+    public function legalGuarantee()
+    {
+        return view('front.legal-guarantee');
+    }
+
 
     /**
      * Store the consumer's statement and send receipt notifications.

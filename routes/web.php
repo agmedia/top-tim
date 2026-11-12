@@ -488,8 +488,8 @@ Route::group(
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/kontakt', [HomeController::class, 'contact'])->name('kontakt');
     Route::get('/cjenici', [\App\Http\Controllers\Front\PriceListController::class, 'index'])->name('price-lists.index');
-    Route::view('/zakonsko-jamstvo', 'front.legal-guarantee')->name('legal-guarantee');
-    Route::view('/povrat-proizvoda', 'front.product-return')->name('product-return');
+    Route::get('/zakonsko-jamstvo', [HomeController::class, 'legalGuarantee'])->name('legal-guarantee');
+    Route::get('/povrat-proizvoda', [HomeController::class, 'productReturn'])->name('product-return');
     Route::post('/povrat-proizvoda', [HomeController::class, 'sendContractTermination'])
         ->middleware('throttle:contract-termination')->name('product-return.send');
     Route::post('/kontakt/posalji', [HomeController::class, 'sendContactMessage'])->name('poruka');
