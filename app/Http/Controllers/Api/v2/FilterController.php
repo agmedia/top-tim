@@ -14,6 +14,7 @@ use App\Models\Front\Catalog\Options\Options;
 use App\Models\Front\Catalog\ProductOption;
 use App\Models\Front\Catalog\Category;
 use App\Models\Front\Catalog\Publisher;
+use App\Services\CatalogImages;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -204,6 +205,8 @@ class FilterController extends Controller
         $products = (new Product())->filter($request)
             ->with('translation')->withCount('options')->withAvg('reviews', 'stars')
             ->paginate(config('settings.pagination.front'));
+
+        CatalogImages::apply($products->getCollection(), $request->input('option'));
 
         return response()->json($products);
     }
