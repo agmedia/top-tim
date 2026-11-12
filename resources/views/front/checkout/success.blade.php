@@ -45,12 +45,34 @@
     </div>
 @endsection
 @push('js_after')
+    @php
+        $contents = $data['order']->products->map(fn ($line) => [
+            'id' => (string) $line->product_id,
+            'quantity' => (int) $line->quantity,
+            'item_price' => (float) $line->price,
+        ])->values();
+    @endphp
     <script>
-        fbq('track', 'Purchase', {
-            value: {{ number_format($data['order']['total'] ?? 0, 2, '.', '') }}, // točna decimalna točka, bez tisućica
-            currency: 'EUR',
-            content_ids: @json($data['ids'] ?? []), // pravi JS array
-            content_type: 'product'
-        });
+        (() => {
+            if (!window.fbq) return;
+            const eventID = @json('purchase-' . $data['order']->id);
+            const key = 'meta-' + eventID;
+            try {
+                if (localStorage.getItem(key)) return;
+            } catch (error) {}
+
+            const contents = @json($contents);
+            window.fbq('track', 'Purchase', {
+                value: @json((float) $data['order']->total),
+                currency: 'EUR',
+                content_ids: [...new Set(contents.map(line => line.id))],
+                contents,
+                content_type: 'product'
+            }, {eventID});
+
+            try {
+                localStorage.setItem(key, '1');
+            } catch (error) {}
+        })();
     </script>
 @endpush

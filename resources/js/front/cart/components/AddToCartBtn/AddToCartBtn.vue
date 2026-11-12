@@ -206,14 +206,6 @@ export default {
                 this.updateCart();
             } else {
                 this.addToCart();
-                if (window.fbq) {
-                    window.fbq('track', 'AddToCart', {
-                        content_ids: [this.id],
-                        content_type: 'product',
-                        value: this.shown_price,
-                        currency: 'EUR',
-                    });
-                }
             }
         },
         addToCart() {

@@ -618,3 +618,16 @@
         })();
     </script>
 @endpush
+
+@push('js_after')
+    <script>
+        if (window.fbq) {
+            window.fbq('track', 'ViewContent', {
+                content_ids: @json([(string) $prod->id]),
+                content_type: 'product',
+                value: @json((float) ($prod->main_special > 0 ? min($prod->main_price, $prod->main_special) : $prod->main_price)),
+                currency: 'EUR'
+            });
+        }
+    </script>
+@endpush

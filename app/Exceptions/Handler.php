@@ -23,6 +23,7 @@ class Handler extends ExceptionHandler
     protected $dontFlash = [
         'password',
         'password_confirmation',
+        'brevo_api_key',
     ];
 
     /**

@@ -60,6 +60,9 @@
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '956372552038449');
         fbq('track', 'PageView');
+        @if(session('newsletter_subscribed'))
+            fbq('track', 'Lead');
+        @endif
     </script>
     <noscript><img height="1" width="1" style="display:none"
                    src="https://www.facebook.com/tr?id=956372552038449&ev=PageView&noscript=1"
@@ -114,7 +117,7 @@
 <script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
     <!-- Main theme script ?v=2.2.9 -->
-<script src="{{ asset('js/cart.js?v=20261109-security') }}"></script>
+<script src="{{ asset('js/cart.js?v=20261112-filter') }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {

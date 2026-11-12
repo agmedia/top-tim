@@ -197,3 +197,11 @@
         </script>
     @endif
 @endpush
+
+@push('js_after')
+    @if (!empty($metaCart['content_ids']))
+        <script>
+            if (window.fbq) window.fbq('track', 'AddPaymentInfo', @json($metaCart));
+        </script>
+    @endif
+@endpush

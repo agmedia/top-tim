@@ -232,9 +232,10 @@ class Brand extends Model implements \Mcamara\LaravelLocalization\Interfaces\Loc
             }
         }
 
-        $query->limit($limit)
-              ->withCount('products')
-              ->orderBy('sort_order');
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
+        $query->withCount('products')->orderBy('sort_order');
 
         return $query;
     }

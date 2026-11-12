@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Helpers\Helper;
+use App\Helpers\FilterColors;
 use App\Helpers\OptionHelper;
 use App\Models\Front\Catalog\Attributes;
 use App\Models\Front\Catalog\Product;
@@ -199,23 +200,9 @@ class FilterController extends Controller
 
         $request = new Request($request_data);
 
-        if (isset($params['ids']) && $params['ids'] != '') {
-            $products = (new Product())->filter($request)
-                                       ->paginate(config('settings.pagination.front'));
-        } else {
-            /*$products = Helper::resolveCache('products')->remember($cache_string, config('cache.life'), function () use ($request) {
-                 return (new Product())->filter($request)
-                                       ->with('author')
-                                       ->paginate(config('settings.pagination.front'), ['*'], 'page', $request->input('page'));
-            });*/
-
-            $products = (new Product())->filter($request)
-                                       ->paginate(config('settings.pagination.front'));
-
-            /*foreach ($products as $product) {
-                Log::info($product->toArray());
-            }*/
-        }
+        $products = (new Product())->filter($request)
+            ->with('translation')->withCount('options')->withAvg('reviews', 'stars')
+            ->paginate(config('settings.pagination.front'));
 
         return response()->json($products);
     }
@@ -231,8 +218,8 @@ class FilterController extends Controller
         if ($request->has('params')) {
 
             return response()->json(
-                (new Brand())->filter($request->input('params'))
-                             ->get()
+                (new Brand())->filter($request->input('params'), 0)
+                             ->with('translation')->get()
                              ->toArray()
             );
         }
@@ -261,9 +248,9 @@ class FilterController extends Controller
 
         if ($request->has('params')) {
             $options  = (new Options())->filter($request->input('params'), 0)
-                                       ->get()->sortBy('translation.title');
+                                       ->with('translation')->get()->sortBy('translation.title');
 
-            foreach ($options as $option) {
+            foreach ($options->where('type', '!=', 'color') as $option) {
                 $response[] = [
                     'id'             => $option->id,
                     'title'          => $option->translation->title,
@@ -276,6 +263,7 @@ class FilterController extends Controller
                     'sort_order'     => $option->sort_order
                 ];
             }
+            $response = array_merge($response, FilterColors::group($options->where('type', 'color')));
         }
 
         return response()->json($response);
@@ -288,7 +276,7 @@ class FilterController extends Controller
         $response = [];
         if ($request->has('params')) {
              $attributes  = (new Attributes())->filter($request->input('params'))
-            ->get()->sortBy('translation.title');
+            ->with('translation')->get()->sortBy('translation.title');
 
 
 

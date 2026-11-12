@@ -41,6 +41,28 @@ class AgService {
      * @param item
      * @returns {*}
      */
+    trackCartAddition(previous, current) {
+        if (!window.fbq) return;
+
+        const contents = Object.values(current.items || {}).flatMap(line => {
+            const before = previous.items?.[line.id];
+            const quantity = Number(line.quantity) - Number(before?.quantity || 0);
+            const productId = line.associatedModel?.id;
+            return quantity > 0 && productId
+                ? [{id: String(productId), quantity, item_price: Number(line.price)}]
+                : [];
+        });
+        if (!contents.length) return;
+
+        window.fbq('track', 'AddToCart', {
+            content_ids: [...new Set(contents.map(line => line.id))],
+            contents,
+            content_type: 'product',
+            currency: 'EUR',
+            value: contents.reduce((total, line) => total + line.quantity * line.item_price, 0),
+        });
+    }
+
     addToCart(item) {
         return axios.post('cart/add', {item: item})
         .then(response => {
@@ -358,8 +380,10 @@ let store = {
 
             state.service.addToCart(item).then(cart => {
                 if (cart) {
+                    const previous = state.cart || {};
                     state.storage.setCart(cart);
                     state.cart = cart;
+                    state.service.trackCartAddition(previous, cart);
                 }
             });
         },
@@ -374,8 +398,10 @@ let store = {
 
             state.service.updateCart(item).then(cart => {
                 if (cart) {
+                    const previous = state.cart || {};
                     state.storage.setCart(cart);
                     state.cart = cart;
+                    state.service.trackCartAddition(previous, cart);
                 }
             });
         },

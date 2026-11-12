@@ -168,65 +168,22 @@ class Options extends Model
      */
     public function filter(array $request, int $limit = 20): Builder
     {
-        $query = (new Options())->newQuery();
+        $params = array_filter(\Illuminate\Support\Arr::only($request, [
+            'ids', 'group', 'cat', 'subcat', 'brand', 'option', 'attribute',
+        ]), fn ($value) => $value !== null && $value !== '');
+        $products = (new Product())->filter(new Request($params))->reorder()->select('products.id');
+        $links = ProductOption::query()->whereIn('product_id', $products);
+        $optionIds = (clone $links)->select('option_id')
+            ->union((clone $links)->select('parent_id'));
 
-        if (isset($request['search_option']) && $request['search_option']) {
-            $query->active();
-
+        $query = $this->newQuery()->active()->whereIn('options.id', $optionIds);
+        if (!empty($request['search_option'])) {
             $query = Helper::searchByTitle($query, $request['search_option']);
-
-        } else {
-            $query->active();
-
-            if ($request['group'] && ( ! isset($request['search_option']) || ! $request['search_option'])) {
-                $query->whereHas('products', function ($query) use ($request) {
-                    $query = ProductHelper::queryCategories($query, $request);
-                    if ($request['option']) {
-                        if (strpos($request['option'], '+') !== false) {
-                            $arr  = explode('+', $request['option']);
-                            $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique();
-                        } else {
-                            $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique();
-                        }
-
-                        $query->whereIn('id', $pids);
-                    }
-                })->orwhereHas('subproducts', function ($query) use ($request) {
-                    $query = ProductHelper::queryCategories($query, $request);
-                    if ($request['option']) {
-                        if (strpos($request['option'], '+') !== false) {
-                            $arr  = explode('+', $request['option']);
-                            $pids = ProductOption::query()->whereIn('option_id', $arr)->orWhereIn('parent_id', $arr)->pluck('product_id')->unique();
-                        } else {
-                            $pids = ProductOption::query()->where('option_id', $request['option'])->orWhere('parent_id', $request['option'])->pluck('product_id')->unique();
-                        }
-
-                        $query->whereIn('id', $pids);
-                    }
-                });
-            }
-
-            if ( ! $request['group'] && $request['ids']) {
-
-                $_ids = collect(explode(',', substr($request['ids'], 1, -1)))->unique();
-
-
-                $query->whereHas('products', function ($query) use ($_ids) {
-                    $query->where('products.status', 1)->where('products.quantity', '!=', 0)->whereIn('products.id', $_ids);
-                })->orwhereHas('subproducts', function ($query) use ($_ids) {
-                    $query->where('products.status', 1)->where('products.quantity', '!=', 0)->whereIn('products.id', $_ids);
-                });
-            }
         }
-
         if ($limit) {
             $query->limit($limit);
         }
 
-        $query/*->withCount('products')*/
-              ->orderBy('sort_order');
-
-
-        return $query;
+        return $query->with('translation')->orderBy('sort_order');
     }
 }

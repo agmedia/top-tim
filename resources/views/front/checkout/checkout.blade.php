@@ -40,3 +40,11 @@
 @push('js_after')
     @livewireScripts
 @endpush
+
+@push('js_after')
+    @if (!empty($metaCart['content_ids']))
+        <script>
+            if (window.fbq) window.fbq('track', 'InitiateCheckout', @json($metaCart));
+        </script>
+    @endif
+@endpush

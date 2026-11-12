@@ -54,9 +54,11 @@ class CheckoutController extends FrontBaseController
             $step = $request->input('step');
         }
 
-        $is_free_shipping = (config('settings.free_shipping') < $this->shoppingCart()->get()['total']) ? true : false;
+        $cart = $this->shoppingCart()->get();
+        $metaCart = $this->metaCart($cart);
+        $is_free_shipping = config('settings.free_shipping') < $cart['total'];
 
-        return view('front.checkout.checkout', compact('step', 'is_free_shipping'));
+        return view('front.checkout.checkout', compact('step', 'is_free_shipping', 'metaCart'));
     }
 
 
@@ -114,7 +116,7 @@ class CheckoutController extends FrontBaseController
 
         $data['payment_form'] = $order->resolvePaymentForm();
 
-        return view('front.checkout.view', compact('data', 'uvjeti'));
+        return view('front.checkout.view', ['data' => $data, 'uvjeti' => $uvjeti, 'metaCart' => $this->metaCart($cart)]);
     }
 
 
@@ -205,7 +207,6 @@ class CheckoutController extends FrontBaseController
         $order_data = $this->resolveFinishedOrder($data['order']['id']);
 
         if (isset($order_data['order'])) {
-            $data['ids'] = $order_data['ids'];
             $data['order'] = $order_data['order'];
             $data['google_tag_manager'] = $order_data['google_tag_manager'];
 
@@ -282,7 +283,6 @@ class CheckoutController extends FrontBaseController
 
         // Rendering a return page never changes payment status, inventory or sends mail.
         $data['order'] = $order;
-        $data['ids'] = $order->products->pluck('id')->values()->all();
         $this->forgetCheckoutCache();
         $this->shoppingCart()->flush()->resolveDB();
 
@@ -395,6 +395,25 @@ class CheckoutController extends FrontBaseController
         CheckoutSession::forgetPayment();
         CheckoutSession::forgetShipping();
         CheckoutSession::forgetComment();
+    }
+
+    private function metaCart(array $cart): array
+    {
+        $contents = collect($cart['items'])->filter(fn ($line) => isset($line->associatedModel->id))
+            ->map(fn ($line) => [
+                'id' => (string) $line->associatedModel->id,
+                'quantity' => (int) $line->quantity,
+                'item_price' => (float) $line->price,
+            ])->values();
+
+        return [
+            'content_ids' => $contents->pluck('id')->unique()->values()->all(),
+            'contents' => $contents,
+            'content_type' => 'product',
+            'num_items' => (int) $cart['count'],
+            'value' => (float) $cart['total'],
+            'currency' => 'EUR',
+        ];
     }
 
     private function cartIsEmpty(array $cart): bool

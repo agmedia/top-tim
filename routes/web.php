@@ -240,6 +240,8 @@ Route::group(
 
         // POSTAVKE
         Route::prefix('settings')->group(function () {
+            Route::get('brevo', [\App\Http\Controllers\Back\Settings\BrevoController::class, 'index'])->name('brevo.index');
+            Route::post('brevo', [\App\Http\Controllers\Back\Settings\BrevoController::class, 'update'])->name('brevo.update');
             // API
             Route::get('api', [ApiController::class, 'index'])->name('api.index');
             Route::get('api/cron-reports', [ApiController::class, 'cronReports'])->name('api.cron.reports');
@@ -289,6 +291,9 @@ Route::group(
 /**
  * API Routes
  */
+Route::get('feeds/google-merchant.xml', [\App\Http\Controllers\Front\ProductFeedController::class, 'google'])->withoutMiddleware("web")->name('feeds.google');
+Route::get('feeds/meta-catalog.csv', [\App\Http\Controllers\Front\ProductFeedController::class, 'meta'])->withoutMiddleware("web")->name('feeds.meta');
+
 Route::prefix('api/v2')->group(function () {
     // SEARCH
     //Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('api.front.search');
@@ -490,7 +495,7 @@ Route::group(
 //
     Route::get('pretrazi', [CatalogRouteController::class, 'search'])->name('pretrazi');
 
-    Route::post('newsletter', [HomeController::class, 'newsletter'])->name('newsletter');
+    Route::post('newsletter', [HomeController::class, 'newsletter'])->middleware('throttle:10,1')->name('newsletter');
 //
     Route::get('info/{page}', [CatalogRouteController::class, 'page'])->name('catalog.route.page');
     Route::get('blog/{blog?}', [CatalogRouteController::class, 'blog'])->name('catalog.route.blog');

@@ -285,3 +285,11 @@
 
     </style>
 @endpush
+
+@if(request()->routeIs('pretrazi') && request()->filled(config('settings.search_keyword')))
+    @push('js_after')
+        <script>
+            if (window.fbq) window.fbq('track', 'Search');
+        </script>
+    @endpush
+@endif

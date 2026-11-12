@@ -13,6 +13,7 @@
                             <input class="form-control rounded-start" type="text" value="" name="email" placeholder="{{ __('front/ricekakis.newsletter_email') }}" required>
                             <button class="btn btn-primary" type="submit" >{{ __('front/ricekakis.newsletter_btn') }}</button>
                         </div>
+                        @error('email') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                         <div class="form-text mt-3">{{ __('front/ricekakis.newsletter_foot') }}</div>
                     </form>
                 </div>

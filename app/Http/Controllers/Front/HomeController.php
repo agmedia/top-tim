@@ -253,8 +253,11 @@ class HomeController extends FrontBaseController
         $created_newsletter = $newsletter->validateRequest($request)->create();
 
         if ($created_newsletter) {
+            if (!app(\App\Services\BrevoNewsletter::class)->subscribe($created_newsletter->email)) {
+                return back()->withErrors(['email' => 'Prijava trenutno nije dostupna. Pokušajte ponovno.']);
+            }
 
-            return back()->with(['success' => 'Uspješna prijava']);
+            return back()->with(['success' => 'Uspješna prijava', 'newsletter_subscribed' => true]);
         }
 
         return back()->with(['error' => 'Whoops..! Upišite ispravan email']);

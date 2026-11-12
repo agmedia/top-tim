@@ -3,6 +3,7 @@
 namespace App\Models\Front\Catalog;
 
 use App\Helpers\Currency;
+use App\Helpers\FilterColors;
 use App\Helpers\Helper;
 use App\Helpers\ProductHelper;
 use App\Helpers\Special;
@@ -288,7 +289,9 @@ class Product extends Model
      */
     public function getStarsAttribute($value)
     {
-        return $this->reviews()->avg('stars');
+        return array_key_exists('reviews_avg_stars', $this->attributes)
+            ? $this->attributes['reviews_avg_stars']
+            : $this->reviews()->avg('stars');
     }
 
 
@@ -297,7 +300,9 @@ class Product extends Model
      */
     public function getHasOptionAttribute()
     {
-        return $this->options()->count() > 0;
+        return array_key_exists('options_count', $this->attributes)
+            ? $this->attributes['options_count'] > 0
+            : $this->options()->exists();
     }
 
 
@@ -893,7 +898,7 @@ class Product extends Model
                 }
             }
 
-            $query->where('brand_id', $auts);
+            $query->whereIn('brand_id', $auts);
         }
 
         //
@@ -922,14 +927,26 @@ class Product extends Model
                         }
 
                     } else {
-                        array_push($opts_ids, intval($request->input('option')));
+                        array_push($opts_ids, $request->input('option'));
                     }
                 }
             }
 
-            $pids = ProductOption::query()->whereIn('option_id', $opts_ids)->orWhereIn('parent_id', $opts_ids)->pluck('product_id');
+            $colors = array_filter($opts_ids, fn ($id) => str_starts_with((string) $id, 'color-'));
+            $numericIds = array_values(array_filter($opts_ids, fn ($id) => ctype_digit((string) $id)));
+            if ($colors) {
+                $groups = FilterColors::group(Options::active()->where('type', 'color')->get(['id', 'value', 'value_opt']));
+                $colorIds = collect($groups)->whereIn('id', $colors)->pluck('option_ids')->flatten()->unique()->all();
+                $query->whereIn('id', ProductOption::query()->select('product_id')->where(function ($query) use ($colorIds) {
+                    $query->whereIn('option_id', $colorIds)->orWhereIn('parent_id', $colorIds);
+                }));
+            }
+            if ($numericIds || !$colors) {
+                $query->whereIn('id', ProductOption::query()->select('product_id')->where(function ($query) use ($numericIds) {
+                    $query->whereIn('option_id', $numericIds)->orWhereIn('parent_id', $numericIds);
+                }));
+            }
 
-            $query->whereIn('id', $pids);
         }
 
 
@@ -963,7 +980,7 @@ class Product extends Model
                 }
             }
 
-            $pids = ProductAttribute::query()->whereIn('attribute_id', $opts_ids)->pluck('product_id');
+            $pids = ProductAttribute::query()->whereIn('attribute_id', $opts_ids)->select('product_id');
 
             $query->whereIn('id', $pids);
         }

@@ -9,7 +9,7 @@
                 <span v-if="attributes.length && subcat" v-for="attribute in attributes">
                             <div v-if="attribute.group === 'Dodatna kategorizacija' ">
                                 <label class="btn btn-light btn-icon me-1 mb-2" :for="attribute.id">
-                                    <input class="form-check-input" type="checkbox" :id="attribute.id" v-bind:value="attribute.id" v-model="selectedAttributes"> {{ attribute.title }}
+                                    <input class="form-check-input" type="checkbox" :id="attribute.id" :value="String(attribute.id)" v-model="selectedAttributes"> {{ attribute.title }}
                                 </label>
                             </div>
                         </span>
@@ -19,7 +19,7 @@
                 </button>
 
                 <div class="d-flex ms-md-auto ms-0  mb-2">
-                    <select class="form-select pe-2" style="max-width: 120px;" v-model="sorting">
+                    <select class="form-select pe-2" style="max-width: 120px;" v-model="sorting" @change="setQueryParam('sort', sorting)">
                         <option value="">{{ trans.sortiraj }}</option>
                         <option value="novi">{{ trans.najnovije }}</option>
                         <option value="price_up">{{ trans.najmanja_cijena }}</option>
@@ -102,6 +102,10 @@
         </div>
         <pagination :data="products" align="center" :show-disabled="true" :limit="4" @pagination-change-page="getProductsPage"></pagination>
 
+        <div v-if="products_error" class="alert alert-warning" role="alert">
+            Proizvodi se nisu uspjeli učitati.
+            <button class="btn btn-sm btn-outline-primary ms-2" type="button" @click="getProducts">Pokušaj ponovno</button>
+        </div>
         <div class="row" v-if="!products_loaded">
             <div class="col-md-12 d-flex justify-content-center mt-4">
                 <div class="spinner-border text-primary opacity-75" role="status" style="width: 9rem; height: 9rem;"></div>
@@ -159,7 +163,6 @@ export default {
             brand:                  '',
             option:                 '',
             attribute:              '',
-            selectedAttributes:     [],
             nakladnik:              '',
             start:                  '',
             end:                    '',
@@ -170,6 +173,8 @@ export default {
             origin:                 location.origin + '/',
             hr_total:               'rezultata',
             products_loaded:        false,
+            products_error:         false,
+            productRequest:         null,
             search_zero_result:     false,
             navigation_zero_result: false,
             trans:                  window.trans,
@@ -177,62 +182,57 @@ export default {
     },
     //
     watch: {
-        sorting(value) {
-            this.setQueryParam('sort', value);
-        },
         $route(params) {
             this.checkQuery(params);
         },
-        selectedAttributes(value) {
-            this.attribute = value.join('+');
-            this.setQueryParamOther('attribute', this.attribute);
+    },
+    computed: {
+        selectedAttributes: {
+            get() { return String(this.$route.query.attribute || '').split('+').filter(Boolean); },
+            set(value) { this.setQueryParamOther('attribute', value.join('+')); },
         },
     },
     //
     mounted() {
         this.checkQuery(this.$route);
-        // if (this.attribute === '') {
-        this.show_attributes = true;
-        this.getAttributes();
-        //  }
+        if (this.subcat) this.getAttributes();
+    },
 
-        console.log(this.admin);
+    beforeUnmount() {
+        this.productRequest?.abort();
     },
 
     methods: {
         /**
          *
          */
-        getProducts() {
-            this.search_zero_result     = false;
+        async getProducts() {
+            this.productRequest?.abort();
+            const controller = new AbortController();
+            this.productRequest = controller;
+            this.search_zero_result = false;
             this.navigation_zero_result = false;
-            this.products_loaded        = false;
-            let params                  = this.setParams();
+            this.products_loaded = false;
+            this.products_error = false;
+            const params = this.setParams();
 
-            //console.log('tu sam...')
-            //  console.log(params)
-
-            axios.post('filter/getProducts', {params}).then(response => {
-                this.products_loaded = true;
-                this.products        = response.data;
+            try {
+                const response = await axios.post('filter/getProducts', {params}, {
+                    params: {page: this.page || 1},
+                    signal: controller.signal,
+                });
+                if (controller.signal.aborted) return;
+                this.products = response.data;
                 this.checkHrTotal();
                 this.checkSpecials();
-
-                if (this.$store.state.storage.getCart()) {
-                    this.checkAvailables();
-                }
-
-                // console.log('Response::data.data')
-                // console.log(response.data.data)
-
-                if (params.pojam != '' && !this.products.total) {
-                    this.search_zero_result = true;
-                }
-
-                if (params.pojam == '' && !this.products.total) {
-                    this.navigation_zero_result = true;
-                }
-            });
+                this.checkAvailables();
+                this.search_zero_result = !!params.pojam && !this.products.total;
+                this.navigation_zero_result = !params.pojam && !this.products.total;
+            } catch (error) {
+                if (!axios.isCancel(error)) this.products_error = true;
+            } finally {
+                if (this.productRequest === controller) this.products_loaded = true;
+            }
         },
 
         /**
@@ -240,20 +240,9 @@ export default {
          * @param page
          */
         getProductsPage(page = 1) {
-            this.products_loaded = false;
-            this.page            = page;
+            this.page = page;
             this.setQueryParam('page', page);
-
-            let params = this.setParams();
             window.scrollTo({top: 0, behavior: 'smooth'});
-
-            axios.post('filter/getProducts?page=' + page, {params}).then(response => {
-                this.products_loaded = true;
-                this.products        = response.data;
-                this.checkHrTotal();
-                this.checkSpecials();
-                this.checkAvailables();
-            });
         },
 
         /**
@@ -263,27 +252,19 @@ export default {
          */
         setQueryParam(type, value) {
             this.closeFilter();
-            this.$router.push({query: this.resolveQuery()}).catch(() => {
-            });
-
-            if (value == '' || value == 1) {
-                this.$router.push({query: this.resolveQuery()}).catch(() => {
-                });
-            }
+            const query = {...this.$route.query};
+            if (type !== 'page') delete query.page;
+            if (value === '' || (type === 'page' && Number(value) === 1)) delete query[type];
+            else query[type] = value;
+            this.$router.push({query}).catch(() => {});
         },
 
         /**
          *
          **/
         setQueryParamOther(type, value) {
-
-            this.$router.push({query: this.resolveQuery()}).catch(() => {
-            });
-
-            if (value === '') {
-                this.$router.push({query: this.resolveQuery()}).catch(() => {
-                });
-            }
+            if (String(this.$route.query[type] || '') === String(value)) return;
+            this.setQueryParam(type, value);
         },
 
         /**
@@ -330,11 +311,7 @@ export default {
                 this.brand = this.brand_def;
             }
 
-            if (this.page != '') {
-                this.getProductsPage(this.page);
-            } else {
-                this.getProducts();
-            }
+            this.getProducts();
         },
 
         /**
@@ -405,7 +382,6 @@ export default {
             axios.post('filter/getAttributes', {params}).then(response => {
 
                 this.attributes = response.data;
-                this.preselect();
 
                 //   console.log('attributi')
                 //  console.log(response.data)
@@ -487,15 +463,9 @@ export default {
          *
          */
         cleanQuery() {
-            this.$router.push({query: {}}).catch(() => {
-            });
-
-          //  this.selectedAttributes = [];
-          //  this.selectedBrands = [];
-          //  this.selectedOptions = [];
-            //this.start = '';
-          //  this.end   = '';
-            location.reload();
+            const query = {...this.$route.query};
+            for (const key of ['brand', 'option', 'attribute', 'start', 'end', 'page']) delete query[key];
+            this.$router.push({query}).catch(() => {});
         },
 
 

@@ -57,13 +57,7 @@ class Newsletter extends Model
      */
     public function create()
     {
-        $id = $this->insertGetId($this->createModelArray());
-
-        if ($id) {
-            return $this->find($id);
-        }
-
-        return false;
+        return static::query()->firstOrCreate(['email' => $this->request->email]);
     }
 
 
