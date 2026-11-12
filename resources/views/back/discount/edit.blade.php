@@ -42,22 +42,31 @@
                         @foreach($brands as $brand)<option value="{{ $brand->id }}" @selected((string) old('brand_id', $discount->brand_id) === (string) $brand->id)>{{ $brand->translation?->title ?? $brand->id }}</option>@endforeach
                     </select>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-6"><label for="discount-quantity">Minimalni broj komada brenda</label><input id="discount-quantity" name="min_quantity" type="number" min="1" max="1000000" step="1" required class="form-control" value="{{ old('min_quantity', $discount->min_quantity) }}"></div>
-                    <div class="form-group col-md-6"><label for="discount-percentage">Popust (%)</label><input id="discount-percentage" name="percentage" type="number" min="0.01" max="100" step="0.01" required class="form-control" value="{{ old('percentage', $discount->percentage) }}"></div>
+                <div class="form-group" data-discount-tiers>
+                    <h2 class="h5">Razine popusta</h2>
+                    <p class="text-muted">Primjer: od 5 komada 5 %, od 10 komada 10 %. Svaka razina vrijedi od navedenog broja komada.</p>
+                    <div data-tier-list>
+                        @foreach(old('tiers', $levels) as $index => $level)
+                            @include('back.discount.level', ['index' => $index, 'level' => $level])
+                        @endforeach
+                    </div>
+                    <template data-tier-template>
+                        @include('back.discount.level', ['index' => 'new', 'level' => ['active' => true]])
+                    </template>
+                    <button type="button" class="btn btn-outline-primary mb-2" data-add-tier><i class="fa fa-plus mr-1"></i> Dodaj razinu</button>
                 </div>
                 <p class="text-muted">Zbrajaju se svi proizvodi i veličine odabranog brenda. Popust se računa od redovne cijene s doplatom za opciju. Ako je postojeća akcijska cijena niža, kupac zadržava tu cijenu.</p>
-                <div class="form-group"><input type="hidden" name="active" value="0"><label><input type="checkbox" name="active" value="1" @checked(old('active', $discount->active))> Aktivno</label></div>
-                <div class="form-group"><button class="btn btn-success" type="submit">Spremi popust</button> <a class="btn btn-light" href="{{ route('discounts') }}">Povratak</a></div>
+                <div class="form-group"><button class="btn btn-success" type="submit">Spremi sve razine</button> <a class="btn btn-light" href="{{ route('discounts') }}">Povratak</a></div>
             </div>
         </form>
         @if($discount->exists)
-            <form method="POST" action="{{ route('discounts.destroy', $discount) }}" onsubmit="return confirm('Obrisati ovaj količinski popust?')">@csrf @method('DELETE')<button type="submit" class="btn btn-outline-danger">Obriši popust</button></form>
+            <form method="POST" action="{{ route('discounts.destroy', $discount) }}" onsubmit="return confirm('Obrisati sve razine popusta za ovaj odabir?')">@csrf @method('DELETE')<input type="hidden" name="all_levels" value="1"><button type="submit" class="btn btn-outline-danger">Obriši sve razine</button></form>
         @endif
     </div>
 @endsection
 @push('js_after')
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('js/back/discount-tiers.js?v=20261112-1') }}" defer></script>
     <script>
         $(() => {
             $('#discount-user').select2({

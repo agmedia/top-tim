@@ -24,6 +24,15 @@ class QuantityDiscountTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config([
+            'database.default' => 'sqlite',
+            'database.connections.sqlite.url' => null,
+            'database.connections.sqlite.database' => ':memory:',
+            'session.driver' => 'array',
+            'cache.default' => 'array',
+        ]);
+        DB::purge('sqlite');
+        DB::reconnect('sqlite');
         session(['locale' => current_locale(), config('session.cart') => 'quantity-test']);
         require_once database_path('migrations/2014_10_12_000000_create_users_table.php');
         require_once database_path('migrations/2020_01_02_223800_create_bouncer_tables.php');
@@ -93,6 +102,90 @@ class QuantityDiscountTest extends TestCase
         $migration->down();
         $this->assertFalse(Schema::hasTable('customer_discounts'));
         $this->assertEquals($before, $snapshot());
+    }
+
+    public function test_admin_manages_multiple_levels_together_and_the_storefront_uses_the_thresholds(): void
+    {
+        $admin = $this->user('admin');
+        $customer = $this->user('customer', 1);
+        $data = ['target' => 'group', 'user_group_id' => 1, 'brand_id' => 1, 'tiers' => [
+            ['min_quantity' => 5, 'percentage' => 5, 'active' => 1],
+            ['min_quantity' => 10, 'percentage' => 10, 'active' => 1],
+            ['min_quantity' => 20, 'percentage' => 15, 'active' => 0],
+        ]];
+        $this->actingAs($admin)->post(route('discounts.store'), $data)->assertRedirect(route('discounts'));
+        $levels = CustomerDiscount::orderBy('min_quantity')->get();
+        $this->assertCount(3, $levels);
+        $this->get(route('discounts'))->assertOk()->assertViewHas('discounts', fn ($sets) => $sets->total() === 1 && $sets[0]->levels->count() === 3);
+        $this->get(route('discounts.edit', $levels[0]))->assertOk()
+            ->assertSee('Dodaj razinu')->assertSee('tiers[2][percentage]', false)->assertSee('Spremi sve razine');
+
+        $this->actingAs($customer);
+        $pricing = app(QuantityDiscounts::class);
+        $this->assertSame(100.0, $pricing->price(100, 100, 1, 4));
+        $this->assertSame(95.0, $pricing->price(100, 100, 1, 5));
+        $this->assertSame(95.0, $pricing->price(100, 100, 1, 9));
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 10));
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 20));
+
+        $otherBrand = $this->rule(['user_group_id' => 1, 'brand_id' => 2]);
+        $otherCustomer = $this->rule(['user_id' => $customer->id]);
+        $data['tiers'] = [
+            ['id' => $levels[0]->id, 'min_quantity' => 5, 'percentage' => 6, 'active' => 1],
+            ['id' => $levels[2]->id, 'min_quantity' => 20, 'percentage' => 20, 'active' => 1],
+            ['min_quantity' => 50, 'percentage' => 25, 'active' => 1],
+        ];
+        $this->actingAs($admin)->patch(route('discounts.update', $levels[0]), $data)->assertRedirect();
+        $this->assertDatabaseMissing('customer_discounts', ['id' => $levels[1]->id]);
+        $this->assertDatabaseHas('customer_discounts', ['id' => $levels[0]->id, 'percentage' => 6]);
+        $this->assertDatabaseHas('customer_discounts', ['user_group_id' => 1, 'brand_id' => 1, 'min_quantity' => 50, 'percentage' => 25]);
+        $this->delete(route('discounts.destroy', $levels[0]), ['all_levels' => 1])->assertRedirect();
+        $this->assertSame([$otherBrand->id, $otherCustomer->id], CustomerDiscount::orderBy('id')->pluck('id')->all());
+    }
+
+    public function test_duplicate_or_invalid_levels_do_not_partially_save_and_foreign_ids_are_rejected(): void
+    {
+        $this->actingAs($this->user('admin'));
+        $customer = $this->user('customer');
+        $original = $this->rule(['user_group_id' => 1, 'min_quantity' => 5]);
+        $foreign = $this->rule(['user_id' => $customer->id]);
+        $data = ['target' => 'group', 'user_group_id' => 1, 'brand_id' => 1, 'tiers' => [
+            ['id' => $original->id, 'min_quantity' => 5, 'percentage' => 5, 'active' => 1],
+            ['min_quantity' => 5, 'percentage' => 10, 'active' => 1],
+        ]];
+        $this->patchJson(route('discounts.update', $original), $data)->assertUnprocessable();
+        $data['tiers'][1] = ['id' => $foreign->id, 'min_quantity' => 10, 'percentage' => 20, 'active' => 1];
+        $this->patchJson(route('discounts.update', $original), $data)->assertUnprocessable();
+        $this->assertSame(10.0, $original->fresh()->percentage, 'Earlier levels must roll back when a later level fails.');
+        $this->assertSame(10.0, $foreign->fresh()->percentage);
+        $this->patchJson(route('discounts.update', $original), array_merge($data, ['tiers' => []]))->assertUnprocessable();
+        $data['tiers'][1] = ['min_quantity' => 10, 'percentage' => 101, 'active' => 1];
+        $this->patchJson(route('discounts.update', $original), $data)->assertUnprocessable();
+        $data['tiers'] = [['min_quantity' => 50, 'percentage' => 20, 'active' => 1]];
+        $this->postJson(route('discounts.store'), $data)->assertUnprocessable();
+        $this->assertDatabaseCount('customer_discounts', 2);
+    }
+
+    public function test_moving_a_set_updates_all_levels_without_overwriting_an_existing_set(): void
+    {
+        $this->actingAs($this->user('admin'));
+        $customer = $this->user('customer');
+        $first = $this->rule(['user_group_id' => 1, 'min_quantity' => 5]);
+        $second = $this->rule(['user_group_id' => 1, 'min_quantity' => 10]);
+        $occupied = $this->rule(['user_id' => $customer->id, 'brand_id' => 2]);
+        $data = ['target' => 'user', 'user_id' => $customer->id, 'brand_id' => 2, 'tiers' => [
+            ['id' => $first->id, 'min_quantity' => 5, 'percentage' => 5, 'active' => 1],
+            ['id' => $second->id, 'min_quantity' => 10, 'percentage' => 10, 'active' => 1],
+        ]];
+        $this->patchJson(route('discounts.update', $first), $data)->assertUnprocessable();
+        $this->assertSame(1, $first->fresh()->user_group_id);
+        $data['brand_id'] = 1;
+        $this->patch(route('discounts.update', $first), $data)->assertRedirect();
+        foreach ([$first, $second] as $level) {
+            $this->assertSame($customer->id, $level->fresh()->user_id);
+            $this->assertNull($level->fresh()->user_group_id);
+        }
+        $this->assertSame(2, $occupied->fresh()->brand_id);
     }
 
     public function test_invalid_rules_and_unprivileged_access_are_rejected(): void

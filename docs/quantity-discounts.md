@@ -1,6 +1,6 @@
 # Količinski popusti po korisniku ili grupi i brendu
 
-Administratori i superadministratori uređuju pravila u **Količinski popusti** (`/admin/discounts`). Svako pravilo ima korisnika ili grupu, brend, minimalni broj komada, postotak i status. Za više pragova dodaje se više pravila.
+Administratori i superadministratori uređuju pravila u **Količinski popusti** (`/admin/discounts`). U jednom obrascu odabiru se korisnik ili grupa i brend, a gumbom **Dodaj razinu** dodaju se pragovi, primjerice 5 komada → 5 %, 10 komada → 10 %. Svaka razina ima vlastiti status. Spremanje je zajedničko i odvija se u jednoj transakciji. Postojeća pravila za isti odabir prikazuju se zajedno, bez nove migracije.
 
 Količina se zbraja po brendu kroz sve proizvode i varijante u košarici. Aktivna osobna pravila i pravila aktivne grupe daju najviši postotak čiji je prag dosegnut. Postotak se računa na redovnu cijenu s doplatom za varijantu. Zadržava se povoljnija postojeća akcijska cijena; popusti na isti artikl ne zbrajaju se. Postojeće pogodnosti na ukupnu košaricu ostaju zasebna pravila.
 
@@ -18,28 +18,28 @@ php artisan config:cache
 php artisan view:cache
 ```
 
-Migracija je provjerena na izoliranoj SQLite bazi. Pristup lokalnom MySQL-u iz radnog okruženja blokiran je, pa migracija na lokalnoj ili produkcijskoj MySQL bazi još nije izvršena. Frontend datoteke `public/js/cart.js` i `public/js/filter.js` već su izgrađene.
+Migracija je provjerena na izoliranoj SQLite bazi, a korisnik je potvrdio uspješno izvršavanje na lokalnom MySQL-u. Status migracije na produkciji provjerava se odvojeno. Dorada za više razina koristi tu postojeću tablicu i ne zahtijeva migraciju. Frontend datoteke `public/js/cart.js` i `public/js/filter.js` već su izgrađene.
 
 ## Provjere
 
 `QuantityDiscountTest` provjerava ovlasti, unos i uređivanje pravila, izolaciju korisnika, aktivnost grupe, promjenu članstva, pragove, druge brendove, doplate za varijante, košaricu, spremljenu cijenu narudžbe, postojeće akcije, 100 % popusta i očuvanje postojećih podataka migracijom. JavaScript provjere koriste izgrađeni frontend za cijene na proizvodu i u košarici.
 
-## Objava preko Gita
+## Objava dorade s više razina
 
-Lokalno, iz projekta. Izričiti odabir putanja izostavlja pripremljene slike i druge izgrađene datoteke koje nisu dio ove izmjene.
+Za ovu doradu **ne pokretati migracije**. Nakon pusha i preuzimanja koda dovoljno je obnoviti predloške. Nova skripta za dodavanje redaka je `public/js/back/discount-tiers.js` i učitava se izravno, bez novog frontend builda.
+
+Lokalno, iz projekta, ove putanje izostavljaju pripremljene slike i nepovezane izmjene:
 
 ```sh
-git add app resources routes tests docs/quantity-discounts.md database/migrations/2026_11_12_180000_create_customer_discounts_table.php public/js/cart.js public/js/filter.js &&
-git commit --only -m "Add customer quantity discounts by brand" -- app resources routes tests docs/quantity-discounts.md database/migrations/2026_11_12_180000_create_customer_discounts_table.php public/js/cart.js public/js/filter.js &&
+git add app/Http/Controllers/Back/DiscountController.php resources/views/back/discount public/js/back/discount-tiers.js tests/Feature/QuantityDiscountTest.php tests/JavaScript/discount-tiers.test.cjs phpunit.xml docs/quantity-discounts.md &&
+git commit --only -m "Edit quantity discount tiers in one form" -- app/Http/Controllers/Back/DiscountController.php resources/views/back/discount public/js/back/discount-tiers.js tests/Feature/QuantityDiscountTest.php tests/JavaScript/discount-tiers.test.cjs phpunit.xml docs/quantity-discounts.md &&
 git push origin HEAD:master
 ```
 
-Na serveru nakon uspješnog pusha:
+Na serveru nakon uspješnog pusha i uz već instaliranu početnu tablicu:
 
 ```sh
 cd /home/toptimco/public_html &&
 git pull --ff-only origin master &&
-php artisan migrate --path=database/migrations/2026_11_12_180000_create_customer_discounts_table.php --force &&
-php artisan config:cache &&
 php artisan view:cache
 ```
