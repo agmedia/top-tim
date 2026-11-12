@@ -17,6 +17,7 @@ use App\Models\Front\Catalog\Publisher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -244,10 +245,23 @@ class FilterController extends Controller
      */
     public function options(Request $request): JsonResponse
     {
-        $response = [];
+        if (!$request->has('params')) {
+            return response()->json([]);
+        }
 
-        if ($request->has('params')) {
-            $options  = (new Options())->filter($request->input('params'), 0)
+        $request->validate(['params' => ['array']]);
+        $fields = [
+            'ids', 'group', 'cat', 'subcat', 'brand', 'option', 'attribute', 'search_option',
+        ];
+        $params = array_replace(array_fill_keys($fields, ''), Arr::only($request->input('params'), $fields));
+        $key = 'catalog-filter-options.v2.' . hash('sha256', json_encode([
+            'locale' => current_locale(),
+            'params' => $params,
+        ]));
+
+        $response = Cache::store(config('cache.catalog_filters'))->remember($key, 120, function () use ($params) {
+            $response = [];
+            $options  = (new Options())->filter($params, 0)
                                        ->with('translation')->get()->sortBy('translation.title');
 
             foreach ($options->where('type', '!=', 'color') as $option) {
@@ -263,8 +277,8 @@ class FilterController extends Controller
                     'sort_order'     => $option->sort_order
                 ];
             }
-            $response = array_merge($response, FilterColors::group($options->where('type', 'color')));
-        }
+            return array_merge($response, FilterColors::group($options->where('type', 'color')));
+        });
 
         return response()->json($response);
     }

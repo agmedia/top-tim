@@ -25,6 +25,11 @@ return [
         ? 'file'
         : env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
 
+    // Catalog filters must also survive requests when the application uses array caching.
+    'catalog_filters' => env('APP_ENV', 'production') === 'production'
+        ? 'file'
+        : env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
+
     /*
     |--------------------------------------------------------------------------
     | Cache Stores

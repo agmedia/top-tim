@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Front\Catalog\Product;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -56,6 +58,64 @@ class CatalogFilterTest extends TestCase
         $this->assertSame([2], $this->matching('20+color-red'));
         $this->assertSame([1], $this->matching('11'));
         $this->assertSame([], $this->matching('color-unknown'));
+    }
+
+    public function test_file_cache_survives_separate_stores_and_refreshes_after_two_minutes(): void
+    {
+        $directory = sys_get_temp_dir() . '/top-tim-filter-cache-' . bin2hex(random_bytes(10));
+        config([
+            'cache.default' => 'array',
+            'cache.catalog_filters' => 'file',
+            'cache.stores.file.path' => $directory,
+        ]);
+        Cache::forgetDriver('file');
+        $request = ['params' => ['ids' => '[1,2]']];
+
+        try {
+            $first = $this->postJson('/api/v2/filter/getOptions', $request)->assertOk();
+            $this->assertContains('color-red', array_column($first->json(), 'id'));
+            DB::table('products')->where('id', 2)->update(['status' => 0]);
+
+            // Resolve a new store to simulate another PHP request with no shared memory.
+            Cache::forgetDriver('file');
+            DB::enableQueryLog();
+            DB::flushQueryLog();
+            $this->postJson('/api/v2/filter/getOptions', $request)->assertOk()->assertExactJson($first->json());
+            $this->assertCount(0, DB::getQueryLog(), 'Cached options must not query the database.');
+
+            $this->travel(121)->seconds();
+            $refreshed = $this->postJson('/api/v2/filter/getOptions', $request)->assertOk();
+            $this->assertNotContains('color-red', array_column($refreshed->json(), 'id'));
+            $this->assertNotEmpty(DB::getQueryLog(), 'Expired options must be rebuilt from current products.');
+        } finally {
+            $this->travelBack();
+            DB::disableQueryLog();
+            Cache::forgetDriver('file');
+            (new Filesystem)->deleteDirectory($directory);
+        }
+    }
+
+    public function test_cached_options_are_isolated_by_search_results_and_selected_options(): void
+    {
+        $requests = [
+            [['ids' => '[1]'], ['color-white', 'color-blue']],
+            [['ids' => '[2]'], ['color-red']],
+            [['ids' => '[1,2]', 'option' => 'color-blue'], ['color-white', 'color-blue']],
+            [['ids' => '[1,2]', 'option' => 'color-red'], ['color-red']],
+            [['ids' => '[]'], []],
+        ];
+
+        foreach ([false, true] as $cached) {
+            foreach ($requests as [$params, $expected]) {
+                DB::enableQueryLog();
+                DB::flushQueryLog();
+                $response = $this->postJson('/api/v2/filter/getOptions', ['params' => $params])->assertOk();
+                $this->assertSame($expected, collect($response->json())->where('type', 'color')->pluck('id')->values()->all());
+                if ($cached) {
+                    $this->assertCount(0, DB::getQueryLog());
+                }
+            }
+        }
     }
 
     public function test_options_are_scoped_to_search_results_and_existing_ids_still_filter(): void

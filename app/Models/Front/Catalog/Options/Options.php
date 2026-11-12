@@ -172,9 +172,11 @@ class Options extends Model
             'ids', 'group', 'cat', 'subcat', 'brand', 'option', 'attribute',
         ]), fn ($value) => $value !== null && $value !== '');
         $products = (new Product())->filter(new Request($params))->reorder()->select('products.id');
-        $links = ProductOption::query()->whereIn('product_id', $products);
-        $optionIds = (clone $links)->select('option_id')
-            ->union((clone $links)->select('parent_id'));
+        // Resolve the small set of available options once, before loading translations.
+        $links = ProductOption::query()->whereIn('product_id', $products)
+            ->distinct()->toBase()->get(['option_id', 'parent_id']);
+        $optionIds = $links->flatMap(fn ($link) => [$link->option_id, $link->parent_id])
+            ->filter()->unique()->values()->all();
 
         $query = $this->newQuery()->active()->whereIn('options.id', $optionIds);
         if (!empty($request['search_option'])) {

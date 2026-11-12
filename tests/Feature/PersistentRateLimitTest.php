@@ -11,12 +11,13 @@ use Tests\TestCase;
 
 class PersistentRateLimitTest extends TestCase
 {
-    public function test_production_uses_persistent_limits_without_changing_the_legacy_default_cache(): void
+    public function test_production_uses_persistent_stores_without_changing_the_legacy_default_cache(): void
     {
         foreach (['production', 'local', 'testing'] as $environment) {
             $cache = $this->cacheConfiguration($environment);
             $this->assertSame('array', $cache['default']);
             $this->assertSame($environment === 'production' ? 'file' : 'array', $cache['limiter']);
+            $this->assertSame($environment === 'production' ? 'file' : 'array', $cache['catalog_filters']);
         }
     }
 
