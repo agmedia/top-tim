@@ -51,6 +51,11 @@ class Currency
             return Settings::get('currency', 'list')->where('status', '=', true)->where('main', '=', false)->first();
         });
 
+        // Legacy HRK must never be displayed as a second storefront currency.
+        if ($currency && strtoupper($currency->code ?? '') === 'HRK') {
+            return false;
+        }
+
         return static::resolveCurrency($currency, $price, $text_price);
     }
 

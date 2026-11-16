@@ -45,7 +45,7 @@ class FilterController extends Controller
 
         // Ako je normal kategorija
         if ($params['group']) {
-            $cache_tag = $params['group'] . session('locale');
+            $cache_tag = $params['group'] . session('locale') . ':' . \App\Services\CategoryNavigation::version();
 
             $response = Helper::resolveCache('categories')->remember($cache_tag, config('cache.life'), function () use ($params) {
                 $categories = Category::active()->topList($params['group'])->sortByName()->with('subcategories')/*->withCount('products')*/ ->get();
@@ -257,7 +257,7 @@ class FilterController extends Controller
             'ids', 'group', 'cat', 'subcat', 'brand', 'option', 'attribute', 'search_option',
         ];
         $params = array_replace(array_fill_keys($fields, ''), Arr::only($request->input('params'), $fields));
-        $key = 'catalog-filter-options.v2.' . hash('sha256', json_encode([
+        $key = 'catalog-filter-options.v3.' . hash('sha256', json_encode([
             'locale' => current_locale(),
             'params' => $params,
         ]));
@@ -265,7 +265,7 @@ class FilterController extends Controller
         $response = Cache::store(config('cache.catalog_filters'))->remember($key, 120, function () use ($params) {
             $response = [];
             $options  = (new Options())->filter($params, 0)
-                                       ->with('translation')->get()->sortBy('translation.title');
+                ->with('translation')->get()->sortBy(fn ($option) => \App\Helpers\SizeOrder::key($option->translation->title));
 
             foreach ($options->where('type', '!=', 'color') as $option) {
                 $response[] = [

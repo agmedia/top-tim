@@ -42,6 +42,7 @@
                     </div>
                 </div>
                 <div class="block-content">
+                    <div class="alert alert-info">Za klub odaberite glavnu kategoriju <strong>FAN SHOP</strong>, unesite naziv kluba, dodajte grb u polje slike i uključite kategoriju. Artikle klubu pridružujete pri uređivanju artikla. Slika može biti JPG, PNG ili WebP do 5 MB.</div>
                     <div class="row justify-content-center push">
                         <div class="col-md-10">
 

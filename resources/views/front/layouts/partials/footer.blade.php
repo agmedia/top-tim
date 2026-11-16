@@ -64,10 +64,10 @@
                             <h3 class="widget-title text-dark pb-1">Top Tim d.o.o.</h3>
                             <ul class="widget-list">
 
-                            <li  class="widget-list-item"><span class="widget-list-link">Put Gvozdenova 283, 22000 Šibenik </span></li>
+                            <li class="widget-list-item"><span class="widget-list-link">{{ __('front/ricekakis.working_hours') }}: {{ __('front/ricekakis.working_hours_value') }}</span></li>
                             <li  class="widget-list-item"><span class="widget-list-link">OIB: 20925110769</span></li>
-                            <li  class="widget-list-item"><span class="widget-list-link">{{ __('front/ricekakis.ziro_racun') }}: HPB banka d.d.</span></li>
-                                <li  class="widget-list-item"> <span class="widget-list-link">IBAN: HR7023900011101520911 </span></li>
+                            <li  class="widget-list-item"><span class="widget-list-link">{{ __('front/ricekakis.ziro_racun') }}: {{ config('storefront.bank.name') }}</span></li>
+                                <li  class="widget-list-item"> <span class="widget-list-link">IBAN: {{ config('storefront.bank.iban') }} </span></li>
 
 
                             </ul>
@@ -105,7 +105,7 @@
                         <div class="widget pb-3 mb-lg-2">
                                 <h3 class="widget-title text-dark pb-1">{{ __('front/ricekakis.kontaktirajte_nas') }}</h3>
                                 <ul class="widget-list">
-                                    <li  class="widget-list-item"><span class="widget-list-link"><a class="nav-link-style fs-md" href="tel:+385 22 337000"><i class="ci-phone me-1"></i> +385 22 337000 </a></span></li>
+                                    <li  class="widget-list-item"><span class="widget-list-link"><a class="nav-link-style fs-md" href="tel:+38522337000"><i class="ci-phone me-1"></i> +385 22 337000 </a></span></li>
 
                                     <li  class="widget-list-item"><span class="widget-list-link"> <a class="nav-link-style fs-md" href="mailto:info@top-tim.com"><i class="ci-mail  me-1"></i> info@top-tim.com</a></span></li>
 
@@ -128,7 +128,7 @@
                         <img src="{{ asset('media/cards/HAMAG-Bicro-logo-RGB-mali.jpg') }}" width="143" height="30" style="height:30px;margin-top: -8px;" loading="lazy" alt="HAMAG">
                     </p>
                         <div class="col-lg-12 mb-lg-0 mb-4">
-                       <small>Sve cijene iskazane su u eurima i uključuju PDV. Trudimo se dati što bolji i točniji opis i sliku. Unatoč tome, ne možemo garantirati da su svi navedeni podaci i slike u potpunosti točni. Ne odgovaramo za eventualne pogreške nastale u opisu proizvoda, greške prilikom štampanja te promjene cijena.</small>
+                       <small>Sve cijene iskazane su u eurima i uključuju PDV. Nastojimo osigurati točne opise i fotografije proizvoda. Ako primijetite pogrešku, javite nam se. Zakonska prava potrošača ostaju nepromijenjena.</small>
                       </div>
                  </div>
             </div>

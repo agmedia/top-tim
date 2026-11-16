@@ -180,7 +180,8 @@ class Category extends Model
     public function validateRequest(Request $request)
     {
         $request->validate([
-            'title.*' => 'required'
+            'title.*' => 'required',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $this->request = $request;
@@ -279,8 +280,9 @@ class Category extends Model
             $path_thumb = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time() . '-thumb.';
             $canvas = Image::canvas(400, 400, '#ffffff');
 
-            $img = $img->resize(null, 400, function ($constraint) {
+            $img = $img->resize(400, 400, function ($constraint) {
                 $constraint->aspectRatio();
+                $constraint->upsize();
             });
 
             $canvas->insert($img, 'center');

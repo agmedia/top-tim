@@ -37,8 +37,8 @@
                     <b>Tvrtka:</b> TOP TIM d.o.o.<br>
                     <b>Sjedište:</b> Put Gvozdenova 283, 22000 Šibenik<br>
                     <b>OIB:</b> 20925110769<br>
-                    <b>IBAN:</b> HR58 2407 0001 1000 9511 8, OTP Banka d.d.<br>
-                    <b>SWIFT:</b> OTPVHR2X
+                    <b>IBAN:</b> {{ config('storefront.bank.iban') }}, {{ config('storefront.bank.name') }}<br>
+                    <b>SWIFT:</b> {{ config('storefront.bank.swift') }}
                 </p>
                 <p>
                     <strong>E-mail:</strong> <a href="mailto:info@top-tim.com">info@top-tim.com</a>
@@ -48,7 +48,7 @@
                 </p>
                 <p>
                     <b>Trgovački sud:</b> Trgovački sud u Zadru - stalna služba u Šibeniku<br>
-                    <b>Temeljni kapital:</b> 20.000,00 kuna / 2.654,46 euro (fiksni tečaj konverzije 7.53450) plaćen u cijelosti<br>
+                    <b>Temeljni kapital:</b> 2.654,46 EUR plaćen u cijelosti<br>
                     <b>Osnivači/članovi društva:</b> Tamara Strika, jedini član d.o.o. <br>
                     <b>Osoba ovlaštena za zastupanje:</b> Tamara Strika, član uprave
                 </p>

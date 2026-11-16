@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'working_hours' => 'Radno vrijeme',
+    'working_hours_value' => 'Pon–Pet, 08:00–15:00',
     'my_account' => 'Moj račun',
     'homepage' => 'Naslovnica',
     'navigation' => 'Navigation',
@@ -21,8 +23,8 @@ return [
     'icons_t2' => 'Program vjernosti',
     'icons_d2' => 'Osvoji bodove s svakom narudžbom i recenzijom',
 
-    'icons_t3' => 'Brza i pozdana dostava',
-    'icons_d3' => 'Dostavljamo za 3-7 radna dana u Hrvatskoj',
+    'icons_t3' => 'Rokovi dostave',
+    'icons_d3' => 'Rasprodaja: 3–7 radnih dana. Svi ostali artikli: 15–30 radnih dana.',
 
     'icons_t4' => 'Sigurna online kupnja',
     'icons_d4' => 'Stranica zaštićena SSL certifikatom',

@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'working_hours' => 'Working hours',
+    'working_hours_value' => 'Mon–Fri, 08:00–15:00',
 
 
     'my_account' => 'My Account',
@@ -23,8 +25,8 @@ return [
     'icons_t2' => 'Customer Loyalty',
     'icons_d2' => 'Earn points with every order and review',
 
-    'icons_t3' => 'Fast and reliable delivery',
-    'icons_d3' => 'Delivered within 1-3 business days in Croatia',
+    'icons_t3' => 'Delivery times',
+    'icons_d3' => 'Clearance: 3–7 working days. All other items: 15–30 working days.',
 
     'icons_t4' => 'Secure online purchase',
     'icons_d4' => 'Website protected by SSL certificate',

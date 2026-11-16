@@ -147,7 +147,9 @@
 
         @if ($cat && ! $subcat)
 
-            @if ($cat->subcategories()->count())
+            @if ($cat->slug === config('storefront.fan_shop_slug'))
+                @include('front.catalog.category.fan-clubs', ['clubs' => $cat->subcategories])
+            @elseif ($cat->subcategories()->count())
                 <section class="py-2 pb-0 mb-0">
                     <div class="scrolling-wrapper">
                     @foreach ($cat->subcategories as $item)
@@ -189,6 +191,7 @@
     @endif
 
 
+    @if (!isset($cat) || !$cat || $cat->slug !== config('storefront.fan_shop_slug') || $subcat)
     <products-view ids="{{ isset($ids) ? $ids : null }}"
                    group="{{ isset($group) ? $group : null }}"
                    cat="{{ isset($cat) ? $cat['id'] : null }}"
@@ -204,6 +207,7 @@
                  bladeoptions="{{ isset($option) ? $option->id : null }}"
                  brand="{{ isset($brand) ? $brand->translation->slug : null }}">
     </filter-side-view>
+    @endif
 
 
 

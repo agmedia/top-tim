@@ -69,9 +69,6 @@
                             <div class="fs-sm me-2"><span v-html="product.category_string"></span></div>
                         </div>
                         <div v-if="Number(product.main_price) > Number(product.main_special)">
-                        <div class="product-price" v-if="Number(product.main_special) >= Number(product.campaign_price ?? product.main_special)">
-                            <span class="fs-sm text-muted" ><small>NC 30 dana: {{ product.main_price_text }} </small> </span>
-                        </div>
                         <div class="product-price">
                             <span class="text-red fs-md">{{ product.main_special_text }}  <span class="fs-md text-redd"><strike>{{ product.main_price_text }}</strike></span></span>
                         </div>

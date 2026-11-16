@@ -148,7 +148,7 @@
 
                     @if (isset($pages) && $pages)
                         @foreach($pages as $page)
-                            @if($page->translation->title !='Homepage' and $page->group =='page' )
+                            @if($page->status && $page->translation && $page->translation->slug === 'opci-uvjeti-poslovanja' && $page->group === 'page')
                                 {!! $page->description !!}
                             @endif
                         @endforeach

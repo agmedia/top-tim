@@ -52,6 +52,7 @@ class CategoryController extends Controller
 
         if ($stored) {
             $category->resolveImage($stored);
+            \App\Services\CategoryNavigation::invalidate();
 
             return redirect()->route('category.edit', ['category' => $stored])->with(['success' => 'Kategorija je snimljena!']);
         }
@@ -90,6 +91,7 @@ class CategoryController extends Controller
 
         if ($updated) {
             $category->resolveImage($updated);
+            \App\Services\CategoryNavigation::invalidate();
 
             return redirect()->route('category.edit', ['category' => $updated])->with(['success' => 'Kategorija je snimljena!']);
         }
@@ -110,6 +112,7 @@ class CategoryController extends Controller
         $destroyed = Category::destroy($category->id);
 
         if ($destroyed) {
+            \App\Services\CategoryNavigation::invalidate();
             return redirect()->route('categories')->with(['success' => 'Kategorija je uspješno izbrisana!']);
         }
 

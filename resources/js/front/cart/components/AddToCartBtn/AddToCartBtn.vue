@@ -17,13 +17,6 @@
             Cijena na {{ context_product.anchor_price.date }}: {{ context_product.anchor_price.formatted }}
         </div>
 
-        <div class="mb-1 mt-1 text-start" v-if="Number(context_product.main_price) > Number(context_product.campaign_price ?? context_product.main_special)">
-      <span class="fs-sm text-muted me-1">
-        {{ trans.lowest_price }}:
-        {{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(shown_price) }}
-      </span>
-        </div>
-
         <div class="mb-1 mt-1 text-start">
             <span class="fs-xs text-muted me-1">{{ trans.pdv }}</span>
         </div>

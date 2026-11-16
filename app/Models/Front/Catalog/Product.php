@@ -684,21 +684,9 @@ class Product extends Model
     /**
      * @return string
      */
-    public function priceString(string $price = null)
+    public function priceString(?string $price = null)
     {
-        if ($price) {
-            $set = explode('.', $price);
-
-            if ( ! isset($set[1])) {
-                $set[1] = '00';
-            }
-
-            return number_format($price, 0, '', '.') . ',' . substr($set[1], 0, 2) . ' kn';
-        }
-
-        $set = explode('.', $this->price);
-
-        return number_format($this->price, 0, '', '.') . ',' . substr($set[1], 0, 2) . ' kn';
+        return number_format((float) ($price ?? $this->price), 2, ',', '.') . ' €';
     }
 
 
