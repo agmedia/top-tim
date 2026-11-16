@@ -84,7 +84,6 @@
                         </small>
                         <div v-if="product.recorded_lowest_price" class="fs-xs text-muted mt-1 recorded-price">
                             Najniža zabilježena cijena: <span class="text-nowrap">{{ product.recorded_lowest_price.formatted }}</span>
-                            <small class="d-block">{{ product.recorded_lowest_price.note }}</small>
                         </div>
                         <div class="star-rating" v-if="product.stars">
                             <span v-for="item in 5 ">

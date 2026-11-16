@@ -19,7 +19,6 @@
 
         <div v-if="context_product.recorded_lowest_price" class="fs-sm text-muted mt-1 mb-2 recorded-price">
             Najniža zabilježena cijena: {{ context_product.recorded_lowest_price.formatted }}
-            <small class="d-block">{{ context_product.recorded_lowest_price.note }}</small>
         </div>
 
         <div class="mb-1 mt-1 text-start">
