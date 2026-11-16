@@ -17,6 +17,11 @@
             Cijena na {{ context_product.anchor_price.date }}: {{ context_product.anchor_price.formatted }}
         </div>
 
+        <div v-if="context_product.recorded_lowest_price" class="fs-sm text-muted mt-1 mb-2 recorded-price">
+            Najniža zabilježena cijena: {{ context_product.recorded_lowest_price.formatted }}
+            <small class="d-block">{{ context_product.recorded_lowest_price.note }}</small>
+        </div>
+
         <div class="mb-1 mt-1 text-start">
             <span class="fs-xs text-muted me-1">{{ trans.pdv }}</span>
         </div>

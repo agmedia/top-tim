@@ -82,6 +82,10 @@
                         <small v-if="product.quantity_discounts?.length" class="d-block text-primary mt-1">
                             Vaš količinski popust od {{ product.quantity_discounts[0].min_quantity }} kom. brenda
                         </small>
+                        <div v-if="product.recorded_lowest_price" class="fs-xs text-muted mt-1 recorded-price">
+                            Najniža zabilježena cijena: <span class="text-nowrap">{{ product.recorded_lowest_price.formatted }}</span>
+                            <small class="d-block">{{ product.recorded_lowest_price.note }}</small>
+                        </div>
                         <div class="star-rating" v-if="product.stars">
                             <span v-for="item in 5 ">
                                 <i v-if="Math.floor(product.stars) - item >= 0" class="star-rating-icon ci-star-filled active"></i>

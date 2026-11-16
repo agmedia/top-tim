@@ -60,6 +60,7 @@ class Product extends Model
         'quantity_discounts',
         'campaign_price',
         'anchor_price',
+        'recorded_lowest_price',
     ];
 
     /**
@@ -471,6 +472,11 @@ class Product extends Model
     public function getAnchorPriceAttribute(): ?array
     {
         return app(\App\Services\AnchorPrices::class)->forProduct((int) $this->id);
+    }
+
+    public function getRecordedLowestPriceAttribute(): ?array
+    {
+        return app(\App\Services\RecordedPrices::class)->forProduct((int) $this->id);
     }
 
     public function getCampaignPriceAttribute()

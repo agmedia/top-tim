@@ -19,9 +19,19 @@ Admin → Katalog → Kategorije → nova kategorija. Kao glavnu kategoriju odab
 
 Veličine se sortiraju prvo numerički (uključujući 10 iza 9), zatim 6XS do 6XL. XXS/XXXL se pri sortiranju tretiraju kao 2XS/3XL; nazivi i ID-evi u katalogu ostaju isti. Ostale oznake dolaze iza standardnih veličina.
 
-## Najniža cijena u 30 dana — otvoreno
+## Početna vrijednost najniže cijene i daljnja evidencija
 
-Dosadašnja oznaka na karticama prikazivala je redovnu cijenu, a detalj proizvoda aktualnu akcijsku cijenu. Nije postojao izračun prethodnih 30 dana. Uklonjene su te netočne tvrdnje, bez promjene obračuna cijena ili sidrenih cijena. Ovo nije dovršen sustav zakonskih referentnih cijena: potrebno je pribaviti provjerenu evidenciju stvarnih cijena i početaka akcija te povezati prikaz s njom. Sidrena cijena na 10.09.2026. i nekoliko dnevnih XML snimki ne dokazuju cijelo prethodno 30-dnevno razdoblje. Za nesnižene artikle izostanak te oznake sam po sebi nije tehnički kvar.
+Na izričit zahtjev trenutačna javna cijena upisuje se kao početna vrijednost proizvodima bez evidencije. Akcijska cijena ulazi u zapis ako je dostupna svim kupcima; osobni, grupni, prijavljeni i kuponski popusti ne ulaze. Naredba `prices:record --missing-only` ne prepisuje postojeće iznose ni datume. Prvi zapis ima izvor `current_price_seed` i stvarno vrijeme upisa, bez datiranja unatrag. Prodajne i sidrene cijene ostaju iste.
+
+Prikaz je „Najniža zabilježena cijena” uz „Evidencija od [datum]” dok nema 30 dana evidencije. Daljnje snimanje raspoređeno je svakih 15 minuta: promjena dodaje novi zapis, nepromijenjena cijena osvježava vrijeme posljednje provjere. Prikazuje se minimum iz javnih cijena zabilježenih u posljednjih 30 dana. Zapisi se ne brišu. To su periodične snimke, ne zajamčena evidencija svake promjene između provjera niti potvrđena referentna cijena prije početka sniženja. Potpuno pravno rješenje prethodnih 30 dana zahtijeva ranije provjerene podatke i događaje početka akcija.
+
+```sh
+php artisan migrate --path=database/migrations/2026_11_16_180000_create_product_price_observations.php --force
+php artisan prices:record --missing-only
+php artisan prices:record
+```
+
+Provjeriti postojeći cron koji pokreće `artisan schedule:run` svake minute. Nova tablica `product_price_observations` odvojena je od kataloga i sidrenih cijena. Za povrat aplikacije zadržati tablicu i podatke; ne pokretati destruktivni rollback nakon prikupljanja evidencije.
 
 Uvjeti su jezično uređeni, uklonjena su stara kunska preračunavanja i zastarjeli myPOS/navodi o automatskoj privoli; ispravljeni su opći tekstovi o povratu, prigovorima i isključenju odgovornosti. Ovo nije potvrda potpune pravne usklađenosti. Zasebna stranica privatnosti i stvarna tehnička privola za analitiku/marketing zahtijevaju poseban pregled. Za konačnu pravnu redakciju provjeriti i posebne poslovne postupke, personalizaciju i cijenu povrata glomazne robe.
 
