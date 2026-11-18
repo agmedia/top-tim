@@ -106,6 +106,8 @@ Route::group(
             Route::post('anchor-prices/import', [\App\Http\Controllers\Back\AnchorPriceController::class, 'import'])->name('anchor-prices.import');
             Route::post('anchor-prices/publish', [\App\Http\Controllers\Back\AnchorPriceController::class, 'publish'])->name('anchor-prices.publish');
             Route::get('anchor-prices/{product}/edit', [\App\Http\Controllers\Back\AnchorPriceController::class, 'edit'])->whereNumber('product')->name('anchor-prices.edit');
+            Route::patch('anchor-prices/{product}/variants/{option}', [\App\Http\Controllers\Back\AnchorPriceController::class, 'updateVariant'])
+                ->whereNumber('product')->whereNumber('option')->name('anchor-prices.variant');
             Route::patch('anchor-prices/{product}', [\App\Http\Controllers\Back\AnchorPriceController::class, 'update'])->whereNumber('product')->name('anchor-prices.update');
             Route::get('products', [ProductController::class, 'index'])->name('products');
             Route::get('product/create', [ProductController::class, 'create'])->name('products.create');

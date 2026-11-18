@@ -40,7 +40,7 @@ test('built product view recalculates personal price for quantities, brand total
         quantity_discounts: [{min_quantity: 10, percentage: 10}, {min_quantity: 20, percentage: 15}]}));
     component.setAttribute('action', JSON.stringify({type: 'P', discount: 5}));
     component.setAttribute('available', '100');
-    component.setAttribute('options', JSON.stringify({size: {options: [{id: 10, option_id: 200, name: 'L', active: 1, quantity: 100, price: 6.9}]}}));
+    component.setAttribute('options', JSON.stringify({variant_anchors: {'0:200': {formatted: '131,90 €', date: '11.09.2026.'}}, size: {options: [{id: 10, option_id: 200, name: 'L', active: 1, quantity: 100, price: 6.9}]}}));
     window.trans = new Proxy({}, {get: (_, key) => String(key)});
     window.scrollTo = () => {};
     window.matchMedia = () => ({matches: false, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}});
@@ -59,7 +59,7 @@ test('built product view recalculates personal price for quantities, brand total
         }};
         const price = () => window.document.querySelector('.cart .h3').textContent.trim();
         await until(() => price().includes('95,00'));
-        assert.match(window.document.querySelector('.cart .anchor-price').textContent, /Cijena na 10\.09\.2026\.: 125,00 €/);
+        assert.match(window.document.querySelector('.cart .anchor-price').textContent, /Bazna cijena na 10\.09\.2026\.: 125,00 €/);
         assert.equal(window.document.querySelectorAll('.cart tbody tr').length, 2);
         const quantity = window.document.querySelector('.cart input[type=number]');
         quantity.value = '2';
@@ -77,7 +77,7 @@ test('built product view recalculates personal price for quantities, brand total
         await until(() => price().includes('96,21'));
         store.state.cart = {items: {b: {quantity: 100, associatedModel: {brand_id: 2}}}};
         await until(() => price().includes('101,56'));
-        assert.match(window.document.querySelector('.cart .anchor-price').textContent, /125,00 €/);
+        assert.match(window.document.querySelector('.cart .anchor-price').textContent, /11\.09\.2026\.: 131,90 €/);
         assert.deepEqual(errors, []);
     } finally {
         window.close();

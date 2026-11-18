@@ -66,7 +66,7 @@ test('built catalog uses one request per change, restores filters and ignores st
         assert.equal(productRequests()[0].page, '2');
         assert.equal(requests.length, 3, 'Only products, brands and options are requested.');
         assert.equal(window.document.querySelectorAll('.form-option-color').length, 2);
-        assert.match(window.document.querySelector('.anchor-price').textContent, /Cijena na 10\.09\.2026\.: 12,00 €/);
+        assert.match(window.document.querySelector('.anchor-price').textContent, /Bazna cijena na 10\.09\.2026\.: 12,00 €/);
         assert.ok(window.document.querySelector('.anchor-price').classList.contains('fs-xs'));
         assert.equal(window.document.querySelector('.card-img-top img').getAttribute('src'), '/product-thumb.webp');
 

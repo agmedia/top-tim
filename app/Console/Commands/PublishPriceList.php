@@ -10,7 +10,7 @@ use Throwable;
 class PublishPriceList extends Command
 {
     protected $signature = 'prices:publish';
-    protected $description = 'Objavi dnevni XML cjenik s potvrđenim sidrenim cijenama.';
+    protected $description = 'Objavi izmjene XML cjenika s potvrđenim baznim cijenama.';
 
     public function handle(PriceListPublisher $publisher): int
     {

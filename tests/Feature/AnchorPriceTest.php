@@ -36,7 +36,10 @@ class AnchorPriceTest extends TestCase
         Schema::table('users', fn (Blueprint $table) => $table->softDeletes());
         Schema::table('user_details', fn (Blueprint $table) => $table->unsignedInteger('user_group_id')->nullable());
         (require database_path('migrations/2026_11_12_190000_create_anchor_price_tables.php'))->up();
+        (require database_path('migrations/2026_11_18_080000_version_webshop_price_lists.php'))->up();
         DB::statement('create table products (id integer primary key, brand_id integer, sku text, ean text, price real, status integer, quantity integer)');
+        DB::statement('create table product_option (id integer primary key, product_id integer, parent_id integer, option_id integer, sku text, price numeric, quantity integer)');
+        DB::statement('create table options_translations (option_id integer, lang text, title text)');
         DB::statement('create table product_translations (id integer primary key, product_id integer, lang text, name text)');
         DB::statement('create table brand_translations (id integer primary key, brand_id integer, lang text, title text)');
         DB::statement('create table product_actions (id integer primary key, status integer, "group" text, user_group_id integer, "lock" integer, links text, type text, discount real, coupon text, date_start text, date_end text, logged integer)');
@@ -69,11 +72,46 @@ class AnchorPriceTest extends TestCase
         $this->assertDatabaseCount('anchor_prices', 0);
     }
 
+    public function test_upgrade_preserves_legacy_downloads_and_backfills_replacement_times(): void
+    {
+        $versioning = require database_path('migrations/2026_11_18_080000_version_webshop_price_lists.php');
+        $versioning->down();
+        foreach (['2026-10-01', '2026-11-11'] as $day) {
+            $filename = "webshop_{$day}.xml";
+            Storage::disk('local')->put($filename, '<original/>');
+            PriceListPublication::create(['publication_date' => $day, 'published_at' => "$day 07:00:00",
+                'product_count' => 1, 'sha256' => hash('sha256', '<original/>'), 'filename' => $filename, 'path' => $filename]);
+        }
+        $versioning->up();
+        $this->assertDatabaseHas('price_list_publications', ['id' => 1, 'replaced_at' => '2026-11-11 07:00:00']);
+        $this->assertDatabaseHas('price_list_publications', ['id' => 2, 'replaced_at' => null, 'revision' => 1]);
+        $this->get(route('price-lists.download', 1))->assertDownload('webshop_2026-10-01.xml');
+        $this->get(route('price-lists.latest'))->assertDownload('webshop_2026-11-11.xml');
+        $this->save(1);
+        $this->save(2);
+        $this->artisan('prices:publish')->assertSuccessful();
+        $this->assertDatabaseCount('price_list_publications', 3);
+    }
+
+    public function test_reference_date_matches_the_confirmed_group_and_first_offer(): void
+    {
+        $this->actingAs($this->user('admin'));
+        $url = route('anchor-prices.update', 1);
+        $this->patchJson($url, $this->payload(1, ['reference_group' => 'general', 'first_offered_on' => '2026-10-16']))
+            ->assertUnprocessable();
+        $this->patch($url, $this->payload(1, ['reference_group' => 'household', 'first_offered_on' => '2025-04-01',
+            'reference_date' => '2025-05-02']))->assertSessionHasNoErrors();
+        $this->assertSame('2025-05-02', AnchorPrice::where('product_id', 1)->firstOrFail()->reference_date->toDateString());
+        $this->patchJson($url, $this->payload(1))->assertUnprocessable();
+        $this->patch($url, $this->payload(1, ['reference_group' => 'general', 'first_offered_on' => '2026-10-16',
+            'reference_date' => '2026-10-16']))->assertSessionHasNoErrors();
+    }
+
     public function test_admin_edits_prices_and_revision_history_without_changing_sale_prices(): void
     {
         $admin = $this->user('admin');
         $payload = $this->payload(1);
-        $this->actingAs($admin)->get(route('anchor-prices.index'))->assertOk()->assertSee('Sidrene cijene i XML cjenici');
+        $this->actingAs($admin)->get(route('anchor-prices.index'))->assertOk()->assertSee('Bazne cijene i XML cjenici');
         $this->get(route('anchor-prices.edit', 1))->assertOk();
         $this->patch(route('anchor-prices.update', 1), $payload)->assertRedirect();
         $this->assertDatabaseHas('anchor_prices', ['product_id' => 1, 'price' => 125, 'updated_by' => $admin->id]);
@@ -99,7 +137,7 @@ class AnchorPriceTest extends TestCase
             $this->assertSame(125.0, $product->anchor_price['price']);
         }
         $this->assertCount(0, DB::getQueryLog());
-        $this->assertStringContainsString('Cijena na 10.09.2026.', view('front.catalog.anchor-price', compact('product'))->render());
+        $this->assertStringContainsString('Bazna cijena na 10.09.2026.', view('front.catalog.anchor-price', compact('product'))->render());
         $this->save(1, ['status' => 'pending']);
         $this->assertNull($product->anchor_price);
         $this->assertNull(Product::find(2)->anchor_price);
@@ -132,46 +170,14 @@ class AnchorPriceTest extends TestCase
         }
     }
 
-    public function test_admin_can_switch_frontend_display_off_and_on_without_losing_prices_or_xml(): void
+    public function test_old_disabled_setting_cannot_hide_confirmed_base_prices(): void
     {
+        DB::table('settings')->insert(['code' => 'anchor_prices', 'key' => 'display_enabled', 'value' => '0']);
         $this->save(1);
-        $this->save(2);
-        $this->save(3, ['status' => 'pending']);
-        $prices = app(AnchorPrices::class);
-        $product = Product::find(1)->setAppends(['anchor_price']);
-        $this->assertTrue($prices->displayEnabled());
-        $this->assertNotNull($product->toArray()['anchor_price']);
-        $this->actingAs($this->user('admin'))
-            ->patch(route('anchor-prices.settings'), ['display_enabled' => 0])
-            ->assertRedirect(route('anchor-prices.index'))->assertSessionHasNoErrors();
-        $this->get(route('anchor-prices.index'))->assertOk()->assertViewHas('displayEnabled', false)
-            ->assertSee('Prikazuj sidrene cijene na webshopu');
-        $this->assertNull($product->toArray()['anchor_price']);
-        $this->assertStringNotContainsString('Cijena na', view('front.catalog.anchor-price', compact('product'))->render());
-        $this->assertDatabaseHas('settings', ['code' => 'anchor_prices', 'key' => 'display_enabled', 'value' => '0']);
-        $this->assertDatabaseCount('anchor_prices', 3);
-        $this->assertDatabaseCount('anchor_price_revisions', 3);
-        $publication = app(PriceListPublisher::class)->publish();
-        $this->assertStringContainsString('<anchor_price>125.00</anchor_price>', Storage::disk('local')->get($publication->path));
-        $this->get(route('price-lists.latest'))->assertOk();
-
-        $this->patch(route('anchor-prices.settings'), ['display_enabled' => 1])->assertRedirect()->assertSessionHasNoErrors();
-        $this->get(route('anchor-prices.index'))->assertOk()->assertViewHas('displayEnabled', true);
-        $this->assertSame(125.0, $product->anchor_price['price']);
-        $this->assertStringContainsString('Cijena na 10.09.2026.', view('front.catalog.anchor-price', compact('product'))->render());
-        $this->assertNull(Product::find(3)->anchor_price);
-        $this->assertDatabaseCount('settings', 1);
-        $this->assertDatabaseHas('products', ['id' => 1, 'price' => 100]);
-    }
-
-    public function test_display_setting_rejects_missing_or_invalid_boolean(): void
-    {
-        $this->actingAs($this->user('admin'));
-        foreach ([[], ['display_enabled' => 'yes'], ['display_enabled' => 2]] as $data) {
-            $this->patchJson(route('anchor-prices.settings'), $data)->assertUnprocessable();
-        }
-        $this->assertTrue(app(AnchorPrices::class)->displayEnabled());
-        $this->assertDatabaseCount('settings', 0);
+        $this->actingAs($this->user('admin'))->patchJson(route('anchor-prices.settings'), ['display_enabled' => 0])
+            ->assertUnprocessable();
+        $this->assertSame(125.0, Product::find(1)->anchor_price['price']);
+        $this->assertNull(Product::find(2)->anchor_price);
     }
 
     public function test_guests_customers_and_editors_cannot_change_or_export_prices(): void
@@ -268,36 +274,94 @@ class AnchorPriceTest extends TestCase
         $this->assertDatabaseCount('price_list_publications', 0);
     }
 
-    public function test_daily_publication_is_immutable_and_new_day_uses_new_prices(): void
+    public function test_republishes_changes_in_the_same_minute_and_keeps_old_file(): void
     {
         $this->save(1);
         $this->save(2);
         $publisher = app(PriceListPublisher::class);
         $first = $publisher->publish();
+        $this->assertSame($first->id, $publisher->publish()->id);
         DB::table('products')->where('id', 1)->update(['price' => 200]);
-        $this->save(1, ['price' => 135]);
-        $again = $publisher->publish();
-        $this->assertEquals($first->id, $again->id);
-        $this->assertSame($first->sha256, $again->sha256);
-        $this->travel(1)->days();
-        $next = $publisher->publish();
-        $this->assertNotEquals($first->id, $next->id);
-        $this->assertStringContainsString('<regular_price>200.00</regular_price>', Storage::disk('local')->get($next->path));
+        $second = $publisher->publish();
+        $this->assertNotEquals($first->id, $second->id);
+        $this->assertStringEndsWith('_ROBA_2_20261112_0800.xml', $second->filename);
+        $this->assertSame($second->id, $publisher->publish()->id);
         $this->assertStringContainsString('<regular_price>100.00</regular_price>', Storage::disk('local')->get($first->path));
+        $this->assertStringContainsString('<regular_price>200.00</regular_price>', Storage::disk('local')->get($second->path));
+        $this->get(route('price-lists.latest'))->assertDownload($second->filename);
+        $this->get(route('price-lists.download', $first))->assertDownload($first->filename);
+        $this->assertDatabaseCount('price_list_publications', 2);
     }
 
-    public function test_corrupt_and_expired_publications_cannot_be_downloaded(): void
+    public function test_archive_expires_from_replacement_and_current_never_ages_out(): void
     {
         $this->save(1);
         $this->save(2);
-        $publication = app(PriceListPublisher::class)->publish();
-        $this->travel(31)->days();
-        $this->get(route('price-lists.download', $publication))->assertNotFound();
+        $publisher = app(PriceListPublisher::class);
+        $first = $publisher->publish();
+        $this->travel(40)->days();
+        $this->get(route('price-lists.latest'))->assertDownload($first->filename);
+        $this->assertSame($first->id, $publisher->publish()->id);
+        DB::table('products')->where('id', 1)->update(['price' => 105]);
+        $second = $publisher->publish();
+        $this->travel(30)->days();
+        $this->get(route('price-lists.download', $first))->assertOk();
+        $this->travel(1)->minutes();
+        $this->get(route('price-lists.download', $first))->assertNotFound();
+        $this->get(route('price-lists.latest'))->assertDownload($second->filename);
+        Storage::disk('local')->put($second->path, '<bad/>');
         $this->get(route('price-lists.latest'))->assertNotFound();
-        $this->travelTo($publication->published_at);
-        Storage::disk('local')->put($publication->path, '<bad/>');
-        $this->get(route('price-lists.download', $publication))->assertNotFound();
         $this->artisan('prices:publish')->assertExitCode(1);
+    }
+
+    public function test_published_field_order_packaging_and_independent_barcodes(): void
+    {
+        $this->actingAs($this->user('admin'));
+        $this->patch(route('anchor-prices.update', 1), $this->payload(1) + [
+            'net_quantity' => '0,25', 'measure_unit' => 'l', 'goods_barcode' => 'TT-CODE',
+        ])->assertSessionHasNoErrors();
+        DB::table('products')->where('id', 2)->update(['sku' => 'YKM100011']);
+        $this->save(2);
+        $pub = app(PriceListPublisher::class)->publish();
+        $xml = simplexml_load_string(Storage::disk('local')->get($pub->path));
+        $row = $xml->products->product[0];
+        $this->assertSame(['name','sku','manufacturer','net_quantity','unit','current_price','special_offer',
+            'unit_price','barcode','ean','anchor_price'], array_slice(array_keys((array) $row), 0, 11));
+        $this->assertSame('20925110769', (string) $xml->metadata->oib);
+        $this->assertStringStartsWith('20925110769_internetska-trgovina_', $pub->filename);
+        $this->assertSame('0.25', (string) $row->net_quantity);
+        $this->assertSame('400.00', (string) $row->unit_price);
+        $this->assertSame('TT-CODE', (string) $row->barcode);
+        $this->assertSame('4006381333931', (string) $row->ean);
+        $this->assertSame('5903137554086', (string) $xml->products->product[1]->ean);
+        $this->patchJson(route('anchor-prices.update', 1), $this->payload(1) + ['measure_unit' => 'l'])
+            ->assertUnprocessable();
+    }
+
+    public function test_option_surcharge_requires_its_own_evidence_and_public_prices_follow_the_selected_sku(): void
+    {
+        $this->save(1);
+        $this->save(2);
+        DB::table('product_option')->insert([
+            ['id' => 4, 'product_id' => 1, 'parent_id' => 90, 'option_id' => 91, 'price' => 5, 'quantity' => 2, 'sku' => 'TT-001-XL'],
+            ['id' => 5, 'product_id' => 1, 'parent_id' => 90, 'option_id' => 92, 'price' => 0, 'quantity' => 1, 'sku' => 'TT-001-L'],
+        ]);
+        $this->artisan('prices:publish')->assertExitCode(1);
+        $this->actingAs($this->user('admin'))->patch(route('anchor-prices.variant', [1, 4]), [
+            'price' => '119,50', 'reference_date' => '2026-10-10', 'note' => 'Prva javna ponuda veličine XL',
+            'status' => 'confirmed', 'ean' => '4006381333931',
+        ])->assertSessionHasNoErrors();
+        $pub = app(PriceListPublisher::class)->publish();
+        $xml = simplexml_load_string(Storage::disk('local')->get($pub->path));
+        $this->assertCount(3, $xml->products->product);
+        $xl = $xml->products->product[0];
+        $this->assertSame('TT-001-XL', (string) $xl->sku);
+        $this->assertSame('105.00', (string) $xl->current_price);
+        $this->assertSame('119.50', (string) $xl->anchor_price);
+        $this->assertSame('2026-10-10', (string) $xl->anchor_date);
+        $this->assertSame('4006381333931', (string) $xl->ean);
+        $this->assertSame('125.00', (string) $xml->products->product[1]->anchor_price);
+        $this->assertSame('', (string) $xml->products->product[1]->ean);
     }
 
     public function test_footer_links_and_legal_guarantee_page_are_public(): void

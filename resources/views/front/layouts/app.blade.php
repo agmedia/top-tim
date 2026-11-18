@@ -118,7 +118,7 @@
 <script src="{{ asset('js/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/shufflejs/dist/shuffle.min.js') }}"></script>
     <!-- Main theme script ?v=2.2.9 -->
-<script src="{{ asset('js/cart.js') }}?v={{ filemtime(public_path('js/cart.js')) }}"></script>
+<script src="{{ asset('js/cart.js') }}{{ is_file(public_path('js/cart.js')) ? '?v=' . filemtime(public_path('js/cart.js')) : '' }}"></script>
 <script src="{{ asset('js/theme.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {

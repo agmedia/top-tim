@@ -33,12 +33,11 @@ class PriceListController extends FrontBaseController
 
     private function respond(PriceListPublication $publication, PriceListPublisher $publisher)
     {
-        abort_unless($publication->published_at >= now()->subDays(config('price_lists.archive_days'))
-            && $publisher->valid($publication), 404);
+        abort_unless($publisher->valid($publication), 404);
         return response()->download(Storage::disk(config('price_lists.disk'))->path($publication->path), $publication->filename, [
             'Content-Type' => 'application/xml; charset=UTF-8',
             'X-Content-Type-Options' => 'nosniff',
-            'Cache-Control' => 'public, max-age=300',
+            'Cache-Control' => 'public, no-cache',
         ]);
     }
 }

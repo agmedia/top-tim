@@ -426,8 +426,15 @@ class Product extends Model
             $response[$key]['options'] = collect($response[$key]['options'])->sortBy('sort_order', SORT_NATURAL)->values()->all();
         }
 
-        //dd($response);
-        //Log::info($response);
+        if ($response && \Illuminate\Support\Facades\Schema::hasTable('anchor_prices')) {
+            $anchor = \App\Models\AnchorPrice::where('product_id', $this->id)->first();
+            foreach ($anchor?->variant_prices ?? [] as $key => $value) {
+                $response['variant_anchors'][$key] = $value['status'] === 'confirmed' ? [
+                    'formatted' => number_format((float) $value['price'], 2, ',', '.') . ' €',
+                    'date' => \Carbon\Carbon::parse($value['reference_date'])->format('d.m.Y.'),
+                ] : null;
+            }
+        }
 
         return $response;
     }

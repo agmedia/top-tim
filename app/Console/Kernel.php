@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('prices:record')->everyFifteenMinutes()->withoutOverlapping(30);
         $schedule->command('prices:publish')
-            ->dailyAt(config('price_lists.publication_time'))
+            ->everyFiveMinutes()
             ->timezone(config('price_lists.timezone'))
             ->when(fn () => (bool) config('price_lists.enabled'))
             ->withoutOverlapping(30);

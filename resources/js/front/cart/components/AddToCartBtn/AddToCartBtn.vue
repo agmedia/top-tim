@@ -13,8 +13,9 @@
       </span>
         </div>
 
-        <div v-if="context_product.anchor_price" class="fs-sm text-muted mt-1 mb-2 anchor-price">
-            Cijena na {{ context_product.anchor_price.date }}: {{ context_product.anchor_price.formatted }}
+        <div v-if="context_product.anchor_price?.net_quantity" class="fs-sm text-muted">{{ formatPrice(finalPrice / context_product.anchor_price.net_quantity) }} / {{ context_product.anchor_price.unit }}</div>
+        <div v-if="selectedAnchor" class="fs-sm text-muted mt-1 mb-2 anchor-price">
+            Bazna cijena na {{ selectedAnchor.date }}: {{ selectedAnchor.formatted }}
         </div>
 
         <div v-if="context_product.recorded_lowest_price" class="fs-sm text-muted mt-1 mb-2 recorded-price">
@@ -136,6 +137,7 @@ export default {
             is_available: 0, // stock za trenutno odabranu opciju
             size_options: {},
             color_options: {},
+            variantAnchors: {},
             selected_size: {},
             selected_color: {},
             trans: window.trans,
@@ -153,6 +155,15 @@ export default {
         };
     },
     computed: {
+        selectedAnchor() {
+            const selected = this.parent === 'size' ? this.selected_color :
+                (this.parent === 'color' || this.size ? this.selected_size : this.selected_color);
+            if (!selected?.option_id || (this.parent === 'color' && !this.size)) return this.context_product.anchor_price;
+            const parent = this.parent === 'color' ? this.selected_color : this.selected_size;
+            const key = (this.parent ? parent.option_id : 0) + ':' + selected.option_id;
+            if (Object.prototype.hasOwnProperty.call(this.variantAnchors, key)) return this.variantAnchors[key];
+            return Number(selected.price || 0) === 0 ? this.context_product.anchor_price : null;
+        },
         tiers() { return this.context_product.quantity_discounts || []; },
         brandQuantity() {
             return Object.values(this.$store.state.cart.items || {}).reduce((sum, item) =>
@@ -215,6 +226,7 @@ export default {
     methods: {
         setOptionsSelection() {
             const res = JSON.parse(this.options);
+            this.variantAnchors = res.variant_anchors || {};
             this.parent = res.parent ? res.parent : null;
             if (!this.parent) this.size_disabled = true;
             this.size_options = res.size ? res.size.options : {};

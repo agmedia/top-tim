@@ -76,8 +76,9 @@
                         <div class="product-price" v-else>
                             <span class="text-dark fs-md" v-if="!product.special">{{ product.main_price_text }} <small v-if="product.secondary_price_text ">{{ product.secondary_price_text }} </small></span>
                         </div>
+                        <div v-if="product.anchor_price?.net_quantity" class="fs-xs text-muted">{{ (Number(product.main_special) / product.anchor_price.net_quantity).toLocaleString('hr-HR', {style: 'currency', currency: 'EUR'}) }} / {{ product.anchor_price.unit }}</div>
                         <div v-if="product.anchor_price" class="fs-xs text-muted mt-1 anchor-price">
-                            Cijena na {{ product.anchor_price.date }}: <span class="text-nowrap">{{ product.anchor_price.formatted }}</span>
+                            Bazna cijena na {{ product.anchor_price.date }}: <span class="text-nowrap">{{ product.anchor_price.formatted }}</span>
                         </div>
                         <small v-if="product.quantity_discounts?.length" class="d-block text-primary mt-1">
                             Vaš količinski popust od {{ product.quantity_discounts[0].min_quantity }} kom. brenda

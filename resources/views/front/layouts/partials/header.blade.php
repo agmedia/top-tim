@@ -154,10 +154,13 @@
 
 
                             json.forEach(function (item) {
-                                const anchor = item.anchor_price
-                                    ? '<div class="fs-sm text-muted">' + $('<span>').text('Cijena na ' + item.anchor_price.date + ': ' + item.anchor_price.formatted).html() + '</div>'
+                                const measure = item.anchor_price?.net_quantity
+                                    ? '<div class="fs-sm text-muted">' + $('<span>').text((item.main_special / item.anchor_price.net_quantity).toLocaleString('hr-HR', {style: 'currency', currency: 'EUR'}) + ' / ' + item.anchor_price.unit).html() + '</div>'
                                     : '';
-                                html += '<tr><td class="image"><a href="' + item.url + '">' + '<img  width="80" alt="' + item.name + ' " src="' + item.image + '">' + '</a></td>' + '<td class="main"><a href="' + item.url + '">' + item.name + ' <br><small> ' + item.sku + '</small></a></td><td class="price"><a href="' + item.url + '"><div class="price"><span class="price">' + item.main_price_text + '</span></div>' + anchor + '</a></td></tr>';
+                                const anchor = item.anchor_price
+                                    ? '<div class="fs-sm text-muted">' + $('<span>').text('Bazna cijena na ' + item.anchor_price.date + ': ' + item.anchor_price.formatted).html() + '</div>'
+                                    : '';
+                                html += '<tr><td class="image"><a href="' + item.url + '">' + '<img  width="80" alt="' + item.name + ' " src="' + item.image + '">' + '</a></td>' + '<td class="main"><a href="' + item.url + '">' + item.name + ' <br><small> ' + item.sku + '</small></a></td><td class="price"><a href="' + item.url + '"><div class="price"><span class="price">' + item.main_special_text + '</span></div>' + measure + anchor + '</a></td></tr>';
                             });
 
 

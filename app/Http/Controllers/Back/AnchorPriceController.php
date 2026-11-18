@@ -32,7 +32,7 @@ class AnchorPriceController extends Controller
                 'a.reference_date', 'a.status as anchor_status');
     }
 
-    public function index(Request $request, AnchorPrices $prices)
+    public function index(Request $request)
     {
         $filters = $request->validate(['q' => 'nullable|string|max:150', 'status' => 'nullable|in:pending,confirmed']);
         $query = $this->products();
@@ -48,20 +48,16 @@ class AnchorPriceController extends Controller
         $products = $query->orderBy('p.id')->paginate(30)->withQueryString();
         $missing = $this->products()->where('p.status', 1)->where('p.price', '>', 0)
             ->where(fn ($q) => $q->whereNull('a.status')->orWhere('a.status', '!=', 'confirmed'))->count();
-        $latest = PriceListPublication::orderByDesc('publication_date')->first();
-        $displayEnabled = $prices->displayEnabled();
-        return view('back.anchor-prices.index', compact('products', 'missing', 'latest', 'displayEnabled'));
+        $latest = PriceListPublication::orderByDesc('id')->first();
+        return view('back.anchor-prices.index', compact('products', 'missing', 'latest'));
     }
 
-    public function settings(Request $request, AnchorPrices $prices)
+    public function settings(Request $request)
     {
-        $request->validate(['display_enabled' => ['required', 'boolean']]);
-        $enabled = $request->boolean('display_enabled');
-        $prices->setDisplayEnabled($enabled);
-
-        return redirect()->route('anchor-prices.index')->with('success', $enabled
-            ? 'Prikaz sidrenih cijena na webshopu je uključen.'
-            : 'Prikaz sidrenih cijena na webshopu je isključen.');
+        $request->validate(['display_enabled' => 'accepted'], [
+            'display_enabled.accepted' => 'Prikaz potvrđenih baznih cijena je obvezan.',
+        ]);
+        return redirect()->route('anchor-prices.index');
     }
 
     public function edit(int $product)
@@ -70,13 +66,20 @@ class AnchorPriceController extends Controller
         abort_unless($product, 404);
         $anchor = AnchorPrice::where('product_id', $product->id)->first();
         $revisions = DB::table('anchor_price_revisions')->where('product_id', $product->id)->orderByDesc('id')->paginate(20);
-        return view('back.anchor-prices.edit', compact('product', 'anchor', 'revisions'));
+        $options = DB::table('product_option')->where('product_id', $product->id)->orderBy('sku')->get();
+        return view('back.anchor-prices.edit', compact('product', 'anchor', 'revisions', 'options'));
     }
 
     public function update(Request $request, int $product, AnchorPrices $prices)
     {
-        $prices->save(array_merge($request->only('price', 'reference_date', 'status', 'note'), ['product_id' => $product]), $request->user()->id);
-        return redirect()->route('anchor-prices.edit', $product)->with('success', 'Sidrena cijena je spremljena.');
+        $prices->save(array_merge($request->only('price', 'reference_date', 'status', 'note', 'net_quantity', 'measure_unit', 'goods_barcode', 'reference_group', 'first_offered_on'), ['product_id' => $product]), $request->user()->id);
+        return redirect()->route('anchor-prices.edit', $product)->with('success', 'Bazna cijena je spremljena.');
+    }
+
+    public function updateVariant(Request $request, int $product, int $option, AnchorPrices $prices)
+    {
+        $prices->saveVariant($product, $option, $request->only('price', 'reference_date', 'status', 'note', 'ean', 'goods_barcode'), $request->user()->id);
+        return redirect()->route('anchor-prices.edit', $product)->with('success', 'Bazna cijena varijante je spremljena.');
     }
 
     public function export()
@@ -88,8 +91,8 @@ class AnchorPriceController extends Controller
             foreach ($this->products()->where('p.status', 1)->where('p.price', '>', 0)->lazyById(250, 'p.id', 'id') as $product) {
                 $safe = fn ($value) => preg_match('/^[=+@\-\t\r\n]/u', (string) $value) ? "'" . $value : $value;
                 fputcsv($output, [$product->id, $safe($product->sku), $safe($product->name),
-                    $product->anchor_price ?? $product->price,
-                    $product->reference_date ?? config('price_lists.reference_date'),
+                    $product->anchor_price,
+                    $product->reference_date,
                     $product->anchor_status ?? 'pending'], ';', '"', '');
             }
             fclose($output);
@@ -168,6 +171,6 @@ class AnchorPriceController extends Controller
         } catch (RuntimeException $exception) {
             return back()->withErrors(['publication' => $exception->getMessage()]);
         }
-        return redirect()->route('anchor-prices.index')->with('success', 'Dnevni cjenik je dostupan: ' . $publication->product_count . ' proizvoda.');
+        return redirect()->route('anchor-prices.index')->with('success', 'Važeći cjenik je dostupan: ' . $publication->product_count . ' proizvoda.');
     }
 }
