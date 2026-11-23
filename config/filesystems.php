@@ -53,6 +53,8 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
         ],
 
         's3' => [
@@ -76,30 +78,45 @@ return [
         //
         'category' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/category/'),
             'url' => 'media/img/category/'
         ],
 
         'sizeguide' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/sizeguide/'),
             'url' => 'media/img/sizeguide/'
         ],
         //
         'publisher' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/publisher/'),
             'url' => 'media/img/publisher/'
         ],
         //
         'author' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/author/'),
             'url' => 'media/img/author/'
         ],
         //
         'products' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/products/'),
             'url' => 'media/img/products/'
         ],
@@ -111,29 +128,44 @@ return [
         //
         'blog' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/blog/'),
             'url' => 'media/img/blog/'
         ],
         //
         'recepti' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/recepti/'),
             'url' => 'media/img/recepti/'
         ],
         //
         'page' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/page/'),
             'url' => 'media/img/page/'
         ],
         //
         'widget' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/widget/'),
             'url' => 'media/img/widget/'
         ],
         'qr' => [
             'driver' => 'local',
+            'visibility' => 'public',
+            'directory_visibility' => 'public',
+            'throw' => true,
             'root' => public_path('media/img/qr/'),
             'url' => 'media/img/qr/'
         ],

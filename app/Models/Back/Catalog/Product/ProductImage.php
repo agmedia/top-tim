@@ -216,19 +216,19 @@ class ProductImage extends Model
         $old  = $this->where('id', $id)->first();
         $path = Image::cleanPath('products', $this->resource->id, $old->image);
 
-        // Obriši staru i snimi novu fotku
-        Image::delete('product', $this->resource->id, $path);
+        // Keep the previous files until the replacement is stored and published.
         $new_path = Image::save('products', $image, $this->resource);
 
         $updated = $this->where('id', $id)->update([
             'image' => config('filesystems.disks.products.url') . $new_path
         ]);
 
-        $this->isDefaultImage($image, $new_path);
-
         if ( ! $updated) {
             return false;
         }
+
+        $this->isDefaultImage($image, $new_path);
+        Image::delete('products', $this->resource->id, $path);
 
         return true;
     }

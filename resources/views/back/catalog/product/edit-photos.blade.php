@@ -70,7 +70,8 @@
                                                  {{--data-service="{{ route('images.ajax.upload') }}"--}}
                                                  data-ratio="free"
                                                  {{--                                         data-size="600,800"--}}
-                                                 data-max-file-size="2"
+                                                 data-max-file-size="5.24288"
+                                                 data-status-file-size="Fotografija je prevelika. Najveća dopuštena veličina je 5 MB."
                                                  data-meta-type="gallery"
                                                  data-meta-type_id="{{ $resource->id }}"
                                                  data-meta-image_id="{{ $image['id'] }}"
@@ -311,7 +312,8 @@
             Slim.create(cropper, {
                 ratio: 'free',
                 //size: '600,800',
-                maxFileSize: '2',
+                maxFileSize: 5.24288,
+                statusFileSize: 'Fotografija je prevelika. Najveća dopuštena veličina je 5 MB.',
                 service: false,
                 meta: {
                     type: 'gallery',

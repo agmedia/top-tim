@@ -268,16 +268,16 @@ class Category extends Model
     {
         if ($this->request->hasFile('image')) {
             $img = Image::make($this->request->image);
-            $str = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time() . '.';
+            // All formats must share one basename, even when encoding crosses a second.
+            $base = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time();
 
-            $path = $str . 'jpg';
+            $path = $base . '.jpg';
             Storage::disk('category')->put($path, $img->encode('jpg'));
 
-            $path_webp = $str . 'webp';
+            $path_webp = $base . '.webp';
             Storage::disk('category')->put($path_webp, $img->encode('webp'));
 
             // Thumb creation
-            $path_thumb = $category->id . '/' . Str::slug($category->translation(current_locale())->title) . '-' . time() . '-thumb.';
             $canvas = Image::canvas(400, 400, '#ffffff');
 
             $img = $img->resize(400, 400, function ($constraint) {
@@ -287,7 +287,7 @@ class Category extends Model
 
             $canvas->insert($img, 'center');
 
-            $path_webp_thumb = $path_thumb . 'webp';
+            $path_webp_thumb = $base . '-thumb.webp';
             Storage::disk('category')->put($path_webp_thumb, $canvas->encode('webp'));
 
             return $category->update([
