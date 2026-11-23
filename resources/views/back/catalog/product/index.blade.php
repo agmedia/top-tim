@@ -115,6 +115,7 @@
                 </div>
             </div>
             <div class="block-content">
+                @php($canCorrectLowestPrice = $canCorrectLowestPrice ?? (auth()->user()?->isActive() && auth()->user()->isAn('admin', 'superadmin')))
                 <div class="table-responsive">
                     <table class="table table-borderless table-striped table-vcenter">
                         <thead>
@@ -167,6 +168,11 @@
                                 <td class="font-size-sm">{{ $product->sku }}</td>
                                 <td class="font-size-sm text-right">
                                     <ag-input-field item="{{ $product }}" target="price"></ag-input-field>
+                                    @php($recordedLowestPrice = app(\App\Services\RecordedPrices::class)->forProduct((int) $product->id))
+                                    <div class="small text-muted mt-1">{{ __('back/products.najniza_kratko') }}: {{ $recordedLowestPrice['formatted'] ?? '—' }}</div>
+                                    @if ($canCorrectLowestPrice)
+                                        <a class="small" href="{{ route('products.edit', ['product' => $product]) }}#lowest-price">{{ __('back/products.uredi_najnizu_cijenu') }}</a>
+                                    @endif
                                 </td>
 
                                 <td class="font-size-sm text-center">{{ $product->quantity }}</td>

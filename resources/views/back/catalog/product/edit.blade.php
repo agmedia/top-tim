@@ -498,6 +498,9 @@
                 </div>
             </div>
         </form>
+        @if (isset($product, $lowestPriceData))
+            @include('back.catalog.product.lowest-price')
+        @endif
         @if (isset($product))
             <form id="delete-product-form{{ $product->id }}" action="{{ route('products.destroy', ['product' => $product]) }}" method="POST" style="display: none;">
                 @csrf

@@ -116,6 +116,9 @@ Route::group(
             Route::post('product', [ProductController::class, 'store'])->name('products.store');
             Route::get('product/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
             Route::patch('product/{product}', [ProductController::class, 'update'])->name('products.update');
+            Route::patch('product/{product}/lowest-price', [\App\Http\Controllers\Back\Catalog\LowestPriceController::class, 'update'])
+                ->whereNumber('product')->name('products.lowest-price.update');
+            Route::get('product/{product}/lowest-price', fn () => abort(405))->whereNumber('product');
             Route::delete('product/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
             // Atttributes

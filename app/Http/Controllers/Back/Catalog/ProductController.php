@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back\Catalog;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Services\CatalogBulkDeletion;
+use App\Services\LowestPriceCorrections;
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Options\Options;
@@ -120,9 +121,14 @@ class ProductController extends Controller
 
         $color_options = Options::getColorList();
 
+        $lowestPriceData = app(LowestPriceCorrections::class)->forAdmin($product->id);
+        $user = request()->user();
+        $canCorrectLowestPrice = $user && $user->isActive()
+            && $user->roles()->whereIn('name', ['admin', 'superadmin'])->exists();
+
         //dd($product->attributes);
 
-        return view('back.catalog.product.edit', compact('product', 'data', 'color_options'));
+        return view('back.catalog.product.edit', compact('product', 'data', 'color_options', 'lowestPriceData', 'canCorrectLowestPrice'));
     }
 
 

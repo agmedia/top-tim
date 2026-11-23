@@ -68,6 +68,12 @@ class RecordedPrices
 
     public function forProduct(int $productId): ?array
     {
+        return app(LowestPriceCorrections::class)->forProduct($productId)
+            ?? $this->automaticForProduct($productId);
+    }
+
+    public function automaticForProduct(int $productId): ?array
+    {
         $attributes = request()->attributes;
         if (!$attributes->has(self::CACHE_KEY)) {
             $values = Schema::hasTable('product_price_observations')
