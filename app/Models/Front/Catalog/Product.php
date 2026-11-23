@@ -462,7 +462,7 @@ class Product extends Model
     public function special(bool $return_action = false)
     {
         $campaign = $this->campaignSpecial($return_action);
-        if ($return_action || !Auth::check()) {
+        if ($return_action) {
             return $campaign;
         }
 

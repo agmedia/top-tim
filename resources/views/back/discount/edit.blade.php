@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
 @endpush
 @section('content')
+    @php($discountTarget = old('target', $discount->applies_to_everyone ? 'everyone' : ($discount->user_group_id ? 'group' : 'user')))
     <div class="bg-body-light"><div class="content content-full"><h1 class="font-size-h2 font-w400">{{ $discount->exists ? 'Uredi' : 'Novi' }} količinski popust</h1></div></div>
     <div class="content content-boxed">
         @include('back.layouts.partials.session')
@@ -15,20 +16,22 @@
             <div class="block-content">
                 <div class="form-group">
                     <label for="discount-target">Popust vrijedi za</label>
-                    <select id="discount-target" name="target" class="form-control">
-                        <option value="user" @selected(old('target', $discount->user_group_id ? 'group' : 'user') === 'user')>Korisnika</option>
-                        <option value="group" @selected(old('target', $discount->user_group_id ? 'group' : 'user') === 'group')>Grupu korisnika</option>
+                    <select id="discount-target" name="target" class="form-control" aria-describedby="discount-everyone-help">
+                        <option value="user" @selected($discountTarget === 'user')>Korisnika</option>
+                        <option value="group" @selected($discountTarget === 'group')>Grupu korisnika</option>
+                        <option value="everyone" @selected($discountTarget === 'everyone')>Svima</option>
                     </select>
+                    <small class="form-text text-muted" id="discount-everyone-help" @if($discountTarget !== 'everyone') hidden @endif>Vrijedi za goste i sve prijavljene kupce.</small>
                 </div>
-                <div class="form-group" id="discount-user-field">
+                <div class="form-group" id="discount-user-field" @if($discountTarget !== 'user') hidden @endif>
                     <label for="discount-user">Korisnik</label>
-                    <select id="discount-user" name="user_id" class="form-control" style="width:100%">
+                    <select id="discount-user" name="user_id" class="form-control" style="width:100%" @disabled($discountTarget !== 'user') @required($discountTarget === 'user')>
                         @if($selectedUser)<option value="{{ $selectedUser->id }}" selected>{{ $selectedUser->name }} ({{ $selectedUser->email }})</option>@endif
                     </select>
                 </div>
-                <div class="form-group" id="discount-group-field">
+                <div class="form-group" id="discount-group-field" @if($discountTarget !== 'group') hidden @endif>
                     <label for="discount-group">Grupa korisnika</label>
-                    <select id="discount-group" name="user_group_id" class="form-control" style="width:100%">
+                    <select id="discount-group" name="user_group_id" class="form-control" style="width:100%" @disabled($discountTarget !== 'group') @required($discountTarget === 'group')>
                         <option value="">Odaberite grupu</option>
                         @foreach($groups as $group)
                             <option value="{{ $group->id }}" @selected((string) old('user_group_id', $discount->user_group_id) === (string) $group->id)>{{ $group->translation?->title ?? $group->id }}{{ $group->status ? '' : ' (neaktivna)' }}</option>
@@ -76,11 +79,14 @@
             });
             $('#discount-group, #discount-brand').select2();
             function selectTarget() {
-                const user = $('#discount-target').val() === 'user';
-                $('#discount-user-field').toggle(user);
-                $('#discount-group-field').toggle(!user);
+                const target = $('#discount-target').val();
+                const user = target === 'user';
+                const group = target === 'group';
+                $('#discount-user-field').prop('hidden', !user);
+                $('#discount-group-field').prop('hidden', !group);
+                $('#discount-everyone-help').prop('hidden', target !== 'everyone');
                 $('#discount-user').prop('disabled', !user).prop('required', user);
-                $('#discount-group').prop('disabled', user).prop('required', !user);
+                $('#discount-group').prop('disabled', !group).prop('required', group);
             }
             $('#discount-target').on('change', selectTarget);
             selectTarget();

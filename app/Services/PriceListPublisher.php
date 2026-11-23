@@ -85,6 +85,7 @@ class PriceListPublisher
                 ->get();
             $actionNames = DB::table('product_actions_translations')->where('lang', 'hr')->pluck('title', 'product_action_id');
             $actionProductId = null;
+            $discounts = app(QuantityDiscounts::class);
             $pool = collect();
             $count = 0;
             $missingBarcodes = 0;
@@ -115,6 +116,11 @@ class PriceListPublisher
                         $offer = trim((string) ($actionNames[$action->id] ?? '')) ?: 'Akcijska prodaja';
                     }
                 }
+                $publicPrice = $discounts->publicPrice((float) $row->price, (float) $current, (int) $row->brand_id, 1);
+                if ($publicPrice < $current) {
+                    $offer = 'Popust za sve kupce';
+                }
+                $current = $publicPrice;
                 $gtin = trim((string) $row->ean);
                 if (!self::validBarcode($gtin)) {
                     $gtin = config('price_lists.verified_ean')[$row->sku] ?? '';

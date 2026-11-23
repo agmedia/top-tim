@@ -13,15 +13,19 @@
             <div class="block-content">
                 <div class="table-responsive">
                     <table class="table table-striped table-vcenter">
-                        <thead><tr><th>Korisnik / grupa</th><th>Brend</th><th>Razine popusta</th><th>Status</th><th class="text-right">Uredi</th></tr></thead>
+                        <thead><tr><th>Popust vrijedi za</th><th>Brend</th><th>Razine popusta</th><th>Status</th><th class="text-right">Uredi</th></tr></thead>
                         <tbody>
                         @forelse($discounts as $discount)
                             <tr>
                                 <td>
-                                    @if($discount->user_id)
+                                    @if($discount->applies_to_everyone)
+                                        Svima (gosti i svi prijavljeni kupci)
+                                    @elseif($discount->user_id)
                                         {{ $discount->user?->name ?? 'Obrisani korisnik' }}<br><small>{{ $discount->user?->email }}</small>
-                                    @else
+                                    @elseif($discount->user_group_id)
                                         Grupa: {{ $discount->group?->translation?->title ?? 'Obrisana grupa' }}
+                                    @else
+                                        Bez korisnika ili grupe (nije javno)
                                     @endif
                                 </td>
                                 <td>{{ $discount->brand?->translation?->title ?? 'Obrisani brend' }}</td>

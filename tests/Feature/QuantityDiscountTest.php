@@ -41,6 +41,7 @@ class QuantityDiscountTest extends TestCase
         Schema::table('users', fn (Blueprint $table) => $table->softDeletes());
         Schema::table('user_details', fn (Blueprint $table) => $table->unsignedInteger('user_group_id')->nullable());
         (require database_path('migrations/2026_11_12_180000_create_customer_discounts_table.php'))->up();
+        (require database_path('migrations/2026_11_23_190000_add_everyone_to_customer_discounts.php'))->up();
         DB::statement('create table user_group (id integer primary key, status integer)');
         DB::statement('create table user_group_translations (id integer primary key, user_group_id integer, lang text, title text)');
         DB::statement('create table brands (id integer primary key, status integer)');
@@ -328,6 +329,100 @@ class QuantityDiscountTest extends TestCase
         (new \ReflectionProperty($controller, 'cart'))->setValue($controller, $cart);
         $response = $controller->check(new Request(['ids' => []]));
         $this->assertSame(['cart' => ['items' => [], 'total' => 0, 'count' => 0], 'message' => null], $response->getData(true));
+    }
+
+    public function test_everyone_rules_apply_to_guests_without_exposing_private_or_untargeted_rules(): void
+    {
+        $customer = $this->user('customer', 1);
+        $this->rule(['applies_to_everyone' => true, 'min_quantity' => 5, 'percentage' => 5]);
+        $this->rule(['applies_to_everyone' => true, 'min_quantity' => 10, 'percentage' => 10]);
+        $this->rule(['applies_to_everyone' => true, 'min_quantity' => 20, 'percentage' => 80, 'active' => false]);
+        $this->rule(['user_id' => $customer->id, 'min_quantity' => 1, 'percentage' => 90]);
+        $this->rule(['user_group_id' => 1, 'min_quantity' => 1, 'percentage' => 85]);
+        $this->rule(['min_quantity' => 1, 'percentage' => 99]); // Legacy unassigned is not public.
+        $this->rule(['applies_to_everyone' => true, 'user_id' => $customer->id, 'min_quantity' => 1, 'percentage' => 95]);
+        $pricing = app(QuantityDiscounts::class);
+        $this->assertGuest();
+        $this->assertSame(100.0, $pricing->price(100, 100, 1, 4));
+        $this->assertSame(95.0, $pricing->price(100, 100, 1, 5));
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 10));
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 100));
+        $this->assertSame(100.0, $pricing->price(100, 100, 2, 100));
+        $this->assertSame([['min_quantity' => 5, 'percentage' => 5.0], ['min_quantity' => 10, 'percentage' => 10.0]], $pricing->tiers(1));
+    }
+
+    public function test_everyone_combines_with_eligible_private_discounts_using_the_best_rate_and_logout_keeps_public_only(): void
+    {
+        $customer = $this->user('customer', 1);
+        $other = $this->user('customer');
+        $this->rule(['applies_to_everyone' => true, 'min_quantity' => 2, 'percentage' => 10]);
+        $this->rule(['user_group_id' => 1, 'min_quantity' => 5, 'percentage' => 15]);
+        $this->rule(['user_id' => $customer->id, 'min_quantity' => 10, 'percentage' => 20]);
+        $this->rule(['user_id' => $other->id, 'min_quantity' => 1, 'percentage' => 99]);
+        $pricing = app(QuantityDiscounts::class);
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 10));
+        $this->actingAs($customer);
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 2));
+        $this->assertSame(85.0, $pricing->price(100, 100, 1, 5));
+        $this->assertSame(80.0, $pricing->price(100, 100, 1, 10));
+        $this->assertSame(75.0, $pricing->price(100, 75, 1, 10));
+        Auth::logout();
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 10));
+        $this->actingAs($this->user('customer'));
+        $this->assertSame(90.0, $pricing->price(100, 100, 1, 10));
+    }
+
+    public function test_guest_cart_and_catalog_cross_brand_threshold_together_and_reprice_after_removal(): void
+    {
+        $this->rule(['applies_to_everyone' => true]);
+        $cart = Cart::session('quantity-test');
+        $this->line('first', 1, 4);
+        $this->line('second', 2, 5);
+        $this->line('other-brand', 3, 50);
+        $adapter = new QuantityTestCart('quantity-test');
+        $this->assertSame(100.0, $adapter->get()['items']['first']->attributes['unit_price']);
+        $cart->update('second', ['quantity' => ['relative' => false, 'value' => 6]]);
+        $after = $adapter->get();
+        $this->assertSame(90.0, $after['items']['first']->attributes['unit_price']);
+        $this->assertSame(45.0, $after['items']['second']->attributes['unit_price']);
+        $this->assertSame(100.0, $after['items']['other-brand']->attributes['unit_price']);
+        $this->assertSame(10, app(QuantityDiscounts::class)->cartQuantity(1));
+        $this->assertSame(90.0, (float) Product::find(1)->special());
+        $removed = $adapter->remove('second');
+        $this->assertSame(100.0, $removed['items']['first']->attributes['unit_price']);
+        $this->assertSame(100.0, (float) Product::find(1)->special());
+    }
+
+    public function test_guest_variant_and_order_snapshot_keep_public_discount_and_better_campaign(): void
+    {
+        $this->rule(['applies_to_everyone' => true, 'min_quantity' => 2, 'percentage' => 12.5]);
+        DB::table('product_option')->insert(['id' => 10, 'product_id' => 1, 'price' => 6.90, 'sku' => 'variant']);
+        $this->line('variant', 1, 2, ['options' => ['option' => ['id' => 10]]]);
+        $response = (new QuantityTestCart('quantity-test'))->get();
+        $this->assertGuest();
+        $this->assertSame(93.54, $response['items']['variant']->attributes['unit_price']);
+        $order = new Order(['cart' => $response]);
+        (new \ReflectionMethod($order, 'updateProducts'))->invoke($order, 42);
+        $this->assertDatabaseHas('order_products', ['order_id' => 42, 'org_price' => 106.9, 'price' => 93.54, 'total' => 187.08]);
+        DB::table('product_actions')->insert(['id' => 1, 'status' => 1, 'group' => 'all', 'type' => 'P', 'discount' => 25]);
+        Cache::flush();
+        Cache::put('currency_main', (object) ['symbol_left' => '', 'symbol_right' => ' €', 'value' => 1, 'decimal_places' => 2]);
+        $this->assertSame(80.18, (new QuantityTestCart('quantity-test'))->get()['items']['variant']->attributes['unit_price']);
+    }
+
+    public function test_guest_catalog_batches_public_rules_and_reloads_changed_rules_on_the_next_request(): void
+    {
+        $rule = $this->rule(['applies_to_everyone' => true, 'min_quantity' => 1]);
+        DB::enableQueryLog();
+        DB::flushQueryLog();
+        for ($i = 0; $i < 50; $i++) {
+            $this->assertSame(90.0, app(QuantityDiscounts::class)->price(100, 100, 1, 1));
+        }
+        $dataQueries = collect(DB::getQueryLog())->filter(fn ($entry) => str_starts_with($entry['query'], 'select * from "customer_discounts"'));
+        $this->assertCount(1, $dataQueries);
+        $rule->update(['active' => false]);
+        $this->app->instance('request', Request::create('/'));
+        $this->assertSame(100.0, app(QuantityDiscounts::class)->price(100, 100, 1, 1));
     }
 
     private function user(string $role, ?int $group = null): User

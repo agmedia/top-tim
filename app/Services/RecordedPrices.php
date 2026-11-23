@@ -23,9 +23,10 @@ class RecordedPrices
         $actions = ProductAction::where('status', 1)->whereNull('user_group_id')
             ->where(fn ($q) => $q->whereNull('coupon')->orWhere('coupon', ''))
             ->where(fn ($q) => $q->whereNull('logged')->orWhere('logged', 0))->get();
+        $discounts = app(QuantityDiscounts::class);
         $created = 0;
         DB::table('products')->where('status', 1)->where('price', '>', 0)
-            ->select('id', 'brand_id', 'price')->orderBy('id')->chunkById(250, function ($rows) use ($latest, $actions, $missingOnly, &$created) {
+            ->select('id', 'brand_id', 'price')->orderBy('id')->chunkById(250, function ($rows) use ($latest, $actions, $discounts, $missingOnly, &$created) {
                 $inserts = [];
                 $unchanged = [];
                 $time = now();
@@ -43,6 +44,7 @@ class RecordedPrices
                     foreach ($locked->isNotEmpty() ? $locked : $eligible as $action) {
                         $current = min($current, max(0, (float) $special->getDiscountPrice($action)));
                     }
+                    $current = $discounts->publicPrice((float) $row->price, $current, (int) $row->brand_id, 1);
                     $current = round($current, 4);
                     if ($previous && abs((float) $previous->price - $current) < 0.00005) {
                         $unchanged[] = $previous->id;

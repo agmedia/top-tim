@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerDiscount extends Model
 {
-    protected $fillable = ['user_id', 'user_group_id', 'brand_id', 'min_quantity', 'percentage', 'active'];
+    protected $fillable = ['user_id', 'user_group_id', 'applies_to_everyone', 'brand_id', 'min_quantity', 'percentage', 'active'];
 
-    protected $casts = ['active' => 'boolean', 'min_quantity' => 'integer', 'percentage' => 'float'];
+    protected $attributes = ['applies_to_everyone' => false];
+
+    protected $casts = ['active' => 'boolean', 'applies_to_everyone' => 'boolean', 'min_quantity' => 'integer', 'percentage' => 'float'];
 
     public function user()
     {

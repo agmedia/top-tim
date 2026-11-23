@@ -26,7 +26,7 @@ class DiscountController extends Controller
 
     public function index()
     {
-        $sets = CustomerDiscount::selectRaw('MIN(id)')->groupBy('user_id', 'user_group_id', 'brand_id');
+        $sets = CustomerDiscount::selectRaw('MIN(id)')->groupBy('user_id', 'user_group_id', 'brand_id', 'applies_to_everyone');
         $discounts = CustomerDiscount::with(['user', 'group.translation', 'brand.translation'])
             ->whereIn('id', $sets)->orderByDesc('id')->paginate(30);
         if ($discounts->isNotEmpty()) {
@@ -37,7 +37,8 @@ class DiscountController extends Controller
             })->orderBy('min_quantity')->get();
             foreach ($discounts as $discount) {
                 $discount->setRelation('levels', $levels->where('user_id', $discount->user_id)
-                    ->where('user_group_id', $discount->user_group_id)->where('brand_id', $discount->brand_id)->values());
+                    ->where('user_group_id', $discount->user_group_id)->where('brand_id', $discount->brand_id)
+                    ->where('applies_to_everyone', $discount->applies_to_everyone)->values());
             }
         }
 
@@ -142,7 +143,7 @@ class DiscountController extends Controller
             $request->merge(['tiers' => [$request->only('min_quantity', 'percentage', 'active')]]);
         }
         $data = $request->validate([
-            'target' => ['required', Rule::in(['user', 'group'])],
+            'target' => ['required', Rule::in(['user', 'group', 'everyone'])],
             'user_id' => ['exclude_unless:target,user', 'required', 'integer', Rule::exists('users', 'id')->whereNull('deleted_at')],
             'user_group_id' => ['exclude_unless:target,group', 'required', 'integer', 'exists:user_group,id'],
             'brand_id' => ['required', 'integer', 'exists:brands,id'],
@@ -160,12 +161,13 @@ class DiscountController extends Controller
         return [
             'user_id' => $data['target'] === 'user' ? $data['user_id'] : null,
             'user_group_id' => $data['target'] === 'group' ? $data['user_group_id'] : null,
+            'applies_to_everyone' => $data['target'] === 'everyone',
             'brand_id' => $data['brand_id'], 'tiers' => $data['tiers'],
         ];
     }
 
     private function target(CustomerDiscount $discount): array
     {
-        return $discount->only('user_id', 'user_group_id', 'brand_id');
+        return $discount->only('user_id', 'user_group_id', 'brand_id', 'applies_to_everyone');
     }
 }
