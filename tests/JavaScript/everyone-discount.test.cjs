@@ -13,7 +13,7 @@ function setup() {
         <small id="discount-everyone-help" hidden>Vrijedi za goste i sve prijavljene kupce.</small>
         <div id="discount-user-field"><select id="discount-user" name="user_id"><option value="21" selected>Test kupac</option></select></div>
         <div id="discount-group-field"><select id="discount-group" name="user_group_id"><option value="3" selected>Test grupa</option></select></div>
-        <select id="discount-brand" name="brand_id" required><option value="7" selected>Test brend</option></select>
+        <select id="discount-brand" name="brand_ids[]" multiple required><option value="7" selected>Test brend</option></select>
         <input name="tiers[0][min_quantity]" value="10" required><input name="tiers[0][percentage]" value="8" required>
     </form>`, {runScripts: 'outside-only'});
     const {window} = dom;
@@ -44,7 +44,7 @@ test('everyone hides and disables both actual Select2 controls, omits private ID
         assert.equal(data.get('target'), 'everyone');
         assert.equal(data.has('user_id'), false);
         assert.equal(data.has('user_group_id'), false);
-        assert.equal(data.get('brand_id'), '7');
+        assert.deepEqual(data.getAll('brand_ids[]'), ['7']);
         assert.equal(data.get('tiers[0][min_quantity]'), '10');
         assert.equal(data.get('tiers[0][percentage]'), '8');
     } finally { p.dom.window.close(); }
@@ -65,7 +65,7 @@ test('switching between everyone, user and group restores only the selected priv
             const data = p.data();
             assert.equal(data.has('user_id'), target === 'user');
             assert.equal(data.has('user_group_id'), target === 'group');
-            assert.equal(data.get('brand_id'), '7');
+            assert.deepEqual(data.getAll('brand_ids[]'), ['7']);
             assert.equal(data.get('tiers[0][min_quantity]'), '10');
             assert.equal(data.get('tiers[0][percentage]'), '8');
         }

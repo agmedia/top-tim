@@ -26,8 +26,8 @@ class DiscountController extends Controller
 
     public function index()
     {
-        $sets = CustomerDiscount::selectRaw('MIN(id)')->groupBy('user_id', 'user_group_id', 'brand_id', 'applies_to_everyone');
-        $discounts = CustomerDiscount::with(['user', 'group.translation', 'brand.translation'])
+        $sets = CustomerDiscount::selectRaw('MIN(id)')->groupBy('user_id', 'user_group_id', 'brand_key', 'applies_to_everyone');
+        $discounts = CustomerDiscount::with(['user', 'group.translation'])
             ->whereIn('id', $sets)->orderByDesc('id')->paginate(30);
         if ($discounts->isNotEmpty()) {
             $levels = CustomerDiscount::where(function ($query) use ($discounts) {
@@ -37,12 +37,16 @@ class DiscountController extends Controller
             })->orderBy('min_quantity')->get();
             foreach ($discounts as $discount) {
                 $discount->setRelation('levels', $levels->where('user_id', $discount->user_id)
-                    ->where('user_group_id', $discount->user_group_id)->where('brand_id', $discount->brand_id)
+                    ->where('user_group_id', $discount->user_group_id)->where('brand_key', $discount->brand_key)
                     ->where('applies_to_everyone', $discount->applies_to_everyone)->values());
             }
         }
 
-        return view('back.discount.index', compact('discounts'));
+        $brandIds = $discounts->flatMap(fn ($discount) => $discount->brand_ids ?: [$discount->brand_id])->unique()->values();
+        $brandLabels = Brand::with('translation')->whereIn('id', $brandIds)->get()
+            ->mapWithKeys(fn ($brand) => [$brand->id => $brand->translation?->title ?? 'Obrisani brend #'.$brand->id])->all();
+
+        return view('back.discount.index', compact('discounts', 'brandLabels'));
     }
 
     public function create()
@@ -60,11 +64,12 @@ class DiscountController extends Controller
         $groups = UserGroup::with('translation')->get();
         $brands = Brand::with('translation')->get()->sortBy('translation.title');
         $selectedUser = User::find(old('user_id', $discount->user_id));
+        $selectedBrandIds = $discount->brand_ids ?: ($discount->brand_id ? [(int) $discount->brand_id] : []);
         $levels = $discount->exists
             ? CustomerDiscount::where($this->target($discount))->orderBy('min_quantity')->get()->toArray()
             : [['min_quantity' => 1, 'percentage' => '', 'active' => true]];
 
-        return view('back.discount.edit', compact('discount', 'groups', 'brands', 'selectedUser', 'levels'));
+        return view('back.discount.edit', compact('discount', 'groups', 'brands', 'selectedUser', 'selectedBrandIds', 'levels'));
     }
 
     public function store(Request $request)
@@ -72,12 +77,13 @@ class DiscountController extends Controller
         $legacy = !$request->has('tiers');
         $data = $this->validated($request);
         DB::transaction(function () use ($data, $legacy) {
-            $target = Arr::except($data, 'tiers');
+            $attributes = Arr::except($data, 'tiers');
+            $target = Arr::only($attributes, ['user_id', 'user_group_id', 'applies_to_everyone', 'brand_key']);
             if (!$legacy && CustomerDiscount::where($target)->exists()) {
                 throw ValidationException::withMessages(['brand_id' => 'Za ovaj odabir već postoje razine. Otvorite postojeći popust i dodajte razinu.']);
             }
             foreach ($data['tiers'] as $level) {
-                CustomerDiscount::create($target + Arr::except($level, 'id'));
+                CustomerDiscount::create($attributes + Arr::except($level, 'id'));
             }
         });
         return redirect()->route('discounts')->with('success', 'Količinski popust je spremljen.');
@@ -88,10 +94,11 @@ class DiscountController extends Controller
         $legacy = !$request->has('tiers');
         $data = $this->validated($request);
         DB::transaction(function () use ($data, $discount, $legacy) {
-            $target = Arr::except($data, 'tiers');
+            $attributes = Arr::except($data, 'tiers');
+            $target = Arr::only($attributes, ['user_id', 'user_group_id', 'applies_to_everyone', 'brand_key']);
             // An older, already open form still updates only its original single level.
             if ($legacy) {
-                $discount->update($target + Arr::except($data['tiers'][0], 'id'));
+                $discount->update($attributes + Arr::except($data['tiers'][0], 'id'));
                 return;
             }
             $existing = CustomerDiscount::where($this->target($discount))->lockForUpdate()->get()->keyBy('id');
@@ -105,7 +112,7 @@ class DiscountController extends Controller
                     throw ValidationException::withMessages(['tiers.' . $index . '.id' => 'Razina ne pripada ovom popustu. Osvježite obrazac.']);
                 }
                 $rule = $id ? $existing->get($id) : new CustomerDiscount;
-                $rule->fill($target + Arr::except($level, 'id'))->save();
+                $rule->fill($attributes + Arr::except($level, 'id'))->save();
                 $kept[] = $rule->id;
             }
             CustomerDiscount::whereIn('id', $existing->keys())->whereNotIn('id', $kept)->delete();
@@ -139,6 +146,9 @@ class DiscountController extends Controller
 
     private function validated(Request $request): array
     {
+        if (!$request->exists('brand_ids') && $request->exists('brand_id')) {
+            $request->merge(['brand_ids' => [$request->input('brand_id')]]);
+        }
         if (!$request->has('tiers')) {
             $request->merge(['tiers' => [$request->only('min_quantity', 'percentage', 'active')]]);
         }
@@ -146,7 +156,8 @@ class DiscountController extends Controller
             'target' => ['required', Rule::in(['user', 'group', 'everyone'])],
             'user_id' => ['exclude_unless:target,user', 'required', 'integer', Rule::exists('users', 'id')->whereNull('deleted_at')],
             'user_group_id' => ['exclude_unless:target,group', 'required', 'integer', 'exists:user_group,id'],
-            'brand_id' => ['required', 'integer', 'exists:brands,id'],
+            'brand_ids' => ['required', 'array', 'list', 'min:1', 'max:100'],
+            'brand_ids.*' => ['required', 'integer', 'min:1', 'distinct', 'exists:brands,id'],
             'tiers' => ['required', 'array', 'min:1', 'max:100'],
             'tiers.*' => ['required', 'array:id,min_quantity,percentage,active'],
             'tiers.*.id' => ['nullable', 'integer', 'min:1', 'distinct'],
@@ -154,20 +165,23 @@ class DiscountController extends Controller
             'tiers.*.percentage' => ['required', 'numeric', 'min:0.01', 'max:100', 'decimal:0,2'],
             'tiers.*.active' => ['required', 'boolean'],
         ], [], [
-            'user_id' => 'korisnik', 'user_group_id' => 'grupa korisnika', 'brand_id' => 'brend',
+            'user_id' => 'korisnik', 'user_group_id' => 'grupa korisnika', 'brand_ids' => 'brendovi', 'brand_ids.*' => 'brend',
             'tiers.*.min_quantity' => 'minimalni broj komada razine', 'tiers.*.percentage' => 'postotak popusta razine',
         ]);
+
+        $brandIds = CustomerDiscount::normalizedBrandIds($data['brand_ids']);
 
         return [
             'user_id' => $data['target'] === 'user' ? $data['user_id'] : null,
             'user_group_id' => $data['target'] === 'group' ? $data['user_group_id'] : null,
             'applies_to_everyone' => $data['target'] === 'everyone',
-            'brand_id' => $data['brand_id'], 'tiers' => $data['tiers'],
+            'brand_id' => $brandIds[0], 'brand_ids' => $brandIds,
+            'brand_key' => CustomerDiscount::brandSetKey($brandIds), 'tiers' => $data['tiers'],
         ];
     }
 
     private function target(CustomerDiscount $discount): array
     {
-        return $discount->only('user_id', 'user_group_id', 'brand_id', 'applies_to_everyone');
+        return $discount->only('user_id', 'user_group_id', 'brand_key', 'applies_to_everyone');
     }
 }

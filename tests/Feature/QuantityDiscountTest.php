@@ -42,6 +42,7 @@ class QuantityDiscountTest extends TestCase
         Schema::table('user_details', fn (Blueprint $table) => $table->unsignedInteger('user_group_id')->nullable());
         (require database_path('migrations/2026_11_12_180000_create_customer_discounts_table.php'))->up();
         (require database_path('migrations/2026_11_23_190000_add_everyone_to_customer_discounts.php'))->up();
+        (require database_path('migrations/2026_11_23_200000_add_brand_sets_to_customer_discounts.php'))->up();
         DB::statement('create table user_group (id integer primary key, status integer)');
         DB::statement('create table user_group_translations (id integer primary key, user_group_id integer, lang text, title text)');
         DB::statement('create table brands (id integer primary key, status integer)');
@@ -423,6 +424,61 @@ class QuantityDiscountTest extends TestCase
         $rule->update(['active' => false]);
         $this->app->instance('request', Request::create('/'));
         $this->assertSame(100.0, app(QuantityDiscounts::class)->price(100, 100, 1, 1));
+    }
+
+    public function test_multi_brand_public_discount_matches_every_selected_brand_and_excludes_other_brands(): void
+    {
+        $this->rule(['applies_to_everyone' => true, 'brand_ids' => [2, 1], 'min_quantity' => 5, 'percentage' => 15]);
+        $pricing = app(QuantityDiscounts::class);
+        $this->assertSame(100.0, $pricing->price(100, 100, 1, 4));
+        $this->assertSame(85.0, $pricing->price(100, 100, 1, 5));
+        $this->assertSame(85.0, $pricing->price(100, 100, 2, 5));
+        $this->assertSame(100.0, $pricing->price(100, 100, 3, 100));
+        $this->assertSame([['min_quantity' => 5, 'percentage' => 15.0]], $pricing->tiers(2));
+        $this->assertSame([], $pricing->tiers(3));
+        $this->assertSame(100.0, $pricing->publicPrice(100, 100, 2, 1));
+    }
+
+    public function test_multi_brand_cart_thresholds_stay_separate_for_each_brand_including_nonfirst_brand(): void
+    {
+        $this->rule(['applies_to_everyone' => true, 'brand_ids' => [1, 2], 'min_quantity' => 10, 'percentage' => 10]);
+        $this->line('brand-one-a', 1, 5);
+        $this->line('brand-one-b', 2, 4);
+        $this->line('brand-two', 3, 5);
+        $cart = Cart::session('quantity-test');
+        $adapter = new QuantityTestCart('quantity-test');
+        $before = $adapter->get();
+        $this->assertSame(100.0, $before['items']['brand-one-a']->attributes['unit_price']);
+        $this->assertSame(100.0, $before['items']['brand-two']->attributes['unit_price']);
+        $cart->update('brand-two', ['quantity' => ['relative' => false, 'value' => 10]]);
+        $after = $adapter->get();
+        $this->assertSame(100.0, $after['items']['brand-one-a']->attributes['unit_price']);
+        $this->assertSame(90.0, $after['items']['brand-two']->attributes['unit_price']);
+        $this->assertSame(90.0, (float) Product::find(3)->special());
+        $cart->update('brand-one-b', ['quantity' => ['relative' => false, 'value' => 5]]);
+        $qualified = $adapter->get();
+        $this->assertSame(90.0, $qualified['items']['brand-one-a']->attributes['unit_price']);
+        $this->assertSame(45.0, $qualified['items']['brand-one-b']->attributes['unit_price']);
+        $order = new Order(['cart' => $qualified]);
+        (new \ReflectionMethod($order, 'updateProducts'))->invoke($order, 42);
+        $this->assertDatabaseHas('order_products', ['order_id' => 42, 'product_id' => 3, 'price' => 90, 'total' => 900]);
+    }
+
+    public function test_multi_brand_group_rule_combines_with_public_and_customer_rules_without_leaking_on_logout(): void
+    {
+        $customer = $this->user('customer', 1);
+        $this->rule(['applies_to_everyone' => true, 'brand_ids' => [1, 2], 'min_quantity' => 1, 'percentage' => 10]);
+        $this->rule(['user_group_id' => 1, 'brand_ids' => [1, 2], 'min_quantity' => 5, 'percentage' => 20]);
+        $this->rule(['user_id' => $customer->id, 'brand_ids' => [2], 'min_quantity' => 10, 'percentage' => 25]);
+        $this->actingAs($customer);
+        $pricing = app(QuantityDiscounts::class);
+        $this->assertSame(80.0, $pricing->price(100, 100, 1, 10));
+        $this->assertSame(75.0, $pricing->price(100, 100, 2, 10));
+        $this->assertSame(65.0, $pricing->price(100, 65, 2, 10));
+        $this->assertSame(90.0, $pricing->publicPrice(100, 100, 2, 1));
+        Auth::logout();
+        $this->assertSame(90.0, $pricing->price(100, 100, 2, 10));
+        $this->assertSame(100.0, $pricing->price(100, 100, 3, 100));
     }
 
     private function user(string $role, ?int $group = null): User

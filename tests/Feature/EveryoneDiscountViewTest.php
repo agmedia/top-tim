@@ -47,7 +47,7 @@ class EveryoneDiscountViewTest extends TestCase
         $help = $xpath->query('//*[@id="discount-everyone-help"]')->item(0);
         $this->assertFalse($help->hasAttribute('hidden'));
         $this->assertSame('Vrijedi za goste i sve prijavljene kupce.', trim($help->textContent));
-        $this->assertTrue($xpath->query('//select[@name="brand_id"]')->item(0)->hasAttribute('required'));
+        $this->assertTrue($xpath->query('//select[@name="brand_ids[]"]')->item(0)->hasAttribute('required'));
         $this->assertSame('10', $xpath->query('//input[@name="tiers[0][min_quantity]"]')->item(0)->getAttribute('value'));
         $this->assertSame('8', $xpath->query('//input[@name="tiers[0][percentage]"]')->item(0)->getAttribute('value'));
     }

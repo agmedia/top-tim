@@ -43,7 +43,7 @@ class QuantityDiscounts
 
     public function tiers(int $brandId): array
     {
-        return $this->rules()->where('brand_id', $brandId)->sortBy('min_quantity')
+        return $this->rulesForBrand($this->rules(), $brandId)->sortBy('min_quantity')
             ->groupBy('min_quantity')->map(fn ($rules, $minimum) => [
                 'min_quantity' => (int) $minimum,
                 'percentage' => (float) $rules->max('percentage'),
@@ -52,7 +52,7 @@ class QuantityDiscounts
 
     public function percentage(int $brandId, int $quantity): float
     {
-        return (float) ($this->rules()->where('brand_id', $brandId)
+        return (float) ($this->rulesForBrand($this->rules(), $brandId)
             ->where('min_quantity', '<=', $quantity)->max('percentage') ?? 0);
     }
 
@@ -66,7 +66,7 @@ class QuantityDiscounts
     /** Public single-offer pricing, independent of staff/customer login and cart contents. */
     public function publicPrice(float $regular, float $campaign, int $brandId, int $quantity = 1): float
     {
-        $percentage = (float) ($this->publicRules()->where('brand_id', $brandId)
+        $percentage = (float) ($this->rulesForBrand($this->publicRules(), $brandId)
             ->where('min_quantity', '<=', $quantity)->max('percentage') ?? 0);
 
         // Preserve existing four-decimal public snapshots when no public discount is applicable.
@@ -87,6 +87,11 @@ class QuantityDiscounts
             request()->attributes->set($key, $rules);
         }
         return request()->attributes->get($key);
+    }
+
+    private function rulesForBrand(Collection $rules, int $brandId): Collection
+    {
+        return $rules->filter(fn ($rule) => $rule->appliesToBrand($brandId));
     }
 
     public function cartQuantity(int $brandId): int

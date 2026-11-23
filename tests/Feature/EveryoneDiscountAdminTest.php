@@ -32,6 +32,7 @@ class EveryoneDiscountAdminTest extends TestCase
         Schema::table('user_details', fn (Blueprint $table) => $table->unsignedInteger('user_group_id')->nullable());
         (require database_path('migrations/2026_11_12_180000_create_customer_discounts_table.php'))->up();
         (require database_path('migrations/2026_11_23_190000_add_everyone_to_customer_discounts.php'))->up();
+        (require database_path('migrations/2026_11_23_200000_add_brand_sets_to_customer_discounts.php'))->up();
         DB::statement('create table user_group (id integer primary key, status integer)');
         DB::statement('create table user_group_translations (id integer primary key, user_group_id integer, lang text, title text)');
         DB::statement('create table brands (id integer primary key, status integer)');

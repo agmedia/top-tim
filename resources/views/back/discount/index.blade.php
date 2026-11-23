@@ -8,12 +8,12 @@
     </div>
     <div class="content">
         @include('back.layouts.partials.session')
-        <p>Prag se računa po ukupnom broju komada istog brenda u košarici. Sve razine uređuju se u jednom obrascu. Primjenjuje se najpovoljnija cijena, bez zbrajanja popusta na artikl.</p>
+        <p>Razine vrijede za sve odabrane brendove. Količine se zbrajaju zasebno za svaki brend. Sve razine uređuju se u jednom obrascu. Primjenjuje se najpovoljnija cijena, bez zbrajanja popusta na artikl.</p>
         <div class="block block-rounded">
             <div class="block-content">
                 <div class="table-responsive">
                     <table class="table table-striped table-vcenter">
-                        <thead><tr><th>Popust vrijedi za</th><th>Brend</th><th>Razine popusta</th><th>Status</th><th class="text-right">Uredi</th></tr></thead>
+                        <thead><tr><th>Popust vrijedi za</th><th>Brendovi</th><th>Razine popusta</th><th>Status</th><th class="text-right">Uredi</th></tr></thead>
                         <tbody>
                         @forelse($discounts as $discount)
                             <tr>
@@ -28,7 +28,11 @@
                                         Bez korisnika ili grupe (nije javno)
                                     @endif
                                 </td>
-                                <td>{{ $discount->brand?->translation?->title ?? 'Obrisani brend' }}</td>
+                                <td>
+                                    @foreach($discount->brand_ids ?: ($discount->brand_id ? [$discount->brand_id] : []) as $brandId)
+                                        {{ $loop->first ? '' : ', ' }}{{ $brandLabels[$brandId] ?? 'Obrisani brend #' . $brandId }}
+                                    @endforeach
+                                </td>
                                 <td>
                                     @foreach($discount->levels as $level)
                                         <span class="badge {{ $level->active ? 'badge-success' : 'badge-secondary' }} mr-1 mb-1">{{ $level->min_quantity }}+ kom. → {{ number_format($level->percentage, 2, ',', '.') }} %{{ $level->active ? '' : ' (neaktivno)' }}</span>
