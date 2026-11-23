@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Back\Catalog;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BulkDeleteRequest;
+use App\Services\CatalogBulkDeletion;
 use App\Models\Back\Catalog\Brand;
 use App\Models\Back\Catalog\Category;
 use App\Models\Back\Catalog\Options\Options;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Catalog\Product\ProductAction;
-use App\Models\Back\Catalog\Product\ProductAttribute;
-use App\Models\Back\Catalog\Product\ProductCategory;
-use App\Models\Back\Catalog\Product\ProductImage;
 use App\Models\Back\Settings\SizeGuide;
 use App\Models\Back\Catalog\Publisher;
 use Illuminate\Http\Request;
@@ -19,7 +18,6 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -162,13 +160,7 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, Product $product)
     {
-        ProductImage::where('product_id', $product->id)->delete();
-        ProductCategory::where('product_id', $product->id)->delete();
-        ProductAttribute::where('product_id', $product->id)->delete();
-
-        Storage::deleteDirectory(config('filesystems.disks.products.root') . $product->id);
-
-        $destroyed = Product::destroy($product->id);
+        $destroyed = app(CatalogBulkDeletion::class)->products([$product->id], $request->user());
 
         if ($destroyed) {
             return redirect()->route('products')->with(['success' => 'Artikl je uspješno snimljen!']);
@@ -187,22 +179,17 @@ class ProductController extends Controller
      */
     public function destroyApi(Request $request)
     {
-        if ($request->has('id')) {
-            $id = $request->input('id');
+        $validated = $request->validate(['id' => ['required', 'integer', 'min:1']]);
+        app(CatalogBulkDeletion::class)->products([$validated['id']], $request->user());
 
-            ProductImage::where('product_id', $id)->delete();
-            ProductCategory::where('product_id', $id)->delete();
+        return response()->json(['success' => 200]);
+    }
 
-            Storage::deleteDirectory(config('filesystems.disks.products.root') . $id);
+    public function bulkDestroy(BulkDeleteRequest $request, CatalogBulkDeletion $deletion)
+    {
+        $deleted = $deletion->products($request->validated('ids'), $request->user());
 
-            $destroyed = Product::destroy($id);
-
-            if ($destroyed) {
-                return response()->json(['success' => 200]);
-            }
-        }
-
-        return response()->json(['error' => 300]);
+        return response()->json(['success' => true, 'deleted' => $deleted, 'message' => 'Odabrani artikli su izbrisani.']);
     }
 
 

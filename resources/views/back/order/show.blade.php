@@ -49,7 +49,7 @@
                                         <img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" height="80px"/>
                                     </a>
                                 </td>
-                                <td><strong>{{ $product->name }} -  {{ $product->product->sku }}</strong></td>
+                                <td><strong>{{ $product->name }} -  {{ $product->sku ?: '—' }}</strong></td>
                                 <td class="text-center"><strong>{{ $product->quantity }}</strong></td>
 
 

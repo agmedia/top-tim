@@ -332,7 +332,7 @@ class Order extends Model
         foreach ($products as $product) {
             $real = $product->real;
 
-            if ($real->decrease) {
+            if ($real && $real->decrease) {
                 $real->decrement('quantity', $product->quantity);
 
                 $has_option = ProductOption::query()->where('sku', $product->sku)->first();

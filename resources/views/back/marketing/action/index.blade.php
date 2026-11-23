@@ -8,11 +8,17 @@
 @endpush
 
 @section('content')
-
+    <div data-bulk-delete data-bulk-url="{{ route('actions.bulk.destroy') }}" data-bulk-kind="akcije">
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/action.action_title') }}</h1>
+                <div class="d-flex align-items-center mr-sm-3">
+                    <span class="mr-2" role="status" aria-live="polite">Označeno: <span data-bulk-count>0</span></span>
+                    <button type="button" class="btn btn-alt-danger my-2" data-bulk-submit disabled>
+                        <i class="fa fa-fw fa-trash-alt"></i><span class="ml-1" data-bulk-label>Obriši označene</span>
+                    </button>
+                </div>
                 <a class="btn btn-hero-success my-2" href="{{ route('actions.create') }}">
                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/action.action_new') }}</span>
                 </a>
@@ -23,6 +29,7 @@
     <!-- Page Content -->
     <div class="content">
     @include('back.layouts.partials.session')
+        <div class="alert alert-danger" data-bulk-error role="alert" hidden></div>
 
 
         <!-- All Products -->
@@ -51,6 +58,9 @@
                     <table class="table table-borderless table-striped table-vcenter">
                         <thead>
                         <tr>
+                            <th class="text-center" style="width: 30px;">
+                                <input type="checkbox" id="actions-select-all" data-bulk-all aria-label="Označi sve akcije na ovoj stranici">
+                            </th>
                             <th class="text-left">{{ __('back/action.title') }}</th>
                             <th>{{ __('back/action.from') }}</th>
                             <th>{{ __('back/action.to') }}</th>
@@ -69,6 +79,9 @@
 
 
                             <tr>
+                                <td class="text-center">
+                                    <input type="checkbox" value="{{ $action->id }}" data-bulk-row aria-label="Označi akciju {{ $action->id }}">
+                                </td>
                                 <td class="font-size-sm">
                                     <a class="font-w600" href="{{ route('actions.edit', ['action' => $action]) }}">{{ $action->translation->title }}</a>
                                 </td>
@@ -100,7 +113,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="font-size-sm text-center" colspan="8">
+                                <td class="font-size-sm text-center" colspan="9">
                                     <label for="">{{ __('back/action.no_action') }}</label>
                                 </td>
                             </tr>
@@ -108,10 +121,11 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $actions->links() }}
+                {{ $actions->withQueryString()->links() }}
             </div>
         </div>
         <!-- END All Products -->
+    </div>
     </div>
     <!-- END Page Content -->
 
@@ -138,10 +152,6 @@
             });
         })
     </script>
-    <script>
-        $("#checkAll").click(function () {
-            $('input:checkbox').not(this).prop('checked', this.checked);
-        });
-    </script>
+    @include('back.layouts.partials.bulk-delete')
 
 @endpush

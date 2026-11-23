@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Back\Marketing;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BulkDeleteRequest;
+use App\Services\CatalogBulkDeletion;
 use App\Models\Back\Catalog\Product\Product;
 use App\Models\Back\Marketing\Action;
 use App\Models\Back\Settings\Settings;
@@ -130,11 +132,9 @@ class ActionController extends Controller
      */
     public function destroy(Request $request, Action $action)
     {
-        $destroyed = $action->resolveDestruction($action->id);
+        $destroyed = app(CatalogBulkDeletion::class)->actions([$action->id], $request->user());
 
         if ($destroyed) {
-            Helper::bumpActionCacheVersion();
-
             return redirect()->route('actions')->with(['success' => 'Akcija je uspjšeno izbrisana!']);
         }
 
@@ -151,17 +151,16 @@ class ActionController extends Controller
      */
     public function destroyApi(Request $request)
     {
-        if ($request->has('id')) {
-            $action = new Action();
-            $destroyed = $action->resolveDestruction($request->input('id'));
+        $validated = $request->validate(['id' => ['required', 'integer', 'min:1']]);
+        app(CatalogBulkDeletion::class)->actions([$validated['id']], $request->user());
 
-            if ($destroyed) {
-                Helper::bumpActionCacheVersion();
+        return response()->json(['success' => 200]);
+    }
 
-                return response()->json(['success' => 200]);
-            }
-        }
+    public function bulkDestroy(BulkDeleteRequest $request, CatalogBulkDeletion $deletion)
+    {
+        $deleted = $deletion->actions($request->validated('ids'), $request->user());
 
-        return response()->json(['error' => 300]);
+        return response()->json(['success' => true, 'deleted' => $deleted, 'message' => 'Odabrane akcije su izbrisane.']);
     }
 }

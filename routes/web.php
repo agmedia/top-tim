@@ -110,6 +110,8 @@ Route::group(
                 ->whereNumber('product')->whereNumber('option')->name('anchor-prices.variant');
             Route::patch('anchor-prices/{product}', [\App\Http\Controllers\Back\AnchorPriceController::class, 'update'])->whereNumber('product')->name('anchor-prices.update');
             Route::get('products', [ProductController::class, 'index'])->name('products');
+            Route::post('products/bulk-delete', [ProductController::class, 'bulkDestroy'])->name('products.bulk.destroy');
+            Route::get('products/bulk-delete', fn () => abort(405));
             Route::get('product/create', [ProductController::class, 'create'])->name('products.create');
             Route::post('product', [ProductController::class, 'store'])->name('products.store');
             Route::get('product/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
@@ -179,6 +181,8 @@ Route::group(
         Route::prefix('marketing')->group(function () {
             // AKCIJE
             Route::get('actions', [ActionController::class, 'index'])->name('actions');
+            Route::post('actions/bulk-delete', [ActionController::class, 'bulkDestroy'])->name('actions.bulk.destroy');
+            Route::get('actions/bulk-delete', fn () => abort(405));
             Route::get('action/create', [ActionController::class, 'create'])->name('actions.create');
             Route::post('action', [ActionController::class, 'store'])->name('actions.store');
             Route::get('action/{action}/edit', [ActionController::class, 'edit'])->name('actions.edit');
@@ -339,7 +343,8 @@ Route::middleware(['auth:sanctum', 'verified', 'no.customers'])->prefix('api/v2'
     Route::post('/products/image/delete', [\App\Http\Controllers\Api\v2\ProductController::class, 'destroyImage'])->name('products.destroy.image');
     Route::post('/products/change/status', [\App\Http\Controllers\Api\v2\ProductController::class, 'changeStatus'])->name('products.change.status');
     Route::post('products/update-item/single', [\App\Http\Controllers\Api\v2\ProductController::class, 'updateItem'])->name('products.update.item');
-    Route::get('/products/bulk/action', [\App\Http\Controllers\Api\v2\ProductController::class, 'bulkAction'])->name('products.bulk.action');
+    Route::post('/products/bulk/action', [ProductController::class, 'bulkDestroy'])->name('products.bulk.action');
+    Route::get('/products/bulk/action', fn () => abort(405));
 
     Route::post('/actions/destroy/api', [ActionController::class, 'destroyApi'])->name('actions.destroy.api');
     Route::post('/reviews/destroy/api', [ReviewController::class, 'destroyApi'])->name('reviews.destroy.api');

@@ -18,13 +18,18 @@
                     </div>
                     <div class="modal-body pb-0">
                         @foreach ($order->products as $product)
+                            @php($liveProduct = $product->real)
                             <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
                                 <div class="d-sm-flex text-center text-sm-start">
-                                    <a class="d-inline-block flex-shrink-0 mx-auto" href="{{ url($product->real->url) }}" style="width: 10rem;">
+                                    @if ($liveProduct)
+                                        <a class="d-inline-block flex-shrink-0 mx-auto" href="{{ url($liveProduct->url) }}" style="width: 10rem;">
+                                    @else
+                                        <div class="d-inline-block flex-shrink-0 mx-auto" style="width: 10rem;">
+                                    @endif
                                         <img src="{{ $product->image ? asset($product->image) : asset('media/avatars/avatar0.jpg') }}" alt="{{ $product->name }}">
-                                    </a>
+                                    @if ($liveProduct) </a> @else </div> @endif
                                     <div class="ps-sm-4 pt-2">
-                                        <h3 class="product-title fs-base mb-2"><a href="{{ url($product->real->url) }}">{{ $product->name }}</a></h3>
+                                        <h3 class="product-title fs-base mb-2">@if ($liveProduct)<a href="{{ url($liveProduct->url) }}">{{ $product->name }}</a>@else{{ $product->name }}@endif</h3>
                                         <div class="fs-lg text-accent pt-2">{{ number_format($product->price, 2, ',', '.') }} €</div>
                                     </div>
                                 </div>

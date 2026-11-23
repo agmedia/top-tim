@@ -8,19 +8,17 @@
 @endpush
 
 @section('content')
-
+    <div data-bulk-delete data-bulk-url="{{ route('products.bulk.destroy') }}" data-bulk-kind="artikle">
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">{{ __('back/products.artikli') }}</h1>
-                <span id="bulk_actions" style="display: none; margin-right: 20px;">
-                    <a class="btn btn-alt-danger my-2 mx-2" href="javascript:bulkAction('delete');">
-                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Obriši selektirane</span>
-                    </a>
-                    {{--<a class="btn btn-alt-success my-2 mx-2" href="javascript:bulkAction('copy');">
-                        <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> Kopiraj selektirane</span>
-                    </a>--}}
-                </span>
+                <div class="d-flex align-items-center mr-sm-3">
+                    <span class="mr-2" role="status" aria-live="polite">Označeno: <span data-bulk-count>0</span></span>
+                    <button type="button" class="btn btn-alt-danger my-2" data-bulk-submit disabled>
+                        <i class="fa fa-fw fa-trash-alt"></i><span class="ml-1" data-bulk-label>Obriši označene</span>
+                    </button>
+                </div>
                 <a class="btn btn-hero-success my-2" href="{{ route('products.create') }}">
                     <i class="far fa-fw fa-plus-square"></i><span class="d-none d-sm-inline ml-1"> {{ __('back/products.novi_artikl') }}</span>
                 </a>
@@ -30,6 +28,7 @@
 
     <div class="content">
     @include('back.layouts.partials.session')
+        <div class="alert alert-danger" data-bulk-error role="alert" hidden></div>
 
     <!-- All Products -->
         <div class="block block-rounded">
@@ -123,7 +122,7 @@
                             <th class="text-center" style="width: 30px;">
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="checkAll" name="selected">
+                                        <input class="form-check-input" type="checkbox" id="products-select-all" data-bulk-all aria-label="Označi sve artikle na ovoj stranici">
                                     </div>
                                 </div>
                             </th>
@@ -145,7 +144,7 @@
                                 <td class="text-center">
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ $product->id }}" id="selected[{{ $product->id }}]" name="selected">
+                                            <input class="form-check-input" type="checkbox" value="{{ $product->id }}" id="selected[{{ $product->id }}]" data-bulk-row aria-label="Označi artikl {{ $product->id }}">
                                         </div>
                                     </div>
                                 </td>
@@ -201,9 +200,10 @@
                     </table>
                 </div>
                 <!-- Pagination -->
-                {{ $products->links() }}
+                {{ $products->withQueryString()->links() }}
             </div>
         </div>
+    </div>
     </div>
 @endsection
 
@@ -262,53 +262,7 @@
                 setRegularURL('week', true);
             });*/
 
-            $('input[name=selected]').on('change', (e) => {
-                console.log(e.currentTarget.value)
-                let checkedBoxes = document.querySelectorAll('input[name=selected]:checked');
-
-                if (checkedBoxes.length) {
-                    document.getElementById('bulk_actions').style.display = 'block';
-                } else {
-                    document.getElementById('bulk_actions').style.display = 'none';
-                }
-            })
-
-            //
-            $("#checkAll").click(function () {
-                $('input[name=selected]:checkbox').not(this).prop('checked', this.checked);
-            });
         });
-
-        function bulkAction(type) {
-            let products = getSelectedProducts();
-
-            axios.get('{{ route('products.bulk.action') }}' + '?products=' + products + '&type=' + type)
-            .then((response) => {
-                location.reload();
-            })
-            .catch((e) => {
-                return errorToast.fire();
-            })
-        }
-
-        /**
-         *
-         * @returns {string}
-         */
-        function getSelectedProducts() {
-            let orders = '[';
-            let checkedBoxes = document.querySelectorAll('input[name=selected]:checked');
-
-            for (let i = 0; i < checkedBoxes.length; i++) {
-                if (checkedBoxes.length - 1 == i) {
-                    orders += checkedBoxes[i].value + ']';
-                } else {
-                    orders += checkedBoxes[i].value + ','
-                }
-            }
-
-            return orders;
-        }
 
         /**
          *
@@ -389,5 +343,6 @@
             });
         }
     </script>
+    @include('back.layouts.partials.bulk-delete')
 
 @endpush
